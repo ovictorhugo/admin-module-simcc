@@ -15,7 +15,7 @@ export function ItemHome(props:Props) {
     
 
     return(
-        <Link to={props.url}>
+        <Link to={props.url} className="">
         <Alert className="h-[160px] dark:hover:bg-neutral-900 hover:bg-gray-100 transition-all w-[220px] items-end flex flex-col justify-between">
             <h3 className="text-5xl font-bold ">{props.value}</h3>
             <div className="flex justify-between gap-3 items-center w-full">

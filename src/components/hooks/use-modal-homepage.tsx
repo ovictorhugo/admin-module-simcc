@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ModalType = "initial-home" | "add-graduate-program"
+export type ModalType = "initial-home" | "maria-home"
 
 
 interface ModalStore {

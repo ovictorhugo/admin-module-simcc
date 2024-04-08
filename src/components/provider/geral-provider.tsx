@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { InitialHome } from "../homepage/inital-home";
+import { MariaHome } from "../homepage/maria-home";
 
 
 
@@ -18,7 +19,8 @@ export const GeralProvider = () => {
 
   return (
     <>
-  <InitialHome/>
+    <InitialHome/>
+    <MariaHome/>
     </>
   )
 }

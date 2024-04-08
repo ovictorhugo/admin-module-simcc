@@ -6,6 +6,8 @@ import  { UserContext }  from '../src/context/context'
 import {User as FirebaseAuthUser} from 'firebase/auth'
 import { Dashboard } from './pages/Dashboard';
 import DefaultLayout from './layout/default-layout';
+import { Indicators } from './pages/Indicators';
+import { Authentication } from './pages/SignIn';
 
 interface User extends FirebaseAuthUser {
   state: string;
@@ -23,7 +25,7 @@ function App() {
   const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:8080/');
   const [urlGeralAdm, setUrlGeralAdm] = useState('http://200.128.66.226:5000/');
 
-  const [searchType, setSearchType] = useState('0');
+  const [searchType, setSearchType] = useState('');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [idGraduateProgram, setIdGraduateProgram] = useState('0');
   const [valoresSelecionadosExport, setValoresSelecionadosExport] = useState(``);
@@ -77,7 +79,13 @@ function App() {
     >
       <Routes>
         <Route path='/' element={<Home/>}/>
+        <Route path='/maria' element={<Home/>}/>
         <Route path='/admin' element={<Dashboard/>}/>
+        <Route path='/indicadores' element={<Indicators/>}/>
+        <Route path='/taxonomia' element={<Indicators/>}/>
+        <Route path='/indicadores-pos-graduacao' element={<Indicators/>}/>
+        <Route path='/signIn' element={<Authentication/>}/>
+        <Route path='/signUp' element={<Authentication/>}/>
       
         
 

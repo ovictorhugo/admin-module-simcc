@@ -3,10 +3,11 @@ import { DataGeralDashboard } from "./data-geral-dashboard";
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { GraduateProgramDashboard } from "./graduate-program-dashboard";
 import { useModalSidebar } from "../hooks/use-modal-sidebar";
+
 export function GeralViewDashboard() {
 
     
-    const { isOpenSidebar } = useModalSidebar();
+    const { isOpen: isOpenSidebar } = useModalSidebar();
 
     console.log(isOpenSidebar)
 
@@ -26,7 +27,7 @@ export function GeralViewDashboard() {
          </div>
 
          {!isOpenSidebar && (
-            <div className="ml-6 max-w-[450px] overflow-y-auto elementBarra pr-2">
+            <div className="ml-6 max-w-[350px] overflow-y-auto elementBarra pr-2">
             <GraduateProgramDashboard/>
             </div>
          )}

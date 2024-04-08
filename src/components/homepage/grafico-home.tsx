@@ -10,9 +10,12 @@ interface Csv {
     type_: string
   }
 
+  import { useTheme } from "next-themes"
+
 export function GraficoHome() {
     const [filteredItems, setFilteredItems] = useState<Csv[]>([]);
     const [chartOptions, setChartOptions] = useState({});
+    const { theme } = useTheme()
     useEffect(() => {
         const filePath = "../dicionario.csv";
 
@@ -106,10 +109,11 @@ export function GraficoHome() {
                   },
                   stops: [
                     [0, "#7D96FF"],   // Cor inicial (transparente)
-                    [1, "#ffffff"],       // Cor final (#005399)
+                    [1, theme === 'dark' ? 'rgb(23 23 23 / 1)' : 'rgb(243 244 246 / 1'],       // Cor final (#005399)
                   ],
                 },
                 lineWidth: 0,
+                enableMouseTracking: false
               },
             },
             animation: {
@@ -117,7 +121,7 @@ export function GraficoHome() {
             },
           });
         }
-      }, [filteredItems]);
+      }, [filteredItems, theme]);
 
 
     return (

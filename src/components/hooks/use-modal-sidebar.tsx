@@ -1,12 +1,12 @@
 
 import { create } from "zustand";
 
-export type ModalType = "filter" | ""
+export type ModalType = "filter" | "info"
 
 
 interface ModalStore {
   type: ModalType | null;
-  isOpenSidebar: boolean;
+  isOpen: boolean;
   onOpen: (type: ModalType) => void;
   onClose: () => void;
 }
@@ -14,7 +14,7 @@ interface ModalStore {
 export const useModalSidebar = create<ModalStore>((set:any) => ({
   type: null,
   data: {},
-  isOpenSidebar: false,
+  isOpen: false,
   onOpen: (type: any) => set({ isOpen: true, type}),
   onClose: () => set({ type: null, isOpen: false })
 }));

@@ -7,6 +7,7 @@ import { Book, Books, CaretRight, Code, Copyright, Quotes, StripeLogo } from "ph
 import { User } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { GraficoHome } from "./grafico-home";
+import { useModalHomepage } from "../hooks/use-modal-homepage";
 
 interface VisaoPrograma {
     article: number,
@@ -53,9 +54,14 @@ export function InitialHome() {
 
       const [enable, setEnable] = useState(false)
       
+      const { isOpen, type} = useModalHomepage();
+  
+      const isModalOpen = isOpen && type === "initial-home";
 
     return  (
-        <div className="h-[full] w-full flex flex-col justify-center">
+      <>
+      {isModalOpen && (
+          <div className="h-full w-full flex flex-col justify-center mr-[72px]">
          
           <div className="flex flex-col justify-center">
           <div className="h-[350px] absolute  ml-16 "><Circle/></div>
@@ -66,11 +72,11 @@ export function InitialHome() {
         
           </div>
 
-          <div className="">
-         <div className="overflow-x-auto elementBarra">
+          <div className=" overflow-x-hidden w-full flex left-0 ">
+         <div className="overflow-x-hidden w-full flex left-0">
          {VisaoPrograma.map(props => {
             return(
-                <div className="flex gap-6">
+                <div className="flex gap-6 w-[955px] overflow-x-auto whitespace-nowrap pb-2 elementBarra">
 
                     <ItemHome
                     title="Pesquisadores"
@@ -78,11 +84,7 @@ export function InitialHome() {
                     value={String(props.researcher)}
                     ><User size={16} className="" /> </ItemHome>
 
-                    <ItemHome
-                    title="Artigos"
-                    url=""
-                    value={String(props.article)}
-                    ><Quotes size={16} className="" /> </ItemHome>
+                   
 
                     <ItemHome
                     title="Livros"
@@ -97,7 +99,7 @@ export function InitialHome() {
                     ><Copyright size={16} className="" /> </ItemHome>
 
                     {!enable && (
-                        <Alert onClick={() => setEnable(true)} className="h-[160px] dark:hover:bg-neutral-900 hover:bg-gray-100 transition-all cursor-pointer w-[220px] flex items-center justify-center">
+                        <Alert onClick={() => setEnable(true)} className="min-h-[160px] whitespace-nowrap dark:hover:bg-neutral-900 hover:bg-gray-100 transition-all cursor-pointer min-w-[220px] flex items-center justify-center">
                         <div><CaretRight size={24} className="" /> </div>
                                 </Alert>
                     )}
@@ -132,5 +134,7 @@ export function InitialHome() {
           </div>
          
         </div>
+      )}
+      </>
     )
 }

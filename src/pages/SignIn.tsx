@@ -1,10 +1,9 @@
-import { Header } from "../components/header/Header";
-import { Admin } from "../components/signIn/admin";
 
-export function SignIn() {
+import { Admin } from "../components/authentication/admin";
+
+export function Authentication() {
     return(
         <>
-        <Header/>
         <Admin/>
         </>
     )

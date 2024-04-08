@@ -9,6 +9,7 @@ import * as React from "react"
 
 
 import logo_4 from '../../assets/logo_4.png';
+import logo_4_white from '../../assets/logo_4_white.png';
 
 import {
     NavigationMenu,
@@ -20,22 +21,27 @@ import {
     navigationMenuTriggerStyle,
   } from "../../components/ui/navigation-menu"
 import { ChartLine, GraduationCap, ListDashes, SignIn, Textbox, UserPlus } from "phosphor-react";
-import { GitBranch, UserCircle } from "lucide-react";
+import { GitBranch } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { Button } from "../ui/button";
 import { UserConfigHeader } from "./user-config-header";
 
+import { useTheme } from "next-themes"
+import { LogoWhite } from "../svg/LogoWhite";
 export function Header() {
   const {loggedIn} = useContext(UserContext)
+
+  const { theme } = useTheme()
+
     return(
-        <header className="h-20 flex justify-between  items-center mr-[72px] ">
+        <header className="h-20 z-[9]  flex justify-between  items-center mr-[72px] ">
             <div className=" w-full flex items-center h-12 gap-4">
             <div className="flex gap-2 items-center h-full justify-center ">
-            <Link to={"/"} className="h-[24px]  " ><LogoSimcc /></Link>
+            <Link to={"/"} className="h-[24px]  " >{theme == 'dark' ? (<LogoWhite />):(<LogoSimcc />)}</Link>
 
             <Separator orientation="vertical" />
 
-            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={logo_4} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
+            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={theme == 'dark' ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
             </div>
 
             <NavigationMenu className="xl:flex hidden">
@@ -104,7 +110,7 @@ export function Header() {
               <ListItem href="/dicionario" title="Explorar">
                 Veja todos os programas das universidades pelo mapa
               </ListItem>
-              <ListItem href="/docs/installation" title="Indicadores">
+              <ListItem href="indicadores-pos-graduacao" title="Indicadores">
                 Painel de indicadores das pós-graduações
               </ListItem>
               
@@ -121,7 +127,7 @@ export function Header() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                <Link to="/indicadores" >
+                <Link to="/taxonomia" >
                     <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     <GitBranch size={16} className="rotate-180" /> Taxonomia
                     </NavigationMenuLink>
@@ -137,7 +143,7 @@ export function Header() {
               )}
 
             {!loggedIn && (
-                <Link to={''}><Button variant={'default'} className="text-white h-10 dark:text-white"><SignIn size={16} className="" />Fazer login</Button></Link>
+                <Link to={'signIn'}><Button variant={'default'} className="text-white h-10 dark:text-white"><SignIn size={16} className="" />Fazer login</Button></Link>
             )}
 
           {loggedIn && (
