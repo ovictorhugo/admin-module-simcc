@@ -34,7 +34,7 @@ export function Header() {
   const { theme } = useTheme()
 
     return(
-        <header className="h-20 z-[9]  flex justify-between  items-center mr-[72px] ">
+        <header className="h-20 z-[99]  flex justify-between  items-center mr-[72px] ">
             <div className=" w-full flex items-center h-12 gap-4">
             <div className="flex gap-2 items-center h-full justify-center ">
             <Link to={"/"} className="h-[24px]  " >{theme == 'dark' ? (<LogoWhite />):(<LogoSimcc />)}</Link>

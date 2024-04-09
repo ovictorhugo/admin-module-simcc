@@ -8,21 +8,7 @@ import { useLocation } from "react-router-dom";
 
 export function Home() {
     const { onOpen } = useModalHomepage();
-    
-
-    const location = useLocation();
-    
-
-    const {valoresSelecionadosExport} = useContext(UserContext)
-
-    useEffect(() => {
-        if(location.pathname == '/' && valoresSelecionadosExport.length == 0) {
-            onOpen('initial-home')
-        } else if (location.pathname == '/maria' && valoresSelecionadosExport.length == 0) {
-            onOpen('maria-home')
-        }
-    }, [location]);
-
+  
 
     return(
         <>

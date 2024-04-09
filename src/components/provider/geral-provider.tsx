@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { InitialHome } from "../homepage/inital-home";
 import { MariaHome } from "../homepage/maria-home";
+import { ResultHome } from "../homepage/result-home";
 
 
 
@@ -21,6 +22,7 @@ export const GeralProvider = () => {
     <>
     <InitialHome/>
     <MariaHome/>
+    <ResultHome/>
     </>
   )
 }

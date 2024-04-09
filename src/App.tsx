@@ -30,6 +30,8 @@ function App() {
   const [idGraduateProgram, setIdGraduateProgram] = useState('0');
   const [valoresSelecionadosExport, setValoresSelecionadosExport] = useState(``);
   const [valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta] = useState('');
+  const [inputMaria, setInputMaria] = useState('');
+  const [maria, setMaria] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -72,8 +74,9 @@ function App() {
       pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema,
       idGraduateProgram, setIdGraduateProgram,
       valoresSelecionadosExport, setValoresSelecionadosExport,
-      valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta
-
+      valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta,
+      inputMaria, setInputMaria,
+      maria, setMaria
 
     }}
     >

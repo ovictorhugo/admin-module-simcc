@@ -27,7 +27,7 @@ export function InitialHome() {
     const { urlGeral, setUrlGeral } = useContext(UserContext);
 
     let urlVisaoPrograma = `${urlGeral}/graduate_program_production?graduate_program_id=0&year=1900`;
-    useEffect(() => {
+    useMemo(() => {
     const fetchData = async () => {
         try {
           const response = await fetch(urlVisaoPrograma, {

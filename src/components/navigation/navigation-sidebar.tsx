@@ -29,9 +29,9 @@ export function NavigationSidebar() {
     return (
      <div className={`whitespace-nowrap  hidden md:flex h-screen  z-30 flex-col transition-all inset-y-0  ${navbar ? ('w-[278px]'):('w-[72px]')}`}> 
          <div
-        className={`space-y-4 flex flex-col  h-full text-primary w-full py-3 ${navbar ? ('px-4'):('items-center')}`}
+        className={`space-y-4 flex flex-col  h-full text-primary w-full pb-3 ${navbar ? ('px-4'):('items-center')}`}
       >
-       <div className={`flex items-center  h-16 `}>
+       <div className={`flex items-center  h-20 `}>
        <Button onClick={() => setNavbar(!navbar)} variant="outline" className="bg-transparent border-0" size="icon">
        <List size={16} className="" /> 
         </Button>

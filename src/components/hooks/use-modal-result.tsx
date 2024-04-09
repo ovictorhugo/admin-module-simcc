@@ -1,6 +1,7 @@
+
 import { create } from "zustand";
 
-export type ModalType = "initial-home" | "maria-home" | "result-home"
+export type ModalType = "articles-home" | "institutions-home" | "researchers-home"
 
 
 interface ModalStore {
@@ -10,7 +11,7 @@ interface ModalStore {
   onClose: () => void;
 }
 
-export const useModalHomepage = create<ModalStore>((set:any) => ({
+export const useModalResult = create<ModalStore>((set:any) => ({
   type: null,
   data: {},
   isOpen: false,

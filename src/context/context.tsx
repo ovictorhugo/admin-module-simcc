@@ -14,6 +14,8 @@ interface UserContextType {
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   navbar: boolean;
   setNavbar: React.Dispatch<React.SetStateAction<boolean>>;
+  maria: boolean;
+  setMaria: React.Dispatch<React.SetStateAction<boolean>>;
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User>>;
   login: (user: User) => void; // Função de login
@@ -25,6 +27,9 @@ interface UserContextType {
   valorDigitadoPesquisaDireta: string,
   setValorDigitadoPesquisaDireta: React.Dispatch<React.SetStateAction<string>>;
 
+  inputMaria: string,
+   setInputMaria: React.Dispatch<React.SetStateAction<string>>;
+  
   urlGeral: string,
   setUrlGeral: React.Dispatch<React.SetStateAction<string>>;
 
@@ -47,6 +52,8 @@ export const UserContext = createContext<UserContextType>({
   setLoggedIn: () => {},
   navbar: false, 
   setNavbar: () => {},
+  maria: false, 
+  setMaria: () => {},
   user: {} as User,
   setUser: () => {},
   login: () => {}, // Definindo uma função vazia como padrão
@@ -57,6 +64,9 @@ setValoresSelecionadosExport: () => {},
 
 valorDigitadoPesquisaDireta: "",
 setValorDigitadoPesquisaDireta: () => {},
+
+inputMaria: "",
+setInputMaria: () => {},
 
 
 urlGeral: "",
