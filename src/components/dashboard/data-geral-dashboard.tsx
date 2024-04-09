@@ -6,7 +6,7 @@ export function DataGeralDashboard() {
     const { user } = useContext(UserContext);
 
     return  (
-        <div className="flex gap-6 w-full h-fit items-center ">
+        <div className="flex gap-6 w-full h-fit max-lg:items-center max-xl:flex-col ">
              <div className="flex gap-2 items-center">
            <h1 className=" text-3xl  font-medium max-w-[400px] ">
             Bem vindo(a) ao Módulo <strong className="bg-red-700 text-white"> administrativo </strong>{" "}

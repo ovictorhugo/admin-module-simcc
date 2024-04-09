@@ -7,7 +7,7 @@ import {User as FirebaseAuthUser} from 'firebase/auth'
 import { Dashboard } from './pages/Dashboard';
 import DefaultLayout from './layout/default-layout';
 import { Indicators } from './pages/Indicators';
-import { Authentication } from './pages/SignIn';
+import { Authentication } from './pages/Authentication';
 
 interface User extends FirebaseAuthUser {
   state: string;

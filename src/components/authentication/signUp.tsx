@@ -15,6 +15,13 @@ import "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { useNavigate } from "react-router-dom";
 
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../ui/tabs"
+
 import { User as FirebaseAuthUser} from 'firebase/auth'
 import { UserContext } from "../../context/context";
 interface User extends FirebaseAuthUser {
@@ -25,7 +32,7 @@ interface User extends FirebaseAuthUser {
 
 
 
-export function Admin() {
+export function SignUpContent() {
     const backgroundImages = [
      'ewe'
       ];
@@ -71,38 +78,65 @@ export function Admin() {
         }
       };
 
+      const [value, setValue] = useState('account')
+
     return(
         <div className="w-full h-screen flex">
             <div className="w-1/2 h-full md:flex hidden bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${backgroundImage})` }}></div>
 
             <div className="md:w-1/2 w-full h-full flex items-center justify-center flex-col">
-            <Card className="md:w-[350px] w-full">
-                <CardHeader>
-                    <CardTitle>Olá, Marcos ; )</CardTitle>
-                    <CardDescription>Página do administrador</CardDescription>
-                </CardHeader>
-      
-                <CardContent>
-                    <form action="">
-                        <div className="grid w-full items-center gap-4">
-                            <div className="flex flex-col space-y-1.5">
-                            <Label htmlFor="name">Email</Label>
-                            <Input onChange={(e) => setEmail(e.target.value)} id="email" placeholder="Seu email" />
-                            </div>
-
-                            <div className="flex flex-col space-y-1.5">
-                            <Label htmlFor="name">Senha</Label>
-                            <Input onChange={(e) => setPassword(e.target.value)} id="senha" placeholder="Sua senha" />
-                            </div>
-                        </div>
-                    </form>
-                </CardContent>
-
-                <CardFooter className="flex ">
-                    
-                    <Button className="w-full" onClick={handleLogin}>Entrar</Button>
-                </CardFooter>
+            <Tabs defaultValue="account" value={value} className="w-[400px]">
+      <TabsList className="grid w-full grid-cols-2">
+        <TabsTrigger value="account" onClick={() => setValue('account')}>Criar conta</TabsTrigger>
+        <TabsTrigger value="password" onClick={() => setValue('password')}>Criar senhar</TabsTrigger>
+      </TabsList>
+      <TabsContent value="account">
+        <Card>
+          <CardHeader>
+            <CardTitle>Criar conta</CardTitle>
+            <CardDescription>
+              Crie sua forma de acesso na plataforma. Clique em continuar quando terminar.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="space-y-1">
+              <Label htmlFor="name">Nome</Label>
+              <Input id="name" defaultValue="Nome" />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="username">Email</Label>
+              <Input id="username" defaultValue="Email" />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button className="text-white dark:text-white" onClick={() => setValue('password')}>Continuar</Button>
+          </CardFooter>
         </Card>
+      </TabsContent>
+      <TabsContent value="password">
+        <Card>
+          <CardHeader>
+            <CardTitle>Senha</CardTitle>
+            <CardDescription>
+              A senha deve ter no mínimo 8 caracteres
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="space-y-1">
+              <Label htmlFor="current">Senha</Label>
+              <Input id="current" type="password" />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="new">Confirmar senha</Label>
+              <Input id="new" type="password" />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button className="text-white dark:text-white">Criar conta</Button>
+          </CardFooter>
+        </Card>
+      </TabsContent>
+    </Tabs>
                 
             </div>
         </div>

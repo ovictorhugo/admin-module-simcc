@@ -3,6 +3,8 @@ import { useModalHomepage } from "../hooks/use-modal-homepage"
 import { UserContext } from "../../context/context"
 import { Button } from "../ui/button"
 
+const API_KEY = "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"
+
 const systemMessage = { //  Explain things like you're talking to a software professional with 5 years of experience.
     "role": "system", "content": "Retorne APENAS um json com o campo type (abstract, article, book, patent, name, area, speaker) e term a partir da frase que o usário digitar "
   }
