@@ -25,7 +25,7 @@ export function GeralViewDashboard() {
             <DataGeralDashboard/>
             <div className="mt-6">
             <AddResearcherDashboard/>
-            <div className="my-6 h-full flex flex-1">
+            <div className="my-6 h-full flex flex-1 ">
             <TableResearcherViewDashboard/>
             </div>
 

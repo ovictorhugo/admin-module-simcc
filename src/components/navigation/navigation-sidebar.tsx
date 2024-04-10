@@ -7,6 +7,8 @@ import { useContext,useState } from "react";
 import { useModalSidebar } from "../hooks/use-modal-sidebar";
 import { UserContext } from "../../context/context";
 
+import geoip from 'geoip-lite';
+
 export function NavigationSidebar() {
     const { onOpen, onClose } = useModalSidebar();
 
@@ -27,7 +29,7 @@ export function NavigationSidebar() {
      
   
     return (
-     <div className={`whitespace-nowrap  hidden md:flex h-screen  z-30 flex-col transition-all inset-y-0  ${navbar ? ('w-[278px]'):('w-[72px]')}`}> 
+     <div className={`whitespace-nowrap sticky top-0 hidden md:flex h-screen  z-30 flex-col transition-all inset-y-0   ${navbar ? ('w-[278px]'):('w-[72px]')}`}> 
          <div
         className={`space-y-4 flex flex-col  h-full text-primary w-full pb-3 ${navbar ? ('px-4'):('items-center')}`}
       >

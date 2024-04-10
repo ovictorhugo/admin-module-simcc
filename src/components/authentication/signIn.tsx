@@ -37,7 +37,11 @@ interface User extends FirebaseAuthUser {
 
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { GoogleLogo } from "phosphor-react";
+import { CookiesProvider, useCookies } from 'react-cookie'
+
 export function SignInContent() {
+  const [cookies, setCookie] = useCookies(['user'])
+
     const backgroundImages = [
      'ewe'
       ];
@@ -73,22 +77,28 @@ export function SignInContent() {
             // Verifique se os dados personalizados existem antes de adicionar ao objeto result.user
             if (snapshot.exists()) {
               
-              console.log('existe'); // Adicione este log
+             
               const userData = snapshot.data();
-              console.log('userData:', userData);
-              // Adicione os dados personalizados diretamente ao objeto result.user
-            
 
-              console.log("user",user)
+              const userDataFinal: User = {
+                ...result.user,
+                img_url: userData.img_url || '', // Set to the appropriate default value or leave it empty if you don't have a default
+                state: userData.state || '',
+                name: userData.name || '',
+                email: result.user.email || '',
+                institution_id: userData.institution_id || '',
+              };
+             
+              // Adicione os dados personalizados diretamente ao objeto result.user
 
               // Atualize o estado com o objeto modificado
-              setUser({ img_url: userData.img_url, state:  userData.state, name: userData.name, email: userData.email, institution_id: userData.institution_id,...{} } as User)
-              
+              setUser(userDataFinal)
+              localStorage.setItem('user', JSON.stringify(userDataFinal));
+              setCookie('user', (userDataFinal), { path: '/' })
             }
 
              // Save user information to local storage
-          localStorage.setItem('user', JSON.stringify(result.user));
-    
+          
     
       
           setTimeout(() => {
@@ -157,7 +167,7 @@ export function SignInContent() {
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="space-y-1">
-              <Label htmlFor="name">Nome</Label>
+              <Label htmlFor="name">Email</Label>
               <Input onChange={(e) => setEmail(e.target.value)} id="name" placeholder="Seu email" />
             </div>
         

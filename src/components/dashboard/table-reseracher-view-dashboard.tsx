@@ -49,10 +49,14 @@ export function TableResearcherViewDashboard() {
         console.log(urlGetResearcher)
 
     return  (
-       <Alert>
+       <div className="w-full ">
+        <Alert className=" overflow-y-auto elementBarra ">
 
-       <DataTable columns={columns} data={researcher} />
+<div className=" overflow-y-auto max-h-fit h-full elementBarra pr-2">
+<DataTable columns={columns} data={researcher} />
+</div>
 
-       </Alert>
+</Alert>
+       </div>
     )
 }

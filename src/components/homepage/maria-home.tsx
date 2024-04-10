@@ -4,6 +4,7 @@ import { UserContext } from "../../context/context"
 import { Button } from "../ui/button"
 
 
+
 const systemMessage = { //  Explain things like you're talking to a software professional with 5 years of experience.
     "role": "system", "content": "Retorne APENAS um json com o campo type (abstract, article, book, patent, name, area, speaker) e term a partir da frase que o usário digitar "
   }

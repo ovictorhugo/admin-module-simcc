@@ -24,7 +24,7 @@ interface VisaoPrograma {
 export function InitialHome() {
 
     const [VisaoPrograma, setVisaoPrograma] = useState<VisaoPrograma[]>([]); 
-    const { urlGeral, setUrlGeral } = useContext(UserContext);
+    const { urlGeral } = useContext(UserContext);
 
     let urlVisaoPrograma = `${urlGeral}/graduate_program_production?graduate_program_id=0&year=1900`;
     useMemo(() => {

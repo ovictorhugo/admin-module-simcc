@@ -13,8 +13,9 @@ import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 
+
 const systemMessage = { //  Explain things like you're talking to a software professional with 5 years of experience.
-    "role": "system", "content": "Retorne APENAS um json com o campo type (abstract, article, book, patent, name, area, speaker) e term a partir da frase que o usuário digitar. Caso o type não for identificado, por padrão será article "
+    "role": "system", "content": `Retorne APENAS um json com o campo "type" (abstract, article, book, patent, name, area, speaker) e "term" contendo uma ÚNICA palavra. Se o tipo não for identificado, por padrão será definido como "article". Se o tipo for "name", o nome completo será extraído e colocado em "term".`
   }
 export function Search() {
 
@@ -143,7 +144,7 @@ const handlePesquisa = () => {
 console.log(messages)
 console.log(valoresSelecionadosExport)
     return  (
-        <div className="bottom-0 right-0 fixed w-full  bg-gradient-to-t from-white dark:from-neutral-900 to-transparent flex flex-col">
+        <div className="bottom-0 right-0 fixed w-full h-[150px] justify-end bg-gradient-to-t from-white dark:from-neutral-900 to-transparent flex flex-col">
         <div className={`pb-3 px-[72px] ${navbar && !isOpenSidebar && 'pl-[278px]'} ${isOpenSidebar && !navbar && 'pl-[368px]'} ${isOpenSidebar && navbar && 'pl-[574px]'}`}>
         <div className="mb-4">
         <div className="flex gap-4">

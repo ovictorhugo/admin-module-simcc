@@ -20,7 +20,7 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
   } from "../../components/ui/navigation-menu"
-import { ChartLine, GraduationCap, ListDashes, SignIn, Textbox, UserPlus } from "phosphor-react";
+import { ChartLine, GraduationCap, GridFour, ListDashes, SignIn, Textbox, UserPlus } from "phosphor-react";
 import { GitBranch } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { Button } from "../ui/button";
@@ -29,12 +29,12 @@ import { UserConfigHeader } from "./user-config-header";
 import { useTheme } from "next-themes"
 import { LogoWhite } from "../svg/LogoWhite";
 export function Header() {
-  const {loggedIn} = useContext(UserContext)
+  const {loggedIn, user} = useContext(UserContext)
 
   const { theme } = useTheme()
 
     return(
-        <header className="h-20 z-[99]  flex justify-between  items-center mr-[72px] ">
+        <header className="h-20 z-[99]  flex justify-between  items-center mr-[72px] sticky top-0 dark:bg-neutral-900 bg-gray-100">
             <div className=" w-full flex items-center h-12 gap-4">
             <div className="flex gap-2 items-center h-full justify-center ">
             <Link to={"/"} className="h-[24px]  " >{theme == 'dark' ? (<LogoWhite />):(<LogoSimcc />)}</Link>
@@ -137,14 +137,18 @@ export function Header() {
             </NavigationMenu>
             </div>
 
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center justify-center">
               {!loggedIn && (
-                <Link to={''}><Button variant={'outline'}><UserPlus size={16} className="" />Criar conta</Button></Link>
+                <Link to={'/signUp'}><Button variant={'outline'}><UserPlus size={16} className="" />Criar conta</Button></Link>
               )}
 
             {!loggedIn && (
-                <Link to={'signIn'}><Button variant={'default'} className="text-white h-10 dark:text-white"><SignIn size={16} className="" />Fazer login</Button></Link>
+                <Link to={'/signIn'}><Button variant={'default'} className="text-white h-10 dark:text-white"><SignIn size={16} className="" />Fazer login</Button></Link>
             )}
+
+{user.state == 'admin' && (
+                <Link to={'/admin'}><Button variant={'outline'}><GridFour size={16} className="" />Módulo administrativo</Button></Link>
+              )}
 
           {loggedIn && (
                 <UserConfigHeader/>

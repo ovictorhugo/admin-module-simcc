@@ -111,7 +111,7 @@ export function AddResearcherDashboard() {
 
     return  (
         <div>
-         <Alert className="bg-cover bg-center bg-opacity-30 bg-no-repeat  gap-6 h-64 min-h-[256px] flex items-center justify-center w-full" style={{ backgroundImage: `url(${bg_popup})` }} >
+         <Alert className="bg-cover bg-center bg-no-repeat  gap-6 h-64 min-h-[256px] flex items-center justify-center w-full" style={{ backgroundImage: `url(${bg_popup})` }} >
             <h3 className="max-w-[240px] font-medium text-2xl  text-gray-700 dark:text-white"><strong className="bg-blue-700 text-white hover:bg-blue-800 transition duration-500 font-medium">Vincule</strong> os pesquisadores à sua instituição de ensino</h3>
 
             <div className="flex gap-6 items-end">

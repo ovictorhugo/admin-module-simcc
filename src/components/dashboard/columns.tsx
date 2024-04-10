@@ -17,14 +17,10 @@ export const columns: ColumnDef<PesquisadorProps>[] = [
   },
   {
     accessorKey: "lattes_id",
-    header: "Lattes Id",
+    header: "ID Lattes",
   },
   {
     accessorKey: "researcher_id",
-    header: "Researcher Id",
-  },
-  {
-    accessorKey: "institution_id",
-    header: "Institution Id",
+    header: "ID do pesquisador",
   },
 ]
