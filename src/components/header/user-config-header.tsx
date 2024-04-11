@@ -50,7 +50,7 @@ export function UserConfigHeader() {
             <DropdownMenu>
                 <DropdownMenuTrigger >
                 <Avatar className="cursor-pointer">
-                    <AvatarImage src={`url(${user.photoURL != null ? (user.photoURL):(user.img_url)})`} />
+                    <AvatarImage src={`${user.photoURL != null ? (user.photoURL):(user.img_url)}`} />
                     <AvatarFallback className="flex items-center justify-center"></AvatarFallback>
                 </Avatar>
                      </DropdownMenuTrigger>

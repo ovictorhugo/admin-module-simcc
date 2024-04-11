@@ -13,7 +13,7 @@ export function HeaderResultTypeHome(props: Props) {
             </div>
 
             <div>
-                {props.children}
+              
             </div>
 
           </div>

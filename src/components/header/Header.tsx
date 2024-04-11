@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { LogoSimcc } from "../svg/LogoSimcc";
 import { Separator } from "../ui/separator";
 import { useContext} from "react";
@@ -28,16 +28,21 @@ import { UserConfigHeader } from "./user-config-header";
 
 import { useTheme } from "next-themes"
 import { LogoWhite } from "../svg/LogoWhite";
+import { useModalHomepage } from "../hooks/use-modal-homepage";
 export function Header() {
   const {loggedIn, user} = useContext(UserContext)
 
   const { theme } = useTheme()
+  const { onOpen } = useModalHomepage();
+  const location = useLocation();
+  
+  const posGraduation = location.pathname == '/pos-graduacao'
 
     return(
-        <header className="h-20 z-[99]  flex justify-between  items-center mr-[72px] sticky top-0 dark:bg-neutral-900 bg-gray-100">
+        <header className={`h-20 z-[99]  flex justify-between  items-center mr-[72px] sticky top-0  ${posGraduation == true ? ('bg-transparent'):('dark:bg-neutral-900 bg-gray-100')}`}>
             <div className=" w-full flex items-center h-12 gap-4">
             <div className="flex gap-2 items-center h-full justify-center ">
-            <Link to={"/"} className="h-[24px]  " >{theme == 'dark' ? (<LogoWhite />):(<LogoSimcc />)}</Link>
+            <Link to={"/"} className="h-[24px]  " onClick={() => onOpen('initial-home')} >{theme == 'dark' ? (<LogoWhite />):(<LogoSimcc />)}</Link>
 
             <Separator orientation="vertical" />
 
@@ -107,7 +112,7 @@ export function Header() {
                   </div>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/dicionario" title="Explorar">
+              <ListItem href="/pos-graduacao" title="Explorar">
                 Veja todos os programas das universidades pelo mapa
               </ListItem>
               <ListItem href="indicadores-pos-graduacao" title="Indicadores">

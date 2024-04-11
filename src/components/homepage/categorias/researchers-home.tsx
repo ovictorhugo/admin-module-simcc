@@ -3,10 +3,19 @@ import { useModalResult } from "../../hooks/use-modal-result";
 import { UserContext } from "../../../context/context";
 import { CloudWordResearcherHome } from "./researchers-home/clould-word-researcher-home";
 import { HeaderResultTypeHome } from "./header-result-type-home";
-import { CaretDown, ListNumbers, UserList } from "phosphor-react";
+import { CaretDown, ListNumbers, MapTrifold, Rows, SquaresFour, UserList } from "phosphor-react";
 import { Button } from "../../ui/button";
 import { ResearchersBloco } from "./researchers-home/researchers-bloco";
 import { ResearcherMap } from "./researchers-home/researcher-map";
+import { TableReseracherhome } from "./researchers-home/table-reseracher-home";
+
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+  } from "../../../components/ui/accordion"
+import { Skeleton } from "../../ui/skeleton";
 
 type Research = {
     among: number,
@@ -29,14 +38,16 @@ type Research = {
     brand: string,
     lattes_update: Date,
   }
+  
 
 export function ResearchersHome() {
     const { isOpen, type} = useModalResult();
+    const [loading, isLoading] = useState(false)
     const [researcher, setResearcher] = useState<Research[]>([]); 
   
     const isModalOpen = isOpen && type === "researchers-home";
 
-    const { urlGeral, searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = useContext(UserContext);
+    const { urlGeral, searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta, navbar} = useContext(UserContext);
 
     let urlTermPesquisadores = ``
 
@@ -61,6 +72,7 @@ export function ResearchersHome() {
       useMemo(() => {
         const fetchData = async () => {
             try {
+              isLoading(true)
               const response = await fetch(urlTermPesquisadores, {
                 mode: "cors",
                 headers: {
@@ -74,6 +86,7 @@ export function ResearchersHome() {
               const data = await response.json();
               if (data) {
                 setResearcher(data);
+                isLoading(false)
               }
             } catch (err) {
               console.log(err);
@@ -81,6 +94,10 @@ export function ResearchersHome() {
           };
           fetchData();
         }, [urlTermPesquisadores]);
+
+        const items = Array.from({ length: 12 }, (_, index) => (
+          <Skeleton key={index} className="w-full rounded-md h-[170px]" />
+        ));
 
     return(
         <>
@@ -90,28 +107,84 @@ export function ResearchersHome() {
 
                    {searchType != 'abstract' && searchType != 'name' && searchType != 'area' && (
                      <div className="mb-8">
-                        <HeaderResultTypeHome title="Pesquisadores mais relevantes por ordem de ocorrências" icon={<ListNumbers size={24} className="text-gray-400" />}>
+                        <Accordion type="single" collapsible>
+                <AccordionItem value="item-1">
+                    <AccordionTrigger>
+                    <HeaderResultTypeHome title="Pesquisadores mais relevantes por ordem de ocorrências" icon={<ListNumbers size={24} className="text-gray-400" />}>
+                        </HeaderResultTypeHome>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                    {loading ? (
+                      <Skeleton className="w-full rounded-md h-[300px]"/>
+                    ):(
+                      <CloudWordResearcherHome
+                      researcher={researcher}
+                      />
+                    )}
+                    </AccordionContent>
+                </AccordionItem>
+                </Accordion>
+                       
+                    
+                 </div>
+                   )}
+
+                <div className="mb-8">
+                        <HeaderResultTypeHome title="Pesquisadores por cidade" icon={<MapTrifold size={24} className="text-gray-400" />}>
                         <Button  variant="outline" className={`bg-transparent border-0 `} size={'icon'}>
                             <CaretDown size={16} className=" whitespace-nowrap" />
                         </Button>
                         </HeaderResultTypeHome>
-                     <CloudWordResearcherHome
+                        <TableReseracherhome
                      researcher={researcher}
                      />
-                 </div>
-                   )}
 
-                
+                    
+
+<Accordion type="single" collapsible>
+                <AccordionItem value="item-1">
+                    <AccordionTrigger>
+                    <HeaderResultTypeHome title="Pesquisadores por cidade" icon={<MapTrifold size={24} className="text-gray-400" />}>
+          
+                        </HeaderResultTypeHome>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                    {loading ? (
+                      <Skeleton className="w-full rounded-md h-[400px]"/>
+                    ):(
+                      <ResearcherMap
+                      researcher={researcher}
+                      />
+                    )}
+                    </AccordionContent>
+                </AccordionItem>
+                </Accordion>
+      
+                 </div>
 
                 <div>
                         <HeaderResultTypeHome title="Pesquisadores por detalhamento" icon={<UserList size={24} className="text-gray-400" />}>
                         <Button  variant="outline" className={`bg-transparent border-0 `} size={'icon'}>
-                            <CaretDown size={16} className=" whitespace-nowrap" />
+                            <Rows size={16} className=" whitespace-nowrap" />
+                        </Button>
+
+                        <Button  variant="outline" className={`bg-transparent border-0 `} size={'icon'}>
+                            <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
                         </HeaderResultTypeHome>
-                     <ResearchersBloco
+                     
+
+                    {loading ? (
+                      <div className={`gap-4 grid ${navbar ? ('grid-cols-2'):('grid-cols-3')}`}>
+                      {items.map((item, index) => (
+                              <div key={index}>{item}</div>
+                            ))}
+                      </div>
+                    ):(
+                      <ResearchersBloco
                      researcher={researcher}
                      />
+                    )}
                  </div>
                 </div>
             </div>

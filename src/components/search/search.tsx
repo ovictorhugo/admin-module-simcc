@@ -12,14 +12,18 @@ import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
-
+import { useLocation } from "react-router-dom";
+import { SelectTypeInstitutionSearch } from "./select-type-institution-search";
+const API_KEY = import.meta.env.VITE_API_KEY
 
 const systemMessage = { //  Explain things like you're talking to a software professional with 5 years of experience.
     "role": "system", "content": `Retorne APENAS um json com o campo "type" (abstract, article, book, patent, name, area, speaker) e "term" contendo uma ÚNICA palavra. Se o tipo não for identificado, por padrão será definido como "article". Se o tipo for "name", o nome completo será extraído e colocado em "term".`
   }
 export function Search() {
 
+    const location = useLocation();
 
+    const posGrad = location.pathname == '/pos-graduacao'
 
 
     const { onOpen } = useModal();
@@ -133,16 +137,20 @@ async function processMessageToChatGPT(messageObject:any) {
 }
 
 const handlePesquisa = () => {
-    if(maria && inputMaria.length > 1) {
+    if(maria && inputMaria.length > 1 && !posGrad) {
         handleSend(inputMaria)
         onOpenHomepage('result-home')
+    } else if (posGrad) {
+        onOpenHomepage('graduation-home')
     } else {
-        onOpenHomepage('initial-home')
+      onOpenHomepage('initial-home')
     }
 }
 
 console.log(messages)
 console.log(valoresSelecionadosExport)
+
+
     return  (
         <div className="bottom-0 right-0 fixed w-full h-[150px] justify-end bg-gradient-to-t from-white dark:from-neutral-900 to-transparent flex flex-col">
         <div className={`pb-3 px-[72px] ${navbar && !isOpenSidebar && 'pl-[278px]'} ${isOpenSidebar && !navbar && 'pl-[368px]'} ${isOpenSidebar && navbar && 'pl-[574px]'}`}>
@@ -163,8 +171,12 @@ console.log(valoresSelecionadosExport)
                      <Label className="flex gap-2 items-center">MarIA<Chats size={16} className="" /></Label>
                 </div>
 
-                {!maria && (
+                {!maria && !posGrad && (
                     <SelectTypeSearch/>
+                )}
+
+            {posGrad && (
+                    <SelectTypeInstitutionSearch/>
                 )}
 
                 

@@ -14,6 +14,8 @@ import { signInWithEmailAndPassword} from 'firebase/auth';
 import "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { useNavigate } from "react-router-dom";
+import { updateProfile, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 
 import {
   Tabs,
@@ -22,13 +24,18 @@ import {
   TabsTrigger,
 } from "../ui/tabs"
 
-import { User as FirebaseAuthUser} from 'firebase/auth'
+
 import { UserContext } from "../../context/context";
+import { User as FirebaseAuthUser} from 'firebase/auth'
+import { GoogleLogo } from "phosphor-react";
+
 interface User extends FirebaseAuthUser {
-    state: string;
-    name: string
-    email: string
-  }
+  img_url: string;
+  state: string;
+  name: string
+  email: string
+  institution_id: string
+}
 
 
 
@@ -45,40 +52,71 @@ export function SignUpContent() {
 
 
       //firebase
-      const [email, setEmail] = useState('');
-      const [password, setPassword] = useState('');
+      const [name, setName] = useState('');
+        const [email, setEmail] = useState('');
+        const [password, setPassword] = useState('');
+        const [confPassword, setConfPassword] = useState('');
       const {setLoggedIn} = useContext(UserContext);
       const history = useNavigate();
       const { setUser } = useContext(UserContext);
 
-      const handleLogin = async () => {
-        try {
-         if(email.length != 0 && password.length != 0 && password.length >= 8 ) {
-          const result = await signInWithEmailAndPassword(auth, email, password);
-          setLoggedIn(true);
-      
-          // Save user information to local storage
-          localStorage.setItem('user', JSON.stringify(result.user));
-    
-          const userData: User = {
-            ...result.user,
-            state: '',
-            name: '',
-            email: result.user.email || '',
-          };
-    
-          setUser(userData);
-      
-          setTimeout(() => {
-            history('/dashboard');
-          }, 0);
-         }
-        } catch (error) {
-          console.error('Authentication error:', error);
-        }
-      };
-
       const [value, setValue] = useState('account')
+
+
+      const [createUserWithEmailAndPassword, userw, loading, error] =
+  useCreateUserWithEmailAndPassword(auth);
+
+  const handleSignOut = async (e: any) => {
+  try {
+
+    if( password == confPassword && password.length >= 8 && email.length != 0 && name.length != 0) {
+      e.preventDefault();
+      createUserWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        userCredential?.user && updateProfile(userCredential.user, { displayName: name });
+     })
+
+
+
+      setTimeout(() => {
+        history('/signIn');
+      }, 0);
+    }
+   
+  } catch (error) {
+   console.error('Authentication error:', error);
+  }
+  
+}
+
+function handleGoogleSignIn() {
+    const provider = new GoogleAuthProvider();
+
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const userData: User = {
+          ...result.user,
+          img_url: '', // Set to the appropriate default value or leave it empty if you don't have a default
+          state: '',
+          name: '',
+          email: result.user.email || '',
+          institution_id: '',
+        };
+  
+        setUser(userData);
+        console.log('userDataSignUp', userData)
+        setLoggedIn(true);
+        setTimeout(() => {
+          history('/');
+        }, 0);
+
+        // Save user information to local storage
+    localStorage.setItem('user', JSON.stringify(result.user));
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
 
     return(
         <div className="w-full h-screen flex">
@@ -101,15 +139,18 @@ export function SignUpContent() {
           <CardContent className="space-y-2">
             <div className="space-y-1">
               <Label htmlFor="name">Nome</Label>
-              <Input id="name" defaultValue="Nome" />
+              <Input onChange={(e) => setName(e.target.value)} id="name" placeholder="Nome" />
             </div>
             <div className="space-y-1">
               <Label htmlFor="username">Email</Label>
-              <Input id="username" defaultValue="Email" />
+              <Input onChange={(e) => setEmail(e.target.value)} id="username" placeholder="Email" />
             </div>
           </CardContent>
           <CardFooter>
-            <Button className="text-white dark:text-white" onClick={() => setValue('password')}>Continuar</Button>
+          <div className="flex flex-col gap-4 w-full">
+         <Button className=" w-full" variant={'outline'} onClick={handleGoogleSignIn} ><GoogleLogo size={16} className="" /> Fazer login com o Google</Button>
+            <Button className="text-white dark:text-white w-full" onClick={() => setValue('password')}>Continuar</Button>
+         </div>
           </CardFooter>
         </Card>
       </TabsContent>
@@ -124,15 +165,15 @@ export function SignUpContent() {
           <CardContent className="space-y-2">
             <div className="space-y-1">
               <Label htmlFor="current">Senha</Label>
-              <Input id="current" type="password" />
+              <Input onChange={(e) => setPassword(e.target.value)} id="current" type="password" placeholder="Senha" />
             </div>
             <div className="space-y-1">
               <Label htmlFor="new">Confirmar senha</Label>
-              <Input id="new" type="password" />
+              <Input  onChange={(e) => setConfPassword(e.target.value)} id="new" type="password" placeholder="Confirmar senha" />
             </div>
           </CardContent>
           <CardFooter>
-            <Button className="text-white dark:text-white">Criar conta</Button>
+          <Button onClick={handleSignOut} className="text-white dark:text-white w-full">Criar conta</Button>
           </CardFooter>
         </Card>
       </TabsContent>

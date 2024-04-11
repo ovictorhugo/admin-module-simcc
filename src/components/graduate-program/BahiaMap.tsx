@@ -7,6 +7,7 @@ import HighchartsOfflineExporting from 'highcharts/modules/offline-exporting';
 
 import { UserContext } from '../../context/context'
 import { useEffect, useState, useContext } from "react";
+import { useTheme } from "next-themes"
 
 // Initialize Highcharts modules
 HighchartsAccessibility(Highcharts);
@@ -14,61 +15,23 @@ HighchartsExporting(Highcharts);
 HighchartsOfflineExporting(Highcharts);
 
 interface GraduateProgram {
-  area: string;
-  code: string;
-  graduate_program_id: string;
-  modality: string;
-  name: string;
-  rating: string;
-  type: string;
-  city: string
-  state: string
-  instituicao: string
-  url_image: string
-  region: string
-  sigla: string
-  latitude: string
-  longitude: string
+  graduatePrograms: any[]
 }
 
 // Importar dados GeoJSON do Brasil
 
 import brazilStatesGeoJSON from './ba_state.json'; // Substitua pelo caminho correto
 
-function BahiaMap() {
+function BahiaMap(props:GraduateProgram) {
   const { urlGeral } = useContext(UserContext);
+  const { theme } = useTheme()
   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext);
-  const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram[]>([]);
 
   const { estadoSelecionado, setEstadoSelecionado } = useContext(UserContext);
 
-  const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=`;
+   // Defina as cores do mapa
+   const colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026'];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(urlGraduateProgram, {
-          mode: "cors",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Max-Age": "3600",
-            "Content-Type": "text/plain",
-          },
-        });
-        const data = await response.json();
-        if (data) {
-          setGraduatePrograms(data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData();
-  }, [urlGraduateProgram]);
-
-  console.log(urlGraduateProgram)
 
   // UseEffect para inicializar o gráfico quando o componente for montado
   useEffect(() => {
@@ -76,7 +39,7 @@ function BahiaMap() {
 
 // Crie um objeto para armazenar a contagem de programas por estado
 const cityProgramCount: Record<string, number> = {};
-  graduatePrograms.forEach((program) => {
+  props.graduatePrograms.forEach((program) => {
     const city = program.city;
     if (cityProgramCount[city]) {
       cityProgramCount[city] += 1;
@@ -140,11 +103,11 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
                 if (cityProgramCount[city] === 1) {
                   
                   // Procurar pelo programa de pós-graduação com o estado correspondente e obter o ID
-                  const programWithState = graduatePrograms.find(program => program.city === city);
+                  const programWithState = props.graduatePrograms.find(program => program.city === city);
                   if (programWithState) {
                 
                     const programId = programWithState.graduate_program_id;
-                    console.log('aq porra')
+                   
                     // Definir o ID do programa selecionado em selectedGraduateProgramId
                     setIdGraduateProgram(programId);
                     console.log(idGraduateProgram)
@@ -166,6 +129,8 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
 
             
           },
+          color: colors,
+
         
         },
       ],
@@ -176,7 +141,7 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
     return () => {
       chart.destroy();
     };
-  }, [graduatePrograms]); // O array vazio garante que o useEffect seja executado apenas uma vez na montagem
+  }, [props.graduatePrograms]); // O array vazio garante que o useEffect seja executado apenas uma vez na montagem
 
   return <div className={` absolute w-[140%] h-[130%] left-[-20px]`} id="containerone" />;
 }

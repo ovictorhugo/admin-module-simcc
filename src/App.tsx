@@ -86,7 +86,7 @@ function App() {
     >
       <Routes>
         <Route path='/' element={<Home/>}/>
-        <Route path='/maria' element={<Home/>}/>
+        <Route path='/pos-graduacao' element={<Home/>}/>
        
         <Route path='/indicadores' element={<Indicators/>}/>
         <Route path='/taxonomia' element={<Indicators/>}/>

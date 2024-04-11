@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 
-export type ModalType = "search" | "add-graduate-program"
+export type ModalType = "search" | "add-graduate-program" | "cookies"
 
 
 interface ModalStore {

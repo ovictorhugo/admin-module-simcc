@@ -36,7 +36,7 @@ export function ResearchItem(props: Research) {
                   ))
                 )}
             <Alert className="flex flex-1 gap-4 rounded-l-none">
-            <div className="h-full w-[110px] bg-cover bg-top bg-no-repeat rounded-md" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}></div>
+            <div className="h-full w-[110px] bg-cover bg-center bg-no-repeat rounded-md" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}></div>
 
             <div className="flex gap-2 flex-col h-full justify-between ">
                 <div className="flex gap-2 flex-col justify-center">

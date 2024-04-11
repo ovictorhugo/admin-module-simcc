@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { InitialHome } from "../homepage/inital-home";
 import { MariaHome } from "../homepage/maria-home";
 import { ResultHome } from "../homepage/result-home";
+import { GraduateProgram } from "../graduate-program/graduate-program";
 
 
 
@@ -23,6 +24,7 @@ export const GeralProvider = () => {
     <InitialHome/>
     <MariaHome/>
     <ResultHome/>
+    <GraduateProgram/>
     </>
   )
 }

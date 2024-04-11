@@ -102,7 +102,11 @@ export function SignInContent() {
     
       
           setTimeout(() => {
-            history('/admin');
+            if(user.state =='admin') {
+              history('/admin');
+            } else {
+              history('/');
+            }
           }, 0);
          }
         } catch (error) {

@@ -8,6 +8,14 @@ import { useLocation } from "react-router-dom";
 
 export function Home() {
     const { onOpen } = useModalHomepage();
+
+    const location = useLocation();
+
+    useEffect(() => {
+        if(location.pathname == '/pos-graduacao') {
+            onOpen('graduation-home')
+        } 
+    }, [location]);
   
 
     return(
