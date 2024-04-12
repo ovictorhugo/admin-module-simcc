@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Alert } from "../ui/alert";
-import { Chat, Chats, FadersHorizontal, Funnel, MagnifyingGlass } from "phosphor-react";
+import { Chat, Chats, FadersHorizontal, Funnel, MagnifyingGlass, X } from "phosphor-react";
 
 
 import { Button } from "../ui/button";
@@ -18,6 +18,10 @@ const API_KEY = import.meta.env.VITE_API_KEY
 
 const systemMessage = { //  Explain things like you're talking to a software professional with 5 years of experience.
     "role": "system", "content": `Retorne APENAS um json com o campo "type" (abstract, article, book, patent, name, area, speaker) e "term" contendo uma ÚNICA palavra. Se o tipo não for identificado, por padrão será definido como "article". Se o tipo for "name", o nome completo será extraído e colocado em "term".`
+  }
+
+  interface ItemsSelecionados {
+    term:string
   }
 export function Search() {
 
@@ -79,6 +83,8 @@ const handlePopUppesquisa = () => {
 
 const [messages, setMessages] = useState([]);
 const [isTyping, setIsTyping] = useState(false);
+  
+const [itemsSelecionados , setItensSelecionados] = useState<ItemsSelecionados[]>([])
 
 const handleSend = async (message: any) => {
   const newMessage = {
@@ -105,6 +111,8 @@ async function processMessageToChatGPT(messageObject:any) {
   }
 
   await fetch("https://api.openai.com/v1/chat/completions",
+
+
     {
       method: "POST",
       headers: {
@@ -125,7 +133,8 @@ async function processMessageToChatGPT(messageObject:any) {
     
       // Defina os valores nas variáveis
       setSearchType(type);
-      setValoresSelecionadosExport(term);
+      
+      setItensSelecionados(prevItems => [...prevItems, { term }]);
 
       setMessages(prevMessages => [...prevMessages, {
         message: data.choices[0].message.content,
@@ -149,6 +158,17 @@ const handlePesquisa = () => {
 
 console.log(messages)
 console.log(valoresSelecionadosExport)
+
+console.log(itemsSelecionados)
+
+const handleRemoveItem = (indexToRemove: any) => {
+  setItensSelecionados(prevItems => prevItems.filter((_, index) => index !== indexToRemove));
+}
+
+useEffect(() => {
+  const joinedTerms = itemsSelecionados.map(item => item.term).join('|');
+  setValoresSelecionadosExport(joinedTerms);
+}, [itemsSelecionados]);
 
 
     return  (
@@ -179,7 +199,16 @@ console.log(valoresSelecionadosExport)
                     <SelectTypeInstitutionSearch/>
                 )}
 
-                
+              <div className='flex gap-2 mx-2'>
+              {itemsSelecionados.map((valor, index) => {
+                  return(
+                      <div key={index} className={`flex gap-2 items-center p-2 px-3 rounded-md text-xs ${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${maria && searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} >
+                          {valor.term}
+                          <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer"/>
+                      </div>
+                  )
+              })}
+                </div>
 
                 <Input onClick={() => handlePopUppesquisa()} onChange={(e) => setInput(e.target.value)} value={input}  type="text" className="border-0 w-full "/>
                 </div>
@@ -191,7 +220,7 @@ console.log(valoresSelecionadosExport)
             <div className="w-fit">
             <Button onClick={() => handlePesquisa()} variant="outline" className={`${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${maria && searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} size={'icon'}>
        <Funnel size={16} className="" /> 
-       <span className="sr-only">Pesquisadores selecionados</span>
+       
         </Button>
             </div>
             </Alert>

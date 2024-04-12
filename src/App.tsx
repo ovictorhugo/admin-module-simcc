@@ -22,7 +22,7 @@ function App() {
   const [navbar, setNavbar] = useState(false);
   const [user, setUser] = useState<User>({  state: '', email: '', name: '', img_url: '', institution_id: '',...{} } as User);
 
-  const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:8080/');
+  const [urlGeral, setUrlGeral] = useState('https://simcc.uesc.br:8080/');
   const [urlGeralAdm, setUrlGeralAdm] = useState('http://200.128.66.226:5000/');
 
   const [searchType, setSearchType] = useState('');

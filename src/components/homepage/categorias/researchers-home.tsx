@@ -44,6 +44,7 @@ export function ResearchersHome() {
     const { isOpen, type} = useModalResult();
     const [loading, isLoading] = useState(false)
     const [researcher, setResearcher] = useState<Research[]>([]); 
+    const [typeVisu, setTypeVisu] = useState('block')
   
     const isModalOpen = isOpen && type === "researchers-home";
 
@@ -107,13 +108,13 @@ export function ResearchersHome() {
 
                    {searchType != 'abstract' && searchType != 'name' && searchType != 'area' && (
                      <div className="mb-8">
-                        <Accordion type="single" collapsible>
-                <AccordionItem value="item-1">
+                        <Accordion type="single" collapsible >
+                <AccordionItem value="item-1" >
                     <AccordionTrigger>
                     <HeaderResultTypeHome title="Pesquisadores mais relevantes por ordem de ocorrências" icon={<ListNumbers size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
                     </AccordionTrigger>
-                    <AccordionContent>
+                    <AccordionContent >
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
@@ -130,17 +131,7 @@ export function ResearchersHome() {
                    )}
 
                 <div className="mb-8">
-                        <HeaderResultTypeHome title="Pesquisadores por cidade" icon={<MapTrifold size={24} className="text-gray-400" />}>
-                        <Button  variant="outline" className={`bg-transparent border-0 `} size={'icon'}>
-                            <CaretDown size={16} className=" whitespace-nowrap" />
-                        </Button>
-                        </HeaderResultTypeHome>
-                        <TableReseracherhome
-                     researcher={researcher}
-                     />
-
-                    
-
+                      
 <Accordion type="single" collapsible>
                 <AccordionItem value="item-1">
                     <AccordionTrigger>
@@ -164,26 +155,37 @@ export function ResearchersHome() {
 
                 <div>
                         <HeaderResultTypeHome title="Pesquisadores por detalhamento" icon={<UserList size={24} className="text-gray-400" />}>
-                        <Button  variant="outline" className={`bg-transparent border-0 `} size={'icon'}>
+                        <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
                         </Button>
 
-                        <Button  variant="outline" className={`bg-transparent border-0 `} size={'icon'}>
+                        <Button  onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
                             <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
                         </HeaderResultTypeHome>
                      
 
-                    {loading ? (
+                    {typeVisu == 'block' ? (
+                    loading ? (
                       <div className={`gap-4 grid ${navbar ? ('grid-cols-2'):('grid-cols-3')}`}>
-                      {items.map((item, index) => (
-                              <div key={index}>{item}</div>
-                            ))}
-                      </div>
+                        {items.map((item, index) => (
+                                <div key={index}>{item}</div>
+                              ))}
+                        </div>
+                      ):(
+                        <ResearchersBloco
+                       researcher={researcher}
+                       />
+                      )
                     ):(
-                      <ResearchersBloco
+                      loading ? (
+                        
+                        <Skeleton className="w-full rounded-md h-[400px]"/>
+                      ):(
+                        <TableReseracherhome
                      researcher={researcher}
                      />
+                      )
                     )}
                  </div>
                 </div>

@@ -5,6 +5,7 @@ import { MapPin } from 'lucide-react';
 import unorm from 'unorm';
 import "leaflet/dist/leaflet.css"
 import { UserContext } from '../../../../context/context';
+import { useModal } from '../../../hooks/use-modal-store';
 
 type Research = {
     researcher: any[];
@@ -20,6 +21,7 @@ type CityData = {
   };
 
 export function ResearcherMap(props:Research) {
+  const { onOpen } = useModal();
     const [cityData, setCityData] = useState<CityData[]>([]);
     const mapRef = useRef(null);
     const {urlGeral} = useContext(UserContext)
@@ -111,46 +113,10 @@ export function ResearcherMap(props:Research) {
       fillOpacity={0.5}
       color="blue"
       style={`outline: "none"`}
+      onClick={() => {onOpen('map-researchers-modal', cityData)}}
     >
       
-      <Tooltip>{city.pesquisadores}</Tooltip>
-      <text x="0" y="0" dy=".3em" style={{ fontSize: '10px', textAnchor: 'middle', fill: 'white' }}>{city.pesquisadores}</text>
-
-      <Popup >
-        <div className="p-1 pb-4">
-        <div className="text-base text-medium flex gap-2 items-center mb-4 bg-white">
-          <MapPin size={16} className="text-gray-500" />{city.nome}
-          <div className="text-xs px-3 rounded-md py-1 roun text-medium  bg-blue-400 text-white">{props.researcher.filter(user => {
-      const normalizedUserCity = unorm.nfd(user.city.toUpperCase()).replace(/[\u0300-\u036f]/g, "");
-      const normalizedCityNome = unorm.nfd(city.nome.toUpperCase()).replace(/[\u0300-\u036f]/g, "");
-      return normalizedUserCity === normalizedCityNome;
-    }).length}</div>
-          </div>
-        <div className="flex flex-col max-h-[250px] overflow-y-auto elementBarra">
-        
-        {props.researcher.map((user) => {
-
-const normalizedUserCity = unorm.nfd(user.city.toUpperCase()).replace(/[\u0300-\u036f]/g, "");
-const normalizedCityNome = unorm.nfd(city.nome.toUpperCase()).replace(/[\u0300-\u036f]/g, "");
-
-          if (normalizedUserCity === normalizedCityNome) {
-            return (
-              <div className="">
-                <div  className="hover:bg-gray-50 transition-all  p-2 cursor-pointer border w-full flex gap-4 items-center border-gray-300 rounded-md my-2" key={user.name}>
-                 <div className={`whitespace-nowrap  bg-cover bg-center bg-no-repeat h-6 w-6 bg-white rounded-md  relative `} style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${user.id}) ` }}>
-                  </div>
-                <div className="flex-1 m-0">{user.name}</div>
-              </div>
-
- 
-              </div>
-            );
-          }
-          return null; // Add this to handle cases where the condition is not met
-        })}
-        </div>
-        </div>
-      </Popup>
+     
     </CircleMarker>
   ))}
 </MapContainer>

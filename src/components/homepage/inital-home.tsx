@@ -19,6 +19,16 @@ interface VisaoPrograma {
     software: number,
     work_in_event: number
   }
+
+
+  import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+  } from "../../components/ui/carousel"
+  
   
 
 export function InitialHome() {
@@ -72,66 +82,75 @@ export function InitialHome() {
         
           </div>
 
-          <div className=" overflow-x-hidden w-full flex left-0 ">
-         <div className="overflow-x-hidden w-full flex left-0">
+          <div className=" w-full ">
+       
          {VisaoPrograma.map(props => {
             return(
-                <div className="flex gap-6 w-[955px] overflow-x-auto whitespace-nowrap pb-2 elementBarra">
+              <Carousel
+              opts={{
+                align: "start",
+              }}
+              className="w-full gap-4  "
+            >
 
-                    <ItemHome
+<CarouselContent className="md:basis-1/2 lg:basis-1/4">  
+<CarouselItem>
+<ItemHome
                     title="Pesquisadores"
                     url=""
                     value={String(props.researcher)}
                     ><User size={16} className="" /> </ItemHome>
-
+</CarouselItem>
                    
 
-                    <ItemHome
+                   
+<CarouselItem >
+<ItemHome
                     title="Livros"
                     url=""
                     value={String(props.book)}
                     > <Book size={16} className="" /></ItemHome>
+</CarouselItem>
                     
-                    <ItemHome
+<CarouselItem >
+<ItemHome
                     title="Patentes"
                     url=""
                     value={String(props.patent)}
                     ><Copyright size={16} className="" /> </ItemHome>
-
-                    {!enable && (
-                        <Alert onClick={() => setEnable(true)} className="min-h-[160px] whitespace-nowrap dark:hover:bg-neutral-900 hover:bg-gray-100 transition-all cursor-pointer min-w-[220px] flex items-center justify-center">
-                        <div><CaretRight size={24} className="" /> </div>
-                                </Alert>
-                    )}
-
-                    {enable && (
-                         <ItemHome
+</CarouselItem>
+                   
+<CarouselItem >
+<ItemHome
                          title="Softwares"
                          url=""
                          value={String(props.software)}
                          ><Code size={16} className="" /> </ItemHome>
-                    )}
-
-                    {enable && (
-                         <ItemHome
+</CarouselItem>
+                 
+<CarouselItem >
+<ItemHome
                          title="Capítulos de livro"
                          url=""
                          value={String(props.book_chapter)}
                          ><Books size={16} className="" /> </ItemHome>
-                    )}
+</CarouselItem>
+<CarouselItem >
 
-                    {enable && (
-                         <ItemHome
+<ItemHome
                          title="Marcas"
                          url=""
                          value={String(props.brand)}
                          ><StripeLogo size={16} className="" /> </ItemHome>
-                    )}
-                </div>
+  </CarouselItem> 
+
+                     </CarouselContent>
+               <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
             )
           })}
          </div>
-          </div>
          
         </div>
       )}
