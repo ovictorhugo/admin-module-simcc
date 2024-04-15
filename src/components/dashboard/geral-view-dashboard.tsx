@@ -4,10 +4,16 @@ import {TableResearcherViewDashboard} from "./table-reseracher-view-dashboard"
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { GraduateProgramDashboard } from "./graduate-program-dashboard";
 import { useModalSidebar } from "../hooks/use-modal-sidebar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../..//components/ui/tabs"
+import { useContext, useState } from "react";
+import { UserContext } from "../../context/context";
+import { Badge } from "../ui/badge";
+import { AddAdmin } from "./add-admin";
+import { PesquisadoresHeader } from "./pesquisadores-header";
 
 
 export function GeralViewDashboard() {
-
+const {user} = useContext(UserContext)
     
     const { isOpen: isOpenSidebar } = useModalSidebar();
 
@@ -17,26 +23,52 @@ export function GeralViewDashboard() {
   
     const isModalOpen = isOpen && type === "general";
 
+    const [value, setValue] = useState('geral')
+
     return  (
        <>
        {isModalOpen && (
          <div className=" overflow-y-hidden flex max-lg:flex-col pr-6 md:pr-[72px] w-full">
-         <div className="flex flex-1  flex-col">
-            <DataGeralDashboard/>
-            <div className="mt-6">
-            <AddResearcherDashboard/>
-            <div className="my-6 h-full flex flex-1 ">
-            <TableResearcherViewDashboard/>
-            </div>
+      <Tabs defaultValue="geral" value={value} className="w-full" >
+       
+        {value == 'geral' && (
+         <DataGeralDashboard/>
+        )}
 
-            </div>
-         </div>
+{value == 'pesquisadores' && (
+          <PesquisadoresHeader/>
+        )}
+        
+        <TabsList className="mb-8">
+         <TabsTrigger value="geral" onClick={() => setValue('geral')}>Visão geral</TabsTrigger>
+         <TabsTrigger value="pesquisadores" onClick={() => setValue('pesquisadores')}>Pesquisadores</TabsTrigger>
+         <TabsTrigger value="pos-graduacoes" onClick={() => setValue('pos-graduacoes')}>Pós-graduações</TabsTrigger>
+      </TabsList>
 
-         {!isOpenSidebar && (
-            <div className="ml-6 lg:max-w-[350px]  w-full overflow-y-auto elementBarra pr-2">
+        
+         <TabsContent value="geral">
+
+         oi
+         </TabsContent>
+         <TabsContent value="pesquisadores">
+            
+           <TableResearcherViewDashboard/>
+          
+         </TabsContent>
+         </Tabs>
+
+         {!isOpenSidebar && value== 'geral' && (
+            <div className="ml-6 lg:max-w-[350px]  w-full overflow-y-auto ">
             <GraduateProgramDashboard/>
+            
+            <div className="mt-6 flex h-full flex-1">
+            <AddAdmin/>
+            </div>
+
+
             </div>
          )}
+
           
         </div>
        )}

@@ -70,7 +70,7 @@ export function SignInContent() {
 
            // Recupere dados personalizados do usuário no Firestore
             const db = getFirestore();
-            const userDocRef = doc(db, 'institution', result.user.uid);
+            const userDocRef = doc(db, 'institution', String(result.user.email));
             const snapshot = await getDoc(userDocRef);
             
 
@@ -125,7 +125,11 @@ export function SignInContent() {
         const provider = new GoogleAuthProvider();
     
         signInWithPopup(auth, provider)
-          .then((result) => {
+          .then(async(result) => {
+            
+            const db = getFirestore();
+            const userDocRef = doc(db, 'institution', String(result.user.email));
+            const snapshot = await getDoc(userDocRef);
             const userData: User = {
               ...result.user,
               img_url: '', // Set to the appropriate default value or leave it empty if you don't have a default
@@ -134,18 +138,56 @@ export function SignInContent() {
               email: result.user.email || '',
               institution_id: '',
             };
+
+            // Verifique se os dados personalizados existem antes de adicionar ao objeto result.user
+            if (snapshot.exists()) {
+              
+             
+              const userData = snapshot.data();
+
+              const userDataFinal: User = {
+                ...result.user,
+                img_url: userData.img_url || '', // Set to the appropriate default value or leave it empty if you don't have a default
+                state: userData.state || '',
+                name: userData.name || '',
+                email: result.user.email || '',
+                institution_id: userData.institution_id || '',
+              };
+             
+              // Adicione os dados personalizados diretamente ao objeto result.user
+
+              // Atualize o estado com o objeto modificado
+              setUser(userDataFinal)
+              localStorage.setItem('user', JSON.stringify(userDataFinal));
+              setCookie('user', (userDataFinal), { path: '/' })
       
-            setUser(userData);
+            setUser(userDataFinal);
             setLoggedIn(true);
             setTimeout(() => {
               history('/');
             }, 0);
-    
-            // Save user information to local storage
-        localStorage.setItem('user', JSON.stringify(result.user));
+          } else {
+            setUser(userData);
+            localStorage.setItem('user', JSON.stringify(userData));
+            setCookie('user', (userData), { path: '/' })
+            setLoggedIn(true);
+            setTimeout(() => {
+              history('/');
+            }, 0);
+          }
+
+          
+           
           })
           .catch((error) => {
             console.log(error)
+            toast("Erro ao fazer login", {
+              description: "Revise os dados e tente novamente",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
           })
       }
 

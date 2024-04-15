@@ -39,7 +39,7 @@ export function Header() {
   const posGraduation = location.pathname == '/pos-graduacao'
 
     return(
-        <header className={`h-20 z-[99]  flex justify-between  items-center mr-[72px] sticky top-0  ${posGraduation == true ? ('bg-transparent'):('dark:bg-neutral-900 bg-gray-100')}`}>
+        <header className={`h-20 z-[3] flex justify-between  items-center mr-[72px] sticky top-0  ${posGraduation == true ? ('bg-transparent'):('dark:bg-neutral-900 bg-gray-100')}`}>
             <div className=" w-full flex items-center h-12 gap-4">
             <div className="flex gap-2 items-center h-full justify-center ">
             <Link to={"/"} className="h-[24px]  " onClick={() => onOpen('initial-home')} >{theme == 'dark' ? (<LogoWhite />):(<LogoSimcc />)}</Link>
@@ -151,13 +151,11 @@ export function Header() {
                 <Link to={'/signIn'}><Button variant={'default'} className="text-white h-10 dark:text-white"><SignIn size={16} className="" />Fazer login</Button></Link>
             )}
 
-{user.state == 'admin' && (
-                <Link to={'/admin'}><Button variant={'outline'}><GridFour size={16} className="" />Módulo administrativo</Button></Link>
+{(user.state === "admin" || user.state === 'colaborator') && (
+                <Link to={'/admin'}><Button variant={'outline'} className="text-gray-500 border-0 dark:text-white"><GridFour size={16} className="" />Módulo administrativo</Button></Link>
               )}
 
-          {loggedIn && (
-                <UserConfigHeader/>
-            )}
+         
 
             </div>
 

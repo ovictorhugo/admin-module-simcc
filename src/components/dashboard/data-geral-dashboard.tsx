@@ -5,6 +5,7 @@ import { ItemHome } from "../homepage/item-home";
 import { User } from "lucide-react";
 import { ItemDashboard } from "./item-home";
 import { GraduationCap } from "phosphor-react";
+import { Badge } from "../ui/badge";
 
 interface VisaoPrograma {
     count_gp: string,
@@ -43,20 +44,25 @@ export function DataGeralDashboard() {
 
     console.log(urlVisaoPrograma)
 
-    return  (
-        <div className="flex gap-6 w-full h-fit max-lg:items-center max-xl:flex-col ">
-             <div className="flex gap-2 items-center">
-           <h1 className=" text-3xl  font-medium max-w-[380px] ">
-            Bem vindo(a) ao Módulo <strong className="bg-red-700 text-white"> administrativo </strong>{" "}
-        </h1>
-        <img src={user.img_url} alt="" className="h-20" />
-           </div>
+    
 
+    return  (
+        <div className="  w-full  flex gap-3 items-center mb-6">
+             <div className="flex gap-2 items-center ">
+          <div>
+           
+          <h1 className=" text-3xl  font-medium max-w-[380px] ">
+            Bem vindo(a) ao Módulo <strong className="bg-red-700 font-medium text-white"> administrativo </strong>{" "}
+        </h1>
+        <p className="mt-2 max-w-[420px] text-gray-500 dark:text-gray-300">Cadastre, edite e remova pesquisadores e programa de pós-graduações no módulo administrativo</p>
+          </div>
+      
+           </div>
            
            {VisaoPrograma.map(props => {
             if(String(user.institution_id) == String(props.institution_id)) {
                 return(
-                    <div className="grid grid-cols-2 gap-6 h-full w-full flex-1">
+                    <div className="grid grid-cols-2 gap-6 min-h-full h-full w-full flex-1">
                     <ItemDashboard
                 title="Docentes"
                 url=""

@@ -8,11 +8,12 @@ import { useModalSidebar } from "../hooks/use-modal-sidebar";
 import { UserContext } from "../../context/context";
 
 import geoip from 'geoip-lite';
+import { UserConfigHeader } from "../header/user-config-header";
 
 export function NavigationSidebar() {
     const { onOpen, onClose } = useModalSidebar();
 
-    const {navbar, setNavbar} = useContext(UserContext)
+    const {navbar, setNavbar, loggedIn, user} = useContext(UserContext)
 
     const [filterState, setFilterState] = useState(""); // Inicialmente, sem filtro
 
@@ -57,11 +58,19 @@ export function NavigationSidebar() {
        {navbar && (<span className="">Pesquisadores selecionados</span>)}
         </Button>
 
-        {navbar && (
-          <p>u</p>
-        )
-          
-        }
+        {loggedIn && (
+          <div className="flex gap-4 items-center w-full">
+          <UserConfigHeader/>
+          {navbar && (
+            <div>
+            <p className="text-xs truncate font-bold max-w-[160px]">{user.displayName}</p>
+            <p className="text-xs truncate max-w-[160px]">{user.email}</p>
+            </div>
+          )}
+        </div>
+        )}
+
+       
           
         </div>
       </div>

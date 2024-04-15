@@ -12,11 +12,13 @@ export function TableReseracherhome(props:Research){
 
     return (
         <div className="w-full overflow-auto ">
-        <Alert className=" overflow-y-auto elementBarra">
-        <div className=" overflow-y-auto max-h-fit h-full elementBarra pr-2">
+     <div className="rounded-md">
+     <div className=" overflow-y-auto max-h-fit h-full ">
             <DataTable columns={columns} data={props.researcher} />
           </div>
-        </Alert>
+     </div>
+        
+    
       </div>
     
 )

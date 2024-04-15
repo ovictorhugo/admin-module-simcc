@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { SearchModal } from "../modals/search-modal";
 import { AddGraduateProgram } from "../modals/add-graduate-program";
+import { MapResearchersModal } from "../modals/map-researchers-modal";
+import { ResearcherModal } from "../modals/researcher-modal";
 
 
 export const ModalProvider = () => {
@@ -20,6 +22,8 @@ export const ModalProvider = () => {
     <>
     <SearchModal/>
     <AddGraduateProgram/>
+    <MapResearchersModal/>
+    <ResearcherModal/>
     </>
   )
 }

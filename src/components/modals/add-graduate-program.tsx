@@ -66,7 +66,6 @@ export function AddGraduateProgram() {
 
           let urlProgram = urlGeralAdm + '/GraduateProgramRest/Insert'
 
-          console.log(data)
 
           const fetchData = async () => {
           

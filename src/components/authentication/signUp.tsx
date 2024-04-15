@@ -10,7 +10,8 @@ import {
     CardTitle,
   } from "../ui/card"
 import { Button } from "../ui/button";
-import { signInWithEmailAndPassword} from 'firebase/auth';
+import { toast } from "sonner"
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { useNavigate } from "react-router-dom";
@@ -85,38 +86,84 @@ export function SignUpContent() {
    
   } catch (error) {
    console.error('Authentication error:', error);
+   toast("Erro ao criar conta", {
+    description: "Revise os dados e tente novamente",
+    action: {
+      label: "Fechar",
+      onClick: () => console.log("Undo"),
+    },
+  })
   }
   
 }
 
 function handleGoogleSignIn() {
-    const provider = new GoogleAuthProvider();
+  const provider = new GoogleAuthProvider();
 
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const userData: User = {
+  signInWithPopup(auth, provider)
+    .then(async(result) => {
+      
+      const db = getFirestore();
+      const userDocRef = doc(db, 'institution', String(result.user.email));
+      const snapshot = await getDoc(userDocRef);
+      const userData: User = {
+        ...result.user,
+        img_url: '', // Set to the appropriate default value or leave it empty if you don't have a default
+        state: '',
+        name:  '',
+        email: result.user.email || '',
+        institution_id: '',
+      };
+
+      // Verifique se os dados personalizados existem antes de adicionar ao objeto result.user
+      if (snapshot.exists()) {
+        
+       
+        const userData = snapshot.data();
+
+        const userDataFinal: User = {
           ...result.user,
-          img_url: '', // Set to the appropriate default value or leave it empty if you don't have a default
-          state: '',
-          name: '',
+          img_url: userData.img_url || '', // Set to the appropriate default value or leave it empty if you don't have a default
+          state: userData.state || '',
+          name: userData.name || '',
           email: result.user.email || '',
-          institution_id: '',
+          institution_id: userData.institution_id || '',
         };
-  
-        setUser(userData);
-        console.log('userDataSignUp', userData)
-        setLoggedIn(true);
-        setTimeout(() => {
-          history('/');
-        }, 0);
+       
+        // Adicione os dados personalizados diretamente ao objeto result.user
 
-        // Save user information to local storage
-    localStorage.setItem('user', JSON.stringify(result.user));
+        // Atualize o estado com o objeto modificado
+        setUser(userDataFinal)
+        localStorage.setItem('user', JSON.stringify(userDataFinal));
+
+      setUser(userDataFinal);
+      setLoggedIn(true);
+      setTimeout(() => {
+        history('/');
+      }, 0);
+    } else {
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
+      setLoggedIn(true);
+      setTimeout(() => {
+        history('/');
+      }, 0);
+    }
+
+    
+     
+    })
+    .catch((error) => {
+      console.log(error)
+      toast("Erro ao fazer login", {
+        description: "Revise os dados e tente novamente",
+        action: {
+          label: "Fechar",
+          onClick: () => console.log("Undo"),
+        },
       })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
+    })
+}
 
     return(
         <div className="w-full h-screen flex">

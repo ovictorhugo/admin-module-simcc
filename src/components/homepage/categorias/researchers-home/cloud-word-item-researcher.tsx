@@ -22,7 +22,18 @@ export function CloudWordItemResearcher(props:Props) {
           className="inline-flex whitespace-nowrap cursor-pointer"
         >
           <Alert
-           className="flex gap-4 font-bold text-blue-700 dark:text-white items-center"
+           className={`flex gap-4 font-bold  dark:text-white items-center
+           ${
+            ( searchType === 'article') && 'text-blue-500 ' ||
+            (searchType === 'abstract') && 'text-yellow-500 ' ||
+            (searchType === 'speaker') && 'text-orange-500' ||
+            (searchType === 'book') && 'text-pink-500 ' ||
+            (searchType === 'patent') && 'text-cyan-500 ' ||
+            (searchType === 'name') && 'text-red-500' ||
+            (searchType=== 'area') && 'text-green-500' ||
+            ('')
+        }
+        `}
             style={{ fontSize: `${props.fontSize}%` }}
           >
             {props.name}

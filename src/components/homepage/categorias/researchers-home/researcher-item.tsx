@@ -3,6 +3,7 @@ import { Alert } from "../../../ui/alert"
 import { UserContext } from "../../../../context/context"
 import { Buildings, MapPin, Star } from "phosphor-react"
 import { GraduationCap } from "lucide-react"
+import { useModal } from "../../../hooks/use-modal-store"
 
 type Research = {
     among: number,
@@ -22,9 +23,11 @@ type Research = {
 }
 
 export function ResearchItem(props: Research) {
+    const { onOpen } = useModal();
     const { urlGeral, valorDigitadoPesquisaDireta, valoresSelecionadosExport, searchType} = useContext(UserContext)
+    const name = props.name
     return(
-        <div className="flex h-[170px] w-full cursor-pointer">
+        <div onClick={() => onOpen('researcher-modal', {name:props.name})} className="flex min=h-[170px] w-full cursor-pointer">
             {props.area != '' && (
                   props.area.split(';').slice(0, 1).map((value, index) => (
                     <div

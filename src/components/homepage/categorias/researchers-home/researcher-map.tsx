@@ -11,6 +11,35 @@ type Research = {
     researcher: any[];
 }
 
+interface ModalData {
+  among?: number,
+  articles?: number,
+  book?: number,
+  book_chapters?: number,
+  id?: string,
+  name?: string,
+  university?: string,
+  lattes_id?: string,
+  area?: string,
+  lattes_10_id?: string,
+  abstract?: string,
+  city?: string,
+  orcid?: string,
+  image?: string
+  graduation?: string,
+  patent?: string,
+  software?: string,
+  brand?: string,
+  lattes_update?: Date,
+
+  nome?: string;
+  latitude?: number;
+  longitude?: number;
+  pesquisadores?: number;
+  professores?: string[];
+ 
+}
+
 type CityData = {
     nome: string;
     latitude: number;
@@ -24,7 +53,7 @@ export function ResearcherMap(props:Research) {
   const { onOpen } = useModal();
     const [cityData, setCityData] = useState<CityData[]>([]);
     const mapRef = useRef(null);
-    const {urlGeral} = useContext(UserContext)
+    const {urlGeral, searchType} = useContext(UserContext)
     const [mapFocused, setMapFocused] = useState(false);
 
     const [defaultZoom] = useState(5.5);
@@ -89,7 +118,7 @@ export function ResearcherMap(props:Research) {
 }, [props.researcher]);
 
     return(
-        <div onClick={() => setMapFocused(true)} className="h-[400px] rounded-md mb-8">
+        <div onClick={() => setMapFocused(true)} className="h-full w-full rounded-md">
       <MapContainer 
       ref={mapRef} 
       center={positionInit} 
@@ -111,11 +140,37 @@ export function ResearcherMap(props:Research) {
       radius={Math.sqrt(city.pesquisadores) * 4}
       fillColor="#173DFF"
       fillOpacity={0.5}
-      color="blue"
+     
       style={`outline: "none"`}
-      onClick={() => {onOpen('map-researchers-modal', cityData)}}
+
+    
+      onClick={() => {
+        const modalData: ModalData = {
+            nome: city.nome,
+            latitude: city.latitude,
+            longitude: city.longitude,
+            pesquisadores: city.pesquisadores,
+            professores: city.professores,
+            lattes_10_id: city.lattes_10_id,
+        };
+        onOpen('map-researchers-modal', modalData);
+        console.log('opeeen')
+    }}
     >
-      
+      <Tooltip>{city.pesquisadores}</Tooltip>
+      <div className='w-full h-full bg-slate-900' 
+       onClick={() => {
+        const modalData: ModalData = {
+            nome: city.nome,
+            latitude: city.latitude,
+            longitude: city.longitude,
+            pesquisadores: city.pesquisadores,
+            professores: city.professores,
+            lattes_10_id: city.lattes_10_id,
+        };
+        onOpen('map-researchers-modal', modalData);
+        console.log('opeeen')
+    }}></div>
      
     </CircleMarker>
   ))}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Home } from './pages/Home'
 import { BrowserRouter as Router, Routes, Route, Navigate, } from 'react-router-dom';
 import  { UserContext }  from '../src/context/context'
@@ -22,8 +22,10 @@ function App() {
   const [navbar, setNavbar] = useState(false);
   const [user, setUser] = useState<User>({  state: '', email: '', name: '', img_url: '', institution_id: '',...{} } as User);
 
+
   const [urlGeral, setUrlGeral] = useState('https://simcc.uesc.br:8080/');
-  const [urlGeralAdm, setUrlGeralAdm] = useState('http://200.128.66.226:5000/');
+  const [urlGeralAdm, setUrlGeralAdm] = useState('https://simcc.uesc.br:5000/');
+  const [mapModal, setMapModal] = useState(false)
 
   const [searchType, setSearchType] = useState('');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
@@ -64,7 +66,7 @@ function App() {
     <>
     <Router>
    <CookiesProvider>
-   <DefaultLayout>
+   
    <UserContext.Provider 
     value={{
       loggedIn, setLoggedIn,
@@ -80,10 +82,12 @@ function App() {
       valoresSelecionadosExport, setValoresSelecionadosExport,
       valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta,
       inputMaria, setInputMaria,
-      maria, setMaria
+      maria, setMaria,
+      mapModal, setMapModal
 
     }}
     >
+      <DefaultLayout>
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/pos-graduacao' element={<Home/>}/>
@@ -107,11 +111,12 @@ function App() {
 
         <Route
           path='/admin'
-          element={loggedIn  ? <Dashboard/> : <Navigate to='/' />}
+          element={user.state == 'admin' || user.state == 'colaborator'  ? <Dashboard/> : <Navigate to='/' />}
         />
       </Routes>
+      </DefaultLayout>
     </UserContext.Provider>
-   </DefaultLayout>
+   
    </CookiesProvider>
     </Router>
  

@@ -13,6 +13,8 @@ interface UserContextType {
   loggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   navbar: boolean;
+  mapModal:boolean; 
+  setMapModal:React.Dispatch<React.SetStateAction<boolean>>;
   setNavbar: React.Dispatch<React.SetStateAction<boolean>>;
   maria: boolean;
   setMaria: React.Dispatch<React.SetStateAction<boolean>>;
@@ -50,6 +52,8 @@ interface UserContextType {
 export const UserContext = createContext<UserContextType>({
   loggedIn: false,
   setLoggedIn: () => {},
+  mapModal:false, 
+  setMapModal:() => {},
   navbar: false, 
   setNavbar: () => {},
   maria: false, 

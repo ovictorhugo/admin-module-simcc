@@ -3,7 +3,7 @@ import { useModalResult } from "../../hooks/use-modal-result";
 import { UserContext } from "../../../context/context";
 import { CloudWordResearcherHome } from "./researchers-home/clould-word-researcher-home";
 import { HeaderResultTypeHome } from "./header-result-type-home";
-import { CaretDown, ListNumbers, MapTrifold, Rows, SquaresFour, UserList } from "phosphor-react";
+import {  ListNumbers, MapTrifold, Rows, SquaresFour, UserList } from "phosphor-react";
 import { Button } from "../../ui/button";
 import { ResearchersBloco } from "./researchers-home/researchers-bloco";
 import { ResearcherMap } from "./researchers-home/researcher-map";
@@ -16,6 +16,8 @@ import {
     AccordionTrigger,
   } from "../../../components/ui/accordion"
 import { Skeleton } from "../../ui/skeleton";
+import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
+import { useModalSidebar } from "../../hooks/use-modal-sidebar";
 
 type Research = {
     among: number,
@@ -42,9 +44,13 @@ type Research = {
 
 export function ResearchersHome() {
     const { isOpen, type} = useModalResult();
+    const {isOpen:isOpenSidebar} = useModalSidebar()
     const [loading, isLoading] = useState(false)
     const [researcher, setResearcher] = useState<Research[]>([]); 
     const [typeVisu, setTypeVisu] = useState('block')
+
+    const { mapModal, setMapModal} = useContext(UserContext)
+    
   
     const isModalOpen = isOpen && type === "researchers-home";
 
@@ -103,12 +109,12 @@ export function ResearchersHome() {
     return(
         <>
         {isModalOpen && (
-            <div className="w-full flex flex-col mb-[150px]">
-                <div>
+            <div className="w-full flex gap-6 mb-[150px]  justify-center">
+                <div className="flex-1 flex flex-col">
 
                    {searchType != 'abstract' && searchType != 'name' && searchType != 'area' && (
-                     <div className="mb-8">
-                        <Accordion type="single" collapsible >
+                  
+                        <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >
                     <AccordionTrigger>
                     <HeaderResultTypeHome title="Pesquisadores mais relevantes por ordem de ocorrências" icon={<ListNumbers size={24} className="text-gray-400" />}>
@@ -125,36 +131,15 @@ export function ResearchersHome() {
                     </AccordionContent>
                 </AccordionItem>
                 </Accordion>
-                       
-                    
-                 </div>
+
                    )}
 
-                <div className="mb-8">
-                      
-<Accordion type="single" collapsible>
-                <AccordionItem value="item-1">
-                    <AccordionTrigger>
-                    <HeaderResultTypeHome title="Pesquisadores por cidade" icon={<MapTrifold size={24} className="text-gray-400" />}>
-          
-                        </HeaderResultTypeHome>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                    {loading ? (
-                      <Skeleton className="w-full rounded-md h-[400px]"/>
-                    ):(
-                      <ResearcherMap
-                      researcher={researcher}
-                      />
-                    )}
-                    </AccordionContent>
-                </AccordionItem>
-                </Accordion>
-      
-                 </div>
 
                 <div>
-                        <HeaderResultTypeHome title="Pesquisadores por detalhamento" icon={<UserList size={24} className="text-gray-400" />}>
+                <Accordion defaultValue="item-1"  type="single" collapsible >
+                <AccordionItem value="item-1" >
+                    <AccordionTrigger className="flex items-center">
+                    <HeaderResultTypeHome title="Pesquisadores por detalhamento" icon={<UserList size={24} className="text-gray-400" />}>
                         <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
                         </Button>
@@ -163,15 +148,24 @@ export function ResearchersHome() {
                             <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
                         </HeaderResultTypeHome>
-                     
-
+                    </AccordionTrigger>
+                    <AccordionContent >
                     {typeVisu == 'block' ? (
                     loading ? (
-                      <div className={`gap-4 grid ${navbar ? ('grid-cols-2'):('grid-cols-3')}`}>
+                      <ResponsiveMasonry
+                        columnsCountBreakPoints={{
+                            350: 1,
+                            750: 2,
+                            900: 3,
+                            1200: navbar || isOpenSidebar || mapModal ? 3 : 4
+                        }}
+                    >
+                                     <Masonry gutter="16px">
                         {items.map((item, index) => (
                                 <div key={index}>{item}</div>
                               ))}
-                        </div>
+                        </Masonry>
+        </ResponsiveMasonry>
                       ):(
                         <ResearchersBloco
                        researcher={researcher}
@@ -187,8 +181,46 @@ export function ResearchersHome() {
                      />
                       )
                     )}
+                    </AccordionContent>
+                </AccordionItem>
+                </Accordion>
+                       
+                     
                  </div>
                 </div>
+
+                {mapModal && (
+                  <div className="flex w-[450px] top-20 sticky">
+
+                    <div className="w-[450px]">
+
+                    </div>
+                    
+                    <div  className="flex w-[450px]  h-screen pb-[230px] top-20 fixed">
+                  {loading ? (
+                        <Skeleton className="w-full rounded-md h-screen pb-[230px] top-20 fixed"/>
+                      ):(
+                        <ResearcherMap
+                        researcher={researcher}
+                        />
+                      )}
+                  </div>
+                  </div>
+                )}
+
+
+                <div onClick={() => setMapModal(!mapModal)} className={`fixed dark:text-white text-sm bottom-[150px] rounded-full px-6 py-2 flex gap-3 transition-all cursor-pointer items-center ${
+            (searchType=== 'article') && 'bg-blue-500 dark:bg-blue-500 text-white' ||
+            (searchType === 'abstract') && 'bg-yellow-500 dark:bg-yellow-500 text-white' ||
+            (searchType === 'speaker') && 'bg-orange-500 dark:bg-orange-500 text-white' ||
+            (searchType === 'book') && 'bg-pink-500 dark:bg-pink-500 text-white' ||
+            (searchType === 'patent') && 'bg-cyan-500 dark:bg-cyan-500 text-white' ||
+            (searchType === 'name') && 'bg-red-500 dark:bg-red-500 text-white' ||
+            (searchType === 'area') && 'bg-green-500 dark:bg-green-500 text-white' ||
+            (!searchType && 'hover:bg-gray-200 dark:hover:bg-black')
+        }`}>
+           <MapTrifold size={16} className=" whitespace-nowrap" /> Mostrar no mapa
+        </div>
             </div>
         )}
         </>
