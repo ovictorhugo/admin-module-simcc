@@ -5,6 +5,7 @@ import { UserContext } from "../../context/context";
 import { PesquisadorProps, columns } from "./columns";
 
 import { DataTable } from "./data-table";
+import { ScrollArea } from "../ui/scroll-area";
 
 export function TableResearcherViewDashboard() {
   const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
@@ -41,12 +42,14 @@ export function TableResearcherViewDashboard() {
   console.log(urlGetResearcher);
 
   return (
-    <div className="w-full overflow-auto ">
-      <Alert className=" overflow-y-auto elementBarra">
-      <div className=" overflow-y-auto max-h-fit h-full elementBarra pr-2">
+    <div className="w-full overflow-y-auto">
+   
+      <ScrollArea>
+      <div className="  ">
           <DataTable columns={columns} data={researcher} />
         </div>
-      </Alert>
+      </ScrollArea>
+    
     </div>
   );
 }

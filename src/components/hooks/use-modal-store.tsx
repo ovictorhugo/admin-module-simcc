@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 
-export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal'
+export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal'
 
 interface ModalData {
   id?: string,
@@ -12,6 +12,17 @@ interface ModalData {
   longitude?: number;
   pesquisadores?: number;
   professores?: string[];
+
+
+  doi?: string,
+  qualis?: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "NP" | "SQ",
+  title?: string,
+  year?: string,
+  jif?: string,
+  jcr_link?: string
+  lattes_10_id?: string,
+  researcher_id?: string
+  magazine?:string
  
 }
 
@@ -28,6 +39,6 @@ export const useModal = create<ModalStore>((set:any) => ({
   data: {},
   isOpen: false,
   onOpen: (type, data = {}) => set({ isOpen: true, type, data }),
-  onClose: () => set({ type: null, isOpen: false }),
+  onClose: () => set({ type: null, isOpen: false, data:[] }),
   
 }));

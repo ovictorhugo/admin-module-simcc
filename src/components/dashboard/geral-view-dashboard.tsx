@@ -10,6 +10,8 @@ import { UserContext } from "../../context/context";
 import { Badge } from "../ui/badge";
 import { AddAdmin } from "./add-admin";
 import { PesquisadoresHeader } from "./pesquisadores-header";
+import { ScrollArea } from "../ui/scroll-area";
+import { PosGraduacoesHeader } from "./pos-graduacoes-header";
 
 
 export function GeralViewDashboard() {
@@ -28,7 +30,7 @@ const {user} = useContext(UserContext)
     return  (
        <>
        {isModalOpen && (
-         <div className=" overflow-y-hidden flex max-lg:flex-col pr-6 md:pr-[72px] w-full">
+         <div className="pb-4  overflow-y-hidden flex max-lg:flex-col pr-6 md:pr-[72px] w-full">
       <Tabs defaultValue="geral" value={value} className="w-full" >
        
         {value == 'geral' && (
@@ -38,8 +40,12 @@ const {user} = useContext(UserContext)
 {value == 'pesquisadores' && (
           <PesquisadoresHeader/>
         )}
+
+{value == 'pos-graduacoes' && (
+          <PosGraduacoesHeader/>
+        )}
         
-        <TabsList className="mb-8">
+        <TabsList className="my-4">
          <TabsTrigger value="geral" onClick={() => setValue('geral')}>Visão geral</TabsTrigger>
          <TabsTrigger value="pesquisadores" onClick={() => setValue('pesquisadores')}>Pesquisadores</TabsTrigger>
          <TabsTrigger value="pos-graduacoes" onClick={() => setValue('pos-graduacoes')}>Pós-graduações</TabsTrigger>
@@ -50,7 +56,7 @@ const {user} = useContext(UserContext)
 
          oi
          </TabsContent>
-         <TabsContent value="pesquisadores">
+         <TabsContent value="pesquisadores" className="m-0">
             
            <TableResearcherViewDashboard/>
           
@@ -58,7 +64,8 @@ const {user} = useContext(UserContext)
          </Tabs>
 
          {!isOpenSidebar && value== 'geral' && (
-            <div className="ml-6 lg:max-w-[350px]  w-full overflow-y-auto ">
+            <ScrollArea  className="ml-6 lg:max-w-[365px] w-full sticky top-0">
+               <div className="  w-full">
             <GraduateProgramDashboard/>
             
             <div className="mt-6 flex h-full flex-1">
@@ -67,6 +74,7 @@ const {user} = useContext(UserContext)
 
 
             </div>
+            </ScrollArea>
          )}
 
           

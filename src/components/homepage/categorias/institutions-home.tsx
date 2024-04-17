@@ -10,12 +10,12 @@ import { HeaderResultTypeHome } from "./header-result-type-home";
 import { useContext, useMemo, useState } from "react";
 import { Buildings, ChartBar, Rows, SquaresFour } from "phosphor-react";
 import { UserContext } from "../../../context/context";
-import { seriesType } from "highcharts";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { GraficoInstitutionsHome } from "./institutions-home/grafico-institutions-home";
 import { InstitutionsBlock } from "./institutions-home/institutions-block";
 import { Button } from "../../ui/button";
 import { useModalSidebar } from "../../hooks/use-modal-sidebar";
+import { TableReseracherInstitutionshome } from "./institutions-home/table-institutions-home";
 
 type Instituicoes = {
     among: string,
@@ -137,7 +137,9 @@ export function InstitutionsHome() {
                         
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
-                        ''
+                        <TableReseracherInstitutionshome
+                        institutions={instituicoes}
+                        />
                       )
                     )}
                     </AccordionContent>

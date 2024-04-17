@@ -45,8 +45,20 @@ import { File, Files, Quotes, Stamp, Student, Ticket } from "phosphor-react";
 import { NuvemPalavras } from "../popup/nuvem-palavras";
 import { ScrollArea } from "../ui/scroll-area";
 import { TotalViewResearcher } from "../popup/total-view-researcher";
+import { InformacoesGeraisResearcher } from "../popup/informacoes-gerais-researcher";
+import { ArticlesResearcher } from "../popup/articles-researcher";
 
+type ResearchOpenAlex = {
+  h_index: number;
+  relevance_score: number;
+  works_count: number;
+  cited_by_count: number;
+  i10_index: number;
+  scopus: string;
+  orcid:string
+  openalex:string
   
+}
 
 
 export function ResearcherModal() {
@@ -59,11 +71,16 @@ export function ResearcherModal() {
     const { urlGeral } = useContext(UserContext);
     console.log("Context:", useContext(UserContext));
 
+    const [researcherData, setResearcherData] = useState<ResearchOpenAlex[]>([]);
+
+    // Função para lidar com a atualização de researcherData
+    const handleResearcherUpdate = (newResearcherData: ResearchOpenAlex[]) => {
+      setResearcherData(newResearcherData);
+    };
+
 
     const urlTermPesquisadores = urlGeral + `researcherName?name=${name != null && (name.split(' ').join(';'))}`;
 
-
-console.log('urlTermPesquisadores', urlTermPesquisadores)
 
     useMemo(() => {
         const fetchData = async () => {
@@ -93,10 +110,12 @@ console.log('urlTermPesquisadores', urlTermPesquisadores)
 
         const [value, setValue] = useState('articles')
 
+        console.log('reseracher DATAAA', researcherData)
+
     return(
         <>
         <Drawer open={isModalOpen} onClose={onClose}  >
-        <DrawerContent onInteractOutside={onClose}  className="px-16 pt-8">
+        <DrawerContent onInteractOutside={onClose}  className="px-16 pt-8 max-h-[80vh]">
         <DrawerHeader className="p-0">
             {researcher.slice(0, 1).map((user) => {
                 return(
@@ -121,7 +140,7 @@ console.log('urlTermPesquisadores', urlTermPesquisadores)
                     software={user.software}
                     brand={user.brand}
                     lattes_update={user.lattes_update}
-                    
+                    onResearcherUpdate={handleResearcherUpdate}
                     />
 
                    </div>
@@ -131,7 +150,7 @@ console.log('urlTermPesquisadores', urlTermPesquisadores)
 <div className="flex gap-6">
 <div className="w-full flex-1">
         <Tabs defaultValue="articles" value={value} className="">
-  <TabsList>
+  <TabsList className="mb-6">
     <TabsTrigger value="articles" onClick={() => setValue('articles')} className="flex gap-2 items-center"> <Quotes size={16} className="" />Artigos</TabsTrigger>
     <TabsTrigger value="book" onClick={() => setValue('book')} className="flex gap-2 items-center"><File size={16} className="" />Livros e capítulos</TabsTrigger>
     <TabsTrigger value="producao-tecnica" onClick={() => setValue('producao-tecnica')} className="flex gap-2 items-center"><Stamp size={16} className="" />Produção técnica</TabsTrigger>
@@ -139,12 +158,27 @@ console.log('urlTermPesquisadores', urlTermPesquisadores)
     <TabsTrigger value="orientacoes" onClick={() => setValue('orientacoes')} className="flex gap-2 items-center"><Student size={16} className="" />Orientações</TabsTrigger>
     <TabsTrigger value="participacao-eventos" onClick={() => setValue('participacao-eventos')} className="flex gap-2 items-center"><Ticket size={16} className="" />Participação em eventos</TabsTrigger>
   </TabsList>
-  <TabsContent value="articles">Make changes to your account here.</TabsContent>
+  <TabsContent value="articles"><ArticlesResearcher/></TabsContent>
   <TabsContent value="book">Change your password here.</TabsContent>
 </Tabs>
         </div>
 
         <div className="w-[350px] gap-12 flex flex-col sticky"> 
+
+        {researcherData.map((user) => {
+                      return(
+                        <InformacoesGeraisResearcher
+                        h_index={user.h_index}
+                        relevance_score={user.relevance_score}
+                        works_count={user.works_count}
+                        cited_by_count={user.cited_by_count}
+                        i10_index={user.i10_index}
+                        scopus={user.scopus}
+                        orcid={user.orcid}
+                        openalex={user.openalex}
+                        />
+                      )
+            })}
 
         {researcher.slice(0, 1).map((user) => {
                       return(

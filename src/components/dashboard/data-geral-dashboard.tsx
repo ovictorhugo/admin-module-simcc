@@ -47,14 +47,14 @@ export function DataGeralDashboard() {
     
 
     return  (
-        <div className="  w-full  flex gap-3 items-center mb-6">
+        <div className="  w-full  flex gap-6 items-center h-[200px]">
              <div className="flex gap-2 items-center ">
           <div>
            
-          <h1 className=" text-3xl  font-medium max-w-[380px] ">
-            Bem vindo(a) ao Módulo <strong className="bg-red-700 font-medium text-white"> administrativo </strong>{" "}
+          <h1 className=" text-3xl  font-medium max-w-[290px] ">
+            Módulo <strong className="bg-red-700 font-medium text-white"> administrativo </strong>{" "}
         </h1>
-        <p className="mt-2 max-w-[420px] text-gray-500 dark:text-gray-300">Cadastre, edite e remova pesquisadores e programa de pós-graduações no módulo administrativo</p>
+        <p className="mt-2 max-w-[290px] text-gray-500 dark:text-gray-300">Cadastre, edite e remova docentes e programa de pós-graduações no módulo administrativo</p>
           </div>
       
            </div>

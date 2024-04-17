@@ -17,7 +17,13 @@ import { SelectTypeInstitutionSearch } from "./select-type-institution-search";
 const API_KEY = import.meta.env.VITE_API_KEY
 
 const systemMessage = { //  Explain things like you're talking to a software professional with 5 years of experience.
-    "role": "system", "content": `Retorne APENAS um json com o campo "type" (abstract, article, book, patent, name, area, speaker) e "term" contendo uma ÚNICA palavra. Se o tipo não for identificado, por padrão será definido como "article". Se o tipo for "name", o nome completo será extraído e colocado em "term".`
+    "role": "system", "content": `
+    Retorne APENAS um json com:
+    1. o campo "type" (abstract, article, book, patent, name, area, speaker). Se o tipo não for identificado, por padrão será definido como "article".
+    2. o campo "term" contendo uma ÚNICA palavra que representa o tema da frase. Se o tipo for "name", o nome completo será extraído e colocado em "term".
+    3. o campo "message" contendo uma mensagem longa sobre o resultado retornado
+    
+    `
   }
 
   interface ItemsSelecionados {
