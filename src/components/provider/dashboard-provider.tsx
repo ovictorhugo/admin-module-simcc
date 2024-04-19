@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { GeralViewDashboard } from "../dashboard/geral-view-dashboard";
+import { GeralViewMaster } from "../dashboard/master/geral-view-master";
 
 
 export const DashboardProvider = () => {
@@ -18,6 +19,7 @@ export const DashboardProvider = () => {
   return (
     <>
     <GeralViewDashboard/>
+    <GeralViewMaster/>
     </>
   )
 }

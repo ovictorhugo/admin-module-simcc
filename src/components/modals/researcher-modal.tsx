@@ -46,7 +46,7 @@ import { NuvemPalavras } from "../popup/nuvem-palavras";
 import { ScrollArea } from "../ui/scroll-area";
 import { TotalViewResearcher } from "../popup/total-view-researcher";
 import { InformacoesGeraisResearcher } from "../popup/informacoes-gerais-researcher";
-import { ArticlesResearcher } from "../popup/articles-researcher";
+import { ArticlesResearcherPopUp } from "../popup/articles-researcher";
 
 type ResearchOpenAlex = {
   h_index: number;
@@ -114,12 +114,21 @@ export function ResearcherModal() {
 
     return(
         <>
-        <Drawer open={isModalOpen} onClose={onClose}  >
-        <DrawerContent onInteractOutside={onClose}  className="px-16 pt-8 max-h-[80vh]">
+        <Drawer open={isModalOpen} onClose={onClose} snapPoints={[0.43, 0.88]} fadeFromIndex={0}  >
+        <DrawerContent onInteractOutside={onClose} >
+        {researcher.slice(0, 1).map((user) => {
+                return(
+                  <div className="w-full flex justify-center ">
+            <div className="bg-cover bg-center bg-no-repeat h-28 w-28 bg-white dark:bg-neutral-950 rounded-2xl mb-3 border-4 border-white dark:border-neutral-950  relative  top-[-75px] " style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${user.id}) ` }}></div>
+          </div>
+                  )
+                })}
+        <ScrollArea className="h-screen px-16 top-[-75px]" >
         <DrawerHeader className="p-0">
             {researcher.slice(0, 1).map((user) => {
                 return(
                    <div>
+
                      <InformationResearcher
                     among={user.among}
                     articles={user.articles}
@@ -158,7 +167,13 @@ export function ResearcherModal() {
     <TabsTrigger value="orientacoes" onClick={() => setValue('orientacoes')} className="flex gap-2 items-center"><Student size={16} className="" />Orientações</TabsTrigger>
     <TabsTrigger value="participacao-eventos" onClick={() => setValue('participacao-eventos')} className="flex gap-2 items-center"><Ticket size={16} className="" />Participação em eventos</TabsTrigger>
   </TabsList>
-  <TabsContent value="articles"><ArticlesResearcher/></TabsContent>
+  <TabsContent value="articles">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                  <ArticlesResearcherPopUp name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
   <TabsContent value="book">Change your password here.</TabsContent>
 </Tabs>
         </div>
@@ -213,6 +228,7 @@ export function ResearcherModal() {
         <DrawerFooter>
           
         </DrawerFooter>
+        </ScrollArea>
         
         </DrawerContent>
         </Drawer>

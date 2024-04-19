@@ -41,6 +41,8 @@ import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-
 import { GraficoArticleHome } from "../homepage/categorias/articles-home/grafico-articles-home";
 import { ArticleBlock } from "../homepage/categorias/articles-home/articles-block";
 import { TableReseracherArticleshome } from "../homepage/categorias/articles-home/table-articles";
+import { FilterArticlePopUp } from "./filters-articles-popup";
+import { ArticleBlockPopUp } from "./articles-block-popup";
 
 
 type Filter = {
@@ -48,7 +50,11 @@ type Filter = {
   qualis: string[]
 }
 
-export function ArticlesResearcher() {
+type Props = {
+  name:string
+}
+
+export function ArticlesResearcherPopUp(props:Props) {
   
 
     const {urlGeral, valoresSelecionadosExport, navbar} = useContext(UserContext)
@@ -68,7 +74,7 @@ export function ArticlesResearcher() {
 
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
     const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
-    let urlTermPublicacoes = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? ('1'):('0')}&graduate_program_id=4`;
+    let urlTermPublicacoes = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=${props.name}&type=ARTICLE&qualis=${qualisString}&year=${yearString}`;
 
     console.log('urlTermPublicacoes', urlTermPublicacoes)
     useMemo(() => {
@@ -108,7 +114,7 @@ export function ArticlesResearcher() {
   
             <div className="mb-[150px]">
 
-                <FilterArticle
+                <FilterArticlePopUp
                 onFilterUpdate={handleResearcherUpdate}/>
               
                         <Accordion  type="single" collapsible >
@@ -163,7 +169,7 @@ export function ArticlesResearcher() {
                         </Masonry>
         </ResponsiveMasonry>
                       ):(
-                        <ArticleBlock
+                        <ArticleBlockPopUp
                         articles={publicacoes}
                         distinct={distinct}
                         />

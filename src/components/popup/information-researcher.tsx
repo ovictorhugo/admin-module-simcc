@@ -77,8 +77,9 @@ const [researcher, setResearcher] = useState<Research[]>([]);
   const urlShare = `${urlGeral}researcher/${props.id}/${searchType}/${valoresSelecionadosExport}`
   const urlApi = `${urlGeral}researcherName?name=${props.name.split(' ').join(';')}`
   useMemo(() => {
+    console.log('orcid',props.orcid)
     const fetchData = async () => {
-        if(props.orcid != 'None') {
+        if(( props.orcid == " None" || props.orcid == "")) {
             try {
               const response = await fetch(urlTermPesquisadoresOrcid, {
                   mode: "cors",
@@ -112,7 +113,7 @@ const [researcher, setResearcher] = useState<Research[]>([]);
               const data = await response.json();
               if (data && data.results && data.results.length > 0) {
                 const firstResult = data.results[0];
-                console.log('name')
+                console.log(urlTermPesquisadores)
                 const { relevance_score, works_count, cited_by_count } = firstResult;
                 const { h_index, i10_index } = firstResult.summary_stats;
                 const { ids } = firstResult;
@@ -127,7 +128,7 @@ const [researcher, setResearcher] = useState<Research[]>([]);
         }
     };
     fetchData();
-}, [urlTermPesquisadores, urlTermPesquisadoresOrcid]);
+}, [urlTermPesquisadores, urlTermPesquisadoresOrcid, props.orcid]);
 
 console.log('urlopenalex', researcher)
 console.log('urlopenalex', urlTermPesquisadoresOrcid)
@@ -225,9 +226,7 @@ const handleDownloadJson = async () => {
         </div>
           
           </div>
-            <div className="w-full flex justify-center ">
-            <div className="bg-cover bg-center bg-no-repeat h-28 w-28 bg-white dark:bg-neutral-950 rounded-2xl mb-3 border-4 border-white dark:border-neutral-950  absolute  top-[-50px] " style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}></div>
-          </div>
+         
 
           <div className="flex items-center flex-col  relative">
           <h4 className="text-3xl font-medium px-8 text-center mb-2">{props.name}</h4>

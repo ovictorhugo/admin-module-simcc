@@ -111,7 +111,12 @@ function App() {
 
         <Route
           path='/admin'
-          element={user.state == 'admin' || user.state == 'colaborator'  ? <Dashboard/> : <Navigate to='/' />}
+          element={(user.state == 'admin' || user.state == 'colaborator' || user.state == 'master')  ? <Dashboard/> : <Navigate to='/' />}
+        />
+
+<Route
+          path='/config'
+          element={(user.state == 'master')  ? <Dashboard/> : <Navigate to='/' />}
         />
       </Routes>
       </DefaultLayout>

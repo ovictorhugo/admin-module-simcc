@@ -20,7 +20,7 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
   } from "../../components/ui/navigation-menu"
-import { ChartLine, GraduationCap, GridFour, ListDashes, SignIn, Textbox, UserPlus } from "phosphor-react";
+import { ChartLine, Gear, GraduationCap, GridFour, ListDashes, SignIn, Textbox, UserPlus } from "phosphor-react";
 import { GitBranch } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { Button } from "../ui/button";
@@ -151,7 +151,11 @@ export function Header() {
                 <Link to={'/signIn'}><Button variant={'default'} className="text-white h-10 dark:text-white"><SignIn size={16} className="" />Fazer login</Button></Link>
             )}
 
-{(user.state === "admin" || user.state === 'colaborator') && (
+{(user.state === 'master') && (
+                <Link to={'/config'}><Button variant={'outline'} size={'icon'} className="text-gray-500 border-0 dark:text-white"><Gear size={16} className="" /></Button></Link>
+              )}
+
+{(user.state === "admin" || user.state === 'colaborator' || user.state === 'master') && (
                 <Link to={'/admin'}><Button variant={'outline'} className="text-gray-500 border-0 dark:text-white"><GridFour size={16} className="" />Módulo administrativo</Button></Link>
               )}
 

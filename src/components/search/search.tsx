@@ -22,7 +22,6 @@ const systemMessage = { //  Explain things like you're talking to a software pro
     1. o campo "type" (abstract, article, book, patent, name, area, speaker). Se o tipo não for identificado, por padrão será definido como "article".
     2. o campo "term" contendo uma ÚNICA palavra que representa o tema da frase. Se o tipo for "name", o nome completo será extraído e colocado em "term".
     3. o campo "message" contendo uma mensagem longa sobre o resultado retornado
-    
     `
   }
 
@@ -208,7 +207,7 @@ useEffect(() => {
               <div className='flex gap-2 mx-2'>
               {itemsSelecionados.map((valor, index) => {
                   return(
-                      <div key={index} className={`flex gap-2 items-center p-2 px-3 rounded-md text-xs ${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${maria && searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} >
+                      <div key={index} className={`flex gap-2 h-10 items-center p-2 px-4 rounded-md text-xs ${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${maria && searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} >
                           {valor.term}
                           <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer"/>
                       </div>

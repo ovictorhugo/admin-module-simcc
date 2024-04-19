@@ -17,8 +17,8 @@ export function Dashboard() {
     useEffect(() => {
         if(location.pathname == '/admin') {
             onOpen('general')
-        } else if (location.pathname == '/admin/graduate-program') {
-            onOpen('graduate-program')
+        } else if (location.pathname == '/config') {
+            onOpen('master')
         } else if (location.pathname == '/admin/researcher') {
             onOpen('researcher')
         }
