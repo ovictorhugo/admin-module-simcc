@@ -12,6 +12,7 @@ import { AddAdmin } from "./add-admin";
 import { PesquisadoresHeader } from "./pesquisadores-header";
 import { ScrollArea } from "../ui/scroll-area";
 import { PosGraduacoesHeader } from "./pos-graduacoes-header";
+import {PosGraducaoView} from "./pos-graduacao-view-dashboard";
 
 
 export function GeralViewDashboard() {
@@ -61,6 +62,12 @@ const {user} = useContext(UserContext)
            <TableResearcherViewDashboard/>
           
          </TabsContent>
+
+         <TabsContent value="pos-graduacoes">
+
+            <PosGraducaoView/>
+         </TabsContent>
+
          </Tabs>
 
          {!isOpenSidebar && value== 'geral' && (

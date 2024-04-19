@@ -1,4 +1,5 @@
-import { AddResearcherDashboard } from "./add-researcher-dashboard";
+
+import { AddGraduateProgramDashboard} from "./add-graduate-program-dashboard"
 
 export function PosGraduacoesHeader() {
     return (
@@ -9,7 +10,7 @@ export function PosGraduacoesHeader() {
       </h1>
       <p className="mt-2 max-w-[420px] text-gray-500 dark:text-gray-300">Cadastre, edite e remova pesquisadores e programa de pós-graduações no módulo administrativo</p>
             </div>
-             <AddResearcherDashboard/>
+             <AddGraduateProgramDashboard/>
         </div>
     )
 }
