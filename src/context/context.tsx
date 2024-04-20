@@ -9,6 +9,10 @@ interface User extends FirebaseAuthUser {
   institution_id: string
 }
 
+interface ItemsSelecionados {
+  term:string
+}
+
 interface UserContextType {
   loggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,6 +33,8 @@ interface UserContextType {
   messagesMaria: any[], // Aqui você define messagesMaria como um array de qualquer tipo
   setMessagesMaria: React.Dispatch<React.SetStateAction<any[]>>, // Aqui você define setMessagesMaria como uma função que atualiza um array de qualquer tipo  
 
+  itemsSelecionados: ItemsSelecionados[] , 
+  setItensSelecionados: React.Dispatch<React.SetStateAction<ItemsSelecionados[]>>,
   valorDigitadoPesquisaDireta: string,
   setValorDigitadoPesquisaDireta: React.Dispatch<React.SetStateAction<string>>;
 
@@ -68,6 +74,10 @@ export const UserContext = createContext<UserContextType>({
 
   valoresSelecionadosExport: "",
 setValoresSelecionadosExport: () => {},
+
+
+itemsSelecionados: [] , 
+  setItensSelecionados: () => {},
 
 messagesMaria: [],
 setMessagesMaria: () => {},

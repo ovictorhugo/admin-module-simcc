@@ -48,13 +48,13 @@ export function SearchModal() {
 
     const { onClose, isOpen, type } = useModal();
     
-    const [itemsSelecionados , setItensSelecionados] = useState<ItemsSelecionados[]>([])
+    
     const [itemsBigrama , setBigrama] = useState<Bigrama[]>([])
     const [itemsSelecionadosPopUp , setItensSelecionadosPopUp] = useState<ItemsSelecionados[]>([])
     const [researcherOpenAlex , setResearcherOpenAlex] = useState<ResearchOpenAlex[]>([])
     const [showInput, setShowInput] = useState(true);
     const isModalOpen = isOpen && type === "search";
-    const {setValoresSelecionadosExport, valoresSelecionadosExport, searchType, setSearchType, urlGeral} = useContext(UserContext)
+    const {setValoresSelecionadosExport, valoresSelecionadosExport, searchType, setSearchType, urlGeral, itemsSelecionados , setItensSelecionados} = useContext(UserContext)
     const db = getFirestore();
     const [input, setInput] = useState('')
 
@@ -106,6 +106,7 @@ export function SearchModal() {
     const handlePesquisa = (value: string, type: string) => {
       setInput('');
       setShowInput(false)
+      setBigrama([])
   
       // Determine the searchType based on the provided type
       let newSearchType = '';
@@ -136,6 +137,12 @@ export function SearchModal() {
 
       setSearchType(newSearchType);
   };
+
+  const handlePesquisaFinal = () => {
+    setItensSelecionados(itemsSelecionadosPopUp)
+    setInput('')
+    onClose()
+  }
 
   ///open alex
   const urlOpenAlex =`https://api.openalex.org/authors?filter=display_name.search:${input}`;
@@ -277,10 +284,6 @@ console.log('fawefwef', urlOpenAlex)
   </button>
 )}
 
-
-
-
-
               </>
           );
       })}
@@ -326,7 +329,7 @@ console.log('fawefwef', urlOpenAlex)
         </div>
 
         <div className="w-fit">
-            <Button variant="outline" className={`${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} size={'icon'}>
+            <Button onClick={() => handlePesquisaFinal()} variant="outline" className={`${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} size={'icon'}>
        <Funnel size={16} className="" /> 
        
         </Button>

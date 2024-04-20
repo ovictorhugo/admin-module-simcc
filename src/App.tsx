@@ -16,6 +16,11 @@ interface User extends FirebaseAuthUser {
   img_url: string;
   institution_id: string
 }
+
+interface ItemsSelecionados {
+  term:string
+}
+
 import { CookiesProvider, useCookies } from 'react-cookie'
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -34,6 +39,7 @@ function App() {
   const [valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta] = useState('');
   const [inputMaria, setInputMaria] = useState('');
   const [maria, setMaria] = useState(false);
+  const [itemsSelecionados , setItensSelecionados] = useState<ItemsSelecionados[]>([])
   const [messagesMaria, setMessagesMaria] = useState<any[]>([]);
 
 
@@ -86,7 +92,8 @@ function App() {
       inputMaria, setInputMaria,
       maria, setMaria,
       mapModal, setMapModal,
-      messagesMaria, setMessagesMaria
+      messagesMaria, setMessagesMaria,
+      itemsSelecionados , setItensSelecionados
 
     }}
     >

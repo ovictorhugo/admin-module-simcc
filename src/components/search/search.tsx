@@ -37,7 +37,7 @@ export function Search() {
 
     const { onOpen } = useModal();
     const { onOpen: onOpenHomepage } = useModalHomepage();
-    const {navbar, searchType, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, setValoresSelecionadosExport, setMessagesMaria} = useContext(UserContext)
+    const {navbar, searchType, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, setValoresSelecionadosExport, setMessagesMaria, itemsSelecionados , setItensSelecionados} = useContext(UserContext)
 
     const { isOpen: isOpenSidebar, onOpen: onOpenSidebar, onClose } = useModalSidebar();
     const [input, setInput] = useState("");
@@ -89,7 +89,6 @@ const handlePopUppesquisa = () => {
 const [messages, setMessages] = useState([]);
 const [isTyping, setIsTyping] = useState(false);
   
-const [itemsSelecionados , setItensSelecionados] = useState<ItemsSelecionados[]>([])
 
 const handleSend = async (message: any) => {
   const newMessage = {
@@ -168,10 +167,23 @@ const handleRemoveItem = (indexToRemove: any) => {
   setItensSelecionados(prevItems => prevItems.filter((_, index) => index !== indexToRemove));
 }
 
+
+
 useEffect(() => {
   const joinedTerms = itemsSelecionados.map(item => item.term).join('|');
   setValoresSelecionadosExport(joinedTerms);
 }, [itemsSelecionados]);
+
+//conectores 
+const handleConnectorChange = (index: number, connector: string) => {
+  // Crie uma cópia do array de itens selecionados
+  const updatedItems = [...itemsSelecionados];
+  // Substitua o último caractere pelo novo conector
+  updatedItems[index].term = updatedItems[index].term.slice(0, -1) + connector;
+  // Atualize o estado com os itens atualizados
+  setItensSelecionados(updatedItems);
+};
+
 
 
     return  (
@@ -204,13 +216,27 @@ useEffect(() => {
 
               <div className='flex gap-2 mx-2'>
               {itemsSelecionados.map((valor, index) => {
-                  return(
-                      <div key={index} className={`flex gap-2 h-10 items-center p-2 px-4 rounded-md text-xs ${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${maria && searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} >
-                          {valor.term}
-                          <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer"/>
-                      </div>
-                  )
-              })}
+          return(
+              <>
+              <div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs ${searchType == 'article' && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract' && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker' && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book' && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent' && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name' && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area' && ('bg-green-500 dark:bg-green-500')} ${searchType == '' && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} >
+              {valor.term.replace(/[|;]/g, '')}
+                  <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer"/>
+                  {/* Adicionando a escolha entre "e" ou "ou" */}
+                  
+              </div>
+
+              {index < itemsSelecionados.length - 1 && (
+  <button className="rounded-full cursor-pointer flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 transition-all text-xs outline-none" onClick={() => {
+    const connector = itemsSelecionados[index].term.endsWith('|') ? ';' : '|'; // Alterna entre "|" e ";" conforme necessário
+    handleConnectorChange(index, connector);
+  }} >
+    {itemsSelecionados[index].term.endsWith(';') ? "e" : "ou"}
+  </button>
+)}
+
+              </>
+          );
+      })}
                 </div>
 
                 <Input onClick={() => handlePopUppesquisa()} onChange={(e) => setInput(e.target.value)} value={input}  type="text" className="border-0 w-full "/>
