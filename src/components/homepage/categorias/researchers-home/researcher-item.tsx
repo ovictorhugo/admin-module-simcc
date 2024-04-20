@@ -49,7 +49,7 @@ export function ResearchItem(props: Research) {
                     <div className="flex gap-1 text-xs p-2 border items-center border-gray-300 dark:border-stone-700 rounded-md"><MapPin size={12}/>{props.city}</div>
                 </div>
 
-                <p>{props.name}</p>
+                <p className="font-medium">{props.name}</p>
 
                 <p className="text-xs flex items-center gap-1"><Buildings size={12}/> {props.university}</p>
                 </div>

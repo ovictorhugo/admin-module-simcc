@@ -26,6 +26,9 @@ interface UserContextType {
   valoresSelecionadosExport: string;
   setValoresSelecionadosExport: React.Dispatch<React.SetStateAction<string>>;
 
+  messagesMaria: any[], // Aqui você define messagesMaria como um array de qualquer tipo
+  setMessagesMaria: React.Dispatch<React.SetStateAction<any[]>>, // Aqui você define setMessagesMaria como uma função que atualiza um array de qualquer tipo  
+
   valorDigitadoPesquisaDireta: string,
   setValorDigitadoPesquisaDireta: React.Dispatch<React.SetStateAction<string>>;
 
@@ -65,6 +68,9 @@ export const UserContext = createContext<UserContextType>({
 
   valoresSelecionadosExport: "",
 setValoresSelecionadosExport: () => {},
+
+messagesMaria: [],
+setMessagesMaria: () => {},
 
 valorDigitadoPesquisaDireta: "",
 setValorDigitadoPesquisaDireta: () => {},

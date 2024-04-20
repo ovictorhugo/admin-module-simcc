@@ -133,6 +133,7 @@ export function AddAdmin() {
 
                    <ScrollArea>
                         {colaboradores.map((props) => {
+                           if(props.institution_id == user.institution_id) {
                             return(
                                 <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
@@ -149,6 +150,7 @@ export function AddAdmin() {
                             <div></div>
                         </div>
                             )
+                           }
                         })}
                    </ScrollArea>
         </Alert>

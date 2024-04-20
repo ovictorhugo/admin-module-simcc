@@ -29,6 +29,9 @@ import {
  
   
   import { useState } from "react";
+import { Input } from "../../../ui/input";
+import { Columns, FileCsv } from "phosphor-react";
+import { useModalResult } from "../../../hooks/use-modal-result";
   
   interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -55,10 +58,102 @@ import {
         columnVisibility,
       },
     });
+
+    const handleBtnCsv = () => {
+      try {
+
+  const convertJsonToCsv = (json: any[]): string => {
+    const items = json;
+    const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+    const header = Object.keys(items[0]);
+    const csv = [
+      '\uFEFF' + header.join(';'), // Add BOM and CSV header
+      ...items.map((item) =>
+        header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+      ) // CSV data
+    ].join('\r\n');
+
+    return csv;
+  };
+
+
+      const csvData = convertJsonToCsv(data);
+      const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = `dados_simcc.csv`;
+      link.href = url;
+      link.click();
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+
+};
+
+const {type} = useModalResult()
   
     return (
-      <div>
-       
+   
+        <div>
+      <div className="flex items-center py-4">
+       {type == 'researchers-home' && (
+         <Input
+         placeholder="Filtrar pesquisador..."
+         value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+         onChange={(event) =>
+           table.getColumn("name")?.setFilterValue(event.target.value)
+         }
+         className="max-w-sm"
+       />
+       )}
+
+{type == 'articles-home' && (
+         <Input
+         placeholder="Filtrar artigo..."
+         value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+         onChange={(event) =>
+           table.getColumn("title")?.setFilterValue(event.target.value)
+         }
+         className="max-w-sm"
+       />
+       )}
+
+<div className="flex gap-3 ml-auto">
+<Button onClick={() => handleBtnCsv()} variant="outline" className="ml-auto">
+<FileCsv size={16} />
+              Download CSV
+            </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            
+            <Button variant="outline" className="ml-auto">
+            <Columns size={16} />
+              Colunas
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+</div>
+      </div>
         <div className="rounded-md border dark:border-none">
           <Table>
             <TableHeader>

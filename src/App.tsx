@@ -34,6 +34,8 @@ function App() {
   const [valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta] = useState('');
   const [inputMaria, setInputMaria] = useState('');
   const [maria, setMaria] = useState(false);
+  const [messagesMaria, setMessagesMaria] = useState<any[]>([]);
+
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -83,28 +85,28 @@ function App() {
       valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta,
       inputMaria, setInputMaria,
       maria, setMaria,
-      mapModal, setMapModal
+      mapModal, setMapModal,
+      messagesMaria, setMessagesMaria
 
     }}
     >
       <DefaultLayout>
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/pos-graduacao' element={<Home/>}/>
+        <Route path='/:page?' element={<Home/>}/>
+       
        
         <Route path='/indicadores' element={<Indicators/>}/>
         <Route path='/taxonomia' element={<Indicators/>}/>
         <Route path='/indicadores-pos-graduacao' element={<Indicators/>}/>
         
-
         <Route
         path='/signIn'
         element={loggedIn == false ? <Authentication/> : <Navigate to='/' />}
         />
 
-      <Route
-        path='/signUp'
-        element={loggedIn == false ? <Authentication/> : <Navigate to='/' />}
+        <Route
+         path='/signUp'
+         element={loggedIn == false ? <Authentication/> : <Navigate to='/' />}
         />
       
         

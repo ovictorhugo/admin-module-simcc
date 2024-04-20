@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { Alert } from "../ui/alert";
 import { UserContext } from "../../context/context";
-import { MapPin, Star } from "phosphor-react"; 
-import { GraduationCap } from "lucide-react";
+import { ArrowSquareOut, DotsThree, Eye, EyeSlash, Hash, MapPin, PencilSimple, Star, Trash } from "phosphor-react"; 
+import { GraduationCap, GraduationCapIcon } from "lucide-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 
 
@@ -22,8 +22,24 @@ import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
     visible: boolean
   }
 
+  import {
+    DropdownMenu,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+  } from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
+  
+
 
 export function PosGraducaoView() {
+  let qualisColor = {
+    'MESTRADO': 'bg-[#006837]',
+    'DOUTORADO': 'bg-[#8FC53E]',
+
+}
 
     const { urlGeralAdm, user } = useContext(UserContext);
     const [posgraduations, setPosgraduations] = useState<PosGraduationsProps[]>([]);
@@ -59,48 +75,85 @@ export function PosGraducaoView() {
 
 
     return(
+      <ResponsiveMasonry
+      columnsCountBreakPoints={{
+          350: 1,
+          750: 2,
+          900: 2,
+          1200: 3
+      }}
+  >
+                   <Masonry gutter="16px">
 
-        <Alert className="flex flex-wrap gap-4">
-       
-    
+
+                    
        {posgraduations.map((posgraduation) => (
-        <div key={posgraduation.graduate_program_id} className="max-w-[350px] flex flex-row items-center p-4  bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer w-full">
-          <div className="flex flex-col">
-            <img className="w-24 h-auto object-cover object-center rounded-l-lg" src={posgraduation.url_image} alt={posgraduation.name} />
-            <div className="flex flex-row justify-between p-4 items-center">
-              <MapPin className="mr-2" size={12} /> 
-              <span className="text-gray-600">{posgraduation.city}</span>
-            </div>
-          </div>
-          <div className="flex flex-col justify-between p-4">
-            <div className="flex flex-col justify-between">
-              <h2 className="text-xl font-semibold  text-blue-700">{posgraduation.name}</h2>
-              <span className="text-gray-600 flex">
-                {[...Array(Number(posgraduation.rating))].map((_, index) => (
-                  <Star key={index} className="mr-1 mt-1" size={16} style={{ fill: "#FFD700" }} />
-                ))}
-              </span>
-            </div>
-            <div className="flex flex-row">
-            <div className="mt-2 flex gap-1 text-xs p-2 border items-center border-gray-300 dark:border-stone-700 rounded-md">
-            <GraduationCap size={12} /> 
-            <span>{posgraduation.type}</span>
-              </div>
-              <div className="mt-2 ml-2 flex gap-1 text-xs p-2 border items-center border-gray-300 dark:border-stone-700 rounded-md">
         
-                <span>{posgraduation.area}</span>
-              </div>
+          <div className="flex items-center">
+                 <div
+                  
+                      className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${posgraduation.modality.includes('ACADÊMICO') ? 'bg-blue-300' : posgraduation.modality.includes('PROFISSIONAL') ? 'bg-blue-900' : 'bg-[#000]'} `}
+                    >
+                      
+                    </div>
 
+            <Alert className="flex gap-4 rounded-l-none">
+            <div className="flex flex-col">
+            <img className="w-12 h-auto object-cover object-center rounded-l-lg" src={posgraduation.url_image} alt={posgraduation.name} />
+           
+          </div>
+          <div className="flex flex-col justify-between w-full">
+            <div className="flex flex-col justify-between">
+            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>{posgraduation.code}</div>
+              <h2 className=" font-medium">{posgraduation.name}</h2>
+             
             </div>
+            <div className="flex items-center justify-between mt-4 gap-4">
+                        <div className="flex items-center gap-4">
+                        
+                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><GraduationCapIcon size={12}/>{posgraduation.type}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><MapPin size={12}/>{posgraduation.city}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12}/>{posgraduation.rating}</div>
+
+                        </div>
+
+                        <div className="flex gap-3">
+                        <Button variant="outline" size={'icon'} className="ml-auto text-sm text-gray-500 dark:text-gray-300">
+            {posgraduation.visible ? (<EyeSlash size={16}/>):(<Eye size={16}/>)}
+            </Button>
+                        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size={'icon'} className="ml-auto text-sm text-gray-500 dark:text-gray-300">
+            <DotsThree size={16}/>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-auto">
+          <Link to={`/pos-graducao/${posgraduation.code}`}><DropdownMenuItem className="flex items-center gap-3"><ArrowSquareOut className="h-4 w-4" />Visualizar página</DropdownMenuItem></Link>
+          <DropdownMenuItem className="flex items-center gap-3"><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="flex items-center gap-3 bg-red-500 hover:bg-red-600 text-white"><Trash className="h-4 w-4" />Deletar programa</DropdownMenuItem>
+       
+
+          </DropdownMenuContent>
+        </DropdownMenu>
+                        </div>
+                        
+                    </div>
           
           </div>
+            </Alert>
+          </div>
         
-        </div>
+
       ))}
 
      
+      </Masonry>
+      </ResponsiveMasonry>
+       
     
-        </Alert>
+    
+   
         
     )
 }

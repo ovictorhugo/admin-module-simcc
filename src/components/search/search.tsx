@@ -21,7 +21,7 @@ const systemMessage = { //  Explain things like you're talking to a software pro
     Retorne APENAS um json com:
     1. o campo "type" (abstract, article, book, patent, name, area, speaker). Se o tipo não for identificado, por padrão será definido como "article".
     2. o campo "term" contendo uma ÚNICA palavra que representa o tema da frase. Se o tipo for "name", o nome completo será extraído e colocado em "term".
-    3. o campo "message" contendo uma mensagem longa sobre o resultado retornado
+    3. o campo "message" contendo um array com: 1. uma mensagem bastante longa sobre o term retornado, 2. Uma mensagem com variações, informando que os 'resultados podem ser filtrados utilizando filtros de instituições, área, qualis e ano'
     `
   }
 
@@ -37,7 +37,7 @@ export function Search() {
 
     const { onOpen } = useModal();
     const { onOpen: onOpenHomepage } = useModalHomepage();
-    const {navbar, searchType, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, setValoresSelecionadosExport} = useContext(UserContext)
+    const {navbar, searchType, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, setValoresSelecionadosExport, setMessagesMaria} = useContext(UserContext)
 
     const { isOpen: isOpenSidebar, onOpen: onOpenSidebar, onClose } = useModalSidebar();
     const [input, setInput] = useState("");
@@ -132,19 +132,17 @@ async function processMessageToChatGPT(messageObject:any) {
       const chatGptMessage = data.choices[0].message;
   const { content } = chatGptMessage;
   const parsedContent = JSON.parse(content);
-  const { type, term } = parsedContent;
+  const { type, term, message } = parsedContent;
       console.log('chatGptMessage',chatGptMessage)
      
     
       // Defina os valores nas variáveis
       setSearchType(type);
+      setMessagesMaria(message)
       
       setItensSelecionados(prevItems => [...prevItems, { term }]);
 
-      setMessages(prevMessages => [...prevMessages, {
-        message: data.choices[0].message.content,
-        sender: "ChatGPT"
-      }]);
+      
       setIsTyping(false);
       
     })

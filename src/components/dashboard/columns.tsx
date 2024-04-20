@@ -54,7 +54,7 @@ export const columns: ColumnDef<PesquisadorProps>[] = [
   
       return (
         <div className="flex gap-3">
-        <Button  onClick={() => HandleDeleteResearcher({id:id_pesquisador})} variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
+        <Button  onClick={() => HandleDeleteResearcher({id:id_pesquisador})} variant={'destructive'} className="h-8 w-8 p-0 text-white dark:text-white">
              
         <Trash size={8} className="h-4 w-4" />
       </Button>

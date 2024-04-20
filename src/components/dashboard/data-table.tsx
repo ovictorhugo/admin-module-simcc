@@ -31,6 +31,7 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 
 import { useState } from "react";
+import { Columns, FileCsv } from "phosphor-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -62,6 +63,38 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const handleBtnCsv = () => {
+        try {
+  
+    const convertJsonToCsv = (json: any[]): string => {
+      const items = json;
+      const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+      const header = Object.keys(items[0]);
+      const csv = [
+        '\uFEFF' + header.join(';'), // Add BOM and CSV header
+        ...items.map((item) =>
+          header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+        ) // CSV data
+      ].join('\r\n');
+  
+      return csv;
+    };
+  
+  
+        const csvData = convertJsonToCsv(data);
+        const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = `todos_pesquisadores.csv`;
+        link.href = url;
+        link.click();
+
+      } catch (error) {
+        console.error('Error:', error);
+      }
+
+  };
+
   return (
     <div>
       <div className="flex items-center py-4">
@@ -73,9 +106,17 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+
+<div className="flex gap-3 ml-auto">
+<Button onClick={() => handleBtnCsv()} variant="outline" className="ml-auto">
+<FileCsv size={16} />
+              Download CSV
+            </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
+            
             <Button variant="outline" className="ml-auto">
+            <Columns size={16} />
               Colunas
             </Button>
           </DropdownMenuTrigger>
@@ -99,6 +140,7 @@ export function DataTable<TData, TValue>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+</div>
       </div>
       <div className="rounded-md border dark:border-none">
         <Table>

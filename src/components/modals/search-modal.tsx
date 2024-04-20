@@ -1,6 +1,7 @@
 
 import {
     Dialog,
+    DialogClose,
     DialogContent,
   } from "../ui/dialog";
 
@@ -247,8 +248,8 @@ console.log('fawefwef', urlOpenAlex)
 
     return  (
         <Dialog open={isModalOpen} onOpenChange={onClose}>
-        <DialogContent className="p-0 border-none min-w-[60vw] bg-transparent">
-       
+        <DialogContent  className="p-0 border-none min-w-[60vw] bg-transparent">
+     
         <Alert  className="h-14 bg-white p-2 flex items-center gap-3 justify-between">
         <div className="flex items-center gap-2 w-full flex-1">
         <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
@@ -441,13 +442,11 @@ console.log('fawefwef', urlOpenAlex)
         <div>
             <p className="uppercase font-medium text-xs mb-3">OpenAlex</p>
             <div className="flex flex-wrap gap-3">
-            {filteredItems.filter(item => item.type_ === 'NAME').slice(0, 5).map((props, index) => (
-                  <div key={index} onClick={() => handlePesquisa(props.term, props.type_)} className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
-                      {props.term}
+            {researcherOpenAlex.slice(0, 5).map((props, index) => (
+                  <div key={index} onClick={() => handlePesquisa(props.term, props.type)} className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
+                   <CloudArrowDown size={16} className="" />    {props.term}
                   </div>
               ))}
-            
-         
             </div>
         </div>
 
