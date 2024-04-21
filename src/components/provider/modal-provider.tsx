@@ -7,6 +7,7 @@ import { MapResearchersModal } from "../modals/map-researchers-modal";
 import { ResearcherModal } from "../modals/researcher-modal";
 import { ArticlesModal } from "../modals/articles-modal";
 import { ConfirmDeleteResearcher } from "../modals/confirm-delete-researcher";
+import {ConfirmDeletePosGraduateProgram} from "../modals/confirm-delete-pos-graduate-program"
 
 
 export const ModalProvider = () => {
@@ -28,6 +29,7 @@ export const ModalProvider = () => {
     <ResearcherModal/>
     <ArticlesModal/>
     <ConfirmDeleteResearcher/>
+    <ConfirmDeletePosGraduateProgram/>
     </>
   )
 }

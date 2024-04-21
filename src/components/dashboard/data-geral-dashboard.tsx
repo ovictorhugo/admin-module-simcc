@@ -47,7 +47,7 @@ export function DataGeralDashboard() {
     
 
     return  (
-        <div className="  w-full  flex gap-6 items-center h-[200px]">
+        <div className="  w-full  flex gap-6 items-center h-[200px]  max-md:flex-col max-md:items-start  max-md:p-4">
              <div className="flex gap-2 items-center ">
           <div>
            
@@ -62,7 +62,7 @@ export function DataGeralDashboard() {
            {VisaoPrograma.map(props => {
             if(String(user.institution_id) == String(props.institution_id)) {
                 return(
-                    <div className="grid grid-cols-2 gap-6 min-h-full h-full w-full flex-1">
+                    <div className="grid grid-cols-2 gap-6 min-h-full h-full w-full flex-1 max-md:hidden">
                     <ItemDashboard
                 title="Docentes"
                 url=""

@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 
-export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'
+export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program'
 
 interface ModalData {
   id?: string,

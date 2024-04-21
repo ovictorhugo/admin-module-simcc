@@ -1,9 +1,12 @@
 import { useContext, useEffect, useState } from "react";
+import { useModal } from "../hooks/use-modal-store"
 import { Alert } from "../ui/alert";
 import { UserContext } from "../../context/context";
 import { ArrowSquareOut, DotsThree, Eye, EyeSlash, Hash, MapPin, PencilSimple, Star, Trash } from "phosphor-react"; 
-import { GraduationCap, GraduationCapIcon } from "lucide-react";
+import {GraduationCapIcon } from "lucide-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
+import { toast } from "sonner"
+
 
 
 
@@ -43,6 +46,8 @@ export function PosGraducaoView() {
 
     const { urlGeralAdm, user } = useContext(UserContext);
     const [posgraduations, setPosgraduations] = useState<PosGraduationsProps[]>([]);
+    const [visibleProgram, setVisibleProgram] = useState(false);
+    const { onOpen } = useModal();
 
     const urlGetPosGraduations = urlGeralAdm + `GraduateProgramRest/Query?institution_id=${user.institution_id}`
   
@@ -70,9 +75,52 @@ export function PosGraducaoView() {
           }
         };
         fetchData();
-      }, [urlGetPosGraduations]);
+      }, [urlGetPosGraduations,visibleProgram]);
 
+      const handleVisibleProgram = (id: string) => {
 
+        const urlVisibleProgram = urlGeralAdm  + `GraduateProgramRest/Update?graduate_program_id=${id}`
+        const fetchData = async () => {
+         
+          try {
+            const response = await fetch(urlVisibleProgram, {
+              mode: 'cors',
+              method: 'POST',
+              headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Max-Age': '3600',
+                'Content-Type': 'text/plain'
+              }
+            });
+            if (response.ok) {
+
+              setVisibleProgram(!visibleProgram)
+              toast("Dados visibilidade com sucesso!", {
+                description: "Operação realizada com sucesso!",
+                action: {
+                  label: "Fechar",
+                  onClick: () => console.log("Undo"),
+                },
+              })
+            } 
+      
+          
+          } catch (err) {
+            toast("Erro ao mudar visibilidade", {
+              description: "Revise os dados e tente novamente",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+          } 
+        };
+        fetchData();
+     
+    
+      };
 
     return(
       <ResponsiveMasonry
@@ -118,7 +166,7 @@ export function PosGraducaoView() {
                         </div>
 
                         <div className="flex gap-3">
-                        <Button variant="outline" size={'icon'} className="ml-auto text-sm text-gray-500 dark:text-gray-300">
+                        <Button variant="outline" size={'icon'} className="ml-auto text-sm text-gray-500 dark:text-gray-300" onClick={() =>handleVisibleProgram(posgraduation.graduate_program_id)}>
             {posgraduation.visible ? (<EyeSlash size={16}/>):(<Eye size={16}/>)}
             </Button>
                         <DropdownMenu>
@@ -129,9 +177,11 @@ export function PosGraducaoView() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-auto">
           <Link to={`/pos-graducao/${posgraduation.code}`}><DropdownMenuItem className="flex items-center gap-3"><ArrowSquareOut className="h-4 w-4" />Visualizar página</DropdownMenuItem></Link>
-          <DropdownMenuItem className="flex items-center gap-3"><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
+          <DropdownMenuItem className="flex items-center gap-3"  ><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="flex items-center gap-3 bg-red-500 hover:bg-red-600 text-white"><Trash className="h-4 w-4" />Deletar programa</DropdownMenuItem>
+          <DropdownMenuItem className="flex items-center gap-3 bg-red-500 hover:bg-red-600 text-white"><Trash className="h-4 w-4" />
+          <Button variant ="null" onClick={() => onOpen('confirm-delete-pos-graduate-program', {id_delete:posgraduation.graduate_program_id})}> Deletar programa</Button>
+         </DropdownMenuItem>
        
 
           </DropdownMenuContent>

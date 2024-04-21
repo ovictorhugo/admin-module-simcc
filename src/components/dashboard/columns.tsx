@@ -11,7 +11,6 @@ import {
 } from "../../components/ui/dropdown-menu"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 import {Trash} from "phosphor-react"
-import {HandleDeleteResearcher} from "./handleDeleteResearcherUseCase"
 import { useModal } from "../hooks/use-modal-store"
 
 export interface PesquisadorProps {
