@@ -170,9 +170,18 @@ const handleRemoveItem = (indexToRemove: any) => {
 
 
 useEffect(() => {
-  const joinedTerms = itemsSelecionados.map(item => item.term).join('|');
-  setValoresSelecionadosExport(joinedTerms);
+  const joinedTerms = itemsSelecionados.map(item => item.term).join('');
+  // Verifica se o último caractere é ponto e vírgula ou barra vertical
+  const lastChar = joinedTerms.slice(-1);
+  if (lastChar === ';' || lastChar === '|') {
+    // Remove o último caractere da concatenação
+    const editedTerms = joinedTerms.slice(0, -1);
+    setValoresSelecionadosExport(editedTerms);
+  } else {
+    setValoresSelecionadosExport(joinedTerms);
+  }
 }, [itemsSelecionados]);
+
 
 //conectores 
 const handleConnectorChange = (index: number, connector: string) => {
@@ -214,7 +223,7 @@ const handleConnectorChange = (index: number, connector: string) => {
                     <SelectTypeInstitutionSearch/>
                 )}
 
-              <div className='flex gap-2 mx-2'>
+              <div className='flex gap-2 mx-2 items-center'>
               {itemsSelecionados.map((valor, index) => {
           return(
               <>

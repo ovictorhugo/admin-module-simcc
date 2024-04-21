@@ -2,7 +2,7 @@
 import { DialogFooter, DialogHeader, Dialog, DialogContent, DialogDescription, DialogTitle } from "../ui/dialog";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
-import { Trash } from "phosphor-react";
+import { ArrowUUpLeft, Trash } from "phosphor-react";
 import { toast } from "sonner"
 import { UserContext } from "../../context/context";
 import { useContext} from "react";
@@ -54,22 +54,27 @@ export function ConfirmDeleteResearcher() {
       };
       
       fetchData()
+      onClose()
     
     }
 
     return(
         <Dialog open={isModalOpen} onOpenChange={onClose}> 
         <DialogContent>
-        <DialogHeader className="pt-8 px-6">
-        <DialogTitle className="text-2xl text-center font-medium">
-         Deletar pesquisador 
+        <DialogHeader className="pt-8 px-6 flex flex-col items-center">
+        <DialogTitle className="text-2xl text-center font-medium max-w-[350px]">
+           <strong className="bg-red-500 text-white hover:bg-red-600 transition duration-500 font-medium">Deletar</strong> pesquisador(a) {data.name}
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
-          Tem certeza de que deseja excluir o pesquisador vinculado a esta instituição?
+          Você tem certeza de que deseja prosseguir com a exclusão do pesquisador que está atualmente vinculado a esta instituição?
           </DialogDescription>
             </DialogHeader>
 
             <DialogFooter className=" py-4 ">
+            <Button variant={'ghost'}   onClick={() => onClose()}>
+            <ArrowUUpLeft size={16} className="" />Cancelar
+              </Button>
+
               <Button variant={'destructive'}   onClick={() => handleDeleteResearcher(id_delete)}>
               <Trash size={16} className="" />Deletar
               </Button>

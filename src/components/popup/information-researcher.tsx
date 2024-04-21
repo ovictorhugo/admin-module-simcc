@@ -238,10 +238,9 @@ const handleDownloadJson = async () => {
               )}
               <p className="text-md  ">{props.university}</p>
             </div>
+            <div className="mb-4 flex gap-3 items-center">
 
-           {researcher.map((item) => {
-            return(
-              <div className="mb-4 flex gap-3 items-center">
+         
               {props.area != '' && (
                   props.area.split(';').map((value, index) => (
                     <li
@@ -262,7 +261,10 @@ const handleDownloadJson = async () => {
                     <div className="bg-blue-700 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><MapPin size={12} className="textwhite" /> {props.city}</div>
                   )}
   
-
+  {researcher.map((item) => {
+            return(
+            
+<div className=" flex gap-3 items-center">
 {((props.orcid !== "None" && props.orcid !== '') || (item.orcid && item.orcid !== '')) && (
     <Link  to={item.orcid ? (item.orcid):(`https://orcid.org/${props.orcid}`)} target="_blank" className="bg-[#A6CE39] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
         <IdentificationBadge size={12} className="" />
@@ -276,14 +278,19 @@ const handleDownloadJson = async () => {
         Scopus
     </Link>
 )}
+</div>
   
   
-  <a href={`https://lattes.cnpq.br/${props.lattes_id}`} target="blank_" className="bg-blue-900 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><LinkSimple size={12} className="textwhite" /> Currículo Lattes</a>
-  
-  <a href={`https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(props.name)}`} rel="noopener noreferrer" target="blank_" className="bg-blue-500 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><LinkedinLogo size={12} className="textwhite" />Pesquisar no LinkedIn</a>
-              </div>
+ 
+             
             )
            })}
+
+<a href={`https://lattes.cnpq.br/${props.lattes_id}`} target="blank_" className="bg-blue-900 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><LinkSimple size={12} className="textwhite" /> Currículo Lattes</a>
+  
+  <a href={`https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(props.name)}`} rel="noopener noreferrer" target="blank_" className="bg-blue-500 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><LinkedinLogo size={12} className="textwhite" />Pesquisar no LinkedIn</a>
+
+           </div>
 
             <div className={isVisible ? "h-auto transition-all" : "h-[60px] overflow-hidden transition-all"}>
             <p className="text-gray-400 text-sm text-justify ">{props.abstract}</p>

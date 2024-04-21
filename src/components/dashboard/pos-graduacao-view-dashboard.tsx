@@ -97,7 +97,7 @@ export function PosGraducaoView() {
             if (response.ok) {
 
               setVisibleProgram(!visibleProgram)
-              toast("Dados visibilidade com sucesso!", {
+              toast("Visibilidade alterada", {
                 description: "Operação realizada com sucesso!",
                 action: {
                   label: "Fechar",
@@ -109,7 +109,7 @@ export function PosGraducaoView() {
           
           } catch (err) {
             toast("Erro ao mudar visibilidade", {
-              description: "Revise os dados e tente novamente",
+              description: "Tente novamente",
               action: {
                 label: "Fechar",
                 onClick: () => console.log("Undo"),
@@ -177,10 +177,24 @@ export function PosGraducaoView() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-auto">
           <Link to={`/pos-graducao/${posgraduation.code}`}><DropdownMenuItem className="flex items-center gap-3"><ArrowSquareOut className="h-4 w-4" />Visualizar página</DropdownMenuItem></Link>
-          <DropdownMenuItem className="flex items-center gap-3"  ><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
+          <DropdownMenuItem className="flex items-center gap-3" onClick={() => onOpen('edit-graduate-program', {
+            graduate_program_id:posgraduation.graduate_program_id,
+            code:posgraduation.code,
+            name:posgraduation.name,
+            area:posgraduation.area,
+            modality:posgraduation.modality,
+            type:posgraduation.type,
+            rating:posgraduation.rating,
+            institution_id:posgraduation.institution_id,
+            description:posgraduation.description,
+            url_image:posgraduation.url_image,
+            city:posgraduation.city,
+            visible:posgraduation.visible
+            
+            })}  ><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="flex items-center gap-3 bg-red-500 hover:bg-red-600 text-white"><Trash className="h-4 w-4" />
-          <Button variant ="null" onClick={() => onOpen('confirm-delete-pos-graduate-program', {id_delete:posgraduation.graduate_program_id})}> Deletar programa</Button>
+          <DropdownMenuItem  onClick={() => onOpen('confirm-delete-pos-graduate-program', {id_delete:posgraduation.graduate_program_id , name:posgraduation.name})} className="flex items-center gap-3 bg-red-500 hover:bg-red-600 text-white"><Trash className="h-4 w-4" />
+         Deletar programa
          </DropdownMenuItem>
        
 

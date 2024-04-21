@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 
-export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program'
+export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program' | 'edit-graduate-program'
 
 interface ModalData {
   id?: string,
@@ -25,6 +25,21 @@ interface ModalData {
   magazine?:string
 
   id_delete?: string
+
+//program edit
+graduate_program_id?: string
+    code?: string
+
+    area?: string
+    modality?: string
+    type?: string
+    rating?: string
+    institution_id?: string
+    description?: string
+    url_image?: string
+    city?:string
+    visible?: boolean
+
  
 }
 
@@ -36,11 +51,14 @@ interface ModalStore {
   data: ModalData;
 }
 
-export const useModal = create<ModalStore>((set:any) => ({
+export const useModal = create<ModalStore>((set: any) => ({
   type: null,
   data: {},
   isOpen: false,
-  onOpen: (type, data = {}) => set({ isOpen: true, type, data }),
-  onClose: () => set({ type: null, isOpen: false, data:[] }),
-  
+  onOpen: (type, newData = {}) => {
+    // Merge os novos dados com os dados existentes
+    const updatedData = { ...useModal.getState().data, ...newData };
+    set({ isOpen: true, type, data: updatedData });
+  },
+  onClose: () => set({ type: null, isOpen: false, data: {} }),
 }));

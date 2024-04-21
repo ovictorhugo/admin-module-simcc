@@ -49,12 +49,13 @@ export const columns: ColumnDef<PesquisadorProps>[] = [
     cell: ({ row }) => {
       const payment = row.original
       const id_pesquisador = row.original.researcher_id;
+      const name = row.original.name;
 
       const { onOpen } = useModal();
   
       return (
         <div className="flex gap-3">
-        <Button  onClick={() => onOpen('confirm-delete-researcher', {id_delete:id_pesquisador})} variant={'destructive'} className="h-8 w-8 p-0 text-white dark:text-white">
+        <Button  onClick={() => onOpen('confirm-delete-researcher', {id_delete:id_pesquisador, name:name})} variant={'destructive'} className="h-8 w-8 p-0 text-white dark:text-white">
              
         <Trash size={8} className="h-4 w-4" />
       </Button>

@@ -43,18 +43,19 @@ interface Csv {
 
   import { getFirestore,  collection, getDocs } from 'firebase/firestore';
   import { query,  where } from 'firebase/firestore';
+import { useModalHomepage } from "../hooks/use-modal-homepage";
 
 export function SearchModal() {
 
     const { onClose, isOpen, type } = useModal();
     
-    
+    const { onOpen: onOpenHomepage } = useModalHomepage();
     const [itemsBigrama , setBigrama] = useState<Bigrama[]>([])
     const [itemsSelecionadosPopUp , setItensSelecionadosPopUp] = useState<ItemsSelecionados[]>([])
     const [researcherOpenAlex , setResearcherOpenAlex] = useState<ResearchOpenAlex[]>([])
     const [showInput, setShowInput] = useState(true);
     const isModalOpen = isOpen && type === "search";
-    const {setValoresSelecionadosExport, valoresSelecionadosExport, searchType, setSearchType, urlGeral, itemsSelecionados , setItensSelecionados} = useContext(UserContext)
+    const {setValoresSelecionadosExport, valoresSelecionadosExport, searchType, setSearchType, urlGeral, itemsSelecionados , setItensSelecionados, setValorDigitadoPesquisaDireta} = useContext(UserContext)
     const db = getFirestore();
     const [input, setInput] = useState('')
 
@@ -63,7 +64,9 @@ export function SearchModal() {
         setSearchType(type)
       }
 
-      
+      useEffect(() => {
+        setItensSelecionadosPopUp(itemsSelecionados)
+      }, [isModalOpen]);
 
 
 
@@ -139,9 +142,14 @@ export function SearchModal() {
   };
 
   const handlePesquisaFinal = () => {
-    setItensSelecionados(itemsSelecionadosPopUp)
+    if(itemsSelecionadosPopUp.length > 0) {
+      setItensSelecionados(itemsSelecionadosPopUp)
+    } else {
+      setValorDigitadoPesquisaDireta(input)
+    }
     setInput('')
     onClose()
+    onOpenHomepage('result-home')
   }
 
   ///open alex
@@ -250,6 +258,8 @@ console.log('fawefwef', urlOpenAlex)
         // Atualize o estado com os itens atualizados
         setItensSelecionadosPopUp(updatedItems);
     };
+
+   
     
     
 
