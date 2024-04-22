@@ -14,7 +14,7 @@ export function TablePosGraduateViewDashboard(props:posGraduationsProps) {
  
 
   return (
-    <div className="w-full overflow-y-auto">
+    <div className="max-md:max-w-[87vw] max-sm:max-w-[87vw] w-full overflow-y-auto">
    
       <ScrollArea>
       <div className="  ">

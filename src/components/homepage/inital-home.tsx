@@ -74,7 +74,7 @@ export function InitialHome() {
   return (
     <>
       {isModalOpen && (
-        <div className="h-full w-full flex flex-col justify-center mr-[72px]">
+        <div className="h-full w-full flex flex-col justify-center mr-[72px] max-sm:ml-4">
           <div className="flex flex-col justify-center">
             <div className="h-[350px] absolute  ml-16 ">
               <Circle />
@@ -101,7 +101,7 @@ export function InitialHome() {
                   opts={{
                     align: "start",
                   }}
-                  className="w-full  sm:max-w-xs lg:max-w-8xl md:max-w-4xl  ml-8"
+                  className="flex items-center w-full  max-sm:max-w-[60vw] max-lg:max-w-[70vw] md:max-w-[85vw] ml-8 sm:flex "
                 >
       <CarouselContent>
      

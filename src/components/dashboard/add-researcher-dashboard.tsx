@@ -111,8 +111,8 @@ export function AddResearcherDashboard() {
 
     return  (
         
-         <Alert className="bg-cover h-[200px] bg-center bg-no-repeat  gap-6 w-full  flex items-center justify-center py-12" style={{ backgroundImage: `url(${bg_popup})` }} >
-            <h3 className="max-w-[240px] font-medium text-2xl  text-gray-700 dark:text-white"><strong className="bg-blue-700 text-white hover:bg-blue-800 transition duration-500 font-medium">Vincule</strong> os pesquisadores à sua instituição de ensino</h3>
+         <Alert className="max-sm:max-w-[90vw] max-md:max-w-[90vw] bg-cover h-[200px] bg-center bg-no-repeat  gap-6 w-full  flex items-center justify-center py-12  max-md:flex-row" style={{ backgroundImage: `url(${bg_popup})` }} >
+            <h3 className="max-w-[240px] font-medium text-2xl max-md:text-xl max-sm:text-base  text-gray-700 dark:text-white"><strong className="bg-blue-700 text-white hover:bg-blue-800 transition duration-500 font-medium">Vincule</strong> os pesquisadores à sua instituição de ensino</h3>
 
             <div className="flex gap-6 items-end">
             <div className="flex flex-col space-y-1.5 w-1/3">

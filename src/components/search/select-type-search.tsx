@@ -17,7 +17,7 @@ export function SelectTypeSearch() {
     const {searchType, setSearchType} = useContext(UserContext)
 
         return(
-        <div>
+        <div className="max-sm:max-w-[98px]">
             <Select defaultValue={searchType} onValueChange={(value) => setSearchType(value)}>
             <SelectTrigger className="w-full whitespace-nowrap">
                 <SelectValue placeholder="Escolha o tipo de pesquisa" />

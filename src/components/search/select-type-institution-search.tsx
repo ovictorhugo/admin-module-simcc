@@ -23,7 +23,7 @@ export function SelectTypeInstitutionSearch() {
     const {searchType, setSearchType} = useContext(UserContext)
 
         return(
-        <div>
+        <div >
             <Select defaultValue={searchType} onValueChange={(value) => setSearchType(value)}>
             <SelectTrigger className="w-full whitespace-nowrap">
                 <SelectValue placeholder="Selecione a instituição" />
