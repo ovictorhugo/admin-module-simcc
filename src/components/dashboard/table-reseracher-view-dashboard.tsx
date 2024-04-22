@@ -6,6 +6,8 @@ import { PesquisadorProps, columns } from "./columns";
 
 import { DataTable } from "./data-table";
 import { ScrollArea } from "../ui/scroll-area";
+import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
+import { UsersFour } from "phosphor-react";
 
 export function TableResearcherViewDashboard() {
   const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
@@ -39,10 +41,12 @@ export function TableResearcherViewDashboard() {
     fetchData();
   }, [urlGetResearcher]);
 
-  console.log(urlGetResearcher);
 
   return (
     <div className="w-full overflow-y-auto">
+        <HeaderResultTypeHome title="Docentes cadastrados" icon={<UsersFour size={24} className="text-gray-400" />}>
+                      
+                        </HeaderResultTypeHome>
    
       <ScrollArea>
       <div className="  ">

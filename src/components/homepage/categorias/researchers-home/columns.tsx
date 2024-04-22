@@ -11,8 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../../../components/ui/dropdown-menu"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
-import { Buildings,Export,MapPin, Plus} from "phosphor-react"
+import { ArrowUpDown, Copy, MoreHorizontal } from "lucide-react"
+import { ArrowSquareOut, Buildings,Export,MapPin, Plus, ShareNetwork} from "phosphor-react"
 import { GraduationCap} from "lucide-react"
 import { useContext } from "react"
 import { UserContext } from "../../../../context/context"
@@ -112,6 +112,8 @@ export const columns: ColumnDef<Research>[] = [
     id: "actions",
     cell: ({ row }) => {
       const payment = row.original
+      const {searchType, valoresSelecionadosExport, urlGeral} = useContext(UserContext)
+      const urlShare = `${urlGeral}researcher/${row.id}/${searchType}/${valoresSelecionadosExport}`
  
       return (
         <div className="flex gap-3">
@@ -122,7 +124,7 @@ export const columns: ColumnDef<Research>[] = [
 
             <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
              
-            <Export size={8} className="h-4 w-4" />
+            <ArrowSquareOut size={8} className="h-4 w-4" />
             </Button>
 
           <DropdownMenu>
@@ -134,10 +136,18 @@ export const columns: ColumnDef<Research>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.lattes_id)}
-            >
-              Copie Lattes ID
+
+            <DropdownMenuItem className="flex items-center gap-3"
+             onClick={() => navigator.clipboard.writeText(payment.lattes_id)}
+            ><Copy className="h-4 w-4" />
+              Copiar Lattes ID
+            </DropdownMenuItem>
+
+            <DropdownMenuItem className="flex items-center gap-3"
+              onClick={() => navigator.clipboard.writeText(urlShare)}
+            ><ShareNetwork className="h-4 w-4" />
+              Copiar link para compartilhar
+             
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </DropdownMenuContent>

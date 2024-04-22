@@ -3,7 +3,7 @@ import { useModal } from "../hooks/use-modal-store"
 import { Alert } from "../ui/alert";
 import { UserContext } from "../../context/context";
 import { ArrowSquareOut, DotsThree, Eye, EyeSlash, GraduationCap, Hash, MapPin, PencilSimple, Rows, SquaresFour, Star, Trash } from "phosphor-react"; 
-import {GraduationCapIcon } from "lucide-react";
+import {Divide, GraduationCapIcon, UserCheck } from "lucide-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { toast } from "sonner"
 
@@ -206,6 +206,9 @@ export function PosGraducaoView() {
             visible:posgraduation.visible
             
             })}  ><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
+               <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('add-researcher-graduation', {id_delete:posgraduation.graduate_program_id , name:posgraduation.name})}><UserCheck className="h-4 w-4" />
+         Editar docentes 
+         </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem  onClick={() => onOpen('confirm-delete-pos-graduate-program', {id_delete:posgraduation.graduate_program_id , name:posgraduation.name})} className="flex items-center gap-3 bg-red-500 hover:bg-red-600 text-white"><Trash className="h-4 w-4" />
          Deletar programa
@@ -227,7 +230,7 @@ export function PosGraducaoView() {
 
      
       </Masonry>
-      </ResponsiveMasonry>):(<TablePosGraduateViewDashboard PosGraduationsProps={posgraduations}/>)}
+      </ResponsiveMasonry>):(<div className="mt-4"><TablePosGraduateViewDashboard PosGraduationsProps={posgraduations} /></div>)}
     
        
        

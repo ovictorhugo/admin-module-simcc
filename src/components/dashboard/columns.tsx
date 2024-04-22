@@ -10,8 +10,9 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
-import {Trash} from "phosphor-react"
+import {Copy, Trash} from "phosphor-react"
 import { useModal } from "../hooks/use-modal-store"
+
 
 export interface PesquisadorProps {
     name: string
@@ -55,7 +56,7 @@ export const columns: ColumnDef<PesquisadorProps>[] = [
   
       return (
         <div className="flex gap-3">
-        <Button  onClick={() => onOpen('confirm-delete-researcher', {id_delete:id_pesquisador, name:name})} variant={'destructive'} className="h-8 w-8 p-0 text-white dark:text-white">
+        <Button  onClick={() => onOpen('confirm-delete-researcher', {id_delete:id_pesquisador, name:name})} variant={'destructive'} className="h-8 w-8 p-0 text-white ml-auto dark:text-white">
              
         <Trash size={8} className="h-4 w-4" />
       </Button>
@@ -68,12 +69,11 @@ export const columns: ColumnDef<PesquisadorProps>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(payment.lattes_id)}
-            >
-              Copie Lattes ID
+            <DropdownMenuItem className="flex items-center gap-3"
+              onClick={() => navigator.clipboard.writeText(payment.lattes_id)}
+            ><Copy className="h-4 w-4" />
+              Copiar Lattes ID
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
           </DropdownMenuContent>
         </DropdownMenu>
         </div>

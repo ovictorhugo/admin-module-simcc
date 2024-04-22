@@ -1,6 +1,6 @@
-import { useContext, useMemo, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { UserContext } from "../../context/context"
-import { BracketsCurly, Buildings, CaretDown, Copy, Export, FileCsv, GraduationCap, IdentificationBadge, LinkSimple, LinkedinLogo, MapPin, Plus, PuzzlePiece, QrCode, ShareNetwork } from "phosphor-react"
+import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, Copy, Export, FileCsv, GraduationCap, IdentificationBadge, LinkSimple, LinkedinLogo, MapPin, Plus, PuzzlePiece, QrCode, ShareNetwork } from "phosphor-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Button } from "../ui/button"
 import { MoreHorizontal } from "lucide-react"
@@ -76,10 +76,14 @@ const [researcher, setResearcher] = useState<Research[]>([]);
   const urlTermPesquisadoresOrcid =`https://api.openalex.org/authors/https://orcid.org/${props.orcid}`;
   const urlShare = `${urlGeral}researcher/${props.id}/${searchType}/${valoresSelecionadosExport}`
   const urlApi = `${urlGeral}researcherName?name=${props.name.split(' ').join(';')}`
+  const [orcid, setOrcid] = useState(props.orcid);
+  useEffect(() => {
+    setOrcid(props.orcid)
+}, [props]);
   useMemo(() => {
-    console.log('orcid',props.orcid)
+    console.log('orcid',orcid)
     const fetchData = async () => {
-        if(( props.orcid == " None" || props.orcid == "")) {
+        if(( orcid != " None" )) {
             try {
               const response = await fetch(urlTermPesquisadoresOrcid, {
                   mode: "cors",
@@ -128,7 +132,7 @@ const [researcher, setResearcher] = useState<Research[]>([]);
         }
     };
     fetchData();
-}, [urlTermPesquisadores, urlTermPesquisadoresOrcid, props.orcid]);
+}, [urlTermPesquisadores, urlTermPesquisadoresOrcid, orcid]);
 
 console.log('urlopenalex', researcher)
 console.log('urlopenalex', urlTermPesquisadoresOrcid)
@@ -185,7 +189,7 @@ const handleDownloadJson = async () => {
 
             <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
              
-            <Export size={8} className="h-4 w-4" />
+            <ArrowSquareOut size={8} className="h-4 w-4" />
             </Button>
 
           <DropdownMenu>
@@ -265,7 +269,7 @@ const handleDownloadJson = async () => {
             return(
             
 <div className=" flex gap-3 items-center">
-{((props.orcid !== "None" && props.orcid !== '') || (item.orcid && item.orcid !== '')) && (
+{((orcid !== "None" && orcid !== '') || (item.orcid && item.orcid !== '')) && (
     <Link  to={item.orcid ? (item.orcid):(`https://orcid.org/${props.orcid}`)} target="_blank" className="bg-[#A6CE39] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
         <IdentificationBadge size={12} className="" />
         Orcid: {item.orcid ? item.orcid.replace(/[^\d-]/g, '') : props.orcid}

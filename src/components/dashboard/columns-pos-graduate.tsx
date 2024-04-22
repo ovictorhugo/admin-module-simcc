@@ -11,11 +11,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu"
-import {  MoreHorizontal } from "lucide-react"
-import { Export} from "phosphor-react"
+import {  MoreHorizontal, Trash, UserCheck } from "lucide-react"
+import { ArrowSquareOut, Export, PencilSimple} from "phosphor-react"
 import {  Eye, EyeSlash, Hash, MapPin, Star } from "phosphor-react"; 
 import {GraduationCapIcon } from "lucide-react";
 import { toast } from "sonner"
+import { Link } from "react-router-dom"
+import { useModal } from "../hooks/use-modal-store"
 
 
 
@@ -47,7 +49,7 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
       },
       {
         accessorKey: "code",
-        header: "código",
+        header: "Código",
         cell: ({ row }) => {
 
             return <div className="flex gap-1 items-center"><Hash size={12}/> {row.getValue("code")}</div>
@@ -79,20 +81,7 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
         }
 
       },
-      {
-        accessorKey: "visible",
-        header: "Visibiidade",
-        cell: ({ row }) => {
-          
 
-          return <div className="flex gap-1 items-center"><Button variant="outline" size={'icon'} className="ml-auto text-sm text-gray-500 dark:text-gray-300 flex items-center">
-            {row.getValue("visible") ? (<EyeSlash size={16}/>):(<Eye size={16}/>)}</Button></div>
-          
-        }
-    
-
-      },
-     
      
     
  
@@ -147,37 +136,49 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
     
       };
 
+      const {onOpen} = useModal()
+
     
  
       return (
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
+
        
-            <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
-             
-            <Export size={8} className="h-4 w-4" />
-            </Button>
+          <Button  onClick={() => handleVisibleProgram (row.original.graduate_program_id)} variant="outline"  className="ml-auto p-0  h-8 w-8 text-sm text-gray-500 dark:text-gray-300 flex items-center">
+            {row.original.visible ? (<EyeSlash size={16}/>):(<Eye size={16}/>)}</Button>
 
           <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button variant="ghost" size={'icon'} className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.code)}
-            >
-      
-              Copie o código
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => handleVisibleProgram (payment.graduate_program_id)}
-            >
-              Mudar visibilidade
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+          <Link to={`/pos-graducao/${row.original.code}`}><DropdownMenuItem className="flex items-center gap-3"><ArrowSquareOut className="h-4 w-4" />Visualizar página</DropdownMenuItem></Link>
+          <DropdownMenuItem className="flex items-center gap-3" onClick={() => onOpen('edit-graduate-program', {
+            graduate_program_id:row.original.graduate_program_id,
+            code:row.original.code,
+            name:row.original.name,
+            area:row.original.area,
+            modality:row.original.modality,
+            type:row.original.type,
+            rating:row.original.rating,
+            institution_id:row.original.institution_id,
+            description:row.original.description,
+            url_image:row.original.url_image,
+            city:row.original.city,
+            visible:row.original.visible
+            
+            })}  ><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('add-researcher-graduation', {id_delete:row.original.graduate_program_id , name:row.original.name})}><UserCheck className="h-4 w-4" />
+         Editar docentes 
+         </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+          <DropdownMenuItem  onClick={() => onOpen('confirm-delete-pos-graduate-program', {id_delete:row.original.graduate_program_id , name:row.original.name})} className="flex items-center gap-3 bg-red-500 hover:bg-red-600 text-white"><Trash className="h-4 w-4" />
+         Deletar programa
+         </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         </div>

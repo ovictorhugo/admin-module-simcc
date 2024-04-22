@@ -17,7 +17,7 @@ import {
   } from "../../components/ui/select"
 
   import { useModal } from "../hooks/use-modal-store";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { toast } from "sonner"
@@ -41,6 +41,16 @@ export function EditGraduateProgram() {
     const [area, setArea] = useState(data && data.area);
     const [code, setCode] = useState(data && data.code);
     const [descricao, setDescricao] = useState('');
+
+    useEffect(() => {
+      setName(data.name)
+      setCity(data.city)
+      setModality(data.modality)
+      setType(data.type)
+      setRanking(data.rating)
+      setArea(data.area)
+      setCode(data.code)
+  }, [data]);
 
     const handleSubmit = async () => {
 
