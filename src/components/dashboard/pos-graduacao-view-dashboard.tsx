@@ -2,10 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { useModal } from "../hooks/use-modal-store"
 import { Alert } from "../ui/alert";
 import { UserContext } from "../../context/context";
-import { ArrowSquareOut, DotsThree, Eye, EyeSlash, Hash, MapPin, PencilSimple, Star, Trash } from "phosphor-react"; 
+import { ArrowSquareOut, DotsThree, Eye, EyeSlash, GraduationCap, Hash, MapPin, PencilSimple, Rows, SquaresFour, Star, Trash } from "phosphor-react"; 
 import {GraduationCapIcon } from "lucide-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { toast } from "sonner"
+
 
 
 
@@ -34,6 +35,8 @@ import { toast } from "sonner"
   } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
+import { TablePosGraduateViewDashboard } from "./table-pos-graduate-dashboard";
+import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
   
 
 
@@ -48,6 +51,7 @@ export function PosGraducaoView() {
     const [posgraduations, setPosgraduations] = useState<PosGraduationsProps[]>([]);
     const [visibleProgram, setVisibleProgram] = useState(false);
     const { onOpen } = useModal();
+    const [typeVisu, setTypeVisu] = useState('block')
 
     const urlGetPosGraduations = urlGeralAdm + `GraduateProgramRest/Query?institution_id=${user.institution_id}`
   
@@ -77,7 +81,7 @@ export function PosGraducaoView() {
         fetchData();
       }, [urlGetPosGraduations,visibleProgram]);
 
-      const handleVisibleProgram = (id: string) => {
+     const handleVisibleProgram = (id: string) => {
 
         const urlVisibleProgram = urlGeralAdm  + `GraduateProgramRest/Update?graduate_program_id=${id}`
         const fetchData = async () => {
@@ -123,7 +127,17 @@ export function PosGraducaoView() {
       };
 
     return(
-      <ResponsiveMasonry
+      <>
+                          <HeaderResultTypeHome title="Programas de pós graduação" icon={<GraduationCap size={24} className="text-gray-400" />}>
+                        <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+                            <Rows size={16} className=" whitespace-nowrap" />
+                        </Button>
+
+                        <Button  onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
+                            <SquaresFour size={16} className=" whitespace-nowrap" />
+                        </Button>
+                        </HeaderResultTypeHome>
+                        {typeVisu=="block"?(  <ResponsiveMasonry className="mt-4"
       columnsCountBreakPoints={{
           350: 1,
           750: 2,
@@ -213,10 +227,12 @@ export function PosGraducaoView() {
 
      
       </Masonry>
-      </ResponsiveMasonry>
+      </ResponsiveMasonry>):(<TablePosGraduateViewDashboard PosGraduationsProps={posgraduations}/>)}
+    
+       
        
     
-    
+       </>
    
         
     )

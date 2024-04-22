@@ -29,6 +29,7 @@ import { UserConfigHeader } from "./user-config-header";
 import { useTheme } from "next-themes"
 import { LogoWhite } from "../svg/LogoWhite";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
+
 export function Header() {
   const {loggedIn, user, setItensSelecionados} = useContext(UserContext)
 
