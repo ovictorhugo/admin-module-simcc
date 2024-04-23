@@ -206,7 +206,7 @@ export function PosGraducaoView() {
             visible:posgraduation.visible
             
             })}  ><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
-               <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('add-researcher-graduation', {id_delete:posgraduation.graduate_program_id , name:posgraduation.name})}><UserCheck className="h-4 w-4" />
+               <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('add-researcher-graduation', {graduate_program_id:posgraduation.graduate_program_id , name:posgraduation.name})}><UserCheck className="h-4 w-4" />
          Editar docentes 
          </DropdownMenuItem>
           <DropdownMenuSeparator />

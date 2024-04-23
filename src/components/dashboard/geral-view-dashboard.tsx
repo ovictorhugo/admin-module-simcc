@@ -50,6 +50,7 @@ const {user} = useContext(UserContext)
          <TabsTrigger value="geral" onClick={() => setValue('geral')}>Visão geral</TabsTrigger>
          <TabsTrigger value="pesquisadores" onClick={() => setValue('pesquisadores')}>Pesquisadores</TabsTrigger>
          <TabsTrigger value="pos-graduacoes" onClick={() => setValue('pos-graduacoes')}>Pós-graduações</TabsTrigger>
+         <TabsTrigger value="grupos-pesquisa" onClick={() => setValue('grupos-pesquisa')}>Grupos de pesquisas</TabsTrigger>
       </TabsList>
 
         
@@ -63,10 +64,15 @@ const {user} = useContext(UserContext)
           
          </TabsContent>
 
-         <TabsContent value="pos-graduacoes">
+         <TabsContent value="pos-graduacoes" className="m-0">
 
             <PosGraducaoView/>
          </TabsContent>
+
+         <TabsContent value="grupos-pesquisa">
+
+
+</TabsContent>
 
          </Tabs>
 

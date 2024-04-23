@@ -1,4 +1,4 @@
-import { ArrowUUpLeft, User } from "phosphor-react";
+import { ArrowUUpLeft, Trash, User } from "phosphor-react";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent,DialogDescription,DialogFooter,DialogHeader,DialogTitle } from "../ui/dialog";
@@ -45,35 +45,14 @@ export function AddResearcherGraduation() {
     const [open, setOpen] = useState(false)
     const [open2, setOpen2] = useState(false)
     const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
-
+    const [id_program , setIdProgram] = useState(dataModal && dataModal.graduate_program_id)
     const { urlGeralAdm, user } = useContext(UserContext);
-  
-    const urlGetResearcher =
-      urlGeralAdm + `GraduateProgramResearcherRest/Query?graduate_program_id${dataModal.graduate_program_id}`;
-  
+
     useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await fetch(urlGetResearcher, {
-            mode: "cors",
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Methods": "GET",
-              "Access-Control-Allow-Headers": "Content-Type",
-              "Access-Control-Max-Age": "3600",
-              "Content-Type": "text/plain",
-            },
-          });
-          const data = await response.json();
-          if (data) {
-            setResearcher(data);
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      fetchData();
-    }, [urlGetResearcher]);
+      setIdProgram(dataModal.graduate_program_id)
+    }, [dataModal]);
+
+  
 
 
     //listar todos os pesquisadores popover
@@ -115,8 +94,6 @@ export function AddResearcherGraduation() {
     setResearcherSearch(filteredResearcherSearch);
     }, [urlGetResearcherSearch]);
     
-    
-    
 
     //sdfsf
 
@@ -126,12 +103,14 @@ export function AddResearcherGraduation() {
       try {
         const data = [
           {
-            graduate_program_id: dataModal.graduate_program_id,
+            graduate_program_id: id_program,
             researcher_id:researcher_id,
             year:String(currentYear),
             type_: type
             }
         ]
+
+        console.log('dataa reesfs', data)
 
         let urlProgram = urlGeralAdm + 'GraduateProgramResearcherRest/Insert'
 
@@ -178,6 +157,8 @@ export function AddResearcherGraduation() {
           } 
         };
         fetchData();
+
+       
    
   
         
@@ -191,6 +172,115 @@ export function AddResearcherGraduation() {
             })
       }
     };
+
+
+    ///deteltar
+    //sdfsf
+
+    const handleSubmitDelete = async ( researcher_id:string) => {
+
+
+      try {
+        const data = [
+          {
+            graduate_program_id: id_program,
+            lattes_id:researcher_id,
+            }
+        ]
+
+        console.log('dataa reesfs', data)
+
+        let urlProgram = urlGeralAdm + 'GraduateProgramResearcherRest/Delete'
+
+
+        const fetchData = async () => {
+        
+          try {
+            const response = await fetch(urlProgram, {
+              mode: 'cors',
+              method: 'DELETE',
+              headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Max-Age': '3600',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+             
+              toast("Dados enviados com sucesso", {
+                  description: "Pesquisador removido no programa de pós-graduação",
+                  action: {
+                    label: "Fechar",
+                    onClick: () => console.log("Undo"),
+                  },
+                })
+             
+            } else {
+              console.error('Erro ao enviar dados para o servidor.');
+              toast("Tente novamente!", {
+                  description: "Erro ao cadastrar pesquisador ao programa",
+                  action: {
+                    label: "Fechar",
+                    onClick: () => console.log("Undo"),
+                  },
+                })
+            }
+            
+          } catch (err) {
+            console.log(err);
+          } 
+        };
+        fetchData();
+
+       
+   
+  
+        
+      } catch (error) {
+          toast("Erro ao processar requisição", {
+              description: "Tente novamente",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+      }
+    };
+
+
+    //
+
+    const urlGetResearcher =
+    urlGeralAdm + `GraduateProgramResearcherRest/Query?graduate_program_id=${id_program}`;
+   
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(urlGetResearcher, {
+          mode: "cors",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Max-Age": "3600",
+            "Content-Type": "text/plain",
+          },
+        });
+        const data = await response.json();
+        if (data) {
+          setResearcher(data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [urlGetResearcher, handleSubmit, handleSubmitDelete]);
   
 
 
@@ -210,16 +300,21 @@ export function AddResearcherGraduation() {
                 <div>
                 <p className="uppercase font-medium text-xs mb-3">PERMANENTES</p>
 
-                <ScrollArea className="w-full max-h-32 mb-4">
+                <ScrollArea className="w-full h-32 mb-4">
                   {researcher.map((props) => {
                     if(props.type_ == "PERMANENTE") {
                      return(
-                      <div className="w-fyll h-12 border-b hover:bg-neutral-100 px-2 transition-all flex gap-3 items-center text-xs uppercase font-medium text-blue-700">
+                      <div className="w-fyll h-12 border-b hover:bg-neutral-100 px-2 transition-all flex gap-3 items-center text-xs uppercase font-medium ">
                      <div className="flex items-center gap-3">
-                     <div className="bg-neutral-200 rounded-md flex items-center justify-center"><User size={16} className="" /></div>{props.name}
+                     <div className="bg-neutral-200 h-8 w-8 rounded-md flex items-center justify-center"><User size={16} className="" /></div>{props.name}
                      </div>
 
-                     <p>{props.lattes_id}</p>
+                    <div className="ml-auto flex gap-3 items-center">
+                    <p>{props.lattes_id}</p>
+                     <Button  onClick={() => handleSubmitDelete(props.lattes_id)} variant={'destructive'} className="h-8 w-8 p-0 text-white ml-auto dark:text-white">
+                      <Trash size={8} className="h-4 w-4" />
+                    </Button>
+                    </div>
                       </div>
                      )
                     }
@@ -228,7 +323,7 @@ export function AddResearcherGraduation() {
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <div className="w-full cursor-pointer h-12 border-b hover:bg-neutral-100 px-2 transition-all flex gap-3 items-center text-xs uppercase font-medium text-blue-700">
-                    <Plus size={16} className="" />ADICiONAR PESQUISADOR
+                    <div className="w-8 h-8 flex items-center justify-center"><Plus size={16} className="" /></div>ADICiONAR PESQUISADOR
                     </div>
                   </PopoverTrigger>
                   <PopoverContent className="min-w-[200px] p-0">
@@ -261,19 +356,24 @@ export function AddResearcherGraduation() {
                 <div>
                 <p className="uppercase font-medium text-xs mb-3">COLABORADORES</p>
 
-                <ScrollArea className="w-full max-h-32">
+                <ScrollArea className="w-full h-32">
                   {researcher.map((props) => {
-                    if(props.type_ == "COLABORADOR") {
-                     return(
-                      <div className="w-fyll h-12 border-b hover:bg-neutral-100 px-2 transition-all flex gap-3 items-center text-xs uppercase font-medium text-blue-700">
-                     <div className="flex items-center gap-3">
-                     <div className="bg-neutral-200 rounded-md flex items-center justify-center"><User size={16} className="" /></div>{props.name}
-                     </div>
-
-                     <p>{props.lattes_id}</p>
+                     if(props.type_ == "COLABORADOR") {
+                      return(
+                       <div className="w-fyll h-12 border-b hover:bg-neutral-100 px-2 transition-all flex gap-3 items-center text-xs uppercase font-medium ">
+                      <div className="flex items-center gap-3">
+                      <div className="bg-neutral-200 h-8 w-8 rounded-md flex items-center justify-center"><User size={16} className="" /></div>{props.name}
                       </div>
-                     )
-                    }
+ 
+                     <div className="ml-auto flex gap-3 items-center">
+                     <p>{props.lattes_id}</p>
+                      <Button  onClick={() => handleSubmitDelete(props.lattes_id)} variant={'destructive'} className="h-8 w-8 p-0 text-white ml-auto dark:text-white">
+                       <Trash size={8} className="h-4 w-4" />
+                     </Button>
+                     </div>
+                       </div>
+                      )
+                     }
                   })}
                
                 <Popover open={open2} onOpenChange={setOpen2}>
@@ -291,10 +391,10 @@ export function AddResearcherGraduation() {
 
                     
   <CommandGroup>
-    {researcherSearch.map((props) => (
+  {researcherSearch.map((props) => (
       <CommandItem key={props.researcher_id} value={props.name}  onSelect={() => {
         handleSubmit('COLABORADOR',props.researcher_id)
-        setOpen2(false)
+        setOpen(false)
       }}>
         <span>{props.name}</span>
       </CommandItem>

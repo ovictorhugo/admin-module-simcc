@@ -33,6 +33,8 @@ export function EditGraduateProgram() {
 
     const { user, urlGeralAdm } = useContext(UserContext);
 
+    const [id_program , setIdProgram] = useState(data && data.graduate_program_id)
+
     const [name, setName] = useState(data && data.name);
     const [city, setCity] = useState( data && data.city);
     const [modality, setModality] = useState(data && data.modality);
@@ -50,16 +52,17 @@ export function EditGraduateProgram() {
       setRanking(data.rating)
       setArea(data.area)
       setCode(data.code)
+      setIdProgram(data.graduate_program_id)
   }, [data]);
 
     const handleSubmit = async () => {
 
-        const docId = uuidv4();
+ 
 
         try {
           const data = [
             {
-                graduate_program_id: docId,
+                graduate_program_id: id_program,
                 code: code,
                 name: name ? name.toUpperCase() : '',
                 area: area ? area.toUpperCase() : '',
@@ -76,7 +79,7 @@ export function EditGraduateProgram() {
 
           let urlProgram = urlGeralAdm + '/GraduateProgramRest/Fix'
 
-
+console.log('data edittt',data)
           const fetchData = async () => {
           
             try {

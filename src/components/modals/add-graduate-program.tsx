@@ -159,7 +159,7 @@ export function AddGraduateProgram() {
 
             <div className="flex flex-col gap-2">
                 <Label>Cidade</Label>
-                <Input value={name} onChange={(e) => setCity(e.target.value)} type="text" placeholder="Cidade"/>
+                <Input value={city} onChange={(e) => setCity(e.target.value)} type="text" placeholder="Cidade"/>
             </div>
             </div>
 
@@ -182,19 +182,19 @@ export function AddGraduateProgram() {
            <div className="w-1/2 flex gap-4">
            <div className="flex flex-col gap-2 w-2/3">
                 <Label>Área</Label>
-                <Input value={name} onChange={(e) => setArea(e.target.value)} type="text" placeholder="Área"/>
+                <Input value={area} onChange={(e) => setArea(e.target.value)} type="text" placeholder="Área"/>
             </div>
 
             <div className="flex flex-col gap-2 w-1/3">
                 <Label>Nota</Label>
-                <Input value={name} onChange={(e) => setRanking(e.target.value)} type="text" placeholder="Nota"/>
+                <Input value={ranking} onChange={(e) => setRanking(e.target.value)} type="text" placeholder="Nota"/>
             </div>
            </div>
             </div>
 
             <div className="flex flex-col gap-2 mt-4">
                 <Label>Código do programa (Sucupira)</Label>
-                <Input value={name} onChange={(e) => setCode(e.target.value)} type="text" placeholder="Código do programa (Sucupira)"/>
+                <Input value={code} onChange={(e) => setCode(e.target.value)} type="text" placeholder="Código do programa (Sucupira)"/>
             </div>
         </div>
 
