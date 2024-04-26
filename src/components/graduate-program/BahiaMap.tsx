@@ -61,8 +61,8 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
         renderTo: 'containerone',
         map: brazilStatesGeoJSON,
         backgroundColor: 'transparent',
-     
-        
+        colorCount: 5,
+
      
       },
       title: {
@@ -79,6 +79,7 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
       },
       colorAxis: {
         tickPixelInterval: 100,
+    
       },
       series: [
         {
@@ -129,12 +130,17 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
 
             
           },
-          color: colors,
+          
 
         
         },
       ],
+      
     });
+
+    
+
+    
 
 
     // Limpar o gráfico quando o componente for desmontado

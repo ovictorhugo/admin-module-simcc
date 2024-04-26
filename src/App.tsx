@@ -22,6 +22,7 @@ interface ItemsSelecionados {
 }
 
 import { CookiesProvider, useCookies } from 'react-cookie'
+import { News } from './pages/News';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [navbar, setNavbar] = useState(false);
@@ -103,6 +104,7 @@ function App() {
        
        
         <Route path='/indicadores' element={<Indicators/>}/>
+        <Route path='/novas-publicacoes' element={<News/>}/>
         <Route path='/taxonomia' element={<Indicators/>}/>
         <Route path='/indicadores-pos-graduacao' element={<Indicators/>}/>
         

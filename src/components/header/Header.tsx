@@ -46,7 +46,7 @@ export function Header() {
 
     return(
         <header className={`h-20 z-[3] flex justify-between  items-center mr-[72px] sticky top-0  ${posGraduation == true ? ('bg-transparent'):('dark:bg-neutral-900 bg-gray-100')}`}>
-            <div className=" w-full flex items-center h-12 gap-4">
+            <div className="  flex items-center h-12 gap-4">
             <div className="flex gap-2 items-center h-full justify-center ">
             <Link to={"/"} className="h-[24px]  " onClick={() => handleClick()} >{theme == 'dark' ? (<LogoWhite />):(<LogoSimcc />)}</Link>
 
@@ -91,8 +91,8 @@ export function Header() {
               <ListItem href="/docs/installation" title="Revistas">
                Listagem das revistas com o Qualis e JCR
               </ListItem>
-              <ListItem href="/docs/primitives/typography" title="Sobre o projeto">
-                Descubra o passo a passo de como utilizar a plataforma
+              <ListItem href="/novas-publicacoes" title="O que há de novo?">
+                Veja os artigos mais recentes nas publicações dos pesquisdores
               </ListItem>
             </ul>
           </NavigationMenuContent>

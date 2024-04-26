@@ -47,6 +47,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { TotalViewResearcher } from "../popup/total-view-researcher";
 import { InformacoesGeraisResearcher } from "../popup/informacoes-gerais-researcher";
 import { ArticlesResearcherPopUp } from "../popup/articles-researcher";
+import { BooksResearcherPopUp } from "../popup/book-researcher";
 
 type ResearchOpenAlex = {
   h_index: number;
@@ -174,7 +175,13 @@ export function ResearcherModal() {
                   )
                 })}
   </TabsContent>
-  <TabsContent value="book">Change your password here.</TabsContent>
+  <TabsContent value="book">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                  <BooksResearcherPopUp name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
 </Tabs>
         </div>
 

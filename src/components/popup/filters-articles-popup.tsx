@@ -13,6 +13,14 @@ type Filter = {
     qualis: string[]
 }
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../components/ui/select"
+
 export function FilterArticlePopUp(props:Props) {
     const qualisColor: { [key: string]: string } = {
         'A1': 'bg-[#006837]',
@@ -128,11 +136,20 @@ export function FilterArticlePopUp(props:Props) {
            <CheckSquare size={24} className="text-gray-400" />
            <p className="text-sm font-bold">Selecione o Qualis</p>
            </div>
-        <Alert className="w-fit">
+        <Alert className="w-full">
 
-<div className="gap-4 flex flex-wrap ">
-{checkboxQualis}
-</div>
+        <Select >
+            <SelectTrigger className="w-full whitespace-nowrap border-none">
+                <SelectValue placeholder="Escolha o Qualis" />
+            </SelectTrigger>
+            <SelectContent>
+               {qualis.map((props) => {
+                return(
+                  <SelectItem value={props.itens}> <div className="flex gap-4 items-center mr-2"><div className={` flex rounded-sm h-4 w-4 ${qualisColor[props.itens]}`}></div> {props.itens}</div></SelectItem>
+                )
+               })}
+            </SelectContent>
+            </Select>
 
 </Alert>
         </div>

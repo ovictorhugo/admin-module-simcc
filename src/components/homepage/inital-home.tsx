@@ -35,6 +35,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../../components/ui/carousel";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 export function InitialHome() {
   const [VisaoPrograma, setVisaoPrograma] = useState<VisaoPrograma[]>([]);
@@ -97,15 +98,9 @@ export function InitialHome() {
 
           {VisaoPrograma.map((props) => {
               return (
-          <Carousel
-                  opts={{
-                    align: "start",
-                  }}
-                  className="flex items-center w-full  max-sm:max-w-[60vw] max-lg:max-w-[70vw] md:max-w-[85vw] ml-8 sm:flex "
-                >
-      <CarouselContent>
+         <ScrollArea className="w-1/2">
      
-             <CarouselItem  className="md:basis-1/2 lg:basis-1/4">
+         <div className="flex gap-4  w-max">
                       <ItemHome
                         title="Pesquisadores"
                         url=""
@@ -114,9 +109,6 @@ export function InitialHome() {
                         <User size={16} className="" />{" "}
                       </ItemHome>
         
-                    </CarouselItem>
-
-                    <CarouselItem  className="md:basis-1/2 lg:basis-1/4 pl-2 md:pl-4">
                       <ItemHome
                         title="Livros"
                         url=""
@@ -125,9 +117,7 @@ export function InitialHome() {
                         {" "}
                         <Book size={16} className="" />
                       </ItemHome>
-                    </CarouselItem>
-
-                    <CarouselItem  className="md:basis-1/2 lg:basis-1/4 pl-2 md:pl-4">
+               
                       <ItemHome
                         title="Patentes"
                         url=""
@@ -135,9 +125,7 @@ export function InitialHome() {
                       >
                         <Copyright size={16} className="" />{" "}
                       </ItemHome>
-                    </CarouselItem>
-
-                    <CarouselItem  className="md:basis-1/2 lg:basis-1/4 pl-2 md:pl-4">
+                  
                       <ItemHome
                         title="Softwares"
                         url=""
@@ -145,9 +133,7 @@ export function InitialHome() {
                       >
                         <Code size={16} className="" />{" "}
                       </ItemHome>
-                    </CarouselItem>
-
-                    <CarouselItem  className="md:basis-1/2 lg:basis-1/4 pl-2 md:pl-4">
+                  
                       <ItemHome
                         title="Capítulos de livro"
                         url=""
@@ -155,8 +141,7 @@ export function InitialHome() {
                       >
                         <Books size={16} className="" />{" "}
                       </ItemHome>
-                    </CarouselItem>
-                    <CarouselItem  className="md:basis-1/2 lg:basis-1/4 pl-1 md:pl-4">
+                
                       <ItemHome
                         title="Marcas"
                         url=""
@@ -164,13 +149,10 @@ export function InitialHome() {
                       >
                         <StripeLogo size={16} className="" />{" "}
                       </ItemHome>
-                    </CarouselItem>
-             
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-   
-    </Carousel>
+                  
+                      </div>
+                      <ScrollBar orientation="horizontal" />
+                    </ScrollArea>
        );
       })}
           </div>

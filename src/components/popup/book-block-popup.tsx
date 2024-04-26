@@ -12,7 +12,8 @@ type Articles = {
     distinct: boolean
 }
 
-export function ArticleBlockPopUp(props:Articles) {
+
+export function BookBlockPopUp(props:Articles) {
     const {navbar} = useContext(UserContext)
     const [count, setCount] = useState(12)
 
@@ -32,23 +33,14 @@ export function ArticleBlockPopUp(props:Articles) {
 {props.articles.slice(0, count).map((props: any) => {
 
         return (
-            <ArticleItem
+            <BookItem
             id={props.id}
-                    doi={props.doi}
-                    name_periodical={props.name_periodical}
-                    qualis={props.qualis}
-                    title={props.title.toUpperCase()}
-                    year={props.year}
-                    color={props.color}
-                    researcher={props.researcher}
-                    lattes_id={props.lattes_id}
-                    magazine={props.magazine}
-                    lattes_10_id={props.lattes_10_id}
-                    jcr_link={props.jcr_link}
-                    jif={props.jif}
-                    researcher_id={props.researcher_id}
-                    distinct={props.distinct}
-            />
+            title={props.title}
+            year={props.year}
+            isbn= {props.isbn}
+            publishing_company= {props.publishing_company}
+
+        />
         );
         })}
         </Masonry>

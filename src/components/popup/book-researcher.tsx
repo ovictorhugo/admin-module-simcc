@@ -1,6 +1,5 @@
 import { useContext, useMemo, useState } from "react";
-import { useModalResult } from "../../hooks/use-modal-result";
-import { UserContext } from "../../../context/context";
+
 
 type Publicacao = {
     id: string,
@@ -19,7 +18,13 @@ type Publicacao = {
     researcher_id: string
   }
 
-  import { Switch } from "../../ui/switch";
+  type Livros = {
+    id: string,
+    title: string,
+    year: string,
+    isbn: string,
+    publishing_company: string
+  }
 
   import {
     Accordion,
@@ -27,33 +32,40 @@ type Publicacao = {
     AccordionItem,
     AccordionTrigger,
     
-  } from "../../../components/ui/accordion"
+  } from "../../components/ui/accordion"
   import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
-import { Skeleton } from "../../ui/skeleton";
-import { HeaderResultTypeHome } from "./header-result-type-home";
+import { Skeleton } from "../ui/skeleton";
+
 import { ChartBar, Quotes, SquaresFour, Rows } from "phosphor-react";
-import { GraficoArticleHome } from "./articles-home/grafico-articles-home";
-import { ArticleBlock } from "./articles-home/articles-block";
-import { Button } from "../../ui/button";
-import { useModalSidebar } from "../../hooks/use-modal-sidebar";
-import { FilterArticle } from "./articles-home/filters-articles";
-import { TableReseracherArticleshome } from "./articles-home/table-articles";
+
+import { Button } from "../ui/button";
+import { UserContext } from "../../context/context";
+import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
+import { GraficoArticleHome } from "../homepage/categorias/articles-home/grafico-articles-home";
+import { TableReseracherArticleshome } from "../homepage/categorias/articles-home/table-articles";
+import { FilterArticlePopUp } from "./filters-articles-popup";
+import { ArticleBlockPopUp } from "./articles-block-popup";
+import { BookBlockPopUp } from "./book-block-popup";
+
 
 type Filter = {
   year: number[]
   qualis: string[]
 }
 
-export function ArticlesHome() {
-    const { isOpen, type} = useModalResult();
-    const {isOpen:isOpenSidebar} = useModalSidebar()
+type Props = {
+  name:string
+}
 
-    const {urlGeral, searchType, valoresSelecionadosExport, navbar} = useContext(UserContext)
+export function BooksResearcherPopUp(props:Props) {
   
-    const isModalOpen = isOpen && type === "articles-home";
+
+    const {urlGeral, valoresSelecionadosExport, navbar, searchType} = useContext(UserContext)
+  
+   
     const [loading, isLoading] = useState(false)
     const [distinct, setDistinct] = useState(false)
-    const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
+    const [publicacoes, setPublicacoes] = useState<Livros[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')
 
     const [filters, setFilters] = useState<Filter[]>([]);
@@ -65,22 +77,12 @@ export function ArticlesHome() {
 
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
     const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
-    let urlTermPublicacoes = ``;
+    let urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=${props.name}&year=${yearString}&term=`;
 
-if(valoresSelecionadosExport != '') {
-  
-  if (searchType == 'name') {
-    urlTermPublicacoes = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=&type=ARTICLE&qualis=${qualisString}&year=${yearString}`;
-} else if (searchType == 'article') {
-  urlTermPublicacoes = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? ('1'):('0')}&graduate_program_id=4`;
-} else if (searchType == 'area') {
-  urlTermPublicacoes = `${urlGeral}bibliographic_production_article_area?area_specialty=${valoresSelecionadosExport.replace(/;/g, ' ')}&great_area=&year=${yearString}&qualis=${qualisString}`
-} else if (searchType == 'abstract') {
-  urlTermPublicacoes = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? ('1'):('0')}`
-  }
-}
-
-    console.log('urlTermPublicacoes', urlTermPublicacoes)
+    if(searchType == "book") {
+        urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=${props.name}&year=${yearString}&term=${valoresSelecionadosExport}`;
+    }
+   
     useMemo(() => {
         const fetchData = async () => {
             try {
@@ -115,13 +117,13 @@ if(valoresSelecionadosExport != '') {
 
     return(
         <>
-        {isModalOpen && (
+  
             <div className="mb-[150px]">
 
-                <FilterArticle
+                <FilterArticlePopUp
                 onFilterUpdate={handleResearcherUpdate}/>
               
-                        <Accordion defaultValue="item-1" type="single" collapsible >
+                        <Accordion  type="single" collapsible >
                 <AccordionItem value="item-1" >
                     <AccordionTrigger>
                     <HeaderResultTypeHome title="Gráfico de quantidade total por Qualis" icon={<ChartBar size={24} className="text-gray-400" />}>
@@ -143,17 +145,7 @@ if(valoresSelecionadosExport != '') {
                 <AccordionItem value="item-1" >
                     <AccordionTrigger>
                     <HeaderResultTypeHome title="Artigos" icon={<Quotes size={24} className="text-gray-400" />}>
-                    <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
-                        <p>Artigos:</p>
-                        Iguais
-                    <Switch
-                     checked={distinct}
-                     onCheckedChange={(value) => setDistinct(value)}
-
-                />
-
-                Distintos
-                    </div>
+                    
                     
                     <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
@@ -171,9 +163,9 @@ if(valoresSelecionadosExport != '') {
                         <ResponsiveMasonry
                         columnsCountBreakPoints={{
                             350: 1,
-                            750: 2,
-                            900: 3,
-                            1200: navbar || isOpenSidebar ? 3 : 4
+                            750: 1,
+                            900: 1,
+                            1200: 2
                         }}
                     >
                                      <Masonry gutter="16px">
@@ -183,7 +175,7 @@ if(valoresSelecionadosExport != '') {
                         </Masonry>
         </ResponsiveMasonry>
                       ):(
-                        <ArticleBlock
+                        <BookBlockPopUp
                         articles={publicacoes}
                         distinct={distinct}
                         />
@@ -203,7 +195,7 @@ if(valoresSelecionadosExport != '') {
                 </Accordion>
                        
             </div>
-        )}
+
         </>
     )
 }

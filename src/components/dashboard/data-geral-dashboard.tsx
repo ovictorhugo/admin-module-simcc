@@ -10,14 +10,15 @@ import { Badge } from "../ui/badge";
 interface VisaoPrograma {
     count_gp: string,
     count_gpr: string,
-    institution_id: string
+    institution_id: string,
+    count_r:string
   }
 
 export function DataGeralDashboard() {
     const { user, urlGeralAdm } = useContext(UserContext);
     const [VisaoPrograma, setVisaoPrograma] = useState<VisaoPrograma[]>([]); 
 
-    let urlVisaoPrograma = `${urlGeralAdm}/InstitutionRest/Query/Count`;
+    let urlVisaoPrograma = `${urlGeralAdm}/InstitutionRest/Query/Count?institution_id=${user.institution_id}`;
     useMemo(() => {
     const fetchData = async () => {
         try {
@@ -66,7 +67,7 @@ export function DataGeralDashboard() {
                     <ItemDashboard
                 title="Docentes"
                 url=""
-                value={String(props.count_gpr)}
+                value={String(props.count_r)}
                 ><User size={16} className="" /> </ItemDashboard>
 
                 <ItemDashboard
