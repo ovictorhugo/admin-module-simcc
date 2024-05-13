@@ -21,8 +21,19 @@ interface ItemsSelecionados {
   term:string
 }
 
+interface PesquisadoresSelecionados {
+  id:string
+  name: string,
+  university: string,
+  lattes_id: string,
+  city: string,
+  area: string,
+  graduation: string,
+}
+
 import { CookiesProvider, useCookies } from 'react-cookie'
 import { News } from './pages/News';
+import { Baremas } from './pages/Baremas';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [navbar, setNavbar] = useState(false);
@@ -41,8 +52,10 @@ function App() {
   const [inputMaria, setInputMaria] = useState('');
   const [maria, setMaria] = useState(false);
   const [itemsSelecionados , setItensSelecionados] = useState<ItemsSelecionados[]>([])
+  const [sugestoes , setSugestoes] = useState<ItemsSelecionados[]>([])
+  const [pesquisadoresSelecionados , setPesquisadoresSelecionados] = useState<PesquisadoresSelecionados[]>([])
   const [messagesMaria, setMessagesMaria] = useState<any[]>([]);
-
+const [idDocumentBarema, setIdDocumentBarema] = useState('')
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -64,12 +77,15 @@ function App() {
     localStorage.setItem('user', JSON.stringify(user)); // Armazenar informações do usuário no localStorage
   };
 
+
   // Função para fazer logout
   const logout = () => {
     setUser({ state: '', email: '', name: '' } as User);
     setLoggedIn(false);
     localStorage.removeItem('user'); // Remover informações do usuário do localStorage ao fazer logout
   };
+
+
 
   return (
     <>
@@ -94,18 +110,24 @@ function App() {
       maria, setMaria,
       mapModal, setMapModal,
       messagesMaria, setMessagesMaria,
-      itemsSelecionados , setItensSelecionados
+      itemsSelecionados , setItensSelecionados,
+      sugestoes , setSugestoes,
+      pesquisadoresSelecionados , setPesquisadoresSelecionados,
+      idDocumentBarema, setIdDocumentBarema
 
     }}
     >
       <DefaultLayout>
       <Routes>
-        <Route path='/:page?' element={<Home/>}/>
+        <Route path='/' element={<Home/>}/>
+
+        <Route path='/pos-graducao' element={<Home/>}/>
        
        
         <Route path='/indicadores' element={<Indicators/>}/>
         <Route path='/novas-publicacoes' element={<News/>}/>
         <Route path='/taxonomia' element={<Indicators/>}/>
+
         <Route path='/indicadores-pos-graduacao' element={<Indicators/>}/>
         
         <Route
@@ -118,7 +140,15 @@ function App() {
          element={loggedIn == false ? <Authentication/> : <Navigate to='/' />}
         />
       
-        
+      <Route
+         path='/barema/:baremaId?'
+         element={loggedIn == false ? <Authentication/> : <Baremas/>}
+        />
+
+        <Route
+         path='/meus-baremas'
+         element={loggedIn == false ? <Authentication/> : <Baremas/>}
+        />
 
         <Route
           path='/admin'

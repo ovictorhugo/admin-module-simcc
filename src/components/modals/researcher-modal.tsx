@@ -61,6 +61,15 @@ type ResearchOpenAlex = {
   
 }
 
+interface PesquisadoresSelecionados {
+  id:string
+  name: string,
+  university: string,
+  lattes_id: string,
+  city: string,
+  area: string,
+}
+
 
 export function ResearcherModal() {
    
@@ -112,6 +121,8 @@ export function ResearcherModal() {
         const [value, setValue] = useState('articles')
 
         console.log('reseracher DATAAA', researcherData)
+
+        
 
     return(
         <>

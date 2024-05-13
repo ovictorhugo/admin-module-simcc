@@ -7,6 +7,7 @@ interface Csv {
   term: string
   frequency: string
   type_: string
+  term_normalize:string
 }
 
 

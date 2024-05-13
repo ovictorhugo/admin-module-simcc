@@ -1,4 +1,4 @@
-import { Plus } from "phosphor-react";
+import { Plus, Trash, User } from "phosphor-react";
 import { Alert } from "../ui/alert";
 import { Button } from "../ui/button";
 import { useModal} from "../hooks/use-modal-store";
@@ -118,6 +118,26 @@ export function AddAdmin() {
       }, []);
       
    
+      const handleRemoveAdmin = async (emailToRemove:string) => {
+        try {
+            const db = getFirestore();
+            const programRef = collection(db, 'institution');
+            await deleteDoc(doc(programRef, emailToRemove));
+
+            toast("Administrador removido com sucesso!", {
+                description: "O administrador foi removido do banco de dados.",
+                action: {
+                    label: "Fechar",
+                    onClick: () => console.log("Undo"),
+                },
+            });
+
+            // Atualize o estado de colaboradores após a remoção
+            setColaboradores(colaboradores.filter(colaborador => colaborador.email !== emailToRemove));
+        } catch (error) {
+            console.error('Erro ao remover o administrador:', error);
+        }
+    };
 
     return(
         <Alert className="flex flex-col ">
@@ -127,27 +147,27 @@ export function AddAdmin() {
                     <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/> <Button onClick={() => handleSubmit()} className="dark:text-white">Cadastrar</Button>
                    </div>
 
-                   <Separator/>
+                   <Separator orientation="horizontal" decorative={true} className="w-full"/>
 
                    <p className="text-zinc-500 text-sm">Pessoas com acesso</p>
 
-                   <ScrollArea>
+                   <ScrollArea className="mt-4">
                         {colaboradores.map((props) => {
                            if(props.institution_id == user.institution_id) {
                             return(
-                                <div className="flex items-center justify-between">
+                                <div className="flex items-center justify-between group">
                             <div className="flex items-center gap-3">
                             <Avatar className="cursor-pointer">
                     <AvatarImage src={`${props.photoURL != null && (props.photoURL)}`} />
-                    <AvatarFallback className="flex items-center justify-center"></AvatarFallback>
+                    <AvatarFallback className="flex items-center justify-center"><User size={16} className="" /> </AvatarFallback>
                 </Avatar>
                                 <div>
                                     <p className="">{props.displayName}</p>
-                                    <p className="">{props.email}</p>
+                                    <p className="text-sm  text-gray-500">{props.email}</p>
                                 </div>
                             </div>
 
-                            <div></div>
+                            <div><Button onClick={() => handleRemoveAdmin(props.email)} className="hidden group-hover:flex transition-all" variant={'destructive'} size={'icon'}><Trash size={16} className="" /></Button></div>
                         </div>
                             )
                            }

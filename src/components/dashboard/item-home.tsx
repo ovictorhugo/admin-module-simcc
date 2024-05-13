@@ -15,7 +15,7 @@ export function ItemDashboard(props:Props) {
     
 
     return(
-        <Link to={props.url} className="w-full h-full p-2">
+        <Link to={props.url} className="w-full h-full">
         <Alert className="h-full dark:hover:bg-neutral-900 hover:bg-gray-100 transition-all flex flex-col justify-between">
           <h3 className="text-7xl font-bold ml-auto">{props.value}</h3>
           <div className="flex justify-between gap-3 items-center">
@@ -28,3 +28,5 @@ export function ItemDashboard(props:Props) {
       </Link>
     )
 }
+
+

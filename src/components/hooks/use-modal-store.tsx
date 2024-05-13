@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 
-export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program' | 'edit-graduate-program' | 'add-researcher-graduation'
+export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program' | 'edit-graduate-program' | 'add-researcher-graduation' | 'add-researcher-csv' | 'add-student-graduation' | 'add-grupo-pesquisa' | 'filters' | 'pesquisadores-selecionados' | 'list-student-program' | 'add-researcher-graduation-two'
 
 interface ModalData {
   id?: string,

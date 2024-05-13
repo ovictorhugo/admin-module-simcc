@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useModal } from "../hooks/use-modal-store"
 import { Alert } from "../ui/alert";
 import { UserContext } from "../../context/context";
-import { ArrowSquareOut, DotsThree, Eye, EyeSlash, GraduationCap, Hash, MapPin, PencilSimple, Rows, SquaresFour, Star, Trash } from "phosphor-react"; 
+import { ArrowSquareOut, DotsThree, Eye, EyeSlash, GraduationCap, Hash, MapPin, PencilSimple, Rows, SquaresFour, Star, Student, Trash } from "phosphor-react"; 
 import {Divide, GraduationCapIcon, UserCheck } from "lucide-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { toast } from "sonner"
@@ -159,12 +159,12 @@ export function PosGraducaoView() {
                       
                     </div>
 
-            <Alert className="flex gap-4 rounded-l-none">
-            <div className="flex flex-col">
-            <img className="w-12 h-auto object-cover object-center rounded-l-lg" src={posgraduation.url_image} alt={posgraduation.name} />
+            <Alert className="flex flex-1 gap-4 rounded-l-none">
+            <div className="flex flex-col whitespace-nowrap">
+            <img className="w-12 h-auto object-cover object-center rounded-l-lg whitespace-nowrap" src={posgraduation.url_image} alt={posgraduation.name} />
            
           </div>
-          <div className="flex flex-col justify-between w-full">
+          <div className="flex flex-col flex-1 justify-between w-full">
             <div className="flex flex-col justify-between">
             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>{posgraduation.code}</div>
               <h2 className=" font-medium">{posgraduation.name}</h2>
@@ -207,7 +207,11 @@ export function PosGraducaoView() {
             
             })}  ><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
                <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('add-researcher-graduation', {graduate_program_id:posgraduation.graduate_program_id , name:posgraduation.name})}><UserCheck className="h-4 w-4" />
-         Editar docentes 
+         Docentes do programa
+         </DropdownMenuItem>
+
+         <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('list-student-program', {graduate_program_id:posgraduation.graduate_program_id , name:posgraduation.name})}><Student className="h-4 w-4" />
+         Discentes do programa
          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem  onClick={() => onOpen('confirm-delete-pos-graduate-program', {id_delete:posgraduation.graduate_program_id , name:posgraduation.name})} className="flex items-center gap-3 bg-red-500 hover:bg-red-600 text-white"><Trash className="h-4 w-4" />

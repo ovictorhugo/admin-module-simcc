@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useModalResult } from "../../hooks/use-modal-result";
 import { UserContext } from "../../../context/context";
 import { CloudWordResearcherHome } from "./researchers-home/clould-word-researcher-home";
@@ -49,9 +49,12 @@ export function ResearchersHome() {
     const [researcher, setResearcher] = useState<Research[]>([]); 
     const [typeVisu, setTypeVisu] = useState('block')
 
-    const { mapModal, setMapModal} = useContext(UserContext)
+    const { mapModal, setMapModal, pesquisadoresSelecionados} = useContext(UserContext)
     
-  
+    useEffect(() => {
+      localStorage.setItem('pesquisadoresSelecionados', JSON.stringify(pesquisadoresSelecionados));
+    }, [pesquisadoresSelecionados])
+
     const isModalOpen = isOpen && type === "researchers-home";
 
     const { urlGeral, searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta, navbar} = useContext(UserContext);
@@ -209,18 +212,7 @@ export function ResearchersHome() {
                 )}
 
 
-                <div onClick={() => setMapModal(!mapModal)} className={`fixed dark:text-white text-sm bottom-[150px] rounded-full px-6 py-2 flex gap-3 transition-all cursor-pointer items-center ${
-            (searchType=== 'article') && 'bg-blue-500 dark:bg-blue-500 text-white' ||
-            (searchType === 'abstract') && 'bg-yellow-500 dark:bg-yellow-500 text-white' ||
-            (searchType === 'speaker') && 'bg-orange-500 dark:bg-orange-500 text-white' ||
-            (searchType === 'book') && 'bg-pink-500 dark:bg-pink-500 text-white' ||
-            (searchType === 'patent') && 'bg-cyan-500 dark:bg-cyan-500 text-white' ||
-            (searchType === 'name') && 'bg-red-500 dark:bg-red-500 text-white' ||
-            (searchType === 'area') && 'bg-green-500 dark:bg-green-500 text-white' ||
-            (!searchType && 'hover:bg-gray-200 dark:hover:bg-black')
-        }`}>
-           <MapTrifold size={16} className=" whitespace-nowrap" /> Mostrar no mapa
-        </div>
+                
             </div>
         )}
         </>

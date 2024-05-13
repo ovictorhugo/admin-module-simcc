@@ -8,10 +8,19 @@ import { Plus } from "lucide-react";
 import { toast } from "sonner"
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { UserContext } from "../../context/context";
+import { FileCsv } from "phosphor-react";
+
+import { useModal } from "../hooks/use-modal-store";
+
+interface Csv {
+  id_lattes:string,
+  nome:string
+}
 
 export function AddResearcherDashboard() {
     const [nomePesquisador, setNomePesquisador] = useState('');
     const [lattesID, setLattesID] = useState('');
+    const [data, setData] = useState<Csv[]>([]);
 
     const { user, urlGeralAdm } = useContext(UserContext);
 
@@ -109,7 +118,16 @@ export function AddResearcherDashboard() {
         }
       };
 
+
+      // upload
+
+      
+
+
+  const {onOpen} = useModal()
+
     return  (
+
         
          <Alert className="max-sm:max-w-[90vw] max-md:max-w-[90vw] bg-cover h-[200px] bg-center bg-no-repeat  gap-6 w-full  flex items-center justify-center py-12  max-md:flex-row" style={{ backgroundImage: `url(${bg_popup})` }} >
             <h3 className="max-w-[240px] font-medium text-2xl max-md:text-xl max-sm:text-base  text-gray-700 dark:text-white"><strong className="bg-blue-700 text-white hover:bg-blue-800 transition duration-500 font-medium">Vincule</strong> os pesquisadores à sua instituição de ensino</h3>
@@ -126,6 +144,8 @@ export function AddResearcherDashboard() {
             </div>
 
             <Button onClick={() => handleSubmitPesquisador()} className="text-white dark:text-white"><Plus size={16} className="" /> Adicionar</Button>
+            <Button size={'icon'} onClick={() => onOpen('add-researcher-csv')} className="text-white dark:text-white"><FileCsv size={16} className="" /></Button>
+           
             </div>
          </Alert>
   

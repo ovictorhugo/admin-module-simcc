@@ -13,6 +13,9 @@ import { PesquisadoresHeader } from "./pesquisadores-header";
 import { ScrollArea } from "../ui/scroll-area";
 import { PosGraduacoesHeader } from "./pos-graduacoes-header";
 import {PosGraducaoView} from "./pos-graduacao-view-dashboard";
+import { PesoProducoes } from "./peso-producoes";
+import { GrupoPesquisaHeader } from "./grupo-pesquisa-header";
+import { PesoProducoesHeader } from "./peso-producao-header";
 
 
 export function GeralViewDashboard() {
@@ -38,12 +41,20 @@ const {user} = useContext(UserContext)
          <DataGeralDashboard/>
         )}
 
-{value == 'pesquisadores' && (
+   {value == 'pesquisadores' && (
           <PesquisadoresHeader/>
         )}
 
-{value == 'pos-graduacoes' && (
+   {value == 'pos-graduacoes' && (
           <PosGraduacoesHeader/>
+        )}
+
+   {value == 'grupos-pesquisa' && (
+          <GrupoPesquisaHeader/>
+        )}
+
+   {value == 'peso-producoes' && (
+          <PesoProducoesHeader/>
         )}
         
         <TabsList className="my-4">
@@ -51,6 +62,7 @@ const {user} = useContext(UserContext)
          <TabsTrigger value="pesquisadores" onClick={() => setValue('pesquisadores')}>Pesquisadores</TabsTrigger>
          <TabsTrigger value="pos-graduacoes" onClick={() => setValue('pos-graduacoes')}>Pós-graduações</TabsTrigger>
          <TabsTrigger value="grupos-pesquisa" onClick={() => setValue('grupos-pesquisa')}>Grupos de pesquisas</TabsTrigger>
+         {user.state == 'admin' || user.state == 'master' && (<TabsTrigger value="peso-producoes" onClick={() => setValue('peso-producoes')}>Peso de produções</TabsTrigger>)}
       </TabsList>
 
         
@@ -71,6 +83,11 @@ const {user} = useContext(UserContext)
 
          <TabsContent value="grupos-pesquisa">
 
+
+</TabsContent>
+
+<TabsContent value="peso-producoes">
+<PesoProducoes/>
 
 </TabsContent>
 

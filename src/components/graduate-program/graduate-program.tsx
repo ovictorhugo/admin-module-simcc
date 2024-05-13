@@ -4,6 +4,7 @@ import { UserContext } from "../../context/context";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { Circle } from "../svg/Circle";
+import { ProgramItem } from "./program-item";
 
 interface GraduateProgram {
     area: string;
@@ -21,6 +22,7 @@ interface GraduateProgram {
     sigla: string
     latitude: string
     longitude: string
+    visible:boolean
   }
 
 export function GraduateProgram() {
@@ -62,7 +64,7 @@ export function GraduateProgram() {
        {isModalOpen && (
          <div className="  overflow-hidden flex justify-center flex-col h-full w-full mr-[72px]">
 
-         <div className="w-full h-full  overflow-hidden flex items-center absolute top-0 left-0 "><BahiaMap graduatePrograms={graduatePrograms}/></div>
+        
 
          <div className="flex flex-col justify-center">
           <div className="h-[350px] absolute  ml-16 "><Circle/></div>
@@ -70,8 +72,35 @@ export function GraduateProgram() {
           <Label className=" z-[9] max-w-[550px] mb-8 ">Arraste ou clique em um dos pontos no gráfico para selecionar o programa de pós-graduação. Você também pode escolher pela lista abaixo</Label>
 
           
-        
           </div>
+
+          <div className="absolute right-0 top-20">
+          <div>
+            {graduatePrograms.map((props) => {
+              if(props.visible == true) {
+                return(
+                <ProgramItem
+                area={props.area}
+                code={props.code}
+                graduate_program_id={props.graduate_program_id}
+                modality={props.modality}
+                name={props.name}
+                rating={props.rating}
+                type={props.type}
+                city={props.city}
+                state={props.state}
+                instituicao={props.instituicao}
+                url_image={props.url_image}
+                region={props.region}
+                sigla={props.sigla}
+                visible={props.visible}
+                />
+                )
+              }
+            })}
+          </div>
+          </div>
+        
 
      </div>
        )}

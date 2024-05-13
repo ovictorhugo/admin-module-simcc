@@ -22,12 +22,10 @@ const systemMessage = { //  Explain things like you're talking to a software pro
     1. o campo "type" (abstract, article, book, patent, name, area, speaker). Se o tipo não for identificado, por padrão será definido como "article".
     2. o campo "term" contendo uma ÚNICA palavra que representa o tema da frase. Se o tipo for "name", o nome completo será extraído e colocado em "term".
     3. o campo "message" contendo um array com: 1. uma mensagem bastante longa sobre o term retornado, 2. Uma mensagem com variações, informando que os 'resultados podem ser filtrados utilizando filtros de instituições, área, qualis e ano'
+    4. o campo "sugestion", contendo uma lista de 7 termos semelhantes separadaas por ";"
     `
   }
 
-  interface ItemsSelecionados {
-    term:string
-  }
 export function Search() {
 
     const location = useLocation();
@@ -37,9 +35,9 @@ export function Search() {
 
     const { onOpen } = useModal();
     const { onOpen: onOpenHomepage } = useModalHomepage();
-    const {navbar, searchType, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, setValoresSelecionadosExport, setMessagesMaria, itemsSelecionados , setItensSelecionados} = useContext(UserContext)
+    const {navbar, searchType, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, setValoresSelecionadosExport, setMessagesMaria, itemsSelecionados , setItensSelecionados, setSugestoes, sugestoes} = useContext(UserContext)
 
-    const { isOpen: isOpenSidebar, onOpen: onOpenSidebar, onClose } = useModalSidebar();
+    const { isOpen: isOpenSidebar } = useModalSidebar();
     const [input, setInput] = useState("");
     const [dataModificacao, setDataModificacao] = useState('');
 
@@ -52,17 +50,8 @@ export function Search() {
     
   }, []);
 
-  const [filterState, setFilterState] = useState("");
 
-  const handleButtonClickInfo = () => {
-    if (filterState === "filter") {
-      onClose();
-      setFilterState("");
-    } else {
-      onOpenSidebar("filter");
-      setFilterState("filter");
-    }
-  };
+
 
   useEffect(() => {
     setInputMaria(input)
@@ -104,6 +93,7 @@ const handleSend = async (message: any) => {
   await processMessageToChatGPT(newMessage);
 };
 
+
 async function processMessageToChatGPT(messageObject:any) {
   const apiRequestBody = {
     "model": "gpt-3.5-turbo",
@@ -131,21 +121,30 @@ async function processMessageToChatGPT(messageObject:any) {
       const chatGptMessage = data.choices[0].message;
   const { content } = chatGptMessage;
   const parsedContent = JSON.parse(content);
-  const { type, term, message } = parsedContent;
-      console.log('chatGptMessage',chatGptMessage)
-     
+  const { type, term, message, sugestion } = parsedContent;
+      
+  console.log('chatGptMessage',chatGptMessage)
     
       // Defina os valores nas variáveis
       setSearchType(type);
       setMessagesMaria(message)
+      const termsArray = sugestion.split(';'); // Split the string into an array of terms
+
+      // Map over the terms array and create an array of objects with the 'term' property set
+      const sugestoesArray = termsArray.map(term => ({ term }));
+
+      // Set the state using the created array of objects
+      setSugestoes(sugestoesArray);
+      console.log('sugestoes',sugestoes)
       
       setItensSelecionados(prevItems => [...prevItems, { term }]);
 
-      
       setIsTyping(false);
       
     })
 }
+
+
 
 const handlePesquisa = () => {
     if(maria && inputMaria.length > 1 && !posGrad) {
@@ -158,10 +157,10 @@ const handlePesquisa = () => {
     }
 }
 
-console.log(messages)
-console.log(valoresSelecionadosExport)
 
-console.log(itemsSelecionados)
+
+
+
 
 const handleRemoveItem = (indexToRemove: any) => {
   setItensSelecionados(prevItems => prevItems.filter((_, index) => index !== indexToRemove));
@@ -200,7 +199,7 @@ const handleConnectorChange = (index: number, connector: string) => {
         <div className={`pb-3 px-[72px] max-sm:px-[5px] ${navbar && !isOpenSidebar && 'pl-[278px]'} ${isOpenSidebar && !navbar && 'pl-[368px]'} ${isOpenSidebar && navbar && 'pl-[574px]'}`}>
         <div className="mb-4">
         <div className="flex gap-4">
-        <Alert onClick={() => handleButtonClickInfo()} className="h-14 p-2 flex items-center w-fit whitespace-nowrap gap-3 px-6 text-sm font-medium cursor-pointer max-sm:w-[80px]"><div><FadersHorizontal size={16} className="" /></div> <div className="max-sm:hidden">Filtros</div></Alert>
+      
             <Alert  className="h-14 p-2 flex items-center justify-between">
             <div className="flex items-center gap-2 w-full flex-1">
                 <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />

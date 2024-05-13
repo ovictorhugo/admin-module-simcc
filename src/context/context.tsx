@@ -13,6 +13,16 @@ interface ItemsSelecionados {
   term:string
 }
 
+interface PesquisadoresSelecionados {
+  id:string
+  name: string,
+  university: string,
+  lattes_id: string,
+  city: string,
+  area: string,
+  graduation: string,
+}
+
 interface UserContextType {
   loggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,17 +34,27 @@ interface UserContextType {
   setMaria: React.Dispatch<React.SetStateAction<boolean>>;
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User>>;
+
   login: (user: User) => void; // Função de login
   logout: () => void; // Função de logout
 
   valoresSelecionadosExport: string;
   setValoresSelecionadosExport: React.Dispatch<React.SetStateAction<string>>;
+  idDocumentBarema: string;
+   setIdDocumentBarema: React.Dispatch<React.SetStateAction<string>>;
 
   messagesMaria: any[], // Aqui você define messagesMaria como um array de qualquer tipo
   setMessagesMaria: React.Dispatch<React.SetStateAction<any[]>>, // Aqui você define setMessagesMaria como uma função que atualiza um array de qualquer tipo  
 
   itemsSelecionados: ItemsSelecionados[] , 
   setItensSelecionados: React.Dispatch<React.SetStateAction<ItemsSelecionados[]>>,
+
+  sugestoes: ItemsSelecionados[] , 
+  setSugestoes: React.Dispatch<React.SetStateAction<ItemsSelecionados[]>>,
+
+  pesquisadoresSelecionados: PesquisadoresSelecionados[] , 
+  setPesquisadoresSelecionados: React.Dispatch<React.SetStateAction< PesquisadoresSelecionados[]>>,
+
   valorDigitadoPesquisaDireta: string,
   setValorDigitadoPesquisaDireta: React.Dispatch<React.SetStateAction<string>>;
 
@@ -79,11 +99,20 @@ setValoresSelecionadosExport: () => {},
 itemsSelecionados: [] , 
   setItensSelecionados: () => {},
 
+  sugestoes: [] , 
+  setSugestoes: () => {},
+
+  pesquisadoresSelecionados: [] , 
+  setPesquisadoresSelecionados: () => {},
+
 messagesMaria: [],
 setMessagesMaria: () => {},
 
 valorDigitadoPesquisaDireta: "",
 setValorDigitadoPesquisaDireta: () => {},
+
+idDocumentBarema: "",
+setIdDocumentBarema:() => {},
 
 inputMaria: "",
 setInputMaria: () => {},

@@ -48,11 +48,11 @@ export function Header() {
         <header className={`h-20 z-[3] flex justify-between  items-center mr-[72px] sticky top-0  ${posGraduation == true ? ('bg-transparent'):('dark:bg-neutral-900 bg-gray-100')}`}>
             <div className="  flex items-center h-12 gap-4">
             <div className="flex gap-2 items-center h-full justify-center ">
-            <Link to={"/"} className="h-[24px]  " onClick={() => handleClick()} >{theme == 'dark' ? (<LogoWhite />):(<LogoSimcc />)}</Link>
+            <Link to={"/"} className="h-[24px]  " onClick={() => handleClick()} >{(theme ==  'dark' ) ? (<LogoWhite />):(<LogoSimcc />)}</Link>
 
             <Separator orientation="vertical" />
 
-            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={theme == 'dark' ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
+            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
             </div>
 
             <NavigationMenu className="xl:flex hidden">
@@ -130,20 +130,14 @@ export function Header() {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-                <Link to="/baremas" >
+                <Link to="/meus-baremas" >
                     <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     <Textbox size={16} className="" /> Baremas
                     </NavigationMenuLink>
                 </Link>
                 </NavigationMenuItem>
 
-                <NavigationMenuItem>
-                <Link to="/taxonomia" >
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    <GitBranch size={16} className="rotate-180" /> Taxonomia
-                    </NavigationMenuLink>
-                </Link>
-                </NavigationMenuItem>
+                
                 </NavigationMenuList>
             </NavigationMenu>
             </div>

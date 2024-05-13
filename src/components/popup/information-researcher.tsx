@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from "react"
 import { UserContext } from "../../context/context"
-import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, Copy, Export, FileCsv, GraduationCap, IdentificationBadge, LinkSimple, LinkedinLogo, MapPin, Plus, PuzzlePiece, QrCode, ShareNetwork } from "phosphor-react"
+import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, Copy, Export, FileCsv, GraduationCap, IdentificationBadge, LinkSimple, LinkedinLogo, MapPin, Plus, PuzzlePiece, QrCode, ShareNetwork, X } from "phosphor-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Button } from "../ui/button"
 import { MoreHorizontal } from "lucide-react"
@@ -46,7 +46,7 @@ interface Props {
 
 
  export function InformationResearcher(props:Props) {
-    const {urlGeral, searchType, valoresSelecionadosExport} = useContext(UserContext)
+    const {urlGeral, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados} = useContext(UserContext)
     const [isVisible, setIsVisible] = useState(false);
     const [apiVisible, setApiVisible] = useState(false);
     const payment = props.lattes_id
@@ -170,6 +170,7 @@ const handleDownloadJson = async () => {
 };
 
 
+
     return (
         <div className="flex flex-col">
 
@@ -181,11 +182,39 @@ const handleDownloadJson = async () => {
           <div className="flex gap-3">
          
 
-
-          <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
-             
-              <Plus size={8} className="h-4 w-4" />
-            </Button>
+          <Button
+            variant={'default'}
+            onClick={() => {
+              // Verifica se o pesquisador já está selecionado pelo nome
+              if (pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name)) {
+                // Remove o pesquisador selecionado com o nome correspondente
+                setPesquisadoresSelecionados(prev => prev.filter(pesquisador => pesquisador.name !== props.name));
+              } else {
+                // Adiciona o novo pesquisador selecionado
+                setPesquisadoresSelecionados(prev => [
+                  ...prev,
+                  {
+                    id: props.id,
+                    name: props.name,
+                    university: props.university,
+                    lattes_id: props.lattes_id,
+                    city: props.city,
+                    area: props.area,
+                    graduation: props.graduation,
+                  }
+                ]);
+              }
+            }}
+            className={`h-8 w-8 p-0 text-white dark:text-white ${
+              pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) && 'bg-red-500 hover:bg-red-600 text-white'
+            }`}
+          >
+            {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
+              <X size={16} className="" />
+            ) : (
+              <Plus size={16} className="" />
+            )}
+          </Button>
 
             <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
              

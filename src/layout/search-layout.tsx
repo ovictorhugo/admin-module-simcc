@@ -10,6 +10,7 @@ import { useModalHomepage } from "../components/hooks/use-modal-homepage";
 const SearchLayout = ({ children }: { children: React.ReactNode }) => {
   const { isOpen: isOpenHomepage, type: typeHomepage } = useModalHomepage();
   const isModalOpen = isOpenHomepage && typeHomepage === "initial-home";
+
     return (
       <div className="h-full flex">
 
@@ -19,6 +20,8 @@ const SearchLayout = ({ children }: { children: React.ReactNode }) => {
             <GraficoHome/>
           </div>
 )}
+
+
           
           </div>
 

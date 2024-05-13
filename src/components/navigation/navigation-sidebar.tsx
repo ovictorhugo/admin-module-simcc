@@ -7,11 +7,12 @@ import { useContext,useState } from "react";
 import { useModalSidebar } from "../hooks/use-modal-sidebar";
 import { UserContext } from "../../context/context";
 
-import geoip from 'geoip-lite';
 import { UserConfigHeader } from "../header/user-config-header";
+import { useModal } from "../hooks/use-modal-store";
 
 export function NavigationSidebar() {
     const { onOpen, onClose } = useModalSidebar();
+    const { onOpen:onOpenModal} = useModal();
 
     const {navbar, setNavbar, loggedIn, user} = useContext(UserContext)
 
@@ -30,9 +31,9 @@ export function NavigationSidebar() {
      
   
     return (
-     <div className={`whitespace-nowrap sticky top-0 hidden md:flex h-screen  z-30 flex-col transition-all inset-y-0   ${navbar ? ('w-[278px]'):('w-[72px]')}`}> 
+     <div className={`whitespace-nowrap sticky left-0  top-0 z-[1]  flex h-screen   flex-col transition-all  ${navbar ? ('w-[278px]'):('w-[72px]')}`}> 
          <div
-        className={`space-y-4 flex flex-col  h-full text-primary w-full pb-3 ${navbar ? ('px-4'):('items-center')}`}
+        className={`space-y-4 flex flex-col sticky left-0  top-0  h-full text-primary w-full pb-3 ${navbar ? ('px-4'):('items-center')}`}
       >
        <div className={`flex items-center  h-20 `}>
        <Button onClick={() => setNavbar(!navbar)} variant="outline" className="bg-transparent border-0" size="icon">
@@ -53,7 +54,7 @@ export function NavigationSidebar() {
 
           <ModeToggle />
 
-          <Button variant="outline" className={`bg-blue-700 hover:text-white hover:bg-blue-800 dark:hover:bg-blue-800 dark:bg-blue-700 text-white border-0 ${navbar ? ('w-full justify-start'):('')}`} size={navbar ? ('default'):('icon')}>
+          <Button onClick={() => onOpenModal('pesquisadores-selecionados')} variant="outline" className={`bg-blue-700 hover:text-white hover:bg-blue-800 dark:hover:bg-blue-800 dark:bg-blue-700 text-white border-0 ${navbar ? ('w-full justify-start'):('')}`} size={navbar ? ('default'):('icon')}>
        <Users size={16} className="" /> 
        {navbar && (<span className="">Pesquisadores selecionados</span>)}
         </Button>

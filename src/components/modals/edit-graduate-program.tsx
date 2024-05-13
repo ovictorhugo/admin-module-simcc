@@ -79,7 +79,7 @@ export function EditGraduateProgram() {
 
           let urlProgram = urlGeralAdm + '/GraduateProgramRest/Fix'
 
-console.log('data edittt',data)
+
           const fetchData = async () => {
           
             try {
@@ -158,7 +158,7 @@ console.log('data edittt',data)
             <div className="mt-4 gap-4 grid grid-cols-2">
             <div className="flex flex-col gap-2 w-full">
                 <Label>Modalidade</Label>
-                <Select defaultValue={modality}  onValueChange={(value) => setModality(value)}>
+                <Select defaultValue={modality} value={modality}  onValueChange={(value) => setModality(value)}>
             <SelectTrigger className="w-full">
                 <SelectValue placeholder="Escolha a modalidade" />
             </SelectTrigger>
@@ -180,7 +180,7 @@ console.log('data edittt',data)
             <div className="mt-4 gap-4 flex">
             <div className="flex flex-col gap-2 w-1/2">
                 <Label>Tipo de programa</Label>
-                <Select defaultValue={type}  onValueChange={(value) => setType(value)}>
+                <Select defaultValue={type} value={type}   onValueChange={(value) => setType(value)}>
             <SelectTrigger className="w-full">
                 <SelectValue placeholder="Escolha o tipo de programa" />
             </SelectTrigger>

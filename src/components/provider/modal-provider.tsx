@@ -10,6 +10,13 @@ import { ConfirmDeleteResearcher } from "../modals/confirm-delete-researcher";
 import {ConfirmDeletePosGraduateProgram} from "../modals/confirm-delete-pos-graduate-program"
 import { EditGraduateProgram } from "../modals/edit-graduate-program";
 import { AddResearcherGraduation } from "../modals/add-researcher-graduation-modal";
+import { AddResearcherCsvModal } from "../modals/add-researcher-csv-modal";
+import { AddStudentGraduationModal } from "../modals/add-student-graduation-modal";
+import { AddGrupoPesquisaModal } from "../modals/add-grupo-pesquisa";
+import { PesquisadoresSelecionados } from "../modals/pesquisadores-selecionados";
+import { FiltersModal } from "../modals/filters-modal";
+import { ListStudentProgramModal } from "../modals/list-student-program";
+import { AddResearcherGraduationTwo } from "../modals/add-researcher-graduation-two";
 
 
 export const ModalProvider = () => {
@@ -34,6 +41,13 @@ export const ModalProvider = () => {
     <ConfirmDeletePosGraduateProgram/>
     <EditGraduateProgram/>
     <AddResearcherGraduation/>
+    <AddResearcherCsvModal/>
+    <AddStudentGraduationModal/>
+    <AddGrupoPesquisaModal/>
+    <PesquisadoresSelecionados/>
+    <FiltersModal/>
+    <ListStudentProgramModal/>
+    <AddResearcherGraduationTwo/>
     </>
   )
 }

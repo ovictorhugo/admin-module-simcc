@@ -1,6 +1,7 @@
 import { ThemeProvider } from "../components/provider/theme-provider";
 import { cn } from "../lib/utils";
 import { ModalProvider } from "../components/provider/modal-provider";
+import { Mobile } from "../components/mobile";
 
 export default function DefaultLayout({
     children,
@@ -9,7 +10,7 @@ export default function DefaultLayout({
   }>) {
     return(
         <body className={cn(
-            " bg-gray-100 dark:bg-neutral-900 "
+            " bg-gray-100 dark:bg-neutral-900 sm:overflow-x-auto sm:overflow-y-auto overflow-x-hidden overflow-y-hidden"
             )}>
             <ThemeProvider
             attribute="class"
@@ -18,6 +19,7 @@ export default function DefaultLayout({
             storageKey="discord-theme"
             >
               <ModalProvider/>
+              <Mobile/>
             {children}
             </ThemeProvider>
             

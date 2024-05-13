@@ -22,6 +22,7 @@ interface Csv {
     term: string
     frequency: string
     type_: string
+    term_normalize:string
   }
 
   interface ItemsSelecionados {
@@ -78,7 +79,7 @@ export function SearchModal() {
         try {
           // Consulta os documentos cujo term começa com o prefixo fornecido
           const filesRef = collection(db, 'termos_busca');
-          const q = query(filesRef, where('term', '>=', prefix), where('term', '<=', prefix + '\uf8ff'));
+          const q = query(filesRef, where('term_normalize', '>=', prefix), where('term_normalize', '<=', prefix + '\uf8ff'));
 
           const querySnapshot = await getDocs(q);
           // Extrai os dados dos documentos encontrados
@@ -89,7 +90,8 @@ export function SearchModal() {
             great_area: file.great_area,
             term: file.term,
             frequency: file.frequency,
-            type_: file.type_
+            type_: file.type_,
+            term_normalize:file.term_normalize
           }));
       
           // Define os dados encontrados em filteredItems
@@ -364,7 +366,7 @@ console.log('fawefwef', urlOpenAlex)
             <p className="uppercase font-medium text-xs mb-3">Artigos</p>
             <div className="flex flex-wrap gap-3">
             {filteredItems.filter(item => item.type_ === 'ARTICLE').slice(0, 5).map((props, index) => (
-            <div key={index} onClick={() => handlePesquisa(props.term, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
+            <div key={index} onClick={() => handlePesquisa(props.term_normalize, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
                 {props.term}
             </div>
         ))}
@@ -377,7 +379,7 @@ console.log('fawefwef', urlOpenAlex)
             <p className="uppercase font-medium text-xs mb-3">Resumo</p>
             <div className="flex flex-wrap gap-3">
             {filteredItems.filter(item => item.type_ === 'ABSTRACT').slice(0, 5).map((props, index) => (
-            <div key={index} onClick={() => handlePesquisa(props.term, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
+            <div key={index} onClick={() => handlePesquisa(props.term_normalize, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
                 {props.term}
             </div>
         ))}
@@ -390,7 +392,7 @@ console.log('fawefwef', urlOpenAlex)
             <p className="uppercase font-medium text-xs mb-3">Patente</p>
             <div className="flex flex-wrap gap-3">
             {filteredItems.filter(item => item.type_ === 'PATENT').slice(0, 5).map((props, index) => (
-            <div key={index} onClick={() => handlePesquisa(props.term, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
+            <div key={index} onClick={() => handlePesquisa(props.term_normalize, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
                 {props.term}
             </div>
         ))}
@@ -403,7 +405,7 @@ console.log('fawefwef', urlOpenAlex)
             <p className="uppercase font-medium text-xs mb-3">Livros e capítulos</p>
             <div className="flex flex-wrap gap-3">
                 {filteredItems.filter(item => item.type_ === 'BOOK' || item.type_ === 'BOOK_CHAPTER').slice(0, 5).map((props, index) => (
-            <div key={index} onClick={() => handlePesquisa(props.term, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
+            <div key={index} onClick={() => handlePesquisa(props.term_normalize, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
                 {props.term}
             </div>
         ))}
@@ -416,7 +418,7 @@ console.log('fawefwef', urlOpenAlex)
             <p className="uppercase font-medium text-xs mb-3">Participação em eventos</p>
             <div className="flex flex-wrap gap-3">
             {filteredItems.filter(item => item.type_ === 'SPEAKER').slice(0, 5).map((props, index) => (
-            <div key={index} onClick={() => handlePesquisa(props.term, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
+            <div key={index} onClick={() => handlePesquisa(props.term_normalize, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
                 {props.term}
             </div>
         ))}
@@ -437,7 +439,7 @@ console.log('fawefwef', urlOpenAlex)
         </div>
     )}
 
-{(filteredItems.filter(item => item.type_ === 'NAME' ).length != 0 || researcherOpenAlex.length != 0) && (
+{(filteredItems.filter(item => item.type_ === 'NAME' ).length != 0) && (
         <div>
             <p className="uppercase font-medium text-xs mb-3">Nome</p>
             <div className="flex flex-wrap gap-3">
