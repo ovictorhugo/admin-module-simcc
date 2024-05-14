@@ -62,7 +62,7 @@ const {user} = useContext(UserContext)
          <TabsTrigger value="pesquisadores" onClick={() => setValue('pesquisadores')}>Pesquisadores</TabsTrigger>
          <TabsTrigger value="pos-graduacoes" onClick={() => setValue('pos-graduacoes')}>Pós-graduações</TabsTrigger>
          <TabsTrigger value="grupos-pesquisa" onClick={() => setValue('grupos-pesquisa')}>Grupos de pesquisas</TabsTrigger>
-         {user.state == 'admin' || user.state == 'master' && (<TabsTrigger value="peso-producoes" onClick={() => setValue('peso-producoes')}>Peso de produções</TabsTrigger>)}
+         {(user.state === 'admin' || user.state === 'master') && (<TabsTrigger value="peso-producoes" onClick={() => setValue('peso-producoes')}>Peso de produções</TabsTrigger>)}
       </TabsList>
 
         
@@ -86,10 +86,15 @@ const {user} = useContext(UserContext)
 
 </TabsContent>
 
+
+
+{(user.state === 'admin' || user.state === 'master') && (
+
 <TabsContent value="peso-producoes">
 <PesoProducoes/>
 
 </TabsContent>
+)}
 
          </Tabs>
 
