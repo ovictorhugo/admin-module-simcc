@@ -1,6 +1,7 @@
 import { Hash, MapPin, Star } from "phosphor-react";
 import { Alert } from "../ui/alert";
 import { GraduationCapIcon } from "lucide-react";
+import { useModal } from "../hooks/use-modal-store";
 
 interface GraduateProgram {
     area: string;
@@ -16,15 +17,34 @@ interface GraduateProgram {
     url_image: string
     region: string
     sigla: string
-    visible:boolean
+    visible:string
+    qtd_discente:string
+    qtd_colaborador:string
+    qtd_permanente:string
   }
 
 export function ProgramItem(props:GraduateProgram) {
+  const { onOpen } = useModal()
+
     return(
-        <div className="flex items-center">
+        <div className="flex items-center relative" onClick={() => onOpen('gratuate-program', {
+          graduate_program_id:props.graduate_program_id,
+          code:props.code,
+          name:props.name,
+          area:props.area,
+          modality:props.modality,
+          type:props.type,
+          rating:props.rating,
+          url_image:props.url_image,
+          city:props.city,
+          visible:props.visible,
+          qtd_discente:props.qtd_discente,
+          qtd_colaborador:props.qtd_discente,
+          qtd_permanente:props.qtd_permanente
+          })}>
                  <div
                   
-                      className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${props.modality.includes('ACADÊMICO') ? 'bg-blue-300' : props.modality.includes('PROFISSIONAL') ? 'bg-blue-900' : 'bg-[#000]'} `}
+                      className={`h-max w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${props.modality.includes('ACADÊMICO') ? 'bg-blue-300' : props.modality.includes('PROFISSIONAL') ? 'bg-blue-900' : 'bg-[#000]'} `}
                     >
                       
                     </div>

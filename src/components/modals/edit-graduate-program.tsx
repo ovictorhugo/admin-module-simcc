@@ -139,7 +139,7 @@ export function EditGraduateProgram() {
 
     return  (
         <Dialog open={isModalOpen} onOpenChange={onClose}> 
- <DialogContent>
+ <DialogContent className="min-w-[40vw]">
  <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-medium">
           Editar programa de <strong className="bg-blue-700 text-white hover:bg-blue-800 transition duration-500 font-medium">pós-graduação</strong> {data.name}

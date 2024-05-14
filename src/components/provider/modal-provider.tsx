@@ -17,7 +17,7 @@ import { PesquisadoresSelecionados } from "../modals/pesquisadores-selecionados"
 import { FiltersModal } from "../modals/filters-modal";
 import { ListStudentProgramModal } from "../modals/list-student-program";
 import { AddResearcherGraduationTwo } from "../modals/add-researcher-graduation-two";
-
+import { GratuateProgramModal } from "../modals/gratuate-program";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -48,6 +48,7 @@ export const ModalProvider = () => {
     <FiltersModal/>
     <ListStudentProgramModal/>
     <AddResearcherGraduationTwo/>
+    <GratuateProgramModal/>
     </>
   )
 }

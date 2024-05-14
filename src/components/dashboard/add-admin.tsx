@@ -151,7 +151,7 @@ export function AddAdmin() {
 
                    <p className="text-zinc-500 text-sm">Pessoas com acesso</p>
 
-                   <ScrollArea className="mt-4">
+                   <ScrollArea className="mt-4 gap-3 flex flex-col">
                         {colaboradores.map((props) => {
                            if(props.institution_id == user.institution_id) {
                             return(

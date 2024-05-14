@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 
-export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program' | 'edit-graduate-program' | 'add-researcher-graduation' | 'add-researcher-csv' | 'add-student-graduation' | 'add-grupo-pesquisa' | 'filters' | 'pesquisadores-selecionados' | 'list-student-program' | 'add-researcher-graduation-two'
+export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program' | 'edit-graduate-program' | 'add-researcher-graduation' | 'add-researcher-csv' | 'add-student-graduation' | 'add-grupo-pesquisa' | 'filters' | 'pesquisadores-selecionados' | 'list-student-program' | 'add-researcher-graduation-two' | 'gratuate-program'
 
 interface ModalData {
   id?: string,
@@ -38,7 +38,11 @@ graduate_program_id?: string
     description?: string
     url_image?: string
     city?:string
-    visible?: boolean
+    visible?: string
+    qtd_discente?:string
+    qtd_colaborador?:string
+    qtd_permanente?:string
+   
 
  
 }

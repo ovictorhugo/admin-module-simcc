@@ -265,7 +265,7 @@ export function AddStudentGraduationModal() {
     
     return(
         <Dialog open={isModalOpen} onOpenChange={onClose}> 
-        <DialogContent className="min-w-[40vw] ">
+        <DialogContent className="min-w-[40vw]">
         <DialogHeader className="pt-8 px-6">
                  <DialogTitle className="text-2xl text-center font-medium">
                  <strong className="bg-blue-700 text-white hover:bg-blue-800 transition duration-500 font-medium">Vincule</strong> os discentes ao programa <br/> {dataModal.name}
@@ -318,13 +318,12 @@ export function AddStudentGraduationModal() {
                 <div className="text-center  text-sm  text-gray-500">Nenhum arquivo importado</div>
               )}
 
-               
                <DialogFooter className=" py-4 ">
         <Button variant={'ghost'}   onClick={() => {
-          onOpen('list-student-program')
+          onClose()
           setData([])
         }}>
-            <ArrowUUpLeft size={16} className="" />Voltar
+            <ArrowUUpLeft size={16} className="" />Cancelar
               </Button>
 
             {data.length != 0 && (

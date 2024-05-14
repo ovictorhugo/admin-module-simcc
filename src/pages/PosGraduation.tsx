@@ -7,7 +7,7 @@ import { useModalHomepage } from "../components/hooks/use-modal-homepage";
 import { useLocation, useParams } from "react-router-dom";
 import { useModal } from "../components/hooks/use-modal-store";
 
-export function Home() {
+export function PosGraduation() {
     const { onOpen } = useModalHomepage();
     const {setIdGraduateProgram} = useContext(UserContext)
 
@@ -25,8 +25,10 @@ export function Home() {
 
 
     useEffect(() => {
-         if(location.pathname == '/') {
-            onOpen('initial-home')
+        if(location.pathname == '/pos-graduacao') {
+            onOpen('graduation-home')
+        } else if(location.pathname == `/pos-graduacao/${programId}`) {
+            onOpen('graduation-home')
         } 
     }, [location]);
   

@@ -62,6 +62,10 @@ export function DataTableModal<TData, TValue>({
       sorting,
       columnFilters,
       columnVisibility,
+      pagination: {
+        pageIndex: 0, // Começa na primeira página
+        pageSize: 3, // Define o tamanho da página como 3
+      },
     },
   });
 
@@ -70,57 +74,7 @@ export function DataTableModal<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4 gap-3">
-        <Input
-          placeholder="Filtrar pesquisador..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-
-<div className="flex gap-3 ml-auto">
-
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            
-            <Button variant="outline" className="ml-auto">
-            <Columns size={16} />
-              Colunas
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {type == 'list-student-program' && (
-  <Button onClick={() => onOpen('add-student-graduation')}  ><Plus size={16} className="" />Adicionar</Button>
-)}
-
-{type == 'add-researcher-graduation' && (
-  <Button onClick={() => onOpen('add-researcher-graduation-two')}  ><Plus size={16} className="" />Adicionar</Button>
-)}
-</div>
-      </div>
+     
       <div className="rounded-md border dark:border-none">
         <Table >
           <TableHeader>

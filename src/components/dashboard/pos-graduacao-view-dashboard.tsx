@@ -24,6 +24,9 @@ import { toast } from "sonner"
     url_image: string
     city:string
     visible: boolean
+    qtd_discente:string
+    qtd_colaborador:string
+    qtd_permanente:string
   }
 
   import {
@@ -151,7 +154,8 @@ export function PosGraducaoView() {
                     
        {posgraduations.map((posgraduation) => (
         
-          <div className="flex items-center">
+          <div className="flex items-center"
+        >
                  <div
                   
                       className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${posgraduation.modality.includes('ACADÊMICO') ? 'bg-blue-300' : posgraduation.modality.includes('PROFISSIONAL') ? 'bg-blue-900' : 'bg-[#000]'} `}
@@ -203,7 +207,8 @@ export function PosGraducaoView() {
             description:posgraduation.description,
             url_image:posgraduation.url_image,
             city:posgraduation.city,
-            visible:posgraduation.visible
+            visible:posgraduation.visible,
+           
             
             })}  ><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
                <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('add-researcher-graduation', {graduate_program_id:posgraduation.graduate_program_id , name:posgraduation.name})}><UserCheck className="h-4 w-4" />
@@ -235,8 +240,6 @@ export function PosGraducaoView() {
      
       </Masonry>
       </ResponsiveMasonry>):(<div className="mt-4"><TablePosGraduateViewDashboard PosGraduationsProps={posgraduations} /></div>)}
-    
-       
        
     
        </>

@@ -5,8 +5,6 @@ import { Button } from "../ui/button"
 
 export function HeaderMeusBarema() {
     const { pesquisadoresSelecionados, urlGeral, setPesquisadoresSelecionados } = useContext(UserContext)
-
-    
       
     return(
         <div className="my-8">

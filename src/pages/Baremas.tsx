@@ -19,7 +19,7 @@ export function Baremas() {
       if (baremaId) {
         setIdDocumentBarema(baremaId);
       } else {
-        // Trate o caso em que baremaId é undefined, se necessário
+       setIdDocumentBarema('')
       }
 
 

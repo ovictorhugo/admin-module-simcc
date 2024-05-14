@@ -118,9 +118,11 @@ export function Header() {
                   </div>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/pos-graduacao" title="Explorar">
-                Veja todos os programas das universidades pelo mapa
+             <Link to={'/pos-graduacao'}>
+             <ListItem title="Explorar">
+                Veja todos os programas 
               </ListItem>
+             </Link>
               <ListItem href="indicadores-pos-graduacao" title="Indicadores">
                 Painel de indicadores das pós-graduações
               </ListItem>

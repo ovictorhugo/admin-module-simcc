@@ -1,4 +1,4 @@
-import { ArrowUUpLeft, DownloadSimple, FileCsv, Plus } from "phosphor-react";
+import { ArrowUUpLeft, DownloadSimple, FileCsv, MagnifyingGlass, Plus } from "phosphor-react";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent,DialogDescription,DialogFooter,DialogHeader,DialogTitle } from "../ui/dialog";
@@ -25,6 +25,17 @@ import {
     CommandList
   } from "../../components/ui/command"
 
+  import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "../../components/ui/select"
+import { Alert } from "../ui/alert";
+import { Input } from "../ui/input";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+
 interface PosGraduationsProps {
     lattes_id: string
     name: string
@@ -43,13 +54,18 @@ export function AddResearcherGraduationTwo() {
     const isModalOpen = isOpen && typeModal === "add-researcher-graduation-two";
     const [data, setData] = useState<PosGraduationsProps[]>([]);
     const {urlGeralAdm, user} = useContext(UserContext)
-
+    const [type, setType] = useState('COLABORADOR');
     const currentYear = new Date().getFullYear();
     const [id_program , setIdProgram] = useState(dataModal && dataModal.graduate_program_id)
     useEffect(() => {
         setIdProgram(dataModal.graduate_program_id)
       }, [dataModal]);
-  
+      const [input, setInput] = useState('')
+
+      const handleChangeInput = (value:string) => {
+     
+        setInput(value)
+      }
 
     const handleFileUpload = (e: any) => {
       const file = e.target.files[0];
@@ -175,7 +191,7 @@ export function AddResearcherGraduationTwo() {
       //
       const [researcherSearch, setResearcherSearch] = useState<PesquisadorProps2[]>([]);
       const [open, setOpen] = useState(false)
-      const urlGetResearcherSearch = urlGeralAdm + `ResearcherRest/Query?institution_id=${user.institution_id}`;
+      const urlGetResearcherSearch = urlGeralAdm + `ResearcherRest/Query?institution_id=&name=${input}&count=20 `;
   
       useEffect(() => {
         const fetchData = async () => {
@@ -291,33 +307,45 @@ return(
            </DialogHeader>
 
            {data.length == 0 && (
-                 <div>
+                 <div >
                     <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                    <Button className="w-full mb-6" variant={'outline'}><Plus size={16} className="" />Adicionar pesquisador</Button>
                   </PopoverTrigger>
-                  <PopoverContent className="min-w-[200px] p-0">
+                  <PopoverContent className="min-w-[200px] max-w-[30vw] w-full">
+                    <div className="flex gap-3 mb-6">
+                    <Select defaultValue={type} value={type}  onValueChange={(value) => setType(value)}>
+            <SelectTrigger className="w-fit">
+                <SelectValue placeholder="Tipo" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem value="COLABORADOR">Colaborador</SelectItem>
+                <SelectItem value="PERMANENTE">Permanente</SelectItem>
 
-                  <Command>
-                    <CommandInput placeholder="Pesquisar docente..." />
-                    <CommandList>
-                    <CommandEmpty>Nenhum docente encontrado</CommandEmpty>
+            </SelectContent>
+            </Select>
 
-                    
-  <CommandGroup>
-  {researcherSearch.map((props) => (
-      <CommandItem key={props.researcher_id} value={props.name}  onSelect={() => {
-        handleSubmit('COLABORADOR',props.researcher_id)
+            <Alert  className="h-10 bg-white p-2 flex w-full items-center gap-3 justify-between">
+            <div className="flex items-center gap-2 w-full flex-1">
+        <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
+        <Input className="rounded-none border-l-0 border-r-0 " onChange={(e) => handleChangeInput(e.target.value)} />
+        </div>
+            </Alert>
+                    </div>
+                  <ScrollArea className="h-[200px]">
+                  <div className="flex flex-wrap gap-3">
+                  {researcherSearch.map((props) => (
+      <div className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} 
+      key={props.researcher_id}  onClick={() => {
+        handleSubmit(type, props.researcher_id)
         setOpen(false)
       }}>
         <span>{props.name}</span>
-      </CommandItem>
+      </div>
     ))}
-  </CommandGroup>
-
-
-  </CommandList>
-                  </Command>
+                  </div>
+                  <ScrollBar orientation="vertical" />
+                  </ScrollArea>
                   </PopoverContent>
                 </Popover>
 

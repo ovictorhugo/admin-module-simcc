@@ -34,6 +34,7 @@ interface PesquisadoresSelecionados {
 import { CookiesProvider, useCookies } from 'react-cookie'
 import { News } from './pages/News';
 import { Baremas } from './pages/Baremas';
+import { PosGraduation } from './pages/PosGraduation';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [navbar, setNavbar] = useState(false);
@@ -121,7 +122,7 @@ const [idDocumentBarema, setIdDocumentBarema] = useState('')
       <Routes>
         <Route path='/' element={<Home/>}/>
 
-        <Route path='/pos-graducao' element={<Home/>}/>
+        <Route path='/pos-graduacao' element={<PosGraduation/>}/>
        
        
         <Route path='/indicadores' element={<Indicators/>}/>

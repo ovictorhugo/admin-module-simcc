@@ -22,7 +22,10 @@ interface GraduateProgram {
     sigla: string
     latitude: string
     longitude: string
-    visible:boolean
+    visible:string
+    qtd_discente:string
+    qtd_colaborador:string
+    qtd_permanente:string
   }
 
 export function GraduateProgram() {
@@ -34,6 +37,8 @@ export function GraduateProgram() {
   const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram[]>([]);
 
     const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=`;
+
+    console.log(urlGraduateProgram)
 
     useEffect(() => {
       const fetchData = async () => {
@@ -68,16 +73,16 @@ export function GraduateProgram() {
 
          <div className="flex flex-col justify-center">
           <div className="h-[350px] absolute  ml-16 "><Circle/></div>
-          <h1 className="z-[9] text-3xl mb-2 font-medium max-w-[500px] "><strong className="bg-red-700 text-white font-medium"> Escolha um programa</strong>{" "}e veja o que a plataforma pode filtrar para você.</h1>
-          <Label className=" z-[9] max-w-[550px] mb-8 ">Arraste ou clique em um dos pontos no gráfico para selecionar o programa de pós-graduação. Você também pode escolher pela lista abaixo</Label>
+          <h1 className=" text-3xl z-[2] mb-2 font-medium max-w-[500px] "><strong className="bg-red-700 text-white font-medium"> Escolha um programa</strong>{" "}e veja o que a plataforma pode filtrar para você.</h1>
+          <Label className="z[2]  max-w-[550px] mb-8 ">Arraste ou clique em um dos pontos no gráfico para selecionar o programa de pós-graduação. Você também pode escolher pela lista abaixo</Label>
 
           
           </div>
 
-          <div className="absolute right-0 top-20">
-          <div>
+          <div className="fixed h-full right-16 top-20 pb-[120px] flex flex-col justify-center items-center  ">
+          <div className="gap-3 max-h-[470px] overflow-y-auto flex flex-col items-center justify-center ">
             {graduatePrograms.map((props) => {
-              if(props.visible == true) {
+              if(props.visible == 'True') {
                 return(
                 <ProgramItem
                 area={props.area}
@@ -94,6 +99,9 @@ export function GraduateProgram() {
                 region={props.region}
                 sigla={props.sigla}
                 visible={props.visible}
+                qtd_discente={props.qtd_discente}
+                qtd_colaborador={props.qtd_colaborador}
+                qtd_permanente={props.qtd_permanente}
                 />
                 )
               }
