@@ -50,7 +50,7 @@ export function DataTableModal<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [pagination, setPagination] = useState({
     pageIndex:Math.ceil(data.length), //initial page index
-    pageSize: 2, //default page size
+    pageSize: 3, //default page size
   });
 
   const table = useReactTable({

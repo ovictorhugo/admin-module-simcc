@@ -88,11 +88,14 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
     id: "actions",
     cell: ({ row }) => {
       const payment = row.original
-      const URLGERALADMIN = import.meta.env.VITE_API_KEY
+     
+      const API_KEY = import.meta.env.VITE_URLGERALADMIN
       const handleVisibleProgram = (id: string) => {
 
-        const urlVisibleProgram = URLGERALADMIN + `GraduateProgramRest/Update?graduate_program_id=${id}`
+        const urlVisibleProgram = API_KEY + `GraduateProgramRest/Update?graduate_program_id=${id}`
         const fetchData = async () => {
+
+          console.log(urlVisibleProgram)
          
           try {
             const response = await fetch(urlVisibleProgram, {
@@ -166,7 +169,7 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
             description:row.original.description,
             url_image:row.original.url_image,
             city:row.original.city,
-            visible:row.original.visible
+            visible:String(row.original.visible)
             
             })}  ><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
             <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('add-researcher-graduation', {id_delete:row.original.graduate_program_id , name:row.original.name})}><UserCheck className="h-4 w-4" />
