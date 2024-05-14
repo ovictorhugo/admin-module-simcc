@@ -18,6 +18,9 @@ import { FiltersModal } from "../modals/filters-modal";
 import { ListStudentProgramModal } from "../modals/list-student-program";
 import { AddResearcherGraduationTwo } from "../modals/add-researcher-graduation-two";
 import { GratuateProgramModal } from "../modals/gratuate-program";
+import { ConfirmDeleteResearcherGraduateProgram } from "../modals/confirm-delete-researcher-graduate-program";
+import { ResetPesoProducoes } from "../modals/reset-peso-producoes";
+import { ConfirmDeleteStudentGraduateProgram } from "../modals/confirm-delete-student-graduate-program";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -49,6 +52,9 @@ export const ModalProvider = () => {
     <ListStudentProgramModal/>
     <AddResearcherGraduationTwo/>
     <GratuateProgramModal/>
+    <ConfirmDeleteResearcherGraduateProgram/>
+    <ResetPesoProducoes/>
+    <ConfirmDeleteStudentGraduateProgram/>
     </>
   )
 }

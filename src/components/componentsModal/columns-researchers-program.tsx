@@ -70,90 +70,12 @@ export const columns: ColumnDef<Research>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const {urlGeralAdm} = useContext(UserContext)
-      const {data: dataModal } = useModal();
-      const [id_program , setIdProgram] = useState(dataModal && dataModal.graduate_program_id)
-      useEffect(() => {
-        setIdProgram(dataModal.graduate_program_id)
-      }, [dataModal]);
-  
-      const handleSubmitDelete = async ( researcher_id:string) => {
-
-
-        try {
-          const data = [
-            {
-              graduate_program_id: id_program,
-              lattes_id:researcher_id,
-              }
-          ]
-  
-          console.log('dataa reesfs', data)
-  
-          let urlProgram = urlGeralAdm + 'GraduateProgramResearcherRest/Delete'
-  
-  
-          const fetchData = async () => {
-          
-            try {
-              const response = await fetch(urlProgram, {
-                mode: 'cors',
-                method: 'DELETE',
-                headers: {
-                  'Access-Control-Allow-Origin': '*',
-                  'Access-Control-Allow-Methods': 'POST',
-                  'Access-Control-Allow-Headers': 'Content-Type',
-                  'Access-Control-Max-Age': '3600',
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
-              });
-  
-              if (response.ok) {
-               
-                toast("Dados enviados com sucesso", {
-                    description: "Pesquisador removido no programa de pós-graduação",
-                    action: {
-                      label: "Fechar",
-                      onClick: () => console.log("Undo"),
-                    },
-                  })
-               
-              } else {
-                console.error('Erro ao enviar dados para o servidor.');
-                toast("Tente novamente!", {
-                    description: "Erro ao cadastrar pesquisador ao programa",
-                    action: {
-                      label: "Fechar",
-                      onClick: () => console.log("Undo"),
-                    },
-                  })
-              }
-              
-            } catch (err) {
-              console.log(err);
-            } 
-          };
-          fetchData();
-  
-         
-     
+      
+      const {onOpen } = useModal();
     
-          
-        } catch (error) {
-            toast("Erro ao processar requisição", {
-                description: "Tente novamente",
-                action: {
-                  label: "Fechar",
-                  onClick: () => console.log("Undo"),
-                },
-              })
-        }
-      };
-
  
       return (
-        <Button  onClick={() => handleSubmitDelete(row.original.lattes_id)} variant={'destructive'} className="h-8 w-8 p-0 text-white ml-auto dark:text-white">
+        <Button  onClick={() => onOpen('confirm-delete-researcher-graduate-program', {lattes_id:row.original.lattes_id, name:row.original.name})} variant={'destructive'} className="h-8 w-8 p-0 text-white ml-auto dark:text-white">
                        <Trash size={8} className="h-4 w-4" />
                      </Button>
       )

@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 
-export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program' | 'edit-graduate-program' | 'add-researcher-graduation' | 'add-researcher-csv' | 'add-student-graduation' | 'add-grupo-pesquisa' | 'filters' | 'pesquisadores-selecionados' | 'list-student-program' | 'add-researcher-graduation-two' | 'gratuate-program'
+export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program' | 'edit-graduate-program' | 'add-researcher-graduation' | 'add-researcher-csv' | 'add-student-graduation' | 'add-grupo-pesquisa' | 'filters' | 'pesquisadores-selecionados' | 'list-student-program' | 'add-researcher-graduation-two' | 'gratuate-program' | 'confirm-delete-researcher-graduate-program' | 'reset-peso-producoes' | 'confirm-delete-student-graduate-program'
 
 interface ModalData {
   id?: string,
@@ -23,6 +23,7 @@ interface ModalData {
   lattes_10_id?: string,
   researcher_id?: string
   magazine?:string
+  lattes_id?:string
 
   id_delete?: string
 
@@ -43,7 +44,7 @@ graduate_program_id?: string
     qtd_colaborador?:string
     qtd_permanente?:string
    
-
+    type_reset?:string
  
 }
 

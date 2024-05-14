@@ -8,6 +8,7 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  setPagination,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -47,26 +48,31 @@ export function DataTableModal<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [pagination, setPagination] = useState({
+    pageIndex:Math.ceil(data.length), //initial page index
+    pageSize: 2, //default page size
+  });
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    autoResetPageIndex: false,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      pagination: {
-        pageIndex: 0, // Começa na primeira página
-        pageSize: 3, // Define o tamanho da página como 3
-      },
+      pagination
+    
     },
+   
   });
 
   const {onOpen, type} = useModal()

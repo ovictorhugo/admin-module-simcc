@@ -214,7 +214,7 @@ export function EditGraduateProgram() {
 
         <DialogFooter className=" py-4 ">
         <Button variant={'ghost'}   onClick={() => onClose()}>
-            <ArrowUUpLeft size={16} className="" />Cancelar
+            <ArrowUUpLeft size={16} className="" />Voltar
               </Button>
 
               <Button  onClick={handleSubmit} className="text-white dark:text-white" >

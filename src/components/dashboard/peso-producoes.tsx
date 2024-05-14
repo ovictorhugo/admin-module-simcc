@@ -1,4 +1,4 @@
-import { ArrowCounterClockwise, Book, CheckSquare, PlusCircle, Quotes, Stamp } from "phosphor-react";
+import { ArrowCounterClockwise, Book, Check, CheckSquare, PlusCircle, Quotes, Stamp } from "phosphor-react";
 import { Alert } from "../ui/alert";
 import { useContext, useEffect, useState } from "react";
 import { Input } from "../ui/input";
@@ -14,14 +14,18 @@ import {
   SelectValue,
 } from "../../components/ui/select"
 import { UserContext } from "../../context/context";
+import { useModal } from "../hooks/use-modal-store";
+
+
 
 
 export function PesoProducoes() {
 
   const {urlGeralAdm, user} = useContext(UserContext)
 
-  const [a1, seta1] = useState(0);
-  const [a2, seta2] = useState(0);
+
+  const [a1, seta1] = useState('');
+  const [a2, seta2] = useState('');
   const [a3, seta3] = useState('');
   const [a4, seta4] = useState('');
   const [b1, setb1] = useState('');
@@ -44,9 +48,12 @@ export function PesoProducoes() {
   const [patenteCondecida, setPatenteConcedida] = useState('');
   const [patenteNaoConcedida, setPatenteNaoConcedida] = useState('');
   const [relTec, setRelTec] = useState('');
+  const { onOpen } = useModal()
   
   const urlGet = urlGeralAdm + `indprod/query?institution_id=${user.institution_id}`;
   console.log(urlGet)
+
+ 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,8 +71,8 @@ export function PesoProducoes() {
         const data = await response.json();
         if (data.length != 0) {
           const newData = data[0] // Assumindo que data é um array e tem apenas um elemento
-          seta1(Number(newData.a1));
-          seta2(Number(newData.a2));
+          seta1(newData.a1);
+          seta2(newData.a2);
           seta3(newData.a3);
           seta4(newData.a4);
           setb1(newData.b1);
@@ -158,19 +165,7 @@ export function PesoProducoes() {
         setCapLivro('0.25')
       }
 
-      const resetProdTec = async () => {
-        setT1('2')
-        setT2('1.5')
-        setT3('1')
-        setT4('0.5')
-        setT5('0.1')
-
-        setSoftware('t5')
-        setPatenteConcedida('t4')
-        setPatenteNaoConcedida('t4')
-        setRelTec('t5')
-
-      }
+      
 
       const url = urlGeralAdm + 'indprod/insert'
 
@@ -355,7 +350,7 @@ export function PesoProducoes() {
                             </div>
 
                             <div className="">
-                                <Button variant={'ghost'} onClick={() => resetProdTec()}  className="text-blue-700 hover:text-blue-800"><ArrowCounterClockwise size={16} />Resetar</Button>
+                                <Button variant={'ghost'} onClick={() => onOpen('reset-peso-producoes', {type_reset:'prod_tec'})}  className="text-blue-700 hover:text-blue-800"><ArrowCounterClockwise size={16} />Resetar</Button>
                             </div>
                         </div>
 
@@ -458,12 +453,11 @@ export function PesoProducoes() {
 
          <div className="w-full flex items-center">
          <Button variant={'ghost'} onClick={() => {
-          resetProdTec()
-          resetArticles()
-          resetProdCien()
+         
+          onOpen('reset-peso-producoes', {type_reset:'all'})
          }}  className="text-blue-700 hover:text-blue-800 ml-auto"><ArrowCounterClockwise size={16} />Resetar</Button>
 
-          <Button onClick={() => Submit()}><ArrowCounterClockwise size={16} />Atualizar</Button>
+          <Button onClick={() => Submit()}><Check size={16} />Atualizar</Button>
          </div>
         </div>
     )

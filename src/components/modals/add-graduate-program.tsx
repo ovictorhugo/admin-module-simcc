@@ -137,19 +137,19 @@ export function AddGraduateProgram() {
 
         <div>
             <div className="flex flex-col gap-2 mt-4">
-                <Label>Nome do programa</Label>
+                <Label>Nome do programa*</Label>
                 <Input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Nome do programa"/>
             </div>
 
             <div className="mt-4 gap-4 grid grid-cols-2">
             <div className="flex flex-col gap-2 w-full">
-                <Label>Modalidade</Label>
+                <Label>Modalidade*</Label>
                 <Select  onValueChange={(value) => setModality(value)}>
             <SelectTrigger className="w-full">
                 <SelectValue placeholder="Escolha a modalidade" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="ACADÊMICO">Acadêmico</SelectItem>
+                <SelectItem value="ACADÊMICO">Acadêmico*</SelectItem>
                 <SelectItem value="PROFISSIONAL">Profissional</SelectItem>
 
             </SelectContent>
@@ -158,14 +158,14 @@ export function AddGraduateProgram() {
             </div>
 
             <div className="flex flex-col gap-2">
-                <Label>Cidade</Label>
+                <Label>Cidade*</Label>
                 <Input value={city} onChange={(e) => setCity(e.target.value)} type="text" placeholder="Cidade"/>
             </div>
             </div>
 
             <div className="mt-4 gap-4 flex">
             <div className="flex flex-col gap-2 w-1/2">
-                <Label>Tipo de programa</Label>
+                <Label>Tipo de programa*</Label>
                 <Select  onValueChange={(value) => setType(value)}>
             <SelectTrigger className="w-full">
                 <SelectValue placeholder="Escolha o tipo de programa" />
@@ -181,7 +181,7 @@ export function AddGraduateProgram() {
 
            <div className="w-1/2 flex gap-4">
            <div className="flex flex-col gap-2 w-2/3">
-                <Label>Área</Label>
+                <Label>Área*</Label>
                 <Input value={area} onChange={(e) => setArea(e.target.value)} type="text" placeholder="Área"/>
             </div>
 
@@ -200,7 +200,7 @@ export function AddGraduateProgram() {
 
         <DialogFooter className=" py-4 ">
         <Button variant={'ghost'}   onClick={() => onClose()}>
-            <ArrowUUpLeft size={16} className="" />Cancelar
+            <ArrowUUpLeft size={16} className="" />Voltar
               </Button>
 
               <Button  onClick={handleSubmit} className="text-white dark:text-white" >
