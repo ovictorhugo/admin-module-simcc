@@ -131,13 +131,46 @@ export function Header() {
           </NavigationMenuContent>
         </NavigationMenuItem>
 
-        <NavigationMenuItem>
-                <Link to="/meus-baremas" >
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    <Textbox size={16} className="" /> Baremas
-                    </NavigationMenuLink>
-                </Link>
-                </NavigationMenuItem>
+                <NavigationMenuItem>
+          <NavigationMenuTrigger> <Textbox size={16} className="" /> Baremas</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+              <li className="row-span-3">
+                <NavigationMenuLink asChild>
+                  <div
+                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                  
+                  >
+                  <GraduationCap size={24} />
+                    <div className="mb-2 mt-4 text-lg font-medium">
+                      Baremas de avaliação
+                    </div>
+                    <p className="text-sm leading-tight text-muted-foreground">
+                      Selecione um programa de pós e tenha uma visão dos docentes e produções
+                    </p>
+                  </div>
+                </NavigationMenuLink>
+              </li>
+              <Link to="/meus-baremas" >
+             <ListItem title="Meus baremas">
+                Veja todos as consultas salvas
+              </ListItem>
+             </Link>
+             <Link to="/barema" >
+             <ListItem title="Criar barema">
+                Crie ou avalie pesquisadores para editais e ranqueamento 
+              </ListItem>
+             </Link>
+
+             <Link to="/procurar-barema" >
+             <ListItem title="Procurar barema">
+                Tem um código para acesso dos resultados? Veja o resultado final aqui
+              </ListItem>
+             </Link>
+              
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
 
                 
                 </NavigationMenuList>

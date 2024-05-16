@@ -147,6 +147,11 @@ const [idDocumentBarema, setIdDocumentBarema] = useState('')
         />
 
         <Route
+         path='/procurar-barema/:baremaId?'
+         element={loggedIn == false ? <Authentication/> : <Baremas/>}
+        />
+
+        <Route
          path='/meus-baremas'
          element={loggedIn == false ? <Authentication/> : <Baremas/>}
         />

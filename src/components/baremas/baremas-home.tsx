@@ -201,8 +201,8 @@ export function BaremasHome() {
               console.log('userId:', user.uid);
       
               const userDocsRef = collection(db, 'baremas');
-  const userDocsQuery = query(userDocsRef, where('userId', '==', user.uid));
-  const userDocSnapshot = await getDocs(userDocsQuery);
+            const userDocSnapshot = await getDocs(userDocsRef);
+
       
   
       
@@ -786,7 +786,6 @@ console.log(somaTotalPorPesquisador);
                     anoResourceProgess:anoResourceProgess,
                     anoResourceCompleted:anoResourceCompleted,
                     anoParticipacao:anoParticipacao
-    
                 }
 
                 const db = getFirestore();
@@ -822,10 +821,6 @@ console.log(somaTotalPorPesquisador);
             })
           }
       }
-
-
-    
-
       //firebase submit
       
      

@@ -37,7 +37,9 @@ const SearchLayout = ({ children }: { children: React.ReactNode }) => {
           
           </div>
 
+         {typeHomepage != "initial-home" && (
           <Search/>
+         )}
         </main>
 
         <Toaster/>

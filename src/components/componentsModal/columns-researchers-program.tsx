@@ -10,6 +10,7 @@ import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../context/context"
 import { toast } from "sonner"
 import { useModal } from "../hooks/use-modal-store"
+import { fetchDataResearcherProgram } from "../modals/function-list-researcher-program"
 //import { UserContext } from "../../../../context/context"
 
 
@@ -72,10 +73,11 @@ export const columns: ColumnDef<Research>[] = [
     cell: ({ row }) => {
       
       const {onOpen } = useModal();
+ 
     
  
       return (
-        <Button  onClick={() => onOpen('confirm-delete-researcher-graduate-program', {lattes_id:row.original.lattes_id, name:row.original.name})} variant={'destructive'} className="h-8 w-8 p-0 text-white ml-auto dark:text-white">
+        <Button  onClick={() => onOpen('confirm-delete-researcher-graduate-program', {lattes_id:row.original.lattes_id, nome:row.original.name})} variant={'destructive'} className="h-8 w-8 p-0 text-white ml-auto dark:text-white">
                        <Trash size={8} className="h-4 w-4" />
                      </Button>
       )

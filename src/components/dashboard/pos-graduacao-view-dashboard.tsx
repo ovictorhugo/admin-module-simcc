@@ -170,7 +170,9 @@ export function PosGraducaoView() {
           </div>
           <div className="flex flex-col flex-1 justify-between w-full">
             <div className="flex flex-col justify-between">
-            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>{posgraduation.code}</div>
+           {posgraduation.code != '' && (
+             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>{posgraduation.code}</div>
+           )}
               <h2 className=" font-medium">{posgraduation.name}</h2>
              
             </div>
@@ -179,7 +181,9 @@ export function PosGraducaoView() {
                         
                         <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><GraduationCapIcon size={12}/>{posgraduation.type}</div>
                         <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><MapPin size={12}/>{posgraduation.city}</div>
-                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12}/>{posgraduation.rating}</div>
+                        {posgraduation.rating != '' && (
+                          <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12}/>{posgraduation.rating}</div>
+                        )}
 
                         </div>
 

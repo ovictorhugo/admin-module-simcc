@@ -6,6 +6,14 @@ import { ArrowUUpLeft, Trash } from "phosphor-react";
 import { toast } from "sonner"
 import { UserContext } from "../../context/context";
 import { useContext, useEffect, useState} from "react";
+import { fetchDataResearcherProgram } from "./function-list-researcher-program";
+
+export interface PesquisadorProps {
+  lattes_id: string
+  name: string
+  type_: string
+}
+
 
 export function ConfirmDeleteResearcherGraduateProgram() {
     const { onOpen, onClose, isOpen, type: typeModal, data:dataModal } = useModal();
@@ -62,6 +70,16 @@ export function ConfirmDeleteResearcherGraduateProgram() {
                      onClick: () => console.log("Undo"),
                    },
                  })
+
+                 const {onOpen,data } = useModal();
+                 onOpen('add-researcher-graduation')
+         const {urlGeralAdm} = useContext(UserContext)
+         const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
+         useEffect(() => {
+          
+           fetchDataResearcherProgram(urlGeralAdm, data.graduate_program_id, setResearcher);
+         }, [urlGeralAdm, ]);
+       
               
              } else {
                console.error('Erro ao enviar dados para o servidor.');
@@ -79,7 +97,7 @@ export function ConfirmDeleteResearcherGraduateProgram() {
            } 
          };
          fetchData();
-         onOpen('add-researcher-graduation')
+         
         
     
    
@@ -103,7 +121,7 @@ export function ConfirmDeleteResearcherGraduateProgram() {
         <DialogContent>
         <DialogHeader className="pt-8 px-6 flex flex-col items-center">
         <DialogTitle className="text-2xl text-center font-medium max-w-[350px]">
-        <strong className="bg-red-500 text-white hover:bg-red-600 transition duration-500 font-medium">Deletar</strong> pesquisador(a) {dataModal.name}
+        <strong className="bg-red-500 text-white hover:bg-red-600 transition duration-500 font-medium">Deletar</strong> pesquisador(a) {dataModal.nome} do programa
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
           Você tem certeza de que deseja prosseguir com a exclusão do pesquisador que está atualmente vinculado a este programa de pós-graduação?

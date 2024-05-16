@@ -7,6 +7,8 @@ import { ResultHome } from "../homepage/result-home";
 import { GraduateProgram } from "../graduate-program/graduate-program";
 import { BaremasHome } from "../baremas/baremas-home";
 import { MeusBaremasHome } from "../baremas/meus-baremas";
+import { ProcurarBaremas } from "../baremas/procurar-barema-public";
+import { ResultProcurarBaremas } from "../baremas/result-procurar-barema";
 
 
 
@@ -29,6 +31,8 @@ export const GeralProvider = () => {
     <GraduateProgram/>
     <BaremasHome/>
     <MeusBaremasHome/>
+    <ProcurarBaremas/>
+    <ResultProcurarBaremas/>
     </>
   )
 }

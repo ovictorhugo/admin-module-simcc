@@ -89,8 +89,11 @@ export function ResearcherModal() {
     };
 
 
-    const urlTermPesquisadores = urlGeral + `researcherName?name=${name != null && (name.split(' ').join(';'))}`;
+    let urlTermPesquisadores = ''
 
+    if(typeModal === "researcher-modal") {
+      urlTermPesquisadores = urlGeral + `researcherName?name=${name != null && (name.split(' ').join(';'))}`;
+    }
 
     useMemo(() => {
         const fetchData = async () => {

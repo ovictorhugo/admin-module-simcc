@@ -71,7 +71,7 @@ export const columns: ColumnDef<Research>[] = [
 
  
       return (
-        <Button  onClick={() => onOpen('confirm-delete-student-graduate-program',{lattes_id:row.original.lattes_id, name:row.original.name})} variant={'destructive'} className="h-8 w-8 p-0 text-white ml-auto dark:text-white">
+        <Button  onClick={() => onOpen('confirm-delete-student-graduate-program',{lattes_id:row.original.lattes_id, nome:row.original.name})} variant={'destructive'} className="h-8 w-8 p-0 text-white ml-auto dark:text-white">
                        <Trash size={8} className="h-4 w-4" />
                      </Button>
       )

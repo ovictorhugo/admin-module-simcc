@@ -46,6 +46,7 @@ interface PosGraduationsProps {
   type_: string
 }
 import Papa from 'papaparse';
+import { fetchDataResearcherProgram } from "./function-list-researcher-program";
 
 
 export function AddResearcherGraduation() {
@@ -56,7 +57,7 @@ export function AddResearcherGraduation() {
     const currentYear = new Date().getFullYear();
     const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
     const [id_program , setIdProgram] = useState(dataModal && dataModal.graduate_program_id)
-    const { urlGeralAdm, user } = useContext(UserContext);
+    const { urlGeralAdm} = useContext(UserContext);
     const [data, setData] = useState<PosGraduationsProps[]>([]);
     const [type, setType] = useState('COLABORADOR');
     const [input, setInput] = useState('')
@@ -236,30 +237,13 @@ export function AddResearcherGraduation() {
   const urlGetResearcher =
     urlGeralAdm + `GraduateProgramResearcherRest/Query?graduate_program_id=${id_program}`;
    
+    console.log(urlGetResearcher)
+    useEffect(() => {
+      fetchDataResearcherProgram(urlGeralAdm, id_program, setResearcher);
+    }, [urlGeralAdm, id_program]);
+  
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(urlGetResearcher, {
-          mode: "cors",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Max-Age": "3600",
-            "Content-Type": "text/plain",
-          },
-        });
-        const data = await response.json();
-        if (data) {
-          setResearcher(data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData();
-  }, [urlGetResearcher, handleSubmit, handleFileUpload]);
+  console.log(researcher)
 
 
   //

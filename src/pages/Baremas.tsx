@@ -31,6 +31,10 @@ export function Baremas() {
             onOpen('baremas');
         } else if (location.pathname === `/barema`) { // Assuming baremaId comes from useParams
             onOpen('baremas');
+        } if (location.pathname === `/procurar-barema/${baremaId}`) { // Assuming baremaId comes from useParams
+            onOpen('procurar-baremas');
+        } else if (location.pathname === `/procurar-barema`) { // Assuming baremaId comes from useParams
+            onOpen('procurar-baremas');
         } else if (location.pathname === '/meus-baremas') {
             onOpen('meus-baremas');
         } else {

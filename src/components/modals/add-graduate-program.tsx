@@ -69,6 +69,47 @@ export function AddGraduateProgram() {
 
           const fetchData = async () => {
           
+           if (name == '') {
+            toast("Campo 'Nome do programa' vazio", {
+              description: "Preencha o campo",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+           } else if (area == '') {
+            toast("Campo 'Área' vazio", {
+              description: "Preencha o campo",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+           } else if (modality == '') {
+            toast("Campo 'Modalidade' vazio", {
+              description: "Preencha o campo",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+           } else if (type == '') {
+            toast("Campo 'Tipo do programa' vazio", {
+              description: "Preencha o campo",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+           } else if (city == '') {
+            toast("Campo 'Cidade' vazio", {
+              description: "Preencha o campo",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+           } else if (city != '' && type != '' && modality != '' && area != '' && name != '') {
             try {
               const response = await fetch(urlProgram, {
                 mode: 'cors',
@@ -107,9 +148,24 @@ export function AddGraduateProgram() {
             } catch (err) {
               console.log(err);
             } 
+           }
           };
           fetchData();
-          onClose()
+
+          if(city != '' && type != '' && modality != '' && area != '' && name != '') {
+            onClose()
+            setName('')
+            setArea('')
+            setCity('')
+            setCode('')
+            setDescricao('')
+            setModality('')
+            setRanking('')
+            setType('')
+          }
+
+          
+          
     
           
         } catch (error) {
@@ -149,7 +205,7 @@ export function AddGraduateProgram() {
                 <SelectValue placeholder="Escolha a modalidade" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="ACADÊMICO">Acadêmico*</SelectItem>
+                <SelectItem value="ACADÊMICO">Acadêmico</SelectItem>
                 <SelectItem value="PROFISSIONAL">Profissional</SelectItem>
 
             </SelectContent>

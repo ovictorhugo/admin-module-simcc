@@ -42,10 +42,6 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { v4 as uuidv4 } from 'uuid';
 
-interface PesquisadorProps {
-  name: string
-  lattes_id: string
-}
 
 export function ListStudentProgramModal() {
     const { onClose, isOpen, type: typeModal, data: dataModal } = useModal();
@@ -291,10 +287,13 @@ export function ListStudentProgramModal() {
 
     //
 
-    const urlGetResearcher =
-    urlGeralAdm + `studentRest/query?graduate_program_id=${id_program}`;
+   let urlGetResearcher = ''
    
+    if (typeModal === "list-student-program") {
+      urlGetResearcher = urlGeralAdm + `studentRest/query?graduate_program_id=${id_program}`;
+    }
 
+    console.log(urlGetResearcher )
   useEffect(() => {
     const fetchData = async () => {
       try {
