@@ -1,10 +1,11 @@
-import { ArrowCounterClockwise, Book, Check, CheckSquare, PlusCircle, Quotes, Stamp } from "phosphor-react";
+import { ArrowCounterClockwise, ArrowUUpLeft, Book, Check, CheckSquare, PlusCircle, Quotes, Stamp } from "phosphor-react";
 import { Alert } from "../ui/alert";
 import { useContext, useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { toast } from "sonner"
+import { DialogFooter, DialogHeader, Dialog, DialogContent, DialogDescription, DialogTitle } from "../ui/dialog";
 
 import {
   Select,
@@ -48,11 +49,13 @@ export function PesoProducoes() {
   const [patenteCondecida, setPatenteConcedida] = useState('');
   const [patenteNaoConcedida, setPatenteNaoConcedida] = useState('');
   const [relTec, setRelTec] = useState('');
-  const { onOpen } = useModal()
   
   const urlGet = urlGeralAdm + `indprod/query?institution_id=${user.institution_id}`;
   console.log(urlGet)
 
+  const { onOpen, onClose, isOpen, type: typeModal, data:dataModal } = useModal();
+  const isModalOpen = isOpen && typeModal === 'reset-peso-producoes'
+  const [typeReset, setTypeReset] = useState('');
  
 
   useEffect(() => {
@@ -165,6 +168,20 @@ export function PesoProducoes() {
         setCapLivro('0.25')
       }
 
+      const resetProdTec = async () => {
+        setT1('2')
+        setT2('1.5')
+        setT3('1')
+        setT4('0.5')
+        setT5('0.1')
+
+        setPatenteConcedida('t4')
+        setPatenteNaoConcedida('t4')
+        setSoftware('t5')
+        setRelTec('t5')
+
+      }
+
       
 
       const url = urlGeralAdm + 'indprod/insert'
@@ -265,7 +282,10 @@ export function PesoProducoes() {
                             </div>
 
                             <div className="">
-                                <Button variant={'ghost'} onClick={() => resetArticles()}  className="text-blue-700 hover:text-blue-800"><ArrowCounterClockwise size={16} />Resetar</Button>
+                                <Button variant={'ghost'} onClick={() => {
+         setTypeReset('articles')
+          onOpen('reset-peso-producoes')
+         }}  className="text-blue-700 hover:text-blue-800"><ArrowCounterClockwise size={16} />Resetar</Button>
                             </div>
                         </div>
 
@@ -310,7 +330,10 @@ export function PesoProducoes() {
                             </div>
 
                             <div className="">
-                                <Button variant={'ghost'} onClick={() => resetProdCien()}  className="text-blue-700 hover:text-blue-800"><ArrowCounterClockwise size={16} />Resetar</Button>
+                                <Button variant={'ghost'} onClick={() => {
+         setTypeReset('prodCien')
+          onOpen('reset-peso-producoes')
+         }} className="text-blue-700 hover:text-blue-800"><ArrowCounterClockwise size={16} />Resetar</Button>
                             </div>
                         </div>
 
@@ -350,7 +373,10 @@ export function PesoProducoes() {
                             </div>
 
                             <div className="">
-                                <Button variant={'ghost'} onClick={() => onOpen('reset-peso-producoes', {type_reset:'prod_tec'})}  className="text-blue-700 hover:text-blue-800"><ArrowCounterClockwise size={16} />Resetar</Button>
+                                <Button variant={'ghost'} onClick={() => {
+         setTypeReset('prodTec')
+          onOpen('reset-peso-producoes')
+         }}  className="text-blue-700 hover:text-blue-800"><ArrowCounterClockwise size={16} />Resetar</Button>
                             </div>
                         </div>
 
@@ -453,12 +479,55 @@ export function PesoProducoes() {
 
          <div className="w-full flex items-center">
          <Button variant={'ghost'} onClick={() => {
-         
-          onOpen('reset-peso-producoes', {type_reset:'all'})
+         setTypeReset('all')
+          onOpen('reset-peso-producoes')
          }}  className="text-blue-700 hover:text-blue-800 ml-auto"><ArrowCounterClockwise size={16} />Resetar</Button>
 
           <Button onClick={() => Submit()}><Check size={16} />Atualizar</Button>
          </div>
+
+         <Dialog open={isModalOpen} onOpenChange={onClose}> 
+        <DialogContent>
+        <DialogHeader className="pt-8 px-6 flex flex-col items-center">
+        <DialogTitle className="text-2xl text-center font-medium max-w-[350px]">
+        <strong className="bg-red-500 text-white hover:bg-red-600 transition duration-500 font-medium">Resetar</strong> {typeReset == 'all' && ('todos os pesos de produções')} {typeReset == 'articles' && ('todos os artigos')} {typeReset == 'prodCien' && ('todas as produções científicas')} {typeReset == 'prodTec' && ('todas as produções técnicas')}
+          </DialogTitle>
+          <DialogDescription className="text-center text-zinc-500">
+          Você tem certeza de que deseja prosseguir e resetar os pesos de produções? Isso irá impactar os índices de produções 
+          </DialogDescription>
+            </DialogHeader>
+
+            <DialogFooter className=" py-4 ">
+            <Button variant={'ghost'}   onClick={() => onClose()}>
+            <ArrowUUpLeft size={16} className="" />Voltar
+              </Button>
+
+              <Button variant={'destructive'} onClick={() => {
+                if(typeReset == 'all') {
+                  
+                  resetArticles()
+                  resetProdCien()
+                  resetProdTec()
+                  onClose()
+                } else if(typeReset == 'articles') {
+                  resetArticles()
+                  onClose()
+                } else if(typeReset == 'prodCien') {
+                  resetProdCien()
+                  onClose()
+                } else if(typeReset == 'prodTec') {
+                  resetProdTec()
+                  onClose()
+                }
+                
+               
+              }}  >
+              <ArrowCounterClockwise size={16} className="" />Resetar
+              </Button>
+            </DialogFooter>
+
+            </DialogContent>
+            </Dialog>
         </div>
     )
 }

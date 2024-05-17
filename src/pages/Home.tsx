@@ -9,7 +9,7 @@ import { useModal } from "../components/hooks/use-modal-store";
 
 export function Home() {
     const { onOpen } = useModalHomepage();
-    const {setIdGraduateProgram} = useContext(UserContext)
+    const {setIdGraduateProgram, idGraduateProgram} = useContext(UserContext)
 
     const location = useLocation();
 
@@ -27,10 +27,14 @@ export function Home() {
     useEffect(() => {
          if(location.pathname == '/') {
             onOpen('initial-home')
-        } 
+        } else  if(location.pathname == '/pos-graduacao') {
+          onOpen('graduation-home')
+      }else  if(location.pathname == `/pos-graduacao/${idGraduateProgram}`) {
+        onOpen('graduation-home')
+    } 
     }, [location]);
   
-
+console.log(idGraduateProgram)
     return(
         <>
         <SearchLayout>

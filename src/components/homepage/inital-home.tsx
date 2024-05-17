@@ -88,7 +88,7 @@ export function InitialHome() {
     <>
       {isModalOpen && (
         <div className="h-full items-center w-full flex flex-col justify-center mr-[72px] max-sm:ml-4">
-          <div className="flex flex-col justify-center ">
+          <div className="flex flex-col justify-center w-full max-w-[60vw] ">
         
             <h1 className="z-[2] text-3xl  font-medium max-w-[750px] mb-6 ">
               Experimente{" "}

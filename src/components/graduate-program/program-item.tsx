@@ -57,7 +57,7 @@ export function ProgramItem(props:GraduateProgram) {
           <div className="flex flex-col justify-between w-full">
             <div className="flex flex-col justify-between">
             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>{props.code}</div>
-              <h2 className=" font-medium">{props.name}</h2>
+              <h2 className=" font-medium max-w-[220px]">{props.name}</h2>
              
             </div>
             <div className="flex items-center justify-between mt-4 gap-4">

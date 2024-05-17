@@ -1,6 +1,7 @@
 import { ArrowUUpLeft, FileCsv, FileXls, Plus } from "phosphor-react";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
+import * as XLSX from 'xlsx';
 import {
     Dialog,
     DialogContent,
@@ -15,14 +16,19 @@ import {
   import Papa from 'papaparse';
 import { useContext, useState } from "react";
 import { DataTableModal } from "../componentsModal/data-table";
-import { columns } from "../componentsModal/columns";
+
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { UserContext } from "../../context/context";
+import { columns } from "../componentsModal/columns-grupo-pesquisa";
 
   interface PesquisadorProps {
-    nome_prupo:string
+    nome_grupo:string
     nome_lider:string
+    cpf:string
+    instituicao:string
     area:string
+    ultimo_envio:string
+    situacao:string
 
   }
 
@@ -42,9 +48,64 @@ export function AddGrupoPesquisaModal() {
   const handleFileUpload = (event: any) => {
     const uploadedFile = event.target.files[0];
     if (uploadedFile) {
-      setFile(uploadedFile);
+      readExcelFile(uploadedFile);
     }
   };
+
+  const readExcelFile = (file:any) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+
+      // Convert the worksheet to JSON, starting from the third row
+      const json = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+
+      // Extract headers from the third row
+      const headers: string[] = json[2] as string[];
+
+      // Remove the first three rows (two rows above headers and headers themselves)
+      const rows = json.slice(3);
+
+      // Map headers to your interface keys
+      const headerMap = {
+        "Nome do Grupo": "nome_grupo",
+        "Nome do Líder": "nome_lider",
+        "CPF": "cpf",
+        "Instituição": "instituicao",
+        "Área Predominante": "area",
+        "Último Envio": "ultimo_envio",
+        "Situação": "situacao"
+      };
+
+      // Convert rows to an array of objects
+      const jsonData = rows.map((row) => {
+        const obj: PesquisadorProps = {
+          nome_grupo: '',
+          nome_lider: '',
+          cpf: '',
+          instituicao: '',
+          area: '',
+          ultimo_envio: '',
+          situacao: ''
+        };
+        headers.forEach((header, index) => {
+          const key = headerMap[header];
+          if (key) {
+            obj[key] = row[index];
+          }
+        });
+        return obj;
+      });
+
+      setData(jsonData);
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  console.log(data)
 
   const handleSubmitPesquisador = async () => {
     try {

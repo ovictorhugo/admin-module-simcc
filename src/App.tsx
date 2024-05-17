@@ -122,7 +122,7 @@ const [idDocumentBarema, setIdDocumentBarema] = useState('')
       <Routes>
         <Route path='/' element={<Home/>}/>
 
-        <Route path='/pos-graduacao' element={<PosGraduation/>}/>
+        <Route path='/pos-graduacao/:graduationId?' element={<PosGraduation/>}/>
        
        
         <Route path='/indicadores' element={<Indicators/>}/>

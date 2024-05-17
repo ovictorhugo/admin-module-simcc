@@ -6,7 +6,7 @@ import { ArrowCounterClockwise, ArrowUUpLeft, Trash } from "phosphor-react";
 import { toast } from "sonner"
 import { UserContext } from "../../context/context";
 import { useContext, useEffect, useState} from "react";
-import { resetProdTecWrapper } from "../dashboard/peso-producoes";
+
 
 export function ResetPesoProducoes() {
     const { onOpen, onClose, isOpen, type: typeModal, data:dataModal } = useModal();

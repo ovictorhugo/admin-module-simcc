@@ -8,7 +8,6 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  setPagination,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -74,8 +73,6 @@ export function DataTableModal<TData, TValue>({
     },
    
   });
-
-  const {onOpen, type} = useModal()
 
 
   return (
