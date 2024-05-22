@@ -70,13 +70,23 @@ export function AddResearcherDashboard() {
                           },
                         })
                     } else {
-                      toast("Erro ao enviar os dados ao servidor", {
-                          description: "Tente novamenete",
+                      if (response.status === 400) {
+                        toast("Pesquisador já existe", {
+                          description: "Tente novamente",
                           action: {
                             label: "Fechar",
                             onClick: () => console.log("Undo"),
                           },
-                        })
+                        });
+                      } else {
+                        toast("Erro ao enviar os dados ao servidor", {
+                          description: "Tente novamente",
+                          action: {
+                            label: "Fechar",
+                            onClick: () => console.log("Undo"),
+                          },
+                        });
+                      }
                     }
                     
                   } catch (err) {
