@@ -42,7 +42,7 @@ function App() {
 
 
   const [urlGeral, setUrlGeral] = useState('https://simcc.uesc.br:8080/');
-  const [urlGeralAdm, setUrlGeralAdm] = useState('https://simcc.uesc.br:5000/');
+  const [urlGeralAdm, setUrlGeralAdm] = useState('http://simcc.uesc.br:5000/');
   const [mapModal, setMapModal] = useState(false)
 
   const [searchType, setSearchType] = useState('');

@@ -80,6 +80,7 @@ export function AddResearcherGraduation() {
   
     const urlGetResearcherSearch = urlGeralAdm + `ResearcherRest/Query?institution_id=&name=${input}&count=20 `;
   
+    console.log(urlGetResearcherSearch)
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -308,7 +309,7 @@ export function AddResearcherGraduation() {
       console.error('Erro ao processar a requisição:', error);
     }
   };
-  
+
   const urlGetResearcher = `${urlGeralAdm}GraduateProgramResearcherRest/Query?graduate_program_id=${id_program}`;
 
 
