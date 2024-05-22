@@ -12,6 +12,7 @@ export const fetchDataResearcherProgram = async (urlGeralAdm: string, id_program
   try {
     const response = await fetch(urlGetResearcher, {
       mode: "cors",
+      method: 'GET',
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET",

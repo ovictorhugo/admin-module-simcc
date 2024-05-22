@@ -297,11 +297,6 @@ export function BaremasHome() {
 
   const [grupos, setGrupos] = useState<Grupo[]>([]);
 
-  
-
-
-
-    
 
       const [header, setHeader] = useState([
         {

@@ -39,7 +39,7 @@ export const ModalProvider = () => {
     <MapResearchersModal/>
     <ResearcherModal/>
     <ArticlesModal/>
-    <ConfirmDeleteResearcher/>
+   
     <ConfirmDeletePosGraduateProgram/>
     <EditGraduateProgram/>
     <AddResearcherGraduation/>

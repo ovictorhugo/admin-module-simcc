@@ -172,77 +172,6 @@ export function ListStudentProgramModal() {
 
     //sdfsf
 
-    const handleSubmit = async (type:string, researcher_id:string) => {
-      const currentYear = new Date().getFullYear();
-
-      try {
-        const data = [
-          {
-            graduate_program_id: id_program,
-            researcher_id:researcher_id,
-            year:String(currentYear),
-            type_: type
-            }
-        ]
-
-        console.log('dataa reesfs', data)
-
-        let urlProgram = urlGeralAdm + 'GraduateProgramResearcherRest/Insert'
-
-
-        const fetchData = async () => {
-        
-          try {
-            const response = await fetch(urlProgram, {
-              mode: 'cors',
-              method: 'POST',
-              headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Max-Age': '3600',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(data),
-            });
-
-            if (response.ok) {
-             
-              toast("Dados enviados com sucesso", {
-                  description: "Pesquisador adicionado no programa de pós-graduação",
-                  action: {
-                    label: "Fechar",
-                    onClick: () => console.log("Undo"),
-                  },
-                })
-             
-            } else {
-              console.error('Erro ao enviar dados para o servidor.');
-              toast("Tente novamente!", {
-                  description: "Erro ao cadastrar pesquisador ao programa",
-                  action: {
-                    label: "Fechar",
-                    onClick: () => console.log("Undo"),
-                  },
-                })
-            }
-            
-          } catch (err) {
-            console.log(err);
-          } 
-        };
-        fetchData();
-
-      } catch (error) {
-          toast("Erro ao processar requisição", {
-              description: "Tente novamente",
-              action: {
-                label: "Fechar",
-                onClick: () => console.log("Undo"),
-              },
-            })
-      }
-    };
 
 
     ///deteltar
@@ -316,7 +245,7 @@ export function ListStudentProgramModal() {
       }
     };
     fetchData();
-  }, [urlGetResearcher, handleSubmit]);
+  }, [urlGetResearcher, id_program, handleSubmitPesquisadorUnique]);
   
 
 

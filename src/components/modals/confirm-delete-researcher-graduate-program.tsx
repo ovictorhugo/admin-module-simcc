@@ -70,15 +70,12 @@ export function ConfirmDeleteResearcherGraduateProgram() {
                      onClick: () => console.log("Undo"),
                    },
                  })
-
-                 const {onOpen,data } = useModal();
+             
                  onOpen('add-researcher-graduation')
+                 
          const {urlGeralAdm} = useContext(UserContext)
          const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
-         useEffect(() => {
-          
-           fetchDataResearcherProgram(urlGeralAdm, data.graduate_program_id, setResearcher);
-         }, [urlGeralAdm, ]);
+      
        
               
              } else {

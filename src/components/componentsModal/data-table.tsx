@@ -63,7 +63,7 @@ export function DataTableModal<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    autoResetPageIndex: false,
+    
     state: {
       sorting,
       columnFilters,

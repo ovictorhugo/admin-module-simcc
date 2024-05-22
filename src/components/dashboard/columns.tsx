@@ -19,6 +19,7 @@ export interface PesquisadorProps {
     lattes_id: string
     researcher_id: string
     institution_id: string
+    last_update:string
   }
 
 

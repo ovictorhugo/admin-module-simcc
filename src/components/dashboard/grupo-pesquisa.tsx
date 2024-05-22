@@ -12,23 +12,17 @@ import { toast } from "sonner"
 
 
   interface PosGraduationsProps {
-    graduate_program_id: string
-    code: string
-    name: string
+    acronym: null,
     area: string
-    modality: string
-    type: string
-    rating: string
     institution_id: string
-    description: string
-    url_image: string
-    city:string
-    created_at:string
-    visible: boolean
-    updated_at:string
-    qtd_discente:string
-    qtd_colaborador:string
-    qtd_permanente:string
+    institution_name: string
+    last_date_sent: string
+    lattes_id: string
+    leader_name: string
+    research_group_id: string
+    research_group_name: string
+    researcher_id: string
+    situation: string
   }
 
   import {
@@ -45,12 +39,8 @@ import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-
   
 
 
-export function PosGraducaoView() {
-  let qualisColor = {
-    'MESTRADO': 'bg-[#006837]',
-    'DOUTORADO': 'bg-[#8FC53E]',
+export function GrupoPesquisaView() {
 
-}
 
     const { urlGeralAdm, user } = useContext(UserContext);
     const [posgraduations, setPosgraduations] = useState<PosGraduationsProps[]>([]);
@@ -58,7 +48,7 @@ export function PosGraducaoView() {
     const { onOpen } = useModal();
     const [typeVisu, setTypeVisu] = useState('block')
 
-    const urlGetPosGraduations = urlGeralAdm + `GraduateProgramRest/Query?institution_id=${user.institution_id}`
+    const urlGetPosGraduations = urlGeralAdm + `researchGroupRest/Query?institution_id=${user.institution_id}`
   
   console.log(urlGetPosGraduations)
 
@@ -137,7 +127,7 @@ export function PosGraducaoView() {
 
     return(
       <>
-                          <HeaderResultTypeHome title="Programas de pós graduação" icon={<GraduationCap size={24} className="text-gray-400" />}>
+                          <HeaderResultTypeHome title="Grupos de pesquisa" icon={<GraduationCap size={24} className="text-gray-400" />}>
                         <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
                         </Button>
@@ -162,80 +152,31 @@ export function PosGraducaoView() {
         
           <div className="flex items-center"
         >
-                 <div
-                  
-                      className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${posgraduation.modality.includes('ACADÊMICO') ? 'bg-blue-300' : posgraduation.modality.includes('PROFISSIONAL') ? 'bg-blue-900' : 'bg-[#000]'} `}
-                    >
-                      
-                    </div>
+               
 
             <Alert className="flex flex-1 gap-4 rounded-l-none">
             <div className="flex flex-col whitespace-nowrap">
-            <img className="w-12 h-auto object-cover object-center rounded-l-lg whitespace-nowrap" src={posgraduation.url_image} alt={posgraduation.name} />
+            <img className="w-12 h-auto object-cover object-center rounded-l-lg whitespace-nowrap" src={user.img_url} alt={posgraduation.research_group_name} />
            
           </div>
           <div className="flex flex-col flex-1 justify-between w-full">
             <div className="flex flex-col justify-between">
-           {posgraduation.code != '' && (
-             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>{posgraduation.code}</div>
-           )}
-              <h2 className=" font-medium">{posgraduation.name}</h2>
+           
+              <h2 className=" font-medium">{posgraduation.research_group_name}</h2>
              
             </div>
             <div className="flex items-center justify-between mt-4 gap-4">
                         <div className="flex items-center gap-4">
                         
-                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><GraduationCapIcon size={12}/>{posgraduation.type}</div>
-                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><MapPin size={12}/>{posgraduation.city}</div>
-                        {posgraduation.rating != '' && (
-                          <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12}/>{posgraduation.rating}</div>
-                        )}
+                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><GraduationCapIcon size={12}/>{posgraduation.situation}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><MapPin size={12}/>{posgraduation.area}</div>
+                       
 
                         </div>
 
                         <div className="flex gap-3">
-                        <Button variant="outline" size={'icon'} className="ml-auto text-sm text-gray-500 dark:text-gray-300" onClick={() =>handleVisibleProgram(posgraduation.graduate_program_id)}>
-            {posgraduation.visible ? (<EyeSlash size={16}/>):(<Eye size={16}/>)}
-            </Button>
-                        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size={'icon'} className="ml-auto text-sm text-gray-500 dark:text-gray-300">
-            <DotsThree size={16}/>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-auto">
-          <Link to={`/pos-graducao/${posgraduation.code}`}><DropdownMenuItem className="flex items-center gap-3"><ArrowSquareOut className="h-4 w-4" />Visualizar página</DropdownMenuItem></Link>
-          <DropdownMenuItem className="flex items-center gap-3" onClick={() => onOpen('edit-graduate-program', {
-            graduate_program_id:posgraduation.graduate_program_id,
-            code:posgraduation.code,
-            name:posgraduation.name,
-            area:posgraduation.area,
-            modality:posgraduation.modality,
-            type:posgraduation.type,
-            rating:posgraduation.rating,
-            institution_id:posgraduation.institution_id,
-            description:posgraduation.description,
-            url_image:posgraduation.url_image,
-            city:posgraduation.city,
-            visible:String(posgraduation.visible),
-           
-            
-            })}  ><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
-               <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('add-researcher-graduation', {graduate_program_id:posgraduation.graduate_program_id , name:posgraduation.name})}><UserCheck className="h-4 w-4" />
-         Docentes do programa
-         </DropdownMenuItem>
-
-         <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('list-student-program', {graduate_program_id:posgraduation.graduate_program_id , name:posgraduation.name})}><Student className="h-4 w-4" />
-         Discentes do programa
-         </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem  onClick={() => onOpen('confirm-delete-pos-graduate-program', {id_delete:posgraduation.graduate_program_id , name:posgraduation.name})} className="flex items-center gap-3 bg-red-500 hover:bg-red-600 text-white"><Trash className="h-4 w-4" />
-         Deletar programa
-         </DropdownMenuItem>
-       
-
-          </DropdownMenuContent>
-        </DropdownMenu>
+                        
+                      
                         </div>
                         
                     </div>

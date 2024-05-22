@@ -24,8 +24,7 @@ import { columns } from "../componentsModal/columns-grupo-pesquisa";
   interface PesquisadorProps {
     nome_grupo:string
     nome_lider:string
-    cpf:string
-    instituicao:string
+    institution_id:string
     area:string
     ultimo_envio:string
     situacao:string
@@ -73,8 +72,7 @@ export function AddGrupoPesquisaModal() {
       const headerMap = {
         "Nome do Grupo": "nome_grupo",
         "Nome do Líder": "nome_lider",
-        "CPF": "cpf",
-        "Instituição": "instituicao",
+       
         "Área Predominante": "area",
         "Último Envio": "ultimo_envio",
         "Situação": "situacao"
@@ -85,11 +83,11 @@ export function AddGrupoPesquisaModal() {
         const obj: PesquisadorProps = {
           nome_grupo: '',
           nome_lider: '',
-          cpf: '',
-          instituicao: '',
+         
           area: '',
           ultimo_envio: '',
-          situacao: ''
+          situacao: '',
+          institution_id:user.institution_id
         };
         headers.forEach((header, index) => {
           const key = headerMap[header];
@@ -109,7 +107,7 @@ export function AddGrupoPesquisaModal() {
 
   const handleSubmitPesquisador = async () => {
     try {
-      if (!file) {
+      if (data.length == 0) {
         // Caso nenhum arquivo tenha sido selecionado
         toast("Erro: Nenhum arquivo selecionado", {
           description: "Por favor, selecione um arquivo para enviar.",
@@ -121,23 +119,20 @@ export function AddGrupoPesquisaModal() {
         return;
       }
 
-      const urlProgram = urlGeralAdm + 'ResearchGroupRest/Insert';
-      const formData = new FormData();
-      formData.append('file', file);
+      const urlProgram = urlGeralAdm + 'researchGroupRest/Insert';
 
      
-
       const response = await fetch(urlProgram, {
+        mode: 'cors',
         method: 'POST',
         headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'POST',
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Max-Age': '3600',
-            'Content-Type': 'application/vnd.ms-excel'
+            'Content-Type': 'application/json'
           },
-          mode: 'no-cors',
-        body: formData,
+        body: JSON.stringify(data),
       });
 
       if (response.ok) {

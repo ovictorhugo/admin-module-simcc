@@ -16,6 +16,7 @@ import {PosGraducaoView} from "./pos-graduacao-view-dashboard";
 import { PesoProducoes } from "./peso-producoes";
 import { GrupoPesquisaHeader } from "./grupo-pesquisa-header";
 import { PesoProducoesHeader } from "./peso-producao-header";
+import { GrupoPesquisaView } from "./grupo-pesquisa";
 
 
 export function GeralViewDashboard() {
@@ -83,7 +84,7 @@ const {user} = useContext(UserContext)
 
          <TabsContent value="grupos-pesquisa">
 
-
+<GrupoPesquisaView/>
 </TabsContent>
 
 

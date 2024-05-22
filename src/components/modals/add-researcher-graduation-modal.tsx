@@ -103,14 +103,7 @@ export function AddResearcherGraduation() {
       };
       fetchData();
 
-      // Lógica para eliminar itens com o mesmo nome de researcher
-    const filteredResearcherSearch = researcherSearch.filter(itemSearch => {
-      // Verifica se o nome do item de pesquisa não está presente nos pesquisadores
-      return !researcher.some(item => item.name === itemSearch.name);
-    });
-    
-    // Define o novo estado de researcherSearch com os itens filtrados
-    setResearcherSearch(filteredResearcherSearch);
+     
     }, [urlGetResearcherSearch]);
     
 
@@ -226,27 +219,11 @@ export function AddResearcherGraduation() {
         delimiter: ";",
         encoding: "UTF-8",
       });
+
+      handleSubmitPesquisador()
     }
   };
 
-  console.log('lista csv',data)
-
- 
-  
-
-  const urlGetResearcher =
-    urlGeralAdm + `GraduateProgramResearcherRest/Query?graduate_program_id=${id_program}`;
-   
-    console.log(urlGetResearcher)
-    useEffect(() => {
-      fetchDataResearcherProgram(urlGeralAdm, id_program, setResearcher);
-    }, [urlGeralAdm, id_program]);
-  
-
-  console.log(researcher)
-
-
-  //
   const handleSubmitPesquisador = async () => {
     try {
       let urlProgram = urlGeralAdm + 'GraduateProgramResearcherRest/Insert'
@@ -331,6 +308,45 @@ export function AddResearcherGraduation() {
       console.error('Erro ao processar a requisição:', error);
     }
   };
+  
+  const urlGetResearcher = `${urlGeralAdm}GraduateProgramResearcherRest/Query?graduate_program_id=${id_program}`;
+
+
+    useEffect(() => {
+      
+
+      const fetchData = async () => {
+      try {
+        const response = await fetch(urlGetResearcher, {
+          mode: "cors",
+          method: 'GET',
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Max-Age": "3600",
+            "Content-Type": "text/plain",
+          },
+        });
+        const data = await response.json();
+        if (data) {
+          setResearcher(data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchData()
+    console.log(urlGetResearcher)
+    }, [urlGeralAdm, id_program, typeModal, handleSubmit, handleSubmitPesquisador]);
+  
+
+    console.log(urlGetResearcher)
+    console.log('lista csv',researcher)
+
+
+  //
+ 
 
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}> 
