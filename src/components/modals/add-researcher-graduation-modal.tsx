@@ -1,4 +1,4 @@
-import { ArrowUUpLeft, FileCsv, MagnifyingGlass, Trash, User } from "phosphor-react";
+import { ArrowUUpLeft, FileCsv, MagnifyingGlass} from "phosphor-react";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent,DialogDescription,DialogFooter,DialogHeader,DialogTitle } from "../ui/dialog";
@@ -46,14 +46,14 @@ interface PosGraduationsProps {
   type_: string
 }
 import Papa from 'papaparse';
-import { fetchDataResearcherProgram } from "./function-list-researcher-program";
+
 
 
 export function AddResearcherGraduation() {
     const { onClose, isOpen, type: typeModal, data: dataModal } = useModal();
     const isModalOpen = isOpen && typeModal === "add-researcher-graduation";
     const [open, setOpen] = useState(false)
-    const [open2, setOpen2] = useState(false)
+   
     const currentYear = new Date().getFullYear();
     const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
     const [id_program , setIdProgram] = useState(dataModal && dataModal.graduate_program_id)
@@ -105,7 +105,7 @@ export function AddResearcherGraduation() {
       fetchData();
 
      
-    }, [urlGetResearcherSearch]);
+    }, [urlGetResearcherSearch, typeModal]);
     
 
     //sdfsf
@@ -158,6 +158,8 @@ export function AddResearcherGraduation() {
                   onClick: () => console.log("Undo"),
                 },
               })
+
+              fetchDataAll()
            
           } else {
             console.error('Erro ao enviar dados para o servidor.');
@@ -295,6 +297,7 @@ export function AddResearcherGraduation() {
               onClick: () => console.log("Undo"),
             },
           });
+          fetchDataAll()
         } else {
           toast("Erro ao enviar os dados ao servidor", {
             description: "Tente novamente",
@@ -312,38 +315,37 @@ export function AddResearcherGraduation() {
 
   const urlGetResearcher = `${urlGeralAdm}GraduateProgramResearcherRest/Query?graduate_program_id=${id_program}`;
 
+  const fetchDataAll = async () => {
+    try {
+      const response = await fetch(urlGetResearcher, {
+        mode: "cors",
+        method: 'GET',
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Max-Age": "3600",
+          "Content-Type": "text/plain",
+        },
+      });
+      const data = await response.json();
+      if (data) {
+        setResearcher(data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
     useEffect(() => {
       
-
-      const fetchData = async () => {
-      try {
-        const response = await fetch(urlGetResearcher, {
-          mode: "cors",
-          method: 'GET',
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Max-Age": "3600",
-            "Content-Type": "text/plain",
-          },
-        });
-        const data = await response.json();
-        if (data) {
-          setResearcher(data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    fetchData()
+    fetchDataAll()
     console.log(urlGetResearcher)
-    }, [urlGeralAdm, id_program, typeModal, handleSubmit, handleSubmitPesquisador]);
+    }, [urlGeralAdm, id_program, typeModal]);
   
 
     console.log(urlGetResearcher)
-    console.log('lista csv',researcher)
+  
 
 
   //

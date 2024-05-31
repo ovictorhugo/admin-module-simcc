@@ -1,4 +1,4 @@
-import { ContentIndicators } from "../components/indicators/content-indicators";
+
 import { NovasPublicacoes } from "../components/novas-publicacoes/novas-publicacoes";
 import SimpleLayout from "../layout/simple-layout";
 

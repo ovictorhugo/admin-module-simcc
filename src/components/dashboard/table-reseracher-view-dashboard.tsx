@@ -10,12 +10,14 @@ import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-
 import { UsersFour } from "phosphor-react";
 import { useModal } from "../hooks/use-modal-store";
 import { ConfirmDeleteResearcher } from "../modals/confirm-delete-researcher";
+import { Skeleton } from "../ui/skeleton";
 
 export function TableResearcherViewDashboard() {
   const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
 
   const { urlGeralAdm, user } = useContext(UserContext);
   const {type, isOpen, onClose} = useModal()
+  const [isLoading, setIsLoading] = useState(true)
 
   const aa = type == 'confirm-delete-researcher'
 
@@ -25,6 +27,7 @@ export function TableResearcherViewDashboard() {
     urlGeralAdm + `ResearcherRest/Query?institution_id=${user.institution_id}`;
 
     useEffect(() => {
+      
       const fetchData = async () => {
         try {
           const response = await fetch(urlGetResearcher, {
@@ -40,6 +43,7 @@ export function TableResearcherViewDashboard() {
           const data = await response.json();
           if (data) {
             setResearcher(data);
+            setIsLoading(false)
           }
         } catch (err) {
           console.log(err);
@@ -55,15 +59,31 @@ export function TableResearcherViewDashboard() {
 
   return (
     <div className="w-full overflow-y-auto">
+       <Alert className="mb-4 flex items-center justify-between">
+        <div className="flex gap-6 items-center">
+        
+        </div>
+
+        <div className="flex items-end flex-col">
+          <p className="text-3xl font-bold">{researcher.length}</p> <p>Docentes</p>
+        </div>
+      </Alert>
+
         <HeaderResultTypeHome title="Docentes cadastrados" icon={<UsersFour size={24} className="text-gray-400" />}>
                       
                         </HeaderResultTypeHome>
    
-      <ScrollArea>
-      <div className="  ">
-          <DataTable columns={columns} data={researcher} />
+      {isLoading ? (
+        <div>
+          <Skeleton className="w-full h-[600px] rounded-md mt-6"/>
         </div>
-      </ScrollArea>
+      ):(
+        <ScrollArea>
+        <div className="  ">
+            <DataTable columns={columns} data={researcher} />
+          </div>
+        </ScrollArea>
+      )}
 
       <ConfirmDeleteResearcher/>
     

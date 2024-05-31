@@ -24,7 +24,7 @@ export function ResearchersBloco(props: Research) {
         350: 1,
         750: 2,
         900: 3,
-        1200: navbar || isOpen || mapModal ? 2 : ((navbar && mapModal) || (isOpen && mapModal)) ? 1 : 3
+        1200: navbar || isOpen || mapModal ? 2 : ((navbar && mapModal) || (isOpen && mapModal)) ? 1 : 4
     }}
 >
 
@@ -47,6 +47,13 @@ export function ResearchersBloco(props: Research) {
                     graduation={item.graduation}
                     patent={item.patent}
                     speaker={item.speaker}
+                    h_index={item.h_index}
+                    relevance_score={item.relevance_score}
+                    works_count={item.works_count}
+                    cited_by_count={item.cited_by_count}
+                    i10_index={item.i10_index}
+                    scopus={item.scopus}
+                    openalex={item.openalex}
                     />
                 );
             })}

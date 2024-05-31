@@ -30,6 +30,14 @@ interface Props {
     brand: string,
     lattes_update: Date,
     onResearcherUpdate: (newResearcher: Research[]) => void;
+
+    h_index:string,
+    relevance_score:string,
+    works_count:string,
+    cited_by_count:string,
+    i10_index:string,
+    scopus:string,
+    openalex:string,
   }
 
   type Research = {
@@ -77,65 +85,8 @@ const [researcher, setResearcher] = useState<Research[]>([]);
   const urlShare = `${urlGeral}researcher/${props.id}/${searchType}/${valoresSelecionadosExport}`
   const urlApi = `${urlGeral}researcherName?name=${props.name.split(' ').join(';')}`
   const [orcid, setOrcid] = useState(props.orcid);
-  useEffect(() => {
-    setOrcid(props.orcid)
-}, [props]);
-  useMemo(() => {
-    console.log('orcid',orcid)
-    const fetchData = async () => {
-        if(( orcid != " None" )) {
-            try {
-              const response = await fetch(urlTermPesquisadoresOrcid, {
-                  mode: "cors",
-                  headers: {
-                  
-                  },
-              });
-              const data = await response.json();
-              if (data) {
-                console.log('orcid')
-                const firstResult = data;
-                const { relevance_score, works_count, cited_by_count } = firstResult;
-                const { h_index, i10_index } = firstResult.summary_stats;
-                const { ids } = firstResult;
-                const { scopus, orcid, openalex } = ids;
-                const extractedData = { h_index, relevance_score, works_count, cited_by_count, i10_index, scopus, orcid, openalex };
-                setResearcher([extractedData]);
-                updateResearcher([extractedData])
-            }
-          } catch (err) {
-              console.log(err);
-          }
-        } else {
-            try {
-              const response = await fetch(urlTermPesquisadores, {
-                  mode: "cors",
-                  headers: {
-                  
-                  },
-              });
-              const data = await response.json();
-              if (data && data.results && data.results.length > 0) {
-                const firstResult = data.results[0];
-                console.log(urlTermPesquisadores)
-                const { relevance_score, works_count, cited_by_count } = firstResult;
-                const { h_index, i10_index } = firstResult.summary_stats;
-                const { ids } = firstResult;
-                const { scopus, orcid, openalex } = ids;
-                const extractedData = { h_index, relevance_score, works_count, cited_by_count, i10_index, scopus, orcid, openalex };
-                setResearcher([extractedData]);
-                updateResearcher([extractedData])
-            }
-          } catch (err) {
-              console.log(err);
-          }
-        }
-    };
-    fetchData();
-}, [urlTermPesquisadores, urlTermPesquisadoresOrcid, orcid]);
 
-console.log('urlopenalex', researcher)
-console.log('urlopenalex', urlTermPesquisadoresOrcid)
+
 
 //csv
 
@@ -294,19 +245,18 @@ const handleDownloadJson = async () => {
                     <div className="bg-blue-700 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><MapPin size={12} className="textwhite" /> {props.city}</div>
                   )}
   
-  {researcher.map((item) => {
-            return(
+
             
 <div className=" flex gap-3 items-center">
-{((orcid !== "None" && orcid !== '') || (item.orcid && item.orcid !== '')) && (
-    <Link  to={item.orcid ? (item.orcid):(`https://orcid.org/${props.orcid}`)} target="_blank" className="bg-[#A6CE39] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
+{(props.orcid !== "None" && props.orcid !== '')  && (
+    <Link  to={props.orcid ? (props.orcid):(`https://orcid.org/${props.orcid}`)} target="_blank" className="bg-[#A6CE39] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
         <IdentificationBadge size={12} className="" />
-        Orcid: {item.orcid ? item.orcid.replace(/[^\d-]/g, '') : props.orcid}
+        Orcid: {props.orcid ? props.orcid.replace(/[^\d-]/g, '') : props.orcid}
     </Link>
 )}
 
-{item.scopus != null && (
-    <Link  to={item.scopus} target="_blank" className="bg-[#FF8200] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
+{props.scopus != null && (
+    <Link  to={props.scopus} target="_blank" className="bg-[#FF8200] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
         <IdentificationBadge size={12} className="" />
         Scopus
     </Link>
@@ -315,9 +265,7 @@ const handleDownloadJson = async () => {
   
   
  
-             
-            )
-           })}
+         
 
 <a href={`https://lattes.cnpq.br/${props.lattes_id}`} target="blank_" className="bg-blue-900 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><LinkSimple size={12} className="textwhite" /> Currículo Lattes</a>
   

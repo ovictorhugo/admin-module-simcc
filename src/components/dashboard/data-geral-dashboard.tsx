@@ -65,13 +65,13 @@ export function DataGeralDashboard() {
                 return(
                     <div className="grid grid-cols-2 gap-6 min-h-full h-full w-full flex-1 max-md:hidden">
                     <ItemDashboard
-                title="Docentes"
+                title="Pesquisadores"
                 url=""
                 value={String(props.count_r)}
                 ><User size={16} className="" /> </ItemDashboard>
 
                 <ItemDashboard
-                title="Pós-graduação"
+                title="Pós-graduações"
                 url=""
                 value={String(props.count_gp)}
                 ><GraduationCap size={16} className="" /> </ItemDashboard>

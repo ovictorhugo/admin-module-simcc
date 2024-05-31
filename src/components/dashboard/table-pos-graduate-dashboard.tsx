@@ -6,7 +6,7 @@ import { DataTable } from "./data-table-pos-graduate";
 import { ScrollArea } from "../ui/scroll-area";
 
 type posGraduationsProps = {
-  PosGraduationsProps: [];
+  PosGraduationsProps: any[];
   };
   
 
@@ -14,7 +14,7 @@ export function TablePosGraduateViewDashboard(props:posGraduationsProps) {
  
 
   return (
-    <div className="max-md:max-w-[87vw] max-sm:max-w-[87vw] w-full overflow-y-auto">
+    <div className="  w-full overflow-y-auto">
    
       <ScrollArea>
       <div className="  ">

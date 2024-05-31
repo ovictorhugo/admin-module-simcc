@@ -12,7 +12,7 @@ export function HeaderResultTypeHome(props: Props) {
               <p className="text-sm font-bold">{props.title}</p>
             </div>
 
-            <div className="flex gap-3 mr-3 items-center h-full">
+            <div className="flex gap-3  items-center h-full">
               {props.children}
             </div>
 

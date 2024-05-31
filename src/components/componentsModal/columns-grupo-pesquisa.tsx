@@ -1,17 +1,9 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "../../components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
-import {Copy, Trash} from "phosphor-react"
-import { useModal } from "../hooks/use-modal-store"
+
+import { ArrowUpDown } from "lucide-react"
+
 
 
 export interface PesquisadorProps {

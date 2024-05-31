@@ -56,17 +56,19 @@ export function ConfirmDeleteStudentGraduateProgram() {
             if (response.ok) {
              
               toast("Dados enviados com sucesso", {
-                  description: "Pesquisador removido no programa de pós-graduação",
+                  description: "Discente removido no programa de pós-graduação",
                   action: {
                     label: "Fechar",
                     onClick: () => console.log("Undo"),
                   },
                 })
+
+                onOpen('list-student-program')
              
             } else {
               console.error('Erro ao enviar dados para o servidor.');
               toast("Tente novamente!", {
-                  description: "Erro ao cadastrar pesquisador ao programa",
+                  description: "Erro ao excluir discente",
                   action: {
                     label: "Fechar",
                     onClick: () => console.log("Undo"),
@@ -108,7 +110,7 @@ export function ConfirmDeleteStudentGraduateProgram() {
             </DialogHeader>
 
             <DialogFooter className=" py-4 ">
-            <Button variant={'ghost'}   onClick={() => onOpen('add-researcher-graduation')}>
+            <Button variant={'ghost'}   onClick={() => onOpen('list-student-program')}>
             <ArrowUUpLeft size={16} className="" />Cancelar
               </Button>
 

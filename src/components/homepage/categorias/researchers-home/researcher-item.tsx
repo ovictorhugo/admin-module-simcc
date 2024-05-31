@@ -1,9 +1,10 @@
 import { useContext } from "react"
 import { Alert } from "../../../ui/alert"
 import { UserContext } from "../../../../context/context"
-import { Buildings, MapPin, Star } from "phosphor-react"
+import { Buildings, MapPin, Plus, Star, X } from "phosphor-react"
 import { GraduationCap } from "lucide-react"
 import { useModal } from "../../../hooks/use-modal-store"
+import { Button } from "../../../ui/button"
 
 type Research = {
     among: number,
@@ -20,14 +21,22 @@ type Research = {
     graduation: string,
     patent: string,
     speaker: string
+
+    h_index:string,
+    relevance_score:string,
+    works_count:string,
+    cited_by_count:string,
+    i10_index:string,
+    scopus:string,
+    openalex:string,
 }
 
 export function ResearchItem(props: Research) {
     const { onOpen } = useModal();
-    const { urlGeral, valorDigitadoPesquisaDireta, valoresSelecionadosExport, searchType} = useContext(UserContext)
+    const { urlGeral, valorDigitadoPesquisaDireta, valoresSelecionadosExport, searchType, setPesquisadoresSelecionados, pesquisadoresSelecionados} = useContext(UserContext)
     const name = props.name
     return(
-        <div onClick={() => onOpen('researcher-modal', {name:props.name})} className="flex min=h-[170px] w-full cursor-pointer">
+        <div onClick={() => onOpen('researcher-modal', {name:props.name})} className="flex group min=h-[170px] w-full cursor-pointer">
             {props.area != '' && (
                   props.area.split(';').slice(0, 1).map((value, index) => (
                     <div
@@ -38,25 +47,68 @@ export function ResearchItem(props: Research) {
                     </div>
                   ))
                 )}
-            <Alert className="flex flex-1 gap-4 rounded-l-none">
-            <div className="h-full w-[110px] bg-cover bg-center bg-no-repeat rounded-md" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}></div>
+            <Alert className="flex p-0 flex-col flex-1 gap-4 rounded-l-none">
+            <div className="flex flex-col items-center">
+            <div className="z-[2] w-full absolute p-4 flex gap-3 justify-end">
+            <Button 
+             onClick={() => {
+                // Verifica se o pesquisador já está selecionado pelo nome
+                if (pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name)) {
+                  // Remove o pesquisador selecionado com o nome correspondente
+                  setPesquisadoresSelecionados(prev => prev.filter(pesquisador => pesquisador.name !== props.name));
+                } else {
+                  // Adiciona o novo pesquisador selecionado
+                  setPesquisadoresSelecionados(prev => [
+                    ...prev,
+                    {
+                      id: props.id,
+                      name: props.name,
+                      university: props.university,
+                      lattes_id: props.lattes_id,
+                      city: props.city,
+                      area: props.area,
+                      graduation: props.graduation,
+                    }
+                  ]);
+                }
+              }}
+            
+            size={'icon'} className={`hidden group-hover:flex transition-all h-8 w-8  ${
+                pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) && 'bg-red-500 hover:bg-red-600 text-white'
+              }`}>
 
-            <div className="flex gap-2 flex-col h-full justify-between ">
+{pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
+              <X size={16} className="" />
+            ) : (
+              <Plus size={16} className="" />
+            )}
+              </Button>
+            </div>
+            
+            <div className="h-full mt-8 border-4 border-white z-[1] min-w-20 max-w-20 bg-cover bg-center bg-no-repeat rounded-xl aspect-square" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}></div>
+            <div className="h-20  w-full absolute bg-cover bg-center bg-no-repeat rounded-tr-md bg-gray-400 backdrop-blur-md backdrop-brightness-150" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}>
+            
+            <div className="bg-[#000000]  bg-opacity-30 absolute backdrop-blur-sm w-full h-full rounded-tr-md"></div>
+            
+            </div>
+            </div>
+
+            <div className="flex gap-2 px-4 flex-col  w-full justify-between items-center ">
                 <div className="flex gap-2 flex-col justify-center">
-                <div className="flex items-center gap-3">
-                    <div className="flex gap-1 text-xs p-2 border items-center border-gray-300 dark:border-stone-700 rounded-md "><GraduationCap size={12}/>{props.graduation}</div>
+                
 
-                    <div className="flex gap-1 text-xs p-2 border items-center border-gray-300 dark:border-stone-700 rounded-md"><MapPin size={12}/>{props.city}</div>
+                <p className="font-medium text-center text-base">{props.name}</p>
+
+                <p className="text-xs flex  items-center gap-1"><Buildings size={12}/> {props.university}</p>
                 </div>
 
-                <p className="font-medium">{props.name}</p>
+                <div className="flex items-center gap-3 mt-4 mb-6">
+                    <div className="flex gap-1 text-sm  items-center "><GraduationCap size={12}/>{props.graduation}</div>
 
-                <p className="text-xs flex items-center gap-1"><Buildings size={12}/> {props.university}</p>
+                    <div className="flex gap-1 text-sm  items-center"><MapPin size={12}/>{props.city}</div>
                 </div>
 
-                <div className="flex gap-3">
-                    <p className=" font-bold text-xs text-blue-700">{props.among} ocorrências de {searchType == 'article' ? (`${props.articles} artigos`): searchType == 'book' ? (`${Number(props.book) + Number(props.book_chapters)} livros e capítulos`) : searchType == 'speaker' ? (`${props.patent} patentes`):('')}</p>
-                </div>
+               
             </div>
         </Alert>
         </div>

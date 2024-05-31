@@ -3,8 +3,8 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Button } from "../../components/ui/button"
-import { ArrowUpDown, Copy, MoreHorizontal } from "lucide-react"
-import { ArrowSquareOut, Buildings, Export, MapPin, Plus, ShareNetwork, X} from "phosphor-react"
+import { ArrowUpDown} from "lucide-react"
+import { Buildings,  MapPin, Plus,  X} from "phosphor-react"
 import { GraduationCap} from "lucide-react"
 import { useContext } from "react"
 import { UserContext } from "../../context/context"

@@ -1,14 +1,17 @@
 import { ChartLine, IdentificationBadge, Quotes } from "phosphor-react";
 
 type Research = {
-    h_index: number;
-    relevance_score: number;
-    works_count: number;
-    cited_by_count: number;
-    i10_index: number;
-    scopus: string;
+
     orcid:string
-    openalex: string
+  
+
+    h_index:string,
+    relevance_score:string,
+    works_count:string,
+    cited_by_count:string,
+    i10_index:string,
+    scopus:string,
+    openalex:string,
     
 }
 

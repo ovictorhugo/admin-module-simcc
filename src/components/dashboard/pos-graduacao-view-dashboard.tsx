@@ -42,6 +42,7 @@ import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { TablePosGraduateViewDashboard } from "./table-pos-graduate-dashboard";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
+import { Skeleton } from "../ui/skeleton";
   
 
 
@@ -57,7 +58,7 @@ export function PosGraducaoView() {
     const [visibleProgram, setVisibleProgram] = useState(false);
     const { onOpen } = useModal();
     const [typeVisu, setTypeVisu] = useState('block')
-
+    const [isLoading, setIsLoading] = useState(true)
     const urlGetPosGraduations = urlGeralAdm + `GraduateProgramRest/Query?institution_id=${user.institution_id}`
   
   console.log(urlGetPosGraduations)
@@ -78,6 +79,7 @@ export function PosGraducaoView() {
             const data = await response.json();
             if (data) {
                 setPosgraduations(data);
+                setIsLoading(false)
             }
           } catch (err) {
             console.log(err);
@@ -137,6 +139,17 @@ export function PosGraducaoView() {
 
     return(
       <>
+      <Alert className="mb-4 flex items-center justify-between">
+        <div className="flex gap-6 items-center">
+          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-blue-900 rounded-sm"></div>Doutorado</div>
+          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-blue-300 rounded-sm"></div>Mestrado</div>
+
+        </div>
+
+        <div className="flex items-end flex-col">
+          <p className="text-3xl font-bold">{posgraduations.length}</p> <p>Pós-graduações</p>
+        </div>
+      </Alert>
                           <HeaderResultTypeHome title="Programas de pós graduação" icon={<GraduationCap size={24} className="text-gray-400" />}>
                         <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
@@ -146,7 +159,27 @@ export function PosGraducaoView() {
                             <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
                         </HeaderResultTypeHome>
-                        {typeVisu=="block"?(  <ResponsiveMasonry className="mt-4"
+                        {typeVisu=="block"?(  
+                          isLoading ? (
+                            <ResponsiveMasonry className="mt-4"
+                            columnsCountBreakPoints={{
+                                350: 1,
+                                750: 2,
+                                900: 2,
+                                1200: 3
+                            }}
+                        >
+                                         <Masonry gutter="16px">
+                                          <Skeleton className="w-full h-[130px] rounded-md"/>
+                                          <Skeleton className="w-full h-[150px] rounded-md"/>
+                                          <Skeleton className="w-full h-[130px] rounded-md"/>
+                                          <Skeleton className="w-full h-[160px] rounded-md"/>
+                                          <Skeleton className="w-full h-[130px] rounded-md"/>
+                                          <Skeleton className="w-full h-[130px] rounded-md"/>
+                                          </Masonry>
+                                          </ResponsiveMasonry>
+                          ):(
+                            <ResponsiveMasonry className="mt-4"
       columnsCountBreakPoints={{
           350: 1,
           750: 2,
@@ -164,21 +197,28 @@ export function PosGraducaoView() {
         >
                  <div
                   
-                      className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${posgraduation.modality.includes('ACADÊMICO') ? 'bg-blue-300' : posgraduation.modality.includes('PROFISSIONAL') ? 'bg-blue-900' : 'bg-[#000]'} `}
+                      className={`h-full w-2 min-w-2 rounded-l-md dark:border-neutral-800 border whitespace-nowrap border-neutral-200 border-r-0 ${posgraduation.modality.includes('ACADÊMICO') ? 'bg-blue-300' : posgraduation.modality.includes('PROFISSIONAL') ? 'bg-blue-900' : 'bg-[#000]'} `}
                     >
                       
                     </div>
 
             <Alert className="flex flex-1 gap-4 rounded-l-none">
-            <div className="flex flex-col whitespace-nowrap">
-            <img className="w-12 h-auto object-cover object-center rounded-l-lg whitespace-nowrap" src={posgraduation.url_image} alt={posgraduation.name} />
            
-          </div>
           <div className="flex flex-col flex-1 justify-between w-full">
             <div className="flex flex-col justify-between">
-           {posgraduation.code != '' && (
+           <div className="flex gap-3 mb-3">
+          
+            <div className="flex flex-col whitespace-nowrap">
+            <img className="w-6 hidden lg:flex h-auto object-cover object-center rounded-l-lg whitespace-nowrap" src={posgraduation.url_image} />
+           
+          </div>
+
+          {posgraduation.code != '' ? (
              <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>{posgraduation.code}</div>
+           ):(
+            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>Sem código</div>
            )}
+           </div>
               <h2 className=" font-medium">{posgraduation.name}</h2>
              
             </div>
@@ -249,7 +289,13 @@ export function PosGraducaoView() {
 
      
       </Masonry>
-      </ResponsiveMasonry>):(<div className="mt-4"><TablePosGraduateViewDashboard PosGraduationsProps={posgraduations} /></div>)}
+      </ResponsiveMasonry>
+                          )
+                        
+                        
+                        
+                        
+                        ):(<div className="mt-2"><TablePosGraduateViewDashboard PosGraduationsProps={posgraduations} /></div>)}
        
     
        </>

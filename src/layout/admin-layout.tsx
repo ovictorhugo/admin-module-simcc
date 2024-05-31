@@ -5,9 +5,9 @@ import { Toaster } from "../components/ui/sonner";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-      <div className="h-full flex">
+      <div className="h-full flex ">
         <NavigationSidebar />
-        <main className="flex-1  flex flex-col">
+        <main className="flex-1  flex flex-col ">
           {/* Assuming Header is another component */}
           <Header />
           <div className="flex h-full">

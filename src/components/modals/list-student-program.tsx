@@ -37,7 +37,7 @@ import {
   PopoverTrigger,
 } from "../../components/ui/popover"
 import { DataTableModal } from "../componentsModal/data-table";
-import { columns } from "../componentsModal/columns-researchers-program";
+import { columns } from "../componentsModal/columns-student-program";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { v4 as uuidv4 } from 'uuid';

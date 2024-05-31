@@ -10,7 +10,7 @@ export default function DefaultLayout({
   }>) {
     return(
         <body className={cn(
-            " bg-gray-100 dark:bg-neutral-900 sm:overflow-x-auto sm:overflow-y-auto overflow-x-hidden overflow-y-hidden"
+            " bg-gray-100 dark:bg-neutral-900 "
             )}>
             <ThemeProvider
             attribute="class"

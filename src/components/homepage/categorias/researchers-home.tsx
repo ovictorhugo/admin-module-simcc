@@ -15,6 +15,7 @@ import {
     AccordionItem,
     AccordionTrigger,
   } from "../../../components/ui/accordion"
+
 import { Skeleton } from "../../ui/skeleton";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { useModalSidebar } from "../../hooks/use-modal-sidebar";
@@ -39,8 +40,18 @@ type Research = {
     software: string,
     brand: string,
     lattes_update: Date,
+
+    h_index:string,
+relevance_score:string,
+works_count:string,
+cited_by_count:string,
+i10_index:string,
+scopus:string,
+openalex:string,
   }
-  
+  interface ItemsSelecionados {
+    term:string
+  }
 
 export function ResearchersHome() {
     const { isOpen, type} = useModalResult();
@@ -48,6 +59,7 @@ export function ResearchersHome() {
     const [loading, isLoading] = useState(false)
     const [researcher, setResearcher] = useState<Research[]>([]); 
     const [typeVisu, setTypeVisu] = useState('block')
+    const { itemsSelecionados, urlGeral, searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta, navbar} = useContext(UserContext);
 
     const { mapModal, setMapModal, pesquisadoresSelecionados} = useContext(UserContext)
     
@@ -55,26 +67,77 @@ export function ResearchersHome() {
       localStorage.setItem('pesquisadoresSelecionados', JSON.stringify(pesquisadoresSelecionados));
     }, [pesquisadoresSelecionados])
 
+
+    function formatTerms(valores: { term: string }[]): string {
+      let result = '';
+      let tempTerms: string[] = [];
+    
+      valores.forEach(item => {
+        let term = item.term.trim();
+    
+        if (term.endsWith(';')) {
+          // Remove the final ';' and add the term to the temporary array
+          tempTerms.push(term.slice(0, -1));
+        } else if (term.endsWith('|')) {
+          // Remove the final '|' and add the term to the temporary array
+          tempTerms.push(term.slice(0, -1));
+    
+          // Add the temporary array to the result as a group and clear the array
+          if (tempTerms.length > 0) {
+            result += '(' + tempTerms.join(';') + ')' + '|';
+            tempTerms = [];
+          }
+        } else {
+          // Handle terms that don't end with ';' or '|'
+          if (tempTerms.length > 0) {
+            result += '(' + tempTerms.join(';') + ')' + '|';
+            tempTerms = [];
+          }
+          result += term + '|';
+        }
+      });
+    
+      // Handle any remaining terms in the tempTerms array
+      if (tempTerms.length > 0) {
+        result += '(' + tempTerms.join(';') + ')';
+      } else {
+        // Remove the last '|' if it exists
+        if (result.endsWith('|')) {
+          result = result.slice(0, -1);
+        }
+      }
+    
+      return result;
+    }
+  
+  
+    const resultadoFormatado = valoresSelecionadosExport;
+    console.log(resultadoFormatado)
+
+
+
+    console.log('valoreees form', resultadoFormatado)
+
     const isModalOpen = isOpen && type === "researchers-home";
 
-    const { urlGeral, searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta, navbar} = useContext(UserContext);
+ 
 
     let urlTermPesquisadores = ``
 
     if (searchType == 'name') {
-        urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport.split(" ").join(";")}${valorDigitadoPesquisaDireta.split(" ").join(";")}`;
+        urlTermPesquisadores = `${urlGeral}/researcherName?name=${resultadoFormatado}${valorDigitadoPesquisaDireta.split(" ").join(";")}`;
     } else if (searchType == 'article') {
-        urlTermPesquisadores = `${urlGeral}researcher?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=&type=ARTICLE&graduate_program_id=`
+        urlTermPesquisadores = `${urlGeral}researcher?terms=${resultadoFormatado}${valorDigitadoPesquisaDireta}&university=&type=ARTICLE&graduate_program_id=`
     } else if (searchType == 'book') {
-        urlTermPesquisadores = `${urlGeral}researcherBook?term=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=&type=BOOK`
+        urlTermPesquisadores = `${urlGeral}researcherBook?term=${resultadoFormatado}${valorDigitadoPesquisaDireta}&university=&type=BOOK`
     } else if (searchType == 'area') {
-        urlTermPesquisadores = `${urlGeral}/researcherArea_specialty?area_specialty=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=&graduate_program_id=`;
+        urlTermPesquisadores = `${urlGeral}/researcherArea_specialty?area_specialty=${resultadoFormatado}${valorDigitadoPesquisaDireta}&university=&graduate_program_id=`;
     } else if (searchType == 'speaker') {
-        urlTermPesquisadores = `${urlGeral}researcherParticipationEvent?term=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=`
+        urlTermPesquisadores = `${urlGeral}researcherParticipationEvent?term=${resultadoFormatado}${valorDigitadoPesquisaDireta}&university=`
     } else if (searchType == 'patent') {
-        urlTermPesquisadores = `${urlGeral}/researcherPatent?term=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&graduate_program_id=&university=`;
+        urlTermPesquisadores = `${urlGeral}/researcherPatent?term=${resultadoFormatado}${valorDigitadoPesquisaDireta}&graduate_program_id=&university=`;
     } else if (searchType == 'abstract') {
-        urlTermPesquisadores = `${urlGeral}researcher?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=&type=ABSTRACT&graduate_program_id=`
+        urlTermPesquisadores = `${urlGeral}researcher?terms=${resultadoFormatado}${valorDigitadoPesquisaDireta}&university=&type=ABSTRACT&graduate_program_id=`
       }
 
       console.log(urlTermPesquisadores)
@@ -157,10 +220,10 @@ export function ResearchersHome() {
                     loading ? (
                       <ResponsiveMasonry
                         columnsCountBreakPoints={{
-                            350: 1,
-                            750: 2,
-                            900: 3,
-                            1200: navbar || isOpenSidebar || mapModal ? 3 : 4
+                          350: 1,
+                          750: 2,
+                          900: 3,
+                          1200: 3
                         }}
                     >
                                      <Masonry gutter="16px">

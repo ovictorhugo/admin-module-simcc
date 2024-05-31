@@ -49,10 +49,10 @@ export function Header() {
     return(
         <header className={`h-20 z-[3] flex justify-between  items-center mr-[72px] sticky top-0  ${posGraduation == true ? ('bg-transparent'):('dark:bg-neutral-900 bg-gray-100')}`}>
             <div className="  flex items-center h-12 gap-4">
-            <div className="flex gap-2 items-center h-full justify-center ">
+            <div className="flex gap-3 items-center h-full justify-center ">
             <Link to={"/"} className="h-[24px]  " onClick={() => handleClick()} >{(theme ==  'dark' ) ? (<LogoWhite />):(<LogoSimcc />)}</Link>
 
-            <Separator orientation="vertical" />
+            <div className="h-6 w-[1px] bg-gray-500"></div>
 
             <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
             </div>

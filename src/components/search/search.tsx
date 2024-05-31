@@ -12,7 +12,7 @@ import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { SelectTypeInstitutionSearch } from "./select-type-institution-search";
 const API_KEY = import.meta.env.VITE_API_KEY
 
@@ -56,14 +56,8 @@ export function Search() {
   useEffect(() => {
     setInputMaria(input)
     
-    if(maria) {
-        
-    } 
-    else if (valoresSelecionadosExport.length > 0) {
-        onOpenHomepage('result-home')
-    } else {
-        onOpenHomepage('initial-home')
-    }
+   
+   
   }, [input, maria]);
 
 const handlePopUppesquisa = () => {
@@ -144,17 +138,13 @@ async function processMessageToChatGPT(messageObject:any) {
     })
 }
 
-
+const history = useNavigate();
 
 const handlePesquisa = () => {
     if(maria && inputMaria.length > 1 && !posGrad) {
         handleSend(inputMaria)
-        onOpenHomepage('result-home')
-    } else if (posGrad) {
-        onOpenHomepage('graduation-home')
-    } else {
-      onOpenHomepage('initial-home')
-    }
+        history('/resultados')
+    } 
 }
 
 

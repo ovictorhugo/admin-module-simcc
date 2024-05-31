@@ -17,6 +17,8 @@ import { PesoProducoes } from "./peso-producoes";
 import { GrupoPesquisaHeader } from "./grupo-pesquisa-header";
 import { PesoProducoesHeader } from "./peso-producao-header";
 import { GrupoPesquisaView } from "./grupo-pesquisa";
+import { ApacheViewDashboard } from "./apache-view-dashboard";
+import { NctiHeader } from "./ncti-header";
 
 
 export function GeralViewDashboard() {
@@ -57,6 +59,10 @@ const {user} = useContext(UserContext)
    {value == 'peso-producoes' && (
           <PesoProducoesHeader/>
         )}
+
+{value == 'nct' && (
+          <NctiHeader/>
+        )}
         
         <TabsList className="my-4">
          <TabsTrigger value="geral" onClick={() => setValue('geral')}>Visão geral</TabsTrigger>
@@ -64,13 +70,14 @@ const {user} = useContext(UserContext)
          <TabsTrigger value="pos-graduacoes" onClick={() => setValue('pos-graduacoes')}>Pós-graduações</TabsTrigger>
          <TabsTrigger value="grupos-pesquisa" onClick={() => setValue('grupos-pesquisa')}>Grupos de pesquisas</TabsTrigger>
          {(user.state === 'admin' || user.state === 'master') && (<TabsTrigger value="peso-producoes" onClick={() => setValue('peso-producoes')}>Peso de produções</TabsTrigger>)}
+         <TabsTrigger value="nct" onClick={() => setValue('nct')}>NCTI's</TabsTrigger>
       </TabsList>
 
         
-         <TabsContent value="geral">
-
-         oi
+         <TabsContent value="geral" className="m-0 flex flex-1 ">
+         <ApacheViewDashboard/>
          </TabsContent>
+
          <TabsContent value="pesquisadores" className="m-0">
             
            <TableResearcherViewDashboard/>
@@ -97,20 +104,25 @@ const {user} = useContext(UserContext)
 </TabsContent>
 )}
 
+<TabsContent value="nct">
+
+o
+</TabsContent>
+
          </Tabs>
 
-         {!isOpenSidebar && value== 'geral' && (
-            <ScrollArea  className="ml-6 lg:max-w-[365px] w-full sticky top-0">
+         {(!isOpenSidebar && value== 'geral') && (
+            <div  className="ml-6 lg:max-w-[365px] w-full sticky top-20 flex right-0">
                <div className="  w-full">
             <GraduateProgramDashboard/>
             
-            <div className="mt-6 flex h-full flex-1">
+            <div className="mt-6 flex  flex-1">
             <AddAdmin/>
             </div>
 
 
             </div>
-            </ScrollArea>
+            </div>
          )}
 
           

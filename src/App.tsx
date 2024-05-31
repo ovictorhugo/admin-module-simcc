@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Home } from './pages/Home'
 import { BrowserRouter as Router, Routes, Route, Navigate, } from 'react-router-dom';
 import  { UserContext }  from '../src/context/context'
@@ -31,18 +31,19 @@ interface PesquisadoresSelecionados {
   graduation: string,
 }
 
-import { CookiesProvider, useCookies } from 'react-cookie'
+import { CookiesProvider} from 'react-cookie'
 import { News } from './pages/News';
 import { Baremas } from './pages/Baremas';
 import { PosGraduation } from './pages/PosGraduation';
+import { Resultados } from './pages/Resultados';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [navbar, setNavbar] = useState(false);
   const [user, setUser] = useState<User>({  state: '', email: '', name: '', img_url: '', institution_id: '',...{} } as User);
 
 
-  const [urlGeral, setUrlGeral] = useState('https://simcc.uesc.br:8080/');
-  const [urlGeralAdm, setUrlGeralAdm] = useState('http://simcc.uesc.br:5000/');
+  const [urlGeral, setUrlGeral] = useState('https://simcc.uesc.br:5002/');
+  const [urlGeralAdm, setUrlGeralAdm] = useState('https://simcc.uesc.br:5000/');
   const [mapModal, setMapModal] = useState(false)
 
   const [searchType, setSearchType] = useState('');
@@ -121,6 +122,7 @@ const [idDocumentBarema, setIdDocumentBarema] = useState('')
       <DefaultLayout>
       <Routes>
         <Route path='/' element={<Home/>}/>
+        <Route path='/resultados/:searchId?/:searchTypeId?' element={<Resultados/>}/>
 
         <Route path='/pos-graduacao/:graduationId?' element={<PosGraduation/>}/>
        

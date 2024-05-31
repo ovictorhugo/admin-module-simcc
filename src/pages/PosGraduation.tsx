@@ -5,7 +5,7 @@ import { UserContext } from "../context/context";
 import { GeralProvider } from "../components/provider/geral-provider";
 import { useModalHomepage } from "../components/hooks/use-modal-homepage";
 import { useLocation, useParams } from "react-router-dom";
-import { useModal } from "../components/hooks/use-modal-store";
+
 
 export function PosGraduation() {
     const { onOpen } = useModalHomepage();
@@ -13,7 +13,7 @@ export function PosGraduation() {
 
     const location = useLocation();
 
-    const {  programId } = useParams<{
+    const {  programId,  } = useParams<{
         programId:string
       }>();
 

@@ -147,7 +147,7 @@ export function AddAdmin() {
                     <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/> <Button onClick={() => handleSubmit()} className="dark:text-white">Cadastrar</Button>
                    </div>
 
-                   <Separator orientation="horizontal" decorative={true} className="w-full"/>
+                   <div className="h-px my-6 w-full bg-gray-300 dark:bg-gray-700"></div>
 
                    <p className="text-zinc-500 text-sm">Pessoas com acesso</p>
 

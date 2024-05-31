@@ -45,6 +45,7 @@ interface Csv {
   import { getFirestore,  collection, getDocs } from 'firebase/firestore';
   import { query,  where } from 'firebase/firestore';
 import { useModalHomepage } from "../hooks/use-modal-homepage";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function SearchModal() {
 
@@ -134,7 +135,10 @@ export function SearchModal() {
   
       setItensSelecionadosPopUp(prevItems => {
         if (hasSameType) {
+          setSearchType(newSearchType)
             return [...prevItems, { term: value+';' }];
+        } else {
+          setSearchType(newSearchType)
         }
         
         return [{ term: value+';' }];
@@ -143,20 +147,73 @@ export function SearchModal() {
       setSearchType(newSearchType);
   };
 
+  const history = useNavigate();
+
+  function formatTerms(valores: { term: string }[]): string {
+    let result = '';
+    let tempTerms: string[] = [];
+  
+    valores.forEach(item => {
+      let term = item.term.trim();
+  
+      if (term.endsWith(';')) {
+        // Remove the final ';' and add the term to the temporary array
+        tempTerms.push(term.slice(0, -1));
+      } else if (term.endsWith('|')) {
+        // Remove the final '|' and add the term to the temporary array
+        tempTerms.push(term.slice(0, -1));
+  
+        // Add the temporary array to the result as a group and clear the array
+        if (tempTerms.length > 0) {
+          result += '(' + tempTerms.join(';') + ')' + '|';
+          tempTerms = [];
+        }
+      } else {
+        // Handle terms that don't end with ';' or '|'
+        if (tempTerms.length > 0) {
+          result += '(' + tempTerms.join(';') + ')' + '|';
+          tempTerms = [];
+        }
+        result += term + '|';
+      }
+    });
+  
+    // Handle any remaining terms in the tempTerms array
+    if (tempTerms.length > 0) {
+      result += '(' + tempTerms.join(';') + ')';
+    } else {
+      // Remove the last '|' if it exists
+      if (result.endsWith('|')) {
+        result = result.slice(0, -1);
+      }
+    }
+  
+    return result;
+  }
+
+
+
   const handlePesquisaFinal = () => {
     if(itemsSelecionadosPopUp.length > 0) {
       setItensSelecionados(itemsSelecionadosPopUp)
+      setValoresSelecionadosExport(formatTerms(itemsSelecionadosPopUp))
+      setInput('')
+    onClose()
+    history(`/resultados/${formatTerms(itemsSelecionadosPopUp)}/${searchType}`)
     } else {
       setValorDigitadoPesquisaDireta(input)
+      onClose()
+      history(`/resultados/${input}/${searchType}`)
+      setInput('')
     }
-    setInput('')
-    onClose()
-    onOpenHomepage('result-home')
+    
   }
 
   ///open alex
   const urlOpenAlex =`https://api.openalex.org/authors?filter=display_name.search:${input}`;
   
+  
+
 
   useMemo(() => {
     const fetchData = async () => {
@@ -248,6 +305,7 @@ console.log('fawefwef', urlOpenAlex)
       useEffect(() => {
         const joinedTerms = itemsSelecionados.map(item => item.term).join('|');
         setValoresSelecionadosExport(joinedTerms);
+        console.log('valoresExport', valoresSelecionadosExport)
       }, [itemsSelecionados]);     
       
       

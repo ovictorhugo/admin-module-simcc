@@ -38,6 +38,14 @@ type Research = {
     software: string,
     brand: string,
     lattes_update: Date,
+
+    h_index:string,
+    relevance_score:string,
+    works_count:string,
+    cited_by_count:string,
+    i10_index:string,
+    scopus:string,
+    openalex:string,
   }
 
   import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
@@ -165,6 +173,14 @@ export function ResearcherModal() {
                     brand={user.brand}
                     lattes_update={user.lattes_update}
                     onResearcherUpdate={handleResearcherUpdate}
+
+                    h_index={user.h_index}
+                    relevance_score={user.relevance_score}
+                    works_count={user.works_count}
+                    cited_by_count={user.cited_by_count}
+                    i10_index={user.i10_index}
+                    scopus={user.scopus}
+                    openalex={user.openalex}
                     />
 
                    </div>
@@ -201,7 +217,7 @@ export function ResearcherModal() {
 
         <div className="w-[350px] gap-12 flex flex-col sticky"> 
 
-        {researcherData.map((user) => {
+        {researcher.slice(0, 1).map((user) => {
                       return(
                         <InformacoesGeraisResearcher
                         h_index={user.h_index}

@@ -3,14 +3,13 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Button } from "../../components/ui/button"
-import { ArrowUpDown, Copy, MoreHorizontal } from "lucide-react"
-import { ArrowSquareOut, Buildings, Export, MapPin, Plus, ShareNetwork, Trash, X} from "phosphor-react"
-import { GraduationCap} from "lucide-react"
-import { useContext, useEffect, useState } from "react"
-import { UserContext } from "../../context/context"
-import { toast } from "sonner"
+import { ArrowUpDown } from "lucide-react"
+import {  Trash } from "phosphor-react"
+
+
+
 import { useModal } from "../hooks/use-modal-store"
-import { fetchDataResearcherProgram } from "../modals/function-list-researcher-program"
+
 //import { UserContext } from "../../../../context/context"
 
 
@@ -40,7 +39,7 @@ export const columns: ColumnDef<Research>[] = [
     cell: ({ row }) => {
       
       
-      const { urlGeral} = useContext(UserContext)
+    
       return <div className="flex gap-3 items-center" > {row.getValue("name")}</div>
     },
   },

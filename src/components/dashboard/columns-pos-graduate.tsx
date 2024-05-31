@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu"
 import {  MoreHorizontal, Trash, UserCheck } from "lucide-react"
-import { ArrowSquareOut, Export, PencilSimple} from "phosphor-react"
+import { ArrowSquareOut, Export, PencilSimple, Student} from "phosphor-react"
 import {  Eye, EyeSlash, Hash, MapPin, Star } from "phosphor-react"; 
 import {GraduationCapIcon } from "lucide-react";
 import { toast } from "sonner"
@@ -43,7 +43,11 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
 
  {
         accessorKey: "name",
-        header: "Nome",
+        header: "Nome do programa",
+        cell: ({ row }) => {
+
+          return <div className="flex gap-2 items-center"> <img className="w-4  object-cover object-center  whitespace-nowrap" src={row.original.url_image}  /> {row.getValue("name")}</div>
+        }
       },
       {
         accessorKey: "code",
@@ -172,8 +176,13 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
             visible:String(row.original.visible)
             
             })}  ><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('add-researcher-graduation', {id_delete:row.original.graduate_program_id , name:row.original.name})}><UserCheck className="h-4 w-4" />
-         Editar docentes 
+     
+         <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('add-researcher-graduation', {graduate_program_id:row.original.graduate_program_id , name:row.original.name})}><UserCheck className="h-4 w-4" />
+         Docentes do programa
+         </DropdownMenuItem>
+
+         <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('list-student-program', {graduate_program_id:row.original.graduate_program_id , name:row.original.name})}><Student className="h-4 w-4" />
+         Discentes do programa
          </DropdownMenuItem>
 
           <DropdownMenuSeparator />

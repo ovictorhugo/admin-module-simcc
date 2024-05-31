@@ -18,7 +18,7 @@ export function SelectTypeSearch() {
 
         return(
         <div className="max-sm:max-w-[98px]">
-            <Select defaultValue={searchType} onValueChange={(value) => setSearchType(value)}>
+            <Select defaultValue={searchType} value={searchType} onValueChange={(value) => setSearchType(value)}>
             <SelectTrigger className="w-full whitespace-nowrap">
                 <SelectValue placeholder="Escolha o tipo de pesquisa" />
             </SelectTrigger>
