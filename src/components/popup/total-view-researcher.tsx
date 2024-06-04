@@ -16,7 +16,7 @@ export function TotalViewResearcher(props:Props) {
     
            <div>
             <div className=" font-medium text-2xl mb-6 pr-12">Total de produção científica e técnica</div>
-             <div className="gap-6 grid grid-cols-2">
+             <div className="gap-6 grid xl:grid-cols-2 md:grid-cols-6 grid-cols-3">
             <Alert className="flex items-center gap-3">
             <Quotes size={16} className="" />
                 <div>

@@ -94,12 +94,12 @@ export function ResearchItem(props: Research) {
             </div>
 
             <div className="flex gap-2 px-4 flex-col  w-full justify-between items-center ">
-                <div className="flex gap-2 flex-col justify-center">
+                <div className="flex gap-2 flex-col items-center justify-center">
                 
 
                 <p className="font-medium text-center text-base">{props.name}</p>
 
-                <p className="text-xs flex  items-center gap-1"><Buildings size={12}/> {props.university}</p>
+                <p className="text-xs flex text-center w-full items-center gap-1"><Buildings size={12}/> {props.university}</p>
                 </div>
 
                 <div className="flex items-center gap-3 mt-4 mb-6">

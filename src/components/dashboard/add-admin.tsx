@@ -79,7 +79,7 @@ export function AddAdmin() {
           const fetchData = async () => {
               try {
                   const userDocsRef = collection(db, 'institution');
-                  const userDocsQuery = query(userDocsRef, where('state', '==', 'colaborator'));
+                  const userDocsQuery = query(userDocsRef, where('institution_id', '==', user.institution_id));
                   
                   // Subscribe to a real-time snapshot of the documents
                   const unsubscribe = onSnapshot(userDocsQuery, async (snapshot) => {
@@ -138,6 +138,8 @@ export function AddAdmin() {
             console.error('Erro ao remover o administrador:', error);
         }
     };
+
+    console.log('col', colaboradores)
 
     return(
         <Alert className="flex flex-col ">

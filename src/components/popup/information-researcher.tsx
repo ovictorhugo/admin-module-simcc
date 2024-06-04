@@ -123,7 +123,7 @@ const handleDownloadJson = async () => {
 
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col mt-8">
 
           <div className="flex justify-between items-center w-full"> 
        
@@ -246,22 +246,21 @@ const handleDownloadJson = async () => {
                   )}
   
 
-            
-<div className=" flex gap-3 items-center">
-{(props.orcid !== "None" && props.orcid !== '')  && (
+  {(props.orcid != '0' )  && (
     <Link  to={props.orcid ? (props.orcid):(`https://orcid.org/${props.orcid}`)} target="_blank" className="bg-[#A6CE39] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
         <IdentificationBadge size={12} className="" />
         Orcid: {props.orcid ? props.orcid.replace(/[^\d-]/g, '') : props.orcid}
     </Link>
 )}
 
-{props.scopus != null && (
+
+{props.scopus != '' && (
     <Link  to={props.scopus} target="_blank" className="bg-[#FF8200] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
         <IdentificationBadge size={12} className="" />
         Scopus
     </Link>
 )}
-</div>
+
   
   
  
@@ -273,12 +272,8 @@ const handleDownloadJson = async () => {
 
            </div>
 
-            <div className={isVisible ? "h-auto transition-all" : "h-[60px] overflow-hidden transition-all"}>
-            <p className="text-gray-400 text-sm text-justify ">{props.abstract}</p>
-            </div>
-
-            {apiVisible && (
-              <div className="w-full bg-slate-100 px-4 py-2 rounded-md text-xs mt-4 flex gap-3 items-center justify-between">
+           {apiVisible && (
+              <div className="w-full bg-slate-100 px-4 py-2 rounded-md text-xs mb-4 flex gap-3 items-center justify-between">
                 <div className="flex items-center gap-3"><BracketsCurly className="h-4 w-4" />{urlApi}</div>
                 <Button onClick={() => navigator.clipboard.writeText(urlApi)} variant="ghost" className="h-8 w-8 p-0">
               <Copy className="h-4 w-4" />
@@ -286,13 +281,20 @@ const handleDownloadJson = async () => {
               </div>
             )}
 
+
+            <div className={isVisible ? "h-auto transition-all" : "h-[60px] overflow-hidden transition-all"}>
+            <p className="text-gray-400 text-sm text-justify ">{props.abstract}</p>
+            </div>
+
+          
+
             <div className="flex gap-4 items-center mt-4">
               <div className={`${!isVisible && ('animate-bounce')} cursor-pointer rounded-md hover:bg-gray-100 h-8 w-8 transition-all flex items-center justify-center`}>
                 <CaretDown onClick={() => setIsVisible(!isVisible)} size={24} className={isVisible ? "rotate-180 transition-all  text-gray-400" : "text-gray-400  transition-all"} />
               </div>
             </div>
 
-            <Separator/>
+            <div className="h-[0.5px] my-6 w-full bg-neutral-200 dark:bg-neutral-800"></div>
 
           </div>
         </div>

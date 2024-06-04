@@ -83,7 +83,7 @@ export function ArticleItem(props:Articles) {
                 <Alert className="rounded-l-none flex flex-col justify-between">
                     <div>
                         <div>
-                           <h3 className="font-semibold mb-4 ">{props.name_periodical}</h3>
+                           <h3 className="font-semibold mb-4 ">{props.name_periodical}{props.magazine}</h3>
                             <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">
                               {normalizedTitle
       .split(/[\s.,;?!]+/)

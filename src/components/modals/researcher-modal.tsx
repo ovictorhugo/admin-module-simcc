@@ -11,7 +11,7 @@ import { useModal } from "../hooks/use-modal-store";
     DrawerTrigger,
   } from "../../components/ui/drawer"
 import { Button } from "../ui/button";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { InformationResearcher } from "../popup/information-researcher";
 import { useContext } from "react";
@@ -56,6 +56,7 @@ import { TotalViewResearcher } from "../popup/total-view-researcher";
 import { InformacoesGeraisResearcher } from "../popup/informacoes-gerais-researcher";
 import { ArticlesResearcherPopUp } from "../popup/articles-researcher";
 import { BooksResearcherPopUp } from "../popup/book-researcher";
+import { ProducaoTecnicaResearcherPopUp } from "../popup/producao-tecnica-researcher";
 
 type ResearchOpenAlex = {
   h_index: number;
@@ -86,8 +87,8 @@ export function ResearcherModal() {
     const [researcher, setResearcher] = useState<Research[]>([]); 
     const [loading, isLoading] = useState(false)
     const {name} = data
-    const { urlGeral } = useContext(UserContext);
-    console.log("Context:", useContext(UserContext));
+    const { urlGeral, itemsSelecionados, itemsSelecionadosPopUp, setItensSelecionadosPopUp, searchType } = useContext(UserContext);
+  
 
     const [researcherData, setResearcherData] = useState<ResearchOpenAlex[]>([]);
 
@@ -102,6 +103,10 @@ export function ResearcherModal() {
     if(typeModal === "researcher-modal") {
       urlTermPesquisadores = urlGeral + `researcherName?name=${name != null && (name.split(' ').join(';'))}`;
     }
+
+    useMemo(() => {
+setItensSelecionadosPopUp(itemsSelecionados)
+    }, [itemsSelecionados]);
 
     useMemo(() => {
         const fetchData = async () => {
@@ -133,20 +138,35 @@ export function ResearcherModal() {
 
         console.log('reseracher DATAAA', researcherData)
 
+        useEffect(() => {
+          if(searchType == 'article' || searchType == 'name' || searchType == 'abstract' || searchType == 'area') {
+            setValue('article')
+          } else if(searchType == 'book') {
+            setValue('book')
+          } else if(searchType == 'patent') {
+            setValue('producao-tecnica')
+          } else if(searchType == 'patente') {
+            setValue('producao-tecnica')
+          } else if(searchType == 'speaker') {
+            setValue('speaker')
+          }
+        }, [isOpen]);
         
 
     return(
         <>
-        <Drawer open={isModalOpen} onClose={onClose} snapPoints={[0.43, 0.88]} fadeFromIndex={0}  >
-        <DrawerContent onInteractOutside={onClose} >
+        <Drawer open={isModalOpen} onClose={onClose}    >
+        <DrawerContent onInteractOutside={onClose} className={`max-h-[88%]`} >
         {researcher.slice(0, 1).map((user) => {
                 return(
                   <div className="w-full flex justify-center ">
-            <div className="bg-cover bg-center bg-no-repeat h-28 w-28 bg-white dark:bg-neutral-950 rounded-2xl mb-3 border-4 border-white dark:border-neutral-950  relative  top-[-75px] " style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${user.id}) ` }}></div>
+            <div className="bg-cover bg-center bg-no-repeat h-28 w-28 bg-white dark:bg-neutral-950 rounded-2xl mb-3 border-4 border-white dark:border-neutral-950  absolute top-[-55px]   " style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${user.id}) ` }}></div>
           </div>
                   )
                 })}
-        <ScrollArea className="h-screen px-16 top-[-75px]" >
+       <div className="overflow-y-auto">
+      
+        <div className=" px-16 " >
         <DrawerHeader className="p-0">
             {researcher.slice(0, 1).map((user) => {
                 return(
@@ -187,18 +207,18 @@ export function ResearcherModal() {
                 )
             })}
 
-<div className="flex gap-6">
+<div className="flex gap-6 xl:flex-row flex-col-reverse">
 <div className="w-full flex-1">
         <Tabs defaultValue="articles" value={value} className="">
   <TabsList className="mb-6">
-    <TabsTrigger value="articles" onClick={() => setValue('articles')} className="flex gap-2 items-center"> <Quotes size={16} className="" />Artigos</TabsTrigger>
+    <TabsTrigger value="article" onClick={() => setValue('article')} className="flex gap-2 items-center"> <Quotes size={16} className="" />Artigos</TabsTrigger>
     <TabsTrigger value="book" onClick={() => setValue('book')} className="flex gap-2 items-center"><File size={16} className="" />Livros e capítulos</TabsTrigger>
     <TabsTrigger value="producao-tecnica" onClick={() => setValue('producao-tecnica')} className="flex gap-2 items-center"><Stamp size={16} className="" />Produção técnica</TabsTrigger>
     <TabsTrigger value="relatorio-tecnico" onClick={() => setValue('relatorio-tecnico')} className="flex gap-2 items-center"><Files size={16} className="" />Relatório técnico</TabsTrigger>
     <TabsTrigger value="orientacoes" onClick={() => setValue('orientacoes')} className="flex gap-2 items-center"><Student size={16} className="" />Orientações</TabsTrigger>
-    <TabsTrigger value="participacao-eventos" onClick={() => setValue('participacao-eventos')} className="flex gap-2 items-center"><Ticket size={16} className="" />Participação em eventos</TabsTrigger>
+    <TabsTrigger value="speaker" onClick={() => setValue('speaker')} className="flex gap-2 items-center"><Ticket size={16} className="" />Participação em eventos</TabsTrigger>
   </TabsList>
-  <TabsContent value="articles">
+  <TabsContent value="article">
   {researcher.slice(0, 1).map((user) => {
                 return(
                   <ArticlesResearcherPopUp name={String(user.id)}/>
@@ -212,10 +232,18 @@ export function ResearcherModal() {
                   )
                 })}
   </TabsContent>
+
+  <TabsContent value="producao-tecnica">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                  <ProducaoTecnicaResearcherPopUp name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
 </Tabs>
         </div>
 
-        <div className="w-[350px] gap-12 flex flex-col sticky"> 
+        <div className="xl:w-[350px] w-full gap-12 flex flex-col sticky"> 
 
         {researcher.slice(0, 1).map((user) => {
                       return(
@@ -265,7 +293,8 @@ export function ResearcherModal() {
         <DrawerFooter>
           
         </DrawerFooter>
-        </ScrollArea>
+        </div>
+       </div>
         
         </DrawerContent>
         </Drawer>

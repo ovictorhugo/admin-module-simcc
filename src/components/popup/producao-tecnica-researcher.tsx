@@ -1,6 +1,22 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 
 
+type Publicacao = {
+    id: string,
+    doi: string,
+    name_periodical: string,
+    qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "SQ" | "NP",
+    title: string,
+    year: string,
+    color: string,
+    researcher: string,
+    lattes_id: string,
+    magazine: string,
+    lattes_10_id: string,
+    jcr_link: string,
+    jif: string
+    researcher_id: string
+  }
 
   type Livros = {
     id: string,
@@ -8,6 +24,15 @@ import { useContext, useEffect, useMemo, useState } from "react";
     year: string,
     isbn: string,
     publishing_company: string
+  }
+
+  type Patente = {
+    id: string,
+  grant_date: string,
+  title: string,
+  year: string,
+  financing: string,
+  project_name: string
   }
 
   import {
@@ -20,14 +45,15 @@ import { useContext, useEffect, useMemo, useState } from "react";
   import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { Skeleton } from "../ui/skeleton";
 
-import { ChartBar,  SquaresFour, Rows, Book, X, ArrowUDownLeft, Books } from "phosphor-react";
+import { ChartBar, Quotes, SquaresFour, Rows, Book, X, ArrowUDownLeft, Books, Copyright, StripeLogo, Code } from "phosphor-react";
 
 import { Button } from "../ui/button";
 import { UserContext } from "../../context/context";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { GraficoArticleHome } from "../homepage/categorias/articles-home/grafico-articles-home";
 import { TableReseracherArticleshome } from "../homepage/categorias/articles-home/table-articles";
-
+import { FilterArticlePopUp } from "./filters-articles-popup";
+import { ArticleBlockPopUp } from "./articles-block-popup";
 import { BookBlockPopUp } from "./book-block-popup";
 import { FilterYearPopUp } from "./filters-year-popup";
 
@@ -41,24 +67,21 @@ type Props = {
   name:string
 }
 
-interface ItemsSelecionados {
-  term:string
-}
-
-export function BooksResearcherPopUp(props:Props) {
-  const [itemsSelecionadosCap , setItensSelecionadosCap] = useState<ItemsSelecionados[]>([])
+export function ProducaoTecnicaResearcherPopUp(props:Props) {
+  
 
     const {urlGeral, valoresSelecionadosExport, navbar, searchType, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados} = useContext(UserContext)
   
    
     const [loading, isLoading] = useState(false)
     const [loading2, isLoading2] = useState(false)
+    const [loading3, isLoading3] = useState(false)
     const [distinct, setDistinct] = useState(false)
-    const [publicacoes, setPublicacoes] = useState<Livros[]>([]);
+    const [publicacoes, setPublicacoes] = useState<Patente[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')
-    const [capLivros, setCapLivros] = useState<Livros[]>([]);
-    const [filters, setFilters] = useState<Filter[]>([]);
 
+    const [filters, setFilters] = useState<Filter[]>([]);
+    const [software, setSoftware] = useState<Livros[]>([]);
     // Função para lidar com a atualização de researcherData
     const handleResearcherUpdate = (newResearcherData: Filter[]) => {
       setFilters(newResearcherData);
@@ -114,11 +137,12 @@ export function BooksResearcherPopUp(props:Props) {
          
 
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
-    const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
-    let urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=${props.name}&year=${yearString}&term=`;
+    
 
-    if(searchType == "book") {
-        urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=${props.name}&year=${yearString}&term=${resultadoFormatado}`;
+    let urlTermPublicacoes = `${urlGeral}patent_production_researcher?researcher_id=${props.name}&year=${yearString}&term=`;
+
+    if(searchType == "patent") {
+        urlTermPublicacoes = `${urlGeral}patent_production_researcher?researcher_id=${props.name}&year=${yearString}&term=${resultadoFormatado}`;
     }
    
     useMemo(() => {
@@ -148,45 +172,69 @@ export function BooksResearcherPopUp(props:Props) {
         }, [ urlTermPublicacoes]);
 
 
-        let urlTermCap = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.name}&year=${yearString}&term=`
+        //softaewra
+        let urlTermSoftware = `${urlGeral}software_production_researcher?researcher_id=${props.name}&year=${yearString}`;
 
-        if(searchType == "book") {
-            urlTermCap = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.name}&year=${yearString}&term=${formatTerms(itemsSelecionadosCap)}`
-        }
-       
         useMemo(() => {
-            const fetchData = async () => {
-                try {
-                  isLoading2(true)
-                  const response = await fetch( urlTermCap, {
-                    mode: "cors",
-                    headers: {
-                      "Access-Control-Allow-Origin": "*",
-                      "Access-Control-Allow-Methods": "GET",
-                      "Access-Control-Allow-Headers": "Content-Type",
-                      "Access-Control-Max-Age": "3600",
-                      "Content-Type": "text/plain",
-                    },
-                  });
-                  const data = await response.json();
-                  if (data) {
-                    setCapLivros(data);
-                    isLoading2(false)
-                  }
-                } catch (err) {
-                  console.log(err);
+          const fetchData = async () => {
+              try {
+                isLoading2(true)
+                const response = await fetch( urlTermSoftware, {
+                  mode: "cors",
+                  headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET",
+                    "Access-Control-Allow-Headers": "Content-Type",
+                    "Access-Control-Max-Age": "3600",
+                    "Content-Type": "text/plain",
+                  },
+                });
+                const data = await response.json();
+                if (data) {
+                  setSoftware(data);
+                  isLoading2(false)
                 }
-              };
-              fetchData();
-            }, [ urlTermCap]);
+              } catch (err) {
+                console.log(err);
+              }
+            };
+            fetchData();
+          }, [ urlTermSoftware]);
+
+          //marca
+        let urlTermMarca = `${urlGeral}brand_production_researcher?researcher_id=${props.name}&year=${yearString}`;
+        const [marca, setMarca] = useState<Livros[]>([]);
+
+        useMemo(() => {
+          const fetchData = async () => {
+              try {
+                isLoading3(true)
+                const response = await fetch( urlTermMarca, {
+                  mode: "cors",
+                  headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET",
+                    "Access-Control-Allow-Headers": "Content-Type",
+                    "Access-Control-Max-Age": "3600",
+                    "Content-Type": "text/plain",
+                  },
+                });
+                const data = await response.json();
+                if (data) {
+                  setMarca(data);
+                  isLoading3(false)
+                }
+              } catch (err) {
+                console.log(err);
+              }
+            };
+            fetchData();
+          }, [ urlTermMarca]);
 
         const items = Array.from({ length: 12 }, (_, index) => (
             <Skeleton key={index} className="w-full rounded-md h-[170px]" />
           ));
 
-          useEffect(() => {
-            setItensSelecionadosCap(itemsSelecionadosPopUp)
-          }, []);
 
 
           //conectores 
@@ -199,21 +247,8 @@ const handleConnectorChange = (index: number, connector: string) => {
   setItensSelecionadosPopUp(updatedItems);
 };
 
-const handleConnectorChangeCap = (index: number, connector: string) => {
-  // Crie uma cópia do array de itens selecionados
-  const updatedItems = [...itemsSelecionadosPopUp];
-  // Substitua o último caractere pelo novo conector
-  updatedItems[index].term = updatedItems[index].term.slice(0, -1) + connector;
-  // Atualize o estado com os itens atualizados
-  setItensSelecionadosCap(updatedItems);
-};
-
 const handleRemoveItem = (indexToRemove: any) => {
   setItensSelecionadosPopUp(prevItems => prevItems.filter((_, index) => index !== indexToRemove));
-}
-
-const handleRemoveItemCap = (indexToRemove: any) => {
-  setItensSelecionadosCap(prevItems => prevItems.filter((_, index) => index !== indexToRemove));
 }
 
     
@@ -229,7 +264,7 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                         <Accordion  type="single" collapsible >
                 <AccordionItem value="item-1" >
                     <AccordionTrigger>
-                    <HeaderResultTypeHome title="Gráfico de quantidade total de livros e capítulos" icon={<ChartBar size={24} className="text-gray-400" />}>
+                    <HeaderResultTypeHome title="Gráfico de quantidade total de produção técnica" icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
                     </AccordionTrigger>
                     <AccordionContent >
@@ -249,9 +284,9 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                     <AccordionTrigger>
                     <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
-            <Book size={24} className="text-gray-400" />
-             {searchType != 'book' || itemsSelecionadosPopUp.length == 0 ? (
-               <p className="text-sm font-bold">Todos os livros</p>
+            <Copyright size={24} className="text-gray-400" />
+             {searchType != 'patent' || itemsSelecionadosPopUp.length == 0 ? (
+               <p className="text-sm font-bold">Todas as patentes</p>
              ):(
               <div className="text-sm font-bold flex items-center gap-2">
               <span className="">{publicacoes.length} </span> ocorrências de
@@ -260,7 +295,7 @@ const handleRemoveItemCap = (indexToRemove: any) => {
             {itemsSelecionadosPopUp.map((valor, index) => {
         return(
             <>
-            <div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs bg-pink-500 dark:bg-pink-500 text-white border-0 `} >
+            <div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs bg-cyan-500 dark:bg-cyan-500 text-white border-0 `} >
             {valor.term.replace(/[|;]/g, '')}
                 <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer"/>
                 {/* Adicionando a escolha entre "e" ou "ou" */}
@@ -280,7 +315,7 @@ const handleRemoveItemCap = (indexToRemove: any) => {
         );
     })}
 
-    em livros
+    em patentes
               </div>
             </div>
              )}
@@ -331,11 +366,11 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                         publicacoes.length == 0 ? (
                           <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
                          ):(
-                        <BookBlockPopUp
-                        articles={publicacoes}
-                        distinct={distinct}
-                        type={'livro'}
-                        />
+                          <BookBlockPopUp
+                          articles={publicacoes}
+                          distinct={distinct}
+                          type={'patente'}
+                          />
                          )
                       )
                     ):(
@@ -352,58 +387,17 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                 </AccordionItem>
                 </Accordion>
 
-                <Accordion defaultValue="item-1"  type="single" collapsible >
+                <Accordion   type="single" collapsible >
                 <AccordionItem value="item-1" >
                     <AccordionTrigger>
                     <div className="flex gap-4 w-full  justify-between items-center ">
             <div className="flex gap-4 items-center">
-            <Books size={24} className="text-gray-400" />
-             {searchType != 'book' || itemsSelecionadosCap.length == 0 ? (
-               <p className="text-sm font-bold">Todos os capítulos de livros</p>
-             ):(
-              <div className="text-sm font-bold flex items-center gap-2">
-              <span className="">{capLivros.length} </span> ocorrências de
-
-              <div className='flex gap-2 items-center'>
-            {itemsSelecionadosCap.map((valor, index) => {
-        return(
-            <>
-            <div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs bg-pink-500 dark:bg-pink-500 text-white border-0 `} >
-            {valor.term.replace(/[|;]/g, '')}
-                <X size={12} onClick={() => handleRemoveItemCap(index)} className="cursor-pointer"/>
-                {/* Adicionando a escolha entre "e" ou "ou" */}
-                
-            </div>
-
-            {index < itemsSelecionadosCap.length - 1 && (
-<button className="rounded-full cursor-pointer flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 transition-all text-xs outline-none" onClick={() => {
-  const connector = itemsSelecionadosPopUp[index].term.endsWith('|') ? ';' : '|'; // Alterna entre "|" e ";" conforme necessário
-  handleConnectorChangeCap(index, connector);
-}} >
-  {itemsSelecionadosPopUp[index].term.endsWith(';') ? "e" : "ou"}
-</button>
-)}
-
-            </>
-        );
-    })}
-
-    em capítulos de livros
-              </div>
-            </div>
-             )}
+            <Code size={24} className="text-gray-400" />
+            <p className="text-sm font-bold">Todos os softwares</p>
             </div>
 
             <div className="flex gap-3  items-center h-full">
-            {itemsSelecionadosCap != itemsSelecionados && (
-              <div className="flex gap-3  items-center">
-                <Button onClick={() => setItensSelecionadosCap(itemsSelecionados)}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
-                            <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
-                        </Button>
-
-              <div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
-              </div>
-            )}
+           
 
             <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
@@ -436,15 +430,16 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                         </Masonry>
         </ResponsiveMasonry>
                       ):(
-                       capLivros.length == 0 ? (
-                        <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
-                       ):(
-                        <BookBlockPopUp
-                        articles={capLivros}
-                        distinct={distinct}
-                        type={'capLivro'}
-                        />
-                       )
+                        software.length == 0 ? (
+                          <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
+                         ):(
+                          <BookBlockPopUp
+                          articles={software}
+                          distinct={distinct}
+                          type={'software'}
+                          />
+                         )
+                        
                       )
                     ):(
                       loading2 ? (
@@ -452,7 +447,82 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
                         <TableReseracherArticleshome
-                        articles={capLivros}
+                        articles={publicacoes}
+                        />
+                      )
+                    )}
+                    </AccordionContent>
+                </AccordionItem>
+                </Accordion>
+
+                <Accordion  type="single" collapsible >
+                <AccordionItem value="item-1" >
+                    <AccordionTrigger>
+                    <div className="flex gap-4 w-full  justify-between items-center ">
+            <div className="flex gap-4 items-center">
+            <StripeLogo size={24} className="text-gray-400" />
+            <p className="text-sm font-bold">Todas as marcas</p>
+            </div>
+
+            <div className="flex gap-3  items-center h-full">
+            {itemsSelecionadosPopUp != itemsSelecionados && (
+              <div className="flex gap-3  items-center">
+                <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+                            <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
+                        </Button>
+
+              <div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
+              </div>
+            )}
+
+            <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+                            <Rows size={16} className=" whitespace-nowrap" />
+                        </Button>
+
+                        <Button  onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
+                            <SquaresFour size={16} className=" whitespace-nowrap" />
+                        </Button>
+            </div>
+
+          </div>
+                   
+                    </AccordionTrigger>
+                    <AccordionContent >
+
+{typeVisu == 'block' ? (
+                    loading ? (
+                        <ResponsiveMasonry
+                        columnsCountBreakPoints={{
+                            350: 1,
+                            750: 1,
+                            900: 2,
+                            1200: 3
+                        }}
+                    >
+                                     <Masonry gutter="16px">
+                        {items.map((item, index) => (
+                                <div key={index}>{item}</div>
+                              ))}
+                        </Masonry>
+        </ResponsiveMasonry>
+                      ):(
+                        marca.length == 0 ? (
+                          <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
+                         ):(
+                          <BookBlockPopUp
+                          articles={software}
+                          distinct={distinct}
+                          type={'marca'}
+                          />
+                         )
+                      )
+                    ):(
+                      loading3 ? (
+                        
+                        <Skeleton className="w-full rounded-md h-[400px]"/>
+                      ):(
+                        <TableReseracherArticleshome
+                        articles={publicacoes}
                         />
                       )
                     )}

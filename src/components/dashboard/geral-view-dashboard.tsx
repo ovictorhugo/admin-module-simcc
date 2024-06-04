@@ -70,7 +70,7 @@ const {user} = useContext(UserContext)
          <TabsTrigger value="pos-graduacoes" onClick={() => setValue('pos-graduacoes')}>Pós-graduações</TabsTrigger>
          <TabsTrigger value="grupos-pesquisa" onClick={() => setValue('grupos-pesquisa')}>Grupos de pesquisas</TabsTrigger>
          {(user.state === 'admin' || user.state === 'master') && (<TabsTrigger value="peso-producoes" onClick={() => setValue('peso-producoes')}>Peso de produções</TabsTrigger>)}
-         <TabsTrigger value="nct" onClick={() => setValue('nct')}>NCTI's</TabsTrigger>
+         <TabsTrigger value="nct" onClick={() => setValue('nct')}>INCITE's</TabsTrigger>
       </TabsList>
 
         

@@ -6,14 +6,16 @@ import { Plus } from "phosphor-react";
 import { UserContext } from "../../context/context";
 import { useModalSidebar } from "../hooks/use-modal-sidebar";
 import { ArticleItem } from "../homepage/categorias/articles-home/article-item";
+import { BookItem } from "./Livro";
 
 type Articles = {
     articles: any[];
     distinct: boolean
+    type:string
 }
 
 
-export function BookBlockPopUp(props:Articles) {
+export function BookBlockPopUp(propsGeral:Articles) {
     const {navbar} = useContext(UserContext)
     const [count, setCount] = useState(12)
 
@@ -30,7 +32,7 @@ export function BookBlockPopUp(props:Articles) {
     }}
 >
                  <Masonry gutter="16px">
-{props.articles.slice(0, count).map((props: any) => {
+{propsGeral.articles.slice(0, count).map((props: any) => {
 
         return (
             <BookItem
@@ -40,13 +42,16 @@ export function BookBlockPopUp(props:Articles) {
             isbn= {props.isbn}
             publishing_company= {props.publishing_company}
 
+
+            type={propsGeral.type}
+
         />
         );
         })}
         </Masonry>
         </ResponsiveMasonry>
 
-        {props.articles.length >= count && (
+        {propsGeral.articles.length >= count && (
             <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
         )}
 

@@ -54,6 +54,7 @@ function App() {
   const [inputMaria, setInputMaria] = useState('');
   const [maria, setMaria] = useState(false);
   const [itemsSelecionados , setItensSelecionados] = useState<ItemsSelecionados[]>([])
+  const [itemsSelecionadosPopUp , setItensSelecionadosPopUp] = useState<ItemsSelecionados[]>([])
   const [sugestoes , setSugestoes] = useState<ItemsSelecionados[]>([])
   const [pesquisadoresSelecionados , setPesquisadoresSelecionados] = useState<PesquisadoresSelecionados[]>([])
   const [messagesMaria, setMessagesMaria] = useState<any[]>([]);
@@ -115,7 +116,8 @@ const [idDocumentBarema, setIdDocumentBarema] = useState('')
       itemsSelecionados , setItensSelecionados,
       sugestoes , setSugestoes,
       pesquisadoresSelecionados , setPesquisadoresSelecionados,
-      idDocumentBarema, setIdDocumentBarema
+      idDocumentBarema, setIdDocumentBarema,
+      itemsSelecionadosPopUp , setItensSelecionadosPopUp
 
     }}
     >

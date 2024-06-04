@@ -49,6 +49,9 @@ interface UserContextType {
   itemsSelecionados: ItemsSelecionados[] , 
   setItensSelecionados: React.Dispatch<React.SetStateAction<ItemsSelecionados[]>>,
 
+  itemsSelecionadosPopUp: ItemsSelecionados[] , 
+  setItensSelecionadosPopUp: React.Dispatch<React.SetStateAction<ItemsSelecionados[]>>,
+
   sugestoes: ItemsSelecionados[] , 
   setSugestoes: React.Dispatch<React.SetStateAction<ItemsSelecionados[]>>,
 
@@ -98,6 +101,9 @@ setValoresSelecionadosExport: () => {},
 
 itemsSelecionados: [] , 
   setItensSelecionados: () => {},
+
+  itemsSelecionadosPopUp:[] , 
+  setItensSelecionadosPopUp:() => {},
 
   sugestoes: [] , 
   setSugestoes: () => {},
