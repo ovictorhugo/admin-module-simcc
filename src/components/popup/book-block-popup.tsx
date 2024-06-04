@@ -45,6 +45,18 @@ export function BookBlockPopUp(propsGeral:Articles) {
 
             type={propsGeral.type}
 
+        
+          
+          grant_date={props.grant_date}
+        
+          financing={props.financing}
+          project_name={props.project_name}
+        
+        
+          nature={props.nature}
+          oriented={props.oriented}
+          status={props.status}
+
         />
         );
         })}

@@ -55,7 +55,7 @@ export function TotalViewResearcher(props:Props) {
             <Alert className="flex items-center gap-3">
             <Code size={16} className="" />
             <div>
-                <p className="font-bold">{props.software} </p><div className="text-sm text-gray-500">Software</div>
+                <p className="font-bold">{props.software} </p><div className="text-sm text-gray-500">Softwares</div>
                 </div>
             </Alert>
         </div>

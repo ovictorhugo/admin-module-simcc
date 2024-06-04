@@ -57,6 +57,8 @@ import { InformacoesGeraisResearcher } from "../popup/informacoes-gerais-researc
 import { ArticlesResearcherPopUp } from "../popup/articles-researcher";
 import { BooksResearcherPopUp } from "../popup/book-researcher";
 import { ProducaoTecnicaResearcherPopUp } from "../popup/producao-tecnica-researcher";
+import { OrientacoesResearcherPopUp } from "../popup/orientacoes-researcher";
+import { RelatorioTecnicoResearcherPopUp } from "../popup/relatorio-tecnico-researcher";
 
 type ResearchOpenAlex = {
   h_index: number;
@@ -211,12 +213,14 @@ setItensSelecionadosPopUp(itemsSelecionados)
 <div className="w-full flex-1">
         <Tabs defaultValue="articles" value={value} className="">
   <TabsList className="mb-6">
+    <div className="flex overflow-x-auto ">
     <TabsTrigger value="article" onClick={() => setValue('article')} className="flex gap-2 items-center"> <Quotes size={16} className="" />Artigos</TabsTrigger>
     <TabsTrigger value="book" onClick={() => setValue('book')} className="flex gap-2 items-center"><File size={16} className="" />Livros e capítulos</TabsTrigger>
     <TabsTrigger value="producao-tecnica" onClick={() => setValue('producao-tecnica')} className="flex gap-2 items-center"><Stamp size={16} className="" />Produção técnica</TabsTrigger>
     <TabsTrigger value="relatorio-tecnico" onClick={() => setValue('relatorio-tecnico')} className="flex gap-2 items-center"><Files size={16} className="" />Relatório técnico</TabsTrigger>
     <TabsTrigger value="orientacoes" onClick={() => setValue('orientacoes')} className="flex gap-2 items-center"><Student size={16} className="" />Orientações</TabsTrigger>
     <TabsTrigger value="speaker" onClick={() => setValue('speaker')} className="flex gap-2 items-center"><Ticket size={16} className="" />Participação em eventos</TabsTrigger>
+    </div>
   </TabsList>
   <TabsContent value="article">
   {researcher.slice(0, 1).map((user) => {
@@ -237,6 +241,22 @@ setItensSelecionadosPopUp(itemsSelecionados)
   {researcher.slice(0, 1).map((user) => {
                 return(
                   <ProducaoTecnicaResearcherPopUp name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
+
+  <TabsContent value="relatorio-tecnico">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                  <RelatorioTecnicoResearcherPopUp name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
+
+  <TabsContent value="orientacoes">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                  <OrientacoesResearcherPopUp name={String(user.id)}/>
                   )
                 })}
   </TabsContent>
