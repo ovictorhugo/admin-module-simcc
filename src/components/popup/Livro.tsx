@@ -1,4 +1,4 @@
-import { AppWindow, Book, BookOpen, CalendarBlank, Check, Copyright, File, Graph, LinkBreak, Paperclip, PenNib, Quotes, SpinnerGap } from "phosphor-react";
+import { AppWindow, Book, BookOpen, CalendarBlank, Check, Copyright, CurrencyCircleDollar, File, Graph, LinkBreak, Paperclip, PenNib, Quotes, SpinnerGap } from "phosphor-react";
 import { useEffect, useState, useContext } from "react";
 import unorm from 'unorm';
 import { UserContext } from "../../context/context";
@@ -70,6 +70,10 @@ const {searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = use
 
 {props.type == 'orientacoes' && (
                              <h3 className="font-semibold mb-4 ">{props.oriented}</h3>
+                          )}
+
+{props.type == 'relatorio-tecnico' && (
+                             <h3 className="font-semibold mb-4 ">{props.project_name}</h3>
                           )}
 
 {props.type == 'patente' && (
@@ -145,6 +149,10 @@ const {searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = use
 
 {props.type == 'orientacoes' && (
                             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Paperclip size={12}/>{props.nature}</div>
+                        )}
+
+{props.type == 'relatorio-tecnico' && (
+                            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center truncate max-w-[200px]" ><CurrencyCircleDollar size={12}/>{props.financing}</div>
                         )}
 
 {props.type == 'patente' && (
