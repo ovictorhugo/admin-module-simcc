@@ -19,14 +19,16 @@ import { Link } from "react-router-dom";
 
 
 
-export type Livros = {
-    id: string,
-    title: string,
-    year: string,
-    isbn: string,
-    publishing_company: string
-  }
+type Livros = {
 
+    id: string,
+  nature: string,
+  oriented: string,
+  status: string,
+  title: string,
+  type: string,
+  year: string
+  }
 
 
 export const columns: ColumnDef<Livros>[] = [
