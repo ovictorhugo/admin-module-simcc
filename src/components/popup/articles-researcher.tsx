@@ -40,9 +40,9 @@ import { FilterArticle } from "../homepage/categorias/articles-home/filters-arti
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { GraficoArticleHome } from "../homepage/categorias/articles-home/grafico-articles-home";
 import { ArticleBlock } from "../homepage/categorias/articles-home/articles-block";
-import { TableReseracherArticleshome } from "../homepage/categorias/articles-home/table-articles";
 import { FilterArticlePopUp } from "./filters-articles-popup";
 import { ArticleBlockPopUp } from "./articles-block-popup";
+import { TableReseracherArticlesPopup } from "./columns/table-articles-popup";
 
 
 type Filter = {
@@ -300,7 +300,7 @@ const handleRemoveItem = (indexToRemove: any) => {
                         
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
-                        <TableReseracherArticleshome
+                        <TableReseracherArticlesPopup
                         articles={publicacoes}
                         />
                       )

@@ -1,33 +1,16 @@
 import { useContext, useMemo, useState } from "react";
 
 
-type Publicacao = {
-    id: string,
-    doi: string,
-    name_periodical: string,
-    qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "SQ" | "NP",
-    title: string,
-    year: string,
-    color: string,
-    researcher: string,
-    lattes_id: string,
-    magazine: string,
-    lattes_10_id: string,
-    jcr_link: string,
-    jif: string
-    researcher_id: string
-  }
+
 
   type Livros = {
     id: string,
     title: string,
     year: string,
-    isbn: string,
-    publishing_company: string
   }
 
   type Patente = {
-    id: string,
+  id: string,
   grant_date: string,
   title: string,
   year: string,
@@ -56,6 +39,8 @@ import { FilterArticlePopUp } from "./filters-articles-popup";
 import { ArticleBlockPopUp } from "./articles-block-popup";
 import { BookBlockPopUp } from "./book-block-popup";
 import { FilterYearPopUp } from "./filters-year-popup";
+import { TableReseracherPatentesPopup } from "./columns/producoes-tecnicas/table-patentes-popup";
+import { TableReseracherMarcasPopup } from "./columns/producoes-tecnicas/table-marcas-popup";
 
 
 type Filter = {
@@ -378,8 +363,8 @@ const handleRemoveItem = (indexToRemove: any) => {
                         
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
-                        <TableReseracherArticleshome
-                        articles={publicacoes}
+                        <TableReseracherPatentesPopup
+                        patentes={publicacoes}
                         />
                       )
                     )}
@@ -446,8 +431,8 @@ const handleRemoveItem = (indexToRemove: any) => {
                         
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
-                        <TableReseracherArticleshome
-                        articles={publicacoes}
+                        <TableReseracherMarcasPopup
+                        livros={publicacoes}
                         />
                       )
                     )}
@@ -521,8 +506,8 @@ const handleRemoveItem = (indexToRemove: any) => {
                         
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
-                        <TableReseracherArticleshome
-                        articles={publicacoes}
+                        <TableReseracherMarcasPopup
+                        livros={publicacoes}
                         />
                       )
                     )}
