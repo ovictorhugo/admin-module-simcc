@@ -125,7 +125,7 @@ const {searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = use
                         </div>
                     </div>
 
-                    <div className="flex items-center mt-4 gap-4">
+                    <div className="flex items-center flex-wrap mt-4 gap-4">
                         <div className="flex items-center gap-4">
                         <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><CalendarBlank size={12}/>{props.year}</div>
                         
@@ -148,11 +148,18 @@ const {searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = use
                         )}
 
 {props.type == 'orientacoes' && (
-                            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Paperclip size={12}/>{props.nature}</div>
+                            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Paperclip size={12} className={'whitespace-nowrap min-w-4'}/>{props.nature}</div>
                         )}
 
 {props.type == 'relatorio-tecnico' && (
                             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center truncate max-w-[200px]" ><CurrencyCircleDollar size={12}/>{props.financing}</div>
+                        )}
+
+{props.type == 'orientacoes' && (
+                            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-2 items-center">
+                                 <div className={`w-4 h-4 rounded-md ${(props.status == "Em andamento") ? "bg-yellow-500" : 'bg-green-500'}`}></div>
+                                 
+                                   {props.status == "Em andamento" ? "Em andamento" : 'Concluída'}</div>
                         )}
 
 {props.type == 'patente' && (

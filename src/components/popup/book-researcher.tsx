@@ -57,6 +57,7 @@ export function BooksResearcherPopUp(props:Props) {
     const [distinct, setDistinct] = useState(false)
     const [publicacoes, setPublicacoes] = useState<Livros[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')
+    const [typeVisu2, setTypeVisu2] = useState('block')
     const [capLivros, setCapLivros] = useState<Livros[]>([]);
     const [filters, setFilters] = useState<Filter[]>([]);
 
@@ -398,7 +399,7 @@ const handleRemoveItemCap = (indexToRemove: any) => {
             <div className="flex gap-3  items-center h-full">
             {itemsSelecionadosCap != itemsSelecionados && (
               <div className="flex gap-3  items-center">
-                <Button onClick={() => setItensSelecionadosCap(itemsSelecionados)}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+                <Button onClick={() => setItensSelecionadosCap(itemsSelecionados)}  variant="outline" className={`bg-transparent border-0 ${typeVisu2 == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
                             <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
                         </Button>
 
@@ -406,11 +407,11 @@ const handleRemoveItemCap = (indexToRemove: any) => {
               </div>
             )}
 
-            <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+            <Button onClick={() => setTypeVisu2('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu2 == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
                         </Button>
 
-                        <Button  onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
+                        <Button  onClick={() => setTypeVisu2('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu2 == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
                             <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
             </div>
@@ -420,7 +421,7 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                     </AccordionTrigger>
                     <AccordionContent >
 
-{typeVisu == 'block' ? (
+{typeVisu2 == 'block' ? (
                     loading2 ? (
                         <ResponsiveMasonry
                         columnsCountBreakPoints={{

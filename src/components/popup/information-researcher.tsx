@@ -247,7 +247,7 @@ const handleDownloadJson = async () => {
   
 
   {(props.orcid != '0' )  && (
-    <Link  to={props.orcid ? (props.orcid):(`https://orcid.org/${props.orcid}`)} target="_blank" className="bg-[#A6CE39] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
+    <Link  to={`https://orcid.org/${props.orcid}`} target="_blank" className="bg-[#A6CE39] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
         <IdentificationBadge size={12} className="" />
         Orcid: {props.orcid ? props.orcid.replace(/[^\d-]/g, '') : props.orcid}
     </Link>

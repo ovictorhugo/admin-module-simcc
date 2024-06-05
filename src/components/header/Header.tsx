@@ -11,6 +11,9 @@ import * as React from "react"
 import logo_4 from '../../assets/logo_4.png';
 import logo_4_white from '../../assets/logo_4_white.png';
 
+import logo_1 from '../../assets/logo_1.png';
+import logo_1_white from '../../assets/logo_1_white.png';
+
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -31,6 +34,8 @@ import { UserConfigHeader } from "./user-config-header";
 import { useTheme } from "next-themes"
 import { LogoWhite } from "../svg/LogoWhite";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
+import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
+import { LogoConectee } from "../svg/LogoConectee";
 
 export function Header() {
   const {loggedIn, user, setItensSelecionados} = useContext(UserContext)
@@ -38,6 +43,7 @@ export function Header() {
   const { theme } = useTheme()
   const { onOpen } = useModalHomepage();
   const location = useLocation();
+  const [versao, setVersao] = React.useState(true)
   
   const posGraduation = location.pathname == '/pos-graduacao'
 
@@ -50,11 +56,21 @@ export function Header() {
         <header className={`h-20 z-[3] flex justify-between  items-center mr-[72px] sticky top-0  ${posGraduation == true ? ('bg-transparent'):('dark:bg-neutral-900 bg-gray-100')}`}>
             <div className="  flex items-center h-12 gap-4">
             <div className="flex gap-3 items-center h-full justify-center ">
-            <Link to={"/"} className="h-[24px]  " onClick={() => handleClick()} >{(theme ==  'dark' ) ? (<LogoWhite />):(<LogoSimcc />)}</Link>
+            {versao ? (
+              <Link to={"/"} className="h-[24px]  " onClick={() => handleClick()} >{(theme ==  'dark' ) ? (<LogoConecteeWhite />):(<LogoConectee />)}</Link>
+            ): (
+              <Link to={"/"} className="h-[24px]  " onClick={() => handleClick()} >{(theme ==  'dark' ) ? (<LogoWhite />):(<LogoSimcc />)}</Link>
+            )}
 
             <div className="h-6 w-[1px] bg-gray-500"></div>
 
-            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
+            {versao ? (
+              <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
+            ): (
+              <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
+            )}
+
+            
             </div>
 
             <NavigationMenu className="xl:flex hidden">

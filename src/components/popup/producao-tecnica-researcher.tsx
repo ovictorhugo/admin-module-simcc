@@ -432,7 +432,7 @@ const handleRemoveItem = (indexToRemove: any) => {
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
                         <TableReseracherMarcasPopup
-                        livros={publicacoes}
+                        livros={software}
                         />
                       )
                     )}
@@ -495,7 +495,7 @@ const handleRemoveItem = (indexToRemove: any) => {
                           <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
                          ):(
                           <BookBlockPopUp
-                          articles={software}
+                          articles={marca}
                           distinct={distinct}
                           type={'marca'}
                           />
@@ -507,7 +507,7 @@ const handleRemoveItem = (indexToRemove: any) => {
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
                         <TableReseracherMarcasPopup
-                        livros={publicacoes}
+                        livros={marca}
                         />
                       )
                     )}
