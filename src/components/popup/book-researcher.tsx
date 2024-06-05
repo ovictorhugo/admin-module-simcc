@@ -26,10 +26,11 @@ import { Button } from "../ui/button";
 import { UserContext } from "../../context/context";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { GraficoArticleHome } from "../homepage/categorias/articles-home/grafico-articles-home";
-import { TableReseracherArticleshome } from "../homepage/categorias/articles-home/table-articles";
 
 import { BookBlockPopUp } from "./book-block-popup";
 import { FilterYearPopUp } from "./filters-year-popup";
+import { TableReseracherBookPopup } from "./columns/table-books-popup";
+import { TableReseracherArticleshome } from "../homepage/categorias/articles-home/table-articles";
 
 
 type Filter = {
@@ -343,8 +344,8 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                         
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
-                        <TableReseracherArticleshome
-                        articles={publicacoes}
+                        <TableReseracherBookPopup
+                        books={publicacoes}
                         />
                       )
                     )}
@@ -451,8 +452,8 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                         
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
-                        <TableReseracherArticleshome
-                        articles={capLivros}
+                        <TableReseracherBookPopup
+                        books={capLivros}
                         />
                       )
                     )}

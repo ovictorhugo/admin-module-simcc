@@ -18,20 +18,20 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-  } from "../../components/ui/table";
+  } from "../../ui/table";
   
   import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuTrigger,
-  } from "../../components/ui/dropdown-menu";
+  } from "../../ui/dropdown-menu";
   
-  import { Button } from "../../components/ui/button";
+  import { Button } from "../../ui/button";
   
   import { useState } from "react";
   import { Columns, FileCsv } from "phosphor-react";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
   
   interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -87,7 +87,7 @@ import { Input } from "../ui/input";
           const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
           const url = URL.createObjectURL(blob);
           const link = document.createElement('a');
-          link.download = `grupos_pesquisa.csv`;
+          link.download = `programas-pos.csv`;
           link.href = url;
           link.click();
   
@@ -101,10 +101,10 @@ import { Input } from "../ui/input";
       <div>
         <div className="flex items-center py-4">
           <Input
-            placeholder="Filtrar grupo de pesquisa..."
-            value={(table.getColumn("research_group_name")?.getFilterValue() as string) ?? ""}
+            placeholder="Filtrar..."
+            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
-              table.getColumn("research_group_name")?.setFilterValue(event.target.value)
+              table.getColumn("title")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />

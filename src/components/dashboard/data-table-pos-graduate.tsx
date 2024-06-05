@@ -6,6 +6,7 @@ import {
     flexRender,
     getCoreRowModel,
     getPaginationRowModel,
+    getFilteredRowModel,
     getSortedRowModel,
     useReactTable,
   } from "@tanstack/react-table";
@@ -54,10 +55,12 @@ import { Input } from "../ui/input";
       getPaginationRowModel: getPaginationRowModel(),
       onSortingChange: setSorting,
       getSortedRowModel: getSortedRowModel(),
+      onColumnFiltersChange: setColumnFilters,
+      getFilteredRowModel: getFilteredRowModel(),
       onColumnVisibilityChange: setColumnVisibility,
       state: {
         sorting,
-     
+        columnFilters,
         columnVisibility,
       },
     });

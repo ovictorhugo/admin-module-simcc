@@ -15,6 +15,8 @@ type Articles = {
 }
 
 
+
+
 export function BookBlockPopUp(propsGeral:Articles) {
     const {navbar} = useContext(UserContext)
     const [count, setCount] = useState(12)
