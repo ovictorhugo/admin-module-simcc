@@ -20,8 +20,6 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
   } from "../../components/ui/navigation-menu"
-
-  
 import { ChartLine, Gear, GraduationCap, GridFour, ListDashes, SignIn, Textbox, UserPlus } from "phosphor-react";
 import { GitBranch } from "lucide-react";
 import { UserContext } from "../../context/context";
@@ -49,12 +47,12 @@ export function Header() {
     return(
         <header className={`h-20 z-[3] flex justify-between  items-center mr-[72px] sticky top-0  ${posGraduation == true ? ('bg-transparent'):('dark:bg-neutral-900 bg-gray-100')}`}>
             <div className="  flex items-center h-12 gap-4">
-            <div className="flex gap-3 items-center h-full justify-center ">
-            <Link to={"/"} className="h-[24px]  " onClick={() => handleClick()} >{(theme ==  'dark' ) ? (<LogoWhite />):(<LogoSimcc />)}</Link>
+            <div className="flex gap-2 items-center h-full justify-center ">
+            <Link to={"/"} className="h-[28px]  " onClick={() => handleClick()} >{theme == 'dark' ? (<LogoWhite />):(<LogoSimcc />)}</Link>
 
-            <div className="h-6 w-[1px] bg-gray-500"></div>
+            <Separator orientation="vertical" />
 
-            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
+            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={theme == 'dark' ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[36px]" /></Link>
             </div>
 
             <NavigationMenu className="xl:flex hidden">
@@ -120,11 +118,9 @@ export function Header() {
                   </div>
                 </NavigationMenuLink>
               </li>
-             <Link to={'/pos-graduacao'}>
-             <ListItem title="Explorar">
-                Veja todos os programas 
+              <ListItem href="/pos-graduacao" title="Explorar">
+                Veja todos os programas das universidades pelo mapa
               </ListItem>
-             </Link>
               <ListItem href="indicadores-pos-graduacao" title="Indicadores">
                 Painel de indicadores das pós-graduações
               </ListItem>
@@ -133,48 +129,21 @@ export function Header() {
           </NavigationMenuContent>
         </NavigationMenuItem>
 
+        <NavigationMenuItem>
+                <Link to="/baremas" >
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    <Textbox size={16} className="" /> Baremas
+                    </NavigationMenuLink>
+                </Link>
+                </NavigationMenuItem>
+
                 <NavigationMenuItem>
-          <NavigationMenuTrigger> <Textbox size={16} className="" /> Baremas</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <div
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                  
-                  >
-                  <GraduationCap size={24} />
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      Baremas de avaliação
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      Selecione um programa de pós e tenha uma visão dos docentes e produções
-                    </p>
-                  </div>
-                </NavigationMenuLink>
-              </li>
-              <Link to="/meus-baremas" >
-             <ListItem title="Meus baremas">
-                Veja todos as consultas salvas
-              </ListItem>
-             </Link>
-             <Link to="/barema" >
-             <ListItem title="Criar barema">
-                Crie ou avalie pesquisadores para editais e ranqueamento 
-              </ListItem>
-             </Link>
-
-             <Link to="/procurar-barema" >
-             <ListItem title="Procurar barema">
-                Tem um código para acesso dos resultados? Veja o resultado final aqui
-              </ListItem>
-             </Link>
-              
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-
-                
+                <Link to="/taxonomia" >
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    <GitBranch size={16} className="rotate-180" /> Taxonomia
+                    </NavigationMenuLink>
+                </Link>
+                </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
             </div>
