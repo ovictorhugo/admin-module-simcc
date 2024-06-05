@@ -33,6 +33,7 @@ import { TableReseracherArticleshome } from "../homepage/categorias/articles-hom
 
 import { BookBlockPopUp } from "./book-block-popup";
 import { FilterYearPopUp } from "./filters-year-popup";
+import { TableReseracherOrientacoesPopup } from "./columns/table-orientacoes-popup";
 
 
 type Filter = {
@@ -279,8 +280,8 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                         
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
-                        <TableReseracherArticleshome
-                        articles={publicacoes}
+                        <TableReseracherOrientacoesPopup
+                        orientacoes={publicacoes}
                         />
                       )
                     )}
