@@ -67,14 +67,14 @@ export function GraduateProgram() {
     return(
        <>
        {isModalOpen && (
-         <div className="  overflow-hidden flex justify-center flex-col h-full w-full mr-[72px]">
+         <div className="h-full   flex justify-center flex-col w-full px-8">
 
         
 
          <div className="flex flex-col justify-center">
-          <div className="h-[350px] absolute  ml-16 "><Circle/></div>
-          <h1 className=" text-3xl z-[2] mb-2 font-medium max-w-[500px] "><strong className="bg-red-700 text-white font-medium"> Escolha um programa</strong>{" "}e veja o que a plataforma pode filtrar para você.</h1>
-          <Label className="z[2]  max-w-[550px] mb-8 ">Arraste ou clique em um dos pontos no gráfico para selecionar o programa de pós-graduação. Você também pode escolher pela lista abaixo</Label>
+
+          <h1 className="z-[2] text-left max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 "> <strong className="bg-[#709CB6]  rounded-md px-3 pb-2 text-white font-medium"> Escolha um programa</strong>{" "}e veja o que a plataforma pode filtrar para você.</h1>
+          <Label className="max-w-[750px] text-left text-lg font-light text-gray-500 ">Arraste ou clique em um dos pontos no gráfico para selecionar o programa de pós-graduação. Você também pode escolher pela lista abaixo</Label>
 
           
           </div>

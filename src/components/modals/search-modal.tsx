@@ -196,10 +196,10 @@ export function SearchModal() {
   const handlePesquisaFinal = () => {
     if(itemsSelecionadosPopUp.length > 0) {
       setItensSelecionados(itemsSelecionadosPopUp)
-      setValoresSelecionadosExport(formatTerms(itemsSelecionadosPopUp))
+      history(`/resultados`)
       setInput('')
     onClose()
-    history(`/resultados/${formatTerms(itemsSelecionadosPopUp)}/${searchType}`)
+    
     } else {
       setValorDigitadoPesquisaDireta(input)
       onClose()
@@ -325,7 +325,7 @@ console.log('fawefwef', urlOpenAlex)
 
     return  (
         <Dialog open={isModalOpen} onOpenChange={onClose}>
-        <DialogContent  className="p-0 border-none min-w-[60vw] bg-transparent">
+        <DialogContent  className="p-0 border-none min-w-[60vw] bg-transparent dark:bg-transparent">
      
         <Alert  className="h-14 bg-white p-2 flex items-center gap-3 justify-between">
         <div className="flex items-center gap-2 w-full flex-1">

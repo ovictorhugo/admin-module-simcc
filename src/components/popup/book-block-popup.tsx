@@ -47,6 +47,12 @@ export function BookBlockPopUp(propsGeral:Articles) {
 
             type={propsGeral.type}
 
+            event_name={props.event_name}
+  
+    nature={props.nature}
+    participation={props.participation}
+   
+
         
           
           grant_date={props.grant_date}
@@ -54,8 +60,7 @@ export function BookBlockPopUp(propsGeral:Articles) {
           financing={props.financing}
           project_name={props.project_name}
         
-        
-          nature={props.nature}
+
           oriented={props.oriented}
           status={props.status}
 

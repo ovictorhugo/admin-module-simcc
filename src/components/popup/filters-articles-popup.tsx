@@ -138,7 +138,7 @@ export function FilterArticlePopUp(props:Props) {
            </div>
         <Alert className="w-full">
 
-        <Select >
+        <Select>
             <SelectTrigger className="w-full whitespace-nowrap border-none">
                 <SelectValue placeholder="Escolha o Qualis" />
             </SelectTrigger>

@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar"
 import { UserContext } from "../../context/context";
-import { UserCircle } from "phosphor-react";
+
 
 import { auth } from "../../lib/firebase";
 import { User as FirebaseAuthUser} from 'firebase/auth'
@@ -24,12 +24,12 @@ interface User extends FirebaseAuthUser {
     DropdownMenuTrigger,
     DropdownMenuShortcut
   } from "../../components/ui/dropdown-menu"
-import { LogOut } from "lucide-react";
+import { ChevronDown, LogOut } from "lucide-react";
   
-  
+import { cn } from "../../lib"
 
 export function UserConfigHeader() {
-    const { user, setLoggedIn, setUser } = useContext(UserContext);
+    const { user, setLoggedIn, setUser, isCollapsed } = useContext(UserContext);
 
    
   const handleLogout = async () => {
@@ -47,29 +47,53 @@ export function UserConfigHeader() {
    
     return(
     
-            <DropdownMenu>
-                <DropdownMenuTrigger >
-                <Avatar className="cursor-pointer rounded-md">
-                    <AvatarImage  className={'rounded-md'} src={`${user.photoURL != null ? (user.photoURL):(user.img_url)}`} />
-                    <AvatarFallback className="flex items-center justify-center"></AvatarFallback>
-                </Avatar>
-                     </DropdownMenuTrigger>
-              
-                <DropdownMenuContent className="w-56">
-                    
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>Profile</DropdownMenuItem>
-                    <DropdownMenuItem>Billing</DropdownMenuItem>
-                    <DropdownMenuItem>Team</DropdownMenuItem>
-                    <DropdownMenuItem>Subscription</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
-                        <LogOut size={16} className="mr-2 h-4 w-4" />
-                        <span>Encerrar sessão</span>
-                        <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
+      <DropdownMenu>
+      <div className="w-full  gap-3 flex items-center ">
+      <DropdownMenuTrigger className="w-full flex-1 items-center flex justify-center">
+          <div className={cn(
+        "flex items-center w-full gap-2 px-2 ",
+        isCollapsed &&
+          "flex h-9 w-9 shrink-0 items-center justify-center p-0 "
+      )}> 
+      
+      <Avatar className="cursor-pointer rounded-md w-fit">
+      <AvatarImage  className={'rounded-md h-[36px] w-[36px]'} src={`${user.photoURL != null ? (user.photoURL):(user.img_url)}`} />
+      <AvatarFallback className="flex items-center justify-center"></AvatarFallback>
+  </Avatar>
+
+         
+              {!isCollapsed && (
+              <div className="flex gap-3 items-center text-sm font-medium ">
+                  
+                  <p className="text-sm font-medium w-full text-left">{user.displayName}</p>
+       
+
+          <ChevronDown size={16}/>
+
+              </div>
+           )}
+           
+          
+      </div>
+      
+      </DropdownMenuTrigger>
+
+   
+
+      </div>
+
+      <DropdownMenuContent>
+  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+  <DropdownMenuSeparator />
+  <DropdownMenuItem>Profile</DropdownMenuItem>
+  <DropdownMenuItem>Billing</DropdownMenuItem>
+  <DropdownMenuItem>Team</DropdownMenuItem>
+  <DropdownMenuItem>Subscription</DropdownMenuItem>
+</DropdownMenuContent>
+
+
+  
+  </DropdownMenu>
 
      
     )

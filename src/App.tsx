@@ -60,6 +60,9 @@ function App() {
   const [messagesMaria, setMessagesMaria] = useState<any[]>([]);
 const [idDocumentBarema, setIdDocumentBarema] = useState('')
 
+const [isCollapsed, setIsCollapsed] = useState(false)
+const [mode, setMode] = useState('user')
+
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
 
@@ -117,7 +120,9 @@ const [idDocumentBarema, setIdDocumentBarema] = useState('')
       sugestoes , setSugestoes,
       pesquisadoresSelecionados , setPesquisadoresSelecionados,
       idDocumentBarema, setIdDocumentBarema,
-      itemsSelecionadosPopUp , setItensSelecionadosPopUp
+      itemsSelecionadosPopUp , setItensSelecionadosPopUp,
+      isCollapsed, setIsCollapsed,
+      mode, setMode
 
     }}
     >
@@ -160,10 +165,9 @@ const [idDocumentBarema, setIdDocumentBarema] = useState('')
          element={loggedIn == false ? <Authentication/> : <Baremas/>}
         />
 
-        <Route
-          path='/admin'
-          element={(user.state == 'admin' || user.state == 'colaborator' || user.state == 'master')  ? <Dashboard/> : <Navigate to='/' />}
-        />
+      
+
+<Route path='/admin' element={<Dashboard/> }/>
 
 <Route
           path='/config'

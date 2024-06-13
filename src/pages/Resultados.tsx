@@ -9,15 +9,12 @@ import { useLocation, useParams } from "react-router-dom";
 
 export function Resultados() {
     const { onOpen } = useModalHomepage();
-    const {setIdGraduateProgram, idGraduateProgram, valoresSelecionadosExport, setValoresSelecionadosExport, setItensSelecionados, setSearchType, searchType} = useContext(UserContext)
+    const {setIdGraduateProgram, isCollapsed, idGraduateProgram, valoresSelecionadosExport, setValoresSelecionadosExport, setItensSelecionados, setSearchType, searchType} = useContext(UserContext)
 
   
 
     const location = useLocation();
-    const { searchId, searchTypeId } = useParams<{
-      searchId: string
-      searchTypeId:string
-  }>();
+
 
   function parseTerms(str: string): { term: string }[] {
     let result: { term: string }[] = [];
@@ -58,21 +55,6 @@ export function Resultados() {
     return result;
 }
 
-  useEffect(() => {
-    if (searchId) {
-        setValoresSelecionadosExport(searchId);
-        console.log('setValoresSelecionadosExport', searchId);
-
-        setItensSelecionados(parseTerms(searchId || ''))
-        
-    }
-
-    if (searchTypeId) {
-        setSearchType(searchTypeId)
-        console.log('searchTypeIddddd', searchTypeId)
-    }
-}, [searchId, searchTypeId]);
-
 
 
 
@@ -80,13 +62,7 @@ export function Resultados() {
      
 
     useEffect(() => {
- 
-        if(location.pathname == `/resultados/${searchId}/${searchTypeId}`) {
-            onOpen('result-home')
-        } else
-           if(location.pathname == `/resultados/${valoresSelecionadosExport}/${searchType}`) {
-              onOpen('result-home')
-          } else  if(location.pathname == `/resultados`) {
+ if(location.pathname == `/resultados`) {
             onOpen('result-home')
         } 
     }, [location]);
@@ -94,7 +70,11 @@ export function Resultados() {
 console.log(idGraduateProgram)
     return(
         <>
-        <SearchLayout>
+        <SearchLayout
+        defaultLayout={[1,2]}
+        defaultCollapsed={isCollapsed}
+        navCollapsedSize={4}
+        >
             <GeralProvider/>
 
         </SearchLayout>

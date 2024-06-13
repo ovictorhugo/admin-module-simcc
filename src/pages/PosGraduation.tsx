@@ -9,7 +9,7 @@ import { useLocation, useParams } from "react-router-dom";
 
 export function PosGraduation() {
     const { onOpen } = useModalHomepage();
-    const {setIdGraduateProgram} = useContext(UserContext)
+    const {setIdGraduateProgram,isCollapsed} = useContext(UserContext)
 
     const location = useLocation();
 
@@ -35,7 +35,11 @@ export function PosGraduation() {
 
     return(
         <>
-        <SearchLayout>
+        <SearchLayout
+         defaultLayout={[1,2]}
+         defaultCollapsed={isCollapsed}
+         navCollapsedSize={4}
+        >
             <GeralProvider/>
 
         </SearchLayout>

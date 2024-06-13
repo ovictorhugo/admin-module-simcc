@@ -279,8 +279,8 @@ const handleRemoveItem = (indexToRemove: any) => {
                         columnsCountBreakPoints={{
                             350: 1,
                             750: 1,
-                            900: 1,
-                            1200: 2
+                            900: 2,
+                            1200: 3
                         }}
                     >
                                      <Masonry gutter="16px">

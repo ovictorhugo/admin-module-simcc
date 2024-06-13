@@ -59,6 +59,7 @@ import { BooksResearcherPopUp } from "../popup/book-researcher";
 import { ProducaoTecnicaResearcherPopUp } from "../popup/producao-tecnica-researcher";
 import { OrientacoesResearcherPopUp } from "../popup/orientacoes-researcher";
 import { RelatorioTecnicoResearcherPopUp } from "../popup/relatorio-tecnico-researcher";
+import { SpeakerResearcherPopUp } from "../popup/speaker-researcher";
 
 type ResearchOpenAlex = {
   h_index: number;
@@ -70,15 +71,6 @@ type ResearchOpenAlex = {
   orcid:string
   openalex:string
   
-}
-
-interface PesquisadoresSelecionados {
-  id:string
-  name: string,
-  university: string,
-  lattes_id: string,
-  city: string,
-  area: string,
 }
 
 
@@ -257,6 +249,14 @@ setItensSelecionadosPopUp(itemsSelecionados)
   {researcher.slice(0, 1).map((user) => {
                 return(
                   <OrientacoesResearcherPopUp name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
+
+  <TabsContent value="speaker">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                  <SpeakerResearcherPopUp name={String(user.id)}/>
                   )
                 })}
   </TabsContent>

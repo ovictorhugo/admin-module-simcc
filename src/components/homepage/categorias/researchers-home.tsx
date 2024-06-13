@@ -110,8 +110,7 @@ export function ResearchersHome() {
       return result;
     }
   
-  
-    const resultadoFormatado = valoresSelecionadosExport;
+    const resultadoFormatado = formatTerms(itemsSelecionados);
     console.log(resultadoFormatado)
 
 
@@ -182,7 +181,7 @@ export function ResearchersHome() {
                   
                         <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
+                    <AccordionTrigger >
                     <HeaderResultTypeHome title="Pesquisadores mais relevantes por ordem de ocorrências" icon={<ListNumbers size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
                     </AccordionTrigger>
@@ -204,13 +203,13 @@ export function ResearchersHome() {
                 <div>
                 <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger className="flex items-center">
+                    <AccordionTrigger >
                     <HeaderResultTypeHome title="Pesquisadores por detalhamento" icon={<UserList size={24} className="text-gray-400" />}>
-                        <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+                        <Button onClick={() => setTypeVisu('rows')}  variant="ghost" className={` h-9 w-9  ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
                         </Button>
 
-                        <Button  onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
+                        <Button  onClick={() => setTypeVisu('block')} variant="ghost" className={` h-9 w-9 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
                             <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
                         </HeaderResultTypeHome>

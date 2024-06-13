@@ -3,11 +3,11 @@ import { useContext, useEffect, useMemo, useState } from "react";
 
 
   type Livros = {
-    id: string,
-    title: string,
-    year: string,
-    isbn: string,
-    publishing_company: string
+    event_name: string
+    id: string
+    nature: string
+    participation: string
+    year: string
   }
 
   import {
@@ -20,7 +20,7 @@ import { useContext, useEffect, useMemo, useState } from "react";
   import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { Skeleton } from "../ui/skeleton";
 
-import { ChartBar,  SquaresFour, Rows, Book, X, ArrowUDownLeft, Books } from "phosphor-react";
+import { ChartBar, Ticket, SquaresFour, Rows, Book, X, ArrowUDownLeft, Books } from "phosphor-react";
 
 import { Button } from "../ui/button";
 import { UserContext } from "../../context/context";
@@ -45,7 +45,7 @@ interface ItemsSelecionados {
   term:string
 }
 
-export function OrientacoesResearcherPopUp(props:Props) {
+export function SpeakerResearcherPopUp(props:Props) {
   const [itemsSelecionadosCap , setItensSelecionadosCap] = useState<ItemsSelecionados[]>([])
 
     const {urlGeral, valoresSelecionadosExport, navbar, searchType, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados} = useContext(UserContext)
@@ -115,8 +115,11 @@ export function OrientacoesResearcherPopUp(props:Props) {
 
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
     const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
-    let urlTermPublicacoes = `${urlGeral}guidance_researcher?researcher_id=${props.name}&year=${yearString}`;
+    let urlTermPublicacoes = `${urlGeral}pevent_researcher?researcher_id=${props.name}&term=&year=${yearString}&nature=`;
 
+    if(searchType == "speaker") {
+      urlTermPublicacoes = `${urlGeral}pevent_researcher?researcher_id=${props.name}&term=${resultadoFormatado}&year=${yearString}&nature=`;
+  }
    
     useMemo(() => {
         const fetchData = async () => {
@@ -215,9 +218,9 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                     <AccordionTrigger>
                     <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
-            <Book size={24} className="text-gray-400" />
-             {searchType != 'book' || itemsSelecionadosPopUp.length == 0 ? (
-               <p className="text-sm font-bold">Todos os livros</p>
+            <Ticket size={24} className="text-gray-400" />
+             {searchType != 'speaker' || itemsSelecionadosPopUp.length == 0 ? (
+               <p className="text-sm font-bold">Todas as participações em eventos</p>
              ):(
               <div className="text-sm font-bold flex items-center gap-2">
               <span className="">{publicacoes.length} </span> ocorrências de
@@ -226,7 +229,7 @@ const handleRemoveItemCap = (indexToRemove: any) => {
             {itemsSelecionadosPopUp.map((valor, index) => {
         return(
             <>
-            <div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs bg-pink-500 dark:bg-pink-500 text-white border-0 `} >
+            <div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs bg-orange-500 dark:bg-orange-500 text-white border-0 `} >
             {valor.term.replace(/[|;]/g, '')}
                 <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer"/>
                 {/* Adicionando a escolha entre "e" ou "ou" */}
@@ -300,7 +303,7 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                         <BookBlockPopUp
                         articles={publicacoes}
                         distinct={distinct}
-                        type={'livro'}
+                        type={'participacao-evento'}
                         />
                          )
                       )

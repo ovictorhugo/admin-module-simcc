@@ -185,8 +185,8 @@ const handleConnectorChange = (index: number, connector: string) => {
 
 
     return  (
-        <div className="bottom-0 right-0 fixed w-full h-[150px] justify-end bg-gradient-to-t from-white dark:from-neutral-900 to-transparent flex flex-col max-sm:flex  max-sm:flex-row">
-        <div className={`pb-3 px-[72px] max-sm:px-[5px] ${navbar && !isOpenSidebar && 'pl-[278px]'} ${isOpenSidebar && !navbar && 'pl-[368px]'} ${isOpenSidebar && navbar && 'pl-[574px]'}`}>
+        <div className="bottom-0 right-0 absolute w-full h-[150px] justify-end bg-gradient-to-t from-white dark:from-neutral-900 to-transparent flex flex-col max-sm:flex  max-sm:flex-row">
+        <div className={`pb-3 px-8 max-sm:px-[5px] `}>
         <div className="mb-4">
         <div className="flex gap-4">
       

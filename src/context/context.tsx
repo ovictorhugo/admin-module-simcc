@@ -79,6 +79,11 @@ interface UserContextType {
   searchType:string,
   setSearchType:React.Dispatch<React.SetStateAction<string>>;
 
+  isCollapsed:boolean, 
+  setIsCollapsed:React.Dispatch<React.SetStateAction<boolean>>;
+      mode:string, 
+      setMode:React.Dispatch<React.SetStateAction<string>>;
+
 }
 
 export const UserContext = createContext<UserContextType>({
@@ -136,6 +141,12 @@ setPesquisadoresSelecionadosGroupBarema: () => {},
 
 searchType:"",
   setSearchType:() => {},
+
+  isCollapsed:false, 
+  setIsCollapsed:() => {},
+
+      mode:"", 
+      setMode:() => {},
  
   idGraduateProgram: "",
   setIdGraduateProgram: () => {},

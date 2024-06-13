@@ -1,4 +1,4 @@
-import { AppWindow, Book, BookOpen, CalendarBlank, Check, Copyright, CurrencyCircleDollar, File, Graph, LinkBreak, Paperclip, PenNib, Quotes, SpinnerGap } from "phosphor-react";
+import { AppWindow, Book, BookOpen,Ticket, IdentificationBadge, CalendarBlank, Check, Copyright, CurrencyCircleDollar, File, Graph, LinkBreak, Paperclip, PenNib, Quotes, SpinnerGap } from "phosphor-react";
 import { useEffect, useState, useContext } from "react";
 import unorm from 'unorm';
 import { UserContext } from "../../context/context";
@@ -25,6 +25,12 @@ type Publicacao = {
   oriented?: string,
   status?: string,
 
+
+  event_name?: string
+   
+    participation?: string
+ 
+
 }
 
 let qualisColor = {
@@ -45,10 +51,10 @@ let qualisColor = {
 export function BookItem(props: Publicacao) {
 const {searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = useContext(UserContext)
 
-    const normalizedTitle = props.title
+    const normalizedTitle = props.title ? props.title
     .replace(/&quot;/g, '"')
     .replace(/&#10;/g, '\n')
-    .toLowerCase();
+    .toLowerCase():'';
 
     const ignoredWords = ['a', 'do', 'da', 'o', 'os', 'as', 'de', "e", "i", 'na', 'du', 'em']; // Adicionar outras palavras que devem ser ignoradas
 
@@ -56,7 +62,7 @@ const {searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = use
         <div className="flex  w-full" >
             
                     <div
-                      className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0  ${props.type == 'livro' && ('bg-pink-800')} ${props.type == 'software' && ('bg-cyan-400')} ${props.type == 'marca' && ('bg-cyan-600')} ${(props.status == "Em andamento" ) && ('bg-yellow-500') } ${(props.status == "Concluída" ) && 'bg-green-500' } ${(props.grant_date == "NaT"  || props.grant_date == "None") ? ('bg-red-500') : ('bg-green-500')} ${props.type == 'capLivro' && ('bg-pink-300')}`}
+                      className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0  ${props.type == 'livro' && ('bg-pink-800')} ${props.type == 'software' && ('bg-cyan-400')} ${props.type == 'marca' && ('bg-cyan-600')} ${(props.status == "Em andamento" ) && ('bg-yellow-500') } ${(props.status == "Concluída" ) && 'bg-green-500' } ${(props.grant_date == "NaT"  || props.grant_date == "None") && ('bg-red-500')}  ${(props.grant_date == "" && props.type=='producao-tecnica') && ('bg-green-500')} ${props.type == 'capLivro' && ('bg-pink-300')}`}
                     > 
                     </div>
                 
@@ -85,7 +91,11 @@ const {searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = use
                            <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">{props.id}</p>
                         )}
 
-{props.type != 'patente' && (
+{props.type == 'participacao-evento' && (
+                           <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">{props.event_name}</p>
+                        )}
+
+{(props.type != 'patente' && props.type != 'speaker') && (
                           <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">
                           {normalizedTitle
   .split(/[\s.,;?!]+/)
@@ -149,6 +159,14 @@ const {searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = use
 
 {props.type == 'orientacoes' && (
                             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Paperclip size={12} className={'whitespace-nowrap min-w-4'}/>{props.nature}</div>
+                        )}
+
+{props.type == 'participacao-evento' && (
+                            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Ticket size={12} className={'whitespace-nowrap min-w-4'}/>{props.nature}</div>
+                        )}
+
+{props.type == 'participacao-evento' && (
+                            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><IdentificationBadge size={12} className={'whitespace-nowrap min-w-4'}/>{props.participation}</div>
                         )}
 
 {props.type == 'relatorio-tecnico' && (

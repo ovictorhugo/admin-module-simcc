@@ -1,78 +1,93 @@
-import { Separator } from "../../components/ui/separator";
-import { ScrollArea } from "../../components/ui/scroll-area";
-import { ModeToggle } from "../../components/mode-toggle";
-import { Button } from "../ui/button";
-import { Info, List, Users } from "phosphor-react";
-import { useContext,useState } from "react";
-import { useModalSidebar } from "../hooks/use-modal-sidebar";
-import { UserContext } from "../../context/context";
+"use client"
 
-import { UserConfigHeader } from "../header/user-config-header";
-import { useModal } from "../hooks/use-modal-store";
+import { Link } from "react-router-dom";
+import { LucideIcon } from "lucide-react"
 
-export function NavigationSidebar() {
-    const { onOpen, onClose } = useModalSidebar();
-    const { onOpen:onOpenModal} = useModal();
+import { cn } from "../../lib"
+import { buttonVariants } from "../ui/button"
+import { useLocation } from "react-router-dom";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../ui/tooltip"
 
-    const {navbar, setNavbar, loggedIn, user} = useContext(UserContext)
+interface NavProps {
+  isCollapsed: boolean
+  links: {
+    title: string
+    label?: string
+    icon: LucideIcon
+    link: string
+  }[]
+}
 
-    const [filterState, setFilterState] = useState(""); // Inicialmente, sem filtro
 
-    const handleButtonClickInfo = () => {
-        if (filterState === "info") {
-          onClose();
-          setFilterState("");
-        } else {
-          onOpen("info");
-          setFilterState("info");
-        }
-      };
 
-     
-  
-    return (
-     <div className={`whitespace-nowrap sticky left-0  top-0 z-[1]  flex h-screen   flex-col transition-all  ${navbar ? ('w-[278px]'):('w-[72px]')}`}> 
-         <div
-        className={`space-y-4 flex flex-col sticky left-0  top-0  h-full text-primary w-full pb-3 ${navbar ? ('px-4'):('items-center')}`}
-      >
-       <div className={`flex items-center  h-20 `}>
-       <Button onClick={() => setNavbar(!navbar)} variant="outline" className="bg-transparent border-0" size="icon">
-       <List size={16} className="" /> 
-        </Button>
-       </div>
-      
-        <ScrollArea className="flex-1 w-full">
-        
-        </ScrollArea>
-        <div className="pb-3 mt-auto flex items-center flex-col gap-y-4">
-        <Button onClick={() => handleButtonClickInfo()} variant="outline" className={`bg-transparent border-0 ${navbar ? ('w-full justify-start'):('')}`} size={navbar ? ('default'):('icon')}>
-       <Info size={16} className=" whitespace-nowrap" /> {navbar && (<span className="">Informações</span>)}
-       
-        </Button>
+export function NavigationSidebar({ links, isCollapsed }: NavProps) {
 
-          <ModeToggle />
+  const location = useLocation();
 
-          <Button onClick={() => onOpenModal('pesquisadores-selecionados')} variant="outline" className={`bg-blue-700 hover:text-white hover:bg-blue-800 dark:hover:bg-blue-800 dark:bg-blue-700 text-white border-0 ${navbar ? ('w-full justify-start'):('')}`} size={navbar ? ('default'):('icon')}>
-       <Users size={16} className="" /> 
-       {navbar && (<span className="">Pesquisadores selecionados</span>)}
-        </Button>
-
-        {loggedIn && (
-          <div className="flex gap-4 items-center w-full">
-          <UserConfigHeader/>
-          {navbar && (
-            <div>
-            <p className="text-xs truncate font-bold max-w-[160px]">{user.displayName}</p>
-            <p className="text-xs truncate max-w-[160px]">{user.email}</p>
-            </div>
-          )}
-        </div>
+  return (
+    <div
+      data-collapsed={isCollapsed}
+      className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2"
+    >
+      <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+        {links.map((link, index) =>
+          isCollapsed ? (
+            <Tooltip key={index} delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Link
+                  to={`${link.link}`}
+                  className={cn(
+                    buttonVariants({ variant:location.pathname == link.link ? ('default'):('ghost'), size: "icon" }),
+                    "h-9 w-9",
+                    location.pathname == link.link &&
+                      "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
+                  )}
+                >
+                  <link.icon className="h-4 w-4" />
+                  <span className="sr-only">{link.title}</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="flex items-center gap-4">
+                {link.title}
+                {link.label && (
+                  <span className="ml-auto text-muted-foreground">
+                    {link.label}
+                  </span>
+                )}
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <Link
+              key={index}
+              to={`${link.link}`}
+              className={cn(
+                buttonVariants({ variant:location.pathname == link.link ? ('default'):('ghost'), size: "sm" }),
+                location.pathname == link.link &&
+                  "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
+                "justify-start"
+              )}
+            >
+              <link.icon className="mr-2 h-4 w-4" />
+              {link.title}
+              {link.label && (
+                <span
+                  className={cn(
+                    "ml-auto",
+                    location.pathname == link.link &&
+                      "text-background dark:text-white"
+                  )}
+                >
+                  {link.label}
+                </span>
+              )}
+            </Link>
+          )
         )}
-
-       
-          
-        </div>
-      </div>
-     </div>
-    )
-  }
+      </nav>
+    </div>
+  )
+}

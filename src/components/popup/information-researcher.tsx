@@ -222,7 +222,7 @@ const handleDownloadJson = async () => {
               )}
               <p className="text-md  ">{props.university}</p>
             </div>
-            <div className="mb-4 flex gap-3 items-center">
+            <div className="mb-4 flex gap-3 items-center flex-wrap justify-center">
 
          
               {props.area != '' && (

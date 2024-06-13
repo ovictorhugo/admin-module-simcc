@@ -10,7 +10,7 @@ export default function DefaultLayout({
   }>) {
     return(
         <body className={cn(
-            " bg-gray-100 dark:bg-neutral-900 "
+            "  h-screen dark:bg-neutral-900 "
             )}>
             <ThemeProvider
             attribute="class"

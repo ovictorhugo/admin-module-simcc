@@ -26,21 +26,30 @@ import {
 
   
 import { ChartLine, Gear, GraduationCap, GridFour, ListDashes, SignIn, Textbox, UserPlus } from "phosphor-react";
-import { GitBranch } from "lucide-react";
+import { DotSquare, GitBranch, Grip, LogIn, Moon, Search, Sun } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { Button } from "../ui/button";
 import { UserConfigHeader } from "./user-config-header";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu"
 
 import { useTheme } from "next-themes"
 import { LogoWhite } from "../svg/LogoWhite";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
 import { LogoConectee } from "../svg/LogoConectee";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Input } from "../ui/input";
 
 export function Header() {
   const {loggedIn, user, setItensSelecionados} = useContext(UserContext)
 
-  const { theme } = useTheme()
+  const { theme, setTheme } = useTheme()
   const { onOpen } = useModalHomepage();
   const location = useLocation();
   const [versao, setVersao] = React.useState(true)
@@ -51,166 +60,105 @@ export function Header() {
     onOpen('initial-home')
     setItensSelecionados([])
   }
+  const [isVisible, setIsVisible] = React.useState(false);
+  const SCROLL_THRESHOLD = 10; // Altura em pixels em que o elemento deve aparecer
+
+  React.useEffect(() => {
+   
+      if (window.scrollY > SCROLL_THRESHOLD) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+
+    
+  }, []);
+  
 
     return(
-        <header className={`h-20 z-[3] flex justify-between  items-center mr-[72px] sticky top-0  ${posGraduation == true ? ('bg-transparent'):('dark:bg-neutral-900 bg-gray-100')}`}>
+        <header className={`h-[53px]  z-[3] flex justify-between border-b border-neutral-200 dark:border-neutral-800 px-4   items-center sticky top-0 `}>
             <div className="  flex items-center h-12 gap-4">
             <div className="flex gap-3 items-center h-full justify-center ">
-            {versao ? (
-              <Link to={"/"} className="h-[24px]  " onClick={() => handleClick()} >{(theme ==  'dark' ) ? (<LogoConecteeWhite />):(<LogoConectee />)}</Link>
-            ): (
-              <Link to={"/"} className="h-[24px]  " onClick={() => handleClick()} >{(theme ==  'dark' ) ? (<LogoWhite />):(<LogoSimcc />)}</Link>
-            )}
+            <Link to={"/"} className="h-[18px]  " onClick={() => handleClick()} >{(theme ==  'dark' ) ? (<LogoConecteeWhite />):(<LogoConectee />)}</Link>
 
-            <div className="h-6 w-[1px] bg-gray-500"></div>
+            <div className="h-4 w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>
 
-            {versao ? (
-              <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
-            ): (
-              <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
-            )}
+            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
 
             
             </div>
 
-            <NavigationMenu className="xl:flex hidden">
-                <NavigationMenuList>
-                <NavigationMenuItem>
-                <Link to="/indicadores" >
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    <ChartLine size={16} className="" /> Indicadores
-                    </NavigationMenuLink>
-                </Link>
-                </NavigationMenuItem>
+            
 
-                <NavigationMenuItem>
-          <NavigationMenuTrigger><ListDashes size={16} />Explorar</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <div
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                 
-                  >
-                  <ListDashes size={24} />
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      Explorar
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      Conheça a plataforma e tudo que ela tem a oferecer
-                    </p>
-                  </div>
-                </NavigationMenuLink>
-              </li>
-              <ListItem href="/dicionario" title="Dicionário">
-                Veja todos os termos disponíveis na plataforma
-              </ListItem>
-              <ListItem href="/docs/installation" title="Revistas">
-               Listagem das revistas com o Qualis e JCR
-              </ListItem>
-              <ListItem href="/novas-publicacoes" title="O que há de novo?">
-                Veja os artigos mais recentes nas publicações dos pesquisdores
-              </ListItem>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
+          
+            </div>
+            
+            <div>
+            
 
-        <NavigationMenuItem>
-          <NavigationMenuTrigger><GraduationCap size={16} /> Pós-graduação</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <div
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                  
-                  >
-                  <GraduationCap size={24} />
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      Pós-graduação
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      Selecione um programa de pós e tenha uma visão dos docentes e produções
-                    </p>
-                  </div>
-                </NavigationMenuLink>
-              </li>
-             <Link to={'/pos-graduacao'}>
-             <ListItem title="Explorar">
-                Veja todos os programas 
-              </ListItem>
-             </Link>
-              <ListItem href="indicadores-pos-graduacao" title="Indicadores">
-                Painel de indicadores das pós-graduações
-              </ListItem>
-              
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-
-                <NavigationMenuItem>
-          <NavigationMenuTrigger> <Textbox size={16} className="" /> Baremas</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <div
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                  
-                  >
-                  <GraduationCap size={24} />
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      Baremas de avaliação
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      Selecione um programa de pós e tenha uma visão dos docentes e produções
-                    </p>
-                  </div>
-                </NavigationMenuLink>
-              </li>
-              <Link to="/meus-baremas" >
-             <ListItem title="Meus baremas">
-                Veja todos as consultas salvas
-              </ListItem>
-             </Link>
-             <Link to="/barema" >
-             <ListItem title="Criar barema">
-                Crie ou avalie pesquisadores para editais e ranqueamento 
-              </ListItem>
-             </Link>
-
-             <Link to="/procurar-barema" >
-             <ListItem title="Procurar barema">
-                Tem um código para acesso dos resultados? Veja o resultado final aqui
-              </ListItem>
-             </Link>
-              
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-
-                
-                </NavigationMenuList>
-            </NavigationMenu>
             </div>
 
+
             <div className="flex gap-2 items-center justify-center">
-              {!loggedIn && (
-                <Link to={'/signUp'}><Button variant={'outline'}><UserPlus size={16} className="" />Criar conta</Button></Link>
-              )}
 
-            {!loggedIn && (
-                <Link to={'/signIn'}><Button variant={'default'} className="text-white h-10 dark:text-white"><SignIn size={16} className="" />Fazer login</Button></Link>
-            )}
+            {isVisible && (
+        <div className="flex gap-3 h-8 border border-neutral-200 dark:border-neutral-800 px-4 rounded-md items-center">
+          <Search size={16} />
+          <Input className="border-0 h-full dark:bg-transparent" />
+        </div>
+      )}
 
-{(user.state === 'master') && (
-                <Link to={'/config'}><Button variant={'outline'} size={'icon'} className="text-gray-500 border-0 dark:text-white"><Gear size={16} className="" /></Button></Link>
-              )}
+{!loggedIn && (
+  <Link to={'/signIn'}>
+  <Button variant="ghost" size="sm" >
+                  <LogIn className="h-4 w-4" />
+                  Fazer login
+                </Button></Link>
+)}
 
-{(user.state === "admin" || user.state === 'colaborator' || user.state === 'master') && (
-                <Link to={'/admin'}><Button variant={'outline'} className="text-gray-500 border-0 dark:text-white"><GridFour size={16} className="" />Módulo administrativo</Button></Link>
-              )}
+
+{!loggedIn && (
+ <Link to={'/signUp'}>
+ <Button  size="sm" >
+                 <LogIn className="h-4 w-4" />
+                 Criar conta
+               </Button></Link>
+)}
+             
+
+
+                <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+
+      <Button variant="ghost" size="icon" >
+              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                <span className="sr-only">Menu de ações rápidas</span>
+              </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("light")}>
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+
+            <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" >
+                <Grip className="h-4 w-4" />
+                <span className="sr-only">Menu de ações rápidas</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Menu de ações rápidas</TooltipContent>
+          </Tooltip>
+
 
          
 
