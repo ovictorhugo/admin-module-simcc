@@ -75,8 +75,6 @@ const [researcher, setResearcher] = useState<Research[]>([]);
         props.onResearcherUpdate(newResearcher);
       }
     };
-  
-
 
   //openalex
   //https://orcid.org/

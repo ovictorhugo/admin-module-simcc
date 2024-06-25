@@ -43,9 +43,9 @@ console.log(idGraduateProgram)
     return(
         <>
         <SearchLayout
-         defaultLayout={[1,2, 0]}
+         defaultLayout={[0,2, 0]}
          defaultCollapsed={isCollapsed}
-         navCollapsedSize={4}
+         navCollapsedSize={0}
         >
             <GeralProvider/>
 

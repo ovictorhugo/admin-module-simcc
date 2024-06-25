@@ -239,7 +239,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
         <div className=" items-center w-full flex flex-col   max-sm:ml-4">
 
 
-          <div className="bg-cover bg-no-repeat bg-center w-full" style={{ backgroundImage: `url(${bg_home})` }}>
+          <div className="bg-cover bg-no-repeat bg-center w-full" >
           <div className="justify-center w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
         <Link to={''}  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
         
