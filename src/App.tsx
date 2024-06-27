@@ -42,8 +42,8 @@ function App() {
   const [user, setUser] = useState<User>({  state: '', email: '', name: '', img_url: '', institution_id: '',...{} } as User);
 
 
-  const [urlGeral, setUrlGeral] = useState('https://simcc.uesc.br:5002/');
-  const [urlGeralAdm, setUrlGeralAdm] = useState('https://simcc.uesc.br:5000/');
+  const [urlGeral, setUrlGeral] = useState('http://150.164.32.238:13000/');
+  const [urlGeralAdm, setUrlGeralAdm] = useState('http://150.164.32.238:12000/');
   const [mapModal, setMapModal] = useState(false)
 
   const [searchType, setSearchType] = useState('');
