@@ -43,7 +43,9 @@ function App() {
 
 
   const [urlGeral, setUrlGeral] = useState('http://150.164.32.238:13000/');
+
   const [urlGeralAdm, setUrlGeralAdm] = useState('http://simcc.uesc.br:5000/');
+
   const [mapModal, setMapModal] = useState(false)
 
   const [searchType, setSearchType] = useState('');
