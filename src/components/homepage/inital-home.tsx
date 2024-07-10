@@ -1,4 +1,4 @@
-import { Label } from "@radix-ui/react-dropdown-menu";
+
 import { Circle } from "../svg/Circle";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
@@ -18,7 +18,7 @@ import {
   Quotes,
   StripeLogo,
 } from "phosphor-react";
-import { ArrowRight, Info, User, Users } from "lucide-react";
+import { ArrowRight, Info, User, User2, Users } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { GraficoHome } from "./grafico-home";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
@@ -51,15 +51,7 @@ import { SelectTypeSearch } from "../search/select-type-search";
 import { Badge } from "../ui/badge";
 import { Link, useLocation } from "react-router-dom";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card"
-import { AreaChart, Area,LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area,LineChart, Line, BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid,  Legend, ResponsiveContainer } from 'recharts';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 type Research = {
   count_article:number
@@ -73,6 +65,7 @@ type Research = {
   count_guidance_in_progress:number
   count_patent_granted:number
   count_patent_not_granted:number
+  count_brand:number
   year:number
 }
 
@@ -81,11 +74,49 @@ interface PalavrasChaves {
   among: number;
 }
 
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "../../components/ui/chart"
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card"
+
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import HC_wordcloud from 'highcharts/modules/wordcloud';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../../components/ui/tooltip"
+import { Label } from "../ui/label";
+
 
 HC_wordcloud(Highcharts);
+
+const chartConfig = {
+  views: {
+    label: "Page Views",
+  },
+  producao_bibliografica: {
+    label: "Produção bibliográfica",
+    color: "hsl(var(--chart-1))",
+  },
+  producao_tecnica: {
+    label: "Produção técnica",
+    color: "hsl(var(--chart-2))",
+  },
+} satisfies ChartConfig
+
 
 export function InitialHome() {
   const [VisaoPrograma, setVisaoPrograma] = useState<VisaoPrograma[]>([]);
@@ -232,14 +263,32 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
     },
   };
 
+  /////////////////////////
+
+  const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>('producao_bibliografica')
+
+  const total = useMemo(
+    () => ({
+      producao_bibliografica: dados.reduce(
+        (acc, curr) => acc + curr.count_article + curr.count_book + curr.count_book_chapter,
+        0
+      ),
+      producao_tecnica: dados.reduce((acc, curr) => acc + curr.count_patent + curr.count_software + curr.count_brand, 0),
+    }),
+    [dados]
+  );
+  
 
   return (
     <>
       {isModalOpen && (
-        <div className=" items-center w-full flex flex-col   max-sm:ml-4">
+        <div className=" items-center w-full flex flex-col   ">
+
+         
 
 
-          <div className="bg-cover bg-no-repeat bg-center w-full" >
+          <div className="bg-cover  bg-no-repeat bg-center w-full" >
+            
           <div className="justify-center w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
         <Link to={''}  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
         
@@ -249,7 +298,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                 {" "}
                 pesquisar um tema
               </strong>{" "}
-              e veja o que a plataforma pode filtrar para você.
+              e veja o que a plataforma pode filtrar para você. 
             </h1>
             <p className="max-w-[750px] text-center text-lg font-light text-foreground"></p>
 
@@ -293,188 +342,230 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
           </div>
           </div>
 
-          <div className=" w-full px-8 md:px-8 grid md:grid-cols-2 gap-4">
-          <ResponsiveMasonry
-    columnsCountBreakPoints={{
-        350: 1,
-        750: 1,
-        900: 1,
-        1200: 2
-    }}
->
-                 <Masonry gutter="16px">
-            <Alert className="p-0">
-                <CardHeader className="flex flex-row m-0  justify-between">
-           <div>
-           {VisaoPrograma.map((props) => (
-                  <CardTitle>{props.researcher} docentes</CardTitle>
-                ))}
-                
-                  <CardDescription className="m-0 p-0">na Escola de Engenharia</CardDescription>
+          <div className=" w-full md:px-8 md:gap-8 flex flex-col px-4">
 
-           </div>
-                  <Users size={20}/>
-                </CardHeader>
-                <CardContent>
-               
-                </CardContent>
+          <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+                    <div className="h-full gap-8 grid">
+                    <Alert className=" ">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                      Total de docentes
+                    </CardTitle>
+                    <CardDescription>da Escola de Engenharia</CardDescription>
+                    </div>
 
-              </Alert>
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add to library</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
 
-              <Alert className="p-0">
-                <CardHeader>
-                
-                  <CardTitle>Artigos por ano</CardTitle>
-                  <CardDescription>Card Description</CardDescription>
-                
-                </CardHeader>
-                <CardContent>
-                <ResponsiveContainer width="100%" height={100}>
-                <LineChart  data={dados}>
-                <XAxis dataKey="year" />
-                
-                <Tooltip />
-                <Line type="monotone" dataKey="count_article" stroke="#9CBCCE" strokeWidth={2} />
-              </LineChart>
-                </ResponsiveContainer>
-                </CardContent>
+                    </Alert>
 
-              </Alert>
-              <Alert className="p-0 ">
-                <CardHeader>
-                  <CardTitle>Orientações</CardTitle>
-                  <div className="flex gap-4 items-center">
-          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-green-500 rounded-sm"></div>Concluídas</div>
-          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-yellow-500 rounded-sm"></div>Em andamento</div>
-          
+                    <Alert className=" ">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                      Produção bibliográfica
+                    </CardTitle>
+                    <CardDescription>Artigos, livros e capítulos</CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add to library</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
+
+                    </Alert>
+                    </div>
+
+                 
+
+                    <Alert className="lg:col-span-2 h-[400px] p-0 ">
+                    <CardHeader className="flex p-0 flex-col items-stretch space-y-0 border-b  sm:flex-row">
+        <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+        <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                      Produção geral
+                    </CardTitle>
+                    <CardDescription>Dados da quadrienal</CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add to library</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
         </div>
-                </CardHeader>
-                <CardContent>
-                <ResponsiveContainer width="100%" height={200}>
-        <AreaChart data={dados}>
-          
-          <XAxis dataKey="year" />
-          <Tooltip />
-          <Area dataKey="count_guidance_complete" stackId="a" fill={`#6BC26B`} />
-          <Area dataKey="count_guidance_in_progress" stackId="a" fill="#DBB540" />
-        </AreaChart>
-      </ResponsiveContainer>
-                </CardContent>
-
-              </Alert>
-
-              <Alert className="p-0">
-                <CardHeader>
-                  <CardTitle>Nuvem de palavras</CardTitle>
-                  <CardDescription>Termos mais utilizados</CardDescription>
-                </CardHeader>
-                <CardContent>
-                <div id="nuveeeem" className="flex w-full h-[200px] justify-center items-center">
-              <HighchartsReact highcharts={Highcharts} options={options}  className={'h-full'} />
-              </div>
-                </CardContent>
-
-              </Alert>
-
-              <Alert className="p-0 h-fit">
-                <CardHeader className="flex flex-row m-0  justify-between">
-           <div>
-           {VisaoPrograma.map((props) => (
-                  <CardTitle>{props.researcher} docentes</CardTitle>
-                ))}
-                
-                  <CardDescription className="m-0 p-0">na Escola de Engenharia</CardDescription>
-
-           </div>
-                  <Users size={20}/>
-                </CardHeader>
-                <CardContent>
-               
-                </CardContent>
-
-              </Alert>
-          
-          
-              </Masonry>
-        </ResponsiveMasonry>
-
-              <div className="gap-4 flex flex-col">
-              <Alert className="p-0">
-                <CardHeader>
-                  <CardTitle>Produção bibliográfica</CardTitle>
-                  <div className="flex gap-4 items-center flex-wrap">
-          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-[#709CB6] rounded-sm"></div>Artigos</div>
-          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-[#9CBCCE] rounded-sm"></div>Livros</div>
-          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-[#284B5D] rounded-sm"></div>Capítulos de livro</div>
+        <div className="flex">
+          {["producao_bibliografica", "producao_tecnica"].map((key) => {
+            const chart = key as keyof typeof chartConfig
+            return (
+              <button
+                key={chart}
+                data-active={activeChart === chart}
+                className={`relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6`}
+                onClick={() => setActiveChart(chart)}
+              >
+                <span className="text-xs text-muted-foreground">
+                {chartConfig[chart].label}
+                </span>
+                <span className="text-lg font-bold leading-none sm:text-3xl">
+                  {total[key as keyof typeof total].toLocaleString()}
+                </span>
+              </button>
+            )
+          })}
         </div>
-                </CardHeader>
-                <CardContent>
-                <ResponsiveContainer width="100%" height={200}>
-        <BarChart data={dados}>
-        
-          <XAxis dataKey="year" />
-          <Tooltip />
-          <Bar dataKey="count_article" stackId="a" fill="#709CB6" />
-          <Bar dataKey="count_book" stackId="a" fill="#9CBCCE" />
-          <Bar dataKey="count_book_chapter" stackId="a" fill="#284B5D" />
-        </BarChart>
-      </ResponsiveContainer>
-                </CardContent>
+      </CardHeader>
 
-              </Alert>
+      <CardContent className="px-2 sm:p-6">
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-[250px] w-full"
+        >
+  <BarChart accessibilityLayer data={dados}>
+  <CartesianGrid vertical={false}  horizontal={false}/>
 
-              <div className=" w-full grid  grid-cols-1 lg:grid-cols-2 gap-4">
-            <Alert className="p-0">
-                <CardHeader>
-                  <CardTitle>Produção técnica</CardTitle>
+  <XAxis
+              dataKey="year"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
 
-                  <div className="flex gap-4 items-center flex-wrap">
-          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-[#709CB6] rounded-sm"></div>Patentes</div>
-          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-[#9CBCCE] rounded-sm"></div>Softwares</div>
-          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-[#284B5D] rounded-sm"></div>Marcas</div>
-        </div>
-                </CardHeader>
-                <CardContent>
-                <ResponsiveContainer width="100%" height={150}>
-        <BarChart data={dados}>
-          
-          <XAxis dataKey="year" />
-          <Tooltip />
-          <Bar dataKey="count_patent" stackId="a" fill="#709CB6" />
-          <Bar dataKey="count_software" stackId="a" fill="#9CBCCE" />
-          <Bar dataKey="count_brand" stackId="a" fill="#284B5D" />
-        </BarChart>
-      </ResponsiveContainer>
-                </CardContent>
+            />
 
-              </Alert>
+<ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="dashed" />}
+            />
 
-              <Alert className="p-0 h-fit">
-                <CardHeader className="flex flex-row m-0  justify-between">
-           <div>
-           {VisaoPrograma.map((props) => (
-                  <CardTitle>{props.researcher} docentes</CardTitle>
-                ))}
-                
-                  <CardDescription className="m-0 p-0">na Escola de Engenharia</CardDescription>
+{activeChart == 'producao_bibliografica' && (
+  <>
+  <Bar dataKey="count_article" fill="#719CB8" radius={4} >
+  <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+  </Bar>
+<Bar dataKey="count_book" fill="#274B5E" radius={4} >
+<LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+</Bar>
+<Bar dataKey="count_book_chapter" fill="#9CBDCF" radius={4} >
+<LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+  </Bar></>
+)}
 
-           </div>
-                  <Users size={20}/>
-                </CardHeader>
-                <CardContent>
-               
-                </CardContent>
+{activeChart == 'producao_tecnica' && (
+  <>
+  <Bar dataKey="count_patent" fill="#719CB8" radius={4} >
+  <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+  </Bar>
+<Bar dataKey="count_brand" fill="#274B5E" radius={4} >
+<LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+</Bar>
+<Bar dataKey="count_software" fill="#9CBDCF" radius={4} >
+<LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+              </Bar></>
+)}
 
-              </Alert>
-          
-              </div>
-              </div>
+  </BarChart>
+          </ChartContainer>
+        </CardContent>
+                    </Alert>
+                  </div>
 
-              <div className=" w-full grid md:grid-cols-1">
-              
-          
-          </div>
-          
+                  <div className="grid md:mb-8 mb-4 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+                    <Alert className=" h-[350px] lg:col-span-2">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                      Produção bibliográfica
+                    </CardTitle>
+                    <CardDescription>Artigos, livros e capítulos</CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add to library</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
+
+                    </Alert>
+
+
+                    <Alert className="">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                      Produção anual
+                    </CardTitle>
+                    <CardDescription>Visão por quadrienal </CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add to library</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
+                    </Alert>
+                  </div>
+
           </div>
         </div>
       )}

@@ -16,6 +16,10 @@ import {
 } from "../../components/ui/select"
 import { UserContext } from "../../context/context";
 import { useModal } from "../hooks/use-modal-store";
+import { useModalDashboard } from "../hooks/use-modal-dashboard";
+import { ChevronLeft, Info } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Badge } from "../ui/badge";
 
 
 
@@ -262,272 +266,314 @@ export function PesoProducoes() {
       
       }
 
-      
+      const { isOpen:isOpenDahsboard, type} = useModalDashboard();
+  
+      const isModalOpenDashboard = isOpenDahsboard && type === 'peso-producao';
 
+
+      //voltar
+      const history = useNavigate();
+
+      const handleVoltar = () => {
+        history(-1);
+      }
+  
+
+      
     return(
-        <div className="flex flex-col mb-16">
+      <>
+     {isModalOpenDashboard && (
+         <main className="flex flex-1 flex-col p-4 md:p-8">
+           <div className="w-full  gap-4">
+            <div className="flex items-center gap-4">
+          
+            <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
+                <ChevronLeft className="h-4 w-4" />
+                <span className="sr-only">Voltar</span>
+              </Button>
+          
+              <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+                Pesos de avaliação
+              </h1>
+
+           <Link to={'https://www.gov.br/capes/pt-br/acesso-a-informacao/acoes-e-programas/avaliacao/sobre-a-avaliacao/areas-avaliacao/sobre-as-areas-de-avaliacao'} target="_blank">   <Badge variant="outline" className="flex gap-2 items-center"><Info size={12}/>Informações de pesos do Sucupira</Badge></Link>
+             
+
+                
+            
+              <div className="hidden items-center gap-2 md:ml-auto md:flex">
+
+              <Button variant={'outline'} onClick={() => {
+        setTypeReset('all')
+         onOpen('reset-peso-producoes')
+        }}  ><ArrowCounterClockwise size={16} />Resetar</Button>
+
+         <Button onClick={() => Submit()}><Check size={16} />Atualizar índices</Button>
+              </div>
+            </div>
+
+            </div>
+
+             <div className="mt-2 flex flex-col w-full pb-4 md:pb-8 gap-4 md:gap-8">
+             <div className="flex flex-col gap-4 md:gap-8 ">
           
 
-           <div className="w-full flex mb-3">
-                        <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-blue-700 whitespace-nowrap"></div>
+          <div className="w-full flex">
+                       <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] dark:bg-[#719CB8]whitespace-nowrap"></div>
 
-                        <Alert  className="rounded-l-none ">
+                       <Alert  className="rounded-l-none ">
 
-                        <div className="flex justify-between mb-6">
-                            <div>
-                            <div className="flex items-center gap-3  ">
-                            <Quotes size={24} className="text-gray-400" />
-                            <p className="text-sm font-bold">Índice artigos</p>
-                            </div>
-                            </div>
+                       <div className="flex justify-between mb-6">
+                           <div>
+                           <div className="flex items-center gap-3  ">
+                           <Quotes size={24} className="text-gray-400" />
+                           <p className="text-sm font-bold">Índice artigos</p>
+                           </div>
+                           </div>
 
-                            <div className="">
-                                <Button variant={'ghost'} onClick={() => {
-         setTypeReset('articles')
-          onOpen('reset-peso-producoes')
-         }}  className="text-blue-700 hover:text-blue-800"><ArrowCounterClockwise size={16} />Resetar</Button>
-                            </div>
-                        </div>
+                           <div className="">
+                               <Button variant={'ghost'} onClick={() => {
+        setTypeReset('articles')
+         onOpen('reset-peso-producoes')
+        }} ><ArrowCounterClockwise size={16} />Resetar</Button>
+                           </div>
+                       </div>
 
-                        <div className="gap-4 grid grid-cols-5 ">
-                        {qualis.map((props) => {
-    return(
-        <div className="flex gap-3" key={props.id}>
-            <div className={`cursor-pointer gap-3 transition-all flex items-center  rounded-md text-xs font-medium `}>
-                <div className={`rounded-sm h-4 w-4 ${qualisColor[props.itens]}`}></div>
-                <span className="text-center block">{props.itens}</span>
-              
-            </div>
-            <Input
-                className=""
-                type="number"
-                onChange={(e) => props.valueSetter(e.target.value)}
-                value={Number(props.value)}
-            />
-        </div>
-    );
+                       <div className="gap-4 grid grid-cols-5 ">
+                       {qualis.map((props) => {
+   return(
+       <div className="flex gap-3" key={props.id}>
+           <div className={`cursor-pointer gap-3 transition-all flex items-center  rounded-md text-xs font-medium `}>
+               <div className={`rounded-sm h-4 w-4 ${qualisColor[props.itens]}`}></div>
+               <span className="text-center block">{props.itens}</span>
+             
+           </div>
+           <Input
+               className=""
+               type="number"
+               onChange={(e) => props.valueSetter(e.target.value)}
+               value={Number(props.value)}
+           />
+       </div>
+   );
 })}
 </div>
-                        </Alert>
-                        </div>
+                       </Alert>
+                       </div>
+    
+
+
+
+
+
+          <div className="w-full flex">
+                       <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] dark:bg-[#719CB8] whitespace-nowrap"></div>
+
+                       <Alert  className="rounded-l-none ">
+
+                       <div className="flex justify-between mb-6">
+                           <div>
+                           <div className="flex items-center gap-3 ">
+<Book size={24} className="text-gray-400" />
+          <p className="text-sm font-bold">Índice livros e capítulos</p>
+          </div>
+                           </div>
+
+                           <div className="">
+                               <Button variant={'ghost'} onClick={() => {
+        setTypeReset('prodCien')
+         onOpen('reset-peso-producoes')
+        }} ><ArrowCounterClockwise size={16} />Resetar</Button>
+                           </div>
+                       </div>
+
+                       <div className="grid grid-cols-2 gap-6">
+        
+        <div className="flex items-center  gap-4  ">
+          <Label className="whitespace-nowrap">Livro</Label>
+          <Input value={livro} onChange={(e) => setLivro(e.target.value)} type="number" placeholder="Peso"/>
+      </div>
      
 
-
-
-
-
-           <div className="w-full flex mb-3">
-                        <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-blue-700 whitespace-nowrap"></div>
-
-                        <Alert  className="rounded-l-none ">
-
-                        <div className="flex justify-between mb-6">
-                            <div>
-                            <div className="flex items-center gap-3 ">
-<Book size={24} className="text-gray-400" />
-           <p className="text-sm font-bold">Índice livros e capítulos</p>
-           </div>
-                            </div>
-
-                            <div className="">
-                                <Button variant={'ghost'} onClick={() => {
-         setTypeReset('prodCien')
-          onOpen('reset-peso-producoes')
-         }} className="text-blue-700 hover:text-blue-800"><ArrowCounterClockwise size={16} />Resetar</Button>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-6">
-         
-         <div className="flex items-center  gap-4  ">
-           <Label className="whitespace-nowrap">Livro</Label>
-           <Input value={livro} onChange={(e) => setLivro(e.target.value)} type="number" placeholder="Peso"/>
-       </div>
-      
-
-   
-         <div className="flex items-center  gap-4 ">
-           <Label className="whitespace-nowrap">Capítulo de livro</Label>
-           <Input value={capLivro} onChange={(e) => setCapLivro(e.target.value)} type="number" placeholder="Peso"/>
-       </div>
-    
+  
+        <div className="flex items-center  gap-4 ">
+          <Label className="whitespace-nowrap">Capítulo de livro</Label>
+          <Input value={capLivro} onChange={(e) => setCapLivro(e.target.value)} type="number" placeholder="Peso"/>
       </div>
-                        </Alert>
-                        </div>
+   
+     </div>
+                       </Alert>
+                       </div>
+
+         
 
           
 
-           
+          <div className="w-full flex ">
+                       <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] dark:bg-[#719CB8] whitespace-nowrap"></div>
 
-           <div className="w-full flex mb-6">
-                        <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-blue-700 whitespace-nowrap"></div>
+                       <Alert  className="rounded-l-none ">
 
-                        <Alert  className="rounded-l-none ">
+                       <div className="flex justify-between mb-6">
+                           <div>
+                           <div className="flex items-center gap-3 ">
+                           <Stamp size={24} className="text-gray-400" />
+          <p className="text-sm font-bold">Índice produção técnica</p>
+          </div>
+                           </div>
 
-                        <div className="flex justify-between mb-6">
-                            <div>
-                            <div className="flex items-center gap-3 ">
-                            <Stamp size={24} className="text-gray-400" />
-           <p className="text-sm font-bold">Índice produção técnica</p>
+                           <div className="">
+                               <Button variant={'ghost'} onClick={() => {
+        setTypeReset('prodTec')
+         onOpen('reset-peso-producoes')
+        }}  ><ArrowCounterClockwise size={16} />Resetar</Button>
+                           </div>
+                       </div>
+
+                       <div className="gap-4 grid grid-cols-5 mb-4">
+                       {ts.map((props) => {
+   return(
+       <div className="flex gap-3" key={props.id}>
+           <div className={`cursor-pointer gap-3 transition-all flex items-center  rounded-md text-xs font-medium `}>
+               <div className={`rounded-sm h-4 w-4 ${tsColor[props.itens]}`}></div>
+               <span className="text-center block">{props.itens}</span>
+             
            </div>
-                            </div>
-
-                            <div className="">
-                                <Button variant={'ghost'} onClick={() => {
-         setTypeReset('prodTec')
-          onOpen('reset-peso-producoes')
-         }}  className="text-blue-700 hover:text-blue-800"><ArrowCounterClockwise size={16} />Resetar</Button>
-                            </div>
-                        </div>
-
-                        <div className="gap-4 grid grid-cols-5 mb-4">
-                        {ts.map((props) => {
-    return(
-        <div className="flex gap-3" key={props.id}>
-            <div className={`cursor-pointer gap-3 transition-all flex items-center  rounded-md text-xs font-medium `}>
-                <div className={`rounded-sm h-4 w-4 ${tsColor[props.itens]}`}></div>
-                <span className="text-center block">{props.itens}</span>
-              
-            </div>
-            <Input
-                className=""
-                type="number"
-                onChange={(e) => props.valueSetter(e.target.value)}
-                value={Number(props.value)}
-            />
-        </div>
-    );
+           <Input
+               className=""
+               type="number"
+               onChange={(e) => props.valueSetter(e.target.value)}
+               value={Number(props.value)}
+           />
+       </div>
+   );
 })}
 </div>
 
 <div className=" bg-neutral-200 dark:bg-neutral-800 h-[0.5px] w-full mb-4"></div>
 
-                        <div className="grid grid-cols-2 gap-4">
-              
-              <div className="flex items-center  gap-4  ">
-                <Label className="whitespace-nowrap min-w-[150px]">Patente concedida</Label>
-                <Select defaultValue={patenteCondecida} value={patenteCondecida} onValueChange={(value) => setPatenteConcedida(value)}>
-            <SelectTrigger className="w-full whitespace-nowrap">
-                <SelectValue placeholder="Escolha o tipo" />
-            </SelectTrigger>
-            <SelectContent>
-                {ts.map((props) => {
-                  return(
-                    <SelectItem value={props.id}> <div className="flex gap-4 items-center mr-2"><div className={`flex rounded-sm h-4 w-4 ${tsColor[props.itens]}`} ></div>{props.itens}</div></SelectItem>
-                  )
-                })}
-            </SelectContent>
-            </Select>
-            </div>
-
-            <div className="flex items-center  gap-4  ">
-                <Label className="whitespace-nowrap min-w-[150px]">Patente não concedida</Label>
-                <Select defaultValue={patenteNaoConcedida} value={patenteNaoConcedida} onValueChange={(value) => setPatenteNaoConcedida(value)}>
-            <SelectTrigger className="w-full whitespace-nowrap">
-                <SelectValue placeholder="Escolha o tipo" />
-            </SelectTrigger>
-            <SelectContent>
-                {ts.map((props) => {
-                  return(
-                    <SelectItem value={props.id}> <div className="flex gap-4 items-center mr-2"><div className={`flex rounded-sm h-4 w-4 ${tsColor[props.itens]}`} ></div>{props.itens}</div></SelectItem>
-                  )
-                })}
-            </SelectContent>
-            </Select>
-            </div>
-          
-
-         
-              <div className="flex items-center  gap-4 ">
-                <Label className="whitespace-nowrap min-w-[150px]">Software</Label>
-                <Select defaultValue={software} value={software} onValueChange={(value) => setSoftware(value)}>
-            <SelectTrigger className="w-full whitespace-nowrap">
-                <SelectValue placeholder="Escolha o tipo" />
-            </SelectTrigger>
-            <SelectContent>
-                {ts.map((props) => {
-                  return(
-                    <SelectItem value={props.id}> <div className="flex gap-4 items-center mr-2"><div className={`flex rounded-sm h-4 w-4 ${tsColor[props.itens]}`} ></div>{props.itens}</div></SelectItem>
-                  )
-                })}
-            </SelectContent>
-            </Select>
-            </div>
-
-            <div className="flex items-center  gap-4 ">
-                <Label className="whitespace-nowrap min-w-[150px]">Relatório técnico</Label>
-                <Select defaultValue={relTec} value={relTec} onValueChange={(value) => setRelTec(value)}>
-            <SelectTrigger className="w-full whitespace-nowrap">
-                <SelectValue placeholder="Escolha o tipo" />
-            </SelectTrigger>
-            <SelectContent>
-                {ts.map((props) => {
-                  return(
-                    <SelectItem value={props.id}> <div className="flex gap-4 items-center mr-2"><div className={`flex rounded-sm h-4 w-4 ${tsColor[props.itens]}`} ></div>{props.itens}</div></SelectItem>
-                  )
-                })}
-            </SelectContent>
-            </Select>
-            </div>
+                       <div className="grid grid-cols-2 gap-4">
              
-             
+             <div className="flex items-center  gap-4  ">
+               <Label className="whitespace-nowrap min-w-[150px]">Patente concedida</Label>
+               <Select defaultValue={patenteCondecida} value={patenteCondecida} onValueChange={(value) => setPatenteConcedida(value)}>
+           <SelectTrigger className="w-full whitespace-nowrap">
+               <SelectValue placeholder="Escolha o tipo" />
+           </SelectTrigger>
+           <SelectContent>
+               {ts.map((props) => {
+                 return(
+                   <SelectItem value={props.id}> <div className="flex gap-4 items-center mr-2"><div className={`flex rounded-sm h-4 w-4 ${tsColor[props.itens]}`} ></div>{props.itens}</div></SelectItem>
+                 )
+               })}
+           </SelectContent>
+           </Select>
            </div>
-                        </Alert>
 
-                  
-                        </div>
+           <div className="flex items-center  gap-4  ">
+               <Label className="whitespace-nowrap min-w-[150px]">Patente não concedida</Label>
+               <Select defaultValue={patenteNaoConcedida} value={patenteNaoConcedida} onValueChange={(value) => setPatenteNaoConcedida(value)}>
+           <SelectTrigger className="w-full whitespace-nowrap">
+               <SelectValue placeholder="Escolha o tipo" />
+           </SelectTrigger>
+           <SelectContent>
+               {ts.map((props) => {
+                 return(
+                   <SelectItem value={props.id}> <div className="flex gap-4 items-center mr-2"><div className={`flex rounded-sm h-4 w-4 ${tsColor[props.itens]}`} ></div>{props.itens}</div></SelectItem>
+                 )
+               })}
+           </SelectContent>
+           </Select>
+           </div>
+         
 
-         <div className="w-full flex items-center">
-         <Button variant={'ghost'} onClick={() => {
-         setTypeReset('all')
-          onOpen('reset-peso-producoes')
-         }}  className="text-blue-700 hover:text-blue-800 ml-auto"><ArrowCounterClockwise size={16} />Resetar</Button>
+        
+             <div className="flex items-center  gap-4 ">
+               <Label className="whitespace-nowrap min-w-[150px]">Software</Label>
+               <Select defaultValue={software} value={software} onValueChange={(value) => setSoftware(value)}>
+           <SelectTrigger className="w-full whitespace-nowrap">
+               <SelectValue placeholder="Escolha o tipo" />
+           </SelectTrigger>
+           <SelectContent>
+               {ts.map((props) => {
+                 return(
+                   <SelectItem value={props.id}> <div className="flex gap-4 items-center mr-2"><div className={`flex rounded-sm h-4 w-4 ${tsColor[props.itens]}`} ></div>{props.itens}</div></SelectItem>
+                 )
+               })}
+           </SelectContent>
+           </Select>
+           </div>
 
-          <Button onClick={() => Submit()}><Check size={16} />Atualizar</Button>
-         </div>
+           <div className="flex items-center  gap-4 ">
+               <Label className="whitespace-nowrap min-w-[150px]">Relatório técnico</Label>
+               <Select defaultValue={relTec} value={relTec} onValueChange={(value) => setRelTec(value)}>
+           <SelectTrigger className="w-full whitespace-nowrap">
+               <SelectValue placeholder="Escolha o tipo" />
+           </SelectTrigger>
+           <SelectContent>
+               {ts.map((props) => {
+                 return(
+                   <SelectItem value={props.id}> <div className="flex gap-4 items-center mr-2"><div className={`flex rounded-sm h-4 w-4 ${tsColor[props.itens]}`} ></div>{props.itens}</div></SelectItem>
+                 )
+               })}
+           </SelectContent>
+           </Select>
+           </div>
+            
+            
+          </div>
+                       </Alert>
 
-         <Dialog open={isModalOpen} onOpenChange={onClose}> 
-        <DialogContent>
-        <DialogHeader className="pt-8 px-6 flex flex-col items-center">
-        <DialogTitle className="text-2xl text-center font-medium max-w-[350px]">
-        <strong className="bg-red-500 text-white hover:bg-red-600 transition duration-500 font-medium">Resetar</strong> {typeReset == 'all' && ('todos os pesos de produções')} {typeReset == 'articles' && ('todos os artigos')} {typeReset == 'prodCien' && ('todas as produções científicas')} {typeReset == 'prodTec' && ('todas as produções técnicas')}
-          </DialogTitle>
-          <DialogDescription className="text-center text-zinc-500">
-          Você tem certeza de que deseja prosseguir e resetar os pesos de produções? Isso irá impactar os índices de produções 
-          </DialogDescription>
-            </DialogHeader>
+                 
+                       </div>
 
-            <DialogFooter className=" py-4 ">
-            <Button variant={'ghost'}   onClick={() => onClose()}>
-            <ArrowUUpLeft size={16} className="" />Voltar
-              </Button>
 
-              <Button variant={'destructive'} onClick={() => {
-                if(typeReset == 'all') {
-                  
-                  resetArticles()
-                  resetProdCien()
-                  resetProdTec()
-                  onClose()
-                } else if(typeReset == 'articles') {
-                  resetArticles()
-                  onClose()
-                } else if(typeReset == 'prodCien') {
-                  resetProdCien()
-                  onClose()
-                } else if(typeReset == 'prodTec') {
-                  resetProdTec()
-                  onClose()
-                }
-                
+        <Dialog open={isModalOpen} onOpenChange={onClose}> 
+       <DialogContent>
+       <DialogHeader className="pt-8 px-6 flex flex-col items-center">
+       <DialogTitle className="text-2xl text-center font-medium max-w-[350px]">
+       <strong className="bg-red-500 text-white hover:bg-red-600 transition duration-500 font-medium">Resetar</strong> {typeReset == 'all' && ('todos os pesos de produções')} {typeReset == 'articles' && ('todos os artigos')} {typeReset == 'prodCien' && ('todas as produções científicas')} {typeReset == 'prodTec' && ('todas as produções técnicas')}
+         </DialogTitle>
+         <DialogDescription className="text-center text-zinc-500">
+         Você tem certeza de que deseja prosseguir e resetar os pesos de produções? Isso irá impactar os índices de produções 
+         </DialogDescription>
+           </DialogHeader>
+
+           <DialogFooter className=" py-4 ">
+           <Button variant={'ghost'}   onClick={() => onClose()}>
+           <ArrowUUpLeft size={16} className="" />Voltar
+             </Button>
+
+             <Button variant={'destructive'} onClick={() => {
+               if(typeReset == 'all') {
+                 
+                 resetArticles()
+                 resetProdCien()
+                 resetProdTec()
+                 onClose()
+               } else if(typeReset == 'articles') {
+                 resetArticles()
+                 onClose()
+               } else if(typeReset == 'prodCien') {
+                 resetProdCien()
+                 onClose()
+               } else if(typeReset == 'prodTec') {
+                 resetProdTec()
+                 onClose()
+               }
                
-              }}  >
-              <ArrowCounterClockwise size={16} className="" />Resetar
-              </Button>
-            </DialogFooter>
+              
+             }}  >
+             <ArrowCounterClockwise size={16} className="" />Resetar
+             </Button>
+           </DialogFooter>
 
-            </DialogContent>
-            </Dialog>
-        </div>
+           </DialogContent>
+           </Dialog>
+       </div>
+             </div>
+         </main>
+     )}
+     </>
     )
 }

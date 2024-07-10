@@ -20,6 +20,49 @@ import { AddResearcherGraduationTwo } from "../modals/add-researcher-graduation-
 import { GratuateProgramModal } from "../modals/gratuate-program";
 import { ConfirmDeleteResearcherGraduateProgram } from "../modals/confirm-delete-researcher-graduate-program";
 import { ConfirmDeleteStudentGraduateProgram } from "../modals/confirm-delete-student-graduate-program";
+import { useModal } from "../hooks/use-modal-store";
+import { ImportBolsistas } from "../modals/import-bolsistas";
+import { ImportDocentes } from "../modals/import-docentes";
+import { ImportTaes } from "../modals/import-taes";
+
+const ModalContent = () => {
+  const { type } = useModal();
+
+  switch (type) {
+    case 'add-graduate-program':
+      return  <AddGraduateProgram/>
+      case 'search':
+        return  <SearchModal/>
+      case 'confirm-delete-pos-graduate-program':
+        return  <ConfirmDeletePosGraduateProgram/>
+      case 'confirm-delete-researcher':
+        return <ConfirmDeleteResearcher/>
+      case 'confirm-delete-researcher-graduate-program':
+        return <ConfirmDeleteResearcherGraduateProgram/>
+      case 'confirm-delete-student-graduate-program':
+        return <ConfirmDeleteStudentGraduateProgram/>
+      case 'filters':
+        return <FiltersModal/>
+      case 'edit-graduate-program':
+        return <EditGraduateProgram/>
+      case 'articles-modal':
+        return <ArticlesModal/>
+      case 'researcher-modal':
+        return <ResearcherModal/>
+      case 'import-bolsistas':
+        return <ImportBolsistas/>
+      case  'import-docentes':
+        return <ImportDocentes/>
+      case 'import-taes':
+        return <ImportTaes/>
+      case 'add-researcher-csv':
+        return <AddResearcherCsvModal/>
+
+    default:
+      return null;
+  }
+};
+
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -32,28 +75,5 @@ export const ModalProvider = () => {
     return null;
   }
 
-  return (
-    <>
-    <SearchModal/>
-    <AddGraduateProgram/>
-    <MapResearchersModal/>
-    <ResearcherModal/>
-    <ArticlesModal/>
-   
-    <ConfirmDeletePosGraduateProgram/>
-    <EditGraduateProgram/>
-    <AddResearcherGraduation/>
-    <AddResearcherCsvModal/>
-    <AddStudentGraduationModal/>
-    <AddGrupoPesquisaModal/>
-    <PesquisadoresSelecionados/>
-    <FiltersModal/>
-    <ListStudentProgramModal/>
-    <AddResearcherGraduationTwo/>
-    <GratuateProgramModal/>
-    <ConfirmDeleteResearcherGraduateProgram/>
-
-    <ConfirmDeleteStudentGraduateProgram/>
-    </>
-  )
+  return <ModalContent />
 }

@@ -9,7 +9,7 @@ import { useLocation, useParams } from "react-router-dom";
 
 export function Resultados() {
     const { onOpen } = useModalHomepage();
-    const {setIdGraduateProgram, isCollapsed, idGraduateProgram, valoresSelecionadosExport, setValoresSelecionadosExport, setItensSelecionados, setSearchType, searchType} = useContext(UserContext)
+    const {navCollapsedSize, defaultLayout, setIdGraduateProgram, isCollapsed, idGraduateProgram, valoresSelecionadosExport, setValoresSelecionadosExport, setItensSelecionados, setSearchType, searchType} = useContext(UserContext)
 
   
 
@@ -71,9 +71,9 @@ console.log(idGraduateProgram)
     return(
         <>
         <SearchLayout
-        defaultLayout={[1,2]}
+        defaultLayout={defaultLayout}
         defaultCollapsed={isCollapsed}
-        navCollapsedSize={4}
+        navCollapsedSize={navCollapsedSize}
         >
             <GeralProvider/>
 

@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { useModal } from "../hooks/use-modal-store"
 import { Alert } from "../ui/alert";
 import { UserContext } from "../../context/context";
-import { ArrowSquareOut, ClockClockwise, DotsThree, Eye, EyeSlash, GraduationCap, Hash, MapPin, PencilSimple, Plus, Rows, SquaresFour, Star, Student, Trash } from "phosphor-react"; 
-import {Divide, GraduationCapIcon, UserCheck } from "lucide-react";
+import { ArrowSquareOut, ClockClockwise, DotsThree, Eye, EyeSlash, FileXls, GraduationCap, Hash, MapPin, PencilSimple, Plus, Rows, SquaresFour, Star, Student, Trash } from "phosphor-react"; 
+import {Divide, GraduationCapIcon, Search, UserCheck } from "lucide-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { toast } from "sonner"
 
@@ -38,219 +38,113 @@ import { TablePosGraduateViewDashboard } from "./table-pos-graduate-dashboard";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { Skeleton } from "../ui/skeleton";
 import { columns } from "./columns-grupos-pesquisa";
+import { useModalDashboard } from "../hooks/use-modal-dashboard";
+import { Tabs, TabsContent } from "../ui/tabs";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../ui/resizable";
+import { TooltipProvider } from "../ui/tooltip";
+import { Input } from "../ui/input";
+import { ItensList } from "./components/itens-list-vitrine";
+import { ItensListGrupoPesquisa } from "./components/itens-list-grupo-pesquisa";
+import { DisplayItemGrupoPesquisa } from "./components/display-item-grupo-pesquisa";
   
 
 
 export function GrupoPesquisaView() {
 
 
-    const { urlGeralAdm, user } = useContext(UserContext);
-    const [posgraduations, setPosgraduations] = useState<PosGraduationsProps[]>([]);
-    const [visibleProgram, setVisibleProgram] = useState(false);
+    const { urlGeralAdm, user,defaultLayout } = useContext(UserContext);
+
     const { onOpen } = useModal();
-    const [typeVisu, setTypeVisu] = useState('block')
-    const [isLoading, setIsLoading] = useState(true)
-    const [count, setCount] = useState(12)
 
-    const urlGetPosGraduations = urlGeralAdm + `researchGroupRest/Query?institution_id=${user.institution_id}`
+ 
+      const { isOpen, type} = useModalDashboard();
   
-  console.log(urlGetPosGraduations)
+      const isModalOpen = isOpen && type === "grupo-pesquisa";
 
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const response = await fetch(urlGetPosGraduations, {
-              mode: "cors",
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET",
-                "Access-Control-Allow-Headers": "Content-Type",
-                "Access-Control-Max-Age": "3600",
-                "Content-Type": "text/plain",
-              },
-            });
-            const data = await response.json();
-            if (data) {
-                setPosgraduations(data);
-                setIsLoading(false)
-            }
-          } catch (err) {
-            console.log(err);
-          }
-        };
-  
-
-        fetchData()
-  
-     
-      }, [urlGetPosGraduations,visibleProgram]);
-
-     const handleVisibleProgram = (id: string) => {
-
-        const urlVisibleProgram = urlGeralAdm  + `GraduateProgramRest/Update?graduate_program_id=${id}`
-        const fetchData = async () => {
-         
-          try {
-            const response = await fetch(urlVisibleProgram, {
-              mode: 'cors',
-              method: 'POST',
-              headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Max-Age': '3600',
-                'Content-Type': 'text/plain'
-              }
-            });
-            if (response.ok) {
-
-              setVisibleProgram(!visibleProgram)
-              toast("Visibilidade alterada", {
-                description: "Operação realizada com sucesso!",
-                action: {
-                  label: "Fechar",
-                  onClick: () => console.log("Undo"),
-                },
-              })
-            } 
-      
-          
-          } catch (err) {
-            toast("Erro ao mudar visibilidade", {
-              description: "Tente novamente",
-              action: {
-                label: "Fechar",
-                onClick: () => console.log("Undo"),
-              },
-            })
-          } 
-        };
-        fetchData();
-     
+      const [tab, setTab] = useState('all')
+      const [search, setSearch] = useState('')
     
-      };
+      const [total, setTotal] = useState<PosGraduationsProps | null>(null);
+
+      // Função para lidar com a atualização de researcherData
+      const handleResearcherUpdate = (newResearcherData: PosGraduationsProps) => {
+          setTotal(newResearcherData);
+        };
 
     return(
       <>
-      <Alert className="mb-4 flex items-center justify-between">
-        <div className="flex gap-6 items-center">
-          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-red-500 rounded-sm"></div>Não-atualizado</div>
-          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-orange-500 rounded-sm"></div>Em preenchimento</div>
-          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-yellow-500 rounded-sm"></div>Aguardando certificação</div>
-          <div className="flex items-center gap-3 text-sm text-gray-500"><div className=" w-4 h-4 bg-green-500 rounded-sm"></div>Certificado</div>
-        </div>
-
-        <div className="flex items-end flex-col">
-          <p className="text-3xl font-bold">{posgraduations.length}</p> <p>Grupos de pesquisa</p>
-        </div>
-      </Alert>
-                          <HeaderResultTypeHome title="Grupos de pesquisa" icon={<GraduationCap size={24} className="text-gray-400" />}>
-                        <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
-                            <Rows size={16} className=" whitespace-nowrap" />
-                        </Button>
-
-                        <Button  onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
-                            <SquaresFour size={16} className=" whitespace-nowrap" />
-                        </Button>
-                        </HeaderResultTypeHome>
-                        {typeVisu=="block"?(  
-                          isLoading ? (
-                            <ResponsiveMasonry className="mt-4"
-                            columnsCountBreakPoints={{
-                                350: 1,
-                                750: 2,
-                                900: 2,
-                                1200: 3
-                            }}
-                        >
-                                         <Masonry gutter="16px">
-                                          <Skeleton className="w-full h-[130px] rounded-md"/>
-                                          <Skeleton className="w-full h-[150px] rounded-md"/>
-                                          <Skeleton className="w-full h-[130px] rounded-md"/>
-                                          <Skeleton className="w-full h-[160px] rounded-md"/>
-                                          <Skeleton className="w-full h-[130px] rounded-md"/>
-                                          <Skeleton className="w-full h-[130px] rounded-md"/>
-                                          </Masonry>
-                                          </ResponsiveMasonry>
-                          ):(
-                           <div>
-                             <ResponsiveMasonry className="mt-4"
-      columnsCountBreakPoints={{
-          350: 1,
-          750: 2,
-          900: 2,
-          1200: 3
-      }}
-  >
-                   <Masonry gutter="16px">
-
-
-                    
-       {posgraduations.slice(0, count).map((posgraduation) => (
-        
-          <div className="flex items-center"
-        >
-               
-               <div
-            className={`h-full w-2 min-w-2 rounded-l-md dark:border-neutral-800 border whitespace-nowrap border-neutral-200 border-r-0 ${
-              posgraduation.situation && posgraduation.situation.includes('Não-atualizado') 
-                ? 'bg-red-500' 
-                : posgraduation.situation && posgraduation.situation.includes('Em preenchimento') 
-                ? 'bg-orange-500' 
-                : posgraduation.situation && posgraduation.situation.includes('Certificado') 
-                ? 'bg-green-500' 
-                : posgraduation.situation && posgraduation.situation.includes('Aguardando certificação') 
-                ? 'bg-yellow-500'
-                : 'bg-[#000]'
-            }`}
-          >
-
-                  
-                </div>
-            <Alert className="flex flex-1 gap-4 rounded-l-none">
-           
-          <div className="flex flex-col flex-1 justify-between w-full">
-            <div className="flex flex-col justify-between">
-           
-              <h2 className=" font-medium">{posgraduation.research_group_name}</h2>
-             
-            </div>
-            <div className="flex items-center justify-between mt-4 gap-4">
-                        <div className="flex items-center gap-4">
-                        
-                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><ClockClockwise size={12}/>{posgraduation.situation}</div>
-                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><GraduationCap size={12}/>{posgraduation.area}</div>
-                       
-
-                        </div>
-
-                        <div className="flex gap-3">
-                        
-                      
-                        </div>
-                        
-                    </div>
-          
-          </div>
-            </Alert>
-          </div>
-        
-
-      ))}
+      {isModalOpen && (
+        <TooltipProvider delayDuration={0}>
+        <ResizablePanelGroup
+    direction="horizontal"
+    onLayout={() => defaultLayout}
+    className="h-full  items-stretch"
+    >
+         <ResizablePanel defaultSize={40} minSize={40}>
+         <Tabs defaultValue={tab} value={tab}>
+    <div className="flex items-center px-4 py-2">
+      <h1 className="text-lg font-bold">Grupos de pesquisa</h1>
 
      
-      </Masonry>
-      </ResponsiveMasonry>
+    </div>
+   <div className="w-full border-b border-neutral-200 dark:border-neutral-800 "></div>
 
-{posgraduations.length >= count && (
-  <div className="w-full flex justify-center my-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
-)}
-                           </div>
-                          )
+    <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex items-center gap-3">
+      <Button onClick={() => onOpen('add-graduate-program')}  size="sm" className="ml-auto gap-1">
+        <FileXls className="h-4 w-4" />
+            Atualizar dados
+            
+         
+        </Button>
 
-                        ):(<div className="mt-2"><DataTable columns={columns} data={posgraduations}/></div>)}
-       
-    
+        <div className="relative w-full bg-white h-10 flex gap-2 items-center border pl-4 border-neutral-200 dark:border-neutral-800 rounded-md dark:bg-neutral-950">
+          <Search size={16} />
+          <Input placeholder="Filtrar pelo nome do grupo..." className="border-none h-8" value={search}  onChange={(e) => setSearch(e.target.value)}/>
+        </div>
+      </div>
+    </div>
+    <TabsContent value="all" className="m-0">
+     <ItensListGrupoPesquisa
+     onResearcherUpdate={handleResearcherUpdate}
+     url={`${urlGeralAdm}researchGroupRest/Query?institution_id=${user.institution_id}`}
+     search={search}
+     />
+    </TabsContent>
+    <TabsContent value="unread" className="m-0">
+   
+    </TabsContent>
+  </Tabs>
+         </ResizablePanel>
+         <ResizableHandle withHandle />
+
+         <ResizablePanel defaultSize={defaultLayout[2]} minSize={50}>
+     
+               {total ? (
+      <DisplayItemGrupoPesquisa
+      acronym={total.acronym}
+    area={total.area}
+    institution_id={total.institution_id}
+    institution_name={total.institution_name}
+    last_date_sent={total.last_date_sent}
+    lattes_id={total.lattes_id}
+    leader_name={total.leader_name}
+    research_group_id={total.research_group_id}
+    research_group_name={total.research_group_name}
+    researcher_id={total.researcher_id}
+    situation={total.situation}
+      />
+    ):(
+      <div className="w-full h-full flex flex-col items-center justify-center">
+       <p className="text-9xl  text-[#719CB8]  font-bold mb-16 animate-pulse">(¬_¬ )</p>
+        <p className="font-medium text-lg">Nenhum grupo de pesquisa selecionado</p>
+      </div>
+    )}
+      
+      </ResizablePanel>
+      </ResizablePanelGroup>
+      </TooltipProvider>
+      )}
        </>
    
         

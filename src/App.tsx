@@ -42,8 +42,8 @@ function App() {
   const [user, setUser] = useState<User>({  state: '', email: '', name: '', img_url: '', institution_id: '',...{} } as User);
 
 
-  const [urlGeral, setUrlGeral] = useState('https://simcc.uesc.br:5002/');
-  const [urlGeralAdm, setUrlGeralAdm] = useState('https://simcc.uesc.br:5000/');
+  const [urlGeral, setUrlGeral] = useState('http://150.164.32.238:13000/');
+  const [urlGeralAdm, setUrlGeralAdm] = useState('http://simcc.uesc.br:5000/');
   const [mapModal, setMapModal] = useState(false)
 
   const [searchType, setSearchType] = useState('');
@@ -61,6 +61,8 @@ function App() {
 const [idDocumentBarema, setIdDocumentBarema] = useState('')
 
 const [isCollapsed, setIsCollapsed] = useState(false)
+const [navCollapsedSize, setNavCollapsedSize] = useState(0)
+const [defaultLayout, setDefaultLayout] = useState([0,440,655])
 const [mode, setMode] = useState('user')
 
   useEffect(() => {
@@ -122,14 +124,16 @@ const [mode, setMode] = useState('user')
       idDocumentBarema, setIdDocumentBarema,
       itemsSelecionadosPopUp , setItensSelecionadosPopUp,
       isCollapsed, setIsCollapsed,
-      mode, setMode
+      mode, setMode,
+      navCollapsedSize, setNavCollapsedSize,
+      defaultLayout, setDefaultLayout
 
     }}
     >
       <DefaultLayout>
       <Routes>
         <Route path='/' element={<Home/>}/>
-        <Route path='/resultados/:searchId?/:searchTypeId?' element={<Resultados/>}/>
+        <Route path='/resultados' element={<Home/>}/>
 
         <Route path='/pos-graduacao/:graduationId?' element={<PosGraduation/>}/>
        
@@ -167,7 +171,13 @@ const [mode, setMode] = useState('user')
 
       
 
-<Route path='/admin' element={<Dashboard/> }/>
+<Route path='/dashboard' element={<Dashboard/> }/>
+<Route path='/dashboard/programas' element={<Dashboard/> }/>
+<Route path='/dashboard/departamentos' element={<Dashboard/> }/>
+<Route path='/dashboard/pesquisadores' element={<Dashboard/> }/>
+<Route path='/dashboard/pesos-avaliacao' element={<Dashboard/> }/>
+<Route path='/dashboard/grupos-pesquisa' element={<Dashboard/> }/>
+<Route path='/dashboard/indicadores' element={<Dashboard/> }/>
 
 <Route
           path='/config'

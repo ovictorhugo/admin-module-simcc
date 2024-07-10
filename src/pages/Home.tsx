@@ -10,7 +10,7 @@ import { useLocation, useParams } from "react-router-dom";
 
 export function Home() {
     const { onOpen } = useModalHomepage();
-    const {isCollapsed,setIdGraduateProgram, idGraduateProgram, valoresSelecionadosExport, setValoresSelecionadosExport} = useContext(UserContext)
+    const {navCollapsedSize, defaultLayout, isCollapsed,setIdGraduateProgram, idGraduateProgram, valoresSelecionadosExport, setValoresSelecionadosExport} = useContext(UserContext)
 
   
 
@@ -33,7 +33,9 @@ export function Home() {
     useEffect(() => {
       if(location.pathname == '/') {
       onOpen('initial-home')
-  } 
+  } else  if(location.pathname == `/resultados`) {
+    onOpen('result-home')
+} 
     }, [location]);
   
 console.log(idGraduateProgram)
@@ -43,9 +45,9 @@ console.log(idGraduateProgram)
     return(
         <>
         <SearchLayout
-         defaultLayout={[0,2, 0]}
+         defaultLayout={defaultLayout}
          defaultCollapsed={isCollapsed}
-         navCollapsedSize={0}
+         navCollapsedSize={navCollapsedSize}
         >
             <GeralProvider/>
 

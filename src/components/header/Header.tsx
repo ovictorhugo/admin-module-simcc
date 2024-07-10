@@ -26,7 +26,7 @@ import {
 
   
 import { ChartLine, Gear, GraduationCap, GridFour, ListDashes, SignIn, Textbox, UserPlus } from "phosphor-react";
-import { DotSquare, GitBranch, Grip, LogIn, Moon, Search, Sun } from "lucide-react";
+import { DotSquare, GitBranch, Grip, Laptop, LogIn, Moon, Search, Sun } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { Button } from "../ui/button";
 import { UserConfigHeader } from "./user-config-header";
@@ -76,9 +76,9 @@ export function Header() {
   
 
     return(
-        <header className={`h-[53px]  z-[3] flex justify-between border-b border-neutral-200 dark:border-neutral-800 px-4   items-center sticky top-0 `}>
-            <div className="  flex items-center h-12 gap-4">
-            <div className="flex gap-3 items-center h-full justify-center ">
+      <header className={`h-[50px]  z-[3] flex justify-between border-b border-neutral-200 dark:border-neutral-800 px-4   items-center sticky top-0 `}>
+      <div className="  flex items-center h-12 gap-4">
+      <div className="flex gap-3 items-center h-full justify-center ">
             <Link to={"/"} className="h-[18px]  " onClick={() => handleClick()} >{(theme ==  'dark' ) ? (<LogoConecteeWhite />):(<LogoConectee />)}</Link>
 
             <div className="h-4 w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>
@@ -127,27 +127,30 @@ export function Header() {
              
 
 
-                <DropdownMenu>
+             <DropdownMenu>
       <DropdownMenuTrigger asChild>
 
       <Button variant="ghost" size="icon" >
-              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                <span className="sr-only">Menu de ações rápidas</span>
-              </Button>
+          <span className="sr-only">Menu de ações rápidas</span>
+      </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+        <DropdownMenuItem className="flex items-center gap-3" onClick={() => setTheme("light")}>
+        <Sun className="h-4 w-4" /> Modo Claro
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+        <DropdownMenuItem className="flex items-center gap-3" onClick={() => setTheme("dark")}>
+        <Moon className="h-4 w-4" />   Modo Escuro
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+        <DropdownMenuItem className="flex items-center gap-3" onClick={() => setTheme("system")}>
+        <Laptop className="h-4 w-4" />  Padrão do sistema
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+
+    <Link to={'/dashboard'}>admin</Link>
 
             <Tooltip>
             <TooltipTrigger asChild>

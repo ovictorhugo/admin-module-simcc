@@ -49,8 +49,7 @@ interface Props {
     scopus: string;
     orcid:string
     openalex: string
-    
-}
+  }
 
 
  export function InformationResearcher(props:Props) {

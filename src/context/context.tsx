@@ -84,6 +84,12 @@ interface UserContextType {
       mode:string, 
       setMode:React.Dispatch<React.SetStateAction<string>>;
 
+      navCollapsedSize:number, 
+      setNavCollapsedSize:React.Dispatch<React.SetStateAction<number>>;
+
+      defaultLayout: number[];
+  setDefaultLayout: React.Dispatch<React.SetStateAction<number[]>>;
+
 }
 
 export const UserContext = createContext<UserContextType>({
@@ -142,8 +148,14 @@ setPesquisadoresSelecionadosGroupBarema: () => {},
 searchType:"",
   setSearchType:() => {},
 
+  navCollapsedSize:0, 
+  setNavCollapsedSize:() => {},
+
   isCollapsed:false, 
   setIsCollapsed:() => {},
+
+  defaultLayout: [],
+  setDefaultLayout:() => {},
 
       mode:"", 
       setMode:() => {},

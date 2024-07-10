@@ -8,9 +8,16 @@ import { useModalHomepage } from "../components/hooks/use-modal-homepage";
 import { TooltipProvider } from "../components/ui/tooltip"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../components/ui/resizable"
 import { cn } from "../lib"
-import { Info, List, Users } from "phosphor-react";
-import { Separator } from "../components/ui/separator";
-import { useState } from "react";
+import { Link} from "react-router-dom";
+
+import { useContext, useState } from "react";
+import { UserContext } from "../context/context";
+import { AccountSwitcher } from "../components/navigation/user-list";
+import { AlertCircle, BarChartBig, Blocks, Building, Building2, FlaskConical, GraduationCap, Home, Info, LayoutDashboard, List, PieChart, Rows3, Rows4, SearchCheck, User, Weight, X } from "lucide-react";
+import { useTheme } from "next-themes";
+import { ScrollArea } from "../components/ui/scroll-area";
+import { UserConfigHeader } from "../components/header/user-config-header";
+
 interface MailProps {
  
   defaultLayout: number[] | undefined
@@ -21,27 +28,29 @@ interface MailProps {
 export default function AdminLayout({
 
   defaultLayout = [265, 440, 655],
-  defaultCollapsed = false,
+  defaultCollapsed = true,
   navCollapsedSize,
   children
 }: MailProps) {
   
-  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed)
+  const {isCollapsed, setIsCollapsed, loggedIn,user} = useContext(UserContext)
   
   const { isOpen: isOpenHomepage, type: typeHomepage } = useModalHomepage();
   const isModalOpen = isOpenHomepage && typeHomepage === "initial-home";
-
+  
+  
     return (
-      <TooltipProvider delayDuration={0}>
+    <div>
+      
+        <TooltipProvider delayDuration={0}>
+
+       
 
 <ResizablePanelGroup
+
         direction="horizontal"
-        onLayout={(sizes: number[]) => {
-          document.cookie = `react-resizable-panels:layout=${JSON.stringify(
-            sizes
-          )}`
-        }}
-        className="h-full max-h-[800px] items-stretch"
+        onLayout={() => defaultLayout}
+        className="h-full  items-stretch"
       >
 
 <ResizablePanel
@@ -50,115 +59,137 @@ export default function AdminLayout({
           collapsible={true}
           minSize={15}
           maxSize={20}
-          onCollapse={(collapsed) => {
-            setIsCollapsed(collapsed)
-            document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
-              collapsed
-            )}`
+          onCollapse={() => { // Função sem parâmetros
+            setIsCollapsed(true);
           }}
-          className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out")}
+          onExpand={() => { // Função para expandir também sem parâmetros
+            setIsCollapsed(false);
+          }}
+          className={cn('flex flex-col justify-between', isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out ")}
         >
 
-<div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? 'h-[52px]': 'px-2')}>
-          
+<div>
+<div className={cn("flex h-[50px] items-center justify-center border-b border-b-neutral-200 dark:border-b-neutral-800", isCollapsed ? 'h-[50px]': 'px-2')}>
+<AccountSwitcher isCollapsed={isCollapsed}  />
           </div>
 
           <NavigationSidebar
             isCollapsed={isCollapsed}
             links={[
               {
-                title: "Inbox",
-                label: "128",
-                icon: Users,
-                variant: "default",
-              },
-              {
-                title: "Drafts",
-                label: "9",
-                icon: Users,
-                variant: "ghost",
-              },
-              {
-                title: "Sent",
+                title: "Dashboard",
                 label: "",
-                icon: Users,
-                variant: "ghost",
+                icon: LayoutDashboard,
+                link: "/dashboard",
               },
+
               {
-                title: "Junk",
-                label: "23",
-                icon: Users,
-                variant: "ghost",
-              },
-              {
-                title: "Trash",
+                title: "Departamentos",
                 label: "",
-                icon: Users,
-                variant: "ghost",
+                icon: Building2,
+                link: "/dashboard/departamentos",
+              },
+
+              {
+                title: "Pesquisadores",
+                label: "",
+                icon: User,
+                link: "/dashboard/pesquisadores",
+              },
+              
+              {
+                title: "Programas",
+                label: "",
+                icon: GraduationCap,
+                link: "/dashboard/programas",
               },
               {
-                title: "Archive",
+                title: "Grupos de pesquisa",
                 label: "",
-                icon: Users,
-                variant: "ghost",
+                icon: Blocks,
+                link: "/dashboard/grupos-pesquisa",
               },
+              {
+                title: "INCT's",
+                label: "",
+                icon: FlaskConical,
+                link: "/dashboard/inct",
+              },
+              {
+                title: "Pesos de avaliação",
+                label: "",
+                icon: Weight,
+                link: "/dashboard/pesos-avaliacao",
+              },
+              {
+                title: "Indicadores",
+                label: "",
+                icon: PieChart,
+                link: "/dashboard/indicadores",
+              },
+
+
+             
             ]}
           />
-          <Separator />
+
+          <div className="w-full h-[0.5px] bg-neutral-200 dark:bg-neutral-800"></div>
+  
 
           <NavigationSidebar
             isCollapsed={isCollapsed}
             links={[
               {
-                title: "Social",
-                label: "972",
-                icon: Users,
-                variant: "ghost",
+                title: "Pós-graduação",
+                label: "",
+                icon: GraduationCap,
+                link: "/pos-graduacao",
               },
               {
-                title: "Updates",
-                label: "342",
-                icon: Users,
-                variant: "ghost",
+                title: "Indicadores",
+                label: "",
+                icon: BarChartBig,
+                link: "/indicadors",
               },
+             
+            ]}
+          />
+</div>
+
+<div className="flex flex-col ">
+          <NavigationSidebar
+            isCollapsed={isCollapsed}
+            links={[
               {
-                title: "Forums",
-                label: "128",
-                icon: Users,
-                variant: "ghost",
+                title: "Informações",
+                label: "",
+                icon: Info,
+                link: "/informacoes",
               },
-              {
-                title: "Shopping",
-                label: "8",
-                icon: Users,
-                variant: "ghost",
-              },
-              {
-                title: "Promotions",
-                label: "21",
-                icon: Users,
-                variant: "ghost",
-              },
+           
+             
             ]}
           />
 
+           {loggedIn && (
+             <UserConfigHeader/>
+           )}
+          </div>
+          
           </ResizablePanel>
 
           <ResizableHandle withHandle />
 
-          <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-            <main className="flex-1  flex flex-col">
+          <ResizablePanel defaultSize={defaultLayout[1]} minSize={30} className="h-screen">
+            <main className="flex-1  flex flex-col h-full">
             {/* Assuming Header is another component */}
             <Header />
-            <div className="flex h-full ">
-            <SidebarProvider/>
+            
+            <div className="h-full overflow-y-auto flex flex-1">
             {children}
-            
-        
-            
             </div>
 
-
+          
           </main>
 
           </ResizablePanel>
@@ -168,6 +199,7 @@ export default function AdminLayout({
         <Toaster/>
         </ResizablePanelGroup>
       </TooltipProvider >
+    </div>
     );
   };
   

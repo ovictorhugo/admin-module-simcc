@@ -68,13 +68,10 @@ export default function SearchLayout({
         >
 
 <div>
-<div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? 'h-[52px]': 'px-2')}>
+<div className={cn("flex h-[50px] items-center justify-center border-b border-b-neutral-200 dark:border-b-neutral-800", isCollapsed ? 'h-[50px]': 'px-2')}>
 <AccountSwitcher isCollapsed={isCollapsed}  />
           </div>
-
-          <div className="w-full h-[0.5px] bg-neutral-200 dark:bg-neutral-800"></div>
-
-
+          
           <NavigationSidebar
             isCollapsed={isCollapsed}
             links={[
@@ -129,7 +126,7 @@ export default function SearchLayout({
           />
 </div>
 
-          <div className="mb-3">
+<div className="flex flex-col ">
           <NavigationSidebar
             isCollapsed={isCollapsed}
             links={[
@@ -144,7 +141,9 @@ export default function SearchLayout({
             ]}
           />
 
-            <UserConfigHeader/>
+           {loggedIn && (
+             <UserConfigHeader/>
+           )}
           </div>
           
           </ResizablePanel>
@@ -155,17 +154,10 @@ export default function SearchLayout({
             <main className="flex-1  flex flex-col h-full">
             {/* Assuming Header is another component */}
             <Header />
-            <div className="text-white bg-red-700 dark:bg-red-700/50 w-full flex justify-between items-center py-2 font-medium px-4 text-sm">
-            <AlertCircle size={16}/>
-              <p>{user.displayName}, atualize seu <Link to={''} target={'_blank'}>Currículo Lattes</Link>. Última atualização:</p>
-              <X size={16}/>
+            
+            <div className="h-full overflow-y-auto flex flex-1">
+            {children}
             </div>
-            <ScrollArea className="flex flex-1">
-       
-           
-           {children}
-        
-            </ScrollArea>
 
           
           </main>

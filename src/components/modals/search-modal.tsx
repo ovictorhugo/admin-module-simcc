@@ -39,7 +39,10 @@ interface Csv {
     type: string
   }
 
-
+  const useQuery = () => {
+    return new URLSearchParams(useLocation().search);
+  }
+  
 
 
   import { getFirestore,  collection, getDocs } from 'firebase/firestore';
@@ -48,6 +51,12 @@ import { useModalHomepage } from "../hooks/use-modal-homepage";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export function SearchModal() {
+
+   //retorna url
+   const queryUrl = useQuery();
+   const navigate = useNavigate();
+const type_search = queryUrl.get('type_search');
+const terms = queryUrl.get('terms');
 
     const { onClose, isOpen, type } = useModal();
     
@@ -103,6 +112,8 @@ export function SearchModal() {
         }
       }
     };
+
+    console.log('filter',filteredItems)
 
     const handleChangeInput = (value:string) => {
       searchFilesByTermPrefix(value)
@@ -192,12 +203,21 @@ export function SearchModal() {
   }
 
 
+  let TypeSearch = type_search ?? searchType
+  let Terms = terms ?? formatTerms(itemsSelecionadosPopUp)
 
   const handlePesquisaFinal = () => {
     if(itemsSelecionadosPopUp.length > 0) {
       setItensSelecionados(itemsSelecionadosPopUp)
-      history(`/resultados`)
       setInput('')
+
+      queryUrl.set('type_search', TypeSearch);
+        queryUrl.set('terms', Terms);
+        navigate({
+          pathname: '/resultados',
+          search: query.toString(),
+        });
+
     onClose()
     
     } else {
@@ -399,7 +419,7 @@ console.log('fawefwef', urlOpenAlex)
         </div>
 
         <div className="w-fit">
-            <Button onClick={() => handlePesquisaFinal()} variant="outline" className={`${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} size={'icon'}>
+            <Button onClick={() => handlePesquisaFinal()} variant="outline" className={`${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 z-[9999999999999999999] `} size={'icon'}>
        <Funnel size={16} className="" /> 
        
         </Button>

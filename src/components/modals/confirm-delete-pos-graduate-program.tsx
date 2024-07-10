@@ -49,7 +49,6 @@ export function ConfirmDeletePosGraduateProgram() {
    
     };
 
-
     return(
         <Dialog open={isModalOpen} onOpenChange={onClose}> 
         <DialogContent>
@@ -58,7 +57,7 @@ export function ConfirmDeletePosGraduateProgram() {
         <strong className="bg-red-500 text-white hover:bg-red-600 transition duration-500 font-medium">Deletar</strong> pós-graduação em {data.name}
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
-          É possível alterar informações básicas do programa de pós-graduação, no campo de edição, caso delete o programa todas as informações serão perdidas.
+          É possível alterar informações básicas do programa. Caso delete,  todas as informações serão perdidas.
           </DialogDescription>
             </DialogHeader>
 

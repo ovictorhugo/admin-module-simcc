@@ -12,7 +12,7 @@ interface VisaoPrograma {
     count_gpr: string,
     institution_id: string,
     count_r:string
-  }
+}
 
 export function DataGeralDashboard() {
     const { user, urlGeralAdm } = useContext(UserContext);

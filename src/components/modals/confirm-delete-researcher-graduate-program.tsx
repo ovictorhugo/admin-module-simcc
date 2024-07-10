@@ -23,19 +23,20 @@ export function ConfirmDeleteResearcherGraduateProgram() {
      const id_delete = String(dataModal.id_delete)
  
      const [id_program , setIdProgram] = useState(dataModal && dataModal.graduate_program_id)
-     const [lattes_id, setLattesId] = useState('')
+     const [lattes_id, setLattesId] = useState(dataModal && dataModal.lattes_id)
+
      useEffect(() => {
-       setIdProgram(dataModal.graduate_program_id)
+       setIdProgram(dataModal.graduate_program_id || '')
        setLattesId(dataModal?.lattes_id || '')
      }, [dataModal]);
  
-     const handleSubmitDelete = async ( researcher_id:string) => {
+     const handleSubmitDelete = async ( researcher_id:string, id_programaa:string) => {
 
 
        try {
          const data = [
            {
-             graduate_program_id: id_program,
+             graduate_program_id: id_programaa,
              lattes_id:researcher_id,
              }
          ]
@@ -130,7 +131,7 @@ export function ConfirmDeleteResearcherGraduateProgram() {
             <ArrowUUpLeft size={16} className="" />Cancelar
               </Button>
 
-              <Button variant={'destructive'}    onClick={() =>handleSubmitDelete(lattes_id)}>
+              <Button variant={'destructive'}    onClick={() =>handleSubmitDelete(lattes_id, id_program)}>
               <Trash size={16} className="" />Deletar
               </Button>
             </DialogFooter>

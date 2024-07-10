@@ -22,8 +22,6 @@ export function ConfirmDeleteStudentGraduateProgram() {
      }, [dataModal]);
  
      const handleSubmitDelete = async ( researcher_id:string) => {
-
-
       try {
         const data = [
           {

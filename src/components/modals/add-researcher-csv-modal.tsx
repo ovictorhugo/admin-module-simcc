@@ -1,208 +1,197 @@
-import { ArrowUUpLeft, DownloadSimple, FileCsv, Plus } from "phosphor-react";
+import { ArrowUUpLeft, FileCsv, FileXls, Upload } from "phosphor-react";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogFooter
-  } from "../ui/dialog";
-  import { toast } from "sonner"
-
-  import Papa from 'papaparse';
-import { useContext, useState } from "react";
-import { DataTableModal } from "../componentsModal/data-table";
-import { columns } from "../componentsModal/columns";
-import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { useCallback, useContext, useState } from "react";
+import { toast } from "sonner"
 import { UserContext } from "../../context/context";
-import { Link } from "react-router-dom";
+import * as XLSX from 'xlsx';
+import {useDropzone} from 'react-dropzone'
 
-  interface PesquisadorProps {
-    name: string
-    lattes_id: string
-  }
+interface Bolsista {
+  name: string
+  id_lattes: string
+}
 
 export function AddResearcherCsvModal() {
-    const { onClose, isOpen, type: typeModal } = useModal();
-    const isModalOpen = isOpen && typeModal === "add-researcher-csv";
-    const [data, setData] = useState<PesquisadorProps[]>([]);
-     //api rest
-     const { user, urlGeralAdm } = useContext(UserContext);
-
-    const handleFileUpload = (e: any) => {
-      const file = e.target.files[0];
+  const { onClose, isOpen, type: typeModal } = useModal();
   
-      if (file) {
-    
-  
-        Papa.parse(file, {
-          complete: (result: any) => {
-            const parsedData = result.data;
-          
+  const isModalOpen = (isOpen && typeModal === 'add-researcher-csv')
 
-            // Filtrar cabeçalho e linhas vazias
-        const filteredData = parsedData.filter((row: any) => Object.values(row).some((value: any) => value !== ""));
+  const { urlGeral } = useContext(UserContext)
+  const [fileInfo, setFileInfo] = useState({ name: '', size: 0 });
 
-        // Transformar os dados filtrados em um array de objetos com a estrutura desejada
-        const jsonData = filteredData.map((row: any) => ({
-          researcher_id: uuidv4(),
-          name: row.name,
-          lattes_id: row.lattes_id,
-          institution_id: user.institution_id,
-        }));
+  const [data, setData] = useState<Bolsista[]>([]);
 
-        setData(jsonData);
-  
-   
-          },
-          header: true,
-          skipEmptyLines: true,
-          delimiter: ";",
-          encoding: "UTF-8",
-        });
-      }
-    };
+  const onDrop = useCallback((acceptedFiles: any) => {
+      handleFileUpload(acceptedFiles);
+  }, []);
 
-    console.log('lista csv',data)
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+      onDrop,
+  });
 
-   
-
-    const handleSubmitPesquisador = async () => {
-      try {
-        let urlProgram = urlGeralAdm + '/ResearcherRest/Insert';
-    
-        // Filtrar os dados com erros
-        const dataWithErrors = [];
-        
-        // Iterar sobre os itens em data
-        for (const item of data) {
-          const { name, lattes_id } = item;
-    
-          if (name.length === 0 && lattes_id.length === 0) {
-            toast("Parece que os campos estão vazios", {
-              description: "Preencha os campos nome do pesquisador e Lattes Id",
-              action: {
-                label: "Fechar",
-                onClick: () => console.log("Undo"),
-              },
-            });
-          } else if (lattes_id.length < 14) {
-            toast("Parece que o Lattes Id está incorreto ou não preenchido", {
-              description: "O Lattes ID deve conter 13 números",
-              action: {
-                label: "Fechar",
-                onClick: () => console.log("Undo"),
-              },
-            });
-          } else if (name.length === 0) {
-            toast("Preencha o nome do pesquisador", {
-              description: "Parece que o campo está vazio",
-              action: {
-                label: "Fechar",
-                onClick: () => console.log("Undo"),
-              },
-            });
-          } else {
-            // Se não houver erros, adiciona o item aos dados a serem enviados
-            dataWithErrors.push(item);
-          }
-        }
-    
-        // Se houver itens com erros, atualiza o estado de data com esses itens
-        if (dataWithErrors.length > 0) {
-      const validData = data.filter(item => !dataWithErrors.includes(item));
-      setData(validData);
-    }
-    
-        // Envia apenas os dados sem erros para o servidor
-        if (dataWithErrors.length > 0) {
-          const response = await fetch(urlProgram, {
-            mode: 'cors',
-            method: 'POST',
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': 'POST',
-              'Access-Control-Allow-Headers': 'Content-Type',
-              'Access-Control-Max-Age': '3600',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dataWithErrors),
+  const handleFileUpload = (files: any) => {
+      const uploadedFile = files[0];
+      if (uploadedFile) {
+          setFileInfo({
+              name: uploadedFile.name,
+              size: uploadedFile.size,
           });
-    
-          if (response.ok) {
-            toast("Dados enviados com sucesso", {
-              description: "Pesquisadores cadastrados na instituição",
-              action: {
-                label: "Fechar",
-                onClick: () => console.log("Undo"),
-              },
-            });
-          } else {
-            toast("Erro ao enviar os dados ao servidor", {
-              description: "Tente novamente",
-              action: {
-                label: "Fechar",
-                onClick: () => console.log("Undo"),
-              },
-            });
-          }
-        }
-      } catch (error) {
-        console.error('Erro ao processar a requisição:', error);
+          readExcelFile(uploadedFile);
       }
-    };
-    
-    return(
-        <Dialog open={isModalOpen} onOpenChange={onClose}> 
-        <DialogContent className="min-w-[40vw] ">
-        <DialogHeader className="pt-8 px-6">
-                 <DialogTitle className="text-2xl text-center font-medium">
-                 <strong className="bg-blue-700 text-white hover:bg-blue-800 transition duration-500 font-medium">Vincule</strong> os pesquisadores <br/> à sua instituição de ensino
-                 </DialogTitle>
-                
-               </DialogHeader>
+  };
 
-               <div>
-              <div className="flex gap-3">
-              <label htmlFor="fileInput" onChange={handleFileUpload} className="rounded-md bg-blue-700 text-sm font-bold cursor-pointer transition-all gap-3 text-white h-10 w-full flex items-center justify-center hover:bg-blue-800">
-    <input onChange={handleFileUpload} id="fileInput" type="file" accept=".csv"  hidden />
-    <FileCsv size={16} className="" />
-Importar arquivo .csv
-    
-  </label>
+  const readExcelFile = (file: File) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+          const data = new Uint8Array(e.target?.result as ArrayBuffer);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
 
-  <a href={'model-add-researcher.csv'}><Button size={'icon'}><DownloadSimple size={16} className="" /></Button></a>
-              </div>
-               </div>
+          // Convert the worksheet to JSON, starting from the third row
+          const json = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
 
-              {data.length != 0 ? (
-                 <div>
-                <DataTableModal columns={columns} data={data}/>
-                 </div>
-              ):(
-                <div className="text-center  text-sm  text-gray-500">Nenhum arquivo importado</div>
-              )}
+          // Extract headers from the first row
+          const headers: string[] = json[0] as string[];
 
-               
-               <DialogFooter className=" py-4 ">
-        <Button variant={'ghost'}   onClick={() => {
-          onClose()
+          // Remove the first row (headers themselves)
+          const rows = json.slice(1);
+
+          // Map headers to your interface keys
+          const headerMap: { [key: string]: keyof Bolsista } = {
+              'name': 'name',
+              'id_lattes': 'id_lattes'
+          };
+
+          // Convert rows to an array of objects
+          const jsonData = rows.map((row: any) => {
+              const obj: Bolsista = {
+                  name: '',
+                  id_lattes: ''
+              };
+              headers.forEach((header, index) => {
+                  const key = headerMap[header];
+                  if (key) {
+                      obj[key] = row[index] || "";
+                  }
+              });
+              return obj;
+          });
+
+          setData(jsonData);
+      };
+      reader.readAsArrayBuffer(file);
+  };
+
+  const handleSubmitBolsista = async () => {
+      try {
+          if (data.length === 0) {
+              toast("Erro: Nenhum arquivo selecionado", {
+                  description: "Por favor, selecione um arquivo csv para enviar.",
+                  action: {
+                      label: "Fechar",
+                      onClick: () => console.log("Fechar"),
+                  },
+              });
+              return;
+          }
+  
+          let urlBolsistaInsert = `${urlGeral}ResearcherRest/Insert`;
+      
+          const response = await fetch(urlBolsistaInsert, {
+              mode: 'cors',
+              method: 'POST',
+              headers: {
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'POST',
+                  'Access-Control-Allow-Headers': 'Content-Type',
+                  'Access-Control-Max-Age': '3600',
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data),
+          });
+
+          if (response.ok) {
+              toast("Dados enviados com sucesso", {
+                  description: "Todos os dados foram enviados.",
+                  action: {
+                      label: "Fechar",
+                      onClick: () => console.log("Fechar"),
+                  },
+              });
+          }
+
           setData([])
-        }}>
-            <ArrowUUpLeft size={16} className="" />Cancelar
-              </Button>
+          setFileInfo({
+              name: '',
+              size: 0,
+          });
+  
+      } catch (error) {
+          console.error('Erro ao processar a requisição:', error);
+          toast("Erro ao processar a requisição", {
+              description: "Tente novamente mais tarde.",
+              action: {
+                  label: "Fechar",
+                  onClick: () => console.log("Fechar"),
+              },
+          });
+      }
+  };
+  
 
-              <Button onClick={() => handleSubmitPesquisador()}   className="text-white dark:text-white" >
-              <Plus size={16} className="" />Adicionar
-              </Button>
-            </DialogFooter>
+  console.log(data)
 
-               </DialogContent>
+  return (
+      <Dialog open={isModalOpen} onOpenChange={onClose}> 
+          <DialogContent className="min-w-[40vw] ">
+              <DialogHeader className="pt-8 px-6 flex flex-col items-center">
+                  <DialogTitle className="text-2xl text-center font-medium">
+                      Importar arquivo .xls
+                  </DialogTitle>
+                  <DialogDescription className="text-center text-zinc-500 max-w-[350px]">
+                      Atualize os itens do na Vitrine com a planilha .xls gerada no SICPAT
+                  </DialogDescription>
+              </DialogHeader>
 
-               </Dialog>
-        
-    )
+              <div className="mb-4">
+                  <div {...getRootProps()} className="border-dashed mb-6 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 mt-4">
+                      <input {...getInputProps()} />
+                      <div className="p-4  border rounded-md">
+                          <FileXls size={24} className=" whitespace-nowrap" />
+                      </div>
+                      {isDragActive ? (
+                          <p>Solte os arquivos aqui ...</p>
+                      ) : (
+                          <p>Arraste e solte o arquivo .xls aqui ou clique para selecionar o arquivo</p>
+                      )}
+                  </div>
+
+                  <div>
+                      {fileInfo.name && (
+                          <div className="justify-center flex items-center gap-3">
+                              <FileXls size={16} />
+                              <p className=" text-center  text-zinc-500 text-sm">
+                                  Arquivo selecionado: <strong>{fileInfo.name}</strong> ({(fileInfo.size / 1024).toFixed(2)} KB)
+                              </p>
+                          </div>
+                      )}
+                  </div>
+              </div>
+
+              <DialogFooter>
+                  <Button onClick={() => onClose()} variant={'ghost'}>
+                      <ArrowUUpLeft size={16} className="" />Cancelar
+                  </Button>
+                  <Button onClick={() => handleSubmitBolsista()}>
+                      <Upload size={16} className="" />Atualizar dados
+                  </Button>
+              </DialogFooter>
+
+              <div></div>
+          </DialogContent>
+      </Dialog>
+  )
 }
