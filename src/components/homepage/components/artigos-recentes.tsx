@@ -1,0 +1,108 @@
+import { useContext, useMemo, useState } from "react";
+import { Button } from "../../ui/button";
+import { UserContext } from "../../../context/context";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../../ui/carousel";
+import { ArticleItem } from "./article-item";
+import Autoplay from "embla-carousel-autoplay"
+
+type Publicacao = {
+    id: string,
+    doi: string,
+    name_periodical: string,
+    qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "SQ" | "NP",
+    title: string,
+    year: string,
+    color: string,
+    researcher: string,
+    lattes_id: string,
+    magazine: string,
+    lattes_10_id: string,
+    jcr_link: string,
+    jif: string
+    researcher_id: string
+  }
+
+
+export function ArtigosRecentes() {
+    const {urlGeral} = useContext(UserContext)
+    const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
+
+    const urlTermPublicacoes = urlGeral + 'recently_updated?year=2024&university='
+
+    useMemo(() => {
+        const fetchData = async () => {
+            try {
+
+              const response = await fetch( urlTermPublicacoes, {
+                mode: "cors",
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": "GET",
+                  "Access-Control-Allow-Headers": "Content-Type",
+                  "Access-Control-Max-Age": "3600",
+                  "Content-Type": "text/plain",
+                },
+              });
+              const data = await response.json();
+              if (data) {
+                setPublicacoes(data);
+
+              }
+            } catch (err) {
+              console.log(err);
+            }
+          };
+          fetchData();
+        }, [ urlTermPublicacoes]);
+
+    return(
+        <div className="w-full">
+           <div className="flex items-center justify-between mb-6">
+           <h2 className="text-2xl font-medium ">Produções mais recentes</h2>
+
+           <Button size={'icon'} className="h-8 w-8"></Button>
+           </div>
+
+           <div>
+           <Carousel className="w-full flex gap-3 items-center "
+            plugins={[
+                Autoplay({
+                  delay: 2000,
+                }),
+              ]}
+           >
+                <CarouselPrevious />
+      <CarouselContent className="-ml-1 flex w-full flex-1">
+        {publicacoes.slice(0,10).map((props, index) => (
+          <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3">
+            <div className="p-1">
+            <ArticleItem
+    id={props.id}
+            doi={props.doi}
+            name_periodical={props.name_periodical}
+            qualis={props.qualis}
+            title={props.title.toUpperCase()}
+            year={props.year}
+            color={props.color}
+            researcher={props.researcher}
+            lattes_id={props.lattes_id}
+            magazine={props.magazine}
+            lattes_10_id={props.lattes_10_id}
+            jcr_link={props.jcr_link}
+            jif={props.jif}
+            researcher_id={props.researcher_id}
+            distinct={props.distinct}
+    />
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      
+     
+      <CarouselNext />
+      
+    </Carousel>
+           </div>
+        </div>
+    )
+}

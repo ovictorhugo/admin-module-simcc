@@ -35,6 +35,8 @@ export function Home() {
       onOpen('initial-home')
   } else  if(location.pathname == `/resultados`) {
     onOpen('result-home')
+} else if(location.pathname == '/pos-graduacao') {
+    onOpen('graduation-home')
 } 
     }, [location]);
   

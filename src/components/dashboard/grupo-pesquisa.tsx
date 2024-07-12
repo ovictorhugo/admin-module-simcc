@@ -91,7 +91,7 @@ export function GrupoPesquisaView() {
 
     <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center gap-3">
-      <Button onClick={() => onOpen('add-graduate-program')}  size="sm" className="ml-auto gap-1">
+      <Button onClick={() => onOpen('add-grupo-pesquisa')}  size="sm" className="ml-auto gap-1">
         <FileXls className="h-4 w-4" />
             Atualizar dados
             

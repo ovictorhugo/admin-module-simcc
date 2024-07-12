@@ -165,11 +165,19 @@ export function AddResearcherDashboard() {
         }
       };
 
-      useEffect(() => {
-        fetchDataTable()
-      }, [urlGetResearcher]);
+     
 
-  const {onOpen} = useModal()
+  const {onOpen, isOpen:isOpenModal, onClose, type:typeModal} = useModal()
+
+  
+
+  useEffect(() => {
+    if (typeModal === 'confirm-delete-researcher' && !isOpenModal) {
+      fetchDataTable();
+    }
+
+    fetchDataTable();
+  }, [isOpenModal, type, fetchDataTable]);
 
   const history = useNavigate();
 

@@ -8,6 +8,9 @@ import { Separator } from "../ui/separator"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
 import QRCode from "react-qr-code";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
+
+
 
 interface Props {
     among: number,
@@ -130,7 +133,12 @@ const handleDownloadJson = async () => {
           <div className="flex gap-3">
          
 
-          <Button
+         
+
+          <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+            <Button
             variant={'default'}
             onClick={() => {
               // Verifica se o pesquisador já está selecionado pelo nome
@@ -163,11 +171,23 @@ const handleDownloadJson = async () => {
               <Plus size={16} className="" />
             )}
           </Button>
+            </TooltipTrigger>
+            <TooltipContent>Adicionar pesquisador(a)</TooltipContent>
+          </Tooltip>
+          </TooltipProvider>
 
+            
+          <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
             <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
-             
-            <ArrowSquareOut size={8} className="h-4 w-4" />
-            </Button>
+            <span className="sr-only">Open menu</span>
+             <ArrowSquareOut size={8} className="h-4 w-4" />
+             </Button>
+            </TooltipTrigger>
+            <TooltipContent>Ir a página</TooltipContent>
+          </Tooltip>
+          </TooltipProvider>
 
           <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -279,17 +299,19 @@ const handleDownloadJson = async () => {
             )}
 
 
-            <div className={isVisible ? "h-auto transition-all" : "h-[60px] overflow-hidden transition-all"}>
+            <div className={isVisible || (props.abstract.length < 500)  ? "h-auto transition-all" : "h-[60px] overflow-hidden transition-all"}>
             <p className="text-gray-400 text-sm text-justify ">{props.abstract}</p>
             </div>
 
           
 
-            <div className="flex gap-4 items-center mt-4">
+            {props.abstract.length > 500 && (
+              <div className="flex gap-4 items-center mt-4">
               <div className={`${!isVisible && ('animate-bounce')} cursor-pointer rounded-md hover:bg-gray-100 h-8 w-8 transition-all flex items-center justify-center`}>
                 <CaretDown onClick={() => setIsVisible(!isVisible)} size={24} className={isVisible ? "rotate-180 transition-all  text-gray-400" : "text-gray-400  transition-all"} />
               </div>
             </div>
+            )}
 
             <div className="h-[0.5px] my-6 w-full bg-neutral-200 dark:bg-neutral-800"></div>
 

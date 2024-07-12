@@ -37,6 +37,7 @@ interface Patrimonio {
   import { format, differenceInDays } from 'date-fns';
 import { Button } from "../../ui/button"
 import { Skeleton } from "../../ui/skeleton"
+import { useModal } from "../../hooks/use-modal-store"
 
 export function ItensList(props:Props) {
     const [total, setTotal] = useState<Patrimonio[]>([]);
@@ -48,40 +49,49 @@ export function ItensList(props:Props) {
         }
       };
       const [isLoading, setIsLoading] = useState(false)
+      const {isOpen, type} = useModal()
 
     const {urlGeral} = useContext(UserContext)
 
     const urlPatrimonioInsert = props.url;
 
-    useEffect(() => {
-        setIsLoading(true)
-      const fetchData = async () => {
+    const fetchData = async () => {
+      setIsLoading(true)
        
-        try {
-            
-          const response = await fetch(urlPatrimonioInsert , {
-            mode: "cors",
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Methods": "GET",
-              "Access-Control-Allow-Headers": "Content-Type",
-              "Access-Control-Max-Age": "3600",
-              "Content-Type": "text/plain",
-            },
-          });
-          const data = await response.json();
-          if (data) {
-              setTotal(data)
-              setIsLoading(false)
-          }
-        } catch (err) {
-          console.log(err);
+      try {
+          
+        const response = await fetch(urlPatrimonioInsert , {
+          mode: "cors",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Max-Age": "3600",
+            "Content-Type": "text/plain",
+          },
+        });
+        const data = await response.json();
+        if (data) {
+            setTotal(data)
+            setIsLoading(false)
         }
-      };
-      fetchData()
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+
+    useEffect(() => {
+      if (type === 'confirm-delete-pos-graduate-program' && isOpen) {
+        fetchData();
+      } else if (type === 'add-graduate-program' && !isOpen) {
+        fetchData();
+      }
   
-     
-    }, [urlPatrimonioInsert]);
+      fetchData();
+    }, [isOpen, type]);
+
+
     const qualisColor = {
       'MESTRADO': 'bg-blue-200',
       'DOUTORADO': 'bg-blue-800',

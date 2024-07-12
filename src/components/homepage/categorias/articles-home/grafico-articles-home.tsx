@@ -1,17 +1,71 @@
 import { useEffect, useState } from "react";
 import { Alert } from "../../../ui/alert";
-import Highcharts from 'highcharts'
-import HighchartsReact from 'highcharts-react-official'
+import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 type Articles = {
-    articles: any[];
+  articles: any[];
 }
 
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent
+} from "../../../../components/ui/chart"
 
-export function GraficoArticleHome(props:Articles) {
-    type Qualis = "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "SQ" | "NP";
+const chartConfig = {
+  views: {
+    label: "Page Views",
+  },
+  A1: {
+    label: "Qualis A1",
+    color: "hsl(var(--chart-1))",
+  },
+  A2: {
+    label: "Qualis A2",
+    color: "hsl(var(--chart-1))",
+  },
+  A3: {
+    label: "Qualis A3",
+    color: "hsl(var(--chart-1))",
+  },
+  A4: {
+    label: "Qualis A4",
+    color: "hsl(var(--chart-1))",
+  },
+  B1: {
+    label: "Qualis B1",
+    color: "hsl(var(--chart-1))",
+  },
+  B2: {
+    label: "Qualis B2",
+    color: "hsl(var(--chart-1))",
+  },
+  B3: {
+    label: "Qualis B3",
+    color: "hsl(var(--chart-1))",
+  },
+  B4: {
+    label: "Qualis B4",
+    color: "hsl(var(--chart-1))",
+  },
+  C: {
+    label: "Qualis C",
+    color: "hsl(var(--chart-1))",
+  },
+  SQ: {
+    label: "Sem qualis",
+    color: "hsl(var(--chart-1))",
+  },
+} satisfies ChartConfig
 
-    const [chartOptions, setChartOptions] = useState({});
+
+export function GraficoArticleHome(props: Articles) {
+  type Qualis = "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "SQ" | "NP";
+
+  const [chartData, setChartData] = useState([]);
 
   type CountResult = {
     [key: string]: number;
@@ -26,68 +80,12 @@ export function GraficoArticleHome(props:Articles) {
       }, {});
 
       const data = Object.entries(counts).map(([name, count]) => {
-        return { name, y: count };
+        return { name, count };
       });
 
       const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
-      const categories = sortedData.map((item) => item.name);
 
-      setChartOptions({
-        chart: {
-          type: 'column',
-          backgroundColor: 'transparent',
-          fontFamily: 'Ubuntu, sans-serif',
-          height: '280px',
-          display: 'flex',
-          position: 'relative',
-        },
-        title: {
-          text: '',
-        },
-        credits: {
-          enabled: false
-        },
-        xAxis: {
-          type: 'category',
-          categories,
-          title: {
-            text: 'Tipo de Qualis',
-            fontFamily: 'Ubuntu, sans-serif',
-          },
-        },
-        yAxis: {
-          min: 0,
-          title: {
-            text: 'Quantidade',
-          },
-        },
-        series: [
-          {
-            name: 'Qualis',
-            data: sortedData.map((item) => {
-              let qualis: Qualis = item.name as Qualis; // converte para o tipo Qualis
-              return { y: item.y, color: getColorForInstitution(qualis) };
-            }),
-          },
-        ],
-        plotOptions: {
-          series: {
-            colorByPoint: false,
-            pointWidth: null,
-            dataLabels: {
-              enabled: true,
-              inside: true,
-              style: {
-                color: 'white',
-                fontSize: '18px',
-                textOutline: '0px contrast',
-                fontFamily: 'Ubuntu, sans-serif',
-              },
-            },
-          },
-          column: {},
-        },
-      });
+      setChartData(sortedData);
     }
   }, [props.articles]);
 
@@ -109,11 +107,39 @@ export function GraficoArticleHome(props:Articles) {
     return colors[qualis] || '#000000';
   }
 
+  return (
+    <Alert className="pt-12">
+      <ChartContainer config={chartConfig} className="h-[250px] w-full" >
+        <BarChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <XAxis
+              dataKey="qualis"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+            
+            />
+  
+          <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="dashed" />}
+            />
 
-    return(
-        <Alert className="pt-12">
-           
-            <HighchartsReact highcharts={Highcharts} options={chartOptions} />
-        </Alert>
-    )
+          <Bar dataKey="count" fill="#8884d8" radius={4} >
+            {chartData.map((entry, index) => (
+              <>
+              <Cell key={`cell-${index}`} fill={getColorForInstitution(entry.name as Qualis)} />
+              <LabelList
+              position="top"
+              offset={12}
+              className="fill-foreground"
+              fontSize={12}
+            /></>
+            ))}
+
+            
+          </Bar>
+        </BarChart>
+      </ChartContainer>
+    </Alert>
+  );
 }

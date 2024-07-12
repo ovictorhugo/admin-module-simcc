@@ -18,10 +18,11 @@ import {
   Quotes,
   StripeLogo,
 } from "phosphor-react";
-import { ArrowRight, Info, User, User2, Users } from "lucide-react";
+import { ArrowRight, Info, Stamp, User, User2, Users } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { GraficoHome } from "./grafico-home";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
+import { useSpring, animated } from 'react-spring';
 
 interface VisaoPrograma {
   article: number;
@@ -32,7 +33,29 @@ interface VisaoPrograma {
   researcher: string;
   software: number;
   work_in_event: number;
+}
 
+interface GrupoPesquisa {
+  nome_grupo: string
+  nome_lider: string
+  institution_id: string
+  area: string
+  ultimo_envio: string
+  situacao: string
+}
+
+interface PosGraduationsProps {
+  acronym: null,
+  area: string
+  institution_id: string
+  institution_name: string
+  last_date_sent: string
+  lattes_id: string
+  leader_name: string
+  research_group_id: string
+  research_group_name: string
+  researcher_id: string
+  situation: string
 }
 
 import {
@@ -51,7 +74,7 @@ import { SelectTypeSearch } from "../search/select-type-search";
 import { Badge } from "../ui/badge";
 import { Link, useLocation } from "react-router-dom";
 
-import { AreaChart, Area,LineChart, Line, BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid,  Legend, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area,LineChart, Line, BarChart, Bar, XAxis, PieChart, Pie, YAxis, LabelList,  CartesianGrid,  Legend, ResponsiveContainer } from 'recharts';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 type Research = {
   count_article:number
@@ -79,6 +102,8 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent
 } from "../../components/ui/chart"
 
 import {
@@ -99,6 +124,9 @@ import {
   TooltipTrigger,
 } from "../../components/ui/tooltip"
 import { Label } from "../ui/label";
+import { useTheme } from "next-themes";
+import { ArtigosRecentes } from "./components/artigos-recentes";
+import { Newsletter } from "./components/newsletter";
 
 
 HC_wordcloud(Highcharts);
@@ -115,12 +143,98 @@ const chartConfig = {
     label: "Produção técnica",
     color: "hsl(var(--chart-2))",
   },
+  count_article: {
+    label: "Artigos",
+    color: "hsl(var(--chart-2))",
+  },
+  count_book: {
+    label: "Livros",
+    color: "hsl(var(--chart-2))",
+  },
+  count_book_chapter: {
+    label: "Capítulos de livros",
+    color: "hsl(var(--chart-2))",
+  },
+  count_patent: {
+    label: "Patentes",
+    color: "hsl(var(--chart-2))",
+  },
+  count_brand: {
+    label: "Marcas",
+    color: "hsl(var(--chart-2))",
+  },
+  count_software: {
+    label: "Softwares",
+    color: "hsl(var(--chart-2))",
+  },
 } satisfies ChartConfig
 
+const chartConfig2 = {
+  views: {
+    label: "Page Views",
+  },
+  producao_bibliografica: {
+    label: "Produção bibliográfica",
+    color: "hsl(var(--chart-1))",
+  },
+} satisfies ChartConfig
 
 export function InitialHome() {
   const [VisaoPrograma, setVisaoPrograma] = useState<VisaoPrograma[]>([]);
-  const { urlGeral, maria, setMaria,  searchType } = useContext(UserContext);
+  const { urlGeralAdm, urlGeral, user, maria, setMaria,  searchType } = useContext(UserContext);
+
+ 
+
+  let urlGrupo =`${urlGeralAdm}researchGroupRest/Query?institution_id=${user.institution_id}`
+
+  const [grupos, setGrupos] = useState<GrupoPesquisa[]>([]);
+
+  useEffect(() => {
+
+  const fetchData = async () => {
+   
+    try {
+        
+      const response = await fetch(urlGrupo , {
+        mode: "cors",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Max-Age": "3600",
+          "Content-Type": "text/plain",
+        },
+      });
+      const data = await response.json();
+      if (data) {
+          setGrupos(data)
+        
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  fetchData()
+
+ 
+}, [urlGrupo]);
+const { theme, setTheme } = useTheme()
+// Crie uma constante para agrupar as áreas e calcular o total de grupos por área
+const areaTotais = grupos.reduce((acc, grupo) => {
+  const area = grupo.area;
+  if (!acc[area]) {
+    acc[area] = 1;
+  } else {
+    acc[area]++;
+  }
+  return acc;
+}, {});
+
+// Converta o objeto em um array para facilitar o uso posterior
+const areaTotaisArray = Object.keys(areaTotais).map((area) => ({
+  area: area,
+  total: areaTotais[area],
+}));
 
   let urlVisaoPrograma = `${urlGeral}/graduate_program_production?graduate_program_id=0&year=1900`;
   useMemo(() => {
@@ -225,7 +339,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
   const options = {
     chart: {
       backgroundColor: 'transparent',
-      height: '200px',
+      height: '250px',
       display: 'flex',
       position: 'relative'
     },
@@ -279,6 +393,23 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
   );
   
 
+  /////////
+  const AnimatedLine = animated(Line);
+  const AnimatedArea = animated(Area);
+  
+    const [visibleChart, setVisibleChart] = useState(0);
+    const chartKeys = ['count_article', 'count_patent', 'count_guidance_in_progress'];
+  
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setVisibleChart((prev) => (prev + 1) % chartKeys.length);
+      }, 3000);
+  
+      return () => clearInterval(interval);
+    }, [chartKeys.length]);
+  
+    const lineProps = useSpring({ opacity: 1, from: { opacity: 0 }, reset: true });
+
   return (
     <>
       {isModalOpen && (
@@ -288,13 +419,77 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
 
 
           <div className="bg-cover  bg-no-repeat bg-center w-full" >
+          <div className="h-[0vh] z-[-1] opacity-45">
+          <ChartContainer config={chartConfig} className="h-[55vh] w-full">
+      <LineChart data={dados}>
+        <defs>
+          <linearGradient id="colorArticle" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#82AAC0" stopOpacity={0.6} />
+            <stop offset="95%" stopColor="#82AAC0" stopOpacity={0} />
+          </linearGradient>
+          <linearGradient id="colorPatent" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor="#82AAC0" stopOpacity={0.6} />
+            <stop offset="95%" stopColor="#82AAC0" stopOpacity={0} />
+          </linearGradient>
+          <linearGradient id="colorGuidance" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor="#82AAC0" stopOpacity={0.6} />
+            <stop offset="95%" stopColor="#82AAC0" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+
+
+        {chartKeys.map((key, index) => {
+          const isVisible = visibleChart === index;
+          const strokeColor = theme === 'dark' ? '#404040' : '#A3A3A3';
+          const fillColor = `url(#color${key.split('_')[1][0].toUpperCase() + key.split('_')[1].slice(1)})`;
+          const strokeOpacity = (chartKeys.length - index) / chartKeys.length;
+
+          return !isVisible && (
+            <Line
+              key={key}
+              dataKey={key}
+              type="monotone"
+              stroke={strokeColor}
+              strokeWidth={6}
+              strokeOpacity={strokeOpacity}
+              dot={false}
+              isAnimationActive={false} 
+            />
+          );
+        })}
+      </LineChart>
+      </ChartContainer>
+
+      <ChartContainer config={chartConfig} className="h-[55vh] w-full top-[-55vh] relative">
+      {chartKeys.map((key, index) => {
+        const isVisible = visibleChart === index;
+        const strokeColor = theme === 'dark' ? '#262626' : '#E5E5E5';
+        const fillColor = `url(#color${key.split('_')[1][0].toUpperCase() + key.split('_')[1].slice(1)})`;
+
+        return isVisible && (
+          <AreaChart key={key} data={dados} className="absolute top-0">
+
+
+            <Area
+              dataKey={key}
+              type="monotone"
+              stroke={'#82AAC0'}
+              fill={fillColor}
+              strokeWidth={6}
+              dot={false}
+            />
+          </AreaChart>
+        );
+      })}
+    </ChartContainer>
+          </div>
             
           <div className="justify-center w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
         <Link to={''}  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
         
             <h1 className="z-[2] text-center max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
               Experimente{" "}
-              <strong className="bg-[#709CB6]  rounded-md px-3 pb-2 text-white font-medium">
+              <strong className="bg-[#82AAC0]  rounded-md px-3 pb-2 text-white font-medium">
                 {" "}
                 pesquisar um tema
               </strong>{" "}
@@ -342,17 +537,106 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
           </div>
           </div>
 
-          <div className=" w-full md:px-8 md:gap-8 flex flex-col px-4">
+          <div className=" w-full md:px-8 md:gap-8 gap-4 flex flex-col px-4">
+           
+           <Alert className="grid gap-3 lg:grid-cols-4 grid-cols-2">
+            <div>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                     <div>
+                     <CardTitle className="text-sm font-medium">
+                       Total de artigos
+                     </CardTitle>
+                 
+                     
+                     </div>
+ 
+                     <Quotes className="h-4 w-4 text-muted-foreground" />
+                    
+                   </CardHeader>
+ 
+                  <CardContent>
+                  <span className="text-lg font-bold leading-none sm:text-3xl">
+                  {VisaoPrograma.map((props) => (<>{props.article}</>))}
+                 </span>
+                  </CardContent>
+            </div>
+            <div>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                     <div>
+                     <CardTitle className="text-sm font-medium">
+                       Total de livros
+                     </CardTitle>
+                    
+                     
+                     </div>
+ 
+                     <Book className="h-4 w-4 text-muted-foreground" />
+                    
+                   </CardHeader>
+ 
+                  <CardContent>
+                  <span className="text-lg font-bold leading-none sm:text-3xl">
+                  {VisaoPrograma.map((props) => (<>{props.book}</>))}
+                 </span>
+                  </CardContent>
+            </div>
+             <div>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                     <div>
+                     <CardTitle className="text-sm font-medium">
+                       Total de capítulos
+                     </CardTitle>
+                   
+                     
+                     </div>
+ 
+                     <Books className="h-4 w-4 text-muted-foreground" />
+                    
+                   </CardHeader>
+ 
+                  <CardContent>
+                  <span className="text-lg font-bold leading-none sm:text-3xl">
+                  {VisaoPrograma.map((props) => (<>{props.book_chapter}</>))}
+                 </span>
+                  </CardContent>
+            </div>
 
+            <div>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                     <div>
+                     <CardTitle className="text-sm font-medium">
+                       Total de patentes
+                     </CardTitle>
+                    
+                     </div>
+ 
+                     <Copyright className="h-4 w-4 text-muted-foreground" />
+                    
+                   </CardHeader>
+ 
+                  <CardContent>
+                  <span className="text-lg font-bold leading-none sm:text-3xl">
+                  {VisaoPrograma.map((props) => (<>{props.patent}</>))}
+                 </span>
+                  </CardContent>
+
+            </div>
+
+           
+
+           
+           </Alert>
+      
           <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
                     <div className="h-full gap-8 grid">
                     <Alert className=" ">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
-                      Total de docentes
+                      Total de  {VisaoPrograma.map((props) => (<>{props.researcher}</>))} docentes
                     </CardTitle>
-                    <CardDescription>da Escola de Engenharia</CardDescription>
+                    <CardDescription>na Escola de Engenharia</CardDescription>
+                   
                     </div>
 
                     <TooltipProvider>
@@ -372,9 +656,9 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
-                      Produção bibliográfica
+                     Total de {VisaoPrograma.map((props) => (<>{props.researcher}</>))} técnicos
                     </CardTitle>
-                    <CardDescription>Artigos, livros e capítulos</CardDescription>
+                    <CardDescription>na Escola de Engenharia</CardDescription>
                     </div>
 
                     <TooltipProvider>
@@ -422,7 +706,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
               <button
                 key={chart}
                 data-active={activeChart === chart}
-                className={`relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6`}
+                className={`relative flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6 ${activeChart === chart && ('bg-neutral-100')} ${activeChart ===  'producao_tecnica' && ('rounded-tr-md')}`}
                 onClick={() => setActiveChart(chart)}
               >
                 <span className="text-xs text-muted-foreground">
@@ -444,13 +728,14 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
         >
   <BarChart accessibilityLayer data={dados}>
   <CartesianGrid vertical={false}  horizontal={false}/>
-
+  <ChartLegend content={<ChartLegendContent />} />
+  
   <XAxis
               dataKey="year"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-
+            
             />
 
 <ChartTooltip
@@ -467,6 +752,8 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                 className="fill-foreground"
                 fontSize={12}
               />
+
+
   </Bar>
 <Bar dataKey="count_book" fill="#274B5E" radius={4} >
 <LabelList
@@ -520,7 +807,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                     </Alert>
                   </div>
 
-                  <div className="grid md:mb-8 mb-4 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+                  <div className="grid  gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
                     <Alert className=" h-[350px] lg:col-span-2">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div>
@@ -540,7 +827,58 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                 </TooltipProvider>
                    
                   </CardHeader>
+<CardContent>
+<ChartContainer
+          config={chartConfig2}
+          className="mx-auto aspect-square max-h-[250px]"
+        >
+<PieChart>
+<ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
 
+<Pie
+              data={areaTotaisArray}
+              dataKey="total"
+              nameKey="area"
+              innerRadius={60}
+              strokeWidth={5}
+            >
+ <Label
+                content={({ viewBox }) => {
+                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                    return (
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
+                        <tspan
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          className="fill-foreground text-3xl font-bold"
+                        >
+                          {grupos.length.toLocaleString()}
+                        </tspan>
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) + 24}
+                          className="fill-muted-foreground"
+                        >
+                          Grupos
+                        </tspan>
+                      </text>
+                    )
+                  }
+                }}
+              />
+
+              </Pie>
+</PieChart>
+          </ChartContainer>
+</CardContent>
                     </Alert>
 
 
@@ -548,9 +886,9 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
-                      Produção anual
+                      Nuvem de palavras
                     </CardTitle>
-                    <CardDescription>Visão por quadrienal </CardDescription>
+                    <CardDescription>Termos mais presentes nos artigos </CardDescription>
                     </div>
 
                     <TooltipProvider>
@@ -563,10 +901,17 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                 </TooltipProvider>
                    
                   </CardHeader>
+
+                  <div id="nuveeeem" className="flex w-full justify-center items-center">
+              <HighchartsReact highcharts={Highcharts} options={options}  className={'h-full'} />
+              </div>
                     </Alert>
                   </div>
-
+                  <ArtigosRecentes/>
+                  <Newsletter/>
           </div>
+
+         
         </div>
       )}
     </>

@@ -7,6 +7,8 @@ import { toast } from "sonner"
 import { UserContext } from "../../context/context";
 import * as XLSX from 'xlsx';
 import {useDropzone} from 'react-dropzone'
+import { Label } from "../ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface Patrimonio {
     matric: string
@@ -22,6 +24,8 @@ interface Patrimonio {
     titulacao: string
     entradaNaUFMG: string
     progressao: string
+    year_charge:string,
+    semester:string
 }
 
 export function ImportDocentes() {
@@ -102,12 +106,14 @@ export function ImportDocentes() {
                     ref: '',
                     titulacao: '',
                     entradaNaUFMG: '',
-                    progressao: ''
+                    progressao: '',
+                    year_charge: String(year),
+                    semester: String(semester)
                 };
                 headers.forEach((header, index) => {
                     const key = headerMap[header];
                     if (key) {
-                        obj[key] = row[index] || "";
+                        obj[key] = String(row[index] || ""); // Converte o valor para string
                     }
                 });
                 return obj;
@@ -131,7 +137,7 @@ export function ImportDocentes() {
                 return;
             }
     
-            let urlPatrimonioInsert = `${urlGeral}insertPatrimonio`;
+            let urlPatrimonioInsert = `http://150.164.32.238:8484/docentes`;
         
             const response = await fetch(urlPatrimonioInsert, {
                 mode: 'cors',
@@ -177,6 +183,14 @@ export function ImportDocentes() {
 
     console.log(data)
 
+    const currentYear = new Date().getFullYear();
+  const [year, setYear] = useState(currentYear);
+    const [semester, setSemester] = useState('1')
+
+    const years = [];
+    for (let i = currentYear; i > currentYear - 4; i--) {
+      years.push(i);
+    }
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}> 
             <DialogContent className="min-w-[40vw] ">
@@ -188,6 +202,37 @@ export function ImportDocentes() {
                         Atualize os itens do na Vitrine com a planilha .xls gerada no SICPAT
                     </DialogDescription>
                 </DialogHeader>
+
+                <div className={`grid gap-8 w-full  sm:grid-cols-2 grid-cols-1 `}>
+                <div className="grid gap-3 w-full ">
+                        <Label htmlFor="name">Ano</Label>
+                        <Select defaultValue={String(year)} value={String(year)} onValueChange={(value) => setYear(Number(value))}>
+                            <SelectTrigger className="">
+                              <SelectValue placeholder="" />
+                            </SelectTrigger>
+                            <SelectContent>
+                            {years.map((year) => (
+                            <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+                        ))}
+
+                            </SelectContent>
+                          </Select>
+                      </div>
+
+                <div className="grid gap-3 w-full ">
+                        <Label htmlFor="name">Semestre</Label>
+                        <Select defaultValue={semester} value={semester} onValueChange={(value) => setSemester(value)}>
+                            <SelectTrigger className="">
+                              <SelectValue placeholder="" />
+                            </SelectTrigger>
+                            <SelectContent>
+                            <SelectItem value={'1'}>Primeiro</SelectItem>
+                            <SelectItem value={'2'}>Segundo</SelectItem>
+
+                            </SelectContent>
+                          </Select>
+                      </div>
+                </div>
 
                 <div className="mb-4">
                     <div {...getRootProps()} className="border-dashed mb-6 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 mt-4">

@@ -53,7 +53,7 @@ export function FilterYearPopUp(props:Props) {
     const [itensSelecionados, setItensSelecionados] = useState<string[]>([]);
     const currentDate = new Date();
     const year = currentDate.getFullYear()
-    const [filterYear, setFilterYear] = useState([year-4])
+    const [filterYear, setFilterYear] = useState([2000])
     type CheckboxStates = {
       [index: number]: boolean;
     };

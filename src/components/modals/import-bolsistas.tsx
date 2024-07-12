@@ -120,7 +120,7 @@ export function ImportBolsistas() {
                     nome_programa_fomento: '',
                     nome_instituto: '',
                     quant_auxilio: '',
-                    quant_bolsa: ''
+                    quant_bolsa: ""
                 };
                 headers.forEach((header, index) => {
                     const key = headerMap[header];

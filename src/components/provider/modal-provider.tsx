@@ -57,6 +57,8 @@ const ModalContent = () => {
         return <ImportTaes/>
       case 'add-researcher-csv':
         return <AddResearcherCsvModal/>
+      case 'add-grupo-pesquisa':
+        return <AddGrupoPesquisaModal/>
 
     default:
       return null;

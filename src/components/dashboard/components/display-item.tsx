@@ -17,6 +17,7 @@ import { Label } from "../../ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../../ui/dialog";
 import { Input } from "../../ui/input";
 import { v4 as uuidv4 } from 'uuid';
+import { columnsStudent } from "../../componentsModal/columns-student-program";
 
 interface Patrimonio {
   graduate_program_id: string
@@ -71,7 +72,7 @@ export function DisplayItem(props:Patrimonio) {
       const [type, setType] = useState('COLABORADOR');
       const [visibleProgram, setVisibleProgram] = useState(false);
       const { urlGeralAdm, user } = useContext(UserContext);
-      const { onOpen } = useModal();
+      const { onOpen, isOpen, type:typeModal } = useModal();
 
       const [isVisible, setIsVisible] = useState(props.visible)
 
@@ -81,6 +82,14 @@ export function DisplayItem(props:Patrimonio) {
         setTab('all')
 
         }, [urlGeralAdm, props.graduate_program_id, props.visible]);
+
+        useEffect(() => {
+          if (typeModal === 'confirm-delete-researcher-graduate-program'  && !isOpen) {
+            fetchDataAll()
+          } 
+      
+          fetchDataAll()
+        }, [isOpen, typeModal]);
 
       const handleVisibleProgram = (id: string) => {
 
@@ -311,35 +320,40 @@ const handleSubmit = async () => {
 
     let urlGetStudent = urlGeralAdm + `studentRest/query?graduate_program_id=${props.graduate_program_id}`;
   
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await fetch(urlGetStudent, {
-            mode: "cors",
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Methods": "GET",
-              "Access-Control-Allow-Headers": "Content-Type",
-              "Access-Control-Max-Age": "3600",
-              "Content-Type": "text/plain",
-            },
-          });
-          const data = await response.json();
-          if (data) {
-            // Certifique-se de que cada researcher tenha o graduate_program_id correto
-            const researchersWithGraduateProgramId = data.map((researcher: PesquisadorProps) => ({
-              ...researcher,
-              graduate_program_id: props.graduate_program_id,
-            }));
-            setStudent(researchersWithGraduateProgramId);
-            console.log(student)
-          }
-        } catch (err) {
-          console.log(err);
+    const fetchDataStudent = async () => {
+      try {
+        const response = await fetch(urlGetStudent, {
+          mode: "cors",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Max-Age": "3600",
+            "Content-Type": "text/plain",
+          },
+        });
+        const data = await response.json();
+        if (data) {
+          // Certifique-se de que cada researcher tenha o graduate_program_id correto
+          const researchersWithGraduateProgramId = data.map((researcher: PesquisadorProps) => ({
+            ...researcher,
+            graduate_program_id: props.graduate_program_id,
+          }));
+          setStudent(researchersWithGraduateProgramId);
+          console.log(student)
         }
-      };
-      fetchData();
-    }, [urlGetStudent, props.graduate_program_id])
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    useEffect(() => {
+      if (typeModal === 'confirm-delete-student-graduate-program'  && !isOpen) {
+        fetchDataStudent();
+      } 
+  
+      fetchDataStudent();
+    }, [isOpen, typeModal, urlGetStudent, props.graduate_program_id]);
 
 
     const [nomePesquisador, setNomePesquisador] = useState('');
@@ -396,6 +410,8 @@ const handleSubmit = async () => {
                           onClick: () => console.log("Undo"),
                         },
                       })
+
+                      fetchDataStudent()
                   } else {
                     toast("Erro ao enviar os dados ao servidor", {
                         description: "Tente novamenete",
@@ -444,8 +460,6 @@ const handleSubmit = async () => {
         console.error('Erro ao processar a requisição:', error);
       }
     };
-
-
 
     return(
       <Tabs defaultValue={tab} value={tab} className="h-full" >
@@ -774,7 +788,7 @@ const handleSubmit = async () => {
                   </CardContent>
 
                   <div className="px-6">
-              <DataTableModal columns={columns} data={student}/>
+              <DataTableModal columns={columnsStudent} data={student}/>
               </div>
        
         </div>

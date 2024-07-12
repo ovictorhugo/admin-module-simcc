@@ -123,7 +123,7 @@ export function Header() {
                  <LogIn className="h-4 w-4" />
                  Criar conta
                </Button></Link>
-)}   <Link to={'/admin'}>   <Button variant="ghost" size="icon" >admin</Button></Link>
+)}   <Link to={'/dashboard'}>   <Button variant="ghost" size="icon" >admin</Button></Link>
              
              <Link to={'/config'}>   <Button variant="ghost" size="icon" ></Button></Link>
 

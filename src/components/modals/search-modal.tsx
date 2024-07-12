@@ -202,30 +202,29 @@ const terms = queryUrl.get('terms');
     return result;
   }
 
+const termosformatados = formatTerms(itemsSelecionadosPopUp)
 
-  let TypeSearch = type_search ?? searchType
-  let Terms = terms ?? formatTerms(itemsSelecionadosPopUp)
+console.log(termosformatados)
+  let TypeSearch = type_search ?? ''
+  let Terms = terms ?? ''
 
   const handlePesquisaFinal = () => {
     if(itemsSelecionadosPopUp.length > 0) {
       setItensSelecionados(itemsSelecionadosPopUp)
+      TypeSearch = searchType
+      Terms = termosformatados
       setInput('')
 
       queryUrl.set('type_search', TypeSearch);
-        queryUrl.set('terms', Terms);
+      queryUrl.set('terms', Terms);
         navigate({
           pathname: '/resultados',
-          search: query.toString(),
+          search: queryUrl.toString(),
         });
 
     onClose()
     
-    } else {
-      setValorDigitadoPesquisaDireta(input)
-      onClose()
-      history(`/resultados/${input}/${searchType}`)
-      setInput('')
-    }
+    } 
     
   }
 

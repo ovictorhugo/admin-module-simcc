@@ -24,6 +24,29 @@ interface TotalPatrimonios {
     count_r:string
   }
 
+  interface Patrimonio {
+    id: string
+    id_lattes: string
+    nome_beneficiario: string
+    cpf_beneficiario: string
+    nome_pais: string
+    nome_regiao: string
+    nome_uf: string
+    nome_cidade: string
+    nome_grande_area: string
+    nome_area: string
+    nome_sub_area: string
+    cod_modalidade: string
+    nome_modalidade: string
+    titulo_chamada: string
+    cod_categoria_nivel: string
+    nome_programa_fomento: string
+    nome_instituto: string
+    quant_auxilio: string
+    quant_bolsa: string
+}
+
+
   import bg_popup from '../../assets/bg_popup.png';
 import { useModal } from "../hooks/use-modal-store";
 
@@ -73,7 +96,38 @@ export function IndicadoresDashboard() {
     }, [urlPatrimonioInsert]);
 
     //
+    const [bolsistas, setBolsistas] = useState<Patrimonio[]>([]);
 
+    let urlBolsistas = urlGeralAdm + `ResearcherRest/Query/Subsidy`
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(urlBolsistas , {
+            mode: "cors",
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET",
+              "Access-Control-Allow-Headers": "Content-Type",
+              "Access-Control-Max-Age": "3600",
+              "Content-Type": "text/plain",
+            },
+          });
+          const data = await response.json();
+          if (data) {
+              setBolsistas(data)
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchData()
+
+    }, [urlBolsistas]);
+
+    //
+console.log(urlBolsistas)
+console.log(bolsistas)
     const [open, setOpen] = useState(false)
     const [open2, setOpen2] = useState(false)
 
@@ -470,9 +524,9 @@ export function IndicadoresDashboard() {
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
-                      Produção anual
+                      Bolsistas CNPq
                     </CardTitle>
-                    <CardDescription>Visão por quadrienal </CardDescription>
+                    <CardDescription>Bolsas PQ e DT </CardDescription>
                     </div>
 
                     <TooltipProvider>
@@ -485,8 +539,35 @@ export function IndicadoresDashboard() {
                 </TooltipProvider>
                    
                   </CardHeader>
+
+
+                  <CardContent>
+
+                  </CardContent>
                     </Alert>
                   </div>
+                  </div>
+            </TabsContent>
+
+            <TabsContent value="tec">
+            <div>
+                  <Link to={''}  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
+        
+        <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
+          Painel dos{" "}
+          <strong className="bg-[#709CB6]  rounded-md px-3 pb-2 text-white font-medium">
+            {" "}
+            técnicos
+          </strong>{" "}
+          da instituição
+        </h1>
+        <p className="max-w-[750px]  text-lg font-light text-foreground">Atualize os dados importando o arquivo .xls na plataforma </p>
+                  <div className="flex gap-3 mt-3">
+                    <Button size={'sm'} 
+                    onClick={() => onOpen('import-taes')}><FileXls size={16}/>Importar dados dos técnicos</Button>
+                  
+                  </div>
+
                   </div>
             </TabsContent>
             </Tabs>

@@ -44,7 +44,7 @@ function App() {
 
   const [urlGeral, setUrlGeral] = useState('http://150.164.32.238:13000/');
 
-  const [urlGeralAdm, setUrlGeralAdm] = useState('http://simcc.uesc.br:5000/');
+  const [urlGeralAdm, setUrlGeralAdm] = useState('http://150.164.32.238:12000/');
 
   const [mapModal, setMapModal] = useState(false)
 
@@ -137,7 +137,7 @@ const [mode, setMode] = useState('user')
         <Route path='/' element={<Home/>}/>
         <Route path='/resultados' element={<Home/>}/>
 
-        <Route path='/pos-graduacao/:graduationId?' element={<PosGraduation/>}/>
+        <Route path='/pos-graduacao' element={<Home/>}/>
        
        
         <Route path='/indicadores' element={<Indicators/>}/>
