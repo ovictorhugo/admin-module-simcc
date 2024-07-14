@@ -237,7 +237,7 @@ const handleConnectorChange = (index: number, connector: string) => {
       })}
                 </div>
 
-                <Input onClick={() => handlePopUppesquisa()} onChange={(e) => setInput(e.target.value)} value={input}  type="text" className="border-0 w-full "/>
+                <Input onClick={() => handlePopUppesquisa()} onChange={(e) => setInput(e.target.value)} value={input}  type="text" className="border-0 w-full flex flex-1 "/>
                 </div>
 
     

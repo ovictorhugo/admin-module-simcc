@@ -49,7 +49,7 @@ type Research = {
   }
 
   import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import { File, Files, Quotes, Stamp, Student, Ticket } from "phosphor-react";
+import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
 import { NuvemPalavras } from "../popup/nuvem-palavras";
 import { ScrollArea } from "../ui/scroll-area";
 import { TotalViewResearcher } from "../popup/total-view-researcher";
@@ -60,6 +60,10 @@ import { ProducaoTecnicaResearcherPopUp } from "../popup/producao-tecnica-resear
 import { OrientacoesResearcherPopUp } from "../popup/orientacoes-researcher";
 import { RelatorioTecnicoResearcherPopUp } from "../popup/relatorio-tecnico-researcher";
 import { SpeakerResearcherPopUp } from "../popup/speaker-researcher";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Copy, MoreHorizontal, Plus } from "lucide-react";
+import { QrCode } from "../popup/qr-code";
 
 type ResearchOpenAlex = {
   h_index: number;
@@ -81,7 +85,7 @@ export function ResearcherModal() {
     const [researcher, setResearcher] = useState<Research[]>([]); 
     const [loading, isLoading] = useState(false)
     const {name} = data
-    const { urlGeral, itemsSelecionados, itemsSelecionadosPopUp, setItensSelecionadosPopUp, searchType } = useContext(UserContext);
+    const { urlGeral, itemsSelecionados, itemsSelecionadosPopUp, setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados } = useContext(UserContext);
   
 
     const [researcherData, setResearcherData] = useState<ResearchOpenAlex[]>([]);
@@ -130,7 +134,7 @@ setItensSelecionadosPopUp(itemsSelecionados)
 
         const [value, setValue] = useState('articles')
 
-        console.log('reseracher DATAAA', researcherData)
+       
 
         useEffect(() => {
           if(searchType == 'article' || searchType == 'name' || searchType == 'abstract' || searchType == 'area') {
@@ -145,6 +149,41 @@ setItensSelecionadosPopUp(itemsSelecionados)
             setValue('speaker')
           }
         }, [isOpen]);
+
+        /////
+
+        //csv
+
+const [jsonData, setJsonData] = useState<any[]>([]);
+
+const convertJsonToCsv = (json: any[]): string => {
+  const items = json;
+  const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+  const header = Object.keys(items[0]);
+  const csv = [
+    '\uFEFF' + header.join(';'), // Add BOM and CSV header
+    ...items.map((item) =>
+      header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+    ) // CSV data
+  ].join('\r\n');
+
+  return csv;
+};
+
+const handleDownloadJson = async () => {
+  try {
+    const csvData = convertJsonToCsv(jsonData);
+    const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = `dados.csv`;
+    link.href = url;
+    link.click();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
         
 
     return(
@@ -158,10 +197,165 @@ setItensSelecionadosPopUp(itemsSelecionados)
           </div>
                   )
                 })}
-       <div className="overflow-y-auto">
+
+{researcher.slice(0, 1).map((props) => {
+   const urlShare = `${urlGeral}researcher/${props.id}/${searchType}/${valoresSelecionadosExport}`
+   const payment = props.lattes_id
+
+   const currentDate = new Date();
+   const lattesUpdate = String(props.lattes_update).split('/');
+   const lattesMonth = parseInt(lattesUpdate[1]);
+   const lattesYear = parseInt(lattesUpdate[2]);
+ 
+   const monthDifference = (currentDate.getFullYear() - lattesYear) * 12 + (currentDate.getMonth() + 1 - lattesMonth);
+
+   const isOutdated = monthDifference > 3;
+
+   // Atualize essa função para chamar a propriedade `onResearcherUpdate`
+   const updateResearcher = (newResearcher: Research[]) => {
+    
+   };
+
+
+                return(
+                 <div className="px-16 pt-6 pb-2">
+                   <div className="flex  justify-between items-center w-full"> 
+       
+       <div className={`border-[1px] border-gray-300 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated ? ('bg-red-500 text-white border-none') : ('')}`}>Atualização do Lattes: {String(props.lattes_update)}</div>
+     
+
+       <div className="flex gap-3">
       
-        <div className=" px-16 " >
-        <DrawerHeader className="p-0">
+
+      
+
+       <TooltipProvider>
+       <Tooltip>
+         <TooltipTrigger asChild>
+         <Button
+         variant={'default'}
+         onClick={() => {
+           // Verifica se o pesquisador já está selecionado pelo nome
+           if (pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name)) {
+             // Remove o pesquisador selecionado com o nome correspondente
+             setPesquisadoresSelecionados(prev => prev.filter(pesquisador => pesquisador.name !== props.name));
+           } else {
+             // Adiciona o novo pesquisador selecionado
+             setPesquisadoresSelecionados(prev => [
+               ...prev,
+               {
+                 id: props.id,
+                 name: props.name,
+                 university: props.university,
+                 lattes_id: props.lattes_id,
+                 city: props.city,
+                 area: props.area,
+                 graduation: props.graduation,
+               }
+             ]);
+           }
+         }}
+         className={`h-8 w-8 p-0 text-white dark:text-white ${
+           pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) && 'bg-red-500 hover:bg-red-600 text-white'
+         }`}
+       >
+         {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
+           <X size={16} className="" />
+         ) : (
+           <Plus size={16} className="" />
+         )}
+       </Button>
+         </TooltipTrigger>
+         <TooltipContent>Adicionar pesquisador(a)</TooltipContent>
+       </Tooltip>
+       </TooltipProvider>
+
+         
+       <TooltipProvider>
+       <Tooltip>
+         <TooltipTrigger asChild>
+         <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
+         <span className="sr-only">Open menu</span>
+          <ArrowSquareOut size={8} className="h-4 w-4" />
+          </Button>
+         </TooltipTrigger>
+         <TooltipContent>Ir a página</TooltipContent>
+       </Tooltip>
+       </TooltipProvider>
+
+       <TooltipProvider>
+       <Tooltip>
+         <TooltipTrigger asChild>
+         <Button variant={'default'} onClick={() => onClose()} className="h-8 w-8 p-0 text-white dark:text-white">
+         <span className="sr-only">Open menu</span>
+          <CaretDown size={8} className="h-4 w-4" />
+          </Button>
+         </TooltipTrigger>
+         <TooltipContent>Fechar</TooltipContent>
+       </Tooltip>
+       </TooltipProvider>
+
+       <DropdownMenu>
+       <DropdownMenuTrigger asChild>
+         <Button variant="ghost" className="h-8 w-8 p-0">
+           <span className="sr-only">Open menu</span>
+           <MoreHorizontal className="h-4 w-4" />
+         </Button>
+       </DropdownMenuTrigger>
+       <DropdownMenuContent align="end">
+         <DropdownMenuLabel>Ações</DropdownMenuLabel>
+         <DropdownMenuItem className="flex items-center gap-3"
+           onClick={() => navigator.clipboard.writeText(payment)}
+         ><Copy className="h-4 w-4" />
+           Copiar Lattes ID
+         </DropdownMenuItem>
+
+         <DropdownMenuItem className="flex items-center gap-3" onClick={() => handleDownloadJson()}><FileCsv className="h-4 w-4" />Baixar CSV das publicações</DropdownMenuItem>
+
+         <DropdownMenuItem className="flex items-center gap-3" ><BracketsCurly className="h-4 w-4" />API da consulta</DropdownMenuItem>
+
+         <DropdownMenuItem className="flex items-center gap-3"
+           onClick={() => navigator.clipboard.writeText(urlShare)}
+         ><ShareNetwork className="h-4 w-4" />
+           Copiar link para compartilhar
+          
+         </DropdownMenuItem>
+         <DropdownMenuSeparator />
+         <DropdownMenuItem className="flex justify-center py-4">
+         
+         <QrCode size={200} className={'bg-transparent'} value={urlShare} />
+         
+         
+         </DropdownMenuItem>
+   
+       </DropdownMenuContent>
+     </DropdownMenu>
+
+
+  
+     </div>
+       
+       </div>
+
+       <div className="flex items-center flex-col  relative">
+       <h4 className="text-3xl font-medium px-8 text-center mb-2">{props.name}</h4>
+          <div className="flex text-gray-500 items-center gap-2 mb-2">
+              {props.image == "None" ? (
+                <Buildings size={16} className="" />
+              ) : (
+                <img src={props.image} alt="" className="h-6" />
+              )}
+              <p className="text-md  ">{props.university}</p>
+            </div>
+       </div>
+                 </div>
+                  )
+                })}
+                
+       <div className="overflow-y-auto elementBarra bg-white dark:bg-black">
+      
+        <div className=" px-16  bg-white dark:bg-black" >
+        <DrawerHeader className="p-0 bg-white dark:bg-black">
             {researcher.slice(0, 1).map((user) => {
                 return(
                    <div>

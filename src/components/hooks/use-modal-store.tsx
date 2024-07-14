@@ -65,5 +65,5 @@ export const useModal = create<ModalStore>((set: any) => ({
     const updatedData = { ...useModal.getState().data, ...newData };
     set({ isOpen: true, type, data: updatedData });
   },
-  onClose: () => set({ type: null, isOpen: false, data: {} }),
+  onClose: () => set({  isOpen: false, data: {} }),
 }));

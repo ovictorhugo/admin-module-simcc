@@ -255,7 +255,7 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                             350: 1,
                             750: 1,
                             900: 2,
-                            1200: 3
+                            1200: 2
                         }}
                     >
                                      <Masonry gutter="16px">

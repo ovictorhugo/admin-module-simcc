@@ -177,7 +177,7 @@ export function AddResearcherDashboard() {
     }
 
     fetchDataTable();
-  }, [isOpenModal, type, fetchDataTable]);
+  }, [isOpenModal, type]);
 
   const history = useNavigate();
 

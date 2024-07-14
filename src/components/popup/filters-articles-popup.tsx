@@ -3,178 +3,163 @@ import { Alert } from "../ui/alert";
 import { Label } from "../ui/label";
 import { CalendarBlank, CheckSquare } from "phosphor-react";
 import { Slider } from "../ui/slider";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
+import { Button } from "../../components/ui/button";
 
 interface Props {
-    onFilterUpdate: (newResearcher: Filter[]) => void;
+  onFilterUpdate: (newResearcher: Filter[]) => void;
 }
 
 type Filter = {
-    year: number[]
-    qualis: string[]
-}
+  year: number[];
+  qualis: any[];
+};
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/select"
+export function FilterArticlePopUp(props: Props) {
+  const qualisColor: { [key: string]: string } = {
+    A1: "bg-[#006837]",
+    A2: "bg-[#8FC53E]",
+    A3: "bg-[#ACC483]",
+    A4: "bg-[#BDC4B1]",
+    B1: "bg-[#F15A24]",
+    B2: "bg-[#F5831F]",
+    B3: "bg-[#F4AD78]",
+    B4: "bg-[#F4A992]",
+    C: "bg-[#EC1C22]",
+    SQ: "bg-[#560B11]",
+    NP: "bg-[#560B11]",
+  };
 
-export function FilterArticlePopUp(props:Props) {
-    const qualisColor: { [key: string]: string } = {
-        'A1': 'bg-[#006837]',
-        'A2': 'bg-[#8FC53E]',
-        'A3': 'bg-[#ACC483]',
-        'A4': 'bg-[#BDC4B1]',
-        'B1': 'bg-[#F15A24]',
-        'B2': 'bg-[#F5831F]',
-        'B3': 'bg-[#F4AD78]',
-        'B4': 'bg-[#F4A992]',
-        'C': 'bg-[#EC1C22]',
-        'SQ': 'bg-[#560B11]',
-        'NP': 'bg-[#560B11]'
-      }
+  const [qualis] = useState([
+    { id: 1, itens: "A1" },
+    { id: 2, itens: "A2" },
+    { id: 3, itens: "A3" },
+    { id: 4, itens: "A4" },
+    { id: 5, itens: "B1" },
+    { id: 6, itens: "B2" },
+    { id: 7, itens: "B3" },
+    { id: 8, itens: "B4" },
+    { id: 10, itens: "C" },
+    { id: 11, itens: "SQ" },
+  ]);
 
+  const [itensSelecionados, setItensSelecionados] = useState<string[]>([]);
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const [filterYear, setFilterYear] = useState([2000]);
+  type CheckboxStates = {
+    [index: number]: boolean;
+  };
 
-    const [qualis] = useState([
-      { id: 1, itens: 'A1' },
-      { id: 2, itens: 'A2' },
-      { id: 3, itens: 'A3' },
-      { id: 4, itens: 'A4' },
-      { id: 5, itens: 'B1' },
-      { id: 6, itens: 'B2' },
-      { id: 7, itens: 'B3' },
-      { id: 8, itens: 'B4' },
-      { id: 10, itens: 'C' },
-      { id: 11, itens: 'SQ' },
-    ]);
+  console.log(itensSelecionados);
 
-    const [itensSelecionados, setItensSelecionados] = useState<string[]>([]);
-    const currentDate = new Date();
-    const year = currentDate.getFullYear()
-    const [filterYear, setFilterYear] = useState([2000])
-    type CheckboxStates = {
-      [index: number]: boolean;
-    };
+  const [checkboxStates, setCheckboxStates] = useState<CheckboxStates>({});
 
-    console.log(itensSelecionados)
-  
-    const [checkboxStates, setCheckboxStates] = useState<CheckboxStates>({});
-  
-    const handleCheckboxChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const itemId = event.target.name;
-      const isChecked = event.target.checked;
-  
-      setCheckboxStates((prevStates) => ({ ...prevStates, [itemId]: isChecked }));
-  
-      setItensSelecionados((prevSelecionados) => {
-        const selectedQualis = qualis.find((q) => q.id === parseInt(itemId));
-        if (selectedQualis) {
-          if (isChecked) {
-            return [...prevSelecionados, selectedQualis.itens];
-          } else {
-            return prevSelecionados.filter((item) => item !== selectedQualis.itens);
-          }
+  const handleCheckboxChangeInput = (itemId: number, isChecked: boolean) => {
+    setCheckboxStates((prevStates) => ({ ...prevStates, [itemId]: isChecked }));
+
+    setItensSelecionados((prevSelecionados) => {
+      const selectedQualis = qualis.find((q) => q.id === itemId);
+      if (selectedQualis) {
+        if (isChecked) {
+          return [...prevSelecionados, selectedQualis.itens];
         } else {
-          // handle the case where selectedQualis is undefined
-          return prevSelecionados;
+          return prevSelecionados.filter((item) => item !== selectedQualis.itens);
         }
-      });
-    };
-
-   
-    
-  
-    const checkboxQualis = qualis.map((quali) => {
-      const isChecked = checkboxStates[quali.id];
-      return (
-        <li
-          key={quali.id}
-          className="checkboxLabel group list-none inline-flex  group overflow-hidden"
-          onMouseDown={(e) => e.preventDefault()}
-        >
-          <label
-            className={` cursor-pointer gap-3 transition-all flex h-10 items-center px-4  rounded-md text-xs font-medium hover:bg-gray-100 ${isChecked ? 'bg-gray-200 ' : ''}`}
-          >
-            <div className={`rounded-sm h-4 w-4 ${qualisColor[quali.itens]}`}></div>
-            <span className="text-center block">{quali.itens}</span>
-            <input
-              type="checkbox"
-              name={quali.id.toString()}
-              className="absolute hidden group"
-              onChange={handleCheckboxChangeInput}
-              id={quali.itens}
-              checked={isChecked}
-            />
-          </label>
-        </li>
-      );
+      } else {
+        // handle the case where selectedQualis is undefined
+        return prevSelecionados;
+      }
     });
+  };
 
-    //ano atual
-   
+  const updateResearcher = (newResearcher: Filter[]) => {
+    if (props.onFilterUpdate) {
+      props.onFilterUpdate(newResearcher);
+    }
+  };
 
-    const updateResearcher = (newResearcher: Filter[]) => {
-        if (props.onFilterUpdate) {
-          props.onFilterUpdate(newResearcher);
-        }
-      };
+  const filtros = {
+    year: filterYear,
+    qualis: itensSelecionados,
+  };
 
-      const filtros = {
-        year: filterYear, // assuming filterYear is correct
-        qualis: itensSelecionados // assuming itensSelecionados is correct
-    };
-    useMemo(() => {
-      updateResearcher([filtros])
-    }, [filterYear, itensSelecionados]);
+  useMemo(() => {
+    updateResearcher([filtros]);
+  }, [filterYear, itensSelecionados]);
 
-    return(
-       <div className="mb-6 flex gap-6">
-        <div className="flex flex-col">
-           <div className="flex items-center gap-3 mb-4 ">
-           <CheckSquare size={24} className="text-gray-400" />
-           <p className="text-sm font-bold">Selecione o Qualis</p>
-           </div>
+  console.log('ED',itensSelecionados)
+
+  return (
+    <div className="mb-6 flex gap-6">
+      <div className="flex flex-col">
+        <div className="flex items-center gap-3 mb-4 ">
+          <CheckSquare size={24} className="text-gray-400" />
+          <p className="text-sm font-bold">Selecione o Qualis</p>
+        </div>
         <Alert className="w-full">
+          <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="w-full  justify-start font-normal min-w-[220px]">
+                {itensSelecionados.length > 0 ? (
+                  <div className="flex flex-wrap gap-4">
+                    {itensSelecionados.map((item) => (
+                      <div key={item} className="flex items-center gap-2">
+                        <div className={`rounded-sm h-4 w-4 ${qualisColor[item]}`}></div>
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  "Escolha o Qualis dos artigos"
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+             
+              {qualis.map((quali) => (
+                <DropdownMenuCheckboxItem
+                  key={quali.id}
+                  checked={checkboxStates[quali.id] || false}
+                  onCheckedChange={(isChecked) =>
+                    handleCheckboxChangeInput(quali.id, isChecked as boolean)
+                  }
+                >
+                  <div className="flex gap-4 items-center">
+                    <div className={`flex rounded-sm h-4 w-4 ${qualisColor[quali.itens]}`}></div>
+                    {quali.itens}
+                  </div>
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </Alert>
+      </div>
 
-        <Select>
-            <SelectTrigger className="w-full whitespace-nowrap border-none">
-                <SelectValue placeholder="Escolha o Qualis" />
-            </SelectTrigger>
-            <SelectContent>
-               {qualis.map((props) => {
-                return(
-                  <SelectItem value={props.itens}> <div className="flex gap-4 items-center mr-2"><div className={` flex rounded-sm h-4 w-4 ${qualisColor[props.itens]}`}></div> {props.itens}</div></SelectItem>
-                )
-               })}
-            </SelectContent>
-            </Select>
-
-</Alert>
+      <div className="w-full flex flex-1 flex-col">
+        <div className="flex items-center gap-3 mb-4 ">
+          <CalendarBlank size={24} className="text-gray-400" />
+          <p className="text-sm font-bold">Selecione o ano</p>
         </div>
-
-        <div className="w-full flex flex-1 flex-col">
-           <div className="flex items-center gap-3 mb-4 ">
-           <CalendarBlank size={24} className="text-gray-400" />
-           <p className="text-sm font-bold">Selecione o ano</p>
-           </div>
-
         <Alert className="w-full flex items-center gap-2 h-full">
-<Slider
-defaultValue={filterYear}
-onValueChange={(value) => setFilterYear(value)}
-max={year}
-min={2000}
-step={1}
-className="color-blue-700"
-
-></Slider>
-
-<p className="text-sm font-bold">{filterYear}</p>
-
-</Alert>
-        </div>
-       </div>
-    )
+          <Slider
+            defaultValue={filterYear}
+            onValueChange={(value) => setFilterYear(value)}
+            max={year}
+            min={2000}
+            step={1}
+            className="color-blue-700"
+          ></Slider>
+          <p className="text-sm font-bold">{filterYear}</p>
+        </Alert>
+      </div>
+    </div>
+  );
 }

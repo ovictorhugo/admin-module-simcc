@@ -23,12 +23,32 @@ import { columns } from "../componentsModal/columns-grupo-pesquisa";
 import { Upload } from "lucide-react";
 
 interface GrupoPesquisa {
-  nome_grupo: string
-  nome_lider: string
-  institution_id: string
-  area: string
-  ultimo_envio: string
-  situacao: string
+  ano_do_censo: string,
+  data_inicio_da_coleta: string,
+  data_fim_da_coleta: string,
+  identificador_do_grupo: string,
+  nome_do_grupo: string,
+  ano_formacao: string,
+  regiao_grupo_pesquisa: string,
+  uf_grupo_pesquisa: string,
+  cidade_grupo_pesquisa: string,
+  grande_area_predominante: string,
+  area_predominante: string,
+  nome_da_instituicao: string,
+  sigla_da_instituicao: string,
+  categoria_administrativa: string,
+  natureza_juridica: string,
+  setor_atividade_economica: string,
+  qtd_linha_pesquisa: number,
+  qtd_pesquisador_grupo: number,
+  qtd_estudantes_grupo: number,
+  qtd_tecnico_grupo: number,
+  qtd_colaborador_grupo: number,
+  quantidadeDePesquisadorDoutor: number,
+  quantDoutorandos: number,
+  quantMestrandos: number,
+  quantGraduandos: number,
+  institution_id:string
 }
 
 export function AddGrupoPesquisaModal() {
@@ -78,22 +98,62 @@ export function AddGrupoPesquisaModal() {
 
           // Map headers to your interface keys
           const headerMap: { [key: string]: keyof GrupoPesquisa } = {
-              'Nome do Grupo': 'nome_grupo',
-              'Nome do Líder': 'nome_lider',
-              'Área Predominante': 'area',
-              'Último Envio': 'ultimo_envio',
-              'Situação': 'situacao'
+              'ANO_DO_CENSO': 'ano_do_censo',
+              'DATA_INICIO_DA_COLETA': 'data_inicio_da_coleta',
+              'DATA_FIM_DA_COLETA': 'data_fim_da_coleta',
+              'IDENTIFICADOR_DO_GRUPO': 'identificador_do_grupo',
+              'NOME_DO_GRUPO': 'nome_do_grupo',
+              'ANO_FORMACAO': 'ano_formacao',
+              'REGIAO_GRUPO_PESQUISA': 'regiao_grupo_pesquisa',
+              'UF_GRUPO_PESQUISA': 'uf_grupo_pesquisa',
+              'CIDADE_GRUPO_PESQUISA': 'cidade_grupo_pesquisa',
+              'GRANDE_AREA_PREDOMINANTE': 'grande_area_predominante',
+              'AREA_PREDOMINANTE': 'area_predominante',
+              'NOME_DA_INSTITUICAO': 'nome_da_instituicao',
+              'SIGLA_DA_INSTITUICAO': 'sigla_da_instituicao',
+              'CATEGORIA_ADMINISTRATIVA': 'categoria_administrativa',
+              'NATUREZA_JURIDICA': 'natureza_juridica',
+              'SETOR_ATIVIDADE_ECONOMICA': 'setor_atividade_economica',
+              'QTD_LINHA_PESQUISA': 'qtd_linha_pesquisa',
+              'QTD_PESQUISADOR_GRUPO': 'qtd_pesquisador_grupo',
+              'QTD_ESTUDANTES_GRUPO': 'qtd_estudantes_grupo',
+              'QTD_TECNICO_GRUPO': 'qtd_tecnico_grupo',
+              'QTD_COLABORADOR_GRUPO': 'qtd_colaborador_grupo',
+              'QUANTIDADEDEPESQUISADORDOUTOR': 'quantidadeDePesquisadorDoutor',
+              'QUANTDOUTORANDOS': 'quantDoutorandos',
+              'QUANTMESTRANDOS': 'quantMestrandos',
+              'QUANTGRADUANDOS': 'quantGraduandos'
           };
 
           // Convert rows to an array of objects
           const jsonData = rows.map((row: any) => {
               const obj: GrupoPesquisa = {
-                  nome_grupo: '',
-                  nome_lider: '',
+                  ano_do_censo: '',
+                  data_inicio_da_coleta: '',
+                  data_fim_da_coleta: '',
+                  identificador_do_grupo: '',
+                  nome_do_grupo: '',
+                  ano_formacao: '',
+                  regiao_grupo_pesquisa: '',
+                  uf_grupo_pesquisa: '',
+                  cidade_grupo_pesquisa: '',
+                  grande_area_predominante: '',
+                  area_predominante: '',
+                  nome_da_instituicao: '',
+                  sigla_da_instituicao: '',
+                  categoria_administrativa: '',
+                  natureza_juridica: '',
+                  setor_atividade_economica: '',
+                  qtd_linha_pesquisa: 0,
+                  qtd_pesquisador_grupo: 0,
+                  qtd_estudantes_grupo: 0,
+                  qtd_tecnico_grupo: 0,
+                  qtd_colaborador_grupo: 0,
+                  quantidadeDePesquisadorDoutor: 0,
+                  quantDoutorandos: 0,
+                  quantMestrandos: 0,
+                  quantGraduandos: 0,
                   institution_id: user.institution_id,
-                  area: '',
-                  ultimo_envio: '',
-                  situacao: ''
               };
               headers.forEach((header, index) => {
                   const key = headerMap[header];

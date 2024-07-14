@@ -131,7 +131,7 @@ export function ArticleItem(props:Articles) {
                         </div>
                         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size={'icon'} className="ml-auto text-sm text-gray-500 dark:text-gray-300">
+            <Button variant="outline" size={'icon'}  className="ml-auto text-sm w-8 h-8 text-gray-500 dark:text-gray-300">
             <DotsThree size={16}/>
             </Button>
           </DropdownMenuTrigger>

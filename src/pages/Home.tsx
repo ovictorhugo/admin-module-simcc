@@ -37,6 +37,8 @@ export function Home() {
     onOpen('result-home')
 } else if(location.pathname == '/pos-graduacao') {
     onOpen('graduation-home')
+} else if(location.pathname == '/dicionario') {
+    onOpen('dicionario')
 } 
     }, [location]);
   

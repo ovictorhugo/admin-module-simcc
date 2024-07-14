@@ -56,7 +56,7 @@ export function ItensList(props:Props) {
     const urlPatrimonioInsert = props.url;
 
     const fetchData = async () => {
-      setIsLoading(true)
+   
        
       try {
           
@@ -82,7 +82,7 @@ export function ItensList(props:Props) {
 
 
     useEffect(() => {
-      if (type === 'confirm-delete-pos-graduate-program' && isOpen) {
+      if (type === 'confirm-delete-pos-graduate-program' && !isOpen) {
         fetchData();
       } else if (type === 'add-graduate-program' && !isOpen) {
         fetchData();

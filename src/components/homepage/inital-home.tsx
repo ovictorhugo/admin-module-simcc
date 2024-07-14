@@ -72,7 +72,7 @@ import { useModal } from "../hooks/use-modal-store";
 import { Switch } from "../ui/switch";
 import { SelectTypeSearch } from "../search/select-type-search";
 import { Badge } from "../ui/badge";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { AreaChart, Area,LineChart, Line, BarChart, Bar, XAxis, PieChart, Pie, YAxis, LabelList,  CartesianGrid,  Legend, ResponsiveContainer } from 'recharts';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
@@ -127,6 +127,7 @@ import { Label } from "../ui/label";
 import { useTheme } from "next-themes";
 import { ArtigosRecentes } from "./components/artigos-recentes";
 import { Newsletter } from "./components/newsletter";
+import { Instrucoes } from "./components/instrucoes";
 
 
 HC_wordcloud(Highcharts);
@@ -181,7 +182,7 @@ const chartConfig2 = {
 
 export function InitialHome() {
   const [VisaoPrograma, setVisaoPrograma] = useState<VisaoPrograma[]>([]);
-  const { urlGeralAdm, urlGeral, user, maria, setMaria,  searchType } = useContext(UserContext);
+  const { setItensSelecionados, urlGeralAdm, urlGeral, user, maria, setMaria,  searchType } = useContext(UserContext);
 
  
 
@@ -410,6 +411,16 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
   
     const lineProps = useSpring({ opacity: 1, from: { opacity: 0 }, reset: true });
 
+    
+    const navigate = useNavigate();
+
+    function handlePesquisaChange(term: string) {
+      setItensSelecionados([{ term }]);
+
+      navigate(`/resultados?type_search=article&terms=${term}`)
+
+    }
+
   return (
     <>
       {isModalOpen && (
@@ -532,6 +543,20 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
         </Button>
             </div>
                 </Alert>
+
+                <div className="flex flex-wrap gap-3">
+                                {words.map((word, index) => (
+                                    <div
+                                        key={index}
+                                        className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`}
+                                    onClick={() => {
+                                        handlePesquisaChange(word.term)
+                                    }}
+                                    >
+                                        {word.term}
+                                    </div>
+                                ))}
+                            </div>
 
              
           </div>
@@ -908,6 +933,8 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                     </Alert>
                   </div>
                   <ArtigosRecentes/>
+
+                  <Instrucoes/>
                   <Newsletter/>
           </div>
 

@@ -56,7 +56,7 @@ export function ResearchersHome() {
   const [loading, setLoading] = useState(false);
   const [researcher, setResearcher] = useState<Research[]>([]);
   const [typeVisu, setTypeVisu] = useState('block');
-  const { itemsSelecionados, setItensSelecionados, urlGeral, searchType, setSearchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta, navbar } = useContext(UserContext);
+  const { itemsSelecionados, setItensSelecionados, urlGeral, searchType, setSearchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta, navbar, setValoresSelecionadosExport } = useContext(UserContext);
   const { mapModal, setMapModal, pesquisadoresSelecionados } = useContext(UserContext);
 
   useEffect(() => {
@@ -70,7 +70,8 @@ export function ResearchersHome() {
 
   useEffect(() => {
     setSearchType(String(type_search || ''));
-  }, [type_search]);
+    setValoresSelecionadosExport(terms || '')
+  }, [type_search, terms]);
 
 
   const isModalOpen = isOpen && type === "researchers-home";

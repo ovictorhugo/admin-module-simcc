@@ -9,6 +9,7 @@ import { Link } from "react-router-dom"
 import { toast } from "sonner"
 import QRCode from "react-qr-code";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
+import { useModal } from "../hooks/use-modal-store"
 
 
 
@@ -120,125 +121,16 @@ const handleDownloadJson = async () => {
   }
 };
 
-
+const {onClose} = useModal()
 
     return (
-        <div className="flex flex-col mt-8">
+        <div className="flex flex-col">
 
-          <div className="flex justify-between items-center w-full"> 
-       
-          <div className={`border-[1px] border-gray-300 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated ? ('bg-red-500 text-white border-none') : ('')}`}>Atualização do Lattes: {String(props.lattes_update)}</div>
-        
-
-          <div className="flex gap-3">
-         
-
-         
-
-          <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-            <Button
-            variant={'default'}
-            onClick={() => {
-              // Verifica se o pesquisador já está selecionado pelo nome
-              if (pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name)) {
-                // Remove o pesquisador selecionado com o nome correspondente
-                setPesquisadoresSelecionados(prev => prev.filter(pesquisador => pesquisador.name !== props.name));
-              } else {
-                // Adiciona o novo pesquisador selecionado
-                setPesquisadoresSelecionados(prev => [
-                  ...prev,
-                  {
-                    id: props.id,
-                    name: props.name,
-                    university: props.university,
-                    lattes_id: props.lattes_id,
-                    city: props.city,
-                    area: props.area,
-                    graduation: props.graduation,
-                  }
-                ]);
-              }
-            }}
-            className={`h-8 w-8 p-0 text-white dark:text-white ${
-              pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) && 'bg-red-500 hover:bg-red-600 text-white'
-            }`}
-          >
-            {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
-              <X size={16} className="" />
-            ) : (
-              <Plus size={16} className="" />
-            )}
-          </Button>
-            </TooltipTrigger>
-            <TooltipContent>Adicionar pesquisador(a)</TooltipContent>
-          </Tooltip>
-          </TooltipProvider>
-
-            
-          <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-            <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
-            <span className="sr-only">Open menu</span>
-             <ArrowSquareOut size={8} className="h-4 w-4" />
-             </Button>
-            </TooltipTrigger>
-            <TooltipContent>Ir a página</TooltipContent>
-          </Tooltip>
-          </TooltipProvider>
-
-          <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem className="flex items-center gap-3"
-              onClick={() => navigator.clipboard.writeText(payment)}
-            ><Copy className="h-4 w-4" />
-              Copiar Lattes ID
-            </DropdownMenuItem>
-
-            <DropdownMenuItem className="flex items-center gap-3" onClick={() => handleDownloadJson()}><FileCsv className="h-4 w-4" />Baixar CSV das publicações</DropdownMenuItem>
-
-            <DropdownMenuItem className="flex items-center gap-3" onClick={() => setApiVisible(!apiVisible)}><BracketsCurly className="h-4 w-4" />API da consulta</DropdownMenuItem>
-
-            <DropdownMenuItem className="flex items-center gap-3"
-              onClick={() => navigator.clipboard.writeText(urlShare)}
-            ><ShareNetwork className="h-4 w-4" />
-              Copiar link para compartilhar
-             
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex justify-center py-4">
-            
-            <QRCode size={200} className={'bg-transparent'} value={urlShare} />
-            
-            
-            </DropdownMenuItem>
-      
-          </DropdownMenuContent>
-        </DropdownMenu>
-        </div>
           
-          </div>
          
 
           <div className="flex items-center flex-col  relative">
-          <h4 className="text-3xl font-medium px-8 text-center mb-2">{props.name}</h4>
-          <div className="flex text-gray-500 items-center gap-2 mb-4">
-              {props.image == "None" ? (
-                <Buildings size={16} className="" />
-              ) : (
-                <img src={props.image} alt="" className="h-6" />
-              )}
-              <p className="text-md  ">{props.university}</p>
-            </div>
+        
             <div className="mb-4 flex gap-3 items-center flex-wrap justify-center">
 
          
@@ -307,9 +199,9 @@ const handleDownloadJson = async () => {
 
             {props.abstract.length > 500 && (
               <div className="flex gap-4 items-center mt-4">
-              <div className={`${!isVisible && ('animate-bounce')} cursor-pointer rounded-md hover:bg-gray-100 h-8 w-8 transition-all flex items-center justify-center`}>
-                <CaretDown onClick={() => setIsVisible(!isVisible)} size={24} className={isVisible ? "rotate-180 transition-all  text-gray-400" : "text-gray-400  transition-all"} />
-              </div>
+              <Button variant='ghost' size={'icon'} className={`${!isVisible && ('animate-bounce')} h-8 w-8 `}>
+                <CaretDown onClick={() => setIsVisible(!isVisible)} size={16} className={isVisible ? "rotate-180 transition-all  text-gray-400" : "text-gray-400  transition-all"} />
+              </Button>
             </div>
             )}
 

@@ -102,12 +102,12 @@ export function ResultHome() {
                 )}
                 <div className="flex py-2 justify-between items-center">
                   <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="sm" className="m-0" onClick={() => onOpen('researchers-home')}>
+                    <Button variant={typeResult == 'researchers-home' ? ('outline'):('ghost')} size="sm" className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
                       <Users className="h-4 w-4" />
                       Pesquisadores
                     </Button>
                     {searchType === 'article' && (
-                      <Button variant="ghost" size="sm" className="m-0" onClick={() => onOpen('researchers-home')}>
+                      <Button variant={typeResult == 'articles-home' ? ('outline'):('ghost')} size="sm" className="m-0" onClick={() => onOpen('articles-home')}>
                         <Quotes className="h-4 w-4" />
                         Artigos
                       </Button>
@@ -148,9 +148,7 @@ export function ResultHome() {
                   </div>
                 </div>
               </div>
-              <div className={`${isOn ? 'px-8' : 'px-4'}`}>
-                <HeaderResult />
-              </div>
+            
             </div>
           )}
           <ScrollArea className="h-full">
@@ -160,7 +158,7 @@ export function ResultHome() {
               </div>
             ) : (
               <div className="w-full flex flex-col items-center justify-center h-[calc(100vh-52px)]">
-                <p className="text-9xl text-[#719CB8] font-bold mb-16 animate-pulse">=]</p>
+                <p className="text-9xl text-[#719CB8] font-bold mb-16 animate-pulse">^_^</p>
                 <p className="font-medium text-lg">
                   Experimente pesquisar um tema e veja o que a plataforma pode filtrar para você.
                 </p>

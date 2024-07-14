@@ -4,6 +4,7 @@ import { UserContext } from "../../../context/context";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../../ui/carousel";
 import { ArticleItem } from "./article-item";
 import Autoplay from "embla-carousel-autoplay"
+import { ArrowSquareOut } from "phosphor-react";
 
 type Publicacao = {
     id: string,
@@ -60,7 +61,7 @@ export function ArtigosRecentes() {
            <div className="flex items-center justify-between mb-6">
            <h2 className="text-2xl font-medium ">Produções mais recentes</h2>
 
-           <Button size={'icon'} className="h-8 w-8"></Button>
+           <Button variant={ 'outline'} className=""><ArrowSquareOut size={16}/> Ver a página</Button>
            </div>
 
            <div>

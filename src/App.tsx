@@ -48,7 +48,7 @@ function App() {
 
   const [mapModal, setMapModal] = useState(false)
 
-  const [searchType, setSearchType] = useState('');
+  const [searchType, setSearchType] = useState('article');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [idGraduateProgram, setIdGraduateProgram] = useState('0');
   const [valoresSelecionadosExport, setValoresSelecionadosExport] = useState(``);
@@ -136,7 +136,7 @@ const [mode, setMode] = useState('user')
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/resultados' element={<Home/>}/>
-
+        <Route path='/dicionario' element={<Home/>}/>
         <Route path='/pos-graduacao' element={<Home/>}/>
        
        

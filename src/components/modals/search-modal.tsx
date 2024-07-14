@@ -215,8 +215,12 @@ console.log(termosformatados)
       Terms = termosformatados
       setInput('')
 
-      queryUrl.set('type_search', TypeSearch);
-      queryUrl.set('terms', Terms);
+      queryUrl.set('type_search', searchType);
+      if(searchType == 'name') {
+        queryUrl.set('terms', Terms.replace(/[()]/g, ''));
+      } else {
+        queryUrl.set('terms', Terms);
+      }
         navigate({
           pathname: '/resultados',
           search: queryUrl.toString(),
@@ -224,7 +228,20 @@ console.log(termosformatados)
 
     onClose()
     
-    } 
+    } else if (itemsSelecionadosPopUp.length == 0 && input.length != 0) {
+
+      setItensSelecionados([{term:input}])
+      setInput('')
+
+      queryUrl.set('type_search', searchType);
+      queryUrl.set('terms', input);
+        navigate({
+          pathname: '/resultados',
+          search: queryUrl.toString(),
+        });
+
+      onClose()
+    }
     
   }
 
@@ -312,9 +329,6 @@ console.log('fawefwef', urlOpenAlex)
   };
      //////////q
       console.log(itemsSelecionadosPopUp)
-
-      
-
 
       //itens selecionados 
       const handleRemoveItem = (indexToRemove: any) => {

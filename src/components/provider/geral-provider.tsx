@@ -9,8 +9,25 @@ import { BaremasHome } from "../baremas/baremas-home";
 import { MeusBaremasHome } from "../baremas/meus-baremas";
 import { ProcurarBaremas } from "../baremas/procurar-barema-public";
 import { ResultProcurarBaremas } from "../baremas/result-procurar-barema";
+import { useModalHomepage } from "../hooks/use-modal-homepage";
+import { Dicionario } from "../dicionario/dicionario";
 
+const ModalContent = () => {
+  const { type } = useModalHomepage();
 
+  switch (type) {
+    case 'dicionario':
+      return <Dicionario/>
+    case 'initial-home':
+      return <InitialHome/>
+    case 'graduation-home':
+      return <GraduateProgram/>
+    case 'result-home':
+      return <ResultHome/>
+    case 'baremas':
+      return <BaremasHome/>
+  }
+}
 
 export const GeralProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -23,16 +40,5 @@ export const GeralProvider = () => {
     return null;
   }
 
-  return (
-    <>
-    <InitialHome/>
-    <MariaHome/>
-    <ResultHome/>
-    <GraduateProgram/>
-    <BaremasHome/>
-    <MeusBaremasHome/>
-    <ProcurarBaremas/>
-    <ResultProcurarBaremas/>
-    </>
-  )
+  return <ModalContent/>
 }
