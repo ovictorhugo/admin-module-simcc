@@ -11,6 +11,7 @@ import { ProcurarBaremas } from "../baremas/procurar-barema-public";
 import { ResultProcurarBaremas } from "../baremas/result-procurar-barema";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 import { Dicionario } from "../dicionario/dicionario";
+import { ContentIndicators } from "../indicators/content-indicators";
 
 const ModalContent = () => {
   const { type } = useModalHomepage();
@@ -26,6 +27,8 @@ const ModalContent = () => {
       return <ResultHome/>
     case 'baremas':
       return <BaremasHome/>
+    case 'indicadores' :
+      return <ContentIndicators/>
   }
 }
 

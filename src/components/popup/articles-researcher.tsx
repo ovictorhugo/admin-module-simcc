@@ -187,10 +187,13 @@ const handleRemoveItem = (indexToRemove: any) => {
               
                         <Accordion  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <HeaderResultTypeHome title="Gráfico de quantidade total por Qualis" icon={<ChartBar size={24} className="text-gray-400" />}>
+                <div className="flex mb-2">
+                   <HeaderResultTypeHome title="Gráfico de quantidade total por Qualis" icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
+                   <AccordionTrigger>
+                  
                     </AccordionTrigger>
+                   </div>
                     <AccordionContent >
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
@@ -205,72 +208,74 @@ const handleRemoveItem = (indexToRemove: any) => {
 
                 <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
+                <div className="flex mb-2">
+                <div className="flex gap-4 w-full justify-between items-center ">
+<div className="flex gap-4 items-center">
+<Quotes size={24} className="text-gray-400" />
+{searchType != 'article' || itemsSelecionadosPopUp.length == 0 ? (
+<p className="text-sm font-bold">Todos os artigos</p>
+):(
+<div className="text-sm font-bold flex items-center gap-2">
+<span className="">{publicacoes.length} </span> ocorrências de
 
-                    <div className="flex gap-4 w-full justify-between items-center ">
-            <div className="flex gap-4 items-center">
-            <Quotes size={24} className="text-gray-400" />
-             {searchType != 'article' || itemsSelecionadosPopUp.length == 0 ? (
-               <p className="text-sm font-bold">Todos os artigos</p>
-             ):(
-              <div className="text-sm font-bold flex items-center gap-2">
-                <span className="">{publicacoes.length} </span> ocorrências de
+<div className='flex gap-2 items-center'>
+{itemsSelecionadosPopUp.map((valor, index) => {
+return(
+<>
+<div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs bg-blue-500 dark:bg-blue-500 text-white border-0 `} >
+{valor.term.replace(/[|;]/g, '')}
+<X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer"/>
+{/* Adicionando a escolha entre "e" ou "ou" */}
 
-                <div className='flex gap-2 items-center'>
-              {itemsSelecionadosPopUp.map((valor, index) => {
-          return(
-              <>
-              <div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs bg-blue-500 dark:bg-blue-500 text-white border-0 `} >
-              {valor.term.replace(/[|;]/g, '')}
-                  <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer"/>
-                  {/* Adicionando a escolha entre "e" ou "ou" */}
-                  
-              </div>
+</div>
 
-              {index < itemsSelecionadosPopUp.length - 1 && (
-  <button className="rounded-full cursor-pointer flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 transition-all text-xs outline-none" onClick={() => {
-    const connector = itemsSelecionadosPopUp[index].term.endsWith('|') ? ';' : '|'; // Alterna entre "|" e ";" conforme necessário
-    handleConnectorChange(index, connector);
-  }} >
-    {itemsSelecionadosPopUp[index].term.endsWith(';') ? "e" : "ou"}
-  </button>
+{index < itemsSelecionadosPopUp.length - 1 && (
+<button className="rounded-full cursor-pointer flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 transition-all text-xs outline-none" onClick={() => {
+const connector = itemsSelecionadosPopUp[index].term.endsWith('|') ? ';' : '|'; // Alterna entre "|" e ";" conforme necessário
+handleConnectorChange(index, connector);
+}} >
+{itemsSelecionadosPopUp[index].term.endsWith(';') ? "e" : "ou"}
+</button>
 )}
 
-              </>
-          );
-      })}
+</>
+);
+})}
 
-      em artigos
+em artigos
+</div>
+</div>
+)}
+</div>
+
+<div className="flex gap-3 mr-3  items-center h-full">
+
+{(itemsSelecionadosPopUp != itemsSelecionados && searchType == 'article') && (
+<div className="flex gap-3  items-center">
+<Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="ghost"  size={'icon'}>
+        <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
+    </Button>
+
+<div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
+</div>
+)}
+
+<Button onClick={() => setTypeVisu('rows')}  variant={typeVisu == 'block' ? 'ghost' : 'outline' } size={'icon'}>
+        <Rows size={16} className=" whitespace-nowrap" />
+    </Button>
+
+    <Button  onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost' }  size={'icon'}>
+        <SquaresFour size={16} className=" whitespace-nowrap" />
+    </Button>
+</div>
+
+</div>
+
+                <AccordionTrigger>
+
+              </AccordionTrigger>
                 </div>
-              </div>
-             )}
-            </div>
-
-            <div className="flex gap-3  items-center h-full">
-
-            {itemsSelecionadosPopUp != itemsSelecionados && (
-              <div className="flex gap-3  items-center">
-                <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
-                            <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
-                        </Button>
-
-              <div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
-              </div>
-            )}
-
-            <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
-                            <Rows size={16} className=" whitespace-nowrap" />
-                        </Button>
-
-                        <Button  onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
-                            <SquaresFour size={16} className=" whitespace-nowrap" />
-                        </Button>
-            </div>
-
-          </div>
-
-                   
-                    </AccordionTrigger>
+                  
                     <AccordionContent >
 
 {typeVisu == 'block' ? (

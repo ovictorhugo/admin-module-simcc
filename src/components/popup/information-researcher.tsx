@@ -42,6 +42,7 @@ interface Props {
     i10_index:string,
     scopus:string,
     openalex:string,
+    openAPI:boolean
   }
 
   type Research = {
@@ -53,6 +54,7 @@ interface Props {
     scopus: string;
     orcid:string
     openalex: string
+    
   }
 
 
@@ -181,10 +183,19 @@ const {onClose} = useModal()
 
            </div>
 
-           {apiVisible && (
+           {props.openAPI && (
               <div className="w-full bg-slate-100 px-4 py-2 rounded-md text-xs mb-4 flex gap-3 items-center justify-between">
                 <div className="flex items-center gap-3"><BracketsCurly className="h-4 w-4" />{urlApi}</div>
-                <Button onClick={() => navigator.clipboard.writeText(urlApi)} variant="ghost" className="h-8 w-8 p-0">
+                <Button onClick={() => {
+                  navigator.clipboard.writeText(urlApi)
+                  toast("Operação realizada", {
+                    description: "URL copiada para área de transferência",
+                    action: {
+                      label: "Fechar",
+                      onClick: () => console.log("Undo"),
+                    },
+                  })
+                }} variant="ghost" className="h-8 w-8 p-0">
               <Copy className="h-4 w-4" />
             </Button>
               </div>

@@ -135,10 +135,13 @@ export function ResearchersHome() {
             {searchType !== 'abstract' && searchType !== 'name' && searchType !== 'area' && (
               <Accordion defaultValue="item-1" type="single" collapsible>
                 <AccordionItem value="item-1">
-                  <AccordionTrigger>
-                    <HeaderResultTypeHome title="Pesquisadores mais relevantes por ordem de ocorrências" icon={<ListNumbers size={24} className="text-gray-400" />}>
+                <div className="flex mb-2">
+                <HeaderResultTypeHome title="Pesquisadores mais relevantes por ordem de ocorrências" icon={<ListNumbers size={24} className="text-gray-400" />}>
                     </HeaderResultTypeHome>
+                  <AccordionTrigger>
+                   
                   </AccordionTrigger>
+                  </div>
                   <AccordionContent>
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]" />
@@ -153,16 +156,21 @@ export function ResearchersHome() {
             <div>
               <Accordion defaultValue="item-1" type="single" collapsible>
                 <AccordionItem value="item-1">
-                  <AccordionTrigger>
-                    <HeaderResultTypeHome title="Pesquisadores por detalhamento" icon={<UserList size={24} className="text-gray-400" />}>
-                      <Button onClick={() => setTypeVisu('rows')} variant="ghost" className={`h-9 w-9 ${typeVisu === 'rows' && 'bg-white dark:bg-neutral-800'}`} size={'icon'}>
+                <div className="flex mb-2">
+                <HeaderResultTypeHome title="Pesquisadores por detalhamento" icon={<UserList size={24} className="text-gray-400" />}>
+                      <div className="flex gap3 mr-3">
+                      <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
                         <Rows size={16} className="whitespace-nowrap" />
                       </Button>
-                      <Button onClick={() => setTypeVisu('block')} variant="ghost" className={`h-9 w-9 ${typeVisu === 'block' && 'bg-white dark:bg-neutral-800'}`} size={'icon'}>
+                      <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'}  size={'icon'}>
                         <SquaresFour size={16} className="whitespace-nowrap" />
                       </Button>
+                      </div>
                     </HeaderResultTypeHome>
+                  <AccordionTrigger>
+                 
                   </AccordionTrigger>
+                  </div>
                   <AccordionContent>
                     {typeVisu === 'block' ? (
                       loading ? (
@@ -171,7 +179,7 @@ export function ResearchersHome() {
                             350: 1,
                             750: 2,
                             900: 3,
-                            1200: 3
+                            1200: 4
                           }}
                         >
                           <Masonry gutter="16px">

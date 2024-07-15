@@ -357,9 +357,13 @@ console.log('fawefwef', urlOpenAlex)
     
 
     return  (
-        <Dialog open={isModalOpen} onOpenChange={onClose}>
-        <DialogContent  className="p-0 border-none min-w-[60vw] bg-transparent dark:bg-transparent">
-     
+        <Dialog open={isModalOpen} onOpenChange={onClose} >
+        <DialogContent   className="p-0 border-none min-w-[60vw] bg-transparent dark:bg-transparent">
+        <style>{`
+            .shadcn-dialog-close {
+                display: none;
+            }
+        `}</style>
         <Alert  className="h-14 bg-white p-2 flex items-center gap-3 justify-between">
         <div className="flex items-center gap-2 w-full flex-1">
         <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
@@ -432,7 +436,7 @@ console.log('fawefwef', urlOpenAlex)
         </div>
 
         <div className="w-fit">
-            <Button onClick={() => handlePesquisaFinal()} variant="outline" className={`${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 z-[9999999999999999999] `} size={'icon'}>
+            <Button onClick={() => handlePesquisaFinal()} variant="outline" className={`${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 z-[9999] `} size={'icon'}>
        <Funnel size={16} className="" /> 
        
         </Button>

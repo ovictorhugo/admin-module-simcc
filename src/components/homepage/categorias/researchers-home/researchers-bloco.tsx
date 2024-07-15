@@ -24,7 +24,9 @@ export function ResearchersBloco(props: Research) {
         350: 1,
         750: 2,
         900: 3,
-        1200: navbar || isOpen || mapModal ? 2 : ((navbar && mapModal) || (isOpen && mapModal)) ? 1 : 4
+        1200:  3,
+        1500: 4,
+        1700: 5
     }}
 >
 

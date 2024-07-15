@@ -26,6 +26,7 @@ export function ArticleBlockPopUp(props:Articles) {
         750: 1,
         900: 2,
         1200: 3,
+        1700:4
     }}
 >
                  <Masonry gutter="16px">

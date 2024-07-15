@@ -17,16 +17,29 @@ import { SelectTypeInstitutionSearch } from "./select-type-institution-search";
 const API_KEY = import.meta.env.VITE_API_KEY
 
 const systemMessage = { //  Explain things like you're talking to a software professional with 5 years of experience.
-    "role": "system", "content": `
-    Retorne APENAS um json com:
-    1. o campo "type" (abstract, article, book, patent, name, area, speaker). Se o tipo não for identificado, por padrão será definido como "article".
-    2. o campo "term" contendo uma ÚNICA palavra que representa o tema da frase. Se o tipo for "name", o nome completo será extraído e colocado em "term".
-    3. o campo "message" contendo um array com: 1. uma mensagem bastante longa sobre o term retornado, 2. Uma mensagem com variações, informando que os 'resultados podem ser filtrados utilizando filtros de instituições, área, qualis e ano'
-    4. o campo "sugestion", contendo uma lista de 7 termos semelhantes separadaas por ";"
-    `
+  "role": "system",
+  "content": `
+  Retorne APENAS um JSON com os seguintes campos:
+  1. "type": Identifique o tipo do termo. Os tipos possíveis são "abstract", "article", "book", "patent", "name", "area", "speaker". Se o tipo não for identificado, defina-o como "article" por padrão.
+  2. "term": Contenha as palavras-chave concatenadas com ";" dentro de parênteses para representar "E" e "|" para representar "OU" (exemplo: (matematica;evolucionaria) para "E" e Bioactive|educational para "OU" no caso do "OU" não tem parênteses). Se o tipo for "name", extraia e coloque o nome completo em "term".
+  3. "message": Contenha um array com duas mensagens:
+      1. Uma mensagem detalhada sobre o "term" retornado.
+      2. Uma mensagem com variações, informando que 'os resultados podem ser filtrados utilizando filtros de instituições, área, qualis e ano'.
+  `
+  }
+
+  const useQuery = () => {
+    return new URLSearchParams(useLocation().search);
   }
 
 export function Search() {
+
+  
+   //retorna url
+   const queryUrl = useQuery();
+   const navigate = useNavigate();
+const type_search = queryUrl.get('type_search');
+const terms = queryUrl.get('terms');
 
     const location = useLocation();
 
@@ -87,6 +100,8 @@ const handleSend = async (message: any) => {
   await processMessageToChatGPT(newMessage);
 };
 
+let TypeSearch = type_search ?? ''
+  let Terms = terms ?? ''
 
 async function processMessageToChatGPT(messageObject:any) {
   const apiRequestBody = {
@@ -122,18 +137,23 @@ async function processMessageToChatGPT(messageObject:any) {
       // Defina os valores nas variáveis
       setSearchType(type);
       setMessagesMaria(message)
-      const termsArray = sugestion.split(';'); // Split the string into an array of terms
+      const termsArray = term // Split the string into an array of terms
 
       // Map over the terms array and create an array of objects with the 'term' property set
-      const sugestoesArray = termsArray.map(term => ({ term }));
-
-      // Set the state using the created array of objects
-      setSugestoes(sugestoesArray);
-      console.log('sugestoes',sugestoes)
-      
+     
       setItensSelecionados(prevItems => [...prevItems, { term }]);
 
       setIsTyping(false);
+    
+
+      queryUrl.set('type_search', searchType);
+      queryUrl.set('terms', termsArray);
+      navigate({
+        pathname: '/resultados',
+        search: queryUrl.toString(),
+      });
+      
+      
       
     })
 }

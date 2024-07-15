@@ -41,6 +41,7 @@ import { BookBlockPopUp } from "./book-block-popup";
 import { FilterYearPopUp } from "./filters-year-popup";
 import { TableReseracherPatentesPopup } from "./columns/producoes-tecnicas/table-patentes-popup";
 import { TableReseracherMarcasPopup } from "./columns/producoes-tecnicas/table-marcas-popup";
+import { GraficoProducaoTecnica } from "./graficos/grafico-producao-tecnica";
 
 
 type Filter = {
@@ -250,17 +251,18 @@ const handleRemoveItem = (indexToRemove: any) => {
               
                         <Accordion  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <HeaderResultTypeHome title="Gráfico de quantidade total de produção técnica" icon={<ChartBar size={24} className="text-gray-400" />}>
+                <div className="flex mb-2">
+                <HeaderResultTypeHome title="Gráfico de quantidade total de produção técnica" icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
+                    <AccordionTrigger>
+                    
                     </AccordionTrigger>
+                    </div>
                     <AccordionContent >
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
-                      <GraficoArticleHome
-                      articles={publicacoes}
-                      />
+                      <GraficoProducaoTecnica software={software} publicacoes={publicacoes} marca={marca} />
                     )}
                     </AccordionContent>
                 </AccordionItem>
@@ -268,8 +270,8 @@ const handleRemoveItem = (indexToRemove: any) => {
 
                 <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <div className="flex gap-4 w-full justify-between items-center ">
+                <div className="flex mb-2">
+                <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
             <Copyright size={24} className="text-gray-400" />
              {searchType != 'patent' || itemsSelecionadosPopUp.length == 0 ? (
@@ -308,10 +310,10 @@ const handleRemoveItem = (indexToRemove: any) => {
              )}
             </div>
 
-            <div className="flex gap-3  items-center h-full">
-            {itemsSelecionadosPopUp != itemsSelecionados && (
+            <div className="flex gap-3 mr-3  items-center h-full">
+            {(itemsSelecionadosPopUp != itemsSelecionados && searchType == 'patent') && (
               <div className="flex gap-3  items-center">
-                <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+                <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="ghost" size={'icon'}>
                             <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
                         </Button>
 
@@ -319,18 +321,22 @@ const handleRemoveItem = (indexToRemove: any) => {
               </div>
             )}
 
-            <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+            <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu == 'block' ? 'ghost' : 'outline' } size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
                         </Button>
 
-                        <Button  onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
+                        <Button  onClick={() => setTypeVisu('block')}  variant={typeVisu == 'block' ? 'outline' : 'ghost' }  size={'icon'}>
                             <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
             </div>
 
           </div>
                    
+
+                    <AccordionTrigger>
+                   
                     </AccordionTrigger>
+                    </div>
                     <AccordionContent >
 
 {typeVisu == 'block' ? (
@@ -376,28 +382,32 @@ const handleRemoveItem = (indexToRemove: any) => {
 
                 <Accordion   type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <div className="flex gap-4 w-full  justify-between items-center ">
+                <div className="flex mb-2">
+                <div className="flex gap-4 w-full  justify-between items-center ">
             <div className="flex gap-4 items-center">
             <Code size={24} className="text-gray-400" />
             <p className="text-sm font-bold">Todos os softwares</p>
             </div>
 
-            <div className="flex gap-3  items-center h-full">
+            <div className="flex gap-3 mr-3  items-center h-full">
            
 
-            <Button onClick={() => setTypeVisu2('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+            <Button onClick={() => setTypeVisu2('rows')}   variant={typeVisu2 == 'block' ? 'ghost' : 'outline' }  size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
                         </Button>
 
-                        <Button  onClick={() => setTypeVisu2('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
+                        <Button  onClick={() => setTypeVisu2('block')} variant={typeVisu2 == 'block' ? 'outline' : 'ghost' }  size={'icon'}>
                             <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
             </div>
 
           </div>
+
+                    <AccordionTrigger>
+                 
                    
                     </AccordionTrigger>
+                    </div>
                     <AccordionContent >
 
 {typeVisu2 == 'block' ? (
@@ -444,36 +454,31 @@ const handleRemoveItem = (indexToRemove: any) => {
 
                 <Accordion  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <div className="flex gap-4 w-full  justify-between items-center ">
+                <div className="flex mb-2">
+                <div className="flex gap-4 w-full  justify-between items-center ">
             <div className="flex gap-4 items-center">
             <StripeLogo size={24} className="text-gray-400" />
             <p className="text-sm font-bold">Todas as marcas</p>
             </div>
 
-            <div className="flex gap-3  items-center h-full">
-            {itemsSelecionadosPopUp != itemsSelecionados && (
-              <div className="flex gap-3  items-center">
-                <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
-                            <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
-                        </Button>
+            <div className="flex gap-3 mr-3  items-center h-full">
+          
 
-              <div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
-              </div>
-            )}
-
-            <Button onClick={() => setTypeVisu3('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+            <Button onClick={() => setTypeVisu3('rows')} variant={typeVisu3 == 'block' ? 'ghost' : 'outline' }  size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
                         </Button>
 
-                        <Button  onClick={() => setTypeVisu3('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
+                        <Button  onClick={() => setTypeVisu3('block')} variant={typeVisu3 == 'block' ? 'outline' : 'ghost' } size={'icon'}>
                             <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
             </div>
 
           </div>
+                    <AccordionTrigger>
+                   
                    
                     </AccordionTrigger>
+                    </div>
                     <AccordionContent >
 
 {typeVisu3 == 'block' ? (

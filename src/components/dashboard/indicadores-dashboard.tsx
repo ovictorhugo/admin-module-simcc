@@ -306,7 +306,7 @@ console.log(bolsistas)
 
             <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8 mt-2">
                   <div>
-                  <Link to={'https://app.powerbi.com/view?r=eyJrIjoiYTg4MGFmNWQtMjQ4Yi00ZmFhLTgzMmMtMDFiMmI3YzFmNmEwIiwidCI6IjkyYzBjZmE5LTdlOTEtNGVhZC1hYzI5LWNkNDRhMjM4OWIwMSJ9&pageName=ReportSectionaf31612e05234cb0b779'} target="_blank"  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como extrair os bolsistas CNPq<ArrowRight size={12}/></Link>
+                  <Link to={'http://www.bi.cnpq.br/painel/mapa-fomento-cti/'} target="_blank"  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como extrair os bolsistas CNPq<ArrowRight size={12}/></Link>
         
         <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
           Painel dos{" "}

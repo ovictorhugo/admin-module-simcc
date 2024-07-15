@@ -53,7 +53,7 @@ export function FilterYearPopUp(props:Props) {
     const [itensSelecionados, setItensSelecionados] = useState<string[]>([]);
     const currentDate = new Date();
     const year = currentDate.getFullYear()
-    const [filterYear, setFilterYear] = useState([2000])
+    const [filterYear, setFilterYear] = useState([1990])
     type CheckboxStates = {
       [index: number]: boolean;
     };
@@ -144,7 +144,7 @@ export function FilterYearPopUp(props:Props) {
 defaultValue={filterYear}
 onValueChange={(value) => setFilterYear(value)}
 max={year}
-min={2000}
+min={1990}
 step={1}
 className="color-blue-700"
 

@@ -120,6 +120,8 @@ export function SpeakerResearcherPopUp(props:Props) {
     if(searchType == "speaker") {
       urlTermPublicacoes = `${urlGeral}pevent_researcher?researcher_id=${props.name}&term=${resultadoFormatado}&year=${yearString}&nature=`;
   }
+
+  console.log(urlTermPublicacoes)
    
     useMemo(() => {
         const fetchData = async () => {
@@ -197,10 +199,14 @@ const handleRemoveItemCap = (indexToRemove: any) => {
               
                         <Accordion  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <HeaderResultTypeHome title="Gráfico de quantidade total de livros e capítulos" icon={<ChartBar size={24} className="text-gray-400" />}>
+                <div className="flex mb-2">
+                <HeaderResultTypeHome title="Gráfico de quantidade total de livros e capítulos" icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
+
+                    <AccordionTrigger>
+                
                     </AccordionTrigger>
+                    </div>
                     <AccordionContent >
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
@@ -215,8 +221,8 @@ const handleRemoveItemCap = (indexToRemove: any) => {
 
                 <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <div className="flex gap-4 w-full justify-between items-center ">
+                <div className="flex mb-2">
+                <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
             <Ticket size={24} className="text-gray-400" />
              {searchType != 'speaker' || itemsSelecionadosPopUp.length == 0 ? (
@@ -255,10 +261,10 @@ const handleRemoveItemCap = (indexToRemove: any) => {
              )}
             </div>
 
-            <div className="flex gap-3  items-center h-full">
-            {itemsSelecionadosPopUp != itemsSelecionados && (
+            <div className="flex gap-3 mr-3  items-center h-full">
+            {(itemsSelecionadosPopUp != itemsSelecionados && searchType == 'speaker') && (
               <div className="flex gap-3  items-center">
-                <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+                <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="ghost"  size={'icon'}>
                             <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
                         </Button>
 
@@ -266,18 +272,21 @@ const handleRemoveItemCap = (indexToRemove: any) => {
               </div>
             )}
 
-            <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+            <Button onClick={() => setTypeVisu('rows')}   variant={typeVisu == 'block' ? 'ghost' : 'outline' } size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
                         </Button>
 
-                        <Button  onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
+                        <Button  onClick={() => setTypeVisu('block')}   variant={typeVisu == 'block' ? 'outline' : 'ghost' } size={'icon'}>
                             <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
             </div>
 
           </div>
                    
+                    <AccordionTrigger>
+                   
                     </AccordionTrigger>
+                    </div>
                     <AccordionContent >
 
 {typeVisu == 'block' ? (

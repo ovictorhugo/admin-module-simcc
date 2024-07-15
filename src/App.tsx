@@ -140,7 +140,9 @@ const [mode, setMode] = useState('user')
         <Route path='/pos-graduacao' element={<Home/>}/>
        
        
-        <Route path='/indicadores' element={<Indicators/>}/>
+        <Route path='/indicadores' element={<Home/>}/>
+
+
         <Route path='/novas-publicacoes' element={<News/>}/>
         <Route path='/taxonomia' element={<Indicators/>}/>
 

@@ -34,6 +34,7 @@ import { TableReseracherArticleshome } from "../homepage/categorias/articles-hom
 import { BookBlockPopUp } from "./book-block-popup";
 import { FilterYearPopUp } from "./filters-year-popup";
 import { TableReseracherOrientacoesPopup } from "./columns/table-orientacoes-popup";
+import { GraficoOrientacoes } from "./graficos/grafico-orientacoes";
 
 
 type Filter = {
@@ -198,17 +199,22 @@ const handleRemoveItemCap = (indexToRemove: any) => {
               
                         <Accordion  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
+                <div className="flex mb-2">
                     <HeaderResultTypeHome title="Gráfico de orientações em andamento e concluídas " icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
+                    <AccordionTrigger>
+                   
                     </AccordionTrigger>
+                    </div>
                     <AccordionContent >
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
-                      <GraficoArticleHome
-                      articles={publicacoes}
-                      />
+                      <GraficoOrientacoes
+                    
+                      livros={publicacoes} // Passa um array com um único item para o componente
+                    />
+                      
                     )}
                     </AccordionContent>
                 </AccordionItem>
@@ -216,17 +222,17 @@ const handleRemoveItemCap = (indexToRemove: any) => {
 
                 <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <div className="flex gap-4 w-full justify-between items-center ">
+                  <div className="flex mb-2">
+                  <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
             <Book size={24} className="text-gray-400" />
             <p className="text-sm font-bold">Todas as orientações</p>
             </div>
 
-            <div className="flex gap-3  items-center h-full">
-            {itemsSelecionadosPopUp != itemsSelecionados && (
+            <div className="flex gap-3 mr-3  items-center h-full">
+            {(itemsSelecionadosPopUp != itemsSelecionados && searchType == '') && (
               <div className="flex gap-3  items-center">
-                <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+                <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="ghost" size={'icon'}>
                             <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
                         </Button>
 
@@ -234,18 +240,22 @@ const handleRemoveItemCap = (indexToRemove: any) => {
               </div>
             )}
 
-            <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+            <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu == 'block' ? 'ghost' : 'outline' }  size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
                         </Button>
 
-                        <Button  onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
+                        <Button  onClick={() => setTypeVisu('block')}  variant={typeVisu == 'block' ? 'outline' : 'ghost' } size={'icon'}>
                             <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
             </div>
 
           </div>
+
+                  <AccordionTrigger>
+                  
                    
                     </AccordionTrigger>
+                  </div>
                     <AccordionContent >
 
 {typeVisu == 'block' ? (

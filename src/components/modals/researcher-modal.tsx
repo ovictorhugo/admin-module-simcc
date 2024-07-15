@@ -63,7 +63,8 @@ import { SpeakerResearcherPopUp } from "../popup/speaker-researcher";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Copy, MoreHorizontal, Plus } from "lucide-react";
-import { QrCode } from "../popup/qr-code";
+
+import QRCode from "react-qr-code";
 
 type ResearchOpenAlex = {
   h_index: number;
@@ -76,7 +77,8 @@ type ResearchOpenAlex = {
   openalex:string
   
 }
-
+import { toast } from "sonner"
+import { Link } from "react-router-dom";
 
 export function ResearcherModal() {
    
@@ -105,6 +107,13 @@ export function ResearcherModal() {
     useMemo(() => {
 setItensSelecionadosPopUp(itemsSelecionados)
     }, [itemsSelecionados]);
+
+    const [open, setOpen] = useState(false);  
+
+    useMemo(() => {
+     setOpen(false)
+     setItensSelecionadosPopUp(itemsSelecionados)
+          }, [isOpen]);
 
     useMemo(() => {
         const fetchData = async () => {
@@ -184,7 +193,8 @@ const handleDownloadJson = async () => {
   }
 };
 
-        
+const currentUrl = window.location.origin
+
 
     return(
         <>
@@ -193,13 +203,13 @@ const handleDownloadJson = async () => {
         {researcher.slice(0, 1).map((user) => {
                 return(
                   <div className="w-full flex justify-center ">
-            <div className="bg-cover bg-center bg-no-repeat h-28 w-28 bg-white dark:bg-neutral-950 rounded-2xl mb-3 border-4 border-white dark:border-neutral-950  absolute top-[-55px]   " style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${user.id}) ` }}></div>
+            <div className="bg-cover bg-center bg-no-repeat h-28 w-28  rounded-2xl mb-3 border-4 border-white dark:border-neutral-950  absolute top-[-55px]   " style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${user.id}) ` }}></div>
           </div>
                   )
                 })}
 
 {researcher.slice(0, 1).map((props) => {
-   const urlShare = `${urlGeral}researcher/${props.id}/${searchType}/${valoresSelecionadosExport}`
+   const urlShare = `${currentUrl}/researcher?researcher_id=${props.id}&search_type=${searchType}&terms=${valoresSelecionadosExport}`
    const payment = props.lattes_id
 
    const currentDate = new Date();
@@ -210,6 +220,7 @@ const handleDownloadJson = async () => {
    const monthDifference = (currentDate.getFullYear() - lattesYear) * 12 + (currentDate.getMonth() + 1 - lattesMonth);
 
    const isOutdated = monthDifference > 3;
+   
 
    // Atualize essa função para chamar a propriedade `onResearcherUpdate`
    const updateResearcher = (newResearcher: Research[]) => {
@@ -274,10 +285,11 @@ const handleDownloadJson = async () => {
        <TooltipProvider>
        <Tooltip>
          <TooltipTrigger asChild>
-         <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
+       <Link to={urlShare} target="_blank">
+       <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
          <span className="sr-only">Open menu</span>
           <ArrowSquareOut size={8} className="h-4 w-4" />
-          </Button>
+          </Button></Link>
          </TooltipTrigger>
          <TooltipContent>Ir a página</TooltipContent>
        </Tooltip>
@@ -305,17 +317,35 @@ const handleDownloadJson = async () => {
        <DropdownMenuContent align="end">
          <DropdownMenuLabel>Ações</DropdownMenuLabel>
          <DropdownMenuItem className="flex items-center gap-3"
-           onClick={() => navigator.clipboard.writeText(payment)}
+           onClick={() => {
+            navigator.clipboard.writeText(payment)
+            toast("Operação realizada", {
+              description: "Lattes ID copiado para área de transferência",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+           }}
          ><Copy className="h-4 w-4" />
            Copiar Lattes ID
          </DropdownMenuItem>
 
          <DropdownMenuItem className="flex items-center gap-3" onClick={() => handleDownloadJson()}><FileCsv className="h-4 w-4" />Baixar CSV das publicações</DropdownMenuItem>
 
-         <DropdownMenuItem className="flex items-center gap-3" ><BracketsCurly className="h-4 w-4" />API da consulta</DropdownMenuItem>
+         <DropdownMenuItem className="flex items-center gap-3" onClick={() => setOpen(!open)} ><BracketsCurly className="h-4 w-4" />API da consulta</DropdownMenuItem>
 
          <DropdownMenuItem className="flex items-center gap-3"
-           onClick={() => navigator.clipboard.writeText(urlShare)}
+           onClick={() => {
+            navigator.clipboard.writeText(urlShare)
+            toast("Operação realizada", {
+              description: "Link copiado para área de transferência",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+           }}
          ><ShareNetwork className="h-4 w-4" />
            Copiar link para compartilhar
           
@@ -323,7 +353,7 @@ const handleDownloadJson = async () => {
          <DropdownMenuSeparator />
          <DropdownMenuItem className="flex justify-center py-4">
          
-         <QrCode size={200} className={'bg-transparent'} value={urlShare} />
+         <QRCode size={200} className={'bg-transparent'} value={urlShare} />
          
          
          </DropdownMenuItem>
@@ -352,10 +382,10 @@ const handleDownloadJson = async () => {
                   )
                 })}
                 
-       <div className="overflow-y-auto elementBarra bg-white dark:bg-black">
+       <div className="overflow-y-auto elementBarra ">
       
-        <div className=" px-16  bg-white dark:bg-black" >
-        <DrawerHeader className="p-0 bg-white dark:bg-black">
+        <div className=" px-16  " >
+        <DrawerHeader className="p-0 ">
             {researcher.slice(0, 1).map((user) => {
                 return(
                    <div>
@@ -389,6 +419,8 @@ const handleDownloadJson = async () => {
                     i10_index={user.i10_index}
                     scopus={user.scopus}
                     openalex={user.openalex}
+
+                    openAPI={open}
                     />
 
                    </div>
@@ -398,6 +430,7 @@ const handleDownloadJson = async () => {
 <div className="flex gap-6 xl:flex-row flex-col-reverse">
 <div className="w-full flex-1">
         <Tabs defaultValue="articles" value={value} className="">
+        {researcher.slice(0, 1).map((user) => (
   <TabsList className="mb-6">
     <div className="flex overflow-x-auto ">
     <TabsTrigger value="article" onClick={() => setValue('article')} className="flex gap-2 items-center"> <Quotes size={16} className="" />Artigos</TabsTrigger>
@@ -408,6 +441,7 @@ const handleDownloadJson = async () => {
     <TabsTrigger value="speaker" onClick={() => setValue('speaker')} className="flex gap-2 items-center"><Ticket size={16} className="" />Participação em eventos</TabsTrigger>
     </div>
   </TabsList>
+  ))}
   <TabsContent value="article">
   {researcher.slice(0, 1).map((user) => {
                 return(
@@ -460,6 +494,7 @@ const handleDownloadJson = async () => {
         <div className="xl:w-[350px] w-full gap-12 flex flex-col sticky"> 
 
         {researcher.slice(0, 1).map((user) => {
+                     if(user.h_index.length != 0 && user.i10_index.length != 0 && user.cited_by_count.length != 0) {
                       return(
                         <InformacoesGeraisResearcher
                         h_index={user.h_index}
@@ -472,6 +507,7 @@ const handleDownloadJson = async () => {
                         openalex={user.openalex}
                         />
                       )
+                     }
             })}
 
         {researcher.slice(0, 1).map((user) => {

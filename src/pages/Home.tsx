@@ -39,6 +39,8 @@ export function Home() {
     onOpen('graduation-home')
 } else if(location.pathname == '/dicionario') {
     onOpen('dicionario')
+}  else if(location.pathname == '/indicadores') {
+    onOpen('indicadores')
 } 
     }, [location]);
   

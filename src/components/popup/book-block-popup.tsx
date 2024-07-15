@@ -31,6 +31,7 @@ export function BookBlockPopUp(propsGeral:Articles) {
         750: 1,
         900: 2,
         1200: 2,
+        1700: 3
     }}
 >
                  <Masonry gutter="16px">

@@ -3,7 +3,7 @@ import { useModal } from "../hooks/use-modal-store"
 import { Alert } from "../ui/alert";
 import { UserContext } from "../../context/context";
 import { ArrowSquareOut, ClockClockwise, DotsThree, Eye, EyeSlash, FileXls, GraduationCap, Hash, MapPin, PencilSimple, Plus, Rows, SquaresFour, Star, Student, Trash } from "phosphor-react"; 
-import {Divide, GraduationCapIcon, Search, UserCheck } from "lucide-react";
+import {ArrowRight, Divide, GraduationCapIcon, Info, Search, UserCheck } from "lucide-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { toast } from "sonner"
 
@@ -82,10 +82,10 @@ export function GrupoPesquisaView() {
     >
          <ResizablePanel defaultSize={40} minSize={40}>
          <Tabs defaultValue={tab} value={tab}>
-    <div className="flex items-center px-4 py-2">
+    <div className="flex items-center justify-between px-4 py-2  h-[56px]">
       <h1 className="text-lg font-bold">Grupos de pesquisa</h1>
 
-     
+      <Link to={'https://app.powerbi.com/view?r=eyJrIjoiYTg4MGFmNWQtMjQ4Yi00ZmFhLTgzMmMtMDFiMmI3YzFmNmEwIiwidCI6IjkyYzBjZmE5LTdlOTEtNGVhZC1hYzI5LWNkNDRhMjM4OWIwMSJ9&pageName=ReportSectionaf31612e05234cb0b779'} target="_blank"  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Painel DGP CNPq<ArrowRight size={12}/></Link>
     </div>
    <div className="w-full border-b border-neutral-200 dark:border-neutral-800 "></div>
 
