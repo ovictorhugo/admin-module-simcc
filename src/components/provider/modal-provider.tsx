@@ -14,7 +14,7 @@ import { AddResearcherCsvModal } from "../modals/add-researcher-csv-modal";
 import { AddStudentGraduationModal } from "../modals/add-student-graduation-modal";
 import { AddGrupoPesquisaModal } from "../modals/add-grupo-pesquisa";
 import { PesquisadoresSelecionados } from "../modals/pesquisadores-selecionados";
-import { FiltersModal } from "../modals/filters-modal";
+
 import { ListStudentProgramModal } from "../modals/list-student-program";
 import { AddResearcherGraduationTwo } from "../modals/add-researcher-graduation-two";
 import { GratuateProgramModal } from "../modals/gratuate-program";
@@ -24,6 +24,7 @@ import { useModal } from "../hooks/use-modal-store";
 import { ImportBolsistas } from "../modals/import-bolsistas";
 import { ImportDocentes } from "../modals/import-docentes";
 import { ImportTaes } from "../modals/import-taes";
+import { FiltersModal } from "../homepage/categorias/researchers-home";
 
 const ModalContent = () => {
   const { type } = useModal();
@@ -41,8 +42,7 @@ const ModalContent = () => {
         return <ConfirmDeleteResearcherGraduateProgram/>
       case 'confirm-delete-student-graduate-program':
         return <ConfirmDeleteStudentGraduateProgram/>
-      case 'filters':
-        return <FiltersModal/>
+     
       case 'edit-graduate-program':
         return <EditGraduateProgram/>
       case 'articles-modal':

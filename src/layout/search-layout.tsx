@@ -13,7 +13,7 @@ import { Link} from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { AlertCircle, BarChartBig, Blocks, Building2, GraduationCap, Home, Info, List, SearchCheck, X } from "lucide-react";
+import { AlertCircle, BarChartBig, Blocks, BookOpen, Building2, GraduationCap, Home, Info, List, SearchCheck, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import { ScrollArea } from "../components/ui/scroll-area";
 import { UserConfigHeader } from "../components/header/user-config-header";
@@ -98,6 +98,12 @@ export default function SearchLayout({
                 label: "",
                 icon: List,
                 link: "/dicionario",
+              },
+              {
+                title: "Produções recentes",
+                label: "",
+                icon: BookOpen,
+                link: "/producoes-recentes",
               },
              
             ]}

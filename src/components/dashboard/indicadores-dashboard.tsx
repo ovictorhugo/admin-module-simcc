@@ -24,31 +24,61 @@ interface TotalPatrimonios {
     count_r:string
   }
 
-  interface Patrimonio {
-    id: string
-    id_lattes: string
-    nome_beneficiario: string
-    cpf_beneficiario: string
-    nome_pais: string
-    nome_regiao: string
-    nome_uf: string
-    nome_cidade: string
-    nome_grande_area: string
-    nome_area: string
-    nome_sub_area: string
-    cod_modalidade: string
-    nome_modalidade: string
-    titulo_chamada: string
-    cod_categoria_nivel: string
-    nome_programa_fomento: string
-    nome_instituto: string
-    quant_auxilio: string
-    quant_bolsa: string
+  interface Bolsistas {
+    aid_quantity:string
+    call_title:string
+    funding_program_name:string
+    modality_code:string
+category_level_code:string
+institute_name:string
+modality_name:string
+name:string
+researcher_id:string
+scholarship_quantity:string
+}
+
+interface Docentes {
+  matric: string;
+  inscUFMG: string;
+  nome: string;
+  genero: string;
+  situacao: string;
+  rt: string;
+  clas: string;
+  cargo: string;
+  classe: string;
+  ref: string;
+  titulacao: string;
+  entradaNaUFMG: string;
+  progressao: string;
+  year_charge: string;
+  semester: string;
+}
+
+interface Tecnicos {
+  matric: string;
+  insUFMG: string;
+  nome: string;
+  genero: string;
+  denoSit: string;
+  rt: string;
+  classe: string;
+  cargo: string;
+  nivel: string;
+  ref: string;
+  titulacao: string;
+  setor: string;
+  detalheSetor: string;
+  dtIngOrg: string;
+  dataProg: string;
+  year_charge: string;
+  semester: string;
 }
 
 
   import bg_popup from '../../assets/bg_popup.png';
 import { useModal } from "../hooks/use-modal-store";
+import { GraficoBolsistaProdutividade } from "./graficos/grafico-bolsista-produtividade";
 
 export function IndicadoresDashboard() {
     const { isOpen, type} = useModalDashboard();
@@ -96,7 +126,7 @@ export function IndicadoresDashboard() {
     }, [urlPatrimonioInsert]);
 
     //
-    const [bolsistas, setBolsistas] = useState<Patrimonio[]>([]);
+    const [bolsistas, setBolsistas] = useState<Bolsistas[]>([]);
 
     let urlBolsistas = urlGeralAdm + `ResearcherRest/Query/Subsidy`
 
@@ -130,6 +160,73 @@ console.log(urlBolsistas)
 console.log(bolsistas)
     const [open, setOpen] = useState(false)
     const [open2, setOpen2] = useState(false)
+
+
+    //
+
+    const [docentes, setDocentes] = useState<Docentes[]>([]);
+
+    let urlDocentes = urlGeralAdm + `docentes`
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(urlDocentes , {
+            mode: "cors",
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET",
+              "Access-Control-Allow-Headers": "Content-Type",
+              "Access-Control-Max-Age": "3600",
+              "Content-Type": "text/plain",
+            },
+          });
+          const data = await response.json();
+          if (data) {
+              setDocentes(data)
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchData()
+
+    }, [urlDocentes]);
+
+    console.log(docentes)
+
+        //
+
+        const [taes, setTaes] = useState<Tecnicos[]>([]);
+
+        let urlTecnicos = urlGeralAdm + `tecnicos`
+    
+        useEffect(() => {
+          const fetchData = async () => {
+            try {
+              const response = await fetch(urlTecnicos , {
+                mode: "cors",
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": "GET",
+                  "Access-Control-Allow-Headers": "Content-Type",
+                  "Access-Control-Max-Age": "3600",
+                  "Content-Type": "text/plain",
+                },
+              });
+              const data = await response.json();
+              if (data) {
+                  setTaes(data)
+              }
+            } catch (err) {
+              console.log(err);
+            }
+          };
+          fetchData()
+    
+        }, [urlTecnicos]);
+    
+        console.log(taes)
 
     return(
         <>
@@ -469,6 +566,61 @@ console.log(bolsistas)
                   </CardHeader>
 
                     </Alert>
+                   </div>
+
+                   <div>
+                   <div className="md:mb-8 mb-4 flex gap-3 items-center">
+                   <h3 className="text-2xl font-medium ">Bolsistas CNPq</h3>
+                   </div>
+                   <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+                   <Alert className=" h-[400px] lg:col-span-2">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                      Tabela  de pesquisadores
+                    </CardTitle>
+                    <CardDescription>Bolsistas de Produtividade em Pesquisa</CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add to library</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
+
+                    </Alert>
+
+                    <Alert className=" h-[400px] flex flex-col ">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                      Gráfico Produtividade em Pesquisa
+                    </CardTitle>
+                    <CardDescription>Graduação, mestrado, doutorado...</CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add to library</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
+
+                          <CardContent className="flex p-0 flex-1  items-center justify-center">
+                            <GraficoBolsistaProdutividade bolsistas={bolsistas}/>
+                          </CardContent>
+                    </Alert>
+                   </div>
+                  
                    </div>
 
                   <div>

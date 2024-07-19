@@ -123,20 +123,15 @@ export function ProcurarBaremas() {
 
    return(
     <>
-    {isModalOpen && (
-         <div className="w-full mr-16 mb-20">
+    
+         <div className="w-full mr-16 mb-20 h-full flex flex-col items-center justify-center">
             <div className="w-full h-full items-center justify-center flex flex-col">
 
             <div className="flex flex-col justify-center max-w-[60vw] w-full">
+            <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
+            Coloque o   <strong className="bg-[#82AAC0]  rounded-md px-3 pb-2 text-white font-medium">código</strong> do barema <br/> e consulte os resultados.
+        </h1>
            
-            <h1 className="z-[2] text-3xl mb-6 font-medium max-w-[750px] ">
-              Coloque o{" "}
-              <strong className="bg-red-700 text-white font-medium">
-                {" "}
-                código do barema
-              </strong>{" "}
-             <br/> e consulte os resultados.
-            </h1>
           </div>
             <Alert  className="h-14 p-2 flex items-center justify-between max-w-[60vw]">
             <div className="flex items-center gap-2 w-full flex-1">
@@ -154,7 +149,7 @@ export function ProcurarBaremas() {
                 </Alert>
             </div>
          </div>
-    )}
+    
     </>
    );
 }

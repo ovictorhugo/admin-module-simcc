@@ -128,6 +128,7 @@ import { useTheme } from "next-themes";
 import { ArtigosRecentes } from "./components/artigos-recentes";
 import { Newsletter } from "./components/newsletter";
 import { Instrucoes } from "./components/instrucoes";
+import { Search } from "../search/search";
 
 
 HC_wordcloud(Highcharts);
@@ -395,8 +396,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
   
 
   /////////
-  const AnimatedLine = animated(Line);
-  const AnimatedArea = animated(Area);
+ 
   
     const [visibleChart, setVisibleChart] = useState(0);
     const chartKeys = ['count_article', 'count_patent', 'count_guidance_in_progress'];
@@ -404,7 +404,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
     useEffect(() => {
       const interval = setInterval(() => {
         setVisibleChart((prev) => (prev + 1) % chartKeys.length);
-      }, 3000);
+      }, 5000);
   
       return () => clearInterval(interval);
     }, [chartKeys.length]);
@@ -509,40 +509,9 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
             <p className="max-w-[750px] text-center text-lg font-light text-foreground"></p>
 
 
-            <Alert  className="h-14 p-2 flex items-center justify-between max-w-[60vw]">
-            <div className="flex items-center gap-2 w-full flex-1">
-            <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
-            <div className="flex gap-3  items-center">
-                <div className="flex items-center gap-2">
-                <Switch
-                     checked={maria}
-                     onCheckedChange={(value) => setMaria(value)}
-
-                />
-                     <Label className="flex gap-2 items-center">MarIA<Chats size={16} className="" /></Label>
-                </div>
-
-                {!maria && (
-                    <SelectTypeSearch/>
-                )}
-                </div>
-              
-            <Input onClick={() => {
-              if(maria) {
-
-              }else {
-                onOpen('search')
-              }
-            }}  onChange={(e) => setInput(e.target.value)} value={input}  type="text" className="border-0 w-full flex flex-1 "/>
-                </div>
-
-                <div className="w-fit">
-                <Button  variant="outline" className={`${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${maria && searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} size={'icon'}>
-       <Funnel size={16} className="" /> 
-       
-        </Button>
-            </div>
-                </Alert>
+           <div className="max-w-[60vw] md:w-[60vw]">
+            <Search/>
+           </div>
 
                 <div className="flex flex-wrap gap-3">
                                 {words.map((word, index) => (

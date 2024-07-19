@@ -74,7 +74,7 @@ import {
     CommandItem,
     CommandList
   } from "../../components/ui/command"
-import { ArrowRight, ChevronLeft, Info, MoreHorizontal, Plus } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { PesquisadorItemBarema } from "./pesquisdor-item-barema";
 
@@ -149,9 +149,8 @@ import {
 
 
 import { GraficoBarema } from "./grafico-barema";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
-import { ProcurarBaremas } from "./procurar-barema-public";
 
 
 export function BaremasHome() {
@@ -819,80 +818,17 @@ console.log(somaTotalPorPesquisador);
           }
       }
       //firebase submit
-
-      const history = useNavigate();
-
-    const handleVoltar = () => {
-      history(-1);
-    }
-
-    const [tab, setTab] = useState('all')
       
      
     return (
         <>
             {isModalOpen && (
-                  <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 min-h-[calc(100vh-56px)]">
-                   
+                <div className="w-full mr-16 mb-20">
+                    <HeaderBarema />
 
-                    <Tabs defaultValue={tab} value={tab} className="h-full" >
-                    <div className="w-full  gap-4">
-            <div className="flex items-center gap-4">
-          
-            <Button onClick={handleVoltar} variant="outline" size="icon" className="h-7 w-7">
-                <ChevronLeft className="h-4 w-4" />
-                <span className="sr-only">Voltar</span>
-              </Button>
-          
-              <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                Baremas de avaliação
-              </h1>
-             
-
-                
-            
-              <div className="hidden items-center gap-2 md:ml-auto md:flex">
-              <TabsList >
-                
-              <TabsTrigger value="all" onClick={() => setTab('all')} className="text-zinc-600 dark:text-zinc-200">Todos os baremas</TabsTrigger>
-
-                <TabsTrigger value="unread" onClick={() => setTab('unread')}  className="text-zinc-600 dark:text-zinc-200">Pesquisar barema</TabsTrigger>
-
-              
-                </TabsList>
-               
-          
-                <Button size="sm" onClick={() => setTab('new')}><Plus size={16}/>Adicionar barema</Button>
-              </div>
-            </div>
-
-            </div>
-
-            <TabsContent value="all" className="h-auto flex flex-col gap-4 md:gap-8  mt-2">
-            <div>
-               
-        
-        <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
-        Meus baremas de avaliação
-        </h1>
-        <p className="max-w-[750px]  text-lg font-light text-foreground">Atualize os dados importando o arquivo .xls na plataforma </p>
-                  <div className="flex gap-3 mt-3">
-                    <Button size={'sm'} 
-                   >Importar dados dos docentes</Button>
-                    <Button size={'sm'} variant={'ghost'} >Importar bolsistas CNPq</Button>
-                  </div>
-
-                  </div>
-            </TabsContent>
-
-            <TabsContent value="unread" className=" flex flex-col gap-4 md:gap-8  mt-2">
-                    <ProcurarBaremas/>
-            </TabsContent>
-
-            <TabsContent value="new" className="h-auto flex flex-col gap-4 md:gap-8  mt-2">
-            <HeaderBarema />
-            <div className="flex">
-            <Tabs defaultValue="1" value={valueTab} className="w-full">
+                    <div className="flex">
+                        
+                    <Tabs defaultValue="1" value={valueTab} className="w-full">
                         <div className="flex flex-col gap-3 w-full">
                         <div className="w-full flex flex-col">
                             <div className=" dark:border-neutral-800 border border-b-0 border-neutral-200 h-3 rounded-t-md bg-blue-700 whitespace-nowrap"></div>
@@ -1277,18 +1213,13 @@ console.log(somaTotalPorPesquisador);
                         </Tabs>
 
                         <div className="w-16 pl-2 whitespace-nowrap">
-                            <div className="bg-white dark:bg-black sticky top-8 flex flex-col gap-2 border dark:border-neutral-800 border-neutral-200 items-center p-2 rounded-md w-full ">
+                            <div className="bg-white sticky top-20 flex flex-col gap-2 border dark:border-neutral-800 border-neutral-200 items-center p-2 rounded-md w-full ">
                                 <Button onClick={adicionarGrupo} variant={'ghost'} size={'icon'}><PlusCircle size={20} /> </Button>
                                 <Button variant={'ghost'} size={'icon'}><FileCsv size={20} /> </Button>
                             </div>
                         </div>
-
-
-            </div>
-            </TabsContent>
-
-                    </Tabs>
-                </main>
+                    </div>
+                </div>
             )}
         </>
     )

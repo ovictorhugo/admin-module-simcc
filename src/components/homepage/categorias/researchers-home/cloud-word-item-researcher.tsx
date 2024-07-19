@@ -2,6 +2,7 @@ import { useContext } from "react"
 import { Alert } from "../../../ui/alert"
 import { Badge } from "../../../ui/badge"
 import { UserContext } from "../../../../context/context"
+import { useModal } from "../../../hooks/use-modal-store"
 
 interface Props{
     id: string,
@@ -13,10 +14,12 @@ interface Props{
 
 export function CloudWordItemResearcher(props:Props) {
     const { searchType} = useContext(UserContext)
+
+    const {onOpen} = useModal()
     
 
     return(
-        <li key={props.id} className="list-none list-item w-min">
+        <li key={props.id} className="list-none list-item w-min" onClick={() => onOpen('researcher-modal', {name:props.name})} >
         <div
          
           className="inline-flex whitespace-nowrap cursor-pointer"
@@ -38,13 +41,13 @@ export function CloudWordItemResearcher(props:Props) {
           >
             {props.name}
             <Badge className={`text-[10px] text-white dark:text-white ${
-            ( searchType === 'article') && 'bg-blue-500 dark:bg-blue-500 text-white' ||
-            (searchType === 'abstract') && 'bg-yellow-500 dark:bg-yellow-500 text-white' ||
-            (searchType === 'speaker') && 'bg-orange-500 dark:bg-orange-500 text-white' ||
-            (searchType === 'book') && 'bg-pink-500 dark:bg-pink-500 text-white' ||
-            (searchType === 'patent') && 'bg-cyan-500 dark:bg-cyan-500 text-white' ||
-            (searchType === 'name') && 'bg-red-500 dark:bg-red-500 text-white' ||
-            (searchType=== 'area') && 'bg-green-500 dark:bg-green-500 text-white' ||
+            ( searchType === 'article') && 'bg-blue-500 dark:bg-blue-500 hover:bg-blue-500 dark:hover:bg-blue-500 text-white' ||
+            (searchType === 'abstract') && 'bg-yellow-500 dark:bg-yellow-500 hover:bg-yellow-500 dark:hover:bg-yellow-500 text-white' ||
+            (searchType === 'speaker') && 'bg-orange-500 dark:bg-orange-500 hover:bg-orange-500 dark:hover:bg-orange-500 text-white' ||
+            (searchType === 'book') && 'bg-pink-500 dark:bg-pink-500 hover:bg-pink-500 dark:hover:bg-pink-500 text-white' ||
+            (searchType === 'patent') && 'bg-cyan-500 dark:bg-cyan-500 hover:bg-cyan-500 dark:hover:bg-cyan-500 text-white' ||
+            (searchType === 'name') && 'bg-red-500 dark:bg-red-500 hover:bg-red-500 dark:hover:bg-red-500 text-white' ||
+            (searchType=== 'area') && 'bg-green-500 dark:bg-green-500 hover:bg-green-500 dark:hover:bg-green-500 text-white' ||
             ('hover:bg-blue-700 dark:bg-white')
         }`}>{props.among} ocorrências</Badge>
           </Alert>

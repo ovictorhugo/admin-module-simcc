@@ -32,6 +32,8 @@ export function Dashboard() {
             onOpen('grupo-pesquisa')
         } else if (location.pathname == '/dashboard/indicadores') {
             onOpen('indicadores')
+        } else if (location.pathname == '/dashboard/baremas') {
+            onOpen('baremas')
         }
     }, [location]);
   

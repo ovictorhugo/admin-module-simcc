@@ -34,43 +34,59 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GraficoProducaoTecnica({ software, publicacoes, marca }: { software: Livros[], publicacoes: Patente[], marca: Livros[] }) {
-    const [chartData, setChartData] = useState<{ label: string; count: number }[]>([]);
+  const [chartData, setChartData] = useState<{ year: string; [key: string]: number }[]>([]);
 
   useEffect(() => {
-    const data = [
-      { label: 'Softwares', count: software.length },
-      { label: 'Patentes', count: publicacoes.length },
-      { label: 'Marcas', count: marca.length },
-    ];
+    const counts: { [year: string]: { [key: string]: number } } = {};
 
+    software.forEach((item) => {
+      const year = item.year;
+      if (!counts[year]) counts[year] = {};
+      counts[year].software = (counts[year].software || 0) + 1;
+    });
+
+    publicacoes.forEach((item) => {
+      const year = item.year;
+      if (!counts[year]) counts[year] = {};
+      counts[year].publicacoes = (counts[year].publicacoes || 0) + 1;
+    });
+
+    marca.forEach((item) => {
+      const year = item.year;
+      if (!counts[year]) counts[year] = {};
+      counts[year].marca = (counts[year].marca || 0) + 1;
+    });
+
+    const data = Object.entries(counts).map(([year, counts]) => ({ year, ...counts }));
     setChartData(data);
   }, [software, publicacoes, marca]);
-
-  function getColorForType(type: 'Softwares'| 'Patentes' | 'Marcas') {
-    const colors = {
-      'Softwares': '#7AD0EA',
-      'Patentes': '#6BC26B',
-      'Marcas': '#FF5733',
-    };
-    return colors[type] || '#000000';
-  }
 
   return (
     <Alert className="pt-12">
       <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <ResponsiveContainer>
           <BarChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <XAxis dataKey="label" tickLine={false} tickMargin={10} axisLine={false} />
-        
+            <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
+            
             <CartesianGrid vertical={false} horizontal={false} />
             <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-            <Bar dataKey="count" radius={4}>
-              <LabelList dataKey="count" position="top" offset={12} className="fill-foreground" fontSize={12} />
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getColorForType(entry.label)} />
-              ))}
-            </Bar>
+            {Object.keys(chartConfig).map((key, index) => (
+              <Bar
+                key={key}
+                dataKey={key}
+                fill={chartConfig[key].color}
+                stackId="a"
+                radius={4}
+              >
+               {index === Object.keys(chartConfig).length - 1 && (
+    <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+  )}
+                {chartData.map((entry, index) =>
+                  entry[key] > 0 ? <Cell key={`cell-${index}`} fill={chartConfig[key].color} /> : null
+                )}
+              </Bar>
+            ))}
           </BarChart>
         </ResponsiveContainer>
       </ChartContainer>

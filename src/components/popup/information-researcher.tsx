@@ -57,9 +57,13 @@ interface Props {
     
   }
 
+  interface ItemsSelecionados {
+    term:string
+  }
+  
 
  export function InformationResearcher(props:Props) {
-    const {urlGeral, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados} = useContext(UserContext)
+    const {urlGeral, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados, itemsSelecionados} = useContext(UserContext)
     const [isVisible, setIsVisible] = useState(false);
     const [apiVisible, setApiVisible] = useState(false);
     const payment = props.lattes_id
@@ -124,6 +128,44 @@ const handleDownloadJson = async () => {
 };
 
 const {onClose} = useModal()
+
+
+// 
+
+const normalizeText = (text: string): string => {
+  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+};
+
+const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNode => {
+  if (terms.length === 0) {
+    return text;
+  }
+
+  const normalizedTerms = terms.map(term => normalizeText(term.term));
+  const regexPattern = normalizedTerms.join('|');
+  console.log(`Generated regex pattern: ${regexPattern}`);
+
+  const regex = new RegExp(`(${regexPattern})`, 'gi');
+  const normalizedText = normalizeText(text);
+  const parts = normalizedText.split(regex);
+
+  let originalIndex = 0;
+  const highlightedParts = parts.map((part, index) => {
+    const originalPart = text.substr(originalIndex, part.length);
+    originalIndex += part.length;
+
+    return regex.test(part)
+      ? <span key={index} className="text-blue-500 font-semibold">{originalPart}</span>
+      : originalPart;
+  });
+
+  return highlightedParts;
+};
+
+
+
+const highlightedAbstract = highlightText(props.abstract, itemsSelecionados);
+
 
     return (
         <div className="flex flex-col">
@@ -203,7 +245,7 @@ const {onClose} = useModal()
 
 
             <div className={isVisible || (props.abstract.length < 500)  ? "h-auto transition-all" : "h-[60px] overflow-hidden transition-all"}>
-            <p className="text-gray-400 text-sm text-justify ">{props.abstract}</p>
+            <p className="text-gray-400 text-sm text-justify ">{highlightedAbstract}</p>
             </div>
 
           

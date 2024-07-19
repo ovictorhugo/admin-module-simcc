@@ -143,7 +143,7 @@ const [mode, setMode] = useState('user')
         <Route path='/indicadores' element={<Home/>}/>
 
 
-        <Route path='/novas-publicacoes' element={<News/>}/>
+        <Route path='/producoes-recentes' element={<Home/>}/>
         <Route path='/taxonomia' element={<Indicators/>}/>
 
         <Route path='/indicadores-pos-graduacao' element={<Indicators/>}/>
@@ -182,6 +182,7 @@ const [mode, setMode] = useState('user')
 <Route path='/dashboard/pesos-avaliacao' element={<Dashboard/> }/>
 <Route path='/dashboard/grupos-pesquisa' element={<Dashboard/> }/>
 <Route path='/dashboard/indicadores' element={<Dashboard/> }/>
+<Route path='/dashboard/baremas' element={<Dashboard/> }/>
 
 <Route
           path='/config'

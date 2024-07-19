@@ -72,15 +72,15 @@ export function ArticleItem(props:Articles) {
   const { onOpen } = useModal();
 
     return(
-        <div className="flex cursor-pointer  w-full" onClick={() => onOpen('articles-modal', {doi:doi, qualis:props.qualis, title:props.title, year:props.year, jif:props.jif, lattes_10_id:props.lattes_10_id, researcher_id:props.researcher_id, magazine:props.name_periodical})}>
+        <div className="flex cursor-pointer h-full w-full" onClick={() => onOpen('articles-modal', {doi:doi, qualis:props.qualis, title:props.title, year:props.year, jif:props.jif, lattes_10_id:props.lattes_10_id, researcher_id:props.researcher_id, magazine:props.name_periodical})}>
             
                     <div
-                      className={`h-full w-2 min-h-[200px] rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${qualisColor[props.qualis as keyof typeof qualisColor]} `}
+                      className={` w-2 min-h-[200px] h-full rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${qualisColor[props.qualis as keyof typeof qualisColor]} `}
                     > 
                     </div>
                 
 
-                <Alert className="rounded-l-none flex flex-col justify-between">
+                <Alert className="rounded-l-none h-full flex flex-col justify-between">
                     <div>
                         <div>
                            <h3 className="font-semibold mb-4 ">{props.name_periodical}{props.magazine}</h3>

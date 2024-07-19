@@ -13,70 +13,72 @@ const chartConfig = {
   },
   A1: {
     label: "Qualis A1",
-    color: "hsl(var(--chart-1))",
+    color: "#006837",
   },
   A2: {
     label: "Qualis A2",
-    color: "hsl(var(--chart-2))",
+    color: "#8FC53E",
   },
   A3: {
     label: "Qualis A3",
-    color: "hsl(var(--chart-3))",
+    color: "#ACC483",
   },
   A4: {
     label: "Qualis A4",
-    color: "hsl(var(--chart-4))",
+    color: "#BDC4B1",
   },
   B1: {
     label: "Qualis B1",
-    color: "hsl(var(--chart-5))",
+    color: "#F15A24",
   },
   B2: {
     label: "Qualis B2",
-    color: "hsl(var(--chart-6))",
+    color: "#F5831F",
   },
   B3: {
     label: "Qualis B3",
-    color: "hsl(var(--chart-7))",
+    color: "#F4AD78",
   },
   B4: {
     label: "Qualis B4",
-    color: "hsl(var(--chart-8))",
+    color: "#F4A992",
   },
   C: {
     label: "Qualis C",
-    color: "hsl(var(--chart-9))",
+    color: "#EC1C22",
   },
   SQ: {
     label: "Sem qualis",
-    color: "hsl(var(--chart-10))",
+    color: "#560B11",
   },
 } satisfies ChartConfig;
 
 export function GraficoArticleHome(props: Articles) {
   type Qualis = "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "SQ" | "NP";
 
-  const [chartData, setChartData] = useState<{ label: string; count: number }[]>([]);
-
-  type CountResult = {
-    [label: string]: number;
-  };
+  const [chartData, setChartData] = useState<{ year: string; [qualis: string]: number }[]>([]);
 
   useEffect(() => {
     if (props.articles) {
-      const counts = props.articles.reduce((result: CountResult, publicacao) => {
-        const qualis = publicacao.qualis;
-        result[qualis] = (result[qualis] || 0) + 1;
-        return result;
-      }, {});
+      const counts: { [year: string]: { [qualis: string]: number } } = {};
 
-      const data = Object.entries(counts).map(([label, count]) => {
-        return { label, count };
+      props.articles.forEach((publicacao) => {
+        const year = publicacao.year;
+        const qualis = publicacao.qualis;
+
+        if (!counts[year]) {
+          counts[year] = {};
+        }
+
+        counts[year][qualis] = (counts[year][qualis] || 0) + 1;
       });
 
-      const sortedData = data.sort((a, b) => a.label.localeCompare(b.label));
+      const data = Object.entries(counts).map(([year, qualisCounts]) => ({
+        year,
+        ...qualisCounts,
+      }));
 
-      setChartData(sortedData);
+      setChartData(data);
     }
   }, [props.articles]);
 
@@ -103,20 +105,35 @@ export function GraficoArticleHome(props: Articles) {
       <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <ResponsiveContainer>
           <BarChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <XAxis dataKey="label" tickLine={false} tickMargin={10} axisLine={false} />
-            <ChartLegend content={<ChartLegendContent />} />
+            <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
+          
             <CartesianGrid vertical={false} horizontal={false} />
-   
+            <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-            <Bar dataKey="count" radius={4}>
-              <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getColorForInstitution(entry.label as Qualis)} />
-              ))}
-            </Bar>
+            {Object.keys(chartConfig).map((key, index) => {
+              if (key !== "views") {
+                return (
+                  <Bar
+                    key={key}
+                    dataKey={key}
+                    fill={chartConfig[key].color}
+                    stackId="a"
+                    radius={4}
+                  >
+                   {index === Object.keys(chartConfig).length - 1 && (
+    <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+  )}
+                  </Bar>
+                );
+              }
+              return null;
+            })}
+
+            
           </BarChart>
         </ResponsiveContainer>
       </ChartContainer>
+
     </Alert>
   );
 }

@@ -7,7 +7,7 @@ import { UserContext } from "../../context/context";
 import { ChatItem } from "../chat/chat-item";
 import { HeaderResult } from "./header-results";
 import { Button } from "../ui/button";
-import { ChevronDown, ChevronUp, SlidersHorizontal, Ticket, Users } from "lucide-react";
+import { ChevronDown, ChevronUp, Copyright, SlidersHorizontal, Ticket, Users } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
 import { useModal } from "../hooks/use-modal-store";
 import { File, Quotes, Stamp } from "phosphor-react";
@@ -24,7 +24,7 @@ export function ResultHome() {
   const { mapModal, maria, messagesMaria, itemsSelecionados, searchType, setItensSelecionados } = useContext(UserContext);
   const { onOpen: onOpenModal } = useModal();
   
-  const [isOn, setIsOn] = useState(false);
+  const [isOn, setIsOn] = useState(true);
   
   const queryUrl = useQuery();
   const navigate = useNavigate();
@@ -96,36 +96,40 @@ export function ResultHome() {
             <div>
               <div className={`w-full ${isOn ? 'px-8' : 'px-4'} border-b border-b-neutral-200 dark:border-b-neutral-800`}>
                 {isOn && (
-                  <div className="w-full pt-4 pb-2 flex justify-between items-center">
-                    <p className="font-medium text-2xl">Resultados</p>
+                  <div className="w-full pt-4  flex justify-between items-center">
+                    <Search />
                   </div>
                 )}
-                <div className="flex py-2 justify-between items-center">
+                <div className={`flex pt-2 justify-between  ${isOn ? '' : ''} `}>
                   <div className="flex items-center gap-2">
-                    <Button variant={typeResult == 'researchers-home' ? ('outline'):('ghost')} size="sm" className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
+                   <div className={`pb-2 border-b-2 border-b-transparent  transition-all ${typeResult == 'researchers-home' && ('border-b-[#719CB8]')}`}>
+                   <Button variant={typeResult == 'researchers-home' ? ('ghost'):('ghost')}  className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
                       <Users className="h-4 w-4" />
                       Pesquisadores
                     </Button>
+                   </div>
                     {searchType === 'article' && (
-                      <Button variant={typeResult == 'articles-home' ? ('outline'):('ghost')} size="sm" className="m-0" onClick={() => onOpen('articles-home')}>
+                       <div className={`pb-2 border-b-2 border-b-transparent  transition-all ${typeResult == 'articles-home' && ('border-b-[#719CB8]')}`}>
+                      <Button variant={typeResult == 'articles-home' ? ('ghost'):('ghost')}  className="m-0" onClick={() => onOpen('articles-home')}>
                         <Quotes className="h-4 w-4" />
                         Artigos
                       </Button>
+                      </div>
                     )}
                     {searchType === 'book' && (
-                      <Button variant="ghost" size="sm" className="m-0" onClick={() => onOpen('researchers-home')}>
+                      <Button variant="ghost"  className="m-0" onClick={() => onOpen('researchers-home')}>
                         <File className="h-4 w-4" />
                         Livros e capítulos
                       </Button>
                     )}
                     {searchType === 'patent' && (
-                      <Button variant="ghost" size="sm" className="m-0" onClick={() => onOpen('researchers-home')}>
-                        <Stamp className="h-4 w-4" />
+                      <Button variant="ghost" className="m-0" onClick={() => onOpen('researchers-home')}>
+                        <Copyright className="h-4 w-4" />
                         Patentes
                       </Button>
                     )}
                     {searchType === 'speaker' && (
-                      <Button variant="ghost" size="sm" className="m-0" onClick={() => onOpen('researchers-home')}>
+                      <Button variant="ghost" className="m-0" onClick={() => onOpen('researchers-home')}>
                         <Ticket className="h-4 w-4" />
                         Participação em eventos
                       </Button>
@@ -134,11 +138,11 @@ export function ResultHome() {
                     <div onClick={() => onOpen('institutions-home')}></div>
                   </div>
                   <div>
-                    <Button onClick={() => onOpenModal('filters')} variant="ghost" size="sm" className="">
+                    <Button onClick={() => onOpenModal('filters')} variant="ghost"  className="">
                       <SlidersHorizontal size={16} className="" />
                       Filtros
                     </Button>
-                    <Button variant="ghost" className="h-9 w-9" size="icon" onClick={() => setIsOn(!isOn)}>
+                    <Button variant="ghost"  size="icon" onClick={() => setIsOn(!isOn)}>
                       {isOn ? (
                         <ChevronUp className="h-4 w-4" />
                       ) : (
@@ -151,20 +155,26 @@ export function ResultHome() {
             
             </div>
           )}
+           
+
           <ScrollArea className="h-full">
             {itemsSelecionados.length > 0 ? (
               <div className="px-8">
                 <ResultProvider />
               </div>
             ) : (
-              <div className="w-full flex flex-col items-center justify-center h-[calc(100vh-52px)]">
+              <div className="h-[calc(100vh-56px)] flex flex-col md:p-8 p-4 md:pt-4">
+              <Search/>
+
+              <div className="w-full flex flex-col items-center justify-center h-full">
                 <p className="text-9xl text-[#719CB8] font-bold mb-16 animate-pulse">^_^</p>
                 <p className="font-medium text-lg">
                   Experimente pesquisar um tema e veja o que a plataforma pode filtrar para você.
                 </p>
               </div>
+             </div>
             )}
-            <Search />
+           
           </ScrollArea>
         </div>
       )}

@@ -5,6 +5,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { ArticleItem } from "./article-item";
 import Autoplay from "embla-carousel-autoplay"
 import { ArrowSquareOut } from "phosphor-react";
+import { Link } from "react-router-dom";
 
 type Publicacao = {
     id: string,
@@ -61,22 +62,22 @@ export function ArtigosRecentes() {
            <div className="flex items-center justify-between mb-6">
            <h2 className="text-2xl font-medium ">Produções mais recentes</h2>
 
-           <Button variant={ 'outline'} className=""><ArrowSquareOut size={16}/> Ver a página</Button>
+        <Link to={'/producoes-recentes'}>   <Button variant={ 'outline'} className=""><ArrowSquareOut size={16}/> Ver a página</Button></Link>
            </div>
 
            <div>
            <Carousel className="w-full flex gap-3 items-center "
             plugins={[
-                Autoplay({
-                  delay: 2000,
-                }),
-              ]}
+              Autoplay({
+                delay: 2000,
+              }),
+            ]}
            >
                 <CarouselPrevious />
       <CarouselContent className="-ml-1 flex w-full flex-1">
         {publicacoes.slice(0,10).map((props, index) => (
           <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3">
-            <div className="p-1">
+            <div className="p-1 h-full">
             <ArticleItem
     id={props.id}
             doi={props.doi}

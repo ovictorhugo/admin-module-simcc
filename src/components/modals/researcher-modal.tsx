@@ -79,6 +79,7 @@ type ResearchOpenAlex = {
 }
 import { toast } from "sonner"
 import { Link } from "react-router-dom";
+import { Alert } from "../ui/alert";
 
 export function ResearcherModal() {
    
@@ -109,10 +110,15 @@ setItensSelecionadosPopUp(itemsSelecionados)
     }, [itemsSelecionados]);
 
     const [open, setOpen] = useState(false);  
+    const [variations, setVariations] = useState<string[]>([]);
 
     useMemo(() => {
      setOpen(false)
      setItensSelecionadosPopUp(itemsSelecionados)
+     
+     if(name != undefined) {
+      setVariations( generateNameVariations(name))
+     }
           }, [isOpen]);
 
     useMemo(() => {
@@ -194,6 +200,36 @@ const handleDownloadJson = async () => {
 };
 
 const currentUrl = window.location.origin
+
+function generateNameVariations(name: string): string[] {
+  const parts = name.split(' ');
+  const lastName = parts[parts.length - 1];
+  const initials = parts.map(part => part[0]).join('. ');
+  const initialsWithDots = initials.replace(/ /g, '.');
+  const firstAndMiddleNames = parts.slice(0, -1).join(' ');
+  const variations = [
+      `${lastName.toUpperCase()}, ${initials.toUpperCase()}`,
+      `${lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()}, ${initials.toUpperCase()}`,
+      `${lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()}, ${initialsWithDots.toUpperCase()}`,
+      `${lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()}, ${firstAndMiddleNames.charAt(0).toUpperCase() + firstAndMiddleNames.slice(1).toLowerCase()} ${initials.toUpperCase()}`,
+      `${lastName.toUpperCase()}, ${firstAndMiddleNames.charAt(0).toUpperCase()}`,
+      `${lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()}, ${firstAndMiddleNames.charAt(0).toUpperCase() + firstAndMiddleNames.slice(1).toLowerCase()}`,
+      `${lastName.toUpperCase()}, ${firstAndMiddleNames.toUpperCase()}`,
+      `${lastName.toUpperCase()}, ${firstAndMiddleNames.charAt(0).toUpperCase() + firstAndMiddleNames.slice(1).toLowerCase()} ${initialsWithDots.toUpperCase()}`,
+      `${parts[parts.length - 2].toUpperCase()} ${lastName.toUpperCase()}, ${firstAndMiddleNames.toUpperCase()}`,
+      `${lastName.toUpperCase()}, ${initials.charAt(0).toUpperCase()}`,
+      `${lastName.toUpperCase()}, ${name.toUpperCase()}`,
+      `${lastName.toUpperCase()}, ${firstAndMiddleNames.charAt(0).toUpperCase() + firstAndMiddleNames.slice(1).toLowerCase()} ${initials.toUpperCase()}`,
+      `${initials.charAt(0).toUpperCase()}. ${lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()}, ${initials.toUpperCase()}`,
+      `${initialsWithDots.toUpperCase()} ${lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()}`,
+      `${initialsWithDots.toUpperCase()} ${lastName.toUpperCase()}`
+  ];
+
+  return variations;
+}
+
+
+
 
 
     return(
@@ -277,7 +313,11 @@ const currentUrl = window.location.origin
          )}
        </Button>
          </TooltipTrigger>
-         <TooltipContent>Adicionar pesquisador(a)</TooltipContent>
+         <TooltipContent> {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
+          'Remover pesquisador(a)'
+         ) : (
+          'Adicionar pesquisador(a)'
+         )}</TooltipContent>
        </Tooltip>
        </TooltipProvider>
 
@@ -529,6 +569,20 @@ const currentUrl = window.location.origin
                         <NuvemPalavras
                         id={user.id}
                         />
+                      )
+            })}
+
+
+        {researcher.slice(0, 1).map(() => {
+                      return(
+                        <div>
+            <div className="mb-6 font-medium text-2xl">Nomes de citação</div>
+            <div className="flex flex-wrap gap-1">
+            {variations.map((variation, index) => (
+                    <p className="text-xs " key={index}>{variation} /</p>
+                ))}
+            </div>
+        </div>
                       )
             })}
 

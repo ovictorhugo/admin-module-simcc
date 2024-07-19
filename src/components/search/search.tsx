@@ -205,9 +205,9 @@ const handleConnectorChange = (index: number, connector: string) => {
 
 
     return  (
-        <div className="bottom-0 right-0 absolute w-full h-[150px] justify-end bg-gradient-to-t from-white dark:from-neutral-900 to-transparent flex flex-col max-sm:flex  max-sm:flex-row">
-        <div className={`pb-3 px-8 max-sm:px-[5px] `}>
-        <div className="mb-4">
+        <div className="bottom-0 mt-4 mb-2  w-full flex flex-col max-sm:flex  max-sm:flex-row">
+        <div className={` max-sm:px-[5px] `}>
+        <div className="">
         <div className="flex gap-4">
       
             <Alert  className="h-14 p-2 flex items-center justify-between">
@@ -265,7 +265,7 @@ const handleConnectorChange = (index: number, connector: string) => {
             </div>
 
             <div className="w-fit">
-            <Button onClick={() => handlePesquisa()} variant="outline" className={`${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${maria && searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} size={'icon'}>
+            <Button onClick={() => handlePesquisa()} variant="outline" className={`${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${maria && ('bg-[#82AAC0]   dark:bg-[#82AAC0]  ')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} size={'icon'}>
        <Funnel size={16} className="" /> 
        
         </Button>
@@ -274,10 +274,7 @@ const handleConnectorChange = (index: number, connector: string) => {
         </div>
         </div>
 
-        <div className="mb-3 flex items-center justify-between">
-        <p className="text-xs  md:flex hidden">Sistema de Mapeamento de Competências da Bahia | versão 2.0.5 (beta) </p>
-        <p className="text-xs flex">Atualizado em {dataModificacao}</p>
-        </div>
+       
         </div>
         </div>
     )

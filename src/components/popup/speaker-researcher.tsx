@@ -30,6 +30,7 @@ import { TableReseracherArticleshome } from "../homepage/categorias/articles-hom
 
 import { BookBlockPopUp } from "./book-block-popup";
 import { FilterYearPopUp } from "./filters-year-popup";
+import { GraficosEventos } from "./graficos/grafico-eventos";
 
 
 type Filter = {
@@ -211,9 +212,7 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
-                      <GraficoArticleHome
-                      articles={publicacoes}
-                      />
+                      <GraficosEventos publicacoes={publicacoes} />
                     )}
                     </AccordionContent>
                 </AccordionItem>

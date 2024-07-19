@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LogoSimcc } from "../svg/LogoSimcc";
 import { Separator } from "../ui/separator";
 import { useContext} from "react";
@@ -53,11 +53,12 @@ export function Header() {
   const { onOpen } = useModalHomepage();
   const location = useLocation();
   const [versao, setVersao] = React.useState(true)
+  const navigate = useNavigate()
   
   const posGraduation = location.pathname == '/pos-graduacao'
 
   const handleClick = () => {
-    onOpen('initial-home')
+    navigate('/')
     setItensSelecionados([])
   }
   const [isVisible, setIsVisible] = React.useState(false);

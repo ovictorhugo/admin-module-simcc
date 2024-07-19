@@ -25,8 +25,6 @@ const ModalContent = () => {
       return <GraduateProgram/>
     case 'result-home':
       return <ResultHome/>
-    case 'baremas':
-      return <BaremasHome/>
     case 'indicadores' :
       return <ContentIndicators/>
   }

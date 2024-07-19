@@ -1,49 +1,48 @@
-import { ArrowUUpLeft, FileCsv, FileXls, Upload } from "phosphor-react";
+import { ArrowUUpLeft, FileXls, Upload } from "phosphor-react";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { useCallback, useContext, useState } from "react";
-import { toast } from "sonner"
+import { toast } from "sonner";
 import { UserContext } from "../../context/context";
 import * as XLSX from 'xlsx';
-import {useDropzone} from 'react-dropzone'
+import { useDropzone } from 'react-dropzone';
+import { Label } from "../ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface Patrimonio {
-    matric: string
-    insUFMG: string
-    nome: string
-    genero: string
-    denoSit: string
-    rt: string
-    classe: string
-    cargo: string
-    nivel: string
-    ref: string
-    titulacao: string
-    setor: string
-    detalheSetor: string
-    dtIngOrg: string
-    dataProg: string
+    matric: string;
+    insUFMG: string;
+    nome: string;
+    genero: string;
+    denoSit: string;
+    rt: string;
+    classe: string;
+    cargo: string;
+    nivel: string;
+    ref: string;
+    titulacao: string;
+    setor: string;
+    detalheSetor: string;
+    dtIngOrg: string;
+    dataProg: string;
+    year_charge: string;
+    semester: string;
 }
 
 export function ImportTaes() {
     const { onClose, isOpen, type: typeModal } = useModal();
-    
-    const isModalOpen = (isOpen && typeModal === 'import-taes')
-
-    const {urlGeral} = useContext(UserContext)
+    const isModalOpen = (isOpen && typeModal === 'import-taes');
+    const { urlGeralAdm } = useContext(UserContext);
     const [fileInfo, setFileInfo] = useState({ name: '', size: 0 });
-
     const [data, setData] = useState<Patrimonio[]>([]);
 
     const onDrop = useCallback((acceptedFiles: any) => {
         handleFileUpload(acceptedFiles);
     }, []);
-  
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-    });
-  
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
     const handleFileUpload = (files: any) => {
         const uploadedFile = files[0];
         if (uploadedFile) {
@@ -54,7 +53,7 @@ export function ImportTaes() {
             readExcelFile(uploadedFile);
         }
     };
-  
+
     const readExcelFile = (file: File) => {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -62,16 +61,16 @@ export function ImportTaes() {
             const workbook = XLSX.read(data, { type: 'array' });
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
-  
+
             // Convert the worksheet to JSON, starting from the third row
             const json = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
-  
+
             // Extract headers from the first row
             const headers: string[] = json[0] as string[];
-  
+
             // Remove the first row (headers themselves)
             const rows = json.slice(1);
-  
+
             // Map headers to your interface keys
             const headerMap: { [key: string]: keyof Patrimonio } = {
                 'MATRIC': 'matric',
@@ -90,7 +89,7 @@ export function ImportTaes() {
                 'DtIngOrg': 'dtIngOrg',
                 'DataProg': 'dataProg'
             };
-  
+
             // Convert rows to an array of objects
             const jsonData = rows.map((row: any) => {
                 const obj: Patrimonio = {
@@ -108,22 +107,47 @@ export function ImportTaes() {
                     setor: '',
                     detalheSetor: '',
                     dtIngOrg: '',
-                    dataProg: ''
+                    dataProg: '',
+                    year_charge: String(year),
+                    semester: String(semester)
                 };
+
                 headers.forEach((header, index) => {
                     const key = headerMap[header];
                     if (key) {
-                        obj[key] = row[index] || "";
+                        if (header === 'DtIngOrg' || header === 'DataProg') {
+                            // Convert cell value to date format
+                            obj[key] = formatDate(row[index]);
+                        } else {
+                            obj[key] = String(row[index] || ""); // Convert value to string
+                        }
                     }
                 });
+
                 return obj;
             });
-  
+
             setData(jsonData);
         };
         reader.readAsArrayBuffer(file);
     };
+
+    const formatDate = (value: any): string => {
+       
+            const date = XLSX.SSF.parse_date_code(value);
+            return `${String(date.d).padStart(2, '0')}/${String(date.m).padStart(2, '0')}/${date.y}`;
+        
+
   
+
+        const parsedDate = new Date(value);
+        if (!isNaN(parsedDate.getTime())) {
+            return `${String(parsedDate.getDate()).padStart(2, '0')}/${String(parsedDate.getMonth() + 1).padStart(2, '0')}/${parsedDate.getFullYear()}`;
+        }
+
+        return "";
+    };
+
     const handleSubmitPatrimonio = async () => {
         try {
             if (data.length === 0) {
@@ -136,9 +160,9 @@ export function ImportTaes() {
                 });
                 return;
             }
-    
-            let urlPatrimonioInsert = `${urlGeral}insertPatrimonio`;
-        
+
+            const urlPatrimonioInsert = `${urlGeralAdm}tecnicos`;
+
             const response = await fetch(urlPatrimonioInsert, {
                 mode: 'cors',
                 method: 'POST',
@@ -162,12 +186,12 @@ export function ImportTaes() {
                 });
             }
 
-            setData([])
+            setData([]);
             setFileInfo({
                 name: '',
                 size: 0,
             });
-    
+
         } catch (error) {
             console.error('Erro ao processar a requisição:', error);
             toast("Erro ao processar a requisição", {
@@ -179,13 +203,21 @@ export function ImportTaes() {
             });
         }
     };
-    
+
+    const currentYear = new Date().getFullYear();
+    const [year, setYear] = useState(currentYear);
+    const [semester, setSemester] = useState('1');
+
+    const years = [];
+    for (let i = currentYear; i > currentYear - 4; i--) {
+        years.push(i);
+    }
 
     console.log(data)
 
     return (
-        <Dialog open={isModalOpen} onOpenChange={onClose}> 
-            <DialogContent className="min-w-[40vw] ">
+        <Dialog open={isModalOpen} onOpenChange={onClose}>
+            <DialogContent className="min-w-[40vw]">
                 <DialogHeader className="pt-8 px-6 flex flex-col items-center">
                     <DialogTitle className="text-2xl text-center font-medium">
                         Importar arquivo .xls
@@ -195,11 +227,40 @@ export function ImportTaes() {
                     </DialogDescription>
                 </DialogHeader>
 
+                <div className={`grid gap-8 w-full sm:grid-cols-2 grid-cols-1`}>
+                    <div className="grid gap-3 w-full">
+                        <Label htmlFor="name">Ano</Label>
+                        <Select defaultValue={String(year)} value={String(year)} onValueChange={(value) => setYear(Number(value))}>
+                            <SelectTrigger className="">
+                                <SelectValue placeholder="" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {years.map((year) => (
+                                    <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="grid gap-3 w-full">
+                        <Label htmlFor="name">Semestre</Label>
+                        <Select defaultValue={semester} value={semester} onValueChange={(value) => setSemester(value)}>
+                            <SelectTrigger className="">
+                                <SelectValue placeholder="" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={'1'}>Primeiro</SelectItem>
+                                <SelectItem value={'2'}>Segundo</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+
                 <div className="mb-4">
-                    <div {...getRootProps()} className="border-dashed mb-6 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 mt-4">
+                    <div {...getRootProps()} className="border-dashed mb-6 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm cursor-pointer transition-all gap-3 w-full flex items-center justify-center hover:bg-neutral-100 mt-4">
                         <input {...getInputProps()} />
-                        <div className="p-4  border rounded-md">
-                            <FileXls size={24} className=" whitespace-nowrap" />
+                        <div className="p-4 border rounded-md">
+                            <FileXls size={24} className="whitespace-nowrap" />
                         </div>
                         {isDragActive ? (
                             <p>Solte os arquivos aqui ...</p>
@@ -212,7 +273,7 @@ export function ImportTaes() {
                         {fileInfo.name && (
                             <div className="justify-center flex items-center gap-3">
                                 <FileXls size={16} />
-                                <p className=" text-center  text-zinc-500 text-sm">
+                                <p className="text-center text-zinc-500 text-sm">
                                     Arquivo selecionado: <strong>{fileInfo.name}</strong> ({(fileInfo.size / 1024).toFixed(2)} KB)
                                 </p>
                             </div>
@@ -232,5 +293,5 @@ export function ImportTaes() {
                 <div></div>
             </DialogContent>
         </Dialog>
-    )
+    );
 }

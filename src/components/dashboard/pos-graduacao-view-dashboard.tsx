@@ -8,9 +8,6 @@ import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { toast } from "sonner"
 
 
-
-
-
   interface PosGraduationsProps {
     graduate_program_id: string
     code: string
@@ -101,7 +98,7 @@ const isModalOpen = isOpen && type === "graduate-program";
             })
           } 
         };
-        fetchData();
+        fetchData()
       };
 
       const [tab, setTab] = useState('all')

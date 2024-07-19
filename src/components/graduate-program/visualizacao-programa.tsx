@@ -1,4 +1,4 @@
-import { ArrowRight, Book, ChevronLeft, Copyright, Globe } from "lucide-react";
+import { ArrowRight, Book, ChevronDown, ChevronLeft, ChevronUp, Copyright, File, Globe, SlidersHorizontal, Ticket, Users } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -7,6 +7,9 @@ import { UserContext } from "../../context/context";
 import { CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Books, Quotes } from "phosphor-react";
 import { Alert } from "../ui/alert";
+import { Search } from "../search/search";
+import { useModalResult } from "../hooks/use-modal-result";
+import { useModal } from "../hooks/use-modal-store";
 
 interface GraduateProgram {
     area?: string;
@@ -47,8 +50,8 @@ interface GraduateProgram {
 
 
 export function VisualizacaoPrograma() {
-  const {urlGeral} = useContext(UserContext)
-
+  const {urlGeral, itemsSelecionados, searchType} = useContext(UserContext)
+  const { onOpen: onOpenModal } = useModal();
     const history = useNavigate();
 
     const handleVoltar = () => {
@@ -118,6 +121,10 @@ const year = currentYear - 4;
     fetchData();
   }, [urlTotalProgram]);
 
+  const [isOn, setIsOn] = useState(true);
+
+  const { onOpen, type: typeResult } = useModalResult();
+
     return(
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
             <Tabs defaultValue={'all'} className="h-full" >
@@ -140,7 +147,7 @@ const year = currentYear - 4;
               <TabsList >
                 
               <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
-
+              <TabsTrigger value="doc" className="text-zinc-600 dark:text-zinc-200">Docentes</TabsTrigger>
                 <TabsTrigger value="unread" className="text-zinc-600 dark:text-zinc-200">Indicadores</TabsTrigger>
 
               
@@ -171,93 +178,159 @@ const year = currentYear - 4;
 
                   </div>
 
-                  <Alert className="grid gap-3 lg:grid-cols-4 grid-cols-2">
-            <div>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  {itemsSelecionados.length > 0 ? (
                      <div>
-                     <CardTitle className="text-sm font-medium">
-                       Total de artigos
-                     </CardTitle>
-                 
-                     
+                     <div className={`w-full ${isOn ? 'px-8' : 'px-4'} border-b border-b-neutral-200 dark:border-b-neutral-800`}>
+                       {isOn && (
+                         <div className="w-full pt-4  flex justify-between items-center">
+                           <Search />
+                         </div>
+                       )}
+                       <div className={`flex py-2 justify-between items-center ${isOn ? 'pb-8' : ''} `}>
+                         <div className="flex items-center gap-2">
+                           <Button variant={typeResult == 'researchers-home' ? ('outline'):('ghost')}  className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
+                             <Users className="h-4 w-4" />
+                             Pesquisadores
+                           </Button>
+                           {searchType === 'article' && (
+                             <Button variant={typeResult == 'articles-home' ? ('outline'):('ghost')}  className="m-0" onClick={() => onOpen('articles-home')}>
+                               <Quotes className="h-4 w-4" />
+                               Artigos
+                             </Button>
+                           )}
+                           {searchType === 'book' && (
+                             <Button variant="ghost"  className="m-0" onClick={() => onOpen('researchers-home')}>
+                               <File className="h-4 w-4" />
+                               Livros e capítulos
+                             </Button>
+                           )}
+                           {searchType === 'patent' && (
+                             <Button variant="ghost" className="m-0" onClick={() => onOpen('researchers-home')}>
+                               <Copyright className="h-4 w-4" />
+                               Patentes
+                             </Button>
+                           )}
+                           {searchType === 'speaker' && (
+                             <Button variant="ghost" className="m-0" onClick={() => onOpen('researchers-home')}>
+                               <Ticket className="h-4 w-4" />
+                               Participação em eventos
+                             </Button>
+                           )}
+                           <div onClick={() => onOpen('articles-home')}></div>
+                           <div onClick={() => onOpen('institutions-home')}></div>
+                         </div>
+                         <div>
+                           <Button onClick={() => onOpenModal('filters')} variant="ghost"  className="">
+                             <SlidersHorizontal size={16} className="" />
+                             Filtros
+                           </Button>
+                           <Button variant="ghost"  size="icon" onClick={() => setIsOn(!isOn)}>
+                             {isOn ? (
+                               <ChevronUp className="h-4 w-4" />
+                             ) : (
+                               <ChevronDown className="h-4 w-4" />
+                             )}
+                           </Button>
+                         </div>
+                       </div>
                      </div>
- 
-                     <Quotes className="h-4 w-4 text-muted-foreground" />
-                    
-                   </CardHeader>
- 
-                  <CardContent>
-                  <span className="text-lg font-bold leading-none sm:text-3xl">
-                  {total.map((props) => (<>{props.article}</>))}
-                 </span>
-                  </CardContent>
-            </div>
-            <div>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                     <div>
-                     <CardTitle className="text-sm font-medium">
-                       Total de livros
-                     </CardTitle>
-                    
-                     
-                     </div>
- 
-                     <Book className="h-4 w-4 text-muted-foreground" />
-                    
-                   </CardHeader>
- 
-                  <CardContent>
-                  <span className="text-lg font-bold leading-none sm:text-3xl">
-                  {total.map((props) => (<>{props.book}</>))}
-                 </span>
-                  </CardContent>
-            </div>
-             <div>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                     <div>
-                     <CardTitle className="text-sm font-medium">
-                       Total de capítulos
-                     </CardTitle>
                    
+                   </div>
+                  ) : (
+                      <div>
+                      <Alert className="grid gap-3 lg:grid-cols-4 grid-cols-2">
+                      <div>
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                               <div>
+                               <CardTitle className="text-sm font-medium">
+                                 Total de artigos
+                               </CardTitle>
+                           
+                               
+                               </div>
+           
+                               <Quotes className="h-4 w-4 text-muted-foreground" />
+                              
+                             </CardHeader>
+           
+                            <CardContent>
+                            <span className="text-lg font-bold leading-none sm:text-3xl">
+                            {total.map((props) => (<>{props.article}</>))}
+                           </span>
+                            </CardContent>
+                      </div>
+                      <div>
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                               <div>
+                               <CardTitle className="text-sm font-medium">
+                                 Total de livros
+                               </CardTitle>
+                              
+                               
+                               </div>
+           
+                               <Book className="h-4 w-4 text-muted-foreground" />
+                              
+                             </CardHeader>
+           
+                            <CardContent>
+                            <span className="text-lg font-bold leading-none sm:text-3xl">
+                            {total.map((props) => (<>{props.book}</>))}
+                           </span>
+                            </CardContent>
+                      </div>
+                       <div>
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                               <div>
+                               <CardTitle className="text-sm font-medium">
+                                 Total de capítulos
+                               </CardTitle>
+                             
+                               
+                               </div>
+           
+                               <Books className="h-4 w-4 text-muted-foreground" />
+                              
+                             </CardHeader>
+           
+                            <CardContent>
+                            <span className="text-lg font-bold leading-none sm:text-3xl">
+                            {total.map((props) => (<>{props.book_chapter}</>))}
+                           </span>
+                            </CardContent>
+                      </div>
+          
+                      <div>
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                               <div>
+                               <CardTitle className="text-sm font-medium">
+                                 Total de patentes
+                               </CardTitle>
+                              
+                               </div>
+           
+                               <Copyright className="h-4 w-4 text-muted-foreground" />
+                              
+                             </CardHeader>
+           
+                            <CardContent>
+                            <span className="text-lg font-bold leading-none sm:text-3xl">
+                            {total.map((props) => (<>{props.patent}</>))}
+                           </span>
+                            </CardContent>
+          
+                      </div>
+          
                      
-                     </div>
- 
-                     <Books className="h-4 w-4 text-muted-foreground" />
-                    
-                   </CardHeader>
- 
-                  <CardContent>
-                  <span className="text-lg font-bold leading-none sm:text-3xl">
-                  {total.map((props) => (<>{props.book_chapter}</>))}
-                 </span>
-                  </CardContent>
-            </div>
+          
+                     
+                     </Alert>
+                      
+                      </div>
 
-            <div>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                     <div>
-                     <CardTitle className="text-sm font-medium">
-                       Total de patentes
-                     </CardTitle>
-                    
-                     </div>
- 
-                     <Copyright className="h-4 w-4 text-muted-foreground" />
-                    
-                   </CardHeader>
- 
-                  <CardContent>
-                  <span className="text-lg font-bold leading-none sm:text-3xl">
-                  {total.map((props) => (<>{props.patent}</>))}
-                 </span>
-                  </CardContent>
+                  )}
 
-            </div>
-
-           
-
-           
-           </Alert>
+                 
             </TabsContent>
             </Tabs>
         </main>

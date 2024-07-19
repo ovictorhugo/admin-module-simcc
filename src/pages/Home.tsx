@@ -41,6 +41,8 @@ export function Home() {
     onOpen('dicionario')
 }  else if(location.pathname == '/indicadores') {
     onOpen('indicadores')
+} else if(location.pathname == '/producoes-recentes') {
+    onOpen('producoes-recentes')
 } 
     }, [location]);
   

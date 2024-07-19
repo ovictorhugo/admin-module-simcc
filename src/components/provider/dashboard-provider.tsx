@@ -10,6 +10,7 @@ import { AddResearcherDashboard } from "../dashboard/add-researcher-dashboard";
 import { PesoProducoes } from "../dashboard/peso-producoes";
 import { GrupoPesquisaView } from "../dashboard/grupo-pesquisa";
 import { IndicadoresDashboard } from "../dashboard/indicadores-dashboard";
+import { BaremasHome } from "../baremas/baremas-home";
 
 
 const ModalContent = () => {
@@ -30,6 +31,8 @@ const ModalContent = () => {
         return <GrupoPesquisaView/>
       case 'indicadores':
         return <IndicadoresDashboard/>
+        case 'baremas':
+          return <BaremasHome/>
 
     default:
       return null;

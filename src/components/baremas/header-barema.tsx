@@ -2,19 +2,25 @@ import { useContext, useEffect } from "react"
 import { UserContext } from "../../context/context"
 import { Trash, X } from "phosphor-react"
 import { Button } from "../ui/button"
+import { ArrowRight, Info } from "lucide-react"
+import { Link } from "react-router-dom"
 
 export function HeaderBarema() {
     const { pesquisadoresSelecionados, urlGeral, setPesquisadoresSelecionados } = useContext(UserContext)
 
 
     return(
-        <div className="my-8">
+        <div className="">
             <div className="flex  gap-6 w-full flex-col  ">
             <div>
-            <h1 className=" text-3xl mb-4  font-medium max-w-[380px] ">
- <strong className="bg-red-700 font-medium text-white">Barema</strong> de avaliação dos pesquisadores
-      </h1>
-      <p className="mt-2 max-w-[420px] text-gray-500 dark:text-gray-300">O sistema de classificação, é uma estrutura criada para avaliar e classificar pesquisadores com base em critérios específicos.</p>
+            <Link to={'http://www.bi.cnpq.br/painel/mapa-fomento-cti/'} target="_blank"  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Visitar página do programa<ArrowRight size={12}/></Link>
+           
+      
+
+      <h1 className=" max-w-[450px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
+            Criar  <strong className="bg-[#82AAC0]  rounded-md px-3 pb-2 text-white font-medium">barema</strong> de avaliação dos pesquisadores
+        </h1>
+        <p className="max-w-[500px]  text-lg font-light text-foreground">O sistema de classificação, é uma estrutura criada para avaliar e classificar pesquisadores com base em critérios específicos.</p>
             </div>
 
             <div className="flex items-center gap-3">
