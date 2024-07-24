@@ -21,15 +21,15 @@ type Patente = {
 const chartConfig = {
   software: {
     label: "Software",
-    color: "hsl(var(--chart-1))",
+    color: "#096670",
   },
   publicacoes: {
     label: "Patentes",
-    color: "hsl(var(--chart-2))",
+    color: "#66B4D0",
   },
   marca: {
     label: "Marcas",
-    color: "hsl(var(--chart-3))",
+    color: "#1B1464",
   },
 } satisfies ChartConfig;
 
@@ -65,7 +65,7 @@ export function GraficoProducaoTecnica({ software, publicacoes, marca }: { softw
     <Alert className="pt-12">
       <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <ResponsiveContainer>
-          <BarChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
             
             <CartesianGrid vertical={false} horizontal={false} />

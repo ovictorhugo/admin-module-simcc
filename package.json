@@ -46,6 +46,7 @@
     "geoip-lite": "^1.4.10",
     "highcharts": "^11.4.1",
     "highcharts-react-official": "^3.2.1",
+    "html-react-parser": "^5.1.12",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.354.0",
     "next-themes": "^0.2.1",

@@ -28,6 +28,7 @@ interface GraduateProgram {
     qtd_discente:string
     qtd_colaborador:string
     qtd_permanente:string
+    create_at:string
   }
 
   const useQuery = () => {
@@ -39,7 +40,7 @@ export function GraduateProgram() {
     const { isOpen, type} = useModalHomepage();
 
     const queryUrl = useQuery();
-   const navigate = useNavigate();
+
 const type_search = queryUrl.get('graduate_program_id');
   
     const isModalOpen = isOpen && type === "graduation-home";
@@ -114,6 +115,7 @@ const type_search = queryUrl.get('graduate_program_id');
                  qtd_discente={props.qtd_discente}
                  qtd_colaborador={props.qtd_colaborador}
                  qtd_permanente={props.qtd_permanente}
+                 create_at={props.create_at}
                  />
                  )
                }

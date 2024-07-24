@@ -63,7 +63,7 @@ export function GraficoLivros({ capLivros, publicacoes }: { capLivros: Livro[], 
     <Alert className="pt-12">
       <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <ResponsiveContainer>
-          <BarChart data={filteredChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          <BarChart data={filteredChartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
            
             <CartesianGrid vertical={false} horizontal={false} />
@@ -77,7 +77,7 @@ export function GraficoLivros({ capLivros, publicacoes }: { capLivros: Livro[], 
                     dataKey={key}
                     fill={chartConfig[key].color}
                     stackId="a"
-                    radius={index === 0 ? [4, 4, 0, 0] : index === Object.keys(chartConfig).length - 1 ? [4, 4, 0, 0] : [0, 0, 0, 0]}
+                    radius={4}
                   >
                     <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
                   </Bar>

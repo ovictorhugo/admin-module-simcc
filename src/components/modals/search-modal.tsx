@@ -208,8 +208,31 @@ console.log(termosformatados)
   let TypeSearch = type_search ?? ''
   let Terms = terms ?? ''
 
+  const location = useLocation();
+
+    const posGrad = location.pathname == '/pos-graduacao'
+
   const handlePesquisaFinal = () => {
-    if(itemsSelecionadosPopUp.length > 0) {
+    if(itemsSelecionadosPopUp.length > 0 && posGrad) {
+      setItensSelecionados(itemsSelecionadosPopUp)
+      TypeSearch = searchType
+      Terms = termosformatados
+      setInput('')
+
+      queryUrl.set('type_search', searchType);
+      if(searchType == 'name') {
+        queryUrl.set('terms', Terms.replace(/[()]/g, ''));
+      } else {
+        queryUrl.set('terms', Terms);
+      }
+        navigate({
+          pathname: '/pos-graduacao',
+          search: queryUrl.toString(),
+        });
+
+    onClose()
+    
+    } else if(itemsSelecionadosPopUp.length > 0) {
       setItensSelecionados(itemsSelecionadosPopUp)
       TypeSearch = searchType
       Terms = termosformatados

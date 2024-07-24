@@ -138,12 +138,12 @@ const [mode, setMode] = useState('user')
         <Route path='/resultados' element={<Home/>}/>
         <Route path='/dicionario' element={<Home/>}/>
         <Route path='/pos-graduacao' element={<Home/>}/>
-       
-       
+        <Route path='/grupos-pesquisa' element={<Home/>}/>
+        <Route path='/informacoes' element={<Home/>}/>
         <Route path='/indicadores' element={<Home/>}/>
-
-
         <Route path='/producoes-recentes' element={<Home/>}/>
+
+
         <Route path='/taxonomia' element={<Indicators/>}/>
 
         <Route path='/indicadores-pos-graduacao' element={<Indicators/>}/>

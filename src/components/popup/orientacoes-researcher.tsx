@@ -35,6 +35,9 @@ import { BookBlockPopUp } from "./book-block-popup";
 import { FilterYearPopUp } from "./filters-year-popup";
 import { TableReseracherOrientacoesPopup } from "./columns/table-orientacoes-popup";
 import { GraficoOrientacoes } from "./graficos/grafico-orientacoes";
+import { CheckSquare } from "lucide-react";
+import { Alert } from "../ui/alert";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 
 type Filter = {
@@ -187,15 +190,42 @@ const handleRemoveItemCap = (indexToRemove: any) => {
   setItensSelecionadosCap(prevItems => prevItems.filter((_, index) => index !== indexToRemove));
 }
 
-    
+    const [type, setType] = useState('')
 
     return(
         <>
   
             <div className="mb-[150px]">
 
-                <FilterYearPopUp
+              <div className="flex gap-6 w-full">
+              <div className="flex flex-col">
+        <div className="flex items-center gap-3 mb-4 w-full ">
+          <CheckSquare size={24} className="text-gray-400" />
+          <p className="text-sm font-bold whitespace-nowrap">Selecione o tipo de orientação</p>
+        </div>
+        <Alert className="w-full">
+        <Select defaultValue={type} value={type} onValueChange={(value) => setType(value)}>
+            <SelectTrigger className="w-full max-w-[300px] whitespace-nowrap border-0">
+                <SelectValue placeholder="Escolha o tipo de orientação" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem value="Iniciação científica"> <div className="flex gap-4 items-center mr-2"><div className="bg-[#8BFBD3] flex rounded-sm h-4 w-4 min-w-4"></div> Iniciação científica</div></SelectItem>
+                <SelectItem value="Dissertação De Mestrado"><div className="flex gap-4 items-center mr-2"><div className="bg-[#67A896] flex rounded-sm h-4 w-4 min-w-4"></div>Dissertação De Mestrado</div></SelectItem>
+                <SelectItem value="Tese de Doutorado"><div className="flex gap-4 items-center mr-2"><div className="bg-[#425450] flex rounded-sm h-4 w-4 min-w-4"></div>Tese de Doutorado</div></SelectItem>
+                <SelectItem value="Trabalho de Conclusao de Curso Graduação"><div className="flex gap-4 items-center mr-2"><div className="bg-[#77D2B6] flex rounded-sm h-4 w-4 min-w-4 whitespace-nowrap"></div>Trabalho de Conclusao de Curso Graduação</div></SelectItem>
+                <SelectItem value="Orientacao-De-Outra-Natureza"><div className="flex gap-4 items-center mr-2"><div className="bg-[#577E74] flex rounded-sm h-4 w-4"></div>Orientacao-De-Outra-Natureza</div></SelectItem>
+                <SelectItem value="Monografia de Conclusao de Curso Aperfeicoamento e Especializacao"><div className="flex gap-4 items-center mr-2"><div className="bg-[#2F7F7C] flex rounded-sm h-4 w-4 min-w-4"></div>Monografia de Conclusao de Curso Aperfeicoamento e Especializacao</div></SelectItem>
+                <SelectItem value="Supervisão de Pós-Doutorado"><div className="flex gap-4 items-center mr-2"><div className="bg-[#46724B] flex rounded-sm h-4 w-4 min-w-4"></div>Supervisão de Pós-Doutorado</div></SelectItem>
+            </SelectContent>
+            </Select>
+          </Alert>
+          </div>
+
+             <div className="w-full ">
+             <FilterYearPopUp
                 onFilterUpdate={handleResearcherUpdate}/>
+              </div>
+             </div>
               
                         <Accordion  type="single" collapsible >
                 <AccordionItem value="item-1" >

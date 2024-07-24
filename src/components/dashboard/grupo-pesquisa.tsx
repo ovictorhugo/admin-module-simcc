@@ -3,7 +3,7 @@ import { useModal } from "../hooks/use-modal-store"
 import { Alert } from "../ui/alert";
 import { UserContext } from "../../context/context";
 import { ArrowSquareOut, ClockClockwise, DotsThree, Eye, EyeSlash, FileXls, GraduationCap, Hash, MapPin, PencilSimple, Plus, Rows, SquaresFour, Star, Student, Trash } from "phosphor-react"; 
-import {ArrowRight, Divide, GraduationCapIcon, Info, Search, UserCheck } from "lucide-react";
+import {ArrowRight, ChevronLeft, Divide, GraduationCapIcon, Info, Search, UserCheck } from "lucide-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { toast } from "sonner"
 
@@ -12,18 +12,14 @@ import { toast } from "sonner"
 import { DataTable } from "./data-table-grupo-pesquisa";
 
   interface PosGraduationsProps {
-    acronym: null,
-    area: string
-    institution_id: string
-    institution_name: string
-    last_date_sent: string
-    lattes_id: string
-    leader_name: string
-    research_group_id: string
-    research_group_name: string
-    researcher_id: string
-    situation: string
-  }
+  area: string,
+  institution: string,
+  leader_one: string,
+  leader_one_id: string,
+  leader_two:string,
+  leader_two_id: string,
+  name: string,
+}
 
   import {
     DropdownMenu,
@@ -33,7 +29,7 @@ import { DataTable } from "./data-table-grupo-pesquisa";
     DropdownMenuTrigger,
   } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { TablePosGraduateViewDashboard } from "./table-pos-graduate-dashboard";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { Skeleton } from "../ui/skeleton";
@@ -44,15 +40,16 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../ui/resi
 import { TooltipProvider } from "../ui/tooltip";
 import { Input } from "../ui/input";
 import { ItensList } from "./components/itens-list-vitrine";
-import { ItensListGrupoPesquisa } from "./components/itens-list-grupo-pesquisa";
+
 import { DisplayItemGrupoPesquisa } from "./components/display-item-grupo-pesquisa";
+import { ItensListGrupoPesquisa } from "./components/itens-list-grupo-pesquisa";
   
 
 
 export function GrupoPesquisaView() {
 
 
-    const { urlGeralAdm, user,defaultLayout } = useContext(UserContext);
+    const { urlGeral, user,defaultLayout } = useContext(UserContext);
 
     const { onOpen } = useModal();
 
@@ -71,6 +68,15 @@ export function GrupoPesquisaView() {
           setTotal(newResearcherData);
         };
 
+        console.log(`${urlGeral}research_group`)
+
+        const history = useNavigate();
+
+    const handleVoltar = () => {
+      history(-1);
+    }
+
+
     return(
       <>
       {isModalOpen && (
@@ -83,21 +89,21 @@ export function GrupoPesquisaView() {
          <ResizablePanel defaultSize={40} minSize={40}>
          <Tabs defaultValue={tab} value={tab}>
     <div className="flex items-center justify-between px-4 py-2  h-[56px]">
+    <div className="flex items-center gap-4">
+          
+          <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
+              <ChevronLeft className="h-4 w-4" />
+              <span className="sr-only">Voltar</span>
+            </Button>
       <h1 className="text-lg font-bold">Grupos de pesquisa</h1>
-
-      <Link to={'https://app.powerbi.com/view?r=eyJrIjoiYTg4MGFmNWQtMjQ4Yi00ZmFhLTgzMmMtMDFiMmI3YzFmNmEwIiwidCI6IjkyYzBjZmE5LTdlOTEtNGVhZC1hYzI5LWNkNDRhMjM4OWIwMSJ9&pageName=ReportSectionaf31612e05234cb0b779'} target="_blank"  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Painel DGP CNPq<ArrowRight size={12}/></Link>
+          </div>
+      <Link to={'https://dgp.cnpq.br/dgp/faces/consulta/consulta_parametrizada.jsf'} target="_blank"  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Plataforma DGP CNPq<ArrowRight size={12}/></Link>
     </div>
    <div className="w-full border-b border-neutral-200 dark:border-neutral-800 "></div>
 
     <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center gap-3">
-      <Button onClick={() => onOpen('add-grupo-pesquisa')}  size="sm" className="ml-auto gap-1">
-        <FileXls className="h-4 w-4" />
-            Atualizar dados
-            
-         
-        </Button>
-
+     
         <div className="relative w-full bg-white h-10 flex gap-2 items-center border pl-4 border-neutral-200 dark:border-neutral-800 rounded-md dark:bg-neutral-950">
           <Search size={16} />
           <Input placeholder="Filtrar pelo nome do grupo..." className="border-none h-8" value={search}  onChange={(e) => setSearch(e.target.value)}/>
@@ -107,7 +113,7 @@ export function GrupoPesquisaView() {
     <TabsContent value="all" className="m-0">
      <ItensListGrupoPesquisa
      onResearcherUpdate={handleResearcherUpdate}
-     url={`${urlGeralAdm}researchGroupRest/Query?institution_id=${user.institution_id}`}
+     url={`${urlGeral}research_group`}
      search={search}
      />
     </TabsContent>
@@ -122,17 +128,13 @@ export function GrupoPesquisaView() {
      
                {total ? (
       <DisplayItemGrupoPesquisa
-      acronym={total.acronym}
-    area={total.area}
-    institution_id={total.institution_id}
-    institution_name={total.institution_name}
-    last_date_sent={total.last_date_sent}
-    lattes_id={total.lattes_id}
-    leader_name={total.leader_name}
-    research_group_id={total.research_group_id}
-    research_group_name={total.research_group_name}
-    researcher_id={total.researcher_id}
-    situation={total.situation}
+      area={total.area}
+  institution={total.institution}
+  leader_one={total.leader_one}
+  leader_one_id={total.leader_one_id}
+  leader_two={total.leader_two}
+  leader_two_id={total.leader_two_id}
+  name={total.name}
       />
     ):(
       <div className="w-full h-full flex flex-col items-center justify-center">

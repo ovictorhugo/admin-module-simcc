@@ -43,6 +43,10 @@ export function Home() {
     onOpen('indicadores')
 } else if(location.pathname == '/producoes-recentes') {
     onOpen('producoes-recentes')
+} else if(location.pathname == '/informacoes') {
+    onOpen('informacoes')
+} else if(location.pathname == '/grupos-pesquisa') {
+    onOpen('grupos-pesquisa')
 } 
     }, [location]);
   

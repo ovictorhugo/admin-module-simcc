@@ -55,7 +55,7 @@ export function ArticleBlockPopUp(props:Articles) {
         </Masonry>
         </ResponsiveMasonry>
 
-        {props.articles.length >= count && (
+        {props.articles.length > count && (
             <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
         )}
 

@@ -12,6 +12,9 @@ import { ResultProcurarBaremas } from "../baremas/result-procurar-barema";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 import { Dicionario } from "../dicionario/dicionario";
 import { ContentIndicators } from "../indicators/content-indicators";
+import { NewsArticles } from "../novas-publicacoes/new-articles";
+import { Info } from "../info/info";
+import { GruposPesquisaPage } from "../grupos-pesquisa/grupos-pesquisa";
 
 const ModalContent = () => {
   const { type } = useModalHomepage();
@@ -27,6 +30,12 @@ const ModalContent = () => {
       return <ResultHome/>
     case 'indicadores' :
       return <ContentIndicators/>
+    case 'producoes-recentes':
+      return <NewsArticles/>
+    case 'informacoes':
+      return <Info/>
+    case 'grupos-pesquisa':
+      return <GruposPesquisaPage/>
   }
 }
 

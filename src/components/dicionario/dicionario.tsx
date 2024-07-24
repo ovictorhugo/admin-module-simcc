@@ -16,6 +16,8 @@ interface Post {
     area_specialty: string;
 }
 
+import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
+
 export function Dicionario() {
     const { onClose, isOpen, type: typeModal } = useModalHomepage();
     const isModalOpen = (isOpen && typeModal === 'dicionario');
@@ -29,20 +31,20 @@ export function Dicionario() {
     let urlTerms = urlGeral + `/originals_words?initials=&type=ARTICLE`;
 
     if (searchType === 'name') {
-        urlTerms = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE`;
+        urlTerms = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=NAME`;
       } else if (searchType === 'article') {
         urlTerms = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE`;
       } else if (searchType === 'book') {
-        urlTerms = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE`;
+        urlTerms = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=BOOK`;
       } else if (searchType === 'area') {
-        urlTerms = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE`;
+        urlTerms = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=AREA`;
       } else if (searchType === 'speaker') {
-        urlTerms = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE`;
+        urlTerms = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=SPEAKER`;
       } else if (searchType === 'patent') {
-        urlTerms = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE`;
+        urlTerms = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=PATENT`;
       } else if (searchType === 'abstract') {
-        urlTerms = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE`;
-      }
+        urlTerms = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ABSTRACT`;
+      } 
 
     useEffect(() => {
         fetch(urlTerms, {
@@ -120,7 +122,15 @@ export function Dicionario() {
                         </div>
                     </div>
 
-                   <div className={`grid pb-8  gap-6 ${pesquisaInput.length != 0 ? ('grid-cols-1'):('grid-cols-3')}`}>
+                    <ResponsiveMasonry
+    columnsCountBreakPoints={{
+        350: 1,
+        750: pesquisaInput.length != 0 ? (1):(2),
+        900: pesquisaInput.length != 0 ? (1):(3),
+        1200: pesquisaInput.length != 0 ? (1):(3)
+    }}
+>
+                 <Masonry gutter="16px">
                    {Object.keys(groupedWords).sort().map((letter) => (
                         <div key={letter}>
                             <div className="flex gap-3 mb-3 items-center">
@@ -143,7 +153,8 @@ export function Dicionario() {
                             </div>
                         </div>
                     ))}
-                   </div>
+                   </Masonry>
+                   </ResponsiveMasonry>
                 </main>
             )}
         </>

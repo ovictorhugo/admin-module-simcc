@@ -12,23 +12,15 @@ import { DataTableModal } from "../../componentsModal/data-table";
 import { columns } from "../../componentsModal/columns-researchers-program";
 
 interface Patrimonio {
-  graduate_program_id: string
-  code: string
-  name: string
-  area: string
-  modality: string
-  type: string
-  rating: string
-  institution_id: string
-  description: string
-  url_image: string
-  city:string
-  created_at:string
-  visible: boolean
-  updated_at:string
-  qtd_discente:string
-  qtd_colaborador:string
-  qtd_permanente:string
+
+    area: string,
+    institution: string,
+    leader_one: string,
+    leader_one_id: string,
+    leader_two:string,
+    leader_two_id: string,
+    name: string,
+    
   }
 
   export interface PesquisadorProps {
@@ -110,7 +102,7 @@ export function DisplayItemGrupoPesquisa(props:Patrimonio) {
 
       const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
 
-      const urlGetResearcher = `${urlGeralAdm}GraduateProgramResearcherRest/Query?graduate_program_id=${props.graduate_program_id}`;
+      const urlGetResearcher = `${urlGeralAdm}GraduateProgramResearcherRest/Query?graduate_program_id=`;
 
       const fetchDataAll = async () => {
         try {
@@ -138,7 +130,7 @@ export function DisplayItemGrupoPesquisa(props:Patrimonio) {
       
         fetchDataAll()
 
-        }, [urlGeralAdm, props.graduate_program_id]);
+        }, [urlGeralAdm, props.name]);
 
     return(
       <Tabs defaultValue={'all'} className="h-full" >
@@ -148,10 +140,7 @@ export function DisplayItemGrupoPesquisa(props:Patrimonio) {
 
         <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon"  onClick={() =>handleVisibleProgram(props.graduate_program_id)} >
-              {props.visible ? (<EyeSlash size={16}/>):(<Eye size={16}/>)}
-                <span className="sr-only">Arquivar</span>
-              </Button>
+            
             </TooltipTrigger>
             <TooltipContent>Mudar visibilidade</TooltipContent>
           </Tooltip>
@@ -167,7 +156,7 @@ export function DisplayItemGrupoPesquisa(props:Patrimonio) {
 
                 <Tooltip>
             <TooltipTrigger asChild>
-              <Button onClick={() => onOpen('confirm-delete-pos-graduate-program', {id_delete:props.graduate_program_id , name:props.name})}  variant='destructive' size="icon"   >
+              <Button onClick={() => onOpen('confirm-delete-pos-graduate-program', {id_delete:props.area , name:props.name})}  variant='destructive' size="icon"   >
              <Trash size={16}/>
                 <span className="sr-only">Arquivar</span>
               </Button>
@@ -179,7 +168,7 @@ export function DisplayItemGrupoPesquisa(props:Patrimonio) {
         <div className="w-full border-b border-neutral-200 dark:border-neutral-800 "></div>
 
         <div >
-        <div className={`w-full h-2 ${qualisColor[props.type.trim() as keyof typeof qualisColor]}`}></div>
+       
       
         </div>
         </div>
@@ -187,7 +176,7 @@ export function DisplayItemGrupoPesquisa(props:Patrimonio) {
         <TabsContent value="all">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-              {props.code != '' ? (props.code):('Sem código')}
+              {props.institution != '' ? (props.area):('Sem código')}
               </CardTitle>
           
             </CardHeader>
@@ -202,10 +191,10 @@ export function DisplayItemGrupoPesquisa(props:Patrimonio) {
               </CardContent>
 
               <div className="flex mt-8 flex-wrap gap-4 px-6">
-              <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{props.type}</div>
-            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><MapPinIcon size={12}/>{props.city}</div>
-            {props.rating != '' && (
-                          <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12}/>{props.rating}</div>
+              <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{props.area}</div>
+            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><MapPinIcon size={12}/>{props.area}</div>
+            {props.area != '' && (
+                          <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12}/>{props.area}</div>
                         )}
               </div>
             
@@ -223,7 +212,7 @@ export function DisplayItemGrupoPesquisa(props:Patrimonio) {
               </CardContent>
 
               <div className="px-6">
-              <DataTableModal columns={columns} data={researcher}/>
+             
               </div>
        </div>
         </TabsContent>

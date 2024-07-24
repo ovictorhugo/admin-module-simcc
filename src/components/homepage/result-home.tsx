@@ -102,14 +102,14 @@ export function ResultHome() {
                 )}
                 <div className={`flex pt-2 justify-between  ${isOn ? '' : ''} `}>
                   <div className="flex items-center gap-2">
-                   <div className={`pb-2 border-b-2 border-b-transparent  transition-all ${typeResult == 'researchers-home' && ('border-b-[#719CB8]')}`}>
+                   <div className={`pb-2 border-b-2 transition-all ${typeResult == 'researchers-home' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
                    <Button variant={typeResult == 'researchers-home' ? ('ghost'):('ghost')}  className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
                       <Users className="h-4 w-4" />
                       Pesquisadores
                     </Button>
                    </div>
                     {searchType === 'article' && (
-                       <div className={`pb-2 border-b-2 border-b-transparent  transition-all ${typeResult == 'articles-home' && ('border-b-[#719CB8]')}`}>
+                       <div className={`pb-2 border-b-2  transition-all ${typeResult == 'articles-home' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
                       <Button variant={typeResult == 'articles-home' ? ('ghost'):('ghost')}  className="m-0" onClick={() => onOpen('articles-home')}>
                         <Quotes className="h-4 w-4" />
                         Artigos

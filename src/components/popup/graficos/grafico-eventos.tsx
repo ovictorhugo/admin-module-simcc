@@ -14,23 +14,27 @@ type Livros = {
 const chartConfig = {
   Congresso: {
     label: "Congresso",
-    color: "#DBB540",
+    color: "#FF5800",
+  },
+  Oficina: {
+    label: "Oficina",
+    color: "#FCEE21",
   },
   Outra: {
     label: "Outra",
-    color: "#6BC26B",
+    color: "#7F400B",
   },
   Simpósio: {
     label: "Simpósio",
-    color: "#FF5733",
+    color: "#D53A2C",
   },
   Encontro: {
     label: "Encontro",
-    color: "#C70039",
+    color: "#E9A700",
   },
   Seminário: {
     label: "Seminário",
-    color: "#900C3F",
+    color: "#FFBD7B",
   },
 } as ChartConfig;
 
@@ -67,7 +71,7 @@ export function GraficosEventos({ publicacoes }: { publicacoes: Livros[] }) {
     <Alert className="pt-12">
       <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <ResponsiveContainer>
-          <BarChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
            
             <CartesianGrid vertical={false} horizontal={false} />
@@ -79,7 +83,7 @@ export function GraficosEventos({ publicacoes }: { publicacoes: Livros[] }) {
                 dataKey={nature}
                 stackId="a"
                 fill={chartConfig[nature].color}
-                radius={index === 0 ? [4, 4, 0, 0] : index === Object.keys(chartConfig).length - 1 ? [ 4, 4, 0, 0] : [0, 0, 0, 0]}
+                radius={4}
               >
                 <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
               </Bar>

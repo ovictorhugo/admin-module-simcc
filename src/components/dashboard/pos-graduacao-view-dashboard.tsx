@@ -3,7 +3,7 @@ import { useModal } from "../hooks/use-modal-store"
 import { Alert } from "../ui/alert";
 import { UserContext } from "../../context/context";
 import { ArrowSquareOut, DotsThree, Eye, EyeSlash, GraduationCap, Hash, MapPin, PencilSimple, Rows, SquaresFour, Star, Student, Trash } from "phosphor-react"; 
-import {Divide, GraduationCapIcon, Plus, Search, UserCheck } from "lucide-react";
+import {ChevronLeft, Divide, GraduationCapIcon, Plus, Search, UserCheck } from "lucide-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { toast } from "sonner"
 
@@ -37,6 +37,7 @@ import { Input } from "../ui/input";
 import { DisplayItem } from "./components/display-item";
 import { ItensList } from "./components/itens-list-vitrine";
 import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
   
 
 
@@ -111,6 +112,13 @@ const isModalOpen = isOpen && type === "graduate-program";
           setTotal(newResearcherData);
         };
 
+        const history = useNavigate();
+
+    const handleVoltar = () => {
+      history(-1);
+    }
+
+
     return(
       <>
        {isModalOpen && (
@@ -123,7 +131,15 @@ const isModalOpen = isOpen && type === "graduate-program";
                <ResizablePanel defaultSize={40} minSize={40}>
                <Tabs defaultValue={tab} value={tab}>
           <div className="flex items-center px-4 py-2">
+          <div className="flex items-center gap-4">
+          
+          <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
+              <ChevronLeft className="h-4 w-4" />
+              <span className="sr-only">Voltar</span>
+            </Button>
             <h1 className="text-lg font-bold">Pós-graduação</h1>
+          </div>
+           
 
             <TabsList className="ml-auto">
               <TabsTrigger onClick={() => setTab('all')} value="all" className="text-zinc-600 dark:text-zinc-200">Pós-graduação</TabsTrigger>

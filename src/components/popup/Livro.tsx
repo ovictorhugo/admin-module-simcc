@@ -1,6 +1,6 @@
 import { AppWindow, Book, BookOpen,Ticket, IdentificationBadge, CalendarBlank, Check, Copyright, CurrencyCircleDollar, File, Graph, LinkBreak, Paperclip, PenNib, Quotes, SpinnerGap } from "phosphor-react";
 import { useEffect, useState, useContext } from "react";
-import unorm from 'unorm';
+
 import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
 import { Link } from "react-router-dom";
@@ -33,36 +33,49 @@ type Publicacao = {
 
 }
 
-let qualisColor = {
-    'A1': 'bg-[#006837]',
-    'A2': 'bg-[#8FC53E]',
-    'A3': 'bg-[#ACC483]',
-    'A4': 'bg-[#BDC4B1]',
-    'B1': 'bg-[#F15A24]',
-    'B2': 'bg-[#F5831F]',
-    'B3': 'bg-[#F4AD78]',
-    'B4': 'bg-[#F4A992]',
-    'B5': 'bg-[#F2D3BB]',
-    'C': 'bg-[#EC1C22]',
-    'None': 'bg-[#560B11]',
-    'NP': 'bg-[#560B11]'
+
+interface ItemsSelecionados {
+  term: string;
 }
 
+const normalizeText = (text: string): string => {
+  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+};
+
+const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNode => {
+  if (terms.length === 0) {
+    return text;
+  }
+
+  const normalizedTerms = terms.map(term => normalizeText(term.term));
+  const regexPattern = normalizedTerms.join('|');
+  const regex = new RegExp(`(${regexPattern})`, 'gi');
+  const normalizedText = normalizeText(text);
+  const parts = normalizedText.split(regex);
+
+  let originalIndex = 0;
+  const highlightedParts = parts.map((part, index) => {
+    const originalPart = text.substr(originalIndex, part.length);
+    originalIndex += part.length;
+
+    return regex.test(part)
+      ? <span key={index} className="text-blue-500 font-semibold">{originalPart}</span>
+      : originalPart;
+  });
+
+  return highlightedParts;
+};
+
 export function BookItem(props: Publicacao) {
-const {searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = useContext(UserContext)
+const {itemsSelecionados} = useContext(UserContext)
 
-    const normalizedTitle = props.title ? props.title
-    .replace(/&quot;/g, '"')
-    .replace(/&#10;/g, '\n')
-    .toLowerCase():'';
-
-    const ignoredWords = ['a', 'do', 'da', 'o', 'os', 'as', 'de', "e", "i", 'na', 'du', 'em']; // Adicionar outras palavras que devem ser ignoradas
-
+   
+    const highlightedTitle = highlightText(props.title || '', itemsSelecionados);
     return (
         <div className="flex  w-full" >
             
                     <div
-                      className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0  ${props.type == 'livro' && ('bg-pink-800')} ${props.type == 'software' && ('bg-cyan-400')} ${props.type == 'marca' && ('bg-cyan-600')} ${(props.status == "Em andamento" ) && ('bg-yellow-500') } ${(props.status == "Concluída" ) && 'bg-green-500' } ${(props.grant_date == "NaT"  || props.grant_date == "None") && ('bg-red-500')}  ${(props.grant_date == "" && props.type=='producao-tecnica') && ('bg-green-500')} ${props.type == 'capLivro' && ('bg-pink-300')}`}
+                      className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0  ${props.type == 'relatorio-tecnico' && ('bg-[#662D91]')}  ${props.type == 'livro' && ('bg-pink-800')} ${props.type == 'software' && ('bg-[#096670]')} ${props.type == 'marca' && ('bg-[#1B1464]')} ${(props.status == "Em andamento" ) && ('bg-yellow-500') } ${(props.status == "Concluída" ) && 'bg-green-500' }   ${( props.type=='patente') && ('bg-[#66B4D0]')} ${props.type == 'capLivro' && ('bg-pink-300')} ${(props.nature == "Congresso" ) && ('bg-[#FF5800]') } ${(props.nature == "Oficina" ) && ('bg-[#FCEE21]') } ${(props.nature == "Simpósio" ) && ('bg-[#D53A2C]') } ${(props.nature == "Encontro" ) && ('bg-[#E9A700]') }  ${(props.nature == "Outra" ) && ('bg-[#7F400B]') } ${(props.nature == "Seminário" ) && ('bg-[#FFBD7B]') }`}
                     > 
                     </div>
                 
@@ -83,7 +96,7 @@ const {searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = use
                           )}
 
 {props.type == 'patente' && (
-                             <h3 className="font-semibold mb-4 ">{props.title}</h3>
+                             <h3 className="font-semibold mb-4 "> {highlightedTitle}</h3>
                           )}
 
 
@@ -97,34 +110,7 @@ const {searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = use
 
 {(props.type != 'patente' && props.type != 'speaker') && (
                           <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">
-                          {normalizedTitle
-  .split(/[\s.,;?!]+/)
-  .map((word, index) => {
-    const formattedWord = unorm.nfkd(word).replace(/[^\w\s]/gi, '').toLowerCase();
-    const formattedValoresSelecionadosExport = unorm.nfkd(valoresSelecionadosExport).replace(/[^\w\s]/gi, '').toLowerCase();
-    const formattedValorDigitadoPesquisaDireta = unorm.nfkd(valorDigitadoPesquisaDireta).replace(/[^\w\s]/gi, '').toLowerCase();
-    const alphabet = Array.from({ length: 26 }, (_, index) => String.fromCharCode('a'.charCodeAt(0) + index));
-    const ignoredWords = [...alphabet, 'do', 'da', `on`, `com`, 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '(', 'na', 'a'];
-    let formattedSpan;
-    
- 
-    if (
-     
-      (formattedValoresSelecionadosExport.includes(formattedWord) ||
-      formattedValorDigitadoPesquisaDireta.includes(formattedWord)) &&
-      !ignoredWords.includes(formattedWord)
-    ) {
-      formattedSpan = (
-        <span key={index} className="text-blue-700 font-bold">
-          {word.toUpperCase()}{' '}
-        </span>
-      );
-    } else {
-      formattedSpan = <span key={index}>{word} </span>;
-    }
-
-    return formattedSpan;
-  })}
+                          {highlightedTitle}
                         </p>
                         )}
 
@@ -165,12 +151,12 @@ const {searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = use
                             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Ticket size={12} className={'whitespace-nowrap min-w-4'}/>{props.nature}</div>
                         )}
 
-{props.type == 'participacao-evento' && (
+{(props.type == 'participacao-evento' && props.participation != 'None') && (
                             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><IdentificationBadge size={12} className={'whitespace-nowrap min-w-4'}/>{props.participation}</div>
                         )}
 
 {props.type == 'relatorio-tecnico' && (
-                            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center truncate max-w-[200px]" ><CurrencyCircleDollar size={12}/>{props.financing}</div>
+                            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center  " ><CurrencyCircleDollar size={12} className=" w-3 whitespace-nowrap flex"/><p className="truncate max-w-[300px]">{props.financing}</p></div>
                         )}
 
 {props.type == 'orientacoes' && (
@@ -182,9 +168,9 @@ const {searchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = use
 
 {props.type == 'patente' && (
                             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-2 items-center">
-                                 <div className={`w-4 h-4 rounded-md ${(props.grant_date == 'NaT' || props.grant_date == "None") ? "bg-red-500" : 'bg-green-500'}`}></div>
+                                 <div className={`w-4 h-4 rounded-md ${(props.grant_date == 'NaT' || props.grant_date == "None" || props.grant_date == "") ? "bg-red-500" : 'bg-green-500'}`}></div>
                                  
-                                   {props.grant_date == 'NaT' || props.grant_date == "None" ? "Sem concessão" : props.grant_date}</div>
+                                   {(props.grant_date == 'NaT' || props.grant_date == "None" || props.grant_date == "") ? "Sem concessão" : props.grant_date}</div>
                         )}
                        
                         

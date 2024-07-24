@@ -126,9 +126,9 @@ const year = currentYear - 4;
   const { onOpen, type: typeResult } = useModalResult();
 
     return(
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+        <main className="flex flex-1 flex-col gap-4 md:gap-8 ">
             <Tabs defaultValue={'all'} className="h-full" >
-            <div className="w-full  gap-4">
+            <div className="w-full  gap-4 md:p-8 p-4 pb-0 md:pb-0">
             <div className="flex items-center gap-4">
           
             <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
@@ -161,15 +161,15 @@ const year = currentYear - 4;
             </div>
 
             <TabsContent value="all" className="h-auto flex flex-col gap-4 md:gap-8  mt-2">
-            <div>
-                  <Link to={'http://www.bi.cnpq.br/painel/mapa-fomento-cti/'} target="_blank"  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Globe size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Visitar página do programa<ArrowRight size={12}/></Link>
+            <div className="md:p-8 p-4 py-0 md:py-0">
+                 
         
         <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
         {graduatePrograms.map((props) => (
           <>{props.name}</>
         ))}
         </h1>
-        <p className="max-w-[750px]  text-lg font-light text-foreground">Atualize os dados importando o arquivo .xls na plataforma </p>
+        <p className="max-w-[750px]  text-lg font-light text-foreground">Pesquise temas e veja os indicadores de produção nesse programa </p>
                   <div className="flex gap-3 mt-3">
                     <Button size={'sm'} 
                    >Importar dados dos docentes</Button>
@@ -179,7 +179,7 @@ const year = currentYear - 4;
                   </div>
 
                   {itemsSelecionados.length > 0 ? (
-                     <div>
+                     <div className="">
                      <div className={`w-full ${isOn ? 'px-8' : 'px-4'} border-b border-b-neutral-200 dark:border-b-neutral-800`}>
                        {isOn && (
                          <div className="w-full pt-4  flex justify-between items-center">
@@ -188,16 +188,20 @@ const year = currentYear - 4;
                        )}
                        <div className={`flex py-2 justify-between items-center ${isOn ? 'pb-8' : ''} `}>
                          <div className="flex items-center gap-2">
-                           <Button variant={typeResult == 'researchers-home' ? ('outline'):('ghost')}  className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
-                             <Users className="h-4 w-4" />
-                             Pesquisadores
-                           </Button>
-                           {searchType === 'article' && (
-                             <Button variant={typeResult == 'articles-home' ? ('outline'):('ghost')}  className="m-0" onClick={() => onOpen('articles-home')}>
-                               <Quotes className="h-4 w-4" />
-                               Artigos
-                             </Button>
-                           )}
+                         <div className={`pb-2 border-b-2 transition-all ${typeResult == 'researchers-home' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
+                   <Button variant={typeResult == 'researchers-home' ? ('ghost'):('ghost')}  className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
+                      <Users className="h-4 w-4" />
+                      Pesquisadores
+                    </Button>
+                   </div>
+                   {searchType === 'article' && (
+                       <div className={`pb-2 border-b-2  transition-all ${typeResult == 'articles-home' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
+                      <Button variant={typeResult == 'articles-home' ? ('ghost'):('ghost')}  className="m-0" onClick={() => onOpen('articles-home')}>
+                        <Quotes className="h-4 w-4" />
+                        Artigos
+                      </Button>
+                      </div>
+                    )}
                            {searchType === 'book' && (
                              <Button variant="ghost"  className="m-0" onClick={() => onOpen('researchers-home')}>
                                <File className="h-4 w-4" />
@@ -237,7 +241,10 @@ const year = currentYear - 4;
                    
                    </div>
                   ) : (
-                      <div>
+                      <div className="md:p-8 p-4 py-0 md:py-0">
+                       <div className="mb-6">
+                       <Search />
+                       </div>
                       <Alert className="grid gap-3 lg:grid-cols-4 grid-cols-2">
                       <div>
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

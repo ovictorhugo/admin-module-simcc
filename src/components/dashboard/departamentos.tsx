@@ -1,4 +1,4 @@
-import { Building2, Check, ChevronLeft, Image, Plus } from "lucide-react";
+import { Building2, Check, ChevronLeft, Image, Plus, PlusCircle, Search } from "lucide-react";
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
@@ -13,12 +13,29 @@ import { toast } from "sonner"
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import { UserContext } from "../../context/context";
+import { TooltipProvider } from "../ui/tooltip";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../ui/resizable";
+import { Tabs, TabsContent } from "../ui/tabs";
+import { ItensListDepartamento } from "./components/itens-list-departamento";
+import { useModal } from "../hooks/use-modal-store";
 
+
+interface Departamentos {
+  dep_id:string
+      org_cod: string
+      dep_nom: string
+      dep_des: string
+      dep_email: string
+      dep_site: string
+      dep_tel: string
+      img_data:string
+      dep_sigla: string
+}
 
 export function Departamentos() {
     const { isOpen, type} = useModalDashboard();
 
-    const {urlGeral} = useContext(UserContext)
+    const {urlGeralAdm} = useContext(UserContext)
   
     const isModalOpen = isOpen && type === "departamento";
 
@@ -96,7 +113,7 @@ export function Departamentos() {
     const formattedPhone = formatPhone(e.target.value);
     updateItem(index, 'dep_tel', formattedPhone);
   };
-  const [onOpen, setIsOpen] = useState(false)
+
 
   console.log(formData)
 
@@ -170,176 +187,83 @@ export function Departamentos() {
     }
   };
 
+  ///
+
+  const [tab, setTab] = useState('all')
+  const [search, setSearch] = useState('')
+  const [total, setTotal] = useState<Departamentos | null>(null);
+
+  const { defaultLayout } = useContext(UserContext);
+  const {onOpen} = useModal()
+
+  
+
+  // Função para lidar com a atualização de researcherData
+  const handleResearcherUpdate = (newResearcherData: Departamentos) => {
+    setTotal(newResearcherData);
+  };
+
     return(
-        <>
-        {isModalOpen && (
-            <main className="flex flex-1 flex-col p-4 md:p-8">
-
-                 <div className="w-full mb-2  gap-4">
-            <div className="flex items-center gap-4">
+      <TooltipProvider delayDuration={0}>
+      <ResizablePanelGroup
+  direction="horizontal"
+  onLayout={() => defaultLayout}
+  className="h-full  items-stretch"
+  >
+       <ResizablePanel defaultSize={40} minSize={40}>
+       <Tabs defaultValue={tab} value={tab}>
+  <div className="flex items-center justify-between px-4 py-2  h-[56px]">
+  <div className="flex items-center gap-4">
           
-            <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
-                <ChevronLeft className="h-4 w-4" />
-                <span className="sr-only">Voltar</span>
-              </Button>
-          
-              <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                Departamentos e setores
-              </h1>
-             
-              
-                
-            
-              <div className="hidden items-center gap-2 md:ml-auto md:flex">
+          <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
+              <ChevronLeft className="h-4 w-4" />
+              <span className="sr-only">Voltar</span>
+            </Button>
+      <h1 className="text-lg font-bold">Departamentos</h1>
+          </div>
 
-          
-                <Button size="sm"><Check size={16}/>Button</Button>
-              </div>
-            </div>
-
-            </div>
-
-           
-           <div className="gap-4 md:gap-8 flex flex-col">
-
-           <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-     <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3"  style={{ backgroundImage: `url(${bg_popup})` }}>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total de departamentos
-                    </CardTitle>
-                    <Building2 className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold"></div>
-                    <p className="text-xs text-muted-foreground">
-                      registrados
-                    </p>
-                  </CardContent>
-                  </Alert>
-
-                  <Alert onClick={() => setIsOpen(!onOpen)} className="p-0 hover:bg-[#274B5E] bg-[#719CB8] text-white transition-all cursor-pointer "  >
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      
-                    </CardTitle>
-                    <Plus className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-
-                  <CardContent>
-                    <h2 className="font-medium text-xl">Adicionar <br/> departamento/setor</h2>
-                  </CardContent>
-                  </Alert>
-     </div>
-
-
-         {onOpen && (
-            <fieldset className="grid gap-6 rounded-lg  p-4 bg-white dark:border-neutral-800 border border-neutral-200 dark:bg-neutral-950 ">
-            <legend className="-ml-1 px-1 text-sm font-medium">
-              Adicionar departamento/setor
-            </legend>
-              
-            {formData.map((item, index) => (
-               <div className="flex  gap-6 md:flex-row flex-col">
     
-    <div className="flex flex-col gap-6 w-full">
-    <div className="flex w-full gap-6 items-end">
-    
-    <div className="grid gap-3 w-full">
-       <Label htmlFor="model">Nome</Label>
-       <Input name="nome" value={item.dep_nom} 
-       onChange={(e) => updateItem(index, 'dep_nom', e.target.value)} id="temperature" type="text" className="flex flex-1" />
-     </div>
-    
-     <div className="grid gap-3 w-full">
-       <Label htmlFor="model">Sigla</Label>
-       <Input name="sigla" value={item.dep_sigla}
-       onChange={(e) => updateItem(index, 'dep_sigla', e.target.value)} id="temperature" type="text" className="flex flex-1" />
-     </div>
+  </div>
+ <div className="w-full border-b border-neutral-200 dark:border-neutral-800 "></div>
 
-     <div className="grid gap-3 w-full">
-       <Label htmlFor="model">Logomarca</Label>
-       <label htmlFor="fileInput" onChange={handleFileChange} className="rounded-md text-sm truncate cursor-pointer transition-all gap-3 border  h-10 w-full flex items-center px-4 hover:bg-neutral-100">
-  
-    <input
-    id="fileInput"
-        type="file"
-        name="img_data"
-        onChange={handleFileChange}
-        accept="image/*"
-        hidden
-      />
-  
-{fileInfo.name != '' ? (fileInfo.name):('Importar arquivo')}
-    
-  </label>
-     </div>
-    
+  <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="flex items-center gap-3">
+      <Button onClick={() => onOpen('add-departamento')}>
+        <Plus size={16}/> Adicionar departamento
+      </Button>
+      <div className="relative w-full bg-white h-10 flex gap-2 items-center border pl-4 border-neutral-200 dark:border-neutral-800 rounded-md dark:bg-neutral-950">
+        <Search size={16} />
+        <Input placeholder="Filtrar pelo nome do grupo..." className="border-none h-8" value={search}  onChange={(e) => setSearch(e.target.value)}/>
+      </div>
     </div>
-    
-    <div className="flex w-full gap-6">
-    <div className="grid gap-3 w-full">
-       <Label htmlFor="model">Site</Label>
-       <Input name="email" value={item.dep_site}
-       onChange={(e) => updateItem(index, 'dep_site', e.target.value)} id="temperature" type="text" className="flex flex-1" />
-     </div>
+  </div>
+  <TabsContent value="all" className="m-0">
+   <ItensListDepartamento
+   onResearcherUpdate={handleResearcherUpdate}
+   url={`${urlGeralAdm}departamentos`}
+   search={search}
+   />
+  </TabsContent>
+  <TabsContent value="unread" className="m-0">
+ 
+  </TabsContent>
+</Tabs>
+       </ResizablePanel>
+       <ResizableHandle withHandle />
 
-     <div className="grid gap-3 md:w-[200px] w-full">
-       <Label htmlFor="model">Código</Label>
-       <Input name="email" value={item.org_cod}
-       onChange={(e) => updateItem(index, 'org_cod', e.target.value)} id="temperature" type="text" className="flex flex-1" />
-     </div>
-    </div>
-   
-    
-    <div className="flex w-full gap-6">
-    
-    <div className="grid gap-3 w-full">
-       <Label htmlFor="model">Telefone</Label>
-       <Input
-    name="telefone"
-    value={item.dep_tel}
-    onChange={(e) => handlePhoneChange(index, e)}
-    id="telefone"
-    type="text"
-    className="flex flex-1"
-    />
-     </div>
-    
-     <div className="grid gap-3 w-full">
-       <Label htmlFor="model">Email</Label>
-       <Input name="email" value={item.dep_email}
-       onChange={(e) => updateItem(index, 'dep_email', e.target.value)} id="temperature" type="text" className="flex flex-1" />
-     </div>
-    
-    
-    </div>
-    
-    
-    </div>
-    <div className="flex flex-col gap-3 w-full">
-                        <Label htmlFor="content" className="h-fit">Descrição</Label>
-                        <Textarea name="observacoes" className="h-full" value={item.dep_des}
-                        onChange={(e) => updateItem(index, 'dep_des', e.target.value)} id="content"/>
-                      </div>
-               </div>
-            ))}
-    
-    <Button onClick={() => handleSubmit()} ><Plus size={16}/> Adicionar </Button>
-           
-            </fieldset>
-         )}
+       <ResizablePanel defaultSize={defaultLayout[2]} minSize={50}>
 
-        <fieldset className="grid gap-6 rounded-lg  p-4 bg-white dark:border-neutral-800 border border-neutral-200 dark:bg-neutral-950 ">
-        <legend className="-ml-1 px-1 text-sm font-medium">
-          Todos os departamentos e setores
-        </legend>
-
-       
-        </fieldset>
-           </div>
-            </main>
-        )}
-        </>
+             {total ? (
+   <div></div>
+  ):(
+    <div className="w-full h-full flex flex-col items-center justify-center">
+     <p className="text-9xl  text-[#719CB8]  font-bold mb-16 animate-pulse">^_____^</p>
+      <p className="font-medium text-lg">Nenhum departamento selecionado</p>
+    </div>
+  )}
+    
+    </ResizablePanel>
+    </ResizablePanelGroup>
+    </TooltipProvider>
     )
 }

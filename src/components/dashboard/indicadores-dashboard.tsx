@@ -3,11 +3,30 @@ import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
-import { Alert } from "../ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
-import { FileXls } from "phosphor-react";
+import { ChartBar, FileXls, Warning } from "phosphor-react";
+
+import { PieSectorDataItem } from "recharts/types/polar/Pie"
+
+import {
+  Label,
+  PolarGrid,
+  PolarRadiusAxis,
+  RadialBar,
+  RadialBarChart,
+  Cell,
+  PieChart,
+  Pie,
+  Sector,
+  CartesianGrid,
+  Bar, 
+  LabelList,
+  BarChart,
+  XAxis
+} from "recharts"
 
 import {
   Tooltip,
@@ -36,6 +55,7 @@ name:string
 researcher_id:string
 scholarship_quantity:string
 }
+import { ChartContainer, ChartTooltip, ChartConfig, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../components/ui/chart";
 
 interface Docentes {
   matric: string;
@@ -75,10 +95,113 @@ interface Tecnicos {
   semester: string;
 }
 
+type Research = {
+  count_article:number
+  count_book:number
+  count_book_chapter:number,
+  count_guidance:number
+  count_patent:number
+  count_report:number
+  count_software:number
+  count_guidance_complete:number
+  count_guidance_in_progress:number
+  count_patent_granted:number
+  count_patent_not_granted:number
+  count_brand:number
+  year:number
+  A1:number
+  A2:number
+  A3:number 
+  A4:number
+  B1:number 
+  B2:number
+  B3:number
+  B4:number 
+  C:number
+  SQ:number
+}
 
   import bg_popup from '../../assets/bg_popup.png';
 import { useModal } from "../hooks/use-modal-store";
 import { GraficoBolsistaProdutividade } from "./graficos/grafico-bolsista-produtividade";
+import { GraficoBolsistaTecnologico } from "./graficos/grafico-bolsista-tecnologico";
+import { GraficoDocentesRt } from "./graficos/grafico-docente-rt";
+import { GraficoDocentesClasse } from "./graficos/grafico-docentes-classe";
+import { GraficoArtigosPorQualis } from "./graficos/grafico-qualis";
+import { GraficoDocentesGenero } from "./graficos/grafico-genero";
+import { GraficoProgressaoDocentes } from "./graficos/grafico-progressao-docentes";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { ScrollArea } from "../ui/scroll-area";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+
+const chartConfig = {
+ 
+  'Produtividade em Pesquisa': {
+    label: "Produtividade em Pesquisa",
+    color: "#809BB5",
+  },
+  'Desen. Tec. e Extensão Inovadora': {
+    label: "Desen. Tec. e Extensão Inovadora",
+    color: "#A6BCCD",
+  },
+  'Outros docentes': {
+    label: "Outros docentes",
+    color: "#354A5C",
+  },
+} satisfies ChartConfig
+
+const chartConfig3 = {
+ 
+  'Participam da pós-graduação': {
+    label: "Participam da pós-graduação",
+    color: "#809BB5",
+  },
+
+  'Outros docentes': {
+    label: "Outros docentes",
+    color: "#354A5C",
+  },
+} satisfies ChartConfig
+
+
+const chartConfig2 = {
+  views: {
+    label: "Page Views",
+  },
+  producao_bibliografica: {
+    label: "Produção bibliográfica",
+    color: "hsl(var(--chart-1))",
+  },
+  producao_tecnica: {
+    label: "Produção técnica",
+    color: "hsl(var(--chart-2))",
+  },
+  count_article: {
+    label: "Artigos",
+    color: "hsl(var(--chart-2))",
+  },
+  count_book: {
+    label: "Livros",
+    color: "hsl(var(--chart-2))",
+  },
+  count_book_chapter: {
+    label: "Capítulos de livros",
+    color: "hsl(var(--chart-2))",
+  },
+  count_patent: {
+    label: "Patentes",
+    color: "hsl(var(--chart-2))",
+  },
+  count_brand: {
+    label: "Marcas",
+    color: "hsl(var(--chart-2))",
+  },
+  count_software: {
+    label: "Softwares",
+    color: "hsl(var(--chart-2))",
+  },
+} satisfies ChartConfig
+
 
 export function IndicadoresDashboard() {
     const { isOpen, type} = useModalDashboard();
@@ -93,7 +216,7 @@ export function IndicadoresDashboard() {
       history(-1);
     }
 
-    const {user, urlGeralAdm } = useContext(UserContext);
+    const {user, urlGeralAdm, urlGeral, setItensSelecionados } = useContext(UserContext);
 
     const [total, setTotal] = useState<TotalPatrimonios[]>([]);
 
@@ -124,6 +247,8 @@ export function IndicadoresDashboard() {
   
      
     }, [urlPatrimonioInsert]);
+
+    console.log(urlPatrimonioInsert)
 
     //
     const [bolsistas, setBolsistas] = useState<Bolsistas[]>([]);
@@ -227,6 +352,80 @@ console.log(bolsistas)
         }, [urlTecnicos]);
     
         console.log(taes)
+
+        const pqCount = bolsistas.filter(b => b.modality_code === 'PQ').length;
+        const dtCount = bolsistas.filter(b => b.modality_code === 'DT').length;
+        const totalCountR = total.reduce((sum, t) => sum + parseInt(t.count_r), 0);
+        const totalCountGraduateR = total.reduce((sum, t) => sum + parseInt(t.count_gpr), 0);
+        
+        const chartData = [
+          { name: 'Produtividade em Pesquisa', value: pqCount },
+          { name: 'Desen. Tec. e Extensão Inovadora', value: dtCount },
+          { name: 'Outros docentes', value: totalCountR - pqCount -dtCount },
+        ];
+
+        const chartData2 = [
+          { name: 'Participam da pós-graduação', value: totalCountGraduateR },
+          { name: 'Outros docentes', value: totalCountR - totalCountGraduateR },
+        ];
+
+        //
+
+        const [year, setYear] = useState(new Date().getFullYear()-9);
+
+        const currentYear = new Date().getFullYear();
+        const years = [];
+        for (let i = currentYear; i > currentYear - 30; i--) {
+            years.push(i);
+        }
+
+        const [dados, setDados] = useState<Research[]>([]);
+
+         let urlDados = `${urlGeral}ResearcherData/DadosGerais?year=${year}`
+      
+         useEffect(() => {
+          const fetchData = async () => {
+              try {
+            
+                const response = await fetch(urlDados, {
+                  mode: "cors",
+                  headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET",
+                    "Access-Control-Allow-Headers": "Content-Type",
+                    "Access-Control-Max-Age": "3600",
+                    "Content-Type": "text/plain",
+                  },
+                });
+                const data = await response.json();
+                if (data) {
+                  setDados(data);
+          
+                }
+              } catch (err) {
+                console.log(err);
+              }
+            };
+            fetchData();
+          }, [urlDados]);
+
+          
+  const [activeChart, setActiveChart] = useState<keyof typeof chartConfig2>('producao_bibliografica')
+
+  const totalBiblio = useMemo(
+    () => ({
+      producao_bibliografica: dados.reduce(
+        (acc, curr) => acc + Number(curr.count_article) + Number(curr.count_book) + Number(curr.count_book_chapter),
+        0
+      ),
+      producao_tecnica: dados.reduce((acc, curr) => acc + curr.count_patent + curr.count_software + curr.count_brand, 0),
+    }),
+    [dados]
+  );
+
+
+const {onOpen:onOpenModal} = useModal()
+
 
     return(
         <>
@@ -373,6 +572,9 @@ console.log(bolsistas)
                 </TooltipProvider>
                    
                   </CardHeader>
+
+
+               
                     </Alert>
                 
                 <Alert className="lg:col-span-2 h-[400px]">
@@ -422,7 +624,10 @@ console.log(bolsistas)
 
                   </div>
 
-                 
+
+                 <Alert>
+
+                 </Alert>
 
                   <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
                     <Alert className="lg:col-span-2 h-[400px]">
@@ -445,6 +650,10 @@ console.log(bolsistas)
                    
                   </CardHeader>
 
+                  <CardContent className="flex py-0 flex-1  items-center justify-center">
+                  <GraficoDocentesClasse docentes={docentes}/>
+                  </CardContent>
+
                     </Alert>
 
                     <Alert className="">
@@ -466,6 +675,10 @@ console.log(bolsistas)
                 </TooltipProvider>
                    
                   </CardHeader>
+
+                  <CardContent className="flex py-0 flex-1  items-center justify-center">
+                  <GraficoDocentesRt docentes={docentes}/>
+                  </CardContent>
                     </Alert>
                   </div>
 
@@ -474,77 +687,151 @@ console.log(bolsistas)
                    <h3 className="text-2xl font-medium ">Produção bibliográfica e técnica</h3>
                    </div>
                   <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-                    <Alert className=" h-[400px]">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+
+
+                  <Alert className="lg:col-span-3 h-[400px] p-0 ">
+                    <CardHeader className="flex p-0 flex-col items-stretch space-y-0 border-b  sm:flex-row">
+        <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+        <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
                     <div>
                     <CardTitle className="text-sm font-medium">
-                      Produção bibliográfica
+                      Produção geral
                     </CardTitle>
-                    <CardDescription>Artigos, livros e capítulos</CardDescription>
+                    <CardDescription>Dados desde o ano {year}</CardDescription>
                     </div>
+
+                   <div className="flex items-center gap-3">
+                   <Select defaultValue={String(year)} value={String(year)} onValueChange={(value) => setYear(Number(value))}>
+                            <SelectTrigger className="w-[100px]">
+                                <SelectValue placeholder="" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {years.map((year) => (
+                                    <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
 
                     <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                      <p>Add to library</p>
+                      <p>Essas informações não representam a produção total da Escola desde a sua fundação, é um recorte a partir de {year}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-                   
-                  </CardHeader>
-
-                    </Alert>
-
-                    <Alert className="">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                      Produção técnica
-                    </CardTitle>
-                    <CardDescription>Patente, software e marca</CardDescription>
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Add to library</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-                    </Alert>
-
-                    <Alert className="">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                      Produção anual
-                    </CardTitle>
-                    <CardDescription>Visão por quadrienal </CardDescription>
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Add to library</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-                    </Alert>
-                  </div>
-                  </div>
-
-                  <div>
-                   <div className="md:mb-8 mb-4 flex gap-3 items-center">
-                   <h3 className="text-2xl font-medium ">Informações sociais</h3>
                    </div>
+                   
+                  </CardHeader>
+        </div>
+        <div className="flex">
+          {["producao_bibliografica", "producao_tecnica"].map((key) => {
+            const chart = key as keyof typeof chartConfig2
+            return (
+              <button
+                key={chart}
+                data-active={activeChart === chart}
+                className={`relative flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6 ${activeChart === chart && ('bg-neutral-100')} ${activeChart ===  'producao_tecnica' && ('rounded-tr-md')}`}
+                onClick={() => setActiveChart(chart)}
+              >
+                <span className="text-xs text-muted-foreground">
+                {chartConfig2[chart].label}
+                </span>
+                <span className="text-lg font-bold leading-none sm:text-3xl">
+                  {totalBiblio[key as keyof typeof totalBiblio].toLocaleString()}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+      </CardHeader>
 
+      <CardContent className="px-2 sm:p-6">
+        <ChartContainer
+          config={chartConfig2}
+          className="aspect-auto h-[250px] w-full"
+        >
+  <BarChart accessibilityLayer data={dados}>
+  <CartesianGrid vertical={false}  horizontal={false}/>
+  <ChartLegend content={<ChartLegendContent />} />
+  
+  <XAxis
+              dataKey="year"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+            
+            />
+
+<ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="dashed" />}
+            />
+
+{activeChart == 'producao_bibliografica' && (
+  <>
+  <Bar dataKey="count_article" fill="#5F82ED" radius={4} >
+  <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+
+
+  </Bar>
+<Bar dataKey="count_book" fill="#792F4C" radius={4} >
+<LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+</Bar>
+<Bar dataKey="count_book_chapter" fill="#DBAFD0" radius={4} >
+<LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+  </Bar></>
+)}
+
+{activeChart == 'producao_tecnica' && (
+  <>
+  <Bar dataKey="count_patent" fill="#66B4D0" radius={4} >
+  <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+  </Bar>
+<Bar dataKey="count_brand" fill="#1B1464" radius={4} >
+<LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+</Bar>
+<Bar dataKey="count_software" fill="#096670" radius={4} >
+<LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+              </Bar></>
+)}
+
+  </BarChart>
+          </ChartContainer>
+        </CardContent>
+                    </Alert>
+
+                    
                    <Alert className=" h-[400px]">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div>
@@ -566,6 +853,67 @@ console.log(bolsistas)
                   </CardHeader>
 
                     </Alert>
+
+                    <Alert className=" h-[400px] lg:col-span-2">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                      Artigos qualificados
+                    </CardTitle>
+                    <CardDescription>Carga horária semanal</CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add to library</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
+
+                  <CardContent className="flex py-0 flex-1  items-center justify-center">
+                 
+                  </CardContent>
+                    </Alert>
+
+
+                    <Alert className="lg:col-span-3 ">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                      Artigos qualificados
+                    </CardTitle>
+                    <CardDescription>Carga horária semanal</CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add to library</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
+
+                  <CardContent className="flex py-0 flex-1  items-center justify-center">
+                      <GraficoArtigosPorQualis dados={dados}/>
+                  </CardContent>
+                    </Alert>
+
+                   
+                  </div>
+                  </div>
+
+                  <div>
+                   <div className="md:mb-8 mb-4 flex gap-3 items-center">
+                   <h3 className="text-2xl font-medium ">Informações sociais</h3>
+                   </div>
+
                    </div>
 
                    <div>
@@ -573,11 +921,131 @@ console.log(bolsistas)
                    <h3 className="text-2xl font-medium ">Bolsistas CNPq</h3>
                    </div>
                    <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-                   <Alert className=" h-[400px] lg:col-span-2">
+                 
+
+                    <Alert className=" flex flex-col ">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
-                      Tabela  de pesquisadores
+                      Gráfico Produtividade em Pesquisa
+                    </CardTitle>
+                    <CardDescription>Total por categoria</CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Bolsistas CNPq</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
+
+                          <CardContent className="flex py-0 flex-1  items-center justify-center">
+                            <GraficoBolsistaProdutividade bolsistas={bolsistas}/>
+                          </CardContent>
+                    </Alert>
+
+
+                    <Alert className=" flex flex-col ">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                      Gráfico Desen. Tec. e Extensão Inovadora
+                    </CardTitle>
+                    <CardDescription>Total por categoria</CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Bolsistas CNPq</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
+
+                          <CardContent className="flex py-0 flex-1  items-center justify-center">
+                            <GraficoBolsistaTecnologico bolsistas={bolsistas}/>
+                          </CardContent>
+                    </Alert>
+
+                    <Alert className="  flex flex-col ">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                      Gráfico percentual de bolsistas
+                    </CardTitle>
+                    <CardDescription>Visão geral da Escola de Engenharia</CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Bolsistas CNPq</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
+
+                  <CardContent className="py-0 flex-1 items-center justify-center">
+                  <ChartContainer
+      config={chartConfig}
+      className="mx-auto aspect-square max-h-[300px]"
+    >
+      <PieChart>
+      <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+      <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5}>
+          {chartData.map((key, index) => (
+            <Cell key={`cell-${index}`} fill={(chartConfig[key.name as keyof typeof chartConfig]).color} />
+          ))}
+
+<Label
+            content={({ viewBox }) => {
+              if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                return (
+                  <text
+                    x={viewBox.cx}
+                    y={viewBox.cy}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                  >
+                    <tspan
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      className="fill-foreground text-4xl font-bold"
+                    >
+                      {bolsistas.length.toLocaleString()}
+                    </tspan>
+                    <tspan
+                      x={viewBox.cx}
+                      y={(viewBox.cy || 0) + 24}
+                      className="fill-muted-foreground"
+                    >
+                      Bolsistas
+                    </tspan>
+                  </text>
+                );
+              }
+            }}
+          />
+        </Pie>
+      </PieChart>
+    </ChartContainer>
+                          </CardContent>
+                    </Alert>
+
+                    <Alert className="  lg:col-span-3">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                      Tabela de pesquisadores
                     </CardTitle>
                     <CardDescription>Bolsistas de Produtividade em Pesquisa</CardDescription>
                     </div>
@@ -593,31 +1061,48 @@ console.log(bolsistas)
                    
                   </CardHeader>
 
-                    </Alert>
+                  <CardContent>
+                    <ScrollArea className="h-[300px]">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="  whitespace-nowrap">Nome</TableHead>
+                          <TableHead className="w-[150px] whitespace-nowrap">Modalidade</TableHead>
+                          <TableHead className="w-[100px] whitespace-nowrap">Categoria</TableHead>
+                          <TableHead className=" whitespace-nowrap">Chamada</TableHead>
+                        </TableRow>
+                      </TableHeader>
 
-                    <Alert className=" h-[400px] flex flex-col ">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                      Gráfico Produtividade em Pesquisa
-                    </CardTitle>
-                    <CardDescription>Graduação, mestrado, doutorado...</CardDescription>
-                    </div>
+                      <TableBody>
+                      {bolsistas.map((props, index) => {
+                  return(
+                      <TableRow className="cursor-pointer" onClick={() => {
+                        onOpenModal('researcher-modal', {name:props.name})
+                        setItensSelecionados([])
+                      }}>
+                          <TableCell className=" text-sm flex whitespace-nowrap flex-1">
+                            {props.name}
+                          </TableCell>
 
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Add to library</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
+                          <TableCell className=" text-sm w-[150px] whitespace-nowrap">
+                            {props.modality_name}
+                          </TableCell>
 
-                          <CardContent className="flex p-0 flex-1  items-center justify-center">
-                            <GraficoBolsistaProdutividade bolsistas={bolsistas}/>
-                          </CardContent>
+                          <TableCell className=" text-sm w-[150px] whitespace-nowrap">
+                            {props.category_level_code}
+                          </TableCell>
+
+                          <TableCell className=" text-sm w-full flex-1">
+                            {props.call_title}
+                          </TableCell>
+                      </TableRow>
+
+                  )})}
+                        </TableBody>
+                        </Table>
+                    </ScrollArea>
+                  </CardContent>
+
                     </Alert>
                    </div>
                   
@@ -649,6 +1134,10 @@ console.log(bolsistas)
                    
                   </CardHeader>
 
+                  <CardContent className="flex py-0 flex-1  items-center justify-center">
+                      <GraficoDocentesGenero docentes={docentes}/>
+                  </CardContent>
+
                     </Alert>
 
                     <Alert className="">
@@ -670,6 +1159,10 @@ console.log(bolsistas)
                 </TooltipProvider>
                    
                   </CardHeader>
+
+                  <CardContent className="flex py-0 flex-1  items-center justify-center">
+                      <GraficoProgressaoDocentes docentes={docentes}/>
+                  </CardContent>
                     </Alert>
 
                     <Alert className="">
@@ -693,9 +1186,51 @@ console.log(bolsistas)
                   </CardHeader>
 
 
-                  <CardContent>
+                  <CardContent className="py-0 flex-1 items-center justify-center">
+                  <ChartContainer
+      config={chartConfig3}
+      className="mx-auto aspect-square max-h-[300px]"
+    >
+      <PieChart>
+      <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+      <Pie data={chartData2} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5}>
+          {chartData2.map((key, index) => (
+            <Cell key={`cell-${index}`} fill={(chartConfig3[key.name as keyof typeof chartConfig3]).color} />
+          ))}
 
-                  </CardContent>
+<Label
+            content={({ viewBox }) => {
+              if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                return (
+                  <text
+                    x={viewBox.cx}
+                    y={viewBox.cy}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                  >
+                    <tspan
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      className="fill-foreground text-4xl font-bold"
+                    >
+                      {totalCountGraduateR.toLocaleString()}
+                    </tspan>
+                    <tspan
+                      x={viewBox.cx}
+                      y={(viewBox.cy || 0) + 24}
+                      className="fill-muted-foreground"
+                    >
+                      Docentes
+                    </tspan>
+                  </text>
+                );
+              }
+            }}
+          />
+        </Pie>
+      </PieChart>
+    </ChartContainer>
+                          </CardContent>
                     </Alert>
                   </div>
                   </div>

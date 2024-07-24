@@ -46,7 +46,21 @@ type Research = {
     i10_index:string,
     scopus:string,
     openalex:string,
+    departament:string
+    subsidy:Bolsistas
   }
+
+  interface Bolsistas {
+    aid_quantity:string
+    call_title:string
+    funding_program_name:string
+    modality_code:string
+    category_level_code:string
+    institute_name:string
+    modality_name:string
+    scholarship_quantity:string
+    }
+
 
   import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
 import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
@@ -104,6 +118,8 @@ export function ResearcherModal() {
     if(typeModal === "researcher-modal") {
       urlTermPesquisadores = urlGeral + `researcherName?name=${name != null && (name.split(' ').join(';'))}`;
     }
+
+    console.log(urlTermPesquisadores)
 
     useMemo(() => {
 setItensSelecionadosPopUp(itemsSelecionados)
@@ -459,6 +475,7 @@ function generateNameVariations(name: string): string[] {
                     i10_index={user.i10_index}
                     scopus={user.scopus}
                     openalex={user.openalex}
+                    departament={user.departament}
 
                     openAPI={open}
                     />
@@ -534,7 +551,7 @@ function generateNameVariations(name: string): string[] {
         <div className="xl:w-[350px] w-full gap-12 flex flex-col sticky"> 
 
         {researcher.slice(0, 1).map((user) => {
-                     if(user.h_index.length != 0 && user.i10_index.length != 0 && user.cited_by_count.length != 0) {
+                  
                       return(
                         <InformacoesGeraisResearcher
                         h_index={user.h_index}
@@ -545,9 +562,11 @@ function generateNameVariations(name: string): string[] {
                         scopus={user.scopus}
                         orcid={user.orcid}
                         openalex={user.openalex}
+                        departament={user.departament}
+                        subsidy={user.subsidy}
                         />
                       )
-                     }
+                     
             })}
 
         {researcher.slice(0, 1).map((user) => {

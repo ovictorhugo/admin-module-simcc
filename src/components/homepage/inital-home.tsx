@@ -129,6 +129,7 @@ import { ArtigosRecentes } from "./components/artigos-recentes";
 import { Newsletter } from "./components/newsletter";
 import { Instrucoes } from "./components/instrucoes";
 import { Search } from "../search/search";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 
 HC_wordcloud(Highcharts);
@@ -185,7 +186,14 @@ export function InitialHome() {
   const [VisaoPrograma, setVisaoPrograma] = useState<VisaoPrograma[]>([]);
   const { setItensSelecionados, urlGeralAdm, urlGeral, user, maria, setMaria,  searchType } = useContext(UserContext);
 
- 
+  const [year, setYear] = useState(new Date().getFullYear()-4);
+
+        const currentYear = new Date().getFullYear();
+        const years = [];
+        for (let i = currentYear; i > currentYear - 30; i--) {
+            years.push(i);
+        }
+
 
   let urlGrupo =`${urlGeralAdm}researchGroupRest/Query?institution_id=${user.institution_id}`
 
@@ -266,8 +274,8 @@ const areaTotaisArray = Object.keys(areaTotais).map((area) => ({
   const [loading, isLoading] = useState(false)
   
   const [dados, setDados] = useState<Research[]>([]);
-  const yearAtualMenosQuatro = new Date().getFullYear() - 4;
-  let urlDados = `${urlGeral}ResearcherData/DadosGerais?year=${yearAtualMenosQuatro}`
+
+  let urlDados = `${urlGeral}ResearcherData/DadosGerais?year=${year}`
 
   useEffect(() => {
     const fetchData = async () => {
@@ -496,7 +504,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
           </div>
             
           <div className="justify-center w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
-        <Link to={''}  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
+        <Link to={'/informacoes'}  className="inline-flex z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
         
             <h1 className="z-[2] text-center max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
               Experimente{" "}
@@ -679,17 +687,30 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                     <CardTitle className="text-sm font-medium">
                       Produção geral
                     </CardTitle>
-                    <CardDescription>Dados da quadrienal</CardDescription>
+                    <CardDescription>Dados desde o ano {year}</CardDescription>
                     </div>
+
+                    <div className="flex items-center gap-3">
+                   <Select defaultValue={String(year)} value={String(year)} onValueChange={(value) => setYear(Number(value))}>
+                            <SelectTrigger className="w-[100px]">
+                                <SelectValue placeholder="" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {years.map((year) => (
+                                    <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
 
                     <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                      <p>Add to library</p>
+                      <p>Essas informações não representam a produção total da Escola desde a sua fundação, é um recorte a partir de {year}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
+                   </div>
                    
                   </CardHeader>
         </div>
@@ -739,7 +760,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
 
 {activeChart == 'producao_bibliografica' && (
   <>
-  <Bar dataKey="count_article" fill="#719CB8" radius={4} >
+  <Bar dataKey="count_article" fill="#5F82ED" radius={4} >
   <LabelList
                 position="top"
                 offset={12}
@@ -749,7 +770,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
 
 
   </Bar>
-<Bar dataKey="count_book" fill="#274B5E" radius={4} >
+<Bar dataKey="count_book" fill="#792F4C" radius={4} >
 <LabelList
                 position="top"
                 offset={12}
@@ -757,7 +778,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                 fontSize={12}
               />
 </Bar>
-<Bar dataKey="count_book_chapter" fill="#9CBDCF" radius={4} >
+<Bar dataKey="count_book_chapter" fill="#DBAFD0" radius={4} >
 <LabelList
                 position="top"
                 offset={12}
@@ -769,7 +790,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
 
 {activeChart == 'producao_tecnica' && (
   <>
-  <Bar dataKey="count_patent" fill="#719CB8" radius={4} >
+  <Bar dataKey="count_patent" fill="#66B4D0" radius={4} >
   <LabelList
                 position="top"
                 offset={12}
@@ -777,7 +798,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                 fontSize={12}
               />
   </Bar>
-<Bar dataKey="count_brand" fill="#274B5E" radius={4} >
+<Bar dataKey="count_brand" fill="#1B1464" radius={4} >
 <LabelList
                 position="top"
                 offset={12}
@@ -785,7 +806,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                 fontSize={12}
               />
 </Bar>
-<Bar dataKey="count_software" fill="#9CBDCF" radius={4} >
+<Bar dataKey="count_software" fill="#096670" radius={4} >
 <LabelList
                 position="top"
                 offset={12}

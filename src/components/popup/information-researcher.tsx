@@ -10,7 +10,7 @@ import { toast } from "sonner"
 import QRCode from "react-qr-code";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { useModal } from "../hooks/use-modal-store"
-
+import htmlParser from 'html-react-parser';
 
 
 interface Props {
@@ -43,8 +43,8 @@ interface Props {
     scopus:string,
     openalex:string,
     openAPI:boolean
-  }
-
+    departament:string
+}
   type Research = {
     h_index: number;
     relevance_score: number;
@@ -54,6 +54,7 @@ interface Props {
     scopus: string;
     orcid:string
     openalex: string
+    departament:string
     
   }
 
@@ -133,7 +134,7 @@ const {onClose} = useModal()
 // 
 
 const normalizeText = (text: string): string => {
-  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 };
 
 const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNode => {
@@ -147,25 +148,29 @@ const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNod
 
   const regex = new RegExp(`(${regexPattern})`, 'gi');
   const normalizedText = normalizeText(text);
-  const parts = normalizedText.split(regex);
 
-  let originalIndex = 0;
-  const highlightedParts = parts.map((part, index) => {
-    const originalPart = text.substr(originalIndex, part.length);
-    originalIndex += part.length;
+  // Use html-react-parser to parse the text and handle the highlighting
+  const parseOptions = {
+    replace: (domNode: any) => {
+      if (domNode.type === 'text') {
+        const parts = domNode.data.split(regex);
+        let originalIndex = 0;
+        return parts.map((part, index) => {
+          const originalPart = text.substr(originalIndex, part.length);
+          originalIndex += part.length;
+          return regex.test(part)
+            ? <span key={index} className="text-blue-500 font-semibold">{originalPart}</span>
+            : originalPart;
+        });
+      }
+    }
+  };
 
-    return regex.test(part)
-      ? <span key={index} className="text-blue-500 font-semibold">{originalPart}</span>
-      : originalPart;
-  });
-
-  return highlightedParts;
+  return htmlParser(text, parseOptions);
 };
 
 
-
 const highlightedAbstract = highlightText(props.abstract, itemsSelecionados);
-
 
     return (
         <div className="flex flex-col">

@@ -17,7 +17,7 @@ interface Bolsistas {
 }
 
 const chartConfig = {
-  '2': {
+  2: {
     label: "Category 2",
     color: "hsl(var(--chart-1))",
   },
@@ -37,13 +37,13 @@ const chartConfig = {
     label: "Category 1D",
     color: "hsl(var(--chart-5))",
   },
-  'SR': {
+  SR: {
     label: "Category SR",
     color: "hsl(var(--chart-6))",
   },
 } satisfies ChartConfig;
 
-export function GraficoBolsistaProdutividade({ bolsistas }: { bolsistas: Bolsistas[] }) {
+export function GraficoBolsistaTecnologico({ bolsistas }: { bolsistas: Bolsistas[] }) {
   const [chartData, setChartData] = useState<{ category: string; count: number }[]>([]);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export function GraficoBolsistaProdutividade({ bolsistas }: { bolsistas: Bolsist
 
     // Count the occurrences of each category
     bolsistas.forEach(bolsista => {
-      if (bolsista.modality_code === "PQ") {
+      if (bolsista.modality_code === "DT") {
         const category = bolsista.category_level_code;
         counts[category] = (counts[category] || 0) + 1;
       }

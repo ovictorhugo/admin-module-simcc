@@ -25,6 +25,7 @@ import { ImportBolsistas } from "../modals/import-bolsistas";
 import { ImportDocentes } from "../modals/import-docentes";
 import { ImportTaes } from "../modals/import-taes";
 import { FiltersModal } from "../homepage/categorias/researchers-home";
+import { AddDepartamento } from "../modals/add-departamento";
 
 const ModalContent = () => {
   const { type } = useModal();
@@ -59,6 +60,8 @@ const ModalContent = () => {
         return <AddResearcherCsvModal/>
       case 'add-grupo-pesquisa':
         return <AddGrupoPesquisaModal/>
+      case 'add-departamento':
+        return <AddDepartamento/>
 
     default:
       return null;

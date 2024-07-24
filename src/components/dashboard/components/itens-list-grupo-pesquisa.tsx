@@ -5,21 +5,17 @@ import { Badge } from "../../ui/badge"
 import { cn } from "../../../lib"
 import { UserContext } from "../../../context/context"
 import { Check, MapPin, User, X } from "phosphor-react"
-import { Barcode, GraduationCapIcon, MapPinIcon, Plus, Star, StretchHorizontal, Users } from "lucide-react"
+import { Barcode, GraduationCapIcon, MapPinIcon, Plus, Shapes, Star, StretchHorizontal, Users } from "lucide-react"
 
 
 interface Patrimonio {
-  acronym: null,
-  area: string
-  institution_id: string
-  institution_name: string
-  last_date_sent: string
-  lattes_id: string
-  leader_name: string
-  research_group_id: string
-  research_group_name: string
-  researcher_id: string
-  situation: string
+  area: string,
+  institution: string,
+  leader_one: string,
+  leader_one_id: string,
+  leader_two:string,
+  leader_two_id: string,
+  name: string,
   }
 
   interface Props {
@@ -76,26 +72,107 @@ export function ItensListGrupoPesquisa(props:Props) {
   
      
     }, [urlPatrimonioInsert]);
-    const qualisColor = {
-      'MESTRADO': 'bg-blue-200',
-      'DOUTORADO': 'bg-blue-800',
-    };
-      const csvCodToText = {
-        'BM': 'Bom',
-        'AE': 'Anti-Econômico',
-        'IR': 'Irrecuperável',
-        'OC': 'Ocioso',
-        'BX': 'Baixado',
-        'RE': 'Recuperável'
-      };
 
+    const normalizeArea = (area: string): string => {
+      return area
+
+        .toUpperCase(); // Converte para maiúsculas
+    };
+    
+    const qualisColor: { [key: string]: string } = {
+      "ASTRONOMIA": "bg-red-200",
+      "FÍSICA": "bg-blue-200",
+      "GEOCIÊNCIAS": "bg-green-200",
+      "MATEMÁTICA": "bg-yellow-200",
+      "OCEANOGRAFIA": "bg-teal-200",
+      "PROBABILIDADE E ESTATÍSTICA": "bg-purple-200",
+      "QUÍMICA": "bg-orange-200",
+      "AGRONOMIA": "bg-red-800",
+      "CIÊNCIA E TECNOLOGIA DE ALIMENTOS": "bg-blue-800",
+      "ENGENHARIA AGRÍCOLA": "bg-green-800",
+      "MEDICINA VETERINÁRIA": "bg-yellow-800",
+      "RECURSOS FLORESTAIS E ENGENHARIA FLORESTAL": "bg-teal-800",
+      "RECURSOS PESQUEIROS E ENGENHARIA DE PESCA": "bg-purple-800",
+      "ZOOTECNIA": "bg-orange-800",
+      "BIOFÍSICA": "bg-red-600",
+      "BIOLOGIA GERAL": "bg-blue-600",
+      "BIOQUÍMICA": "bg-green-600",
+      "BIOTECNOLOGIA": "bg-yellow-600",
+      "BOTÂNICA": "bg-teal-600",
+      "ECOLOGIA": "bg-purple-600",
+      "FARMACOLOGIA": "bg-orange-600",
+      "FISIOLOGIA": "bg-red-400",
+      "GENÉTICA": "bg-blue-400",
+      "IMUNOLOGIA": "bg-green-400",
+      "MICROBIOLOGIA": "bg-yellow-400",
+      "MORFOLOGIA": "bg-teal-400",
+      "PARASITOLOGIA": "bg-purple-400",
+      "ZOOLOGIA": "bg-orange-400",
+      "EDUCAÇÃO FÍSICA": "bg-red-300",
+      "ENFERMAGEM": "bg-blue-300",
+      "FARMÁCIA": "bg-green-300",
+      "FISIOTERAPIA E TERAPIA OCUPACIONAL": "bg-yellow-300",
+      "FONOAUDIOLOGIA": "bg-teal-300",
+      "MEDICINA": "bg-purple-300",
+      "NUTRIÇÃO": "bg-orange-300",
+      "ODONTOLOGIA": "bg-red-100",
+      "SAÚDE COLETIVA": "bg-blue-100",
+      "ANTROPOLOGIA": "bg-green-100",
+      "ARQUEOLOGIA": "bg-yellow-100",
+      "CIÊNCIA POLÍTICA": "bg-teal-100",
+      "EDUCAÇÃO": "bg-purple-100",
+      "FILOSOFIA": "bg-orange-100",
+      "GEOGRAFIA": "bg-red-900",
+      "HISTÓRIA": "bg-blue-900",
+      "PSICOLOGIA": "bg-green-900",
+      "SOCIOLOGIA": "bg-yellow-900",
+      "TEOLOGIA": "bg-teal-900",
+      "CIÊNCIA DA COMPUTAÇÃO": "bg-purple-900",
+      "DESENHO INDUSTRIAL": "bg-orange-900",
+      "ENGENHARIA AEROESPACIAL": "bg-red-500",
+      "ENGENHARIA BIOMÉDICA": "bg-blue-500",
+      "ENGENHARIA CIVIL": "bg-green-500",
+      "ENGENHARIA DE ENERGIA": "bg-yellow-500",
+      "ENGENHARIA DE MATERIAIS E METALÚRGICA": "bg-teal-500",
+      "ENGENHARIA DE MINAS": "bg-purple-500",
+      "ENGENHARIA DE PRODUÇÃO": "bg-orange-500",
+      "ENGENHARIA DE TRANSPORTES": "bg-red-700",
+      "ENGENHARIA ELÉTRICA": "bg-blue-700",
+      "ENGENHARIA MECÂNICA": "bg-green-700",
+      "ENGENHARIA NAVAL E OCEÂNICA": "bg-yellow-700",
+      "ENGENHARIA NUCLEAR": "bg-teal-700",
+      "ENGENHARIA QUÍMICA": "bg-purple-700",
+      "ENGENHARIA SANITÁRIA": "bg-orange-700",
+      "ARTES": "bg-red-50",
+      "LETRAS": "bg-blue-50",
+      "LINGÜÍSTICA": "bg-green-50",
+      "BIOÉTICA": "bg-yellow-50",
+      "CIÊNCIAS AMBIENTAIS": "bg-teal-50",
+      "DEFESA": "bg-purple-50",
+      "DIVULGAÇÃO CIENTÍFICA": "bg-orange-50",
+      "MICROELETRÔNICA": "bg-red-700",
+      "ROBÓTICA, MECATRÔNICA E AUTOMAÇÃO": "bg-blue-700",
+      "SEGURANÇA CONTRA INCÊNDIO": "bg-green-700",
+      "ADMINISTRAÇÃO": "bg-yellow-700",
+      "ARQUITETURA E URBANISMO": "bg-teal-700",
+      "CIÊNCIA DA INFORMAÇÃO": "bg-purple-700",
+      "COMUNICAÇÃO": "bg-orange-700",
+      "DEMOGRAFIA": "bg-red-100",
+      "DIREITO": "bg-blue-100",
+      "ECONOMIA": "bg-green-100",
+      "ECONOMIA DOMÉSTICA": "bg-yellow-100",
+      "MUSEOLOGIA": "bg-teal-100",
+      "PLANEJAMENTO URBANO E REGIONAL": "bg-purple-100",
+      "SERVIÇO SOCIAL": "bg-orange-100",
+      "TURISMO": "bg-red-200",
+    };
       console.log(total)
       const [count, setCount] = useState(12)
 
       const search = props.search
 
       const filteredTotal = Array.isArray(total) ? total.filter(item => {
-        const searchString = `${item.research_group_name}`;
+        const searchString = `${item.name}`;
         return searchString.toLowerCase().includes(search.toLowerCase());
       }) : [];
       
@@ -119,19 +196,9 @@ export function ItensListGrupoPesquisa(props:Props) {
         {filteredTotal.slice(0, count).map((item) => {
           
           return(
-<div className="flex" onClick={() => updateResearcher(item)}>
-            <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border min-h-[120px]  border-neutral-200 border-r-0  relative ${
-              item.situation && item.situation.includes('Não-atualizado') 
-                ? 'bg-red-500' 
-                : item.situation && item.situation.includes('Em preenchimento') 
-                ? 'bg-orange-500' 
-                : item.situation && item.situation.includes('Certificado') 
-                ? 'bg-green-500' 
-                : item.situation && item.situation.includes('Aguardando certificação') 
-                ? 'bg-yellow-500'
-                : 'bg-[#000]'
-            }`}></div>
-  
+        <div className="flex" onClick={() => updateResearcher(item)}>
+            <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border min-h-[120px] border-neutral-200 border-r-0 ${qualisColor[normalizeArea(item.area || '')]} min-h-full relative`}></div>
+          
             <button
        
             className={cn(
@@ -142,15 +209,15 @@ export function ItensListGrupoPesquisa(props:Props) {
           >
             <div className="flex w-full flex-col gap-1">
            <div className="flex justify-between items-center">
-           <div className="text-xs font-medium mb-2 flex items-center gap-2">{item.research_group_id != '' ? (item.research_group_id):('Sem código')}
+           <div className="text-xs font-medium mb-2 flex items-center gap-2">{item.area != '' ? (item.area):('Sem código')}
           </div>
-           <GraduationCapIcon size={16}/>
+           <Shapes size={16}/>
            </div>
               <div className="flex items-center">
                 
                 <div className="flex items-center gap-2">
                     
-                  <div className="font-semibold text-lg">{item.research_group_name}</div>
+                  <div className="font-semibold text-lg">{item.name}</div>
                   
                  
                 </div>
@@ -162,9 +229,9 @@ export function ItensListGrupoPesquisa(props:Props) {
               </div>
               
             </div>
-            <div className="line-clamp-2 text-xs text-muted-foreground flex gap-4">
-            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{item.situation}</div>
-            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><MapPinIcon size={12}/>{item.research_group_name}</div>
+            <div className="line-clamp-2 text-xs text-muted-foreground flex flex-wrap gap-4">
+            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{item.leader_one}</div>
+{item.leader_two != 'nan' && ( <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{item.leader_two}</div>)}
           
             </div>
            

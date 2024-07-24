@@ -41,9 +41,7 @@ export function Search() {
 const type_search = queryUrl.get('type_search');
 const terms = queryUrl.get('terms');
 
-    const location = useLocation();
-
-    const posGrad = location.pathname == '/pos-graduacao'
+   
 
 
     const { onOpen } = useModal();
@@ -158,10 +156,18 @@ async function processMessageToChatGPT(messageObject:any) {
     })
 }
 
+const location = useLocation();
+
+const posGrad = location.pathname == '/pos-graduacao'
+
 const history = useNavigate();
 
 const handlePesquisa = () => {
-    if(maria && inputMaria.length > 1 && !posGrad) {
+  if(maria && inputMaria.length > 1 && posGrad ) {
+    handleSend(inputMaria)
+ 
+}  
+   else if(maria && inputMaria.length > 1 ) {
         handleSend(inputMaria)
         history('/resultados')
     } 
@@ -224,14 +230,11 @@ const handleConnectorChange = (index: number, connector: string) => {
                      <Label className="flex gap-2 items-center">MarIA<Chats size={16} className="" /></Label>
                 </div>
 
-                {!maria && !posGrad && (
+                {!maria  && (
                     <SelectTypeSearch/>
                 )}
 
-            {posGrad && (
-                    <SelectTypeInstitutionSearch/>
-                )}
-
+     
               <div className='flex gap-2 mx-2 items-center'>
               {itemsSelecionados.map((valor, index) => {
           return(
