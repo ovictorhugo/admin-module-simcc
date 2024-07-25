@@ -93,10 +93,17 @@ export function ItensListDepartamento(props:Props) {
       const search = props.search
 
       const filteredTotal = Array.isArray(total) ? total.filter(item => {
-        const searchString = `${item.dep_nom}`;
-        return searchString.toLowerCase().includes(search.toLowerCase());
-      }) : [];
+        // Normaliza a string do item e da busca para comparação
+        const normalizeString = (str) => str
+          .normalize("NFD") // Decompõe os caracteres acentuados
+          .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
+          .toLowerCase(); // Converte para minúsculas
       
+        const searchString = normalizeString(item.dep_nom);
+        const normalizedSearch = normalizeString(search);
+      
+        return searchString.includes(normalizedSearch);
+      }) : [];
       
 
   return (

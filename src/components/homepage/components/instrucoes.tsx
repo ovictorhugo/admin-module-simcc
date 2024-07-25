@@ -7,8 +7,8 @@ import { CardDescription, CardHeader, CardTitle } from "../../ui/card";
 
 export function Instrucoes() {
     return(
-        <div className="grid gap-6 md:grid-cols-2 md:min-h-screen">
-            <div className="h-screen flex justify-center flex-col sticky top-0">
+        <div className="grid gap-6 lg:grid-cols-2 md:min-h-screen">
+            <div className="h-screen flex justify-center flex-col lg:sticky top-0">
                 <h2 className="text-5xl  lg:leading-[1.1] leading-tight tracking-tighter font-bold max-w-[420px] mb-4">O que a plataforma pode fazer e como ela pode te auxiliar?</h2>
                 <p className="max-w-[550px] mb-4  text-lg font-light text-foreground">O Conectee é uma plataforma desenvolvida com o objetivo de auxiliar na seleção e filtragem das produções dos pesquisadores da Escola de Engenharia da UFMG. </p>
                <div className="flex gap-3">
@@ -18,7 +18,7 @@ export function Instrucoes() {
                </div>
             </div>
 
-            <div className="flex flex-col gap-8 md:ml-48">
+            <div className="flex flex-col gap-8 lg:ml-24 xl:ml-48">
                 <Alert className="">
                     <CardHeader>
                     <div className="h-[300px] flex items-center justify-center"><TextCursorInput size={120} className="text-[#719CB8]"/></div>

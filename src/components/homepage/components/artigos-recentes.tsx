@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import { Button } from "../../ui/button";
 import { UserContext } from "../../../context/context";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../../ui/carousel";
@@ -57,6 +57,13 @@ export function ArtigosRecentes() {
           fetchData();
         }, [ urlTermPublicacoes]);
 
+
+        const plugin = useRef(
+          Autoplay({ delay: 2000, stopOnInteraction: true })
+        )
+
+        
+
     return(
         <div className="w-full">
            <div className="flex items-center justify-between mb-6">
@@ -67,11 +74,10 @@ export function ArtigosRecentes() {
 
            <div>
            <Carousel className="w-full flex gap-3 items-center "
-            plugins={[
-              Autoplay({
-                delay: 2000,
-              }),
-            ]}
+             plugins={[plugin.current]}
+           
+             onMouseEnter={plugin.current.stop}
+             onMouseLeave={plugin.current.reset}
            >
                 <CarouselPrevious />
       <CarouselContent className="-ml-1 flex w-full flex-1">

@@ -170,7 +170,7 @@ export default function SearchLayout({
             {/* Assuming Header is another component */}
             <Header />
             
-            <div className="h-full overflow-y-auto flex flex-1">
+            <div className="h-full overflow-y-auto overflow-x-hidden flex flex-1">
             {children}
             </div>
 

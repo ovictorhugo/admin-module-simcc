@@ -176,8 +176,16 @@ export function GruposPesquisaPage() {
         const [search, setSearch] = useState('')
   
         const filteredTotal = Array.isArray(total) ? total.filter(item => {
-          const searchString = `${item.name}`;
-          return searchString.toLowerCase().includes(search.toLowerCase());
+          // Normaliza a string do item e da busca para comparação
+          const normalizeString = (str) => str
+            .normalize("NFD") // Decompõe os caracteres acentuados
+            .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
+            .toLowerCase(); // Converte para minúsculas
+        
+          const searchString = normalizeString(item.name);
+          const normalizedSearch = normalizeString(search);
+        
+          return searchString.includes(normalizedSearch);
         }) : [];
         
         const navigate = useNavigate();
@@ -198,7 +206,7 @@ export function GruposPesquisaPage() {
             
            
 
-           <div className="justify-center w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
+           <div className="justify-center md:px-8 px-4 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
        <Link to={'/informacoes'}  className="inline-flex z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
        
            <h1 className="z-[2] text-center max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
@@ -213,7 +221,7 @@ export function GruposPesquisaPage() {
 
 
      
-          <Alert  className="h-14 mt-8 p-2 flex items-center justify-between max-w-[60vw] w-[60vw]">
+          <Alert  className="h-14 mt-8 p-2 flex items-center justify-between lg:max-w-[60vw] lg:w-[60vw] w-full ">
            <div className="flex items-center gap-2 w-full flex-1">
            <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
            <Input  onChange={(e) => setSearch(e.target.value)} value={search}  type="text" className="border-0 w-full "/>
