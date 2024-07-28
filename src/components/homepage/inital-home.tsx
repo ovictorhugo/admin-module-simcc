@@ -35,6 +35,16 @@ interface VisaoPrograma {
   work_in_event: number;
 }
 
+interface Rt {
+  teachers:CoutRt[]
+  technician:CoutRt[]
+}
+
+interface CoutRt {
+  count: number
+  rt:string
+}
+
 interface GrupoPesquisa {
   nome_grupo: string
   nome_lider: string
@@ -130,6 +140,9 @@ import { Newsletter } from "./components/newsletter";
 import { Instrucoes } from "./components/instrucoes";
 import { Search } from "../search/search";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { GraficoRtTeachers } from "./components/grafico-teachers";
+import { FooterHome } from "../footer/footer-home";
+import { GraficoRtTechnician } from "./components/grafico-technician";
 
 
 HC_wordcloud(Highcharts);
@@ -228,6 +241,43 @@ export function InitialHome() {
 
  
 }, [urlGrupo]);
+
+//
+
+let urlRt =`${urlGeral}departament/rt`
+
+const [rt, setRt] = useState<Rt | null>(null);
+
+useEffect(() => {
+
+const fetchData = async () => {
+ 
+  try {
+      
+    const response = await fetch(urlRt , {
+      mode: "cors",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Max-Age": "3600",
+        "Content-Type": "text/plain",
+      },
+    });
+    const data = await response.json();
+    if (data) {
+        setRt(data)
+      
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+fetchData()
+
+
+}, [urlRt]);
+
 const { theme, setTheme } = useTheme()
 // Crie uma constante para agrupar as áreas e calcular o total de grupos por área
 const areaTotais = grupos.reduce((acc, grupo) => {
@@ -349,7 +399,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
   const options = {
     chart: {
       backgroundColor: 'transparent',
-      height: '250px',
+      height: '300px',
       display: 'flex',
       position: 'relative'
     },
@@ -521,8 +571,8 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
             <Search/>
            </div>
 
-                <div className="flex flex-wrap gap-3">
-                                {words.map((word, index) => (
+                <div className="flex flex-wrap gap-3 z-[3] w-full lg:w-[60vw]">
+                                {words.slice(0, 10).map((word, index) => (
                                     <div
                                         key={index}
                                         className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`}
@@ -631,8 +681,8 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
       
           <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
                     <div className="h-full gap-8 grid">
-                    <Alert className=" ">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <Alert className="p-0 ">
+                    <CardHeader className="flex p-10 flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
                       Total de  {VisaoPrograma.map((props) => (<>{props.researcher}</>))} docentes
@@ -645,17 +695,21 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                      <p>Add to library</p>
+                      <p>Dados do semestre atual</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
                    
                   </CardHeader>
 
+                <div className="flex flex-1 px-6">
+                <GraficoRtTeachers rtData={rt}/>
+                </div>
+
                     </Alert>
 
-                    <Alert className=" ">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <Alert className="p-0 ">
+                    <CardHeader className="flex flex-row p-10 items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
                      Total de {VisaoPrograma.map((props) => (<>{props.researcher}</>))} técnicos
@@ -667,20 +721,24 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                      <p>Add to library</p>
+                      <p>Dados do semestre atual</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
                    
                   </CardHeader>
 
+                  <div className="flex flex-1 px-6">
+                <GraficoRtTechnician rtData={rt}/>
+                </div>
+
                     </Alert>
                     </div>
 
                  
 
-                    <Alert className="lg:col-span-2 h-[400px] p-0 ">
-                    <CardHeader className="flex p-0 flex-col items-stretch space-y-0 border-b  sm:flex-row">
+                    <Alert className="lg:col-span-2 h-[450px] p-0 ">
+                    <CardHeader className="flex p-0 flex-col items-stretch space-y-0 border-b dark:border-b-neutral-800  sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
         <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
                     <div>
@@ -721,7 +779,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
               <button
                 key={chart}
                 data-active={activeChart === chart}
-                className={`relative flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6 ${activeChart === chart && ('bg-neutral-100')} ${activeChart ===  'producao_tecnica' && ('rounded-tr-md')}`}
+                className={`relative flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 dark:border-l-neutral-800 sm:px-8 sm:py-6 ${activeChart === chart && ('bg-neutral-100 dark:bg-neutral-800')} ${activeChart ===  'producao_tecnica' && ('rounded-tr-md')}`}
                 onClick={() => setActiveChart(chart)}
               >
                 <span className="text-xs text-muted-foreground">
@@ -739,7 +797,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
       <CardContent className="px-2 sm:p-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[300px] w-full"
         >
   <BarChart accessibilityLayer data={dados}>
   <CartesianGrid vertical={false}  horizontal={false}/>
@@ -823,7 +881,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   </div>
 
                   <div className="grid  gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-                    <Alert className=" h-[350px] lg:col-span-2">
+                    <Alert className=" h-[400px] lg:col-span-2">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
@@ -926,6 +984,8 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
 
                   <Instrucoes/>
                   <Newsletter/>
+
+                  <FooterHome/>
           </div>
 
          

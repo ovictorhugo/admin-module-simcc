@@ -20,7 +20,7 @@ import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
 import { useModal } from "../hooks/use-modal-store";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
 
 import { toast } from "sonner";
@@ -31,8 +31,8 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
 export function AddDepartamento() {
-  const { onClose, isOpen, type: typeModal } = useModal();
-  const isModalOpen = isOpen && typeModal === "add-departamento";
+  const { onClose, isOpen, type: typeModal, data } = useModal();
+  const isModalOpen = (isOpen && typeModal === "add-departamento") ||  (isOpen && typeModal === "edit-departamento")
 
   const { user, urlGeralAdm } = useContext(UserContext);
 
@@ -42,9 +42,9 @@ export function AddDepartamento() {
   const id = uuid.replace(/\D/g, '').slice(0, 10);
 
   const [formData, setFormData] = useState({
-    dep_id: id,
-    org_cod: '',
-    dep_nom: '',
+    dep_id:  id,
+    org_cod:  '',
+    dep_nom:'',
     dep_des: '',
     dep_email: '',
     dep_site: '',
@@ -52,13 +52,15 @@ export function AddDepartamento() {
     dep_sigla: ''
   });
 
+
+
   const [fileInfo, setFileInfo] = useState({
     name: '',
     size: 0
   });
 
   const [pdfs, setPdfs] = useState({
-    img_data: null
+    img_data:  null
   });
 
   const handleChange = (e: any) => {
@@ -83,6 +85,29 @@ export function AddDepartamento() {
     handleSubmitDepartamento();
   };
 
+  useEffect(() => {
+
+    const idEdit = data.dep_id || ''
+    
+    setFormData({
+      dep_id: (data && typeModal != 'add-departamento') ?idEdit : id,
+      org_cod: (data && typeModal != 'add-departamento') ? data.org_cod : '',
+      dep_nom: (data &&typeModal != 'add-departamento') ? data.dep_nom : '',
+      dep_des: (data && typeModal != 'add-departamento') ? data.dep_des : '',
+      dep_email: (data && typeModal != 'add-departamento') ? data.dep_email :'',
+      dep_site: (data && typeModal != 'add-departamento') ? data.dep_site : '',
+      dep_tel: (data && typeModal != 'add-departamento') ? data.dep_tel : '',
+      dep_sigla: (data && typeModal != 'add-departamento') ? data.dep_sigla : ''
+    });
+
+    setPdfs({
+      img_data: (data && typeModal != 'add-departamento') ? data.img_data: ''
+    })
+
+    
+
+    }, [data.dep_id]);
+
   const updateItem = (field: any, value: any) => {
     setFormData({
       ...formData,
@@ -95,16 +120,16 @@ export function AddDepartamento() {
     value = value.replace(/^(\d{2})(\d)/, '($1) $2'); // Adiciona parênteses em torno dos dois primeiros dígitos
     value = value.replace(/(\d{1})(\d{4})(\d{4})/, '$1 $2-$3'); // Formata o restante como x xxxx-xxxx
     return value.slice(0, 16); // Limita a 15 caracteres
-  };
+  }
 
   const handlePhoneChange = (e: any) => {
     const formattedPhone = formatPhone(e.target.value);
     updateItem('dep_tel', formattedPhone);
-  };
+  }
 
   const handleSubmitDepartamento = async () => {
     try {
-      if (!pdfs.img_data) {
+      if (!pdfs.img_data && typeModal == 'add-departamento') {
         toast("Erro: Nenhuma imagem selecionada", {
           description: "Por favor, selecione uma imagem para enviar.",
           action: {
@@ -115,7 +140,11 @@ export function AddDepartamento() {
         return;
       }
 
-      const urlDepartamentoInsert = urlGeralAdm + `departamentos`; // Atualize a URL conforme necessário
+      let urlDepartamentoInsert = urlGeralAdm + `departamentos`; // Atualize a URL conforme necessário
+
+      if (typeModal == 'edit-departamento') {
+        urlDepartamentoInsert = urlGeralAdm + `departamentos/update`; 
+      }
 
       const data = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
@@ -159,7 +188,10 @@ export function AddDepartamento() {
         setPdfs({
           img_data: null
         });
+
+        onClose()
       }
+      
     } catch (error) {
       console.error('Erro ao processar a requisição:', error);
       toast("Erro ao processar a requisição", {

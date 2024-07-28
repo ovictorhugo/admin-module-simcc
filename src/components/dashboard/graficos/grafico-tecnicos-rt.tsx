@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Alert } from "../../ui/alert";
 import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import { ChartContainer, ChartTooltip,ChartConfig, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
+import { ChartContainer, ChartTooltip, ChartConfig, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
 interface Docentes {
-  matric: string;
-  insUFMG: string;
-  nome: string;
-  genero: string;
-  denoSit: string;
-  rt: string;
-  classe: string;
-  cargo: string;
-  nivel: string;
-  ref: string;
-  titulacao: string;
-  setor: string;
-  detalheSetor: string;
-  dtIngOrg: string;
-  dataProg: string;
-  year_charge: string;
-  semester: string;
+  cargo:string
+  classe:string
+  data_prog:string
+  deno_sit:string
+  detalhe_setor:string
+  dting_org:string
+  genero:string
+  ins_ufmg:string
+  matric:string
+  nivel:string
+  nome:string
+  ref:string
+  rt:string
+  semester:string
+  setor:string
+  titulacao:string
 }
 
 const chartConfig = {
@@ -50,6 +49,11 @@ export function GraficoTecnicosRt({ docentes }: { docentes: Docentes[] }) {
   const [chartData, setChartData] = useState<{ rt: string; count: number }[]>([]);
 
   useEffect(() => {
+    if (!Array.isArray(docentes)) {
+      console.error("The 'docentes' prop is not an array:", docentes);
+      return;
+    }
+
     const counts: { [key: string]: number } = {};
 
     docentes.forEach(docente => {
@@ -82,7 +86,7 @@ export function GraficoTecnicosRt({ docentes }: { docentes: Docentes[] }) {
         <ResponsiveContainer>
           <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
             <XAxis dataKey="rt" tickLine={false} tickMargin={10} axisLine={false} />
-           
+        
             <CartesianGrid vertical={false} horizontal={false} />
             <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />

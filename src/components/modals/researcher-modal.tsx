@@ -38,7 +38,7 @@ type Research = {
     software: string,
     brand: string,
     lattes_update: Date,
-
+   
     h_index:string,
     relevance_score:string,
     works_count:string,
@@ -48,6 +48,7 @@ type Research = {
     openalex:string,
     departament:string
     subsidy:Bolsistas
+    graduate_programs:GraduatePrograms
   }
 
   interface Bolsistas {
@@ -59,6 +60,11 @@ type Research = {
     institute_name:string
     modality_name:string
     scholarship_quantity:string
+    }
+
+    interface  GraduatePrograms {
+      graduate_program_id:string
+      name:string
     }
 
 
@@ -151,11 +157,23 @@ setItensSelecionadosPopUp(itemsSelecionados)
                   "Content-Type": "text/plain",
                 },
               });
+              
               const data = await response.json();
               if (data) {
                 setResearcher(data);
                 isLoading(false)
-              }
+              } 
+              if (data.length == 0 && isOpen) {
+                onClose()
+                toast("Pesquisador(a) ainda não cerregado na base", {
+                  description: "Tente novamente mais tarde",
+                  action: {
+                    label: "Fechar",
+                    onClick: () => console.log("Undo"),
+                  },
+                });
+              } 
+
             } catch (err) {
               console.log(err);
             }
@@ -215,10 +233,12 @@ const handleDownloadJson = async () => {
   }
 };
 
+
+
 const currentUrl = window.location.origin
 
 function generateNameVariations(name: string): string[] {
-  const parts = name.split(' ');
+  const parts = name.toUpperCase().split(' ');
   const lastName = parts[parts.length - 1];
   const initials = parts.map(part => part[0]).join('. ');
   const initialsWithDots = initials.replace(/ /g, '.');

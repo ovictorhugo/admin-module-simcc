@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 
-export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program' | 'edit-graduate-program' | 'add-researcher-graduation' | 'add-researcher-csv' | 'add-student-graduation' | 'add-grupo-pesquisa' | 'filters' | 'pesquisadores-selecionados' | 'list-student-program' | 'add-researcher-graduation-two' | 'gratuate-program' | 'confirm-delete-researcher-graduate-program' | 'reset-peso-producoes' | 'confirm-delete-student-graduate-program' | 'import-bolsistas' | 'import-docentes' | 'import-taes' | 'add-departamento'
+export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program' | 'edit-graduate-program' | 'add-researcher-graduation' | 'add-researcher-csv' | 'add-student-graduation' | 'add-grupo-pesquisa' | 'filters' | 'pesquisadores-selecionados' | 'list-student-program' | 'add-researcher-graduation-two' | 'gratuate-program' | 'confirm-delete-researcher-graduate-program' | 'reset-peso-producoes' | 'confirm-delete-student-graduate-program' | 'import-bolsistas' | 'import-docentes' | 'import-taes' | 'add-departamento' | 'confirm-delete-departamento' | 'edit-departamento' | 'import-disciplina'
 
 interface ModalData {
   id?: string,
@@ -45,6 +45,16 @@ graduate_program_id?: string
     qtd_permanente?:string
    
     type_reset?:string
+
+    dep_id?:string
+    org_cod?: string
+    dep_nom?: string
+    dep_des?: string
+    dep_email?: string
+    dep_site?: string
+    dep_tel?: string
+    img_data?:string
+    dep_sigla?: string
  
 }
 

@@ -2,36 +2,36 @@ import { ArrowUUpLeft, FileXls, Upload } from "phosphor-react";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { toast } from "sonner";
 import { UserContext } from "../../context/context";
 import * as XLSX from 'xlsx';
 import { useDropzone } from 'react-dropzone';
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Progress } from "../ui/progress"; // Assuming you have a ProgressBar component
+import { Progress } from "../ui/progress";
 
 interface Patrimonio {
-    matric: string;
-    inscUFMG: string;
-    nome: string;
-    genero: string;
-    situacao: string;
-    rt: string;
-    clas: string;
-    cargo: string;
-    classe: string;
-    ref: string;
-    titulacao: string;
-    entradaNaUFMG: string;
-    progressao: string;
-    year_charge: string;
     semester: string;
+    department: string;
+    academic_activity_code: string;
+    academic_activity_name: string;
+    academic_activity_ch: string;
+    demanding_courses: string;
+    oft: string;
+    id: string;
+    available_slots: string;
+    occupied_slots: string;
+    percent_occupied_slots: string;
+    schedule: string;
+    language: string;
+    professor: string;
+    status: string;
 }
 
-export function ImportDocentes() {
+export function ImportDisciplina() {
     const { onClose, isOpen, type: typeModal } = useModal();
-    const isModalOpen = (isOpen && typeModal === 'import-docentes');
+    const isModalOpen = (isOpen && typeModal === 'import-disciplina');
     const { urlGeralAdm } = useContext(UserContext);
     const [fileInfo, setFileInfo] = useState({ name: '', size: 0 });
     const [data, setData] = useState<Patrimonio[]>([]);
@@ -70,49 +70,45 @@ export function ImportDocentes() {
             const rows = json.slice(1);
 
             const headerMap: { [key: string]: keyof Patrimonio } = {
-                'MATRIC': 'matric',
-                'INSC UFMG': 'inscUFMG',
-                'NOME': 'nome',
-                'GÊNERO': 'genero',
-                'SITUAÇÃO': 'situacao',
-                'RT': 'rt',
-                'CLAS': 'clas',
-                'CARGO': 'cargo',
-                'CLASSE': 'classe',
-                'REF': 'ref',
-                'TITULAÇÃO': 'titulacao',
-                'ENTRADA NA UFMG': 'entradaNaUFMG',
-                'PROGRESSÃO': 'progressao'
+                'Semestre': 'semester',
+                'Departamento': 'department',
+                'Atividade acadêmica - Código': 'academic_activity_code',
+                'Atividade acadêmica - Nome': 'academic_activity_name',
+                'Atividade acadêmica - CH': 'academic_activity_ch',
+                'Cursos demandantes': 'demanding_courses',
+                'Oft.': 'oft',
+                'Id.': 'id',
+                'Vagas Disp.': 'available_slots',
+                'Vagas Ocup.': 'occupied_slots',
+                '% Vagas Ocup.': 'percent_occupied_slots',
+                'Horário': 'schedule',
+                'Língua': 'language',
+                'Professores (nome, nº de inscrição, encargo)': 'professor',
+                'Sit.': 'status'
             };
 
             const jsonData = rows.map((row: any) => {
                 const obj: Patrimonio = {
-                    matric: '',
-                    inscUFMG: '',
-                    nome: '',
-                    genero: '',
-                    situacao: '',
-                    rt: '',
-                    clas: '',
-                    cargo: '',
-                    classe: '',
-                    ref: '',
-                    titulacao: '',
-                    entradaNaUFMG: '',
-                    progressao: '',
-                    year_charge: '',
-                    semester: ''
+                    semester: '',
+                    department: '',
+                    academic_activity_code: '',
+                    academic_activity_name: '',
+                    academic_activity_ch: '',
+                    demanding_courses: '',
+                    oft: '',
+                    id: '',
+                    available_slots: '',
+                    occupied_slots: '',
+                    percent_occupied_slots: '',
+                    schedule: '',
+                    language: '',
+                    professor: '',
+                    status: '',
                 };
                 headers.forEach((header, index) => {
                     const key = headerMap[header];
                     if (key) {
-                        if ((header === 'ENTRADA NA UFMG' || header === 'PROGRESSÃO') && typeof row[index] === 'number') {
-                            obj[key] = XLSX.SSF.format('dd/mm/yyyy', row[index]);
-                        } else if (header === 'CLAS') {
-                            obj[key] = row[index] === 0 ? '0' : String(row[index]);
-                        } else {
-                            obj[key] = String(row[index] || "");
-                        }
+                        obj[key] = String(row[index] || "");
                     }
                 });
                 return obj;
@@ -122,17 +118,6 @@ export function ImportDocentes() {
         };
         reader.readAsArrayBuffer(file);
     };
-
-
-    useEffect(() => {
-        // Update year_charge and semester in data whenever year or semester changes
-        const updatedData = data.map(item => ({
-            ...item,
-            year_charge: String(year),
-            semester: semester
-        }));
-        setData(updatedData);
-    }, [year, semester]);
 
     const handleSubmitPatrimonio = async () => {
         try {
@@ -147,7 +132,7 @@ export function ImportDocentes() {
                 return;
             }
 
-            const urlPatrimonioInsert = urlGeralAdm + `docentes`;
+            const urlPatrimonioInsert = urlGeralAdm + `departamentos/disciplinas`;
 
             const response = await fetch(urlPatrimonioInsert, {
                 mode: 'cors',
@@ -197,7 +182,6 @@ export function ImportDocentes() {
     }
 
     console.log(data)
-    console.log(year)
 
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -211,34 +195,7 @@ export function ImportDocentes() {
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className={`grid gap-8 w-full sm:grid-cols-2 grid-cols-1`}>
-                    <div className="grid gap-3 w-full">
-                        <Label htmlFor="year">Ano</Label>
-                        <Select value={String(year)} onValueChange={(value) => setYear(Number(value))}>
-                            <SelectTrigger className="">
-                                <SelectValue placeholder="Selecione o ano" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {years.map((year) => (
-                                    <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    <div className="grid gap-3 w-full">
-                        <Label htmlFor="semester">Semestre</Label>
-                        <Select value={semester} onValueChange={(value) => setSemester(value)}>
-                            <SelectTrigger className="">
-                                <SelectValue placeholder="Selecione o semestre" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value={'1'}>Primeiro</SelectItem>
-                                <SelectItem value={'2'}>Segundo</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
+               
 
                 <div className="mb-4">
                     <div {...getRootProps()} className="border-dashed mb-6 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm cursor-pointer transition-all gap-3 w-full flex items-center justify-center hover:bg-neutral-100 mt-4">
@@ -253,32 +210,33 @@ export function ImportDocentes() {
                         )}
                     </div>
 
-                    <div>
-                        {fileInfo.name && (
-                            <div className="justify-center flex items-center gap-3">
-                                <FileXls size={16} />
-                                <p className="text-center text-zinc-500 text-sm">
-                                    Arquivo selecionado: <strong>{fileInfo.name}</strong> ({(fileInfo.size / 1024).toFixed(2)} KB)
-                                </p>
-                            </div>
-                        )}
-                    </div>
+                    {fileInfo.name && (
+                        <aside>
+                            <h4>Arquivo</h4>
+                            <ul>
+                                <li key={fileInfo.name}>
+                                    {fileInfo.name} - {(fileInfo.size / 1024).toFixed(2)} KB
+                                </li>
+                            </ul>
+                        </aside>
+                    )}
                 </div>
 
                 {uploadProgress > 0 && (
-                    <div className="mb-4">
-                        <Label>Progresso do upload</Label>
-                        <Progress value={uploadProgress} max={100} />
-                    </div>
+                    <Progress value={uploadProgress} className="w-full" />
                 )}
 
-                <DialogFooter>
-                    <Button onClick={() => onClose()} variant={'ghost'}>
-                        <ArrowUUpLeft size={16} className="" />Cancelar
-                    </Button>
-                    <Button onClick={() => handleSubmitPatrimonio()}>
-                        <Upload size={16} className="" />Atualizar dados
-                    </Button>
+                <DialogFooter className="mt-8">
+                    <div className="w-full flex gap-3">
+                        <Button onClick={onClose} className="w-full" variant='secondary'>
+                            <ArrowUUpLeft className="mr-2" size={20} />
+                            Cancelar
+                        </Button>
+                        <Button onClick={handleSubmitPatrimonio} className="w-full">
+                            <Upload className="mr-2" size={20} />
+                            Enviar arquivo
+                        </Button>
+                    </div>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

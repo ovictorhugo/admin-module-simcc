@@ -13,7 +13,7 @@ import { Link} from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { AlertCircle, BarChartBig, Blocks, Building, Building2, CandlestickChart, ClipboardEdit, FlaskConical, GraduationCap, Home, Info, LayoutDashboard, List, PieChart, Rows3, Rows4, SearchCheck, User, Weight, X } from "lucide-react";
+import { AlertCircle, BarChartBig, Blocks, Building, Building2, CandlestickChart, ClipboardEdit, FlaskConical, GraduationCap, Home, Info, LayoutDashboard, List, Mail, PieChart, Rows3, Rows4, SearchCheck, User, Weight, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import { ScrollArea } from "../components/ui/scroll-area";
 import { UserConfigHeader } from "../components/header/user-config-header";
@@ -146,10 +146,10 @@ export default function AdminLayout({
                 link: "/dashboard/baremas",
               },
               {
-                title: "Indicadores",
+                title: "Enviar notificações",
                 label: "",
-                icon: BarChartBig,
-                link: "/indicadors",
+                icon: Mail,
+                link: "/dashboard/enviar-notificacoes",
               },
              
             ]}
@@ -164,7 +164,7 @@ export default function AdminLayout({
                 title: "Informações",
                 label: "",
                 icon: Info,
-                link: "/informacoes",
+                link: "/dashboard/informacoes",
               },
            
              

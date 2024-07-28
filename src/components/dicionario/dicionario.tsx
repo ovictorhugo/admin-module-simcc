@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import { ArrowRight, Info, Rows } from "lucide-react";
+import { ArrowRight, ChevronLeft, Info, Rows } from "lucide-react";
 import { SelectTypeSearch } from "../search/select-type-search";
 import { Input } from "../ui/input";
 import { MagnifyingGlass } from "phosphor-react";
@@ -89,26 +89,53 @@ export function Dicionario() {
         navigate(`/resultados?type_search=${searchType}&terms=${term}`)
 
       }
-    
+
+      const history = useNavigate();
+
+      const handleVoltar = () => {
+        history(-1);
+      }
+  
+    console.log(urlTerms)
 
     return (
         <>
             {isModalOpen && (
-                <main className="flex  flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-                    <div>
-                        <Link to={''} className="inline-flex items-center rounded-lg bg-neutral-100 dark:bg-neutral-700 gap-2 mb-3 px-3 py-1 text-sm font-medium">
-                            <Info size={12} />
-                            <div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>
-                            Saiba como utilizar a plataforma
-                            <ArrowRight size={12} />
-                        </Link>
+                <main className="flex  flex-1 flex-col gap-4 p-4  md:p-8">
+                     <div className="w-full  gap-4">
+            <div className="flex items-center gap-4">
+          
+            <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
+                <ChevronLeft className="h-4 w-4" />
+                <span className="sr-only">Voltar</span>
+              </Button>
+          
+              <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+              Dicionário de termos
+              </h1>
+             
 
-                        <h1 className="max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
-                            Dicionário de{" "}
+                
+            
+              <div className="hidden items-center gap-2 md:ml-auto md:flex">
+              
+               
+          
+                <Button size="sm">Button</Button>
+              </div>
+            </div>
+
+            </div>
+
+                    <div>
+                      
+
+                        <h1 className="max-w-[450px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
+                            Todas as {" "}
                             <strong className="bg-[#709CB6] rounded-md px-3 pb-2 text-white font-medium">
-                                termos
+                                palavras
                             </strong>{" "}
-                            de busca
+                            cadastradas na plataforma
                         </h1>
                         <p className="max-w-[750px] text-lg font-light text-foreground">
                             Pesquise termos para auxiliar o seu filtro na plataforma
@@ -147,7 +174,7 @@ export function Dicionario() {
                                         handlePesquisaChange(word.term)
                                     }}
                                     >
-                                        {word.term}
+                                        {word.term} {searchType == 'AREA' && (`${word.area_expertise} - ${word.area_specialty}`)}
                                     </div>
                                 ))}
                             </div>

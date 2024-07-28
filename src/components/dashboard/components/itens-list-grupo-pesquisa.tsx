@@ -30,11 +30,12 @@ import { Skeleton } from "../../ui/skeleton"
 
 export function ItensListGrupoPesquisa(props:Props) {
     const [total, setTotal] = useState<Patrimonio[]>([]);
-
+    const [selectedResearcher, setSelectedResearcher] = useState<Patrimonio | null>(null);
     // Atualize essa função para chamar a propriedade `onResearcherUpdate`
     const updateResearcher = (newResearcher: Patrimonio) => {
         if (props.onResearcherUpdate) {
           props.onResearcherUpdate(newResearcher);
+          setSelectedResearcher(newResearcher);
         }
       };
       const [isLoading, setIsLoading] = useState(false)
@@ -72,6 +73,8 @@ export function ItensListGrupoPesquisa(props:Props) {
   
      
     }, [urlPatrimonioInsert]);
+
+
 
     const normalizeArea = (area: string): string => {
       return area
@@ -173,7 +176,7 @@ export function ItensListGrupoPesquisa(props:Props) {
 
       const filteredTotal = Array.isArray(total) ? total.filter(item => {
         // Normaliza a string do item e da busca para comparação
-        const normalizeString = (str) => str
+        const normalizeString = (str:any) => str
           .normalize("NFD") // Decompõe os caracteres acentuados
           .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
           .toLowerCase(); // Converte para minúsculas
@@ -209,7 +212,7 @@ export function ItensListGrupoPesquisa(props:Props) {
             <button
        
             className={cn(
-              "flex flex-col rounded-lg w-full rounded-l-none bg-white dark:bg-neutral-800 dark:border-neutral-700 items-start gap-2  border p-3 text-left text-sm transition-all hover:bg-accent",
+              `flex flex-col rounded-lg w-full rounded-l-none ${item.name === selectedResearcher?.name ? 'bg-neutral-100 dark:bg-neutral-700': 'bg-white dark:bg-neutral-800' }  dark:border-neutral-700 items-start gap-2  border p-3 text-left text-sm transition-all hover:bg-accent`,
             
             )}
            
@@ -247,7 +250,7 @@ export function ItensListGrupoPesquisa(props:Props) {
           )
             })}
 
-    {filteredTotal.length >= count && (
+    {filteredTotal.length > count && (
             <Button variant={'outline'} onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button>
         )}
       </div>

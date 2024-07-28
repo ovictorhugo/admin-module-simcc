@@ -75,7 +75,16 @@ const {itemsSelecionados} = useContext(UserContext)
         <div className="flex  w-full" >
             
                     <div
-                      className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0  ${props.type == 'relatorio-tecnico' && ('bg-[#662D91]')}  ${props.type == 'livro' && ('bg-pink-800')} ${props.type == 'software' && ('bg-[#096670]')} ${props.type == 'marca' && ('bg-[#1B1464]')} ${(props.status == "Em andamento" ) && ('bg-yellow-500') } ${(props.status == "Concluída" ) && 'bg-green-500' }   ${( props.type=='patente') && ('bg-[#66B4D0]')} ${props.type == 'capLivro' && ('bg-pink-300')} ${(props.nature == "Congresso" ) && ('bg-[#FF5800]') } ${(props.nature == "Oficina" ) && ('bg-[#FCEE21]') } ${(props.nature == "Simpósio" ) && ('bg-[#D53A2C]') } ${(props.nature == "Encontro" ) && ('bg-[#E9A700]') }  ${(props.nature == "Outra" ) && ('bg-[#7F400B]') } ${(props.nature == "Seminário" ) && ('bg-[#FFBD7B]') }`}
+                      className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0  ${props.type == 'relatorio-tecnico' && ('bg-[#662D91]')}  ${props.type == 'livro' && ('bg-pink-800')} ${props.type == 'software' && ('bg-[#096670]')} ${props.type == 'marca' && ('bg-[#1B1464]')}  ${( props.nature=='Iniciação Científica') && ('bg-[#8BFBD3]')}
+                      ${( props.nature=='Iniciacao Cientifica') && ('bg-[#8BFBD3]')} 
+                      ${( props.nature=='Dissertação De Mestrado') && ('bg-[#67A896]')} 
+                       ${( props.nature=='Tese De Doutorado') && ('bg-[#425450]')} 
+                       ${( props.nature=='Trabalho de Conclusao de Curso Graduacao') && ('bg-[#77D2B6]')} 
+                         ${( props.nature=='Trabalho De Conclusão De Curso De Graduação') && ('bg-[#77D2B6]')} 
+                        ${( props.nature=='Orientacao-De-Outra-Natureza') && ('bg-[#577E74]')}
+                        ${( props.nature=='Monografia de Conclusao de Curso Aperfeicoamento e Especializacao') && ('bg-[#2F7F7C]')}
+                        ${( props.nature=='Supervisão De Pós-Doutorado') && ('bg-[#46724B]')}
+                      ${( props.type=='patente') && ('bg-[#66B4D0]')} ${props.type == 'capLivro' && ('bg-pink-300')} ${(props.nature == "Congresso" ) && ('bg-[#FF5800]') } ${(props.nature == "Oficina" ) && ('bg-[#FCEE21]') } ${(props.nature == "Simpósio" ) && ('bg-[#D53A2C]') } ${(props.nature == "Encontro" ) && ('bg-[#E9A700]') }  ${(props.nature == "Outra" ) && ('bg-[#7F400B]') } ${(props.nature == "Seminário" ) && ('bg-[#FFBD7B]') }`}
                     > 
                     </div>
                 

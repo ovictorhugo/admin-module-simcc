@@ -1,4 +1,4 @@
-import { ChevronLeft, Mail } from "lucide-react";
+import { ChevronLeft, Mail, MapPin } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
@@ -216,6 +216,8 @@ export function Info() {
             <TabsContent value="all" className="flex flex-col gap-4 md:gap-8">
                 <Duvidas/>
 
+
+
                 <h3 className="text-2xl font-medium ">Colaboradores</h3>
 
                 <div className="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8">
@@ -240,6 +242,13 @@ export function Info() {
                             </div>
                         </Alert>
                     ))}
+                </div>
+
+                <h3 className="text-2xl font-medium ">Suporte</h3>
+
+                <div className="flex flex-col gap-3">
+                <div className='flex gap-2 items-center text-sm text-gray-500'><MapPin size={16}/> Av. Pres. Antônio Carlos, 6627 - Pampulha, Belo Horizonte - MG, 31270-901</div>
+                <div className='flex gap-2 items-center text-sm text-gray-500'><Mail size={16}/> conectee@eng.ufmg.br</div>
                 </div>
             </TabsContent>
 

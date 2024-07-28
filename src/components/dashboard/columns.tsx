@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
-import {Copy, Trash} from "phosphor-react"
+import {Copy, Eye, Trash} from "phosphor-react"
 import { useModal } from "../hooks/use-modal-store"
 
 
@@ -57,10 +57,17 @@ export const columns: ColumnDef<PesquisadorProps>[] = [
   
       return (
         <div className="flex gap-3">
+         
+
         <Button  onClick={() => onOpen('confirm-delete-researcher', {id_delete:id_pesquisador, name:name})} variant={'destructive'} className="h-8 w-8 p-0 text-white ml-auto dark:text-white">
              
         <Trash size={8} className="h-4 w-4" />
       </Button>
+
+      <Button  onClick={() => onOpen('researcher-modal', {name:name})} variant={'ghost'} className="h-8 w-8 p-0 ">
+      <Eye size={8} className="h-4 w-4" />
+</Button>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">

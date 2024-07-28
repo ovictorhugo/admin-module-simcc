@@ -89,7 +89,7 @@ export function NuvemPalavras(props:Grafico) {
         borderWidth: "1px",
         borderColor: 'blue',
         BackgroundColor: 'red',
-        colors: ['#041962', '#0392FA'],
+        colors: ['#9CBCCE', '#284B5D', '#709CB6'],
 
       },
     },

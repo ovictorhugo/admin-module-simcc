@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Home } from './pages/Home'
-import { BrowserRouter as Router, Routes, Route, Navigate, } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import  { UserContext }  from '../src/context/context'
 
 import {User as FirebaseAuthUser} from 'firebase/auth'
@@ -36,6 +36,7 @@ import { News } from './pages/News';
 import { Baremas } from './pages/Baremas';
 import { PosGraduation } from './pages/PosGraduation';
 import { Resultados } from './pages/Resultados';
+import LoadingWrapper from './components/loading';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [navbar, setNavbar] = useState(false);
@@ -66,6 +67,14 @@ const [isCollapsed, setIsCollapsed] = useState(false)
 const [navCollapsedSize, setNavCollapsedSize] = useState(0)
 const [defaultLayout, setDefaultLayout] = useState([0,440,655])
 const [mode, setMode] = useState('user')
+
+useEffect(() => {
+ if(searchType.length == 0) {
+  setSearchType('article')
+  setItensSelecionados([])
+  
+ }
+}, [searchType]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -132,6 +141,7 @@ const [mode, setMode] = useState('user')
 
     }}
     >
+    
       <DefaultLayout>
       <Routes>
         <Route path='/' element={<Home/>}/>
@@ -142,6 +152,7 @@ const [mode, setMode] = useState('user')
         <Route path='/informacoes' element={<Home/>}/>
         <Route path='/indicadores' element={<Home/>}/>
         <Route path='/producoes-recentes' element={<Home/>}/>
+        <Route path='/departamentos' element={<Home/>}/>
 
 
         <Route path='/taxonomia' element={<Indicators/>}/>
@@ -183,6 +194,7 @@ const [mode, setMode] = useState('user')
 <Route path='/dashboard/grupos-pesquisa' element={<Dashboard/> }/>
 <Route path='/dashboard/indicadores' element={<Dashboard/> }/>
 <Route path='/dashboard/baremas' element={<Dashboard/> }/>
+<Route path='/dashboard/enviar-notificacoes' element={<Dashboard/> }/>
 
 <Route
           path='/config'
@@ -190,6 +202,7 @@ const [mode, setMode] = useState('user')
         />
       </Routes>
       </DefaultLayout>
+
     </UserContext.Provider>
    
    </CookiesProvider>

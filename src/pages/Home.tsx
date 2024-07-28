@@ -47,6 +47,8 @@ export function Home() {
     onOpen('informacoes')
 } else if(location.pathname == '/grupos-pesquisa') {
     onOpen('grupos-pesquisa')
+} else if(location.pathname == '/departamentos') {
+    onOpen('departamentos')
 } 
     }, [location]);
   

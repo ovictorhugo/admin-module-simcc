@@ -15,6 +15,7 @@ import { ContentIndicators } from "../indicators/content-indicators";
 import { NewsArticles } from "../novas-publicacoes/new-articles";
 import { Info } from "../info/info";
 import { GruposPesquisaPage } from "../grupos-pesquisa/grupos-pesquisa";
+import { DepartamentPage } from "../departamentos/departamentos-page";
 
 const ModalContent = () => {
   const { type } = useModalHomepage();
@@ -36,6 +37,8 @@ const ModalContent = () => {
       return <Info/>
     case 'grupos-pesquisa':
       return <GruposPesquisaPage/>
+    case 'departamentos':
+      return <DepartamentPage/>
   }
 }
 

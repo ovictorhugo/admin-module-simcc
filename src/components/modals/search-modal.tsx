@@ -115,8 +115,19 @@ const terms = queryUrl.get('terms');
 
     console.log('filter',filteredItems)
 
+    const normalizeInput = (value: string): string => {
+      // Remove accents and diacritics
+      value = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      // Convert to lowercase
+      value = value.toLowerCase();
+      // Remove special characters (keep only letters and numbers)
+      value = value.replace(/[^a-z0-9]/g, "");
+      return value;
+    };
+
     const handleChangeInput = (value:string) => {
-      searchFilesByTermPrefix(value)
+      const normalizedValue = normalizeInput(value);
+      searchFilesByTermPrefix(normalizedValue)
       setInput(value)
     }
 
@@ -163,24 +174,20 @@ const terms = queryUrl.get('terms');
   function formatTerms(valores: { term: string }[]): string {
     let result = '';
     let tempTerms: string[] = [];
-  
+
     valores.forEach(item => {
       let term = item.term.trim();
-  
+
       if (term.endsWith(';')) {
-        // Remove the final ';' and add the term to the temporary array
         tempTerms.push(term.slice(0, -1));
       } else if (term.endsWith('|')) {
-        // Remove the final '|' and add the term to the temporary array
         tempTerms.push(term.slice(0, -1));
-  
-        // Add the temporary array to the result as a group and clear the array
+
         if (tempTerms.length > 0) {
           result += '(' + tempTerms.join(';') + ')' + '|';
           tempTerms = [];
         }
       } else {
-        // Handle terms that don't end with ';' or '|'
         if (tempTerms.length > 0) {
           result += '(' + tempTerms.join(';') + ')' + '|';
           tempTerms = [];
@@ -188,19 +195,18 @@ const terms = queryUrl.get('terms');
         result += term + '|';
       }
     });
-  
-    // Handle any remaining terms in the tempTerms array
+
     if (tempTerms.length > 0) {
       result += '(' + tempTerms.join(';') + ')';
     } else {
-      // Remove the last '|' if it exists
       if (result.endsWith('|')) {
         result = result.slice(0, -1);
       }
     }
-  
+
     return result;
   }
+
 
 const termosformatados = formatTerms(itemsSelecionadosPopUp)
 
@@ -354,9 +360,11 @@ console.log('fawefwef', urlOpenAlex)
       console.log(itemsSelecionadosPopUp)
 
       //itens selecionados 
-      const handleRemoveItem = (indexToRemove: any) => {
-        setItensSelecionadosPopUp(prevItems => prevItems.filter((_, index) => index !== indexToRemove));
-      }
+      const handleRemoveItem = (index: number) => {
+        const newItems = [...itemsSelecionadosPopUp];
+        newItems.splice(index, 1);
+        setItensSelecionadosPopUp(newItems);
+      };
       
       useEffect(() => {
         const joinedTerms = itemsSelecionados.map(item => item.term).join('|');
@@ -367,13 +375,12 @@ console.log('fawefwef', urlOpenAlex)
       
       //conectores 
       const handleConnectorChange = (index: number, connector: string) => {
-        // Crie uma cópia do array de itens selecionados
-        const updatedItems = [...itemsSelecionadosPopUp];
-        // Substitua o último caractere pelo novo conector
-        updatedItems[index].term = updatedItems[index].term.slice(0, -1) + connector;
-        // Atualize o estado com os itens atualizados
-        setItensSelecionadosPopUp(updatedItems);
-    };
+        const newItems = [...itemsSelecionadosPopUp];
+        let term = newItems[index].term.trim();
+        term = term.replace(/[|;]$/, ''); // Remove qualquer conector existente no final
+        newItems[index].term = term + connector;
+        setItensSelecionadosPopUp(newItems);
+      };
 
    
     

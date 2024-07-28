@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Button } from "../../components/ui/button"
-import { ArrowUpDown } from "lucide-react"
+import { ArrowUpDown, Eye } from "lucide-react"
 import {  Trash } from "phosphor-react"
 
 
@@ -73,13 +73,19 @@ export const columns: ColumnDef<Research>[] = [
     cell: ({ row }) => {
       
       const {onOpen } = useModal();
- 
+      const name = row.original.name;
     
  
       return (
-        <Button  onClick={() => onOpen('confirm-delete-researcher-graduate-program', {lattes_id:row.original.lattes_id, graduate_program_id:row.original.graduate_program_id, nome:row.original.name})} variant={'destructive'} className="h-8 w-8 p-0 text-white ml-auto dark:text-white">
+       <div className="flex gap-3">
+           <Button  onClick={() => onOpen('researcher-modal', {name:name})} variant={'ghost'} className="h-8 w-8 p-0 ">
+      <Eye size={8} className="h-4 w-4" />
+</Button>
+
+         <Button  onClick={() => onOpen('confirm-delete-researcher-graduate-program', {lattes_id:row.original.lattes_id, graduate_program_id:row.original.graduate_program_id, nome:row.original.name})} variant={'destructive'} className="h-8 w-8 p-0 text-white  dark:text-white">
                        <Trash size={8} className="h-4 w-4" />
                      </Button>
+       </div>
       )
     },
   },

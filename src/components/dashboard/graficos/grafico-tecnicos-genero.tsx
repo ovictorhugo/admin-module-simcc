@@ -4,23 +4,22 @@ import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell, Label } from "rechar
 import { ChartContainer, ChartConfig, ChartTooltip, ChartTooltipContent } from "../../../components/ui/chart";
 
 interface Docentes {
-    matric: string;
-    insUFMG: string;
-    nome: string;
-    genero: string;
-    denoSit: string;
-    rt: string;
-    classe: string;
-    cargo: string;
-    nivel: string;
-    ref: string;
-    titulacao: string;
-    setor: string;
-    detalheSetor: string;
-    dtIngOrg: string;
-    dataProg: string;
-    year_charge: string;
-    semester: string;
+    cargo:string
+  classe:string
+  data_prog:string
+  deno_sit:string
+  detalhe_setor:string
+  dting_org:string
+  genero:string
+  ins_ufmg:string
+  matric:string
+  nivel:string
+  nome:string
+  ref:string
+  rt:string
+  semester:string
+  setor:string
+  titulacao:string
 }
 
 const chartConfig = {
@@ -38,6 +37,11 @@ export function GraficoTecnicosGenero({ docentes }: { docentes: Docentes[] }) {
   const [chartData, setChartData] = useState<{ genero: string; count: number }[]>([]);
 
   useEffect(() => {
+    if (!Array.isArray(docentes)) {
+      console.error("The 'docentes' prop is not an array:", docentes);
+      return;
+    }
+
     const counts: { [key: string]: number } = {};
 
     docentes.forEach(docente => {
@@ -55,8 +59,8 @@ export function GraficoTecnicosGenero({ docentes }: { docentes: Docentes[] }) {
 
   function getColorForGenero(genero: string) {
     const colors = {
-      "MASCULINO": chartConfig.MASCULINO.color,
-      "FEMININO": chartConfig.FEMININO.color,
+      MASCULINO: chartConfig.MASCULINO.color,
+      FEMININO: chartConfig.FEMININO.color,
     };
     return colors[genero] || '#000000';
   }
@@ -84,6 +88,7 @@ export function GraficoTecnicosGenero({ docentes }: { docentes: Docentes[] }) {
                       </text>
                     );
                   }
+                  return null;
                 }}
               />
               {chartData.map((entry, index) => (

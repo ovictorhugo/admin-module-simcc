@@ -18,6 +18,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../ui/resi
 import { Tabs, TabsContent } from "../ui/tabs";
 import { ItensListDepartamento } from "./components/itens-list-departamento";
 import { useModal } from "../hooks/use-modal-store";
+import { DisplayItemDepartamento } from "./components/display-item-departamento";
 
 
 interface Departamentos {
@@ -254,10 +255,20 @@ export function Departamentos() {
        <ResizablePanel defaultSize={defaultLayout[2]} minSize={50}>
 
              {total ? (
-   <div></div>
+    <DisplayItemDepartamento
+    dep_id={total.dep_id}
+      org_cod={total.org_cod}
+      dep_nom={total.dep_nom}
+      dep_des={total.dep_des}
+      dep_email={total.dep_email}
+      dep_site={total.dep_site}
+      dep_tel={total.dep_tel}
+      img_data={total.img_data}
+      dep_sigla={total.dep_sigla}
+    />
   ):(
     <div className="w-full h-full flex flex-col items-center justify-center">
-     <p className="text-9xl  text-[#719CB8]  font-bold mb-16 animate-pulse">^_____^</p>
+     <p className="text-9xl  text-[#719CB8]  font-bold mb-16 animate-pulse">^____^</p>
       <p className="font-medium text-lg">Nenhum departamento selecionado</p>
     </div>
   )}

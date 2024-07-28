@@ -163,7 +163,7 @@ export function ResultHome() {
                 <ResultProvider />
               </div>
             ) : (
-              <div className="h-[calc(100vh-56px)] flex flex-col md:p-8 p-4 md:pt-4">
+              <div className="h-[calc(100vh-90px)] flex flex-col md:p-8 p-4 md:pt-4">
               <Search/>
 
               <div className="w-full flex flex-col items-center justify-center h-full">

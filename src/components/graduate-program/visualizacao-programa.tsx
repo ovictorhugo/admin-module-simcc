@@ -10,27 +10,28 @@ import { Alert } from "../ui/alert";
 import { Search } from "../search/search";
 import { useModalResult } from "../hooks/use-modal-result";
 import { useModal } from "../hooks/use-modal-store";
+import { DisplayItem } from "../dashboard/components/display-item";
 
 interface GraduateProgram {
-    area?: string;
-    code?: string;
-    graduate_program_id?: string;
-    modality?: string;
-    name?: string;
-    rating?: string;
-    type?: string;
-    city?: string
-    state?: string
-    instituicao?: string
-    url_image?: string
-    region?: string
-    sigla?: string
-    latitude?: string
-    longitude?: string
-    visible?:string
-    qtd_discente?:string
-    qtd_colaborador?:string
-    qtd_permanente?:string
+    area: string;
+    code: string;
+    graduate_program_id: string;
+    modality: string;
+    name: string;
+    rating: string;
+    type: string;
+    city: string
+    state: string
+    instituicao: string
+    url_image: string
+    region: string
+    sigla: string
+    latitude: string
+    longitude: string
+    visible:string
+    qtd_discente:string
+    qtd_colaborador:string
+    qtd_permanente:string
   }
 
   interface Total {
@@ -50,7 +51,7 @@ interface GraduateProgram {
 
 
 export function VisualizacaoPrograma() {
-  const {urlGeral, itemsSelecionados, searchType} = useContext(UserContext)
+  const {urlGeral, itemsSelecionados, searchType, user} = useContext(UserContext)
   const { onOpen: onOpenModal } = useModal();
     const history = useNavigate();
 
@@ -148,7 +149,7 @@ const year = currentYear - 4;
                 
               <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
               <TabsTrigger value="doc" className="text-zinc-600 dark:text-zinc-200">Docentes</TabsTrigger>
-                <TabsTrigger value="unread" className="text-zinc-600 dark:text-zinc-200">Indicadores</TabsTrigger>
+                <TabsTrigger value="unread" className="text-zinc-600 dark:text-zinc-200">Administrativo</TabsTrigger>
 
               
                 </TabsList>
@@ -160,8 +161,8 @@ const year = currentYear - 4;
 
             </div>
 
-            <TabsContent value="all" className="h-auto flex flex-col gap-4 md:gap-8  mt-2">
-            <div className="md:p-8 p-4 py-0 md:py-0">
+            <TabsContent value="all" className="h-auto flex flex-col gap-4 md:gap-8  ">
+            <div className="md:p-8 p-4 py-0 md:py-0 mt-2">
                  
         
         <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
@@ -338,6 +339,29 @@ const year = currentYear - 4;
                   )}
 
                  
+            </TabsContent>
+
+            <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8  ">
+                 <div className="px-">
+                 {graduatePrograms.map((total) => (
+                     <DisplayItem
+                     graduate_program_id={total.graduate_program_id}
+                     code={total.code}
+                     name={total.name}
+                     area={total.area}
+                     modality={total.modality}
+                     type={total.type}
+                     rating={total.rating}
+                     institution_id={user.institution_id}
+                     url_image={total.url_image}
+                     city={total.city}
+                     visible={Boolean(total.visible)}
+                     qtd_discente={total.qtd_discente}
+                     qtd_colaborador={total.qtd_colaborador}
+                     qtd_permanente={total.qtd_permanente}
+                     />
+                  ))}
+                 </div>
             </TabsContent>
             </Tabs>
         </main>

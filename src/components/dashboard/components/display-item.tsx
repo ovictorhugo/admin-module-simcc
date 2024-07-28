@@ -28,12 +28,12 @@ interface Patrimonio {
   type: string
   rating: string
   institution_id: string
-  description: string
+  description?: string
   url_image: string
   city:string
-  created_at:string
+  created_at?:string
   visible: boolean
-  updated_at:string
+  updated_at?:string
   qtd_discente:string
   qtd_colaborador:string
   qtd_permanente:string

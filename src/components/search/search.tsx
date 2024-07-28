@@ -178,9 +178,11 @@ const handlePesquisa = () => {
 
 
 
-const handleRemoveItem = (indexToRemove: any) => {
-  setItensSelecionados(prevItems => prevItems.filter((_, index) => index !== indexToRemove));
-}
+const handleRemoveItem = (index: number) => {
+  const newItems = [...itemsSelecionados];
+  newItems.splice(index, 1);
+  setItensSelecionados(newItems);
+};
 
 
 
@@ -200,13 +202,28 @@ useEffect(() => {
 
 //conectores 
 const handleConnectorChange = (index: number, connector: string) => {
-  // Crie uma cópia do array de itens selecionados
-  const updatedItems = [...itemsSelecionados];
-  // Substitua o último caractere pelo novo conector
-  updatedItems[index].term = updatedItems[index].term.slice(0, -1) + connector;
-  // Atualize o estado com os itens atualizados
-  setItensSelecionados(updatedItems);
+  const newItems = [...itemsSelecionados];
+  let term = newItems[index].term.trim();
+  term = term.replace(/[|;]$/, ''); // Remove qualquer conector existente no final
+  newItems[index].term = term + connector;
+  setItensSelecionados(newItems);
 };
+
+useEffect(() => {
+  queryUrl.set('terms', Terms);
+
+  if( itemsSelecionados.length > 0 && posGrad) {
+    navigate({
+      pathname: '/pos-graduacao',
+      search: queryUrl.toString(),
+    });
+  } else if (itemsSelecionados.length > 0) {
+    navigate({
+      pathname: '/resultados',
+      search: queryUrl.toString(),
+    });
+  }
+}, [itemsSelecionados]);
 
 
 

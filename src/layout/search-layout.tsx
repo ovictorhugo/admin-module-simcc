@@ -17,6 +17,7 @@ import { AlertCircle, BarChartBig, Blocks, BookOpen, Building2, GraduationCap, H
 import { useTheme } from "next-themes";
 import { ScrollArea } from "../components/ui/scroll-area";
 import { UserConfigHeader } from "../components/header/user-config-header";
+import { Footer } from "../components/footer/footer";
 interface MailProps {
  
   defaultLayout: number[] | undefined
@@ -174,7 +175,7 @@ export default function SearchLayout({
             {children}
             </div>
 
-          
+          <Footer/>
           </main>
 
           </ResizablePanel>

@@ -26,6 +26,8 @@ import { ImportDocentes } from "../modals/import-docentes";
 import { ImportTaes } from "../modals/import-taes";
 import { FiltersModal } from "../homepage/categorias/researchers-home";
 import { AddDepartamento } from "../modals/add-departamento";
+import { ConfirmDeleteDepartamento } from "../modals/confirm-delete-departamento";
+import { ImportDisciplina } from "../modals/import-disciplina";
 
 const ModalContent = () => {
   const { type } = useModal();
@@ -62,6 +64,12 @@ const ModalContent = () => {
         return <AddGrupoPesquisaModal/>
       case 'add-departamento':
         return <AddDepartamento/>
+      case 'confirm-delete-departamento':
+        return <ConfirmDeleteDepartamento/>
+      case 'edit-departamento':
+        return <AddDepartamento/>
+      case 'import-disciplina':
+        return <ImportDisciplina/>
 
     default:
       return null;

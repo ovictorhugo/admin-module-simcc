@@ -76,23 +76,22 @@ interface Docentes {
 }
 
 interface Tecnicos {
-  matric: string;
-  insUFMG: string;
-  nome: string;
-  genero: string;
-  denoSit: string;
-  rt: string;
-  classe: string;
-  cargo: string;
-  nivel: string;
-  ref: string;
-  titulacao: string;
-  setor: string;
-  detalheSetor: string;
-  dtIngOrg: string;
-  dataProg: string;
-  year_charge: string;
-  semester: string;
+  cargo:string
+  classe:string
+  data_prog:string
+  deno_sit:string
+  detalhe_setor:string
+  dting_org:string
+  genero:string
+  ins_ufmg:string
+  matric:string
+  nivel:string
+  nome:string
+  ref:string
+  rt:string
+  semester:string
+  setor:string
+  titulacao:string
 }
 
 type Research = {
@@ -132,6 +131,12 @@ interface VisaoPrograma {
   work_in_event: number;
 }
 
+
+interface YearSemester {
+  year:string
+  semester:string
+}
+
   import bg_popup from '../../assets/bg_popup.png';
 import { useModal } from "../hooks/use-modal-store";
 import { GraficoBolsistaProdutividade } from "./graficos/grafico-bolsista-produtividade";
@@ -148,6 +153,8 @@ import { Input } from "../ui/input";
 import { GraficoTecnicosRt } from "./graficos/grafico-tecnicos-rt";
 import { GraficoTecnicosGenero } from "./graficos/grafico-tecnicos-genero";
 import { GraficoProgressaoTecnicos } from "./graficos/grafico-progressao-tecnicos";
+import { GraficoTecnicosCargo } from "./graficos/grafico-tecnico-cargo";
+import { LinhaTempoDocentes } from "./components/linha-tempo";
 
 const chartConfig = {
  
@@ -216,6 +223,18 @@ const chartConfig2 = {
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
+
+function generateYearSemesterArray(startYear: number, startSemester: number, endYear: number, endSemester: number): YearSemester[] {
+  const result: YearSemester[] = [];
+  for (let year = startYear; year <= endYear; year++) {
+    for (let semester = 1; semester <= 2; semester++) {
+      if (year === endYear && semester > endSemester) break;
+      result.push({ year: year.toString(), semester: semester.toString() });
+    }
+  }
+  return result;
+}
+
 
 
 export function IndicadoresDashboard() {
@@ -340,6 +359,8 @@ console.log(bolsistas)
         const [taes, setTaes] = useState<Tecnicos[]>([]);
 
         let urlTecnicos = urlGeralAdm + `tecnicos`
+
+        console.log(urlTecnicos)
     
         useEffect(() => {
           const fetchData = async () => {
@@ -368,6 +389,53 @@ console.log(bolsistas)
     
         console.log(taes)
 
+
+         //Anos arquivos enviados docentes 
+
+         const [yearDocentes, setYearDocentes] = useState<YearSemester[]>([]);
+
+         let urlYearDocentes = urlGeralAdm + `docentes/semestres`
+ 
+         console.log(urlYearDocentes)
+     
+         useEffect(() => {
+           const fetchData = async () => {
+             try {
+               const response = await fetch(urlYearDocentes , {
+                 mode: "cors",
+                 headers: {
+                   "Access-Control-Allow-Origin": "*",
+                   "Access-Control-Allow-Methods": "GET",
+                   "Access-Control-Allow-Headers": "Content-Type",
+                   "Access-Control-Max-Age": "3600",
+                   "Content-Type": "text/plain",
+                 },
+               });
+               const data = await response.json();
+               if (data) {
+                   setYearDocentes(data)
+               }
+             } catch (err) {
+               console.log(err);
+             }
+           };
+           fetchData()
+     
+         }, [urlYearDocentes]);
+
+         const currentYear = new Date().getFullYear();
+         const currentSemester = new Date().getMonth() < 6 ? 1 : 2;
+       
+         const yearSemesterArray = generateYearSemesterArray(2010, 1, currentYear, currentSemester);
+       
+         const items = yearSemesterArray.map(item => ({
+           ...item,
+           selected: yearDocentes.some(docente => docente.year === item.year && docente.semester === item.semester)
+         }));
+
+        //
+
+
         const pqCount = bolsistas.filter(b => b.modality_code === 'PQ').length;
         const dtCount = bolsistas.filter(b => b.modality_code === 'DT').length;
         const totalCountR = total.reduce((sum, t) => sum + parseInt(t.count_r), 0);
@@ -388,7 +456,7 @@ console.log(bolsistas)
 
         const [year, setYear] = useState(new Date().getFullYear()-9);
 
-        const currentYear = new Date().getFullYear();
+       
         const years = [];
         for (let i = currentYear; i > currentYear - 30; i--) {
             years.push(i);
@@ -668,6 +736,10 @@ useMemo(() => {
                   </div>
 
                   </div>
+
+                 <div className="grid grid-cols-1">
+                 <LinhaTempoDocentes items={items} />
+                 </div>
 
 
                  <Alert className="flex gap-6">
@@ -1531,7 +1603,7 @@ useMemo(() => {
                   </CardHeader>
 
                   <CardContent className="flex py-0 flex-1  items-center justify-center">
-                  <GraficoDocentesClasse docentes={docentes}/>
+                  <GraficoTecnicosCargo docentes={taes}/>
                   </CardContent>
 
                     </Alert>

@@ -34,6 +34,8 @@ export function Dashboard() {
             onOpen('indicadores')
         } else if (location.pathname == '/dashboard/baremas') {
             onOpen('baremas')
+        } else if (location.pathname == '/dashboard/enviar-notificacoes') {
+            onOpen('enviar-notificacoes')
         }
     }, [location]);
   
