@@ -1,4 +1,4 @@
-import { ArrowRight, Book, ChevronLeft, Copyright, Download, File, GraduationCap, Info, Link2, User } from "lucide-react";
+import { ArrowRight, Book, ChevronLeft, Copyright, Download, File, GraduationCap, Info, Link2, User, UserCog } from "lucide-react";
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
@@ -7,7 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
-import { Books, ChartBar, FileXls, Quotes, Warning } from "phosphor-react";
+import { Books, ChartBar, Code, FileXls, Quotes, StripeLogo, Student, Warning } from "phosphor-react";
 import { Label as LabelInput } from "../ui/label";
 import { PieSectorDataItem } from "recharts/types/polar/Pie"
 
@@ -601,10 +601,10 @@ useMemo(() => {
                     <CardTitle className="text-sm font-medium">
                       Total de Técnicos
                     </CardTitle>
-                    <GraduationCap className="h-4 w-4 text-muted-foreground" />
+                    <UserCog className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{props.count_gp}</div>
+                    <div className="text-2xl font-bold">{taes.length}</div>
                     <p className="text-xs text-muted-foreground">
                       registrados
                     </p>
@@ -840,14 +840,14 @@ useMemo(() => {
                     <CardTitle className="text-sm font-medium">
                       Divisão por gênero
                     </CardTitle>
-                    <CardDescription>Graduação, mestrado, doutorado...</CardDescription>
+                    <CardDescription>Autodeclaração dos docentes</CardDescription>
                     </div>
 
                     <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                      <p>Add to library</p>
+                      <p>Fonte: Escola de Engenharia</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -864,16 +864,16 @@ useMemo(() => {
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
-                      Produção técnica
+                      Progressão de carreira
                     </CardTitle>
-                    <CardDescription>Patente, software e marca</CardDescription>
+                    <CardDescription>Quantidade por ano</CardDescription>
                     </div>
 
                     <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                      <p>Add to library</p>
+                      <p>Fonte: Escola de Engenharia </p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -889,7 +889,7 @@ useMemo(() => {
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
-                      Bolsistas CNPq
+                     Quantidade de docentes na pós-graduação
                     </CardTitle>
                     <CardDescription>Bolsas PQ e DT </CardDescription>
                     </div>
@@ -898,7 +898,7 @@ useMemo(() => {
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                      <p>Add to library</p>
+                      <p>Fonte: Conectee</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -1051,7 +1051,7 @@ useMemo(() => {
                     
                      </div>
  
-                     <Copyright className="h-4 w-4 text-muted-foreground" />
+                     <StripeLogo className="h-4 w-4 text-muted-foreground" />
                     
                    </CardHeader>
  
@@ -1072,7 +1072,7 @@ useMemo(() => {
                     
                      </div>
  
-                     <Copyright className="h-4 w-4 text-muted-foreground" />
+                     <Code className="h-4 w-4 text-muted-foreground" />
                     
                    </CardHeader>
  
@@ -1093,7 +1093,7 @@ useMemo(() => {
                     
                      </div>
  
-                     <Copyright className="h-4 w-4 text-muted-foreground" />
+                     <File className="h-4 w-4 text-muted-foreground" />
                     
                    </CardHeader>
  
@@ -1115,7 +1115,7 @@ useMemo(() => {
                     
                      </div>
  
-                     <Copyright className="h-4 w-4 text-muted-foreground" />
+                     <Student className="h-4 w-4 text-muted-foreground" />
                     
                    </CardHeader>
  

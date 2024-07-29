@@ -687,8 +687,7 @@ const handleSubmit = async () => {
     <DialogHeader>
       <DialogTitle>Escolher pesquisador</DialogTitle>
       <DialogDescription>
-        This action cannot be undone. This will permanently delete your account
-        and remove your data from our servers.
+       Todos os docentes cadastrado no Módulo Administrativo da instituição
       </DialogDescription>
     </DialogHeader>
 

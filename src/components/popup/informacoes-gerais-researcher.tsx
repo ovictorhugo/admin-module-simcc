@@ -14,6 +14,7 @@ type Research = {
     openalex:string,
     departament:string
     subsidy:Bolsistas
+    graduate_programs:GraduatePrograms[]
   }
 
   interface Bolsistas {
@@ -27,6 +28,11 @@ type Research = {
     scholarship_quantity:string
     }
 
+    interface  GraduatePrograms {
+      graduate_program_id:string
+      name:string
+    }
+
 
 import {
     Tooltip,
@@ -34,16 +40,19 @@ import {
     TooltipProvider,
     TooltipTrigger,
   } from "../../components/ui/tooltip"
-import { Building2 } from "lucide-react";
+import { Building2, GraduationCap } from "lucide-react";
 import { Alert } from "../ui/alert";
+import { Link } from "react-router-dom";
   
 
 export function InformacoesGeraisResearcher(props:Research) {
     return (
         <div>
-            <div className=" font-medium text-2xl mb-6 pr-12">Informações gerais</div>
+            {(props.h_index.length != 0 && props.cited_by_count.length != 0 && props.i10_index.length != 0) && (
+              <div className=" font-medium text-2xl mb-6 pr-12">Informações gerais</div>
+            )}
 
-            <div className="flex gap-3 items-center flex-wrap">
+            <div className="flex gap-3 mb-6 items-center flex-wrap">
             {props.h_index.length != 0 && (
                   <TooltipProvider>
   <Tooltip>
@@ -83,13 +92,44 @@ export function InformacoesGeraisResearcher(props:Research) {
 
             </div>
 
-            <div className="flex">
-                                         <div className={`h-full w-2 min-w-[8px] min-h-[100px] rounded-l-lg border border-r-0 border-neutral-200 dark:border-neutral-800 ` }></div>
-                                        
-                                         <Alert className="flex items-center rounded-l-none">
+           {(Array(props.subsidy).length != 0) && (
+             <div>
+              <div className="font-medium text-2xl mb-6 pr-12">
+            Bolsa de proatividade
+          </div>
+              <div className="flex mt-6">
+              
+              <div className={`h-full w-2 min-w-[8px] min-h-[100px] rounded-l-lg border border-r-0 border-neutral-200 dark:border-neutral-800 ` }></div>
+             
+              <Alert className="flex items-center rounded-l-none">
+ 
+ </Alert>
+ </div>
+             </div>
+           )}
 
-              </Alert>
-            </div>
+            {props.graduate_programs.length !== 0 && (
+        <div >
+          <div className="font-medium text-2xl my-6 ">
+            Programas de pós-graduação
+          </div>
+
+          <div className="flex gap-3 items-center flex-wrap">
+            {props.graduate_programs.map((item) => (
+              <Link
+                key={item.graduate_program_id}
+                to={`/pos-graduacao?graduate_program_id=${item.graduate_program_id}`}
+                target="_blank"
+              >
+                <div className="border-neutral-200 border dark:border-neutral-800 py-2 px-4 rounded-md text-xs flex gap-2 items-center">
+                  <GraduationCap size={12} className="" />
+                  {item.name}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
         </div>
     )
 }

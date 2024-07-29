@@ -1,19 +1,23 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
+import cors from 'cors'; // Importa o pacote cors
 
 const app = express();
+
+// Configura o middleware cors
+app.use(cors({
+  origin: 'http://localhost:8080', // Substitua pelo domínio da sua aplicação cliente
+  methods: 'POST',
+  allowedHeaders: 'Content-Type',
+}));
+
 app.use(express.json());
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.eng.ufmg.br', // Substitua pelo host SMTP correto do seu servidor Zimbra
-  port: 587, // Use a porta correta (587 para TLS ou 465 para SSL)
-  secure: false, // Use 'true' se a porta for 465 (SSL)
+  service: 'gmail',
   auth: {
-    user: 'vitrinepatrimonio@eng.ufmg.br',
-    pass: 'xyz888@_A',
-  },
-  tls: {
-    rejectUnauthorized: false, // Adicione isso se estiver enfrentando problemas com certificados SSL não confiáveis
+    user: 'conectee.eng@gmail.com',
+    pass: 'vh2004VH',
   },
 });
 
@@ -21,8 +25,8 @@ app.post('/api/send-email', async (req, res) => {
   const { html } = req.body;
 
   const mailOptions = {
-    from: 'vitrinepatrimonio@eng.ufmg.br',
-    to: 'victorhugodejesus2004@hotmail.com',
+    from: 'conectee.eng@gmail.com',
+    to: 'victorhugodejesusoliveira@gmail.com',
     subject: 'Notificação',
     html,
   };

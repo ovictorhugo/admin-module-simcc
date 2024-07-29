@@ -13,12 +13,14 @@ interface YearSemester {
   
   interface Props {
     items: Item[];
+    depId:string
   }
 
   
-  export function LinhaTempoDisciplinas({ items }: Props) {
+  export function LinhaTempoDisciplinas({ items, depId }: Props) {
     const {onOpen} = useModal()
 
+   console.log(depId)
     return (
   
         <ScrollArea className=" relative pb-4 whitespace-nowrap">
@@ -30,7 +32,7 @@ interface YearSemester {
               <div className="flex items-center w-full">
               <div className="border-b w-full  flex flex-1  "></div>
 
-              <div onClick={() => onOpen('import-disciplina')} className={`w-8 h-8 cursor-pointer rounded-full border ${item.selected ? 'bg-[#719CB8] dark:bg-[#719CB8] text-white' : 'bg-neutral-50 dark:bg-neutral-900'} whitespace-nowrap flex items-center justify-center text-xl font-bold`}>
+              <div onClick={() => onOpen('import-disciplina', {dep_id:depId})} className={`w-8 h-8 cursor-pointer rounded-full border ${item.selected ? 'bg-[#719CB8] dark:bg-[#719CB8] text-white' : 'bg-neutral-50 dark:bg-neutral-900'} whitespace-nowrap flex items-center justify-center text-xl font-bold`}>
                 {item.selected ? <Check size={12} /> : <X size={12} />}
               </div>
 

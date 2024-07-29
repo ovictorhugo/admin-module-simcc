@@ -11,6 +11,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../ui/tooltip"
+import { useContext } from "react";
+import { UserContext } from "../../context/context";
 
 interface NavProps {
   isCollapsed: boolean
@@ -28,6 +30,8 @@ export function NavigationSidebar({ links, isCollapsed }: NavProps) {
 
   const location = useLocation();
 
+  const {setItensSelecionados, setSearchType} = useContext(UserContext)
+
   return (
     <div
       data-collapsed={isCollapsed}
@@ -39,6 +43,10 @@ export function NavigationSidebar({ links, isCollapsed }: NavProps) {
             <Tooltip key={index} delayDuration={0}>
               <TooltipTrigger asChild>
                 <Link
+                onClick={() => {
+                    setSearchType('article')
+                    setItensSelecionados([])
+                }}
                   to={`${link.link}`}
                   className={cn(
                     buttonVariants({ variant:location.pathname == link.link ? ('default'):('ghost'), size: "icon" }),
@@ -64,6 +72,10 @@ export function NavigationSidebar({ links, isCollapsed }: NavProps) {
             <Link
               key={index}
               to={`${link.link}`}
+              onClick={() => {
+                setSearchType('article')
+                setItensSelecionados([])
+            }}
               className={cn(
                 buttonVariants({ variant:location.pathname == link.link ? ('default'):('ghost'), size: "sm" }),
                 location.pathname == link.link &&

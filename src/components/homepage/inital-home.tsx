@@ -84,7 +84,8 @@ import { SelectTypeSearch } from "../search/select-type-search";
 import { Badge } from "../ui/badge";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { AreaChart, Area,LineChart, Line, BarChart, Bar, XAxis, PieChart, Pie, YAxis, LabelList,  CartesianGrid,  Legend, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area,LineChart, Line, BarChart, Bar, XAxis, PieChart, Pie, YAxis, LabelList, Cell, CartesianGrid,  Legend, ResponsiveContainer } from 'recharts';
+import { Label as LabelChart } from 'recharts';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 type Research = {
   count_article:number
@@ -145,7 +146,37 @@ import { FooterHome } from "../footer/footer-home";
 import { GraficoRtTechnician } from "./components/grafico-technician";
 
 
+interface Bolsistas {
+  aid_quantity:string
+  call_title:string
+  funding_program_name:string
+  modality_code:string
+category_level_code:string
+institute_name:string
+modality_name:string
+name:string
+researcher_id:string
+scholarship_quantity:string
+}
+
 HC_wordcloud(Highcharts);
+
+const chartConfig5 = {
+ 
+  'Produtividade em Pesquisa': {
+    label: "Produtividade em Pesquisa",
+    color: "#809BB5",
+  },
+  'Desen. Tec. e Extensão Inovadora': {
+    label: "Desen. Tec. e Extensão Inovadora",
+    color: "#A6BCCD",
+  },
+  'Outros docentes': {
+    label: "Outros docentes",
+    color: "#354A5C",
+  },
+} satisfies ChartConfig
+
 
 const chartConfig = {
   views: {
@@ -277,6 +308,21 @@ fetchData()
 
 
 }, [urlRt]);
+
+// Função para somar os counts de technician
+const sumTechnicianCounts = (technician: CoutRt[]): number => {
+  return technician.reduce((total, item) => total + item.count, 0);
+};
+
+const [totalTechnicianCounts, setTotalTechnicianCounts] = useState(0)
+
+useEffect(() => {
+  if (rt) {
+    setTotalTechnicianCounts(sumTechnicianCounts(rt.technician))
+
+  }
+}, [rt]);
+
 
 const { theme, setTheme } = useTheme()
 // Crie uma constante para agrupar as áreas e calcular o total de grupos por área
@@ -478,6 +524,47 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
       navigate(`/resultados?type_search=article&terms=${term}`)
 
     }
+
+
+    /////////
+    const [bolsistas, setBolsistas] = useState<Bolsistas[]>([]);
+
+    let urlBolsistas = urlGeralAdm + `ResearcherRest/Query/Subsidy`
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(urlBolsistas , {
+            mode: "cors",
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET",
+              "Access-Control-Allow-Headers": "Content-Type",
+              "Access-Control-Max-Age": "3600",
+              "Content-Type": "text/plain",
+            },
+          });
+          const data = await response.json();
+          if (data) {
+              setBolsistas(data)
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchData()
+
+    }, [urlBolsistas]);
+
+    const pqCount = bolsistas.filter(b => b.modality_code === 'PQ').length;
+    const dtCount = bolsistas.filter(b => b.modality_code === 'DT').length;
+    const totalCountR = Number(VisaoPrograma.map((props) => (props.researcher)))
+  
+    const chartData = [
+      { name: 'Produtividade em Pesquisa', value: pqCount },
+      { name: 'Desen. Tec. e Extensão Inovadora', value: dtCount },
+      { name: 'Outros docentes', value: totalCountR - pqCount -dtCount },
+    ];
 
   return (
     <>
@@ -695,7 +782,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                      <p>Dados do semestre atual</p>
+                    <p>Fonte: Escola de Engenharia</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -712,7 +799,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                     <CardHeader className="flex flex-row p-10 items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
-                     Total de {VisaoPrograma.map((props) => (<>{props.researcher}</>))} técnicos
+                     Total de {totalTechnicianCounts} técnicos
                     </CardTitle>
                     <CardDescription>na Escola de Engenharia</CardDescription>
                     </div>
@@ -721,7 +808,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                      <p>Dados do semestre atual</p>
+                      <p>Fonte: Escola de Engenharia</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -881,81 +968,8 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   </div>
 
                   <div className="grid  gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-                    <Alert className=" h-[400px] lg:col-span-2">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                      Produção bibliográfica
-                    </CardTitle>
-                    <CardDescription>Artigos, livros e capítulos</CardDescription>
-                    </div>
 
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Add to library</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-<CardContent>
-<ChartContainer
-          config={chartConfig2}
-          className="mx-auto aspect-square max-h-[250px]"
-        >
-<PieChart>
-<ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-
-<Pie
-              data={areaTotaisArray}
-              dataKey="total"
-              nameKey="area"
-              innerRadius={60}
-              strokeWidth={5}
-            >
- <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
-                        >
-                          {grupos.length.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Grupos
-                        </tspan>
-                      </text>
-                    )
-                  }
-                }}
-              />
-
-              </Pie>
-</PieChart>
-          </ChartContainer>
-</CardContent>
-                    </Alert>
-
-
-                    <Alert className="">
+                    <Alert className="lg:col-span-2">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
@@ -968,7 +982,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                      <p>Add to library</p>
+                      <p>Fonte: Plataforma Lattes</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -978,6 +992,72 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   <div id="nuveeeem" className="flex w-full justify-center items-center">
               <HighchartsReact highcharts={Highcharts} options={options}  className={'h-full'} />
               </div>
+                    </Alert>
+
+                    <Alert className=" h-[400px] ">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                    Gráfico percentual de bolsistas CNPq
+                    </CardTitle>
+                    <CardDescription>Visão geral da Escola de Engenharia</CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Fonte: Painel CNPq</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
+<CardContent>
+<ChartContainer
+      config={chartConfig5}
+      className="mx-auto aspect-square max-h-[300px]"
+    >
+      <PieChart>
+      <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+      <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5}>
+          {chartData.map((key, index) => (
+            <Cell key={`cell-${index}`} fill={(chartConfig5[key.name as keyof typeof chartConfig]).color} />
+          ))}
+
+<LabelChart
+            content={({ viewBox }) => {
+              if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                return (
+                  <text
+                    x={viewBox.cx}
+                    y={viewBox.cy}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                  >
+                    <tspan
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      className="fill-foreground text-4xl font-bold"
+                    >
+                      {bolsistas.length.toLocaleString()}
+                    </tspan>
+                    <tspan
+                      x={viewBox.cx}
+                      y={(viewBox.cy || 0) + 24}
+                      className="fill-muted-foreground"
+                    >
+                      Bolsistas
+                    </tspan>
+                  </text>
+                );
+              }
+            }}
+          />
+        </Pie>
+      </PieChart>
+    </ChartContainer>
+</CardContent>
                     </Alert>
                   </div>
                   <ArtigosRecentes/>

@@ -62,7 +62,7 @@ export function ResearchersBloco(props: Research) {
         </Masonry>
         </ResponsiveMasonry>
 
-        {props.researcher.length >= count && (
+        {props.researcher.length > count && (
             <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
         )}
        </div>

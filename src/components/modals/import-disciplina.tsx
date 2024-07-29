@@ -2,7 +2,7 @@ import { ArrowUUpLeft, FileXls, Upload } from "phosphor-react";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { UserContext } from "../../context/context";
 import * as XLSX from 'xlsx';
@@ -27,10 +27,11 @@ interface Patrimonio {
     language: string;
     professor: string;
     status: string;
+    dep_id:string
 }
 
 export function ImportDisciplina() {
-    const { onClose, isOpen, type: typeModal } = useModal();
+    const { onClose, isOpen, type: typeModal, data:dataModal } = useModal();
     const isModalOpen = (isOpen && typeModal === 'import-disciplina');
     const { urlGeralAdm } = useContext(UserContext);
     const [fileInfo, setFileInfo] = useState({ name: '', size: 0 });
@@ -38,6 +39,14 @@ export function ImportDisciplina() {
     const [year, setYear] = useState(new Date().getFullYear());
     const [semester, setSemester] = useState('1');
     const [uploadProgress, setUploadProgress] = useState(0);
+
+    const [depId, setDepId] = useState(dataModal ? dataModal.dep_id : '')
+
+    useEffect(() => {
+
+        
+        setDepId(dataModal.dep_id)
+    }, [dataModal]);
 
     const onDrop = useCallback((acceptedFiles: any) => {
         handleFileUpload(acceptedFiles);
@@ -63,12 +72,12 @@ export function ImportDisciplina() {
             const workbook = XLSX.read(data, { type: 'array' });
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
-
+    
             const json = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
-
+    
             const headers: string[] = json[0] as string[];
             const rows = json.slice(1);
-
+    
             const headerMap: { [key: string]: keyof Patrimonio } = {
                 'Semestre': 'semester',
                 'Departamento': 'department',
@@ -86,7 +95,7 @@ export function ImportDisciplina() {
                 'Professores (nome, nº de inscrição, encargo)': 'professor',
                 'Sit.': 'status'
             };
-
+    
             const jsonData = rows.map((row: any) => {
                 const obj: Patrimonio = {
                     semester: '',
@@ -104,20 +113,52 @@ export function ImportDisciplina() {
                     language: '',
                     professor: '',
                     status: '',
+                    dep_id: depId
                 };
                 headers.forEach((header, index) => {
                     const key = headerMap[header];
                     if (key) {
-                        obj[key] = String(row[index] || "");
+                        let value = row[index];
+                        // Fix the semester value if it's a number
+                        if (key === 'semester') {
+                            value = String(value).trim();
+                            const regex = /^(\d{4})\/(\d)$/;
+                            const match = value.match(regex);
+                            if (match) {
+                                const [_, year, sem] = match;
+                                value = `${year}/${sem}`;
+                            } else {
+                                // Default to current year and semester if not formatted correctly
+                                const currentYear = new Date().getFullYear();
+                                const currentSemester = new Date().getMonth() <= 6 ? '1' : '2';
+                                value = `${currentYear}/${currentSemester}`;
+                            }
+                        }
+                        obj[key] = String(value || "");
                     }
                 });
                 return obj;
             });
-
+    
             setData(jsonData);
         };
         reader.readAsArrayBuffer(file);
     };
+    
+    
+
+    useEffect(() => {
+
+        
+        // Update year_charge and semester in data whenever year or semester changes
+        const updatedData = data.map(item => ({
+            ...item,
+            dep_id:depId
+        }));
+        setData(updatedData);
+    }, [depId]);
+
+    console.log('deep',depId)
 
     const handleSubmitPatrimonio = async () => {
         try {

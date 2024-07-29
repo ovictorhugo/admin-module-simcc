@@ -1,3 +1,5 @@
+import { ChevronLeft } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
 
   import {
@@ -16,7 +18,24 @@ import { useEffect, useMemo, useState } from "react";
 import { InformationResearcher } from "../popup/information-researcher";
 import { useContext } from "react";
 import { UserContext } from "../../context/context";
-
+import QRCode from "react-qr-code";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
+import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
+import { NuvemPalavras } from "../popup/nuvem-palavras";
+import { ScrollArea } from "../ui/scroll-area";
+import { TotalViewResearcher } from "../popup/total-view-researcher";
+import { InformacoesGeraisResearcher } from "../popup/informacoes-gerais-researcher";
+import { ArticlesResearcherPopUp } from "../popup/articles-researcher";
+import { BooksResearcherPopUp } from "../popup/book-researcher";
+import { ProducaoTecnicaResearcherPopUp } from "../popup/producao-tecnica-researcher";
+import { OrientacoesResearcherPopUp } from "../popup/orientacoes-researcher";
+import { RelatorioTecnicoResearcherPopUp } from "../popup/relatorio-tecnico-researcher";
+import { SpeakerResearcherPopUp } from "../popup/speaker-researcher";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Copy, MoreHorizontal, Plus } from "lucide-react";
+import { toast } from "sonner"
+import { Link } from "react-router-dom";
 
 type Research = {
     among: number,
@@ -67,48 +86,102 @@ type Research = {
       name:string
     }
 
+    type ResearchOpenAlex = {
+        h_index: number;
+        relevance_score: number;
+        works_count: number;
+        cited_by_count: number;
+        i10_index: number;
+        scopus: string;
+        orcid:string
+        openalex:string
+        
+      }
 
-  import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
-import { NuvemPalavras } from "../popup/nuvem-palavras";
-import { ScrollArea } from "../ui/scroll-area";
-import { TotalViewResearcher } from "../popup/total-view-researcher";
-import { InformacoesGeraisResearcher } from "../popup/informacoes-gerais-researcher";
-import { ArticlesResearcherPopUp } from "../popup/articles-researcher";
-import { BooksResearcherPopUp } from "../popup/book-researcher";
-import { ProducaoTecnicaResearcherPopUp } from "../popup/producao-tecnica-researcher";
-import { OrientacoesResearcherPopUp } from "../popup/orientacoes-researcher";
-import { RelatorioTecnicoResearcherPopUp } from "../popup/relatorio-tecnico-researcher";
-import { SpeakerResearcherPopUp } from "../popup/speaker-researcher";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Copy, MoreHorizontal, Plus } from "lucide-react";
+      const useQuery = () => {
+        return new URLSearchParams(useLocation().search);
+      };
 
-import QRCode from "react-qr-code";
 
-type ResearchOpenAlex = {
-  h_index: number;
-  relevance_score: number;
-  works_count: number;
-  cited_by_count: number;
-  i10_index: number;
-  scopus: string;
-  orcid:string
-  openalex:string
-  
-}
-import { toast } from "sonner"
-import { Link } from "react-router-dom";
-import { Alert } from "../ui/alert";
+export function ResearcherPage() {
 
-export function ResearcherModal() {
-   
+    const { urlGeral, itemsSelecionados, setSearchType, setValoresSelecionadosExport, itemsSelecionadosPopUp, setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados, setItensSelecionados } = useContext(UserContext);
+
+    const history = useNavigate();
+
+    const handleVoltar = () => {
+      history(-1);
+    }
+
+    const queryUrl = useQuery();
+
+    const type_search = queryUrl.get('type_search');
+    const terms = queryUrl.get('terms');
+
+    const researcher_name = queryUrl.get('researcher_name');
+
+    useEffect(() => {
+        if (terms) {
+          const parsedTerms = parseTerms(String(terms));
+          setItensSelecionados(parsedTerms);
+        }
+      }, []);
+
+      useEffect(() => {
+        setSearchType(String(type_search || ''));
+        setValoresSelecionadosExport(terms || '')
+      }, []);
+
+    function parseTerms(formatted: string): { term: string }[] {
+        let result: { term: string }[] = [];
+        let temp = '';
+        let inGroup = false;
+    
+        for (let i = 0; i < formatted.length; i++) {
+          const char = formatted[i];
+    
+          if (char === '(') {
+            inGroup = true;
+            if (temp.trim()) {
+              result.push({ term: temp.trim() + '|' });
+              temp = '';
+            }
+          } else if (char === ')') {
+            inGroup = false;
+            if (temp.trim()) {
+              result.push({ term: temp.trim() + ';' });
+              temp = '';
+            }
+          } else if (char === '|' && !inGroup) {
+            if (temp.trim()) {
+              result.push({ term: temp.trim() + '|' });
+              temp = '';
+            }
+          } else {
+            temp += char;
+          }
+        }
+    
+        if (temp.trim()) {
+          result.push({ term: temp.trim() });
+        }
+    
+        return result.map(item => {
+          if (item.term.endsWith('|') || item.term.endsWith(';')) {
+            item.term = item.term.slice(0, -1);
+          }
+          return item;
+        });
+      }
+    
+
+      
     const { onClose, isOpen, type: typeModal, data } = useModal();
     const isModalOpen = isOpen && typeModal === "researcher-modal";
     const [researcher, setResearcher] = useState<Research[]>([]); 
     const [loading, isLoading] = useState(false)
     const {name} = data
-    const { urlGeral, itemsSelecionados, itemsSelecionadosPopUp, setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados } = useContext(UserContext);
+
   
 
     const [researcherData, setResearcherData] = useState<ResearchOpenAlex[]>([]);
@@ -119,11 +192,8 @@ export function ResearcherModal() {
     };
 
 
-    let urlTermPesquisadores = ''
-
-    if(typeModal === "researcher-modal") {
-      urlTermPesquisadores = urlGeral + `researcherName?name=${name != null && (name.split(' ').join(';'))}`;
-    }
+    let urlTermPesquisadores = urlGeral + `researcherName?name=${researcher_name}`;
+    
 
     console.log(urlTermPesquisadores)
 
@@ -138,8 +208,8 @@ setItensSelecionadosPopUp(itemsSelecionados)
      setOpen(false)
      setItensSelecionadosPopUp(itemsSelecionados)
      
-     if(name != undefined) {
-      setVariations( generateNameVariations(name))
+     if(researcher_name != undefined) {
+      setVariations( generateNameVariations(researcher_name))
      }
           }, [isOpen]);
 
@@ -298,20 +368,10 @@ function generateNameVariations(name: string): string[] {
 
 
 
-
     return(
-        <>
-        <Drawer open={isModalOpen} onClose={onClose}    >
-        <DrawerContent onInteractOutside={onClose} className={`max-h-[88%]`} >
-        {researcher.slice(0, 1).map((user) => {
-                return(
-                  <div className="w-full flex justify-center ">
-            <div className="bg-cover bg-center bg-no-repeat h-28 w-28  rounded-2xl mb-3 border-4 border-white dark:border-neutral-950  absolute top-[-55px]   " style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${user.id}) ` }}></div>
-          </div>
-                  )
-                })}
-
-{researcher.slice(0, 1).map((props) => {
+        <main className="flex flex-1 flex-col  p-4 md:p-8 ">
+             <div className="w-full  gap-4 m pb-0 md:pb-0">
+             {researcher.slice(0, 1).map((props) => {
    const urlShare = `${currentUrl}/researcher?researcher_name=${props.name}&search_type=${searchType}&terms=${valoresSelecionadosExport}`
    const payment = props.lattes_id
 
@@ -325,25 +385,30 @@ function generateNameVariations(name: string): string[] {
    const isOutdated = monthDifference > 3;
    
 
-   // Atualize essa função para chamar a propriedade `onResearcherUpdate`
-   const updateResearcher = (newResearcher: Research[]) => {
-    
-   };
+   return(
+            <div className="flex items-center gap-4">
+          
+            <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
+                <ChevronLeft className="h-4 w-4" />
+                <span className="sr-only">Voltar</span>
+              </Button>
+          
+              <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+                Página do(a) pesquisador(a)
+              </h1>
+             
 
+                
+            
+              <div className="hidden items-center gap-2 md:ml-auto md:flex">
+              
+               
+          
+              <div className="flex gap-3">
 
-                return(
-                 <div className="px-16 pt-6 pb-2">
-                   <div className="flex  justify-between items-center w-full"> 
-       
-       <div className={`border-[1px] border-gray-300 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated ? ('bg-red-500 text-white border-none') : ('')}`}>Atualização do Lattes: {String(props.lattes_update)}</div>
-     
+              <div className={`border-[1px] border-gray-300 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated ? ('bg-red-500 text-white border-none') : ('')}`}>Atualização do Lattes: {String(props.lattes_update)}</div>
 
-       <div className="flex gap-3">
-      
-
-      
-
-       <TooltipProvider>
+              <TooltipProvider>
        <Tooltip>
          <TooltipTrigger asChild>
          <Button
@@ -388,33 +453,8 @@ function generateNameVariations(name: string): string[] {
        </Tooltip>
        </TooltipProvider>
 
-         
-       <TooltipProvider>
-       <Tooltip>
-         <TooltipTrigger asChild>
-       <Link to={urlShare} target="_blank">
-       <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
-         <span className="sr-only">Open menu</span>
-          <ArrowSquareOut size={8} className="h-4 w-4" />
-          </Button></Link>
-         </TooltipTrigger>
-         <TooltipContent>Ir a página</TooltipContent>
-       </Tooltip>
-       </TooltipProvider>
 
-       <TooltipProvider>
-       <Tooltip>
-         <TooltipTrigger asChild>
-         <Button variant={'default'} onClick={() => onClose()} className="h-8 w-8 p-0 text-white dark:text-white">
-         <span className="sr-only">Open menu</span>
-          <CaretDown size={8} className="h-4 w-4" />
-          </Button>
-         </TooltipTrigger>
-         <TooltipContent>Fechar</TooltipContent>
-       </Tooltip>
-       </TooltipProvider>
-
-       <DropdownMenu>
+              <DropdownMenu>
        <DropdownMenuTrigger asChild>
          <Button variant="ghost" className="h-8 w-8 p-0">
            <span className="sr-only">Open menu</span>
@@ -468,211 +508,218 @@ function generateNameVariations(name: string): string[] {
        </DropdownMenuContent>
      </DropdownMenu>
 
-
-  
-     </div>
-       
-       </div>
-
-       <div className="flex items-center flex-col  relative">
-       <h4 className="text-3xl font-medium px-8 text-center mb-2">{props.name}</h4>
-          <div className="flex text-gray-500 items-center gap-2 mb-2">
-              {props.image == "None" ? (
-                <Buildings size={16} className="" />
-              ) : (
-                <img src={props.image} alt="" className="h-6" />
-              )}
-              <p className="text-md  ">{props.university}</p>
+              </div>
+              </div>
             </div>
-       </div>
-                 </div>
-                  )
-                })}
-                
-       <div className="overflow-y-auto elementBarra ">
-      
-        <div className=" px-16  " >
-        <DrawerHeader className="p-0 ">
+
+)
+})}
+            </div>
+
             {researcher.slice(0, 1).map((user) => {
                 return(
-                   <div>
+                  <div className="w-full flex justify-center ">
+            <div className="bg-cover bg-center bg-no-repeat h-28 w-28  rounded-2xl mb-3 border-4 border-white dark:border-neutral-950    " style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${user.id}) ` }}></div>
+          </div>
+                  )
+                })}
 
-                     <InformationResearcher
-                    among={user.among}
-                    articles={user.articles}
-                    book={user.book}
-                    book_chapters={user.book_chapters}
-                    id={user.id}
-                    name={user.name}
-                    university={user.university}
-                    lattes_id={user.lattes_id}
-                    area={user.area}
-                    abstract={user.abstract}
-                    lattes_10_id={user.lattes_10_id}
-                    city={user.city}
-                    orcid={user.orcid}
-                    image={user.image}
-                    graduation={user.graduation}
-                    patent={user.patent}
-                    software={user.software}
-                    brand={user.brand}
-                    lattes_update={user.lattes_update}
-                    onResearcherUpdate={handleResearcherUpdate}
-
-                    h_index={user.h_index}
-                    relevance_score={user.relevance_score}
-                    works_count={user.works_count}
-                    cited_by_count={user.cited_by_count}
-                    i10_index={user.i10_index}
-                    scopus={user.scopus}
-                    openalex={user.openalex}
-                    departament={user.departament}
-
-                    openAPI={open}
-                    />
-
-                   </div>
+            {researcher.slice(0, 1).map((props) => {
+                return(
+                    <div className="flex items-center flex-col  relative">
+                    <h4 className="text-3xl font-medium px-8 text-center mb-2">{props.name}</h4>
+                       <div className="flex text-gray-500 items-center gap-2 mb-2">
+                           {props.image == "None" ? (
+                             <Buildings size={16} className="" />
+                           ) : (
+                             <img src={props.image} alt="" className="h-6" />
+                           )}
+                           <p className="text-md  ">{props.university}</p>
+                         </div>
+                    </div>
                 )
-            })}
+                })}
+            <div className=" ">
+      
+      <div className="   " >
+      <DrawerHeader className="p-0 ">
+          {researcher.slice(0, 1).map((user) => {
+              return(
+                 <div className="w-fit">
+
+                   <InformationResearcher
+                  among={user.among}
+                  articles={user.articles}
+                  book={user.book}
+                  book_chapters={user.book_chapters}
+                  id={user.id}
+                  name={user.name}
+                  university={user.university}
+                  lattes_id={user.lattes_id}
+                  area={user.area}
+                  abstract={user.abstract}
+                  lattes_10_id={user.lattes_10_id}
+                  city={user.city}
+                  orcid={user.orcid}
+                  image={user.image}
+                  graduation={user.graduation}
+                  patent={user.patent}
+                  software={user.software}
+                  brand={user.brand}
+                  lattes_update={user.lattes_update}
+                  onResearcherUpdate={handleResearcherUpdate}
+
+                  h_index={user.h_index}
+                  relevance_score={user.relevance_score}
+                  works_count={user.works_count}
+                  cited_by_count={user.cited_by_count}
+                  i10_index={user.i10_index}
+                  scopus={user.scopus}
+                  openalex={user.openalex}
+                  departament={user.departament}
+
+                  openAPI={open}
+                  />
+
+                 </div>
+              )
+          })}
 
 <div className="flex gap-6 xl:flex-row flex-col-reverse">
 <div className="w-full flex-1">
-        <Tabs defaultValue="articles" value={value} className="">
-        {researcher.slice(0, 1).map((user) => (
-  <TabsList className="mb-6">
-    <div className="flex overflow-x-auto ">
-    <TabsTrigger value="article" onClick={() => setValue('article')} className="flex gap-2 items-center"> <Quotes size={16} className="" />Artigos</TabsTrigger>
-    <TabsTrigger value="book" onClick={() => setValue('book')} className="flex gap-2 items-center"><File size={16} className="" />Livros e capítulos</TabsTrigger>
-    <TabsTrigger value="producao-tecnica" onClick={() => setValue('producao-tecnica')} className="flex gap-2 items-center"><Stamp size={16} className="" />Produção técnica</TabsTrigger>
-    <TabsTrigger value="relatorio-tecnico" onClick={() => setValue('relatorio-tecnico')} className="flex gap-2 items-center"><Files size={16} className="" />Relatório técnico</TabsTrigger>
-    <TabsTrigger value="orientacoes" onClick={() => setValue('orientacoes')} className="flex gap-2 items-center"><Student size={16} className="" />Orientações</TabsTrigger>
-    <TabsTrigger value="speaker" onClick={() => setValue('speaker')} className="flex gap-2 items-center"><Ticket size={16} className="" />Participação em eventos</TabsTrigger>
-    </div>
-  </TabsList>
-  ))}
-  <TabsContent value="article">
-  {researcher.slice(0, 1).map((user) => {
-                return(
-                  <ArticlesResearcherPopUp name={String(user.id)}/>
-                  )
-                })}
-  </TabsContent>
-  <TabsContent value="book">
-  {researcher.slice(0, 1).map((user) => {
-                return(
-                  <BooksResearcherPopUp name={String(user.id)}/>
-                  )
-                })}
-  </TabsContent>
+      <Tabs defaultValue="articles" value={value} className="">
+      {researcher.slice(0, 1).map((user) => (
+<TabsList className="mb-6">
+  <div className="flex overflow-x-auto ">
+  <TabsTrigger value="article" onClick={() => setValue('article')} className="flex gap-2 items-center"> <Quotes size={16} className="" />Artigos</TabsTrigger>
+  <TabsTrigger value="book" onClick={() => setValue('book')} className="flex gap-2 items-center"><File size={16} className="" />Livros e capítulos</TabsTrigger>
+  <TabsTrigger value="producao-tecnica" onClick={() => setValue('producao-tecnica')} className="flex gap-2 items-center"><Stamp size={16} className="" />Produção técnica</TabsTrigger>
+  <TabsTrigger value="relatorio-tecnico" onClick={() => setValue('relatorio-tecnico')} className="flex gap-2 items-center"><Files size={16} className="" />Relatório técnico</TabsTrigger>
+  <TabsTrigger value="orientacoes" onClick={() => setValue('orientacoes')} className="flex gap-2 items-center"><Student size={16} className="" />Orientações</TabsTrigger>
+  <TabsTrigger value="speaker" onClick={() => setValue('speaker')} className="flex gap-2 items-center"><Ticket size={16} className="" />Participação em eventos</TabsTrigger>
+  </div>
+</TabsList>
+))}
+<TabsContent value="article">
+{researcher.slice(0, 1).map((user) => {
+              return(
+                <ArticlesResearcherPopUp name={String(user.id)}/>
+                )
+              })}
+</TabsContent>
+<TabsContent value="book">
+{researcher.slice(0, 1).map((user) => {
+              return(
+                <BooksResearcherPopUp name={String(user.id)}/>
+                )
+              })}
+</TabsContent>
 
-  <TabsContent value="producao-tecnica">
-  {researcher.slice(0, 1).map((user) => {
-                return(
-                  <ProducaoTecnicaResearcherPopUp name={String(user.id)}/>
-                  )
-                })}
-  </TabsContent>
+<TabsContent value="producao-tecnica">
+{researcher.slice(0, 1).map((user) => {
+              return(
+                <ProducaoTecnicaResearcherPopUp name={String(user.id)}/>
+                )
+              })}
+</TabsContent>
 
-  <TabsContent value="relatorio-tecnico">
-  {researcher.slice(0, 1).map((user) => {
-                return(
-                  <RelatorioTecnicoResearcherPopUp name={String(user.id)}/>
-                  )
-                })}
-  </TabsContent>
+<TabsContent value="relatorio-tecnico">
+{researcher.slice(0, 1).map((user) => {
+              return(
+                <RelatorioTecnicoResearcherPopUp name={String(user.id)}/>
+                )
+              })}
+</TabsContent>
 
-  <TabsContent value="orientacoes">
-  {researcher.slice(0, 1).map((user) => {
-                return(
-                  <OrientacoesResearcherPopUp name={String(user.id)}/>
-                  )
-                })}
-  </TabsContent>
+<TabsContent value="orientacoes">
+{researcher.slice(0, 1).map((user) => {
+              return(
+                <OrientacoesResearcherPopUp name={String(user.id)}/>
+                )
+              })}
+</TabsContent>
 
-  <TabsContent value="speaker">
-  {researcher.slice(0, 1).map((user) => {
-                return(
-                  <SpeakerResearcherPopUp name={String(user.id)}/>
-                  )
-                })}
-  </TabsContent>
+<TabsContent value="speaker">
+{researcher.slice(0, 1).map((user) => {
+              return(
+                <SpeakerResearcherPopUp name={String(user.id)}/>
+                )
+              })}
+</TabsContent>
 </Tabs>
-        </div>
+      </div>
 
-        <div className="xl:w-[350px] w-full gap-12 flex flex-col sticky"> 
-
-        {researcher.slice(0, 1).map((user) => {
-                  
-                      return(
-                        <InformacoesGeraisResearcher
-                        h_index={user.h_index}
-                        relevance_score={user.relevance_score}
-                        works_count={user.works_count}
-                        cited_by_count={user.cited_by_count}
-                        i10_index={user.i10_index}
-                        scopus={user.scopus}
-                        orcid={user.orcid}
-                        openalex={user.openalex}
-                        departament={user.departament}
-                        subsidy={user.subsidy}
-                        graduate_programs={user.graduate_programs}
-                        />
-                      )
-                     
-            })}
-
-        {researcher.slice(0, 1).map((user) => {
-                      return(
-                        <TotalViewResearcher
-                        among={user.among}
-                        articles={user.articles}
-                        book={user.book}
-                        book_chapters={user.book_chapters}
-                        patent={user.patent}
-                        software={user.software}
-                        brand={user.brand}
-                        />
-                      )
-            })}
+      <div className="xl:w-[350px] w-full gap-12 flex flex-col sticky"> 
 
       {researcher.slice(0, 1).map((user) => {
-                      return(
-                        <NuvemPalavras
-                        id={user.id}
-                        />
-                      )
-            })}
+                
+                    return(
+                      <InformacoesGeraisResearcher
+                      h_index={user.h_index}
+                      relevance_score={user.relevance_score}
+                      works_count={user.works_count}
+                      cited_by_count={user.cited_by_count}
+                      i10_index={user.i10_index}
+                      scopus={user.scopus}
+                      orcid={user.orcid}
+                      openalex={user.openalex}
+                      departament={user.departament}
+                      subsidy={user.subsidy}
+                      graduate_programs={user.graduate_programs}
+                      />
+                    )
+                   
+          })}
+
+      {researcher.slice(0, 1).map((user) => {
+                    return(
+                      <TotalViewResearcher
+                      among={user.among}
+                      articles={user.articles}
+                      book={user.book}
+                      book_chapters={user.book_chapters}
+                      patent={user.patent}
+                      software={user.software}
+                      brand={user.brand}
+                      />
+                    )
+          })}
+
+    {researcher.slice(0, 1).map((user) => {
+                    return(
+                      <NuvemPalavras
+                      id={user.id}
+                      />
+                    )
+          })}
 
 
-        {researcher.slice(0, 1).map(() => {
-                      return(
-                        <div>
-            <div className="mb-6 font-medium text-2xl">Nomes de citação</div>
-            <div className="flex flex-wrap gap-1">
-            {variations.map((variation, index) => (
-                    <p className="text-xs " key={index}>{variation} /</p>
-                ))}
-            </div>
-        </div>
-                      )
-            })}
+      {researcher.slice(0, 1).map(() => {
+                    return(
+                      <div>
+          <div className="mb-6 font-medium text-2xl">Nomes de citação</div>
+          <div className="flex flex-wrap gap-1">
+          {variations.map((variation, index) => (
+                  <p className="text-xs " key={index}>{variation} /</p>
+              ))}
+          </div>
+      </div>
+                    )
+          })}
 
 
-        </div>
+      </div>
 </div>
-        </DrawerHeader>
+      </DrawerHeader>
 
-       
+     
 
 
-        <DrawerFooter>
-          
-        </DrawerFooter>
-        </div>
-       </div>
+      <DrawerFooter>
         
-        </DrawerContent>
-        </Drawer>
-        </>
+      </DrawerFooter>
+      </div>
+     </div>
+        </main>
     )
 }

@@ -16,6 +16,7 @@ import { NewsArticles } from "../novas-publicacoes/new-articles";
 import { Info } from "../info/info";
 import { GruposPesquisaPage } from "../grupos-pesquisa/grupos-pesquisa";
 import { DepartamentPage } from "../departamentos/departamentos-page";
+import { ResearcherPage } from "../researcher/researcher-page";
 
 const ModalContent = () => {
   const { type } = useModalHomepage();
@@ -39,6 +40,8 @@ const ModalContent = () => {
       return <GruposPesquisaPage/>
     case 'departamentos':
       return <DepartamentPage/>
+    case 'pesquisador':
+      return <ResearcherPage/>
   }
 }
 

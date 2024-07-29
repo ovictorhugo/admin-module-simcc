@@ -71,7 +71,6 @@ const [mode, setMode] = useState('user')
 useEffect(() => {
  if(searchType.length == 0) {
   setSearchType('article')
-  setItensSelecionados([])
   
  }
 }, [searchType]);
@@ -153,7 +152,7 @@ useEffect(() => {
         <Route path='/indicadores' element={<Home/>}/>
         <Route path='/producoes-recentes' element={<Home/>}/>
         <Route path='/departamentos' element={<Home/>}/>
-
+        <Route path='/researcher' element={<Home/>}/>
 
         <Route path='/taxonomia' element={<Indicators/>}/>
 

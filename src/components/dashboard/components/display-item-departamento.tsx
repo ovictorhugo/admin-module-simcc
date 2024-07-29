@@ -19,6 +19,27 @@ import { Input } from "../../ui/input";
 import { v4 as uuidv4 } from 'uuid';
 import { columnsStudent } from "../../componentsModal/columns-student-program";
 import { LinhaTempoDisciplinas } from "./linha-tempo-disciplinas";
+import { PainelDisciplinas } from "./painel-disciplinas";
+
+interface Disciplinas {
+  semester: string;
+  department: string;
+  academic_activity_code: string;
+  academic_activity_name: string;
+  academic_activity_ch: string;
+  demanding_courses: string;
+  oft: string;
+  id: string;
+  available_slots: string;
+  occupied_slots: string;
+  percent_occupied_slots: string;
+  schedule: string;
+  language: string;
+  professor: string;
+  status: string;
+  dep_id:string
+}
+
 
 
 interface YearSemester {
@@ -312,7 +333,9 @@ const handleSubmit = async () => {
       ...item,
       selected: yearDocentes.some(docente => docente.year === item.year && docente.semester === item.semester)
     }));
- 
+
+
+  
 
     return(
       <Tabs defaultValue={tab} value={tab} className="h-full" >
@@ -510,8 +533,10 @@ const handleSubmit = async () => {
         <TabsContent value="dis" className="mt-0">
         
         <div className="grid grid-cols-1">
-                 <LinhaTempoDisciplinas items={items} />
+                 <LinhaTempoDisciplinas items={items} depId={props.dep_id} />
                  </div>
+
+                 <PainelDisciplinas/>
      
         </TabsContent>
         </Tabs>
