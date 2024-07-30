@@ -12,6 +12,7 @@ import { GrupoPesquisaView } from "../dashboard/grupo-pesquisa";
 import { IndicadoresDashboard } from "../dashboard/indicadores-dashboard";
 import { BaremasHome } from "../baremas/baremas-home";
 import { EnviarNotificacoes } from "../enviar-notificacoes/enviar-notificacoes";
+import { InfoDashboardPage } from "../dashboard/info-dashboard-page";
 
 
 const ModalContent = () => {
@@ -36,6 +37,8 @@ const ModalContent = () => {
           return <BaremasHome/>
       case 'enviar-notificacoes':
         return <EnviarNotificacoes/>
+      case 'informacoes':
+        return <InfoDashboardPage/>
 
     default:
       return null;

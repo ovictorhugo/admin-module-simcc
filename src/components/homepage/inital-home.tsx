@@ -216,15 +216,6 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-const chartConfig2 = {
-  views: {
-    label: "Page Views",
-  },
-  producao_bibliografica: {
-    label: "Produção bibliográfica",
-    color: "hsl(var(--chart-1))",
-  },
-} satisfies ChartConfig
 
 export function InitialHome() {
   const [VisaoPrograma, setVisaoPrograma] = useState<VisaoPrograma[]>([]);
@@ -399,15 +390,13 @@ const areaTotaisArray = Object.keys(areaTotais).map((area) => ({
       fetchData();
     }, [urlDados]);
 
-  const [enable, setEnable] = useState(false);
+
 
   const { isOpen, type } = useModalHomepage();
-  const {onOpen } = useModal()
+
 
   const isModalOpen = isOpen && type === "initial-home";
-  const [input, setInput] = useState("");
 
-  const posGrad = location.pathname == '/pos-graduacao'
 
   console.log(urlDados)
 
@@ -994,7 +983,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
               </div>
                     </Alert>
 
-                    <Alert className=" h-[400px] ">
+                    <Alert className=" h-full ">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">

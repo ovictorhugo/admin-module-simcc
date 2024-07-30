@@ -1,8 +1,8 @@
-import { Archive, AreaChart, Barcode, Check, ChevronsUpDown, Info, Link2, MapPin, MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, Star, User, Users, X } from "lucide-react";
+import {  AreaChart,  ChevronsUpDown, PencilLine, Plus, SquareArrowOutUpRight, Star, User, Users, X } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { Eye, EyeSlash, FileCsv, FileXls, MagnifyingGlass, Trash } from "phosphor-react";
+import {  MagnifyingGlass, Trash } from "phosphor-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { toast } from "sonner"
 import { useContext, useEffect, useState } from "react";
@@ -12,33 +12,13 @@ import { DataTableModal } from "../../componentsModal/data-table";
 import { columns } from "../../componentsModal/columns-researchers-program";
 import { Alert } from "../../ui/alert";
 import { Link } from "react-router-dom";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
+
 import { Label } from "../../ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../../ui/dialog";
 import { Input } from "../../ui/input";
-import { v4 as uuidv4 } from 'uuid';
-import { columnsStudent } from "../../componentsModal/columns-student-program";
 import { LinhaTempoDisciplinas } from "./linha-tempo-disciplinas";
 import { PainelDisciplinas } from "./painel-disciplinas";
 
-interface Disciplinas {
-  semester: string;
-  department: string;
-  academic_activity_code: string;
-  academic_activity_name: string;
-  academic_activity_ch: string;
-  demanding_courses: string;
-  oft: string;
-  id: string;
-  available_slots: string;
-  occupied_slots: string;
-  percent_occupied_slots: string;
-  schedule: string;
-  language: string;
-  professor: string;
-  status: string;
-  dep_id:string
-}
 
 
 
@@ -89,23 +69,8 @@ interface Patrimonio {
   
 
 export function DisplayItemDepartamento(props:Patrimonio) {
-    const qualisColor = {
-        'MESTRADO': 'bg-blue-200',
-        'DOUTORADO': 'bg-blue-800',
-      };
-    
-      const csvCodToText = {
-        'BM': 'Bom',
-        'AE': 'Anti-Econômico',
-        'IR': 'Irrecuperável',
-        'OC': 'Ocioso',
-        'BX': 'Baixado',
-        'RE': 'Recuperável'
-      };
 
-      const [type, setType] = useState('COLABORADOR');
-      const [visibleProgram, setVisibleProgram] = useState(false);
-      const { urlGeralAdm, user } = useContext(UserContext);
+      const { urlGeralAdm } = useContext(UserContext);
       const { onOpen, isOpen, type:typeModal } = useModal();
 
     
@@ -166,7 +131,7 @@ export function DisplayItemDepartamento(props:Patrimonio) {
       const [input, setInput] = useState('')
 
         const permanenteCount = researcher.filter(researcher => researcher.type_ === 'PERMANENTE').length;
-      const colaboradorCount = researcher.filter(researcher => researcher.type_ === 'COLABORADOR').length;  
+  
 
 
        //listar todos os pesquisadores popover

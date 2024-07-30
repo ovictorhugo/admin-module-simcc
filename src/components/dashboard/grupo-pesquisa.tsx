@@ -1,15 +1,9 @@
-import { useContext, useEffect, useState } from "react";
-import { useModal } from "../hooks/use-modal-store"
-import { Alert } from "../ui/alert";
+import { useContext,  useState } from "react";
+
 import { UserContext } from "../../context/context";
-import { ArrowSquareOut, ClockClockwise, DotsThree, Eye, EyeSlash, FileXls, GraduationCap, Hash, MapPin, PencilSimple, Plus, Rows, SquaresFour, Star, Student, Trash } from "phosphor-react"; 
-import {ArrowRight, ChevronLeft, Divide, GraduationCapIcon, Info, Search, UserCheck } from "lucide-react";
-import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
-import { toast } from "sonner"
 
+import {ArrowRight, ChevronLeft, Info, Search } from "lucide-react";
 
-
-import { DataTable } from "./data-table-grupo-pesquisa";
 
   interface PosGraduationsProps {
   area: string,
@@ -21,25 +15,16 @@ import { DataTable } from "./data-table-grupo-pesquisa";
   name: string,
 }
 
-  import {
-    DropdownMenu,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-  } from "../ui/dropdown-menu";
+
 import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { TablePosGraduateViewDashboard } from "./table-pos-graduate-dashboard";
-import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
-import { Skeleton } from "../ui/skeleton";
-import { columns } from "./columns-grupos-pesquisa";
+
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { Tabs, TabsContent } from "../ui/tabs";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../ui/resizable";
 import { TooltipProvider } from "../ui/tooltip";
 import { Input } from "../ui/input";
-import { ItensList } from "./components/itens-list-vitrine";
+
 
 import { DisplayItemGrupoPesquisa } from "./components/display-item-grupo-pesquisa";
 import { ItensListGrupoPesquisa } from "./components/itens-list-grupo-pesquisa";
@@ -49,9 +34,9 @@ import { ItensListGrupoPesquisa } from "./components/itens-list-grupo-pesquisa";
 export function GrupoPesquisaView() {
 
 
-    const { urlGeral, user,defaultLayout } = useContext(UserContext);
+    const { urlGeral, defaultLayout } = useContext(UserContext);
 
-    const { onOpen } = useModal();
+
 
  
       const { isOpen, type} = useModalDashboard();

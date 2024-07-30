@@ -27,6 +27,15 @@ type OpenAlex = {
   
   }  
 
+  import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "../../components/ui/dialog"
+
 export function ArticlesModal() {
 
     const {urlGeral, valorDigitadoPesquisaDireta, valoresSelecionadosExport} = useContext(UserContext)

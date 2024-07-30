@@ -21,20 +21,10 @@ import {
   TableRow,
 } from "../../components/ui/table";
 
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
-
 import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
+
 
 import { useState } from "react";
-import { Columns, FileCsv } from "phosphor-react";
-import { Plus } from "lucide-react";
-import { useModal } from "../hooks/use-modal-store";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

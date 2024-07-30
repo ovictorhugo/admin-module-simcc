@@ -1,16 +1,14 @@
 import { useContext, useEffect, useState } from "react";
-import { Alert } from "../ui/alert";
+
 import { UserContext } from "../../context/context";
-import { toast } from "sonner"
-import { Button } from "../ui/button";
-import { Terminal } from "phosphor-react";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+
+import { ScrollArea } from "../ui/scroll-area";
 
 interface PesquisadorProps {
     message:string
 }
 export function ApacheViewDashboard() {
-    const { urlGeralAdm, user } = useContext(UserContext);
+    const { urlGeralAdm} = useContext(UserContext);
     const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
     const urlGetApache = urlGeralAdm + `sys/checkHop`;
 

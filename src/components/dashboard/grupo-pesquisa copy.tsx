@@ -2,10 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { useModal } from "../hooks/use-modal-store"
 import { Alert } from "../ui/alert";
 import { UserContext } from "../../context/context";
-import { ArrowSquareOut, ClockClockwise, DotsThree, Eye, EyeSlash, GraduationCap, Hash, MapPin, PencilSimple, Plus, Rows, SquaresFour, Star, Student, Trash } from "phosphor-react"; 
-import {Divide, GraduationCapIcon, UserCheck } from "lucide-react";
+import {  ClockClockwise, GraduationCap, Plus, Rows, SquaresFour } from "phosphor-react"; 
+
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
-import { toast } from "sonner"
+
 
 
 
@@ -25,20 +25,13 @@ import { DataTable } from "./data-table-grupo-pesquisa";
     situation: string
   }
 
-  import {
-    DropdownMenu,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-  } from "../ui/dropdown-menu";
+
 import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
-import { TablePosGraduateViewDashboard } from "./table-pos-graduate-dashboard";
+
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { Skeleton } from "../ui/skeleton";
 import { columns } from "./columns-grupos-pesquisa";
-import { useModalDashboard } from "../hooks/use-modal-dashboard";
+
   
 
 
@@ -48,7 +41,7 @@ export function GrupoPesquisaView() {
     const { urlGeralAdm, user } = useContext(UserContext);
     const [posgraduations, setPosgraduations] = useState<PosGraduationsProps[]>([]);
     const [visibleProgram, setVisibleProgram] = useState(false);
-    const { onOpen } = useModal();
+
     const [typeVisu, setTypeVisu] = useState('block')
     const [isLoading, setIsLoading] = useState(true)
     const [count, setCount] = useState(12)
@@ -87,9 +80,8 @@ export function GrupoPesquisaView() {
       }, [urlGetPosGraduations,visibleProgram]);
 
  
-      const { isOpen, type} = useModalDashboard();
+
   
-      const isModalOpen = isOpen && type === "grupo-pesquisa";
 
     return(
       <>

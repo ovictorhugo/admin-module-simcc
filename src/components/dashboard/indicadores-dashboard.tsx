@@ -952,6 +952,31 @@ useMemo(() => {
     </ChartContainer>
                           </CardContent>
                     </Alert>
+
+                    <Alert className=" h-[400px] lg:col-span-3">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                      Artigos qualificados
+                    </CardTitle>
+                    <CardDescription>Carga horária semanal</CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add to library</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
+
+                  <CardContent className="flex py-0 flex-1  items-center justify-center">
+                 
+                  </CardContent>
+                    </Alert>
                   </div>
 
                   <div>

@@ -12,15 +12,12 @@ import { FileCsv } from "phosphor-react";
 
 import { useModal } from "../hooks/use-modal-store";
 
-interface Csv {
-  id_lattes:string,
-  nome:string
-}
+
 
 export function AddResearcherInciteDashboard() {
     const [nomePesquisador, setNomePesquisador] = useState('');
     const [lattesID, setLattesID] = useState('');
-    const [data, setData] = useState<Csv[]>([]);
+
 
     const { user, urlGeralAdm } = useContext(UserContext);
 

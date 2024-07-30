@@ -194,6 +194,7 @@ useEffect(() => {
 <Route path='/dashboard/indicadores' element={<Dashboard/> }/>
 <Route path='/dashboard/baremas' element={<Dashboard/> }/>
 <Route path='/dashboard/enviar-notificacoes' element={<Dashboard/> }/>
+<Route path='/dashboard/informacoes' element={<Dashboard/> }/>
 
 <Route
           path='/config'

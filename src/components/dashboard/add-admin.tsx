@@ -1,16 +1,15 @@
-import { Plus, Trash, User } from "phosphor-react";
+import { Trash, User } from "phosphor-react";
 import { Alert } from "../ui/alert";
 import { Button } from "../ui/button";
-import { useModal} from "../hooks/use-modal-store";
 import { Input } from "../ui/input";
-import { Separator } from "../ui/separator";
+
 import { ScrollArea } from "../ui/scroll-area";
 import { toast } from "sonner"
 import { useContext, useEffect, useState } from "react";
-import { getFirestore,  collection, addDoc, setDoc } from 'firebase/firestore';
+import { getFirestore,  collection, setDoc } from 'firebase/firestore';
 import { UserContext } from "../../context/context";
-import { onSnapshot,  getDocs, query, deleteDoc, doc, where, updateDoc, deleteField } from 'firebase/firestore';
-import { getAuth } from "firebase/auth";
+import { onSnapshot,  getDocs, query, deleteDoc, doc, where } from 'firebase/firestore';
+
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar"
 interface UserData {
     [`Document ID`]: string

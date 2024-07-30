@@ -1,21 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table"
 
-import { Button } from "../../components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu"
-import {  MoreHorizontal, Trash, UserCheck } from "lucide-react"
-import { ArrowSquareOut, ClockClockwise, Export, PencilSimple, Student} from "phosphor-react"
-import {  Eye, EyeSlash, Hash, MapPin, Star } from "phosphor-react"; 
+import {  ClockClockwise} from "phosphor-react"
+
 import {GraduationCapIcon } from "lucide-react";
-import { toast } from "sonner"
-import { Link } from "react-router-dom"
-import { useModal } from "../hooks/use-modal-store"
+
 import { useContext } from "react"
 import { UserContext } from "../../context/context"
 

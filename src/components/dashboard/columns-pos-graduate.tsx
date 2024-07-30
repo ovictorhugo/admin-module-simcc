@@ -5,12 +5,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
+
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu"
 import {  MoreHorizontal, Trash, UserCheck } from "lucide-react"
-import { ArrowSquareOut, Export, PencilSimple, Student} from "phosphor-react"
+import { ArrowSquareOut,PencilSimple, Student} from "phosphor-react"
 import {  Eye, EyeSlash, Hash, MapPin, Star } from "phosphor-react"; 
 import {GraduationCapIcon } from "lucide-react";
 import { toast } from "sonner"
@@ -91,7 +91,7 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original
+
      
       const API_KEY = import.meta.env.VITE_URLGERALADMIN
       const handleVisibleProgram = (id: string) => {

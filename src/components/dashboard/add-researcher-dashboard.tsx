@@ -4,11 +4,11 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useContext, useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { ChevronLeft, Info, Plus, User } from "lucide-react";
+import { ChevronLeft,  Plus, User } from "lucide-react";
 import { toast } from "sonner"
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { UserContext } from "../../context/context";
-import { FileCsv, FileXls } from "phosphor-react";
+import { FileXls } from "phosphor-react";
 import { PesquisadorProps, columns } from "./columns";
 import { useModal } from "../hooks/use-modal-store";
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
@@ -16,15 +16,11 @@ import { useNavigate } from "react-router-dom";
 import { DataTable } from "./data-table";
 import { CardContent, CardHeader, CardTitle } from "../ui/card";
 
-interface Csv {
-  id_lattes:string,
-  nome:string
-}
 
 export function AddResearcherDashboard() {
     const [nomePesquisador, setNomePesquisador] = useState('');
     const [lattesID, setLattesID] = useState('');
-    const [data, setData] = useState<Csv[]>([]);
+
 
     const { user, urlGeralAdm } = useContext(UserContext);
 
@@ -167,7 +163,7 @@ export function AddResearcherDashboard() {
 
      
 
-  const {onOpen, isOpen:isOpenModal, onClose, type:typeModal} = useModal()
+  const {onOpen, isOpen:isOpenModal, type:typeModal} = useModal()
 
   
 
