@@ -4,7 +4,7 @@ import { ScrollArea } from "../../ui/scroll-area"
 import { cn } from "../../../lib"
 import { UserContext } from "../../../context/context"
 
-import {Building, GraduationCapIcon, Hash, Mail, MapPinIcon, Plus,  Users } from "lucide-react"
+import {Building, GraduationCapIcon, Hash, Mail, MapPinIcon, Phone, Plus,  Users } from "lucide-react"
 
 
 interface Departamentos {
@@ -133,7 +133,7 @@ export function ItensListDepartamento(props:Props) {
           
           return(
 <div className="flex" onClick={() => updateResearcher(item)}>
-<div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 bg-center  bg-no-repeat backdrop-blur-xl  border min-h-[120px]  border-neutral-200 border-r-0   relative `} style={{
+<div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 bg-center   bg-no-repeat backdrop-blur-xl  border min-h-[120px]  border-neutral-200 border-r-0   relative `} style={{
               backgroundImage: `url(data:image/jpeg;base64,${item.img_data})`,
            
             }}></div>
@@ -179,13 +179,13 @@ export function ItensListDepartamento(props:Props) {
             <div className="line-clamp-2 text-xs text-muted-foreground flex gap-4">
             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>{item.org_cod}</div>
             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Mail size={12}/>{item.dep_email}</div>
-          
+            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Phone size={12}/>{item.dep_tel}</div>
             </div>
 
             
 
            </div>
-           <img className="h-12" src={`data:image/jpeg;base64,${item.img_data}`} alt={item.dep_nom} />
+           <img className="h-12 mix-blend-multiply" src={`data:image/jpeg;base64,${item.img_data}`} alt={item.dep_nom}  />
             
         </div>
            

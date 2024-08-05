@@ -150,6 +150,7 @@ export function Dicionario() {
                     </div>
 
                     <ResponsiveMasonry
+                    className="pb-4 md:pb-8"
     columnsCountBreakPoints={{
         350: 1,
         750: pesquisaInput.length != 0 ? (1):(2),

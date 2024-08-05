@@ -46,9 +46,17 @@ type Research = {
     i10_index:string,
     scopus:string,
     openalex:string,
-    departament:string
-    subsidy:Bolsistas
+ 
+    subsidy:Bolsistas[]
     graduate_programs:GraduatePrograms[]
+    departments:Departments[]
+    research_groups:ResearchGroups[]
+
+    cargo:string
+    clas:string
+    classe:string
+    rt:string
+    situacao:string
   }
 
   interface Bolsistas {
@@ -67,11 +75,28 @@ type Research = {
       name:string
     }
 
+    interface Departments {
+      dep_des:string
+      dep_email:string
+      dep_nom:string
+      dep_id:string
+      dep_sigla:string
+      dep_site:string
+      dep_tel:string
+      img_data:string
+    }
+
+    interface ResearchGroups {
+      area:string
+      group_id:string
+      name:string
+    }
+
 
   import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
+import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, CodesandboxLogo, File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
 import { NuvemPalavras } from "../popup/nuvem-palavras";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { TotalViewResearcher } from "../popup/total-view-researcher";
 import { InformacoesGeraisResearcher } from "../popup/informacoes-gerais-researcher";
 import { ArticlesResearcherPopUp } from "../popup/articles-researcher";
@@ -82,7 +107,7 @@ import { RelatorioTecnicoResearcherPopUp } from "../popup/relatorio-tecnico-rese
 import { SpeakerResearcherPopUp } from "../popup/speaker-researcher";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Copy, MoreHorizontal, Plus } from "lucide-react";
+import { Boxes, Copy, MoreHorizontal, Plus } from "lucide-react";
 
 import QRCode from "react-qr-code";
 
@@ -100,6 +125,7 @@ type ResearchOpenAlex = {
 import { toast } from "sonner"
 import { Link } from "react-router-dom";
 import { Alert } from "../ui/alert";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 export function ResearcherModal() {
    
@@ -312,7 +338,11 @@ function generateNameVariations(name: string): string[] {
                 })}
 
 {researcher.slice(0, 1).map((props) => {
-   const urlShare = `${currentUrl}/researcher?researcher_name=${props.name}&search_type=${searchType}&terms=${valoresSelecionadosExport}`
+   let urlShare = `${currentUrl}/researcher?researcher_name=${props.name}&search_type=${searchType}&terms=${valoresSelecionadosExport}`
+   if(searchType == 'name') {
+    urlShare = `${currentUrl}/researcher?researcher_name=${props.name}&search_type=${searchType}&terms=`
+  }
+
    const payment = props.lattes_id
 
    const currentDate = new Date();
@@ -526,7 +556,7 @@ function generateNameVariations(name: string): string[] {
                     i10_index={user.i10_index}
                     scopus={user.scopus}
                     openalex={user.openalex}
-                    departament={user.departament}
+                   
 
                     openAPI={open}
                     />
@@ -539,16 +569,72 @@ function generateNameVariations(name: string): string[] {
 <div className="w-full flex-1">
         <Tabs defaultValue="articles" value={value} className="">
         {researcher.slice(0, 1).map((user) => (
-  <TabsList className="mb-6">
-    <div className="flex overflow-x-auto ">
-    <TabsTrigger value="article" onClick={() => setValue('article')} className="flex gap-2 items-center"> <Quotes size={16} className="" />Artigos</TabsTrigger>
-    <TabsTrigger value="book" onClick={() => setValue('book')} className="flex gap-2 items-center"><File size={16} className="" />Livros e capítulos</TabsTrigger>
-    <TabsTrigger value="producao-tecnica" onClick={() => setValue('producao-tecnica')} className="flex gap-2 items-center"><Stamp size={16} className="" />Produção técnica</TabsTrigger>
-    <TabsTrigger value="relatorio-tecnico" onClick={() => setValue('relatorio-tecnico')} className="flex gap-2 items-center"><Files size={16} className="" />Relatório técnico</TabsTrigger>
-    <TabsTrigger value="orientacoes" onClick={() => setValue('orientacoes')} className="flex gap-2 items-center"><Student size={16} className="" />Orientações</TabsTrigger>
-    <TabsTrigger value="speaker" onClick={() => setValue('speaker')} className="flex gap-2 items-center"><Ticket size={16} className="" />Participação em eventos</TabsTrigger>
-    </div>
-  </TabsList>
+            <div className=" grid grid-cols-1 mb-6">
+              <ScrollArea className="">
+  <TabsList className="mb-4 flex h-auto">
+
+    <TabsTrigger
+      value="article"
+      onClick={() => setValue('article')}
+      className="flex gap-2 items-center"
+    >
+      <Quotes size={16} className="" />
+      Artigos
+    </TabsTrigger>
+    <TabsTrigger
+      value="book"
+      onClick={() => setValue('book')}
+      className="flex gap-2 items-center"
+    >
+      <File size={16} className="" />
+      Livros e capítulos
+    </TabsTrigger>
+    <TabsTrigger
+      value="producao-tecnica"
+      onClick={() => setValue('producao-tecnica')}
+      className="flex gap-2 items-center"
+    >
+      <Stamp size={16} className="" />
+      Produção técnica
+    </TabsTrigger>
+    <TabsTrigger
+      value="relatorio-tecnico"
+      onClick={() => setValue('relatorio-tecnico')}
+      className="flex gap-2 items-center"
+    >
+      <Files size={16} className="" />
+      Relatório técnico
+    </TabsTrigger>
+    <TabsTrigger
+      value="orientacoes"
+      onClick={() => setValue('orientacoes')}
+      className="flex gap-2 items-center"
+    >
+      <Student size={16} className="" />
+      Orientações
+    </TabsTrigger>
+    <TabsTrigger
+      value="speaker"
+      onClick={() => setValue('speaker')}
+      className="flex gap-2 items-center"
+    >
+      <Ticket size={16} className="" />
+      Participação em eventos
+    </TabsTrigger>
+    <TabsTrigger
+      value="research-project"
+      onClick={() => setValue('research-project')}
+      className="flex gap-2 items-center"
+    >
+      <Boxes size={16} className="" />
+      Projetos de pesquisa
+    </TabsTrigger>
+ 
+</TabsList>
+
+<ScrollBar orientation="horizontal"/>
+</ScrollArea>
+            </div>
   ))}
   <TabsContent value="article">
   {researcher.slice(0, 1).map((user) => {
@@ -596,11 +682,27 @@ function generateNameVariations(name: string): string[] {
                   )
                 })}
   </TabsContent>
+
+  <TabsContent value="research-project">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                 <div></div>
+                  )
+                })}
+  </TabsContent>
 </Tabs>
         </div>
 
-        <div className="xl:w-[350px] w-full gap-12 flex flex-col sticky"> 
-
+        <div className="xl:w-[350px]  w-full grid grid-cols-1"> 
+        <ResponsiveMasonry
+    columnsCountBreakPoints={{
+        350: 1,
+        750: 1,
+        900: 1,
+        1200: 1
+    }}
+>
+                 <Masonry gutter="24px">
         {researcher.slice(0, 1).map((user) => {
                   
                       return(
@@ -613,9 +715,18 @@ function generateNameVariations(name: string): string[] {
                         scopus={user.scopus}
                         orcid={user.orcid}
                         openalex={user.openalex}
-                        departament={user.departament}
+                  
                         subsidy={user.subsidy}
                         graduate_programs={user.graduate_programs}
+                        departments={user.departments}
+
+                        cargo={user.cargo}
+                        clas={user.clas}
+                        classe={user.classe}
+                        rt={user.rt}
+                        situacao={user.situacao}
+
+                        research_groups={user.research_groups}
                         />
                       )
                      
@@ -657,7 +768,8 @@ function generateNameVariations(name: string): string[] {
                       )
             })}
 
-
+</Masonry>
+</ResponsiveMasonry>
         </div>
 </div>
         </DrawerHeader>

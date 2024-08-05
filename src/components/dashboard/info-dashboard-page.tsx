@@ -1,7 +1,8 @@
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, File } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useNavigate } from "react-router-dom";
+import { Alert } from "../ui/alert";
 
 export function InfoDashboardPage() {
     const history = useNavigate();
@@ -48,6 +49,21 @@ export function InfoDashboardPage() {
             <TabsContent value="all" className="flex flex-col gap-4 md:gap-8">
 
 
+            </TabsContent>
+
+            <TabsContent value="doc" className="flex flex-col gap-4 md:gap-8">
+            <h3 className="text-2xl font-medium ">Modelo de documentos </h3>
+
+              <div className="grid xl:grid-cols-12 lg:grid-cols-9 md:grid-cols-6 sm:grid-cols-4 grid-cols-2">
+                <div className="flex gap-2 flex-col">
+                  <Alert className="w-full aspect-square border rounded-md flex items-center justify-center"><div><File size={24}/></div></Alert>
+
+                  <div>
+                    <p className="font-medium pb-2">Xls Id Lattes</p>
+                    <p></p>
+                  </div>                  
+                </div>
+              </div>
             </TabsContent>
             </Tabs>
         </main>

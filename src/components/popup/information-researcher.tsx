@@ -11,6 +11,7 @@ import QRCode from "react-qr-code";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { useModal } from "../hooks/use-modal-store"
 import htmlParser from 'html-react-parser';
+import useWindowSize from "./use-windows-size"
 
 
 interface Props {
@@ -43,7 +44,7 @@ interface Props {
     scopus:string,
     openalex:string,
     openAPI:boolean
-    departament:string
+
 }
   type Research = {
     h_index: number;
@@ -54,7 +55,7 @@ interface Props {
     scopus: string;
     orcid:string
     openalex: string
-    departament:string
+   
     
   }
 
@@ -172,6 +173,23 @@ const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNod
 
 const highlightedAbstract = highlightText(props.abstract, itemsSelecionados);
 
+
+const size = useWindowSize();
+
+let charLimit;
+if (size.width > 1600) {
+  charLimit = 820; // Aumenta o limite para telas grandes
+} else if (size.width > 1500) {
+  charLimit = 500; // Aumenta o limite para telas grandes
+} else if (size.width > 1200) {
+  charLimit = 500;
+} else if (size.width > 768) {
+  charLimit = 500;
+} else {
+  charLimit = 300;
+}
+
+
     return (
         <div className="flex flex-col">
 
@@ -231,7 +249,7 @@ const highlightedAbstract = highlightText(props.abstract, itemsSelecionados);
            </div>
 
            {props.openAPI && (
-              <div className="w-full bg-slate-100 px-4 py-2 rounded-md text-xs mb-4 flex gap-3 items-center justify-between">
+              <div className="w-full bg-slate-100 dark:bg-neutral-800 px-4 py-2 rounded-md text-xs mb-4 flex gap-3 items-center justify-between">
                 <div className="flex items-center gap-3"><BracketsCurly className="h-4 w-4" />{urlApi}</div>
                 <Button onClick={() => {
                   navigator.clipboard.writeText(urlApi)
@@ -254,14 +272,21 @@ const highlightedAbstract = highlightText(props.abstract, itemsSelecionados);
             </div>
 
           
-
-            {props.abstract.length > 500 && (
-              <div className="flex gap-4 items-center mt-4">
-              <Button variant='ghost' size={'icon'} className={`${!isVisible && ('animate-bounce')} h-8 w-8 `}>
-                <CaretDown onClick={() => setIsVisible(!isVisible)} size={16} className={isVisible ? "rotate-180 transition-all  text-gray-400" : "text-gray-400  transition-all"} />
-              </Button>
-            </div>
-            )}
+            {props.abstract.length > charLimit && (
+        <div className="flex gap-4 items-center mt-4">
+          <Button 
+            variant='ghost' 
+            size={'icon'} 
+            className={`${!isVisible && 'animate-bounce'} h-8 w-8`}
+            onClick={() => setIsVisible(!isVisible)}
+          >
+            <CaretDown 
+              size={16} 
+              className={isVisible ? "rotate-180 transition-all text-gray-400" : "text-gray-400 transition-all"} 
+            />
+          </Button>
+        </div>
+      )}
 
             <div className="h-[0.5px] my-6 w-full bg-neutral-200 dark:bg-neutral-800"></div>
 

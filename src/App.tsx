@@ -37,15 +37,16 @@ import { Baremas } from './pages/Baremas';
 import { PosGraduation } from './pages/PosGraduation';
 import { Resultados } from './pages/Resultados';
 import LoadingWrapper from './components/loading';
+import { useModal } from './components/hooks/use-modal-store';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [navbar, setNavbar] = useState(false);
   const [user, setUser] = useState<User>({  state: '', email: '', name: '', img_url: '', institution_id: '',...{} } as User);
 
 
-  const [urlGeral, setUrlGeral] = useState('http://150.164.32.238:13000/');
+  const [urlGeral, setUrlGeral] = useState('http://simcc.uesc.br:5002/');
 
-  const [urlGeralAdm, setUrlGeralAdm] = useState('http://150.164.32.238:12000/');
+  const [urlGeralAdm, setUrlGeralAdm] = useState('http://simcc.uesc.br:5001/');
 
   const [mapModal, setMapModal] = useState(false)
 
@@ -103,7 +104,7 @@ useEffect(() => {
     localStorage.removeItem('user'); // Remover informações do usuário do localStorage ao fazer logout
   };
 
-
+ 
 
   return (
     <>

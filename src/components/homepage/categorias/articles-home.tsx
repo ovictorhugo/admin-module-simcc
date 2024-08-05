@@ -116,17 +116,22 @@ if(valoresSelecionadosExport != '') {
     return(
         <>
         {isModalOpen && (
-            <div className="mb-[150px]">
+            <div className="mt-4 md:mt-8">
 
                 <FilterArticle
                 onFilterUpdate={handleResearcherUpdate}/>
               
                         <Accordion defaultValue="item-1" type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <HeaderResultTypeHome title="Gráfico de quantidade total por Qualis" icon={<ChartBar size={24} className="text-gray-400" />}>
-                        </HeaderResultTypeHome>
-                    </AccordionTrigger>
+                <div className="flex mb-2">
+                <HeaderResultTypeHome title="Gráfico de quantidade total por Qualis" icon={<ChartBar size={24} className="text-gray-400" />}>
+                </HeaderResultTypeHome>
+
+                <AccordionTrigger>
+                   
+                   </AccordionTrigger>
+                </div>
+                   
                     <AccordionContent >
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
@@ -141,8 +146,8 @@ if(valoresSelecionadosExport != '') {
 
                 <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <HeaderResultTypeHome title="Artigos" icon={<Quotes size={24} className="text-gray-400" />}>
+                <div className="flex mb-2">
+                <HeaderResultTypeHome title="Artigos" icon={<Quotes size={24} className="text-gray-400" />}>
                     <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
                         <p>Artigos:</p>
                         Iguais
@@ -163,7 +168,11 @@ if(valoresSelecionadosExport != '') {
                             <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
                         </HeaderResultTypeHome>
+                        <AccordionTrigger>
+                    
                     </AccordionTrigger>
+                  </div>
+                    
                     <AccordionContent >
 
 {typeVisu == 'block' ? (

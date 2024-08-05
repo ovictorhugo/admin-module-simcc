@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Alert } from "../ui/alert";
 import { LinkSimple } from "phosphor-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
+import { getVersion } from "../../gerVersion";
 
 export function Info() {
     const history = useNavigate();
@@ -166,6 +167,9 @@ export function Info() {
         );
       };
 
+      const version = getVersion();
+
+
     const [colaboradores, setColaboradores] = useState([
         { id: 1, itens: 'https://www.ufba.br/sites/portal.ufba.br/files/brasao_ufba.jpg', name: `Victor Hugo de Jesus Oliveira`, inst: `Universidade Federal de Minas Gerais`, img:`../col_3.png`, mail: 'victorhugodejesusoliveira@gmail.com' },
         { id: 2, itens: 'https://upload.wikimedia.org/wikipedia/commons/8/88/Bras%C3%A3o_da_UNEB.png', name: `Matheus Souza dos Santos`, inst: `Universidade do Estado da Bahia`, img:`../col_4.png`, mail:'ejorge@uneb.br' },
@@ -244,7 +248,29 @@ export function Info() {
                     ))}
                 </div>
 
+                <h3 className="text-2xl font-medium ">Sobre a plataforma</h3>
+
+                <div className="flex flex-col gap-3">
+                <div className='flex gap-2 items-center text-sm text-gray-500'>O CONECTEE é uma plataforma desenvolvida pela Escola de Engenharia da Universidade Federal de Minas Gerais (UFMG) com o objetivo de centralizar e visualizar de forma abrangente os dados dos pesquisadores da instituição. Integrando informações provenientes de diversas fontes como Lattes, Sucupira, Diretório dos Grupos de Pesquisa (DGP), OpenAlex e Journal Citation Reports (JCR), o CONECTEE fornece uma visão detalhada e acessível das competências e produções acadêmicas da escola. Todas as informações de produção bibliográfica e técnica apresentadas, foram retiradas da Plataforma Lattes com autorização do CNPq e OpenAlex.</div>
+                <div className='flex gap-2 items-center text-sm text-gray-500'></div>
+                <div className='flex gap-2 items-center text-sm text-gray-500'>Mapeamento de Produções Acadêmicas:</div>
+                <div className='flex gap-2 items-center text-sm text-gray-500'>
+                  <ul>
+                <li>Artigos Científicos: Detalhamento com informações como Qualis, JCR, DOI, autores e resumo.</li>
+                  <li>Livros e Capítulos: Informações sobre Nome do livro, título,ano</li>
+                  <li>Propriedade Intelectual: Patentes, marcas, e softwares desenvolvidos.</li>
+                  <li>Participação em eventos: Participações e contribuições e eventos acadêmicos.</li>
+                  <li>Relatórios Técnicos Participações e contribuições e eventos acadêmicos.</li>
+                  <li>Orientações: Participações e contribuições e eventos acadêmicos.</li>
+                  </ul>
+                  
+                  </div>
+                  <div className='flex gap-2 items-center text-sm text-gray-500'>A plataforma possui operadores booleanos de busca (E ou OU) e é capaz de fazer buscas a partir de perguntas com processamento de linguagem natural</div>
+                <div className='flex gap-2 items-center text-sm text-gray-500'>A plataforma se destaca como uma ferramenta para fomentar a interação entre a UFMG e outras instituições públicas e privadas, ao mesmo tempo que potencializa a visibilidade das competências e produções da Escola de Engenharia. Com sua interface intuitiva, a plataforma facilita a exploração e entendimento das contribuições acadêmicas e tecnológicas da UFMG, promovendo colaborações e inovações significativas.</div>
+                <div className='flex gap-2 items-center text-sm text-gray-500'>Versão da plataforma: {version}</div>
+                </div>
                 <h3 className="text-2xl font-medium ">Suporte</h3>
+
 
                 <div className="flex flex-col gap-3">
                 <div className='flex gap-2 items-center text-sm text-gray-500'><MapPin size={16}/> Av. Pres. Antônio Carlos, 6627 - Pampulha, Belo Horizonte - MG, 31270-901</div>
@@ -253,7 +279,7 @@ export function Info() {
             </TabsContent>
 
             <TabsContent value="doc" className="flex flex-col gap-4 md:gap-8">
-            <h3 className="text-2xl font-medium ">Dicinário de chamadas</h3>
+            <h3 className="text-2xl font-medium ">Dicionário de chamadas</h3>
 
                 <h3 className="text-2xl font-medium ">Dicionário de cores</h3>
 

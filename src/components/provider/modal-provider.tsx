@@ -28,6 +28,7 @@ import { FiltersModal } from "../homepage/categorias/researchers-home";
 import { AddDepartamento } from "../modals/add-departamento";
 import { ConfirmDeleteDepartamento } from "../modals/confirm-delete-departamento";
 import { ImportDisciplina } from "../modals/import-disciplina";
+import { ConfirmDeleteResearcherDepartament } from "../modals/confirm-delete-researcher-departament";
 
 const ModalContent = () => {
   const { type } = useModal();
@@ -70,6 +71,8 @@ const ModalContent = () => {
         return <AddDepartamento/>
       case 'import-disciplina':
         return <ImportDisciplina/>
+      case 'confirm-delete-researcher-departament':
+        return <ConfirmDeleteResearcherDepartament/>
 
     default:
       return null;

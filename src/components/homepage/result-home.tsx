@@ -46,28 +46,38 @@ export function ResultHome() {
 
   const isModalOpen = isOpen && type === "result-home";
 
-  function parseTerms(formatted: string): { term: string }[] {
+  function parseTerms(encoded: string): { term: string }[] {
+    // Decode the URL-encoded string first
+    const formatted = decodeURIComponent(encoded);
+  
     let result: { term: string }[] = [];
     let temp = '';
     let inGroup = false;
-
+  
     for (let i = 0; i < formatted.length; i++) {
       const char = formatted[i];
-
+  
       if (char === '(') {
         inGroup = true;
+        // Add any preceding term as an individual term
         if (temp.trim()) {
           result.push({ term: temp.trim() + '|' });
           temp = '';
         }
       } else if (char === ')') {
         inGroup = false;
+        // Process the grouped terms
         if (temp.trim()) {
-          result.push({ term: temp.trim() + ';' });
+          const terms = temp.split(';').map(t => t.trim());
+          terms.forEach(term => {
+            if (term) {
+              result.push({ term: term + ';' });
+            }
+          });
           temp = '';
         }
-      } else if (char === '|' && !inGroup) {
-        if (temp.trim()) {
+      } else if (char === '|') {
+        if (!inGroup && temp.trim()) {
           result.push({ term: temp.trim() + '|' });
           temp = '';
         }
@@ -75,11 +85,13 @@ export function ResultHome() {
         temp += char;
       }
     }
-
+  
+    // Add any remaining term
     if (temp.trim()) {
-      result.push({ term: temp.trim() });
+      result.push({ term: temp.trim() + (inGroup ? ';' : '|') });
     }
-
+  
+    // Handle final cleanup for separators
     return result.map(item => {
       if (item.term.endsWith('|') || item.term.endsWith(';')) {
         item.term = item.term.slice(0, -1);
@@ -87,6 +99,8 @@ export function ResultHome() {
       return item;
     });
   }
+  
+
 
   return (
     <>

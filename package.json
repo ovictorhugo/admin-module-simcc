@@ -1,7 +1,7 @@
 {
   "name": "conectee",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.5.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -78,6 +78,7 @@
     "react-router-dom": "^6.22.3",
     "react-spring": "^9.7.3",
     "recharts": "^2.12.7",
+    "resend": "^3.5.0",
     "safer-buffer": "^2.1.2",
     "sonner": "^1.4.3",
     "tailwind-merge": "^2.2.1",

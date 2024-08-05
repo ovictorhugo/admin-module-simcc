@@ -77,7 +77,7 @@ const terms = queryUrl.get('terms');
 
       useEffect(() => {
         setItensSelecionadosPopUp(itemsSelecionados)
-      }, [isModalOpen]);
+      }, []);
 
 
 
@@ -169,8 +169,6 @@ const terms = queryUrl.get('terms');
       setSearchType(newSearchType);
   };
 
-  const history = useNavigate();
-
   function formatTerms(valores: { term: string }[]): string {
     let result = '';
     let tempTerms: string[] = [];
@@ -208,7 +206,11 @@ const terms = queryUrl.get('terms');
   }
 
 
-const termosformatados = formatTerms(itemsSelecionadosPopUp)
+let termosformatados = formatTerms(itemsSelecionadosPopUp)
+
+useEffect(() => {
+  termosformatados = formatTerms(itemsSelecionadosPopUp)
+}, [itemsSelecionados, itemsSelecionadosPopUp]);
 
 console.log(termosformatados)
   let TypeSearch = type_search ?? ''
@@ -220,7 +222,7 @@ console.log(termosformatados)
 
   const handlePesquisaFinal = () => {
     if(itemsSelecionadosPopUp.length > 0 && posGrad) {
-      setItensSelecionados(itemsSelecionadosPopUp)
+      
       TypeSearch = searchType
       Terms = termosformatados
       setInput('')
@@ -239,7 +241,7 @@ console.log(termosformatados)
     onClose()
     
     } else if(itemsSelecionadosPopUp.length > 0) {
-      setItensSelecionados(itemsSelecionadosPopUp)
+   
       TypeSearch = searchType
       Terms = termosformatados
       setInput('')
@@ -387,13 +389,10 @@ console.log('fawefwef', urlOpenAlex)
     
 
     return  (
-        <Dialog open={isModalOpen} onOpenChange={onClose} >
+        <Dialog open={isModalOpen} onOpenChange={onClose}  >
         <DialogContent   className="p-0 border-none min-w-[60vw] bg-transparent dark:bg-transparent">
-        <style>{`
-            .shadcn-dialog-close {
-                display: none;
-            }
-        `}</style>
+        <DialogClose className="hidden h-0 absolute z-[-9999]" />
+      
         <Alert  className="h-14 bg-white p-2 flex items-center gap-3 justify-between">
         <div className="flex items-center gap-2 w-full flex-1">
         <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />

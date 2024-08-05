@@ -9,7 +9,7 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
 import { Books, ChartBar, Code, FileXls, Quotes, StripeLogo, Student, Warning } from "phosphor-react";
 import { Label as LabelInput } from "../ui/label";
-import { PieSectorDataItem } from "recharts/types/polar/Pie"
+
 
 import {
   Label,
@@ -119,6 +119,19 @@ type Research = {
   C:number
   SQ:number
 }
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../../components/ui/alert-dialog"
+
 
 interface VisaoPrograma {
   article: number;
@@ -433,6 +446,19 @@ console.log(bolsistas)
            selected: yearDocentes.some(docente => docente.year === item.year && docente.semester === item.semester)
          }));
 
+         const [openModalYearDocente, setOpenModalYearDocente] = useState(false)
+
+         useEffect(() => {
+          const currentItem = items.find(
+            item => item.year === String(currentYear) && item.semester === String(currentSemester)
+          );
+      
+          if (currentItem && !currentItem.selected) {
+            setOpenModalYearDocente(true)
+          }
+
+        }, []);
+
         //
 
 
@@ -717,6 +743,24 @@ useMemo(() => {
             </TabsContent>
 
             <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8">
+            <AlertDialog open={openModalYearDocente} onOpenChange={() => setOpenModalYearDocente(false)}>
+
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Os dados de {currentYear}/{currentSemester} ainda não foram importados</AlertDialogTitle>
+      <AlertDialogDescription>
+        This action cannot be undone. This will permanently delete your account
+        and remove your data from our servers.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel onClick={() => setOpenModalYearDocente(false)}>Cancelar</AlertDialogCancel>
+      <AlertDialogAction >Importar dados</AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+                
+                
                   <div className="mt-2">
                   <Link to={'http://www.bi.cnpq.br/painel/mapa-fomento-cti/'} target="_blank"  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como extrair os bolsistas CNPq<ArrowRight size={12}/></Link>
         

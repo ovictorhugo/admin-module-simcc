@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
 
 import { Button } from "../ui/button";
-import { Check, ChevronLeft, Copy, GraduationCap, Play, User } from "lucide-react";
+import { Check, ChevronLeft, Copy, GraduationCap, Play, RefreshCcw, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -17,6 +17,8 @@ import { Input } from "../ui/input";
 import { toast } from "sonner"
 import { ApacheViewDashboard } from "./apache-view-dashboard";
 import { Checkbox } from "../ui/checkbox";
+import { CargosFuncoes } from "./components/cargos-funcoes";
+
 
 interface TotalPatrimonios {
    count_gp: string,
@@ -138,6 +140,69 @@ export function GeralViewDashboard() {
     fetchData();
 };
 
+const [directory, setDirectory] = useState('');
+
+  let urlDiretorio =`${urlGeralAdm}api/directory`
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await fetch(urlDiretorio , {
+        mode: "cors",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Max-Age": "3600",
+          "Content-Type": "text/plain",
+        },
+      });
+      const data = await response.json();
+      if (data) {
+          setDirectory(data)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  fetchData()
+
+ 
+}, []);
+
+
+const handleSubmitDiretorio = async () => {
+  try {
+    const response = await fetch(`${urlGeralAdm}api/save-directory`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ directory }),
+    });
+
+    if (response.ok) {
+      toast("Diretório alterado", {
+        description: "Todos os arquivos necessários serão puxados dessa pasta",
+        action: {
+          label: "Fechar",
+          onClick: () => console.log("Undo"),
+        },
+      })
+    } else {
+      toast("Erro ao alterar diretório", {
+        description: "Todos os arquivos necessários serão puxados dessa pasta",
+        action: {
+          label: "Fechar",
+          onClick: () => console.log("Undo"),
+        },
+      })
+    }
+  } catch (error) {
+    console.error('Error saving directory:', error);
+  }
+};
+
 
     return  (
        <>
@@ -163,7 +228,7 @@ export function GeralViewDashboard() {
               <TabsList >
                 
               <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
-             
+              <TabsTrigger value="cargos" className="text-zinc-600 dark:text-zinc-200">Cargos e funções</TabsTrigger>
                 <TabsTrigger value="unread" className="text-zinc-600 dark:text-zinc-200">Configurações</TabsTrigger>
                
                 </TabsList>
@@ -175,7 +240,7 @@ export function GeralViewDashboard() {
 
             </div>
 
-            <TabsContent value="all" className="h-auto flex flex-col gap-6 mt-2">
+            <TabsContent value="all" className="h-auto flex flex-col gap-6 ">
             {total.map((props) => {
                   return(
                     <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
@@ -328,31 +393,40 @@ export function GeralViewDashboard() {
 
             </TabsContent>
 
+            <TabsContent value="cargos" className="h-auto flex flex-col gap-6 mt-2">
+              <CargosFuncoes/>
+            </TabsContent>
+
             <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8 mt-2">
             <Alert className="p-0">
               <CardHeader>
-                <CardTitle>Diretório dos plugins</CardTitle>
+                <CardTitle>Diretório de arquivos</CardTitle>
                 <CardDescription>
-                  The directory within your project, in which your plugins are
-                  located.
+                O diretório dentro da plataforma, no qual os documentos e configurações estão
+                localizados.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form className="flex flex-col gap-4">
-                  <Input
-                    placeholder="Project Name"
-                    defaultValue="/content/plugins"
+               
+                 <div className="flex gap-3 items-center">
+                 <Input
+                    placeholder="Diretório"
+                    value={directory}
+                   onChange={(e) => setDirectory(e.target.value)}
                   />
-                  <div className="flex items-center space-x-2">
+
+                  <Button onClick={() => handleSubmitDiretorio()}><RefreshCcw size={16}/>Alterar diretório</Button>
+                 </div>
+                  <div className="flex mt-4 items-center space-x-2">
                     <Checkbox id="include" defaultChecked />
                     <label
                       htmlFor="include"
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
-                      Allow administrators to change the directory.
+                      Permitir que os administradores alterem o diretório.
                     </label>
                   </div>
-                </form>
+               
               </CardContent>
               </Alert>
 

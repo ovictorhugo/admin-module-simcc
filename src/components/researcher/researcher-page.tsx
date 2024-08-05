@@ -14,6 +14,7 @@ import { useModal } from "../hooks/use-modal-store";
   } from "../../components/ui/drawer"
 import { Button } from "../ui/button";
 import { useEffect, useMemo, useState } from "react";
+import bg from '../../assets/bg_researcher.png'
 
 import { InformationResearcher } from "../popup/information-researcher";
 import { useContext } from "react";
@@ -38,65 +39,79 @@ import { toast } from "sonner"
 import { Link } from "react-router-dom";
 
 type Research = {
-    among: number,
-    articles: number,
-    book: number,
-    book_chapters: number,
-    id: string,
-    name: string,
-    university: string,
-    lattes_id: string,
-    area: string,
-    lattes_10_id: string,
-    abstract: string,
-    city: string,
-    orcid: string,
-    image: string
-    graduation: string,
-    patent: string,
-    software: string,
-    brand: string,
-    lattes_update: Date,
-   
-    h_index:string,
-    relevance_score:string,
-    works_count:string,
-    cited_by_count:string,
-    i10_index:string,
-    scopus:string,
-    openalex:string,
-    departament:string
-    subsidy:Bolsistas
-    graduate_programs:GraduatePrograms[]
+  among: number,
+  articles: number,
+  book: number,
+  book_chapters: number,
+  id: string,
+  name: string,
+  university: string,
+  lattes_id: string,
+  area: string,
+  lattes_10_id: string,
+  abstract: string,
+  city: string,
+  orcid: string,
+  image: string
+  graduation: string,
+  patent: string,
+  software: string,
+  brand: string,
+  lattes_update: Date,
+ 
+  h_index:string,
+  relevance_score:string,
+  works_count:string,
+  cited_by_count:string,
+  i10_index:string,
+  scopus:string,
+  openalex:string,
+
+  subsidy:Bolsistas[]
+  graduate_programs:GraduatePrograms[]
+  departments:Departments[]
+  research_groups:ResearchGroups[]
+
+  cargo:string
+  clas:string
+  classe:string
+  rt:string
+  situacao:string
+}
+
+interface Bolsistas {
+  aid_quantity:string
+  call_title:string
+  funding_program_name:string
+  modality_code:string
+  category_level_code:string
+  institute_name:string
+  modality_name:string
+  scholarship_quantity:string
   }
 
-  interface Bolsistas {
-    aid_quantity:string
-    call_title:string
-    funding_program_name:string
-    modality_code:string
-    category_level_code:string
-    institute_name:string
-    modality_name:string
-    scholarship_quantity:string
-    }
+  interface  GraduatePrograms {
+    graduate_program_id:string
+    name:string
+  }
 
-    interface  GraduatePrograms {
-      graduate_program_id:string
-      name:string
-    }
+  interface Departments {
+    dep_des:string
+    dep_email:string
+    dep_nom:string
+    dep_id:string
+    dep_sigla:string
+    dep_site:string
+    dep_tel:string
+    img_data:string
+  }
 
-    type ResearchOpenAlex = {
-        h_index: number;
-        relevance_score: number;
-        works_count: number;
-        cited_by_count: number;
-        i10_index: number;
-        scopus: string;
-        orcid:string
-        openalex:string
-        
-      }
+  interface ResearchGroups {
+    area:string
+    group_id:string
+    name:string
+  }
+
 
       const useQuery = () => {
         return new URLSearchParams(useLocation().search);
@@ -369,10 +384,17 @@ function generateNameVariations(name: string): string[] {
 
 
     return(
-        <main className="flex flex-1 flex-col  p-4 md:p-8 ">
+        <div>
+
+       
+          <main className="flex flex-1 flex-col  p-4 md:p-8 ">
              <div className="w-full  gap-4 m pb-0 md:pb-0">
              {researcher.slice(0, 1).map((props) => {
-   const urlShare = `${currentUrl}/researcher?researcher_name=${props.name}&search_type=${searchType}&terms=${valoresSelecionadosExport}`
+   let urlShare = `${currentUrl}/researcher?researcher_name=${props.name}&search_type=${searchType}&terms=${valoresSelecionadosExport}`
+
+   if(searchType == 'name') {
+     urlShare = `${currentUrl}/researcher?researcher_name=${props.name}&search_type=${searchType}&terms=`
+   }
    const payment = props.lattes_id
 
    const currentDate = new Date();
@@ -387,6 +409,8 @@ function generateNameVariations(name: string): string[] {
 
    return(
             <div className="flex items-center gap-4">
+
+              
           
             <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
                 <ChevronLeft className="h-4 w-4" />
@@ -663,9 +687,17 @@ function generateNameVariations(name: string): string[] {
                       scopus={user.scopus}
                       orcid={user.orcid}
                       openalex={user.openalex}
-                      departament={user.departament}
                       subsidy={user.subsidy}
                       graduate_programs={user.graduate_programs}
+                      departments={user.departments}
+
+                      cargo={user.cargo}
+                      clas={user.clas}
+                      classe={user.classe}
+                      rt={user.rt}
+                      situacao={user.situacao}
+
+                      research_groups={user.research_groups}
                       />
                     )
                    
@@ -721,5 +753,6 @@ function generateNameVariations(name: string): string[] {
       </div>
      </div>
         </main>
+        </div>
     )
 }

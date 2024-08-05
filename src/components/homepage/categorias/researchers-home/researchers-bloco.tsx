@@ -56,6 +56,9 @@ export function ResearchersBloco(props: Research) {
                     i10_index={item.i10_index}
                     scopus={item.scopus}
                     openalex={item.openalex}
+                    departament={item.departament}
+                    subsidy={item.subsidy}
+                    graduate_programs={item.graduate_programs}
                     />
                 );
             })}

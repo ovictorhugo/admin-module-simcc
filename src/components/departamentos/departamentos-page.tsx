@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { VisualizacaoDepartamento } from "./visualizacao-departamento";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
@@ -34,7 +34,7 @@ export function DepartamentPage() {
     const [totalSelecionado, setTotalSelecionado] = useState<Departamentos | null>(null);
 
     const queryUrl = useQuery();
-    const type_search = queryUrl.get('departament_id');
+    const type_search = queryUrl.get('dep_id');
     const [isLoading, setIsLoading] = useState(false)
 
 
@@ -94,6 +94,17 @@ export function DepartamentPage() {
         return searchString.includes(normalizedSearch);
       }) : [];
 
+      const navigate = useNavigate();
+
+      const handlePesquisaFinal = (dep_id:string) => {
+        queryUrl.set('dep_id', dep_id);
+          navigate({
+            pathname: '/departamentos',
+            search: queryUrl.toString(),
+          });
+      }
+    
+
     return(
         <>
         {departamentoSelecionado.length == 0 ? (
@@ -127,7 +138,7 @@ da Escola de Engenharia
 
 {totalSelecionado ? (
 <div className="flex items-center gap-2">
- <Button><ArrowRight size={16}/> Ver informações do departamento</Button>
+ <Button onClick={() => handlePesquisaFinal(totalSelecionado.dep_id)}><ArrowRight size={16}/> Ver informações do departamento</Button>
 </div>
 ):(
 <Alert  className="h-14 mt-8 p-2 flex items-center justify-between lg:max-w-[600px] lg:w-[60vw] w-full">

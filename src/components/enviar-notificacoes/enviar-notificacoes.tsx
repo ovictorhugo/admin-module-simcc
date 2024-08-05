@@ -7,14 +7,13 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-
+import { toast } from "sonner";
 import img_1 from '../../assets/logo_email_1.png';
 import img_2 from '../../assets/logo_email_2.png';
 import img_3 from '../../assets/bg_home.png';
 import img_4 from '../../assets/logo_email_3.png';
 import { render } from '@react-email/render';
 import { NotificationEmail } from './notificacao';
-
 
 export function EnviarNotificacoes() {
   const navigate = useNavigate();
@@ -38,8 +37,7 @@ export function EnviarNotificacoes() {
     );
 
     try {
-      const response = await fetch('http://localhost:3001/api/send-email', {
-        mode: 'cors',
+      const response = await fetch('http://localhost:3002/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,15 +46,26 @@ export function EnviarNotificacoes() {
       });
 
       if (response.ok) {
-        alert('Emails enviados com sucesso!');
+        setLink('')
+        setSubTitulo('')
+        setTexto('')
+        setTitulo('')
+
+        toast("Email enviado", {
+          description: "Sua solicitação chegará na caixa de entrada de todos os usuários cadastrados",
+          action: {
+              label: "Fechar",
+              onClick: () => console.log("Fechar"),
+          },
+      });
       } else {
-        alert('Falha ao enviar emails.');
+    
       }
     } catch (error) {
-      console.error('Error sending email:', error);
-      alert('Erro ao enviar emails.');
+      console.error('Erro ao enviar email:', error);
+    
     }
-  }
+  };
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:p-8">
@@ -70,7 +79,7 @@ export function EnviarNotificacoes() {
             Enviar notificações
           </h1>
           <div className="hidden items-center gap-2 md:ml-auto md:flex">
-            <Button size="sm" onClick={handleEnviarEmails}>
+            <Button size="sm" onClick={() => handleEnviarEmails()}>
               <Send size={16} /> Enviar emails
             </Button>
           </div>
@@ -132,8 +141,8 @@ export function EnviarNotificacoes() {
         <div className="flex lg:col-span-2 rounded-md border dark:border-neutral-800">
           <ScrollArea className="w-full">
             <div id="layout_email" className="w-full bg-neutral-50">
-              <div className="bg-cover z-[0] bg-center bg-no-repeat h-64 absolute rounded-t-md bg-[#415F71] w-full" style={{ backgroundImage: `url(${img_3})` }}></div>
-              <div className="max-w-[650px] mx-auto py-8 z-[2] relative">
+              <div className="bg-cover z-[0] bg-center bg-no-repeat h-64  rounded-t-md bg-[#415F71] w-full" style={{ backgroundImage: `url(${img_3})` }}></div>
+              <div className="max-w-[650px] mx-auto py-8 z-[2] relative -top-56">
                 <div className="bg-[#719CB8] p-8 w-full rounded-t-md">
                   <img src={img_1} className="h-16" alt="Logo" />
                 </div>

@@ -61,14 +61,14 @@ interface GraduateProgram {
     return new URLSearchParams(useLocation().search);
   }
 
-export function DocentesPrograma() {
+export function DocentesDepartamento() {
     const { urlGeral } = useContext(UserContext)
 
     const queryUrl = useQuery();
 
-    const type_search = queryUrl.get('graduate_program_id');
+    const type_search = queryUrl.get('dep_id');
 
-    const urlGraduateProgram = `${urlGeral}researcherName?name=&graduate_program_id=${type_search}`
+    const urlGraduateProgram = `${urlGeral}researcherName?name=&dep_id=${type_search}`
 
     console.log(urlGraduateProgram)
 
@@ -107,7 +107,7 @@ export function DocentesPrograma() {
                  
         
                  <h1 className=" max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
-                 Docentes colaboradores e permanentes do programa
+                 Docentes do departamento
                  </h1>
                  <p className="max-w-[750px]  text-lg font-light text-foreground">Todos os pesquisadores que fazem parte do programa de pós-graduação </p>
                            <div className="flex gap-3 mt-3">
@@ -118,7 +118,7 @@ export function DocentesPrograma() {
          
                            </div>
 
-                           <div className="mb-4 md:mb-8">
+            <div className="mb-4 md:mb-8">
        <ResponsiveMasonry
     columnsCountBreakPoints={{
         350: 1,

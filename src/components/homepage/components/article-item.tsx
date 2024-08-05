@@ -13,6 +13,7 @@ import {
 import { Button } from "../../ui/button";
 import { Link } from "react-router-dom";
 import { useModal } from "../../hooks/use-modal-store";
+import { Eye } from "lucide-react";
 
 type Articles = {
     id: string,
@@ -72,7 +73,7 @@ export function ArticleItem(props:Articles) {
   const { onOpen } = useModal();
 
     return(
-        <div className="flex cursor-pointer h-full w-full" onClick={() => onOpen('articles-modal', {doi:doi, qualis:props.qualis, title:props.title, year:props.year, jif:props.jif, lattes_10_id:props.lattes_10_id, researcher_id:props.researcher_id, magazine:props.name_periodical})}>
+        <div className="flex  h-full w-full" >
             
                     <div
                       className={` w-2 min-h-[200px] h-full rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${qualisColor[props.qualis as keyof typeof qualisColor]} `}
@@ -129,6 +130,11 @@ export function ArticleItem(props:Articles) {
                                <Link to={props.jcr_link} className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><LinkBreak size={16}/>JCR</Link>
                             )}
                         </div>
+
+                      <div className=" ml-auto flex items-center gap-2">
+                      <Button variant="outline" size={'icon'} className="ml-auto text-sm h-8 w-8 text-gray-500 dark:text-gray-300">
+            <Eye onClick={() => onOpen('articles-modal', {doi:doi, qualis:props.qualis, title:props.title, year:props.year, jif:props.jif, lattes_10_id:props.lattes_10_id, researcher_id:props.researcher_id, magazine:props.name_periodical})} size={16}/>
+            </Button>
                         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size={'icon'} className="ml-auto text-sm h-8 w-8 text-gray-500 dark:text-gray-300">
@@ -151,6 +157,7 @@ export function ArticleItem(props:Articles) {
 
           </DropdownMenuContent>
         </DropdownMenu>
+                      </div>
                         
                     </div>
                 </Alert>

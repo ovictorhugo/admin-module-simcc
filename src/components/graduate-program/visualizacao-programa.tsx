@@ -31,6 +31,7 @@ import {
 } from "../../components/ui/chart"
 import { GraficoArtigosPorQualis } from "../dashboard/graficos/grafico-qualis";
 import { DocentesPrograma } from "./docentes-programa";
+import { IndicatorsGraduate } from "./indicators-graduate";
 
 interface PalavrasChaves {
   term: string;
@@ -97,6 +98,7 @@ interface GraduateProgram {
   }
   
   HC_wordcloud(Highcharts);
+
   const useQuery = () => {
     return new URLSearchParams(useLocation().search);
   }
@@ -405,6 +407,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
                 
               <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
               <TabsTrigger value="doc" className="text-zinc-600 dark:text-zinc-200">Docentes</TabsTrigger>
+              <TabsTrigger value="ind" className="text-zinc-600 dark:text-zinc-200">Indicadores</TabsTrigger>
                 <TabsTrigger value="unread" className="text-zinc-600 dark:text-zinc-200">Administrativo</TabsTrigger>
 
               
@@ -860,6 +863,11 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
             <TabsContent value="doc" className="h-auto flex flex-col gap-4 md:gap-8  ">
                     <DocentesPrograma/>
             </TabsContent>
+
+            <TabsContent value="ind" className="h-auto flex flex-col gap-4 md:gap-8  ">
+                    <IndicatorsGraduate/>
+            </TabsContent>
+
 
             <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8  ">
                  <div className="px-">

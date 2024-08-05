@@ -15,12 +15,12 @@ import bg_popup from '../../assets/bg_home.png'
 interface Patrimonio {
     area: string,
     institution: string,
-    leader_one: string,
-    leader_one_id: string,
-    leader_two:string,
-    leader_two_id: string,
+    first_leader: string,
+    first_leader_id: string,
+    second_leader:string,
+    second_leader_id: string,
     name: string,
-    group_id:string
+    id:string
     }
   
     const useQuery = () => {
@@ -77,7 +77,7 @@ export function GruposPesquisaPage() {
      
     }, [urlPatrimonioInsert]);
 
-
+    console.log(urlPatrimonioInsert)
     const normalizeArea = (area: string): string => {
         return area
   
@@ -203,7 +203,7 @@ export function GruposPesquisaPage() {
     return(
      <>
      {programSelecionado.length == 0 ? (
-           <main className="flex flex-1 flex-col gap-4 md:gap-8 ">
+           <main className="flex flex-1 flex-col gap-4 md:gap-8  ">
 
            <div className="bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${bg_popup})` }}>
            <div className="justify-center md:px-8 px-4 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
@@ -252,7 +252,7 @@ export function GruposPesquisaPage() {
              1700: 4
          }}
       >
-                      <Masonry gutter="16px">
+                      <Masonry gutter="16px" className="pb-4 md:pb-8">
        <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
        <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
        <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
@@ -274,11 +274,11 @@ export function GruposPesquisaPage() {
           1700: 4
       }}
    >
-                   <Masonry gutter="16px">
+                   <Masonry gutter="16px" className="pb-4 md:pb-8">
        {filteredTotal.slice(0, count).map((item) => {
          
          return(
-       <div className="flex" onClick={() => handlePesquisaFinal(item.group_id)}>
+       <div className="flex" onClick={() => handlePesquisaFinal(item.id)}>
            <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border min-h-[120px] border-neutral-200 border-r-0 ${qualisColor[normalizeArea(item.area || '')]} min-h-full relative`}></div>
          
            <button
@@ -311,9 +311,9 @@ export function GruposPesquisaPage() {
              </div>
              
            </div>
-           <div className="line-clamp-2 flex-wrap text-xs text-muted-foreground flex gap-4">
-           <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{item.leader_one}</div>
-           {item.leader_two != 'nan' && ( <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{item.leader_two}</div>)}
+           <div className="line-clamp-2 flex-wrap text-xs text-muted-foreground flex gap-2">
+           <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{item.first_leader}</div>
+           {(item.second_leader != '' && item.second_leader != null) && ( <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{item.second_leader}</div>)}
          
            </div>
           

@@ -2,9 +2,14 @@
 import path from "path";
 import react from "file:///C:/admin-module-simcc/node_modules/@vitejs/plugin-react/dist/index.mjs";
 import { defineConfig } from "file:///C:/admin-module-simcc/node_modules/vite/dist/node/index.js";
+import * as packageJson from './package.json';
+
 var __vite_injected_original_dirname = "C:\\admin-module-simcc";
 var vite_config_default = defineConfig({
   plugins: [react()],
+  define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(packageJson.version),
+  },
   server: {
     host: true,
     port: 5e3

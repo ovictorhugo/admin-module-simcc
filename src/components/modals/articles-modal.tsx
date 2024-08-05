@@ -34,6 +34,7 @@ type OpenAlex = {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
+    DialogClose
   } from "../../components/ui/dialog"
 
 export function ArticlesModal() {
@@ -148,8 +149,9 @@ const normalizedTitle = data.title ?
     const [apiVisible, setApiVisible] = useState(false);
     const urlApi = `${urlGeral}researcherName?name=`
     return(
-        <Drawer open={isModalOpen} onClose={onClose}>
-        <DrawerContent onInteractOutside={onClose}  className="">
+      <Dialog open={isModalOpen} onOpenChange={onClose}>
+        <DialogContent className="min-w-[40vw] ">
+        <DialogClose className="hidden" />
         <div
                       className={`h-full w-2 rounded-tl-3xl  absolute  ${qualisColor[data.qualis as keyof typeof qualisColor]} `}
                     > 
@@ -210,11 +212,11 @@ const normalizedTitle = data.title ?
                     </div>
                     </div>
 
-            <DrawerHeader className="flex mb-8">
+            <div className="flex mb-8 flex-col  max-h-[350px] overflow-y-auto">
                 
                 {article.map((props) => {
                     return(
-                       <div className="flex gap-6">
+                       <div className="flex gap-6 flex-col">
 
                          <div className="ml-2 flex flex-1 flex-col">
                            <div>
@@ -345,8 +347,8 @@ const normalizedTitle = data.title ?
                        </div>
                     )
                 })}
-            </DrawerHeader>
-        </DrawerContent>
-        </Drawer>
+            </div>
+            </DialogContent>
+            </Dialog>
     )
 }

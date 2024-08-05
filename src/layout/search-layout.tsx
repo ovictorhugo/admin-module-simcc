@@ -10,7 +10,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../compone
 import { cn } from "../lib"
 import { Link} from "react-router-dom";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
 import { AlertCircle, BarChartBig, Blocks, BookOpen, Building2, GraduationCap, Home, Info, List, SearchCheck, X } from "lucide-react";
@@ -18,6 +18,7 @@ import { useTheme } from "next-themes";
 import { ScrollArea } from "../components/ui/scroll-area";
 import { UserConfigHeader } from "../components/header/user-config-header";
 import { Footer } from "../components/footer/footer";
+import { useModal } from "../components/hooks/use-modal-store";
 interface MailProps {
  
   defaultLayout: number[] | undefined
@@ -38,7 +39,26 @@ export default function SearchLayout({
   const { isOpen: isOpenHomepage, type: typeHomepage } = useModalHomepage();
   const isModalOpen = isOpenHomepage && typeHomepage === "initial-home";
   
-  
+  const {onOpen} = useModal()
+
+  useEffect(() => {
+    // Função que será chamada quando o evento de teclado ocorrer
+    const handleKeyDown = (event:any) => {
+      // Verifica se Ctrl + Y foi pressionado
+      if (event.ctrlKey && event.key === 'y') {
+        onOpen('search')
+      }
+    };
+
+    // Adiciona o listener de evento quando o componente é montado
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Remove o listener de evento quando o componente é desmontado
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
     return (
     <div>
       

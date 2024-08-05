@@ -59,7 +59,27 @@ type Research = {
   i10_index: string,
   scopus: string,
   openalex: string,
+  subsidy:Bolsistas[]
+  graduate_programs:GraduatePrograms[]
 }
+
+interface Bolsistas {
+  aid_quantity:string
+  call_title:string
+  funding_program_name:string
+  modality_code:string
+  category_level_code:string
+  institute_name:string
+  modality_name:string
+  scholarship_quantity:string
+  }
+
+  interface  GraduatePrograms {
+    graduate_program_id:string
+    name:string
+  }
+
+  
 interface ItemsSelecionados {
   term: string
 }
@@ -135,7 +155,7 @@ export function FiltersModal({ researcher, setResearcher }) {
             type="multiple"
             value={selectedAreas}
             onValueChange={handleAreaToggle}
-            className="aspect-auto  items-start justify-start"
+            className="aspect-auto flex flex-wrap items-start justify-start"
           >
              {uniqueAreas.map((area) => (
               <ToggleGroupItem key={area} value={area}>
@@ -155,7 +175,7 @@ export function FiltersModal({ researcher, setResearcher }) {
             type="multiple"
             value={selectedGraduations}
             onValueChange={handleGraduationToggle}
-             className="aspect-auto  items-start justify-start"
+             className="aspect-auto  flex flex-wrap items-start justify-start"
           >
             {uniqueGraduations.map((grad) => (
               <ToggleGroupItem key={grad} value={grad}>
@@ -259,6 +279,45 @@ export function ResearchersHome() {
 
   const totalAmong = researcher.reduce((sum, researcher) => sum + researcher.among, 0);
 
+  function formatTerms(valores: { term: string }[]): string {
+    let result = '';
+    let tempTerms: string[] = [];
+
+    valores.forEach(item => {
+      let term = item.term.trim();
+
+      if (term.endsWith(';')) {
+        tempTerms.push(term.slice(0, -1));
+      } else if (term.endsWith('|')) {
+        tempTerms.push(term.slice(0, -1));
+
+        if (tempTerms.length > 0) {
+          result += '(' + tempTerms.join(';') + ')' + '|';
+          tempTerms = [];
+        }
+      } else {
+        if (tempTerms.length > 0) {
+          result += '(' + tempTerms.join(';') + ')' + '|';
+          tempTerms = [];
+        }
+        result += term + '|';
+      }
+    });
+
+    if (tempTerms.length > 0) {
+      result += '(' + tempTerms.join(';') + ')';
+    } else {
+      if (result.endsWith('|')) {
+        result = result.slice(0, -1);
+      }
+    }
+
+    return result;
+  }
+
+  
+
+
   return (
     <>
       {isModalOpen && (
@@ -275,9 +334,36 @@ export function ResearchersHome() {
        </CardHeader>
        <CardContent>
          <div className="text-2xl font-bold">{totalAmong}</div>
-         <p className="text-xs text-muted-foreground">
-           pela pesquisa {itemsSelecionados.join(';')}
+        <div className="flex items-center gap-3">
+        <p className="text-xs text-muted-foreground">
+           pela pesquisa
          </p>
+
+         <div className="flex gap-2">
+         {itemsSelecionados.map((valor, index) => {
+          return(
+              <>
+              <div key={index} className={`flex gap-2 items-center w-fit p-2 px-3 capitalize rounded-md text-xs ${searchType == 'article' && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract' && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker' && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book' && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent' && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name' && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area' && ('bg-green-500 dark:bg-green-500')} ${searchType == '' && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} >
+              {valor.term.replace(/[|;]/g, '')}
+                  
+                  {/* Adicionando a escolha entre "e" ou "ou" */}
+                  
+              </div>
+
+              {index < itemsSelecionados.length - 1 && (
+  <div className="rounded-full flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100  dark:bg-neutral-800 transition-all text-xs outline-none" onClick={() => {
+    const connector = itemsSelecionados[index].term.endsWith('|') ? ';' : '|'; // Alterna entre "|" e ";" conforme necessário
+   
+  }} >
+    {itemsSelecionados[index].term.endsWith(';') ? "e" : "ou"}
+  </div>
+)}
+
+              </>
+          );
+      })}
+         </div>
+        </div>
        </CardContent>
        </Alert>
     )}

@@ -6,6 +6,9 @@ import { GraduationCap } from "lucide-react"
 import { useModal } from "../../../hooks/use-modal-store"
 import { Button } from "../../../ui/button"
 
+import dt from '../../../../assets/dt.png'
+import pq from '../../../../assets/pq.png'
+
 type Research = {
     among: number,
     articles: number,
@@ -29,7 +32,28 @@ type Research = {
     i10_index:string,
     scopus:string,
     openalex:string,
-}
+    departament?:string
+    departments:string
+    subsidy:Bolsistas[]
+    graduate_programs:GraduatePrograms[]
+  }
+
+  interface Bolsistas {
+    aid_quantity:string
+    call_title:string
+    funding_program_name:string
+    modality_code:string
+    category_level_code:string
+    institute_name:string
+    modality_name:string
+    scholarship_quantity:string
+    }
+
+    interface  GraduatePrograms {
+      graduate_program_id:string
+      name:string
+    }
+
 
 export function ResearchItem(props: Research) {
     const { onOpen } = useModal();
@@ -41,6 +65,7 @@ export function ResearchItem(props: Research) {
             <Alert className="flex p-0 flex-col flex-1 gap-4">
             <div className="flex flex-col">
             <div className="z-[1] w-full absolute p-4 flex gap-3 justify-end">
+            
             <Button 
              onClick={() => {
                 // Verifica se o pesquisador já está selecionado pelo nome
@@ -74,6 +99,10 @@ export function ResearchItem(props: Research) {
               <Plus size={16} className="" />
             )}
               </Button>
+
+              {props.subsidy.length != 0 && props.subsidy.slice(0,1).map((item) => (
+                  <img src={item.modality_code == 'DT'  ? (dt):(pq)} className="w-8 relative -top-4" alt="" />
+             ))}
             </div>
             
             
@@ -90,7 +119,7 @@ export function ResearchItem(props: Research) {
                 <div className="flex gap-2 flex-col">
                 
 
-                <p className="font-medium  text-base">{props.name}</p>
+                <p className="font-semibold  text-xl">{props.name}</p>
 
                 {props.university.length > 0 && (
                   <p className="text-xs flex font-medium text-center w-full items-center gap-1"><Buildings size={12}/> {props.university}</p>

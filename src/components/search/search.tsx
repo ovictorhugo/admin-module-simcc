@@ -20,8 +20,8 @@ const systemMessage = { //  Explain things like you're talking to a software pro
   "role": "system",
   "content": `
   Retorne APENAS um JSON com os seguintes campos:
-  1. "type": Identifique o tipo do termo. Os tipos possíveis são "abstract", "article", "book", "patent", "name", "area", "speaker". Se o tipo não for identificado, defina-o como "article" por padrão.
-  2. "term": Contenha as palavras-chave concatenadas com ";" dentro de parênteses para representar "E" e "|" para representar "OU" (exemplo: (matematica;evolucionaria) para "E" e Bioactive|educational para "OU" no caso do "OU" não tem parênteses). Se o tipo for "name", extraia e coloque o nome completo em "term".
+  1. Identificar o Tipo:  "type": Identifique o tipo do termo. Os tipos possíveis são "abstract", "article", "book", "patent", "name", "area", "speaker". Se o tipo não for identificado, defina-o como "article" por padrão.
+  2. Formatação de Termos "term": Precisamos concatenar os termos com ; para representar "E" e | para representar "OU", além de adicionar parênteses para agrupar os termos associados por "E". Atenção ao pegar o termo principal da frase.  (exemplo: (matematica;evolucionaria)|robotica, Bioactive|educational. Se o tipo for "name", extraia e coloque o nome completo em "term".
   3. "message": Contenha um array com duas mensagens:
       1. Uma mensagem detalhada sobre o "term" retornado.
       2. Uma mensagem com variações, informando que 'os resultados podem ser filtrados utilizando filtros de instituições, área, qualis e ano'.
@@ -207,17 +207,70 @@ const handleConnectorChange = (index: number, connector: string) => {
   term = term.replace(/[|;]$/, ''); // Remove qualquer conector existente no final
   newItems[index].term = term + connector;
   setItensSelecionados(newItems);
-};
 
-useEffect(() => {
-  queryUrl.set('terms', Terms);
-
+  
   if( itemsSelecionados.length > 0 && posGrad) {
+    queryUrl.set('terms', formatTerms(itemsSelecionados));
     navigate({
       pathname: '/pos-graduacao',
       search: queryUrl.toString(),
     });
-  } else if (itemsSelecionados.length > 0) {
+  } else if (itemsSelecionados.length > 0 && !posGrad) {
+    queryUrl.set('terms', formatTerms(itemsSelecionados));
+    navigate({
+      pathname: '/resultados',
+      search: queryUrl.toString(),
+    });
+  }
+};
+
+function formatTerms(valores: { term: string }[]): string {
+  let result = '';
+  let tempTerms: string[] = [];
+
+  valores.forEach(item => {
+    let term = item.term.trim();
+
+    if (term.endsWith(';')) {
+      tempTerms.push(term.slice(0, -1));
+    } else if (term.endsWith('|')) {
+      tempTerms.push(term.slice(0, -1));
+
+      if (tempTerms.length > 0) {
+        result += '(' + tempTerms.join(';') + ')' + '|';
+        tempTerms = [];
+      }
+    } else {
+      if (tempTerms.length > 0) {
+        result += '(' + tempTerms.join(';') + ')' + '|';
+        tempTerms = [];
+      }
+      result += term + '|';
+    }
+  });
+
+  if (tempTerms.length > 0) {
+    result += '(' + tempTerms.join(';') + ')';
+  } else {
+    if (result.endsWith('|')) {
+      result = result.slice(0, -1);
+    }
+  }
+
+  return result;
+}
+
+useEffect(() => {
+  
+
+  if( itemsSelecionados.length > 0 && posGrad) {
+    queryUrl.set('terms', formatTerms(itemsSelecionados));
+    navigate({
+      pathname: '/pos-graduacao',
+      search: queryUrl.toString(),
+    });
+  } else if (itemsSelecionados.length > 0 && !posGrad) {
+    queryUrl.set('terms', formatTerms(itemsSelecionados));
     navigate({
       pathname: '/resultados',
       search: queryUrl.toString(),
@@ -226,7 +279,7 @@ useEffect(() => {
 }, [itemsSelecionados]);
 
 
-
+console.log(itemsSelecionados)
     return  (
         <div className="bottom-0 mt-4 mb-2  w-full flex flex-col max-sm:flex  max-sm:flex-row">
         <div className={` max-sm:px-[5px] `}>

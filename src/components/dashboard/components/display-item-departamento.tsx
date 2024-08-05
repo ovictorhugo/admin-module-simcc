@@ -1,4 +1,4 @@
-import {  AreaChart,  ChevronsUpDown, PencilLine, Plus, SquareArrowOutUpRight, Star, User, Users, X } from "lucide-react";
+import {  AreaChart,  ChevronsUpDown, PencilLine, Plus, SquareArrowOutUpRight,User } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
@@ -9,7 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/context";
 import { useModal } from "../../hooks/use-modal-store";
 import { DataTableModal } from "../../componentsModal/data-table";
-import { columns } from "../../componentsModal/columns-researchers-program";
+
 import { Alert } from "../../ui/alert";
 import { Link } from "react-router-dom";
 
@@ -18,6 +18,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from "../../ui/input";
 import { LinhaTempoDisciplinas } from "./linha-tempo-disciplinas";
 import { PainelDisciplinas } from "./painel-disciplinas";
+import { columnsDepartament } from "../../componentsModal/columns-researchers-departament";
 
 
 
@@ -42,8 +43,8 @@ interface Patrimonio {
   export interface PesquisadorProps {
     lattes_id: string
     name: string
-    type_: string
-    graduate_program_id: string
+    researcher_id: string
+    dep_id: string
   }
   
   export interface PesquisadorProps2 {
@@ -74,28 +75,12 @@ export function DisplayItemDepartamento(props:Patrimonio) {
       const { onOpen, isOpen, type:typeModal } = useModal();
 
     
-
-      useEffect(() => {
-  
-        fetchDataAll()
-        setTab('all')
-
-        }, [urlGeralAdm, props.dep_id]);
-
-        useEffect(() => {
-          if (typeModal === 'confirm-delete-researcher-graduate-program'  && !isOpen) {
-            fetchDataAll()
-          } 
-      
-          fetchDataAll()
-        }, [isOpen, typeModal]);
-
     
 
 
       const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
 
-      const urlGetResearcher = `${urlGeralAdm}GraduateProgramResearcherRest/Query?graduate_program_id=${props.graduate_program_id}`;
+      const urlGetResearcher = `${urlGeralAdm}departamentos/researcher?dep_id=${props.dep_id}`;
 
       const fetchDataAll = async () => {
         try {
@@ -115,7 +100,7 @@ export function DisplayItemDepartamento(props:Patrimonio) {
             // Certifique-se de que cada researcher tenha o graduate_program_id correto
             const researchersWithGraduateProgramId = data.map((researcher: PesquisadorProps) => ({
               ...researcher,
-              graduate_program_id: props.graduate_program_id,
+              dep_id: props.dep_id,
             }));
             setResearcher(researchersWithGraduateProgramId);
           }
@@ -124,13 +109,14 @@ export function DisplayItemDepartamento(props:Patrimonio) {
         }
       }
 
-
+console.log(researcher)
+console.log(urlGetResearcher)
 
       const [tab, setTab] = useState('all')
 
       const [input, setInput] = useState('')
 
-        const permanenteCount = researcher.filter(researcher => researcher.type_ === 'PERMANENTE').length;
+    
   
 
 
@@ -260,7 +246,7 @@ const handleSubmit = async () => {
     //
     const [yearDocentes, setYearDocentes] = useState<YearSemester[]>([]);
 
-    let urlYearDocentes = urlGeralAdm + `tecnicos`
+    let urlYearDocentes = urlGeralAdm + `departamentos/disciplinas/semestres?dep_id=${props.dep_id}`
 
     console.log(urlYearDocentes)
 
@@ -301,6 +287,21 @@ const handleSubmit = async () => {
 
 
   
+    useEffect(() => {
+  
+      fetchDataAll()
+      setTab('all')
+
+      }, [urlGeralAdm, props.dep_id]);
+
+      useEffect(() => {
+        if (typeModal === 'confirm-delete-researcher-departament'  && !isOpen) {
+          fetchDataAll()
+        } 
+    
+        fetchDataAll()
+      }, [isOpen, typeModal]);
+
 
     return(
       <Tabs defaultValue={tab} value={tab} className="h-full" >
@@ -361,6 +362,7 @@ const handleSubmit = async () => {
         <TabsList >
               <TabsTrigger value="all" onClick={() => setTab('all')} className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
                 <TabsTrigger value="unread" onClick={() => setTab('unread')} className="text-zinc-600 dark:text-zinc-200">Docentes</TabsTrigger>
+                <TabsTrigger value="tec" onClick={() => setTab('tec')} className="text-zinc-600 dark:text-zinc-200">Técnicos</TabsTrigger>
                 <TabsTrigger value="dis" onClick={() => setTab('dis')} className="text-zinc-600 dark:text-zinc-200">Disciplinas</TabsTrigger>
                 </TabsList>
 
@@ -400,7 +402,7 @@ const handleSubmit = async () => {
                     <User className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{permanenteCount}</div>
+                    <div className="text-2xl font-bold">{researcher.length}</div>
                     <p className="text-xs text-muted-foreground">
                     registrados no departamento
                     </p>
@@ -490,18 +492,18 @@ const handleSubmit = async () => {
         </CardContent>
 
         <div className="px-6">
-              <DataTableModal columns={columns} data={researcher}/>
+              <DataTableModal columns={columnsDepartament} data={researcher}/>
               </div>
         </div>
         </TabsContent>
 
-        <TabsContent value="dis" className="mt-0">
+        <TabsContent value="dis" className="mt-0 p-4 md:p-8">
         
         <div className="grid grid-cols-1">
                  <LinhaTempoDisciplinas items={items} depId={props.dep_id} />
                  </div>
 
-                 <PainelDisciplinas/>
+                 <PainelDisciplinas dep_id={props.dep_id}/>
      
         </TabsContent>
         </Tabs>

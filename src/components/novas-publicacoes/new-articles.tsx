@@ -179,7 +179,7 @@ useMemo(() => {
 
             </div>
 
-            <TabsContent value="all" className="max-h-[calc(100vh-135px)] h-full">
+            <TabsContent value="all" className="max-h-[calc(100vh-162px)] h-full ">
            
  <div className="flex  flex-col  h-full ">
  <div className="lg:max-w-[500px]  mt-2">
@@ -244,7 +244,7 @@ useMemo(() => {
                   
             </TabsContent>
 
-            <TabsContent value="unread">
+            <TabsContent value="unread" className="pb-4 md:pb-8">
             <div className="mt-4 ">
          
 
@@ -267,7 +267,7 @@ useMemo(() => {
                         </div>
                     </div>
 
-                    <div className="my-8">
+                    <div className="mt-8">
                     {pesquisaInput.length === 0 ? (
    <h3 className="text-2xl font-medium mb-8 ">
     Mostrando todas as revistas, digite para aparecer mais
@@ -335,7 +335,7 @@ useMemo(() => {
                                     </ResponsiveMasonry>
 
                                     {magazine.length >= count && (
-            <div className="w-full flex justify-center my-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
+            <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
         )}
                      </div>
                 )}

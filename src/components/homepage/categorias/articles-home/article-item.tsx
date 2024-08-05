@@ -12,6 +12,7 @@ import {
 import { Button } from "../../../ui/button";
 import { Link } from "react-router-dom";
 import { useModal } from "../../../hooks/use-modal-store";
+import { Eye } from "lucide-react";
 
 type Articles = {
     id: string,
@@ -100,7 +101,7 @@ export function ArticleItem(props: Articles) {
   const highlightedTitle = highlightText(props.title, itemsSelecionados);
 
   return (
-    <div className="flex cursor-pointer w-full" onClick={() => onOpen('articles-modal', { doi: doi, qualis: props.qualis, title: props.title, year: props.year, jif: props.jif, lattes_10_id: props.lattes_10_id, researcher_id: props.researcher_id, magazine: props.name_periodical })}>
+    <div className="flex w-full" >
       <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${qualisColor[props.qualis as keyof typeof qualisColor]}`}></div>
       <Alert className="rounded-l-none flex flex-col justify-between">
         <div>
@@ -126,6 +127,11 @@ export function ArticleItem(props: Articles) {
               </Link>
             )}
           </div>
+
+       <div className="flex gap-2 items-center ml-auto">
+       <Button variant="outline" size={'icon'} className="ml-auto text-sm h-8 w-8 text-gray-500 dark:text-gray-300">
+            <Eye onClick={() => onOpen('articles-modal', {doi:doi, qualis:props.qualis, title:props.title, year:props.year, jif:props.jif, lattes_10_id:props.lattes_10_id, researcher_id:props.researcher_id, magazine:props.name_periodical})} size={16}/>
+            </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size={'icon'} className="ml-auto text-sm w-8 h-8 text-gray-500 dark:text-gray-300">
@@ -147,6 +153,7 @@ export function ArticleItem(props: Articles) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+       </div>
         </div>
       </Alert>
     </div>
