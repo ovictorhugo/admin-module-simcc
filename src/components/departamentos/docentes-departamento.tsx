@@ -5,6 +5,7 @@ import { ResearchItem } from "../homepage/categorias/researchers-home/researcher
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { Skeleton } from "../ui/skeleton";
 
 interface GraduateProgram {
     among: number,
@@ -73,9 +74,10 @@ export function DocentesDepartamento() {
     console.log(urlGraduateProgram)
 
     const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram[]>([]);
-
+    const [isLoading, setIsLoading] = useState(false)
     useEffect(() => {
       const fetchData = async () => {
+        setIsLoading(true)
         try {
           const response = await fetch(urlGraduateProgram, {
             mode: "cors",
@@ -90,6 +92,7 @@ export function DocentesDepartamento() {
           const data = await response.json();
           if (data) {
             setGraduatePrograms(data);
+            setIsLoading(false)
           }
         } catch (err) {
           console.log(err);
@@ -118,57 +121,81 @@ export function DocentesDepartamento() {
          
                            </div>
 
-            <div className="mb-4 md:mb-8">
-       <ResponsiveMasonry
-    columnsCountBreakPoints={{
-        350: 1,
-        750: 2,
-        900: 3,
-        1200:  3,
-        1500: 4,
-        1700: 5
-    }}
->
+            {isLoading ? (
+                <div className="mb-4 md:mb-8 w-full">
+  <ResponsiveMasonry
+             columnsCountBreakPoints={{
+                 350: 1,
+                 750: 2,
+                 900: 3,
+                 1200:  3,
+                 1500: 4,
+                 1700: 5
+             }}
+         >
+         
+                              <Masonry gutter="16px">
+                              {Array.from({ length: 12 }).map((_, index) => (
+                                    <Skeleton key={index} className="w-full rounded-md h-[250px]" />
+                                ))}
+                              </Masonry>
 
-                     <Masonry gutter="16px">
-             {graduatePrograms.slice(0, count).map((item: any) => {
+                              </ResponsiveMasonry>
 
-                return (
-                    <ResearchItem
-                    among={item.among}
-                    articles={item.articles}
-                    book={item.book}
-                    book_chapters={item.book_chapters}
-                    id={item.id}
-                    name={item.name}
-                    university={item.university}
-                    lattes_id={item.lattes_id}
-                    area={item.area}
-                    lattes_10_id={item.lattes_10_id}
-                    city={item.city}
-                    graduation={item.graduation}
-                    patent={item.patent}
-                    speaker={item.speaker}
-                    h_index={item.h_index}
-                    relevance_score={item.relevance_score}
-                    works_count={item.works_count}
-                    cited_by_count={item.cited_by_count}
-                    i10_index={item.i10_index}
-                    scopus={item.scopus}
-                    openalex={item.openalex}
-                    subsidy={item.subsidy}
-                    graduate_programs={item.graduate_programs}
-                    departments={item.departments}
-                    />
-                );
-            })}
-        </Masonry>
-        </ResponsiveMasonry>
-
-        {graduatePrograms.length > count && (
-            <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
-        )}
-       </div>
+                </div>
+            ):(
+                <div className="mb-4 md:mb-8">
+                <ResponsiveMasonry
+             columnsCountBreakPoints={{
+                 350: 1,
+                 750: 2,
+                 900: 3,
+                 1200:  3,
+                 1500: 4,
+                 1700: 5
+             }}
+         >
+         
+                              <Masonry gutter="16px">
+                      {graduatePrograms.slice(0, count).map((item: any) => {
+         
+                         return (
+                             <ResearchItem
+                             among={item.among}
+                             articles={item.articles}
+                             book={item.book}
+                             book_chapters={item.book_chapters}
+                             id={item.id}
+                             name={item.name}
+                             university={item.university}
+                             lattes_id={item.lattes_id}
+                             area={item.area}
+                             lattes_10_id={item.lattes_10_id}
+                             city={item.city}
+                             graduation={item.graduation}
+                             patent={item.patent}
+                             speaker={item.speaker}
+                             h_index={item.h_index}
+                             relevance_score={item.relevance_score}
+                             works_count={item.works_count}
+                             cited_by_count={item.cited_by_count}
+                             i10_index={item.i10_index}
+                             scopus={item.scopus}
+                             openalex={item.openalex}
+                             subsidy={item.subsidy}
+                             graduate_programs={item.graduate_programs}
+                             departments={item.departments}
+                             />
+                         );
+                     })}
+                 </Masonry>
+                 </ResponsiveMasonry>
+         
+                 {graduatePrograms.length > count && (
+                     <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
+                 )}
+                </div>
+            )}
         </div>
     )
 }

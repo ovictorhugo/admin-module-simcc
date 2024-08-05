@@ -1,4 +1,4 @@
-import { Archive, AreaChart, Barcode, Check, ChevronsUpDown, Info, Link2, MapPin, MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, Star, User, Users, X } from "lucide-react";
+import { Archive, AreaChart, Barcode, Check, ChevronsUpDown, GraduationCap, Info, Link2, MapPin, MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, Star, User, Users, X } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
@@ -503,7 +503,7 @@ const handleSubmit = async () => {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link to={'/'}>
+              <Link to={`/pos-graduacao?graduate_program_id=${props.graduate_program_id}`} target="_blank">
               <Button variant="ghost" size="icon"   >
               <SquareArrowOutUpRight size={16}/>
                 <span className="sr-only">Arquivar</span>
@@ -564,7 +564,7 @@ const handleSubmit = async () => {
    {props.code != '' ? (props.code):('Sem código')}
    </CardTitle>
 
-   <Info className="h-4 w-4 text-muted-foreground" />
+   <GraduationCap className="h-4 w-4 text-muted-foreground" />
  </CardHeader>
 <CardContent className="flex flex-col justify-between h-full">
    <div>
@@ -577,7 +577,7 @@ const handleSubmit = async () => {
 
    <div className="flex mb-6 flex-wrap gap-4 px-6">
    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{props.type}</div>
- <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><MapPinIcon size={12}/>{props.city}</div>
+ <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><MapPinIcon size={12}/>{props.city}</div>
  {props.rating != '' && (
                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12}/>{props.rating}</div>
              )}
@@ -586,22 +586,7 @@ const handleSubmit = async () => {
 
 <div className="w-full flex ">
                        <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#00A137] dark:bg-[#00A137] whitespace-nowrap"></div>
-<Alert className="p-6 rounded-l-none flex gap-3 justify-between lg:items-center lg:flex-row flex-col">
-<div>
-  <div className="text-2xl font-bold uppercase">Importar dados do Sucupira</div>
-  <p className="mt-2 text-sm">
-  Importe o arquivo .xls na plataforma e atualize os dados do programa de pós-graduação
-  </p>
 
-  <div className="flex gap-3 mt-6">
-  <Link to={'https://sucupira.capes.gov.br/sucupira/'} target="_blank"><Button variant={'ghost'}><Link2 size={16}/>Acessar Sucupira</Button></Link>
-    <Button><FileXls size={16}/>Atualizar dados</Button></div>
-</div>
-
-<div>
-  <img src="https://www.ufjf.br/propp/wp-content/uploads/sites/20/2016/12/plataforma_sucupira_nova_versao.jpg" alt="" className="mix-blend-multiply h-16 whitespace-nowrap" />
-</div>
-</Alert>
 </div>
 </div>
             

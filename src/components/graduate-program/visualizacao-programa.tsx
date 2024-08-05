@@ -1,4 +1,4 @@
-import { ArrowRight, Book, ChevronDown, ChevronLeft, ChevronUp, Copyright, File, Globe, Info, SlidersHorizontal, Ticket, Users } from "lucide-react";
+import { ArrowRight, Book, ChevronDown, ChevronLeft, ChevronUp, Copyright, File, Globe, Info, MapPinIcon, SlidersHorizontal, Star, Ticket, Users } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -424,18 +424,21 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
             <div className="md:p-8 p-4 py-0 md:py-0 mt-2">
                  
         
-        <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
+        <h1 className=" max-w-[700px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
         {graduatePrograms.map((props) => (
           <>{props.name}</>
         ))}
         </h1>
-        <p className="max-w-[750px]  text-lg font-light text-foreground">Pesquise temas e veja os indicadores de produção nesse programa </p>
-                  <div className="flex gap-3 mt-3">
-                    <Button size={'sm'} 
-                   >Importar dados dos docentes</Button>
-                    <Button size={'sm'} variant={'ghost'} >Importar bolsistas CNPq</Button>
-                  </div>
-
+      
+        {graduatePrograms.map((props) => (
+                  <div className="flex flex-wrap gap-4 ">
+            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{props.type}</div>
+          <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><MapPinIcon size={12}/>{props.city}</div>
+          {props.rating != '' && (
+                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12}/>{props.rating}</div>
+                      )}
+            </div>
+              ))}
                   </div>
 
                   {itemsSelecionados.length > 0 ? (
@@ -826,7 +829,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
                   
                     </Alert>
 
-                    <Alert className=" h-[400px] ">
+                    <Alert className=" h-full ">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">

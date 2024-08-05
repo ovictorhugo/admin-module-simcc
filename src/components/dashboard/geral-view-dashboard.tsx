@@ -142,7 +142,7 @@ export function GeralViewDashboard() {
 
 const [directory, setDirectory] = useState('');
 
-  let urlDiretorio =`${urlGeralAdm}api/directory`
+  let urlDiretorio =`${urlGeralAdm}s/directory`
 
 useEffect(() => {
   const fetchData = async () => {
@@ -173,7 +173,7 @@ useEffect(() => {
 
 const handleSubmitDiretorio = async () => {
   try {
-    const response = await fetch(`${urlGeralAdm}api/save-directory`, {
+    const response = await fetch(`${urlGeralAdm}s/save-directory`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -228,6 +228,7 @@ const handleSubmitDiretorio = async () => {
               <TabsList >
                 
               <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
+              <TabsTrigger value="dep" className="text-zinc-600 dark:text-zinc-200">Departamentos</TabsTrigger>
               <TabsTrigger value="cargos" className="text-zinc-600 dark:text-zinc-200">Cargos e funções</TabsTrigger>
                 <TabsTrigger value="unread" className="text-zinc-600 dark:text-zinc-200">Configurações</TabsTrigger>
                
@@ -311,7 +312,7 @@ const handleSubmitDiretorio = async () => {
                 <Alert  className="xl:col-span-2 p-0" x-chunk="dashboard-01-chunk-4" >
                 <CardHeader className="flex gap-6 flex-col md:flex-row items-center justify-between">
               <div className="grid gap-2 ">
-              <CardTitle>Titulo</CardTitle>
+              <CardTitle>Acessos na plataforma</CardTitle>
                 <CardDescription>
                 O Apache Hop atualiza diariamente os dados de todos os pesquisadores na plataforma. 
                 </CardDescription>

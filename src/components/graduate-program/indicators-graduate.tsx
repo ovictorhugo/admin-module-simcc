@@ -15,7 +15,7 @@ export function IndicatorsGraduate() {
     const [value, setValue] = useState('article')
   const url2 = 'https://app.powerbi.com/view?r=eyJrIjoiNTEwMjUxMzktMzZjYS00ZjM1LWJhYzYtZDY3Y2I2YzE1ZGRiIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
     return (
-        <main className="flex flex-1 flex-col gap-4  p-4 md:p-8 ">
+        <main className="flex flex-1 flex-col gap-4  px-4 md:px-8 ">
                 
 
             <div className="lg:max-w-[900px]  mt-2">
@@ -51,7 +51,7 @@ Produção geral
       onClick={() => setValue('2')}
       className=" gap-2 items-center"
     >
-Visão social da escola
+Discentes
 </TabsTrigger>
                 </TabsList>
                 

@@ -91,6 +91,23 @@ export function VisualizacaoGrupo() {
 
             </div>
 
+            <div className="md:p-8 p-4 py-0 md:py-0 mt-2">
+                 
+        
+                 <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
+                 {graduatePrograms.map((props) => (
+                   <>{props.name}</>
+                 ))}
+                 </h1>
+                 <p className="max-w-[750px]  text-lg font-light text-foreground">Pesquise temas e veja os indicadores de produção nesse programa </p>
+                           <div className="flex gap-3 mt-3">
+                             <Button size={'sm'} 
+                            >Ir para o DGP CNPq</Button>
+                           
+                           </div>
+         
+                           </div>
+
         </main>
     )
 }

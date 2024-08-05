@@ -5,6 +5,7 @@ import { ResearchItem } from "../homepage/categorias/researchers-home/researcher
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { Skeleton } from "../ui/skeleton";
 
 interface GraduateProgram {
     among: number,
@@ -73,9 +74,10 @@ export function DocentesPrograma() {
     console.log(urlGraduateProgram)
 
     const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram[]>([]);
-
+    const [isLoading, setIsLoading] = useState(false)
     useEffect(() => {
       const fetchData = async () => {
+        setIsLoading(true)
         try {
           const response = await fetch(urlGraduateProgram, {
             mode: "cors",
@@ -90,6 +92,7 @@ export function DocentesPrograma() {
           const data = await response.json();
           if (data) {
             setGraduatePrograms(data);
+            setIsLoading(false)
           }
         } catch (err) {
           console.log(err);
@@ -117,6 +120,30 @@ export function DocentesPrograma() {
                            </div>
          
                            </div>
+
+                           {isLoading ? (
+                <div className="mb-4 md:mb-8 w-full">
+  <ResponsiveMasonry
+             columnsCountBreakPoints={{
+                 350: 1,
+                 750: 2,
+                 900: 3,
+                 1200:  3,
+                 1500: 4,
+                 1700: 5
+             }}
+         >
+         
+                              <Masonry gutter="16px">
+                              {Array.from({ length: 12 }).map((_, index) => (
+                                    <Skeleton key={index} className="w-full rounded-md h-[250px]" />
+                                ))}
+                              </Masonry>
+
+                              </ResponsiveMasonry>
+
+                </div>
+            ):(
 
                            <div className="mb-4 md:mb-8">
        <ResponsiveMasonry
@@ -169,6 +196,7 @@ export function DocentesPrograma() {
             <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
         )}
        </div>
+            )}
         </div>
     )
 }
