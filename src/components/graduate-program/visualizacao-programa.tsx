@@ -858,10 +858,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
                       </div>
 
                   )}
-
-                 
-
-                 
+  
             </TabsContent>
             <TabsContent value="doc" className="h-auto flex flex-col gap-4 md:gap-8  ">
                     <DocentesPrograma/>

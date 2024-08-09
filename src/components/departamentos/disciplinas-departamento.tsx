@@ -319,7 +319,7 @@ const combineItems = (items: Disciplinas[]) => {
                                                            
 
                                                            <div className="w-6 h-6">
-                                                           <img src={`${urlGeral}ResearcherData/Image?name=${props.researcher_name}`} alt="" className="w-full h-full object-cover rounded-md " />
+                                                           <img src={`${urlGeral}ResearcherData/Image?name=${item}`} alt="" className="w-full h-full object-cover rounded-md " />
                                                            </div>
                                                         </dt>
 

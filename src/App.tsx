@@ -44,9 +44,9 @@ function App() {
   const [user, setUser] = useState<User>({  state: '', email: '', name: '', img_url: '', institution_id: '',...{} } as User);
 
 
-  const [urlGeral, setUrlGeral] = useState('http://simcc.uesc.br:5002/');
+  const [urlGeral, setUrlGeral] = useState(import.meta.env.VITE_URL_GERAL);
 
-  const [urlGeralAdm, setUrlGeralAdm] = useState('http://simcc.uesc.br:5001/');
+  const [urlGeralAdm, setUrlGeralAdm] = useState(import.meta.env.VITE_URL_GERAL_ADM);
 
   const [mapModal, setMapModal] = useState(false)
 

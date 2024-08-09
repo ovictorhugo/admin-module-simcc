@@ -109,7 +109,7 @@ export function GraficoArtigosPorQualis({ dados }: { dados: Research[] }) {
     <Alert className="p-0 border-0 h-full">
       <ChartContainer  config={chartConfig}  className="h-[300px] w-full">
         <ResponsiveContainer>
-          <BarChart  data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          <BarChart  data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
           <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
            
           

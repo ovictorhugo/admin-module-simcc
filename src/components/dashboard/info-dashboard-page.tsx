@@ -1,4 +1,4 @@
-import { ChevronLeft, File } from "lucide-react";
+import { ChevronLeft, Download, File } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,24 @@ export function InfoDashboardPage() {
     const handleVoltar = () => {
       history(-1);
     }
+
+    const docs = [
+      {
+        name:'Modelo - importação pesquisadores xls',
+        des:'Importar os pesquisadores com nome e Id Lattes na página PESQUISADORES para realizar a rotina de extração dos dados',
+        doc:'importar-pesquisadores.xls'
+      },
+      {
+        name:'Modelo - importação de dados dos docentes',
+        des:'Importar os pesquisadores com nome e Id Lattes na página PESQUISADORES para realizar a rotina de extração dos dados',
+        doc:'importar-pesquisadores.xls'
+      },
+      {
+        name:'Modelo - importação de dados dos técnicos',
+        des:'Importar os pesquisadores com nome e Id Lattes na página PESQUISADORES para realizar a rotina de extração dos dados',
+        doc:'importar-pesquisadores.xls'
+      }
+    ]
 
     return(
         <main className="flex flex-1 flex-col gap-4 md:gap-8 md:p-8 p-4">
@@ -54,16 +72,25 @@ export function InfoDashboardPage() {
             <TabsContent value="doc" className="flex flex-col gap-4 md:gap-8">
             <h3 className="text-2xl font-medium ">Modelo de documentos </h3>
 
-              <div className="grid xl:grid-cols-12 lg:grid-cols-9 md:grid-cols-6 sm:grid-cols-4 grid-cols-2">
-                <div className="flex gap-2 flex-col">
-                  <Alert className="w-full aspect-square border rounded-md flex items-center justify-center"><div><File size={24}/></div></Alert>
+             <div className="flex flex-col gap-4 md:gap-8">
+              {docs.map((props) => (
+                <Alert className="flex w-full justify-between items-center">
 
-                  <div>
-                    <p className="font-medium pb-2">Xls Id Lattes</p>
-                    <p></p>
-                  </div>                  
+                <div className="flex items-center gap-3"><div className="w-12 flex items-center justify-center">
+                <File size={16}/>
                 </div>
-              </div>
+                <div className="flex flex-col">
+                <p className="font-medium">{props.name}</p>
+                <p className="text-gray-500 text-sm">{props.des}</p>
+                </div>
+                </div>
+
+                <div>
+                  <Button className="w-8 h-8" size={'icon'} variant={'ghost'}><Download size={16}/></Button>
+                </div>
+              </Alert>
+              ))}
+             </div>
             </TabsContent>
             </Tabs>
         </main>

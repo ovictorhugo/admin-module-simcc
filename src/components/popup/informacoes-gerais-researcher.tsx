@@ -68,7 +68,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
   } from "../../components/ui/tooltip"
-import {  BarChart, Clock, GraduationCap, Mail, Phone, Shapes, SquareUser } from "lucide-react";
+import {  BarChart, Clock, GraduationCap, Info, Mail, Phone, Shapes, SquareUser } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { Link } from "react-router-dom";
   
@@ -238,7 +238,7 @@ export function InformacoesGeraisResearcher(props:Research) {
             <div className="font-medium text-2xl mb-6 pr-12">
           Departamento
           </div>
-            <div className="flex ">
+            <div className="flex mb-6 ">
             
             <div className={`w-2 min-w-[8px] min-h-[125px] flex flex-1 h-full rounded-l-lg border border-r-0 border-neutral-200 dark:border-neutral-800 ` }></div>
 
@@ -271,7 +271,7 @@ export function InformacoesGeraisResearcher(props:Research) {
               <div className="font-medium text-2xl mb-6 pr-12">
             Bolsa CNPq
             </div>
-              <div className="flex ">
+              <div className="flex">
               
               <div className={`w-2 min-w-[8px] min-h-[125px] flex flex-1 h-full rounded-l-lg ${item.modality_code == 'DT'? ('bg-[#183EFF]'):('bg-[#00D000]')} border border-r-0 border-neutral-200 dark:border-neutral-800 ` }></div>
             
@@ -322,9 +322,20 @@ export function InformacoesGeraisResearcher(props:Research) {
 
 {props.research_groups.length != 0 && (
   <div>
-    <div className="font-medium text-2xl mb-6 pr-12">
+    <div className="my-6 flex items-center justify-between">
+    <div className="font-medium text-2xl ">
 Grupos de pequisa
 </div>
+
+<TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Líder ou vice-líder de grupos cadastrados no DGP CNPq</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+    </div>
 
       <div className="flex flex-col gap-6">
       {props.research_groups.map((item) => (

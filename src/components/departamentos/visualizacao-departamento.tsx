@@ -1,7 +1,7 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Button } from "../ui/button";
-import { Book, ChevronLeft, Copyright, Info } from "lucide-react";
+import { Book, ChevronLeft, Copyright, Globe, Hash, Info, Mail, Phone } from "lucide-react";
 import { DisciplinasDepartamentoPage } from "./disciplinas-departamento";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
@@ -444,8 +444,53 @@ const year2 = currentYear1 - 4;
           <>{props.dep_nom}</>
         ))}
         </h1>
+        {departamento.slice(0,1).map((props) => (
+  <div className="flex flex-wrap gap-4 mb-4 md:mb-8 ">
+  <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>CÓDIGO: {props.org_cod}</div>
+  <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>{props.dep_sigla}</div>
+  </div>
+
+        ))}
 
         <div className=" py-0 md:py-0">
+          {departamento.slice(0,1).map((props) => (
+            <div className="mb-4 md:mb-8">
+            <div
+                    className={`h-3 w-full rounded-t-md dark:border-neutral-800 border border-neutral-200 border-b-0 bg-[#719CB8]  `}
+                  ></div>
+  
+              <Alert
+                        className="p-0 rounded-t-none"  x-chunk="dashboard-05-chunk-4"
+                      >
+  
+  <CardHeader className="flex flex-row items-start bg-neutral-100 dark:bg-neutral-800">
+              <div className="flex items-center justify-between w-full">
+                <CardTitle className="group flex items-center w-fit gap-2 text-lg">
+                  <div className="w-fit">Informações</div>
+              
+                </CardTitle>
+<div className="flex gap-3 items-center ">
+<Button variant={'ghost'} className="hover:bg-neutral-200 dark:hover:bg-neutral-700"><Mail size={16}/> {props.dep_email}</Button>
+
+<Link to={props.dep_site} target="_blank"><Button variant={'ghost'} className="hover:bg-neutral-200 dark:hover:bg-neutral-700"><Globe size={16}/> {props.dep_site}</Button></Link>
+
+<Button variant={'ghost'} className="hover:bg-neutral-200 dark:hover:bg-neutral-700"><Phone size={16}/> {props.dep_tel}</Button>
+</div>
+              </div>
+              <div className="ml-auto flex items-center gap-1">
+               
+               
+              </div>
+              
+            </CardHeader>
+
+            <CardContent className="p-6 text-sm">
+              {props.dep_des}
+            </CardContent>
+          </Alert>
+            </div>
+          ))}
+
               
                       <Alert className="grid gap-3 lg:grid-cols-4 grid-cols-2 mb-4 md:mb-8">
                       <div>

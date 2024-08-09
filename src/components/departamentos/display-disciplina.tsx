@@ -322,7 +322,7 @@ if (totalWorkload !== props.academic_activity_ch) {
                  >
                    <dt className="flex items-center gap-2 text-muted-foreground">
                    <div className="w-8 h-8">
-                                                           <img src={`${urlGeral}ResearcherData/Image?name=${props.researcher_name}`} alt="" className="w-full h-full object-cover rounded-md " />
+                                                           <img src={`${urlGeral}ResearcherData/Image?name=${researcher}`} alt="" className="w-full h-full object-cover rounded-md " />
                                                            </div>
                      <dd>{researcher.name}</dd>
                    </dt>

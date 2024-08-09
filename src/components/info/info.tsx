@@ -1,16 +1,40 @@
-import { ChevronLeft, Mail, MapPin } from "lucide-react";
+import { Braces, ChevronLeft, Copy, Download, FileJson, Mail, MapPin } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
 import { Duvidas } from "./duvidas";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Alert } from "../ui/alert";
-import { LinkSimple } from "phosphor-react";
+import { BracketsCurly, LinkSimple } from "phosphor-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { getVersion } from "../../gerVersion";
+import { Badge } from "../ui/badge";
+import { toast } from "sonner"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  
+} from "../../components/ui/accordion"
+
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../components/ui/table"
+
+import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
+import { UserContext } from "../../context/context";
 
 export function Info() {
     const history = useNavigate();
+
+    const {urlGeral} = useContext(UserContext)
 
     const handleVoltar = () => {
       history(-1);
@@ -182,6 +206,10 @@ export function Info() {
         { id: 5, itens: 'https://www.ufrb.edu.br/ascom/images/documentos/marca/01_-_Preferencial.png', name: `Gleidson de Meireles Costa`, inst: `Universidade Federal do Recôncavo da Bahia`, img:`../col_1.png`, mail:'' },
       ]);
 
+       const urlApi = `${urlGeral}researcherName?name=`
+       const urlApi2 = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=&type=&qualis=&year=`
+
+
     return(
         <main className="flex flex-1 flex-col gap-4 md:gap-8 md:p-8 p-4">
             <Tabs defaultValue={'all'} className="h-full" >
@@ -218,6 +246,14 @@ export function Info() {
             </div>
 
             <TabsContent value="all" className="flex flex-col gap-4 md:gap-8">
+
+              <Alert className="h-[300px] flex items-center justify-center">
+              <h1 className="z-[2] text-center max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
+            Saiba as informações sobre
+            a plataforma
+            </h1>
+              </Alert>
+
                 <Duvidas/>
 
 
@@ -280,6 +316,645 @@ export function Info() {
 
             <TabsContent value="doc" className="flex flex-col gap-4 md:gap-8">
             <h3 className="text-2xl font-medium ">Dicionário de chamadas</h3>
+
+            <div className="flex flex-col gap-4 md:gap-8">
+            <Alert className="flex w-full justify-between items-center ">
+            <Accordion  type="single" collapsible className="w-full" >
+                <AccordionItem value="item-1" >
+                <div className="flex h-12">
+                <HeaderResultTypeHome title="Informções do pesquisador" icon={<FileJson size={24} className="text-gray-400" />}>
+                <div className="flex gap-3 items-center">
+                <Badge className="bg-[#DBB540] hover:bg-[#DBB540] mr-3">GET</Badge>
+              
+                </div>
+                </HeaderResultTypeHome>
+
+                <AccordionTrigger>
+                   
+                   </AccordionTrigger>
+                </div>
+                   
+                    <AccordionContent >
+                      <div className="mt-4">
+                      <div className="w-full bg-slate-100 dark:bg-neutral-800 px-4 py-2 rounded-md text-xs mb-4 flex gap-3 items-center justify-between">
+                <div className="flex items-center gap-3"><BracketsCurly className="h-4 w-4" />{urlApi}</div>
+                <Button onClick={() => {
+                  navigator.clipboard.writeText(urlApi)
+                  toast("Operação realizada", {
+                    description: "URL copiada para área de transferência",
+                    action: {
+                      label: "Fechar",
+                      onClick: () => console.log("Undo"),
+                    },
+                  })
+                }} variant="ghost" className="h-8 w-8 p-0">
+              <Copy className="h-4 w-4" />
+            </Button>
+              </div>
+
+              <div className="mb-4 flex items-center gap-3 flex-wrap">
+                <p className="font-medium">Parâmetros da URL:</p>
+                <Badge variant={'outline'}>name: Nome completo do pesquisador</Badge>
+               
+              </div>
+
+              <Table>
+
+  <TableHeader>
+    <TableRow>
+     
+      <TableHead>Parâmetro</TableHead>
+      <TableHead  className="w-[100px]">Tipo</TableHead>
+      <TableHead>Descrição</TableHead>
+      <TableHead>Elemento pai</TableHead>
+  
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell className="font-medium">abstract</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Resumo cadastrado no currículo Lattes do pesquisador</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">among</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Quantidade de ocorrências para pesquisa na plataforma</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">area</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Grande área cadastrada no currículo Lattes do pesquisador</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">articles</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Quantidade total de artigos</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">book</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Quantidade total de livros</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">book_chapters</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Quantidade total de capítulos de livros</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">brand</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Quantidade total de marcas</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">cargo</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Cargo na instituição</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">cited_by_count</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Quantidade de citações - OpenAlex</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">city</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Cidade cadastrada no currículo Lattes do pesquisador</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">classe</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Tipo do docente</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">departments</TableCell>
+      <TableCell>Array</TableCell>
+      <TableCell>Informações do departamento</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">dep_des</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Descrição do departamento</TableCell>
+      <TableCell>departments</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">dep_email</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Email do departamento</TableCell>
+      <TableCell>departments</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">dep_id</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Id do departamento na Plataforma</TableCell>
+      <TableCell>departments</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">dep_sigla</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Sigla do departamento </TableCell>
+      <TableCell>departments</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">dep_site</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Endereço online do departamento </TableCell>
+      <TableCell>departments</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">dep_tel</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Número do departamento </TableCell>
+      <TableCell>departments</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">img_data</TableCell>
+      <TableCell>Image</TableCell>
+      <TableCell>Logomarca do departamento </TableCell>
+      <TableCell>departments</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">org_cod</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Código do departamento no patrimõnio</TableCell>
+      <TableCell>departments</TableCell>
+    </TableRow>
+    
+    <TableRow>
+      <TableCell className="font-medium">graduate_programs</TableCell>
+      <TableCell>Array</TableCell>
+      <TableCell>Programas de pós-graduação que o docente faz parte</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">name</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Nome do programa de pós-graduação</TableCell>
+      <TableCell>graduate_programs</TableCell>
+    </TableRow>
+
+
+    <TableRow>
+      <TableCell className="font-medium">graduate_program_id</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Identificador do programa de pós-graduação na plataforma</TableCell>
+      <TableCell>graduate_programs</TableCell>
+    </TableRow>
+
+
+    
+    <TableRow>
+      <TableCell className="font-medium">graduation</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Titulação do docente</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">h_index</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Índice H - OpenAlex</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">i10_index</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Índice i10 - OpenAlex</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">id</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Identificador do pesquisador na plataforma</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">image_university</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Url da logomarca da instituição</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">lattes_id</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Id do Currículo Lattes</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">lattes_update</TableCell>
+      <TableCell>Date</TableCell>
+      <TableCell>Data de atualização do Currículo Lattes</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">name</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Nome completo do pesquisador</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">openalex</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Link da página do OpenAlex do pesquisador</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">orcid</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Orcid do pesquisador</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">patent</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Quantidade total de patentes</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">ref</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Número de referência do cargo na instituição</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">relevance_score</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Índice de relevância do pesquisador - OpenAlex</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">research_groups</TableCell>
+      <TableCell>Array</TableCell>
+      <TableCell>Grupos de pequisa que o docente é líder ou vice-líder</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">area</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Área de pesquisa do grupo</TableCell>
+      <TableCell>research_groups</TableCell>
+    </TableRow>
+
+     <TableRow>
+      <TableCell className="font-medium">group_id</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Identificador do grupo de pesquisa na plataforma</TableCell>
+      <TableCell>research_groups</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">name</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Nome do grupo de pesquisa</TableCell>
+      <TableCell>research_groups</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">rt</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Regime de trabalho</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">scopus</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Link do Scopus do pesquisador</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">situacao</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Situação de cadastro na instituição</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">software</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Quantidade total de softwares</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">titulacao</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Titulação do docente (informação da instituição)</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">university</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Titulação do docente (informação da instituição)</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">works_count</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Quantidade total de trabalho em eventos</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">subsidy</TableCell>
+      <TableCell>Array</TableCell>
+      <TableCell>Informações da bolsa CNPq</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">aid_quantity</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Quantidade de ajuda</TableCell>
+      <TableCell>subsidy</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">call_title</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Nome do edital de convocação CNPq</TableCell>
+      <TableCell>subsidy</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">category_level_code</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Código do nível da bolsa</TableCell>
+      <TableCell>subsidy</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">funding_program_name</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Nome do programa de financiamento</TableCell>
+      <TableCell>subsidy</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">id</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Identificação da bolsa</TableCell>
+      <TableCell>subsidy</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">institute_name</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Nome da instituição do docente</TableCell>
+      <TableCell>subsidy</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">modality_code</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Código da modalidade da bolsa</TableCell>
+      <TableCell>subsidy</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">modality_name</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Nome da modalidade da bolsa</TableCell>
+      <TableCell>subsidy</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">scholarship_quantity</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Quantidade de bolsa</TableCell>
+      <TableCell>subsidy</TableCell>
+    </TableRow>
+
+  </TableBody>
+
+ 
+</Table>
+
+
+                      </div>
+                    </AccordionContent>
+                </AccordionItem>
+                </Accordion>
+
+
+
+</Alert>
+
+<Alert className="flex w-full justify-between items-center ">
+            <Accordion  type="single" collapsible className="w-full" >
+                <AccordionItem value="item-1" >
+                <div className="flex h-12">
+                <HeaderResultTypeHome title="Produção bibliográfica do pesquisador" icon={<FileJson size={24} className="text-gray-400" />}>
+                <div className="flex gap-3 items-center">
+                <Badge className=" bg-green-900 hover:bg-green-900 ">CSV</Badge>
+                <Badge className="bg-[#DBB540] hover:bg-[#DBB540] mr-3">GET</Badge>
+                </div>
+                </HeaderResultTypeHome>
+
+                <AccordionTrigger>
+                   
+                   </AccordionTrigger>
+                </div>
+                   
+                    <AccordionContent >
+                      <div className="mt-4">
+                      <div className="w-full bg-slate-100 dark:bg-neutral-800 px-4 py-2 rounded-md text-xs mb-4 flex gap-3 items-center justify-between">
+                <div className="flex items-center gap-3"><BracketsCurly className="h-4 w-4" />{urlApi2}</div>
+                <Button onClick={() => {
+                  navigator.clipboard.writeText(urlApi2)
+                  toast("Operação realizada", {
+                    description: "URL copiada para área de transferência",
+                    action: {
+                      label: "Fechar",
+                      onClick: () => console.log("Undo"),
+                    },
+                  })
+                }} variant="ghost" className="h-8 w-8 p-0">
+              <Copy className="h-4 w-4" />
+            </Button>
+              </div>
+
+              <div className="mb-4 flex items-center gap-3 flex-wrap">
+                <p className="font-medium">Parâmetros da URL:</p>
+                <Badge variant={'outline'}>terms: Palavra-chave</Badge>
+                <Badge variant={'outline'}>* researcher_id: Identificador do pesquisador na plataforma</Badge>
+                <Badge variant={'outline'}>* type: ARTICLE</Badge>
+                <Badge variant={'outline'}>qualis: A1 | A2 | A3 | A4 | B1 | B2 | B3 | B4 | C | SQ (separar por ";")</Badge>
+                <Badge variant={'outline'}>* year: Ano mínimo de publicação</Badge>
+              </div>
+
+              <Table>
+
+  <TableHeader>
+    <TableRow>
+     
+      <TableHead>Parâmetro</TableHead>
+      <TableHead  className="w-[100px]">Tipo</TableHead>
+      <TableHead>Descrição</TableHead>
+      <TableHead>Elemento pai</TableHead>
+  
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell className="font-medium">abstract</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Resumo do artigo</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">doi</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Digital identifier of an object - DOI</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">id</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Identificador do artigo na plataforma</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">jcr_link</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Link JCR do artigo</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">jif</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Journal Citation Reports JCR</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">lattes_10_id</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Identificador de foto no currículo Lattes</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">lattes_id</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Id do Currículo Lattes</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">magazine</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Nome da resvista da publicação</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">qualis</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Classificação da produção científica - Sucupira</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">researcher</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Nome do pesquisador</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">researcher_id</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Identificador do pesquisador na plataforma</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">title</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Título da publicação</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">type</TableCell>
+      <TableCell>String</TableCell>
+      <TableCell>Tipo de publicação (ARTICLE)</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell className="font-medium">year</TableCell>
+      <TableCell>Number</TableCell>
+      <TableCell>Ano de publicação</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+  </TableBody>
+</Table>
+
+
+                      </div>
+                    </AccordionContent>
+                </AccordionItem>
+                </Accordion>
+
+
+
+</Alert>
+            </div>
 
                 <h3 className="text-2xl font-medium ">Dicionário de cores</h3>
 

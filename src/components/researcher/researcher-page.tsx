@@ -112,6 +112,18 @@ interface Bolsistas {
     name:string
   }
 
+  type ResearchOpenAlex = {
+    h_index: number;
+    relevance_score: number;
+    works_count: number;
+    cited_by_count: number;
+    i10_index: number;
+    scopus: string;
+    orcid:string
+    openalex:string
+    
+  }
+
 
       const useQuery = () => {
         return new URLSearchParams(useLocation().search);
@@ -389,7 +401,20 @@ function generateNameVariations(name: string): string[] {
        
           <main className="flex flex-1 flex-col  p-4 md:p-8 ">
              <div className="w-full  gap-4 m pb-0 md:pb-0">
+             <div className="flex items-center gap-4">
+
+             <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
+                <ChevronLeft className="h-4 w-4" />
+                <span className="sr-only">Voltar</span>
+              </Button>
+          
+              <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+                Página do(a) pesquisador(a)
+              </h1>
+
              {researcher.slice(0, 1).map((props) => {
+
+              
    let urlShare = `${currentUrl}/researcher?researcher_name=${props.name}&search_type=${searchType}&terms=${valoresSelecionadosExport}`
 
    if(searchType == 'name') {
@@ -408,18 +433,11 @@ function generateNameVariations(name: string): string[] {
    
 
    return(
-            <div className="flex items-center gap-4">
+            
 
               
           
-            <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
-                <ChevronLeft className="h-4 w-4" />
-                <span className="sr-only">Voltar</span>
-              </Button>
-          
-              <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                Página do(a) pesquisador(a)
-              </h1>
+       
              
 
                 
@@ -534,10 +552,11 @@ function generateNameVariations(name: string): string[] {
 
               </div>
               </div>
-            </div>
+           
 
 )
 })}
+ </div>
             </div>
 
             {researcher.slice(0, 1).map((user) => {
@@ -600,7 +619,7 @@ function generateNameVariations(name: string): string[] {
                   i10_index={user.i10_index}
                   scopus={user.scopus}
                   openalex={user.openalex}
-                  departament={user.departament}
+                
 
                   openAPI={open}
                   />
@@ -698,6 +717,7 @@ function generateNameVariations(name: string): string[] {
                       situacao={user.situacao}
 
                       research_groups={user.research_groups}
+                      
                       />
                     )
                    
