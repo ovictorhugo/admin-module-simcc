@@ -187,7 +187,7 @@ useEffect(() => {
             
                 return(
                     <div key={props.id} className="group flex transition-all ">
-                <div className=" rounded-md w-10 h-10 bg-cover bg-center bg-no-repeat rounded-l-lg rounded-r-none" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}></div>
+                <div className=" rounded-md w-10 h-10 bg-cover bg-center bg-no-repeat rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white dark:bg-neutral-700" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}></div>
                 <div className="h-10 w-10 text-xs flex items-center justify-center transition-all dark:bg-neutral-950 bg-white border-neutral-200 dark:border-neutral-800 border text-gray-500 dark:text-white rounded-r-md">
                     {calcularPontuacao(props) !== undefined ? parseFloat(calcularPontuacao(props)).toFixed(2) : ''}
                 </div>

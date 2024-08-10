@@ -13,8 +13,8 @@ import { Button } from "../ui/button";
 import { signInWithEmailAndPassword} from 'firebase/auth';
 import "firebase/auth";
 import { auth } from "../../lib/firebase";
-import { useNavigate } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
+import img1 from '../../assets/bg_home.png'
 import {
   Tabs,
   TabsContent,
@@ -190,12 +190,22 @@ export function SignInContent() {
             })
           })
       }
+      const location = useLocation();
 
       const [value, setValue] = useState('account')
 
     return(
         <div className="w-full h-screen flex">
-            <div className="w-1/2 h-full md:flex hidden bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${backgroundImage})` }}></div>
+            <div className="w-1/2 h-full p-16 md:flex items-end hidden bg-cover bg-center bg-no-repeat bg-[#719CB8]" style={{ backgroundImage: `url(${img1})` }}>
+            <div>
+             <div>
+             <p className="font-medium text-white max-w-[500px]">
+              "O Programa Sempre UFMG tem o objetivo de promover a conexão entre a Universidade e seus egressos, incentivando a cultura do retorno e da retribuição à Universidade"
+              </p>
+              <p className="text-white mt-2 text-sm">Alfredo Tetse</p>
+             </div>
+            </div>
+            </div>
 
             <div className="md:w-1/2 w-full h-full flex items-center justify-center flex-col">
             <Tabs defaultValue="account" value={value} className="w-[400px]">

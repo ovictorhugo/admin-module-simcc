@@ -1,7 +1,7 @@
 import { ChevronLeft } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
-
+import { Helmet } from 'react-helmet';
   import {
     Drawer,
     DrawerClose,
@@ -207,7 +207,7 @@ export function ResearcherPage() {
     const isModalOpen = isOpen && typeModal === "researcher-modal";
     const [researcher, setResearcher] = useState<Research[]>([]); 
     const [loading, isLoading] = useState(false)
-    const {name} = data
+   
 
   
 
@@ -392,11 +392,14 @@ function generateNameVariations(name: string): string[] {
   return variations;
 }
 
-
+const researcherName = researcher.length > 0 ? researcher[0].name : "Desconhecido";
 
 
     return(
-        <div>
+        <html>
+         <Helmet>
+        <title>Conectee | {researcherName}</title>
+      </Helmet>
 
        
           <main className="flex flex-1 flex-col  p-4 md:p-8 ">
@@ -773,6 +776,6 @@ function generateNameVariations(name: string): string[] {
       </div>
      </div>
         </main>
-        </div>
+        </html>
     )
 }

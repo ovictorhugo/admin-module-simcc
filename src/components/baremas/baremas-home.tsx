@@ -3,12 +3,25 @@ import { useModalHomepage } from "../hooks/use-modal-homepage";
 import { HeaderBarema } from "./header-barema";
 import { Alert } from "../ui/alert";
 import { Button } from "../ui/button";
-import { ArrowCounterClockwise, CaretDown, CaretUp, ChartBar, ChartLine, Check, Copy, DotsSix, Download, FileCsv, GearSix, PencilLine, PlusCircle, Rows, Trash, Users } from "phosphor-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { ArrowCounterClockwise, CaretDown, CaretUp, ChartBar, ChartLine, Check, Copy, DotsSix, Download, FileCsv, Gear, GearSix, PencilLine, PlusCircle, Rows, Trash, Users } from "phosphor-react";
 import { Input } from "../ui/input";
 import { getFirestore, doc, getDocs, updateDoc, onSnapshot, collection, addDoc, query, deleteDoc,  where,  Query } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid'; 
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../components/ui/accordion";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { toast } from "sonner"
+
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from "../../components/ui/table"
+  
 type Research = {
     article_A1: string,
     article_A2: string,
@@ -74,7 +87,7 @@ import {
     CommandItem,
     CommandList
   } from "../../components/ui/command"
-import { ArrowRight, ChevronLeft, Info, MoreHorizontal, Plus } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronsUpDown, Info, MoreHorizontal, Plus } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { PesquisadorItemBarema } from "./pesquisdor-item-barema";
 
@@ -152,11 +165,12 @@ import { GraficoBarema } from "./grafico-barema";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { ProcurarBaremas } from "./procurar-barema-public";
+import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 
 
 export function BaremasHome() {
     const { isOpen, type } = useModalDashboard();
-    const [openPopovers, setOpenPopovers] = useState([]);
+    
     const { pesquisadoresSelecionados, urlGeral, setPesquisadoresSelecionados, user, idDocumentBarema, setIdDocumentBarema } = useContext(UserContext)
 
     const isModalOpen = isOpen && type === 'baremas';
@@ -165,7 +179,7 @@ export function BaremasHome() {
         baremaId:string
       }>();
 
-    
+      const [openPopo2, setOpenPopo2] = useState(false)
 
     const [anoArtigo, setAnoArtigo] = useState(Number(new Date().getFullYear() - 4));
     const [anoWorkInEvent, setAnoWorkInEvent] = useState(Number(new Date().getFullYear() - 4));
@@ -299,6 +313,14 @@ export function BaremasHome() {
 
   const [grupos, setGrupos] = useState<Grupo[]>([]);
 
+  const [openPopovers, setOpenPopovers] = useState<boolean[][]>(
+    () => grupos.map(group => new Array(group.categorias.length).fill(false))
+  );
+
+  // Update openPopovers if grupos state changes, for instance, when groups are fetched from an API
+  useEffect(() => {
+    setOpenPopovers(grupos.map(group => new Array(group.categorias.length).fill(false)));
+  }, [grupos]);
 
       const [header, setHeader] = useState([
         {
@@ -895,7 +917,7 @@ console.log(somaTotalPorPesquisador);
             <Tabs defaultValue="1" value={valueTab} className="w-full">
                         <div className="flex flex-col gap-3 w-full">
                         <div className="w-full flex flex-col">
-                            <div className=" dark:border-neutral-800 border border-b-0 border-neutral-200 h-3 rounded-t-md bg-blue-700 whitespace-nowrap"></div>
+                            <div className=" dark:border-neutral-800 border border-b-0 border-neutral-200 h-3 rounded-t-md bg-[#719CB8] whitespace-nowrap"></div>
 
                             <Alert  className="rounded-t-none ">
                             <div className="flex justify-between  mb-6">
@@ -934,29 +956,20 @@ console.log(somaTotalPorPesquisador);
                                 
                            <TabsContent value="1" className="w-full flex gap-3 flex-col m-0 p-0">
                         <div className="w-full flex">
-                        <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-blue-700 whitespace-nowrap"></div>
+                        <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] whitespace-nowrap"></div>
 
                         <Alert  className="rounded-l-none ">
-
-                        <div className="flex justify-between  mb-6">
-                            <div className="flex flex-col ">
-                            <div className="flex items-center gap-3 mb-2 mt-4 ">
-                            <GearSix size={24} className="text-gray-400" />
-           <p className="text-sm font-bold">Configurações da avaliação</p>
-           </div>
-                            <p className="mt-2 max-w-[500px] text-gray-500 text-xs dark:text-gray-300">Estas configurações incluem o nome do barema para exportação, o período de ano a ser considerado para a análise e outras definições.</p>
-                            </div>
-
-                            <div className="flex gap-3">
-                               {isOpenConfig && (
-                                 <Button variant={'ghost'} onClick={() => resetConfig()} className="text-blue-700 hover:text-blue-800"><ArrowCounterClockwise size={16} />Resetar configuração</Button>
-                               )}
-                                <Button variant={'ghost'} size={'icon'} onClick={() => setIsOpenConfig(!isOpenConfig)} className="text-blue-700 hover:text-blue-800">{isOpenConfig ? (<CaretUp size={16} />):(<CaretDown size={16} />)}</Button>
-                            </div>
-                        </div>
-
-                        {isOpenConfig && (
-                            <div>
+                        <Accordion  type="single" collapsible>
+                <AccordionItem value="item-1">
+                <div className="flex  h-12">
+                <HeaderResultTypeHome title="Configurações da avaliação" icon={<Gear size={24} className="text-gray-400" />}>
+                    </HeaderResultTypeHome>
+                  <AccordionTrigger>
+                   
+                  </AccordionTrigger>
+                  </div>
+                  <AccordionContent>
+                  <div>
                                 <div className="gap-4 grid grid-cols-2 ">
                         {config.map((props) => {
     return(
@@ -977,7 +990,13 @@ console.log(somaTotalPorPesquisador);
 })}
 </div>
                             </div>
-                        )}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+
+                   
+
+                        
                         </Alert>
                         </div>
                             <DragDropContext onDragEnd={onDragEnd}>
@@ -989,7 +1008,7 @@ console.log(somaTotalPorPesquisador);
                                                     {(provided:any) => (
                                                         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                                             <div className="w-full flex">
-                                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-blue-700 whitespace-nowrap"></div>
+                                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] whitespace-nowrap"></div>
                                                                 <div className="w-full">
                                                                     <Alert className="rounded-l-none rounded-b-none">
                                                                         <div className="w-full flex items-center justify-center text-gray-500"><DotsSix size={20} /></div>
@@ -1015,88 +1034,74 @@ console.log(somaTotalPorPesquisador);
                                                                                 </div>
 
                                                                                 <div className="flex items-center gap-3  ">
-                                                                                {editingDescricaoGrupoIndex === grupoIndex ? ( // Renderizar input de edição se o grupo estiver em modo de edição
-                <div className="flex items-center gap-3">
-                    <Input value={grupo.descricao} className="flex-1 border-0 text-xs" onChange={(e) => handleDescricaoChange(e, grupoIndex)} />
-                 
-                    <Button variant={'ghost'} size={'icon'} onClick={() => toggleEditDescricao(grupoIndex, 'descricao')} className=" whitespace-nowrap" >
-                        <Check size={16} />
-                    </Button>
-                </div>
-            ) : ( // Renderizar título normalmente se o grupo não estiver em modo de edição
-                <div className="flex items-center gap-3 mt-2">
-                    <p className=" max-w-[420px] text-gray-500 text-xs dark:text-gray-300">{grupo.descricao}</p>
-                    <PencilLine onClick={() => toggleEditDescricao(grupoIndex, 'descricao')} size={12} />
-                </div>
-            )}
+                                                                                
                                                     
 
                                                                                 </div>
                                                                             </div>
 
                                                                             <div className="">
-                                                                                <Button variant={'ghost'} onClick={() => adicionarCriterio(grupo.id)} className="text-blue-700 hover:text-blue-800"><PlusCircle size={16} />Adicionar critério</Button>
+                                                                                <Button variant={'ghost'} onClick={() => adicionarCriterio(grupo.id)} ><PlusCircle size={16} />Adicionar critério</Button>
                                                                             </div>
                                                                         </div>
 
+                                                                        <Table>
                                                                         {grupo.categorias.length !== 0 && (
-                                                                            <div className="w-full hover:bg-neutral-100/50 dark:hover:bg-neutral-800/50 transition-all  grid grid-cols-4 border rounded-b-none border-neutral-200 dark:border-neutral-800 py-3 px-4 rounded-md">
-                                                                                <p className="font-medium text-gray-600 text-sm dark:text-white">Critérios</p>
-                                                                                <p className="font-medium text-gray-600 text-sm dark:text-white">Pontos</p>
-                                                                                <p className="font-medium text-gray-600 text-sm dark:text-white">Pontuação máxima</p>
-                                                                                <p className="font-medium text-gray-600 text-sm dark:text-white">Total</p>
-                                                                            </div>
+                                                                            <TableHeader>
+                                                                            <TableRow>
+                                                                              <TableHead className="w-[100px] min-w-[100px] ">Critério</TableHead>
+                                                                              <TableHead className="w-[100px] min-w-[100px]">Pontuação</TableHead>
+                                                                              <TableHead className="w-[200px] min-w-[200px]">Pontuação máxima</TableHead>
+                                                                              <TableHead className="text-right w-ful">Total</TableHead>
+                                                                            </TableRow>
+                                                                          </TableHeader>
                                                                         )}
 
+                                                                        <TableBody>
                                                                         {grupo.categorias.length !== 0 && (
-                                                                            <div className="w-full flex gap-4   transition-all  flex-col border border-t-0 rounded-t-none border-neutral-200 dark:border-neutral-800 py-3 px-4 rounded-md">
-                                                                                {grupo.categorias.map((categoria, index) => (
-                                                                                    <div className="grid grid-cols-4 group  border-b pb-3 border-neutral-200 dark:border-neutral-800 " key={index}>
-                                                                                        <div className="w-full">
-                                                                                        <Popover
-                                                     open={openPopovers[grupoIndex * grupo.categorias.length + index]} onOpenChange={(isOpen) => {
-                                                       const newOpenPopovers = [...openPopovers];
-                                                       newOpenPopovers[grupoIndex * grupo.categorias.length + index] = isOpen;
-                                                       setOpenPopovers(newOpenPopovers);
-                                                   }}>
-                     <PopoverTrigger asChild>
-                      <Button className="w-fit text-gray-600 text-sm dark:text-white font-normal" variant={'outline'}>{categoria.criterio.length == 0 ? ('Escolha um critério'):(categoria.criterio)}</Button>
-                     </PopoverTrigger>
-                     <PopoverContent className="min-w-[300px] p-0">
-   
-                     <Command>
-                       <CommandInput placeholder="Pesquisar docente..." />
-                       <CommandList>
-            <CommandEmpty>Nenhum critério encontrado</CommandEmpty>
+                                                                           
+                                                                                grupo.categorias.map((categoria, index) => (
+                                                                                    <TableRow>
+                                                                                        <TableCell>
+                                                                                        <div className="">
+                                                                                      
 
-            {/* Dynamically render CommandGroup based on criteria type */}
-            {Object.entries(criterios.reduce((groups: GroupedCriteria, criterion) => {
-                if (!groups[criterion.type]) {
-                    groups[criterion.type] = [];
-                }
-                groups[criterion.type].push(
-                    <CommandItem
-                        key={criterion.id}
-                        value={criterion.value}
-                        onSelect={() => selecionarCriterio(grupoIndex, index, criterion.id, criterion.value)}
-                        onClick={() => selecionarCriterio(grupoIndex, index, criterion.id, criterion.value)}
-                    >
-                        <span>{criterion.value}</span>
-                    </CommandItem>
-                );
-                return groups;
-            }, {} as GroupedCriteria)).map(([type, group]) => (
-                <CommandGroup key={type} heading={type}>
-                    {group}
-                </CommandGroup>
-            ))}
-        </CommandList>
-                     </Command>
-                     </PopoverContent>
-                   </Popover>
+                                                                                        <Dialog
+                                                                                    key={index}
+                                                                                    open={openPopovers[index]}
+                                                                                    onOpenChange={(isOpen) => {
+                                                                                        // Create a copy of the current state
+                                                                                        const newOpenPopovers = [...openPopovers];
+                                                                                        
+                                                                                        // Update the specific index with the new state
+                                                                                        newOpenPopovers[index] = isOpen;
+                                                                                        
+                                                                                        // Update the state
+                                                                                        setOpenPopovers(newOpenPopovers);
+                                                                                    }}
+                                                                                    >
+                        <DialogTrigger className="w-full">
+                        <Button
+                              variant="outline"
+                              role="combobox"
+                              
+                              className="w-full justify-between"
+                            >
+                              {categoria.criterio.length == 0 ? ('Escolha um critério'):(categoria.criterio)}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="z-[9999]" >
+                                    {index}     {grupo.id}                                           
+                            </DialogContent>
+                            </Dialog>
                                                                                         </div>
-                                                                                        <Input className="w-24" name="pontos" value={categoria.pontos} onChange={(e) => handleInputChange(e, index, grupo.id)} />
-                                                                                        <Input className={`w-24 ${categoria.pontos > categoria.pontuacao_max && ('border-red-500')}`} name="pontuacao_max" value={categoria.pontuacao_max} onChange={(e) => handleInputChange(e, index, grupo.id)} />
+                                                                                        </TableCell>
+
+                                                                                        <TableCell><Input className="w-24" name="pontos" value={categoria.pontos} onChange={(e) => handleInputChange(e, index, grupo.id)} /></TableCell>
+                                                                                        <TableCell><Input className={`w-24 ${categoria.pontos > categoria.pontuacao_max && ('border-red-500')}`} name="pontuacao_max" value={categoria.pontuacao_max} onChange={(e) => handleInputChange(e, index, grupo.id)} /></TableCell>
+                                                                                        
+                                                                                        <TableCell>
                                                                                         <div className="flex justify-between items-center gap-3">
                                                                                             <div className="overflow-x-auto flex-nowrap flex-1">
                                                                                                 <PesquisadorItemBarema 
@@ -1111,12 +1116,15 @@ console.log(somaTotalPorPesquisador);
                                                                                             </div>
                                                                                             <Button className=" group-hover:flex hidden whitespace-nowrap" variant={'ghost'} size={'icon'} onClick={() => removerCriterio(grupoIndex, index)}><Trash size={16} /> </Button>
                                                                                         </div>
-                                                                                    </div>
-                                                                                ))}
-                                                                            </div>
+                                                                                        </TableCell>
+                                                                                        </TableRow>
+                                                                                ))
+                                                                            
                                                                         )}
+                                                                         </TableBody>
+                                                                        </Table>
                                                                     </Alert>
-                                                                    <Alert className="rounded-l-none rounded-t-none border-t-0 dark:bg-neutral-800 bg-zinc-200 flex justify-between items-center">
+                                                                    <Alert className="rounded-l-none rounded-t-none border-t-0 dark:bg-neutral-800 bg-neutral-100 flex justify-between items-center">
                                                                         <div>
                                                                             {grupo.categorias.length !== 0 && (
                                                                                 <div className="flex items-center gap-3">
@@ -1128,10 +1136,10 @@ console.log(somaTotalPorPesquisador);
                                                                             )}
                                                                         </div>
                                                                         <div className="flex gap-3 items-center">
-                                                                            <Button variant={'ghost'} size={'icon'} onClick={() => duplicarGrupo(grupoIndex)}><Copy size={16} /> </Button>
-                                                                            <Button variant={'ghost'} size={'icon'} onClick={() => deletarGrupo(grupoIndex)} ><Trash size={16} /> </Button>
-                                                                            <div className="h-8 w-[0.5px] bg-slate-500"></div>
-                                                                            <Button variant={'ghost'} size={'icon'} ><MoreHorizontal className="h-4 w-4" /> </Button>
+                                                                            <Button variant={'ghost'} className="hover:bg-neutral-200 dark:hover:bg-neutral-700" size={'icon'} onClick={() => duplicarGrupo(grupoIndex)}><Copy size={16} /> </Button>
+                                                                            <Button variant={'ghost'} className="hover:bg-neutral-200 dark:hover:bg-neutral-700" size={'icon'} onClick={() => deletarGrupo(grupoIndex)} ><Trash size={16} /> </Button>
+                                                                            <div className="h-8 w-[0.5px] bg-neutral-500 dark:bg-white"></div>
+                                                                            <Button variant={'ghost'} className="hover:bg-neutral-200 dark:hover:bg-neutral-700" size={'icon'} ><MoreHorizontal className="h-4 w-4" /> </Button>
                                                                         </div>
                                                                     </Alert>
                                                                 </div>
