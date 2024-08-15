@@ -47,8 +47,9 @@ interface Csv {
 
   import { getFirestore,  collection, getDocs } from 'firebase/firestore';
   import { query,  where } from 'firebase/firestore';
-import { useModalHomepage } from "../hooks/use-modal-homepage";
+
 import { useLocation, useNavigate } from "react-router-dom";
+import { useModalResult } from "../hooks/use-modal-result";
 
 export function SearchModal() {
 
@@ -60,13 +61,13 @@ const terms = queryUrl.get('terms');
 
     const { onClose, isOpen, type } = useModal();
     
-    const { onOpen: onOpenHomepage } = useModalHomepage();
+
     const [itemsBigrama , setBigrama] = useState<Bigrama[]>([])
     const [itemsSelecionadosPopUp , setItensSelecionadosPopUp] = useState<ItemsSelecionados[]>([])
     const [researcherOpenAlex , setResearcherOpenAlex] = useState<ResearchOpenAlex[]>([])
     const [showInput, setShowInput] = useState(true);
     const isModalOpen = isOpen && type === "search";
-    const {setValoresSelecionadosExport, valoresSelecionadosExport, searchType, setSearchType, urlGeral, itemsSelecionados , setItensSelecionados, setValorDigitadoPesquisaDireta} = useContext(UserContext)
+    const {setValoresSelecionadosExport,  searchType, setSearchType, urlGeral, itemsSelecionados , setItensSelecionados, setValorDigitadoPesquisaDireta} = useContext(UserContext)
     const db = getFirestore();
     const [input, setInput] = useState('')
 
@@ -76,8 +77,10 @@ const terms = queryUrl.get('terms');
       }
 
       useEffect(() => {
+    
         setItensSelecionadosPopUp(itemsSelecionados)
-      }, []);
+     
+      }, [itemsSelecionados]);
 
 
 
@@ -169,48 +172,65 @@ const terms = queryUrl.get('terms');
       setSearchType(newSearchType);
   };
 
+  const handlePesquisaOpenAlex = (value: string) => {
+    setInput('');
+    setShowInput(false)
+    setBigrama([])
+
+    setItensSelecionadosPopUp([{term:value}]);
+
+    setSearchType('name');
+};
+
+  const { onOpen:onOpenResult } = useModalResult();
+
   function formatTerms(valores: { term: string }[]): string {
     let result = '';
     let tempTerms: string[] = [];
+    let lastConnector = '';
 
     valores.forEach(item => {
-      let term = item.term.trim();
+        let term = item.term.trim();
+        let connector = term.slice(-1);
 
-      if (term.endsWith(';')) {
-        tempTerms.push(term.slice(0, -1));
-      } else if (term.endsWith('|')) {
-        tempTerms.push(term.slice(0, -1));
+        if (connector === ';' || connector === '|') {
+            term = term.slice(0, -1);
+        }
 
-        if (tempTerms.length > 0) {
-          result += '(' + tempTerms.join(';') + ')' + '|';
-          tempTerms = [];
+        if (connector === ';') {
+            tempTerms.push(term);
+            lastConnector = ';';
+        } else if (connector === '|') {
+            tempTerms.push(term);
+            result += '(' + tempTerms.join(';') + ')|';
+            tempTerms = [];
+            lastConnector = '|';
+        } else {
+            if (tempTerms.length > 0) {
+                result += '(' + tempTerms.join(';') + ')|';
+                tempTerms = [];
+            }
+            result += term + '|';
+            lastConnector = '|';
         }
-      } else {
-        if (tempTerms.length > 0) {
-          result += '(' + tempTerms.join(';') + ')' + '|';
-          tempTerms = [];
-        }
-        result += term + '|';
-      }
     });
 
     if (tempTerms.length > 0) {
-      result += '(' + tempTerms.join(';') + ')';
-    } else {
-      if (result.endsWith('|')) {
+        result += '(' + tempTerms.join(';') + ')';
+    } else if (result.endsWith('|')) {
         result = result.slice(0, -1);
-      }
     }
 
     return result;
-  }
+}
 
 
-let termosformatados = formatTerms(itemsSelecionadosPopUp)
+
+const [termosformatados, setTermosformatados] = useState(formatTerms(itemsSelecionadosPopUp))
 
 useEffect(() => {
-  termosformatados = formatTerms(itemsSelecionadosPopUp)
-}, [itemsSelecionados, itemsSelecionadosPopUp]);
+  setTermosformatados(formatTerms(itemsSelecionadosPopUp))
+}, [ itemsSelecionadosPopUp, itemsSelecionados]);
 
 console.log(termosformatados)
   let TypeSearch = type_search ?? ''
@@ -230,13 +250,17 @@ console.log(termosformatados)
       queryUrl.set('type_search', searchType);
       if(searchType == 'name') {
         queryUrl.set('terms', Terms.replace(/[()]/g, ''));
+        setItensSelecionados(itemsSelecionadosPopUp)
       } else {
         queryUrl.set('terms', Terms);
+        setItensSelecionados(itemsSelecionadosPopUp)
       }
         navigate({
           pathname: '/pos-graduacao',
           search: queryUrl.toString(),
         });
+      
+        onOpenResult('researchers-home')
 
     onClose()
     
@@ -249,29 +273,38 @@ console.log(termosformatados)
       queryUrl.set('type_search', searchType);
       if(searchType == 'name') {
         queryUrl.set('terms', Terms.replace(/[()]/g, ''));
+        setItensSelecionados(itemsSelecionadosPopUp)
       } else {
         queryUrl.set('terms', Terms);
+        setItensSelecionados(itemsSelecionadosPopUp)
       }
         navigate({
           pathname: '/resultados',
           search: queryUrl.toString(),
         });
-
+    
+        onOpenResult('researchers-home')
     onClose()
     
     } else if (itemsSelecionadosPopUp.length == 0 && input.length != 0) {
-
-      setItensSelecionados([{term:input}])
+      setItensSelecionadosPopUp([{term:input}])
+      TypeSearch = searchType
+      Terms = termosformatados
       setInput('')
 
       queryUrl.set('type_search', searchType);
-      queryUrl.set('terms', input);
+      if(searchType == 'name') {
+        queryUrl.set('terms', formatTerms(itemsSelecionadosPopUp));
+      } else {
+        queryUrl.set('terms', formatTerms(itemsSelecionadosPopUp));
+      }
         navigate({
           pathname: '/resultados',
           search: queryUrl.toString(),
         });
-
-      onClose()
+    
+        onOpenResult('researchers-home')
+    onClose()
     }
     
   }
@@ -368,24 +401,30 @@ console.log('fawefwef', urlOpenAlex)
         setItensSelecionadosPopUp(newItems);
       };
       
-      useEffect(() => {
-        const joinedTerms = itemsSelecionados.map(item => item.term).join('|');
-        setValoresSelecionadosExport(joinedTerms);
-        console.log('valoresExport', valoresSelecionadosExport)
-      }, [itemsSelecionados]);     
+     
       
       
       //conectores 
-      const handleConnectorChange = (index: number, connector: string) => {
-        const newItems = [...itemsSelecionadosPopUp];
-        let term = newItems[index].term.trim();
-        term = term.replace(/[|;]$/, ''); // Remove qualquer conector existente no final
-        newItems[index].term = term + connector;
-        setItensSelecionadosPopUp(newItems);
-      };
+     // Função para alterar o conector, considerando termos entre parênteses
+const handleConnectorChange = (index: number, connector: string) => {
+  const newItems = [...itemsSelecionadosPopUp];
+  let term = newItems[index].term.trim();
+
+  // Remove qualquer conector existente no final, mas preserve os parênteses
+  term = term.replace(/[|;]$/, '');
+
+  // Se o termo estiver entre parênteses, adicione o conector fora dos parênteses
+  if (term.startsWith('(') && term.endsWith(')')) {
+      term = term.slice(0, -1) + connector + ')';
+  } else {
+      term += connector;
+  }
+
+  newItems[index].term = term;
+  setItensSelecionadosPopUp(newItems);
+};
 
    
-    
     
 
     return  (
@@ -578,16 +617,18 @@ console.log('fawefwef', urlOpenAlex)
         </div>
     )}
 
-        <div>
-            <p className="uppercase font-medium text-xs mb-3">OpenAlex</p>
-            <div className="flex flex-wrap gap-3">
-            {researcherOpenAlex.slice(0, 5).map((props, index) => (
-                  <div key={index} onClick={() => handlePesquisa(props.term, props.type)} className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
-                   <CloudArrowDown size={16} className="" />    {props.term}
-                  </div>
-              ))}
-            </div>
-        </div>
+     {!posGrad && (
+         <div>
+         <p className="uppercase font-medium text-xs mb-3">OpenAlex</p>
+         <div className="flex flex-wrap gap-3">
+         {researcherOpenAlex.slice(0, 5).map((props, index) => (
+               <div key={index} onClick={() => handlePesquisaOpenAlex(props.term)} className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
+                <CloudArrowDown size={16} className="" />    {props.term}
+               </div>
+           ))}
+         </div>
+     </div>
+     )}
 
 
 </Masonry>

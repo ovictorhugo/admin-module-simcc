@@ -18,7 +18,7 @@ type Publicacao = {
     researcher_id: string
   }
 
-  import { Switch } from "../ui/switch";
+
 
   import {
     Accordion,
@@ -33,13 +33,11 @@ import { Skeleton } from "../ui/skeleton";
 import { ChartBar, Quotes, SquaresFour, Rows, X, ArrowUDownLeft } from "phosphor-react";
 
 import { Button } from "../ui/button";
-import { useModalSidebar } from "../hooks/use-modal-sidebar";
-import { useModalResult } from "../hooks/use-modal-result";
+
 import { UserContext } from "../../context/context";
-import { FilterArticle } from "../homepage/categorias/articles-home/filters-articles";
+
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { GraficoArticleHome } from "../homepage/categorias/articles-home/grafico-articles-home";
-import { ArticleBlock } from "../homepage/categorias/articles-home/articles-block";
 import { FilterArticlePopUp } from "./filters-articles-popup";
 import { ArticleBlockPopUp } from "./articles-block-popup";
 import { TableReseracherArticlesPopup } from "./columns/table-articles-popup";
@@ -57,11 +55,11 @@ type Props = {
 export function ArticlesResearcherPopUp(props:Props) {
   
 
-    const {urlGeral, valoresSelecionadosExport, navbar, setItensSelecionadosPopUp, itemsSelecionadosPopUp, searchType, itemsSelecionados} = useContext(UserContext)
+    const {urlGeral, setItensSelecionadosPopUp, itemsSelecionadosPopUp, searchType, itemsSelecionados} = useContext(UserContext)
   
    
     const [loading, isLoading] = useState(false)
-    const [distinct, setDistinct] = useState(false)
+    const [distinct] = useState(false)
     const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')
 

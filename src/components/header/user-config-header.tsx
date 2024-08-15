@@ -22,9 +22,8 @@ interface User extends FirebaseAuthUser {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-    DropdownMenuShortcut
   } from "../../components/ui/dropdown-menu"
-import { ChevronDown, LogOut } from "lucide-react";
+import { ChevronDown} from "lucide-react";
   
 import { cn } from "../../lib"
 

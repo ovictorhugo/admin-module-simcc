@@ -1,16 +1,12 @@
-import {  Link, useNavigate } from "react-router-dom";
+import {  Link } from "react-router-dom";
 import { Button } from "../ui/button";
-import { ChevronLeft, SquareArrowOutUpRight } from "lucide-react";
+import {  SquareArrowOutUpRight } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useState } from "react";
 
 export function IndicatorsGraduate() {
-    const history = useNavigate();
-
-    const handleVoltar = () => {
-      history(-1);
-    }
-
+   
+   
     const url = 'https://app.powerbi.com/view?r=eyJrIjoiNTEwMjUxMzktMzZjYS00ZjM1LWJhYzYtZDY3Y2I2YzE1ZGRiIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
     const [value, setValue] = useState('article')
   const url2 = 'https://app.powerbi.com/view?r=eyJrIjoiNTEwMjUxMzktMzZjYS00ZjM1LWJhYzYtZDY3Y2I2YzE1ZGRiIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'

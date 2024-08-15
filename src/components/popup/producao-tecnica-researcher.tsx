@@ -28,15 +28,12 @@ import { useContext, useMemo, useState } from "react";
   import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { Skeleton } from "../ui/skeleton";
 
-import { ChartBar, Quotes, SquaresFour, Rows, Book, X, ArrowUDownLeft, Books, Copyright, StripeLogo, Code } from "phosphor-react";
+import { ChartBar,  SquaresFour, Rows,  X, ArrowUDownLeft,  Copyright, StripeLogo, Code } from "phosphor-react";
 
 import { Button } from "../ui/button";
 import { UserContext } from "../../context/context";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
-import { GraficoArticleHome } from "../homepage/categorias/articles-home/grafico-articles-home";
-import { TableReseracherArticleshome } from "../homepage/categorias/articles-home/table-articles";
-import { FilterArticlePopUp } from "./filters-articles-popup";
-import { ArticleBlockPopUp } from "./articles-block-popup";
+
 import { BookBlockPopUp } from "./book-block-popup";
 import { FilterYearPopUp } from "./filters-year-popup";
 import { TableReseracherPatentesPopup } from "./columns/producoes-tecnicas/table-patentes-popup";
@@ -56,13 +53,13 @@ type Props = {
 export function ProducaoTecnicaResearcherPopUp(props:Props) {
   
 
-    const {urlGeral, valoresSelecionadosExport, navbar, searchType, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados} = useContext(UserContext)
+    const {urlGeral, searchType, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados} = useContext(UserContext)
   
    
     const [loading, isLoading] = useState(false)
     const [loading2, isLoading2] = useState(false)
     const [loading3, isLoading3] = useState(false)
-    const [distinct, setDistinct] = useState(false)
+    const [distinct] = useState(false)
     const [publicacoes, setPublicacoes] = useState<Patente[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')
     const [typeVisu2, setTypeVisu2] = useState('block')
@@ -76,28 +73,23 @@ export function ProducaoTecnicaResearcherPopUp(props:Props) {
 
 
     };
-
     function formatTerms(valores: { term: string }[]): string {
       let result = '';
       let tempTerms: string[] = [];
-    
+  
       valores.forEach(item => {
         let term = item.term.trim();
-    
+  
         if (term.endsWith(';')) {
-          // Remove the final ';' and add the term to the temporary array
           tempTerms.push(term.slice(0, -1));
         } else if (term.endsWith('|')) {
-          // Remove the final '|' and add the term to the temporary array
           tempTerms.push(term.slice(0, -1));
-    
-          // Add the temporary array to the result as a group and clear the array
+  
           if (tempTerms.length > 0) {
             result += '(' + tempTerms.join(';') + ')' + '|';
             tempTerms = [];
           }
         } else {
-          // Handle terms that don't end with ';' or '|'
           if (tempTerms.length > 0) {
             result += '(' + tempTerms.join(';') + ')' + '|';
             tempTerms = [];
@@ -105,19 +97,18 @@ export function ProducaoTecnicaResearcherPopUp(props:Props) {
           result += term + '|';
         }
       });
-    
-      // Handle any remaining terms in the tempTerms array
+  
       if (tempTerms.length > 0) {
         result += '(' + tempTerms.join(';') + ')';
       } else {
-        // Remove the last '|' if it exists
         if (result.endsWith('|')) {
           result = result.slice(0, -1);
         }
       }
-    
+  
       return result;
     }
+  
     
     
     const resultadoFormatado = formatTerms(itemsSelecionadosPopUp);
@@ -244,7 +235,7 @@ const handleRemoveItem = (indexToRemove: any) => {
     return(
         <>
   
-            <div className="mb-[150px]">
+            <div className="">
 
                 <FilterYearPopUp
                 onFilterUpdate={handleResearcherUpdate}/>

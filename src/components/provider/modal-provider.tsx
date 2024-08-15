@@ -3,32 +3,31 @@
 import { useEffect, useState } from "react";
 import { SearchModal } from "../modals/search-modal";
 import { AddGraduateProgram } from "../modals/add-graduate-program";
-import { MapResearchersModal } from "../modals/map-researchers-modal";
+
 import { ResearcherModal } from "../modals/researcher-modal";
 import { ArticlesModal } from "../modals/articles-modal";
 import { ConfirmDeleteResearcher } from "../modals/confirm-delete-researcher";
 import {ConfirmDeletePosGraduateProgram} from "../modals/confirm-delete-pos-graduate-program"
 import { EditGraduateProgram } from "../modals/edit-graduate-program";
-import { AddResearcherGraduation } from "../modals/add-researcher-graduation-modal";
-import { AddResearcherCsvModal } from "../modals/add-researcher-csv-modal";
-import { AddStudentGraduationModal } from "../modals/add-student-graduation-modal";
-import { AddGrupoPesquisaModal } from "../modals/add-grupo-pesquisa";
-import { PesquisadoresSelecionados } from "../modals/pesquisadores-selecionados";
 
-import { ListStudentProgramModal } from "../modals/list-student-program";
-import { AddResearcherGraduationTwo } from "../modals/add-researcher-graduation-two";
-import { GratuateProgramModal } from "../modals/gratuate-program";
+import { AddResearcherCsvModal } from "../modals/add-researcher-csv-modal";
+
+import { AddGrupoPesquisaModal } from "../modals/add-grupo-pesquisa";
+
+
+
 import { ConfirmDeleteResearcherGraduateProgram } from "../modals/confirm-delete-researcher-graduate-program";
 import { ConfirmDeleteStudentGraduateProgram } from "../modals/confirm-delete-student-graduate-program";
 import { useModal } from "../hooks/use-modal-store";
 import { ImportBolsistas } from "../modals/import-bolsistas";
 import { ImportDocentes } from "../modals/import-docentes";
 import { ImportTaes } from "../modals/import-taes";
-import { FiltersModal } from "../homepage/categorias/researchers-home";
+
 import { AddDepartamento } from "../modals/add-departamento";
 import { ConfirmDeleteDepartamento } from "../modals/confirm-delete-departamento";
 import { ImportDisciplina } from "../modals/import-disciplina";
 import { ConfirmDeleteResearcherDepartament } from "../modals/confirm-delete-researcher-departament";
+import { MinhaArea } from "../minha-area/minha-area";
 
 const ModalContent = () => {
   const { type } = useModal();
@@ -73,6 +72,8 @@ const ModalContent = () => {
         return <ImportDisciplina/>
       case 'confirm-delete-researcher-departament':
         return <ConfirmDeleteResearcherDepartament/>
+      case 'minha-area':
+        return <MinhaArea/>
 
     default:
       return null;

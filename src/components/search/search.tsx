@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Alert } from "../ui/alert";
-import { Chat, Chats, FadersHorizontal, Funnel, MagnifyingGlass, X } from "phosphor-react";
+import {  Chats,  Funnel, MagnifyingGlass, X } from "phosphor-react";
 
 
 import { Button } from "../ui/button";
@@ -13,10 +13,9 @@ import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SelectTypeInstitutionSearch } from "./select-type-institution-search";
 const API_KEY = import.meta.env.VITE_API_KEY
 
-const systemMessage = { //  Explain things like you're talking to a software professional with 5 years of experience.
+const systemMessage = { 
   "role": "system",
   "content": `
   Retorne APENAS um JSON com os seguintes campos:
@@ -41,12 +40,71 @@ export function Search() {
 const type_search = queryUrl.get('type_search');
 const terms = queryUrl.get('terms');
 
-   
+useEffect(() => {
+  if (type_search) {
+    setSearchType(String(type_search));
+  }
+  if (terms) {
+    setValoresSelecionadosExport(terms)
+  }
+  
+}, [type_search, terms]);
+
+
+function parseTerms(encoded: string): { term: string }[] {
+  // Decodifica a string URL-encoded
+  const formatted = decodeURIComponent(encoded);
+
+  let result: { term: string }[] = [];
+  let temp = '';
+  let inGroup = false;
+
+  for (let i = 0; i < formatted.length; i++) {
+    const char = formatted[i];
+
+    if (char === '(') {
+      inGroup = true;
+      // Adiciona qualquer termo precedente como um termo individual
+      if (temp.trim()) {
+        result.push({ term: temp.trim() + '|' });
+        temp = '';
+      }
+    } else if (char === ')') {
+      inGroup = false;
+      // Processa os termos agrupados
+      if (temp.trim()) {
+        const terms = temp.split(';').map(t => t.trim());
+        terms.forEach((term, index) => {
+          if (term) {
+            result.push({ term: term + (index < terms.length - 1 ? ';' : '|') });
+          }
+        });
+        temp = '';
+      }
+    } else if (char === '|') {
+      if (!inGroup && temp.trim()) {
+        result.push({ term: temp.trim() + '|' });
+        temp = '';
+      }
+    } else {
+      temp += char;
+    }
+  }
+
+  // Adiciona qualquer termo restante
+  if (temp.trim()) {
+    result.push({ term: temp.trim() + (inGroup ? ';' : '|') });
+  }
+
+  // Não remove os conectores finais, pois eles são necessários
+  return result;
+}
+
 
 
     const { onOpen } = useModal();
     const { onOpen: onOpenHomepage } = useModalHomepage();
-    const {navbar, searchType, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, setValoresSelecionadosExport, setMessagesMaria, itemsSelecionados , setItensSelecionados, setSugestoes, sugestoes} = useContext(UserContext)
+    const {navbar, searchType, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, setValoresSelecionadosExport, setMessagesMaria, itemsSelecionados , setItensSelecionados, setSugestoes, sugestoes, itemsSelecionadosPopUp} = useContext(UserContext)
 
     const { isOpen: isOpenSidebar } = useModalSidebar();
     const [input, setInput] = useState("");
@@ -76,6 +134,8 @@ const handlePopUppesquisa = () => {
         onOpen('search')
     } 
 }
+
+
 
 
 //
@@ -150,15 +210,15 @@ async function processMessageToChatGPT(messageObject:any) {
         pathname: '/resultados',
         search: queryUrl.toString(),
       });
-      
-      
-      
+
     })
 }
 
 const location = useLocation();
 
 const posGrad = location.pathname == '/pos-graduacao'
+
+const resultados = location.pathname == '/resultados'
 
 const history = useNavigate();
 
@@ -179,9 +239,28 @@ const handlePesquisa = () => {
 
 
 const handleRemoveItem = (index: number) => {
-  const newItems = [...itemsSelecionados];
-  newItems.splice(index, 1);
-  setItensSelecionados(newItems);
+
+  if(itemsSelecionados.length == 1) {
+    if (posGrad) {
+      queryUrl.set('terms', '');
+      navigate({
+        pathname: '/pos-graduacao',
+        search: queryUrl.toString(),
+      });
+    } else if (resultados) {
+      queryUrl.set('terms', '');
+      navigate({
+        pathname: '/resultados',
+        search: queryUrl.toString(),
+      });
+    }
+    setItensSelecionados([])
+  } else {
+    const newItems = [...itemsSelecionados];
+    newItems.splice(index, 1);
+    setItensSelecionados(newItems);
+  }
+  
 };
 
 
@@ -209,13 +288,13 @@ const handleConnectorChange = (index: number, connector: string) => {
   setItensSelecionados(newItems);
 
   
-  if( itemsSelecionados.length > 0 && posGrad) {
+  if(  posGrad) {
     queryUrl.set('terms', formatTerms(itemsSelecionados));
     navigate({
       pathname: '/pos-graduacao',
       search: queryUrl.toString(),
     });
-  } else if (itemsSelecionados.length > 0 && !posGrad) {
+  } else if ( !posGrad) {
     queryUrl.set('terms', formatTerms(itemsSelecionados));
     navigate({
       pathname: '/resultados',
@@ -227,59 +306,79 @@ const handleConnectorChange = (index: number, connector: string) => {
 function formatTerms(valores: { term: string }[]): string {
   let result = '';
   let tempTerms: string[] = [];
+  let lastConnector = '';
 
   valores.forEach(item => {
-    let term = item.term.trim();
+      let term = item.term.trim();
+      let connector = term.slice(-1);
 
-    if (term.endsWith(';')) {
-      tempTerms.push(term.slice(0, -1));
-    } else if (term.endsWith('|')) {
-      tempTerms.push(term.slice(0, -1));
+      if (connector === ';' || connector === '|') {
+          term = term.slice(0, -1);
+      }
 
-      if (tempTerms.length > 0) {
-        result += '(' + tempTerms.join(';') + ')' + '|';
-        tempTerms = [];
+      if (connector === ';') {
+          tempTerms.push(term);
+          lastConnector = ';';
+      } else if (connector === '|') {
+          tempTerms.push(term);
+          result += '(' + tempTerms.join(';') + ')|';
+          tempTerms = [];
+          lastConnector = '|';
+      } else {
+          if (tempTerms.length > 0) {
+              result += '(' + tempTerms.join(';') + ')|';
+              tempTerms = [];
+          }
+          result += term + '|';
+          lastConnector = '|';
       }
-    } else {
-      if (tempTerms.length > 0) {
-        result += '(' + tempTerms.join(';') + ')' + '|';
-        tempTerms = [];
-      }
-      result += term + '|';
-    }
   });
 
   if (tempTerms.length > 0) {
-    result += '(' + tempTerms.join(';') + ')';
-  } else {
-    if (result.endsWith('|')) {
+      result += '(' + tempTerms.join(';') + ')';
+  } else if (result.endsWith('|')) {
       result = result.slice(0, -1);
-    }
   }
 
   return result;
 }
 
-useEffect(() => {
-  
+const hasTerms = queryUrl.has('terms');
 
-  if( itemsSelecionados.length > 0 && posGrad) {
-    queryUrl.set('terms', formatTerms(itemsSelecionados));
-    navigate({
-      pathname: '/pos-graduacao',
-      search: queryUrl.toString(),
-    });
-  } else if (itemsSelecionados.length > 0 && !posGrad) {
-    queryUrl.set('terms', formatTerms(itemsSelecionados));
-    navigate({
-      pathname: '/resultados',
-      search: queryUrl.toString(),
-    });
+
+
+useEffect(() => {
+  // Se houver itens selecionados, atualize a URL com esses termos
+  if (itemsSelecionados.length > 0) {
+    if (!hasTerms && posGrad) {
+      queryUrl.set('terms', formatTerms(itemsSelecionados));
+      navigate({
+        pathname: '/pos-graduacao',
+        search: queryUrl.toString(),
+      });
+    } else if (hasTerms && resultados) {
+      queryUrl.set('terms', formatTerms(itemsSelecionados));
+      navigate({
+        pathname: '/resultados',
+        search: queryUrl.toString(),
+      });
+    }
+  }  else {
+      if (terms) {
+        const parsedTerms = parseTerms(String(terms));
+        setItensSelecionados(parsedTerms);
+      } else {
+      // Se não houver itens selecionados, defina "terms" como vazio na URL
+     
+    }
+    
   }
 }, [itemsSelecionados]);
 
 
-console.log(itemsSelecionados)
+
+
+
     return  (
         <div className="bottom-0 mt-4 mb-2  w-full flex flex-col max-sm:flex  max-sm:flex-row">
         <div className={` max-sm:px-[5px] `}>
@@ -320,6 +419,8 @@ console.log(itemsSelecionados)
   <button className="rounded-full cursor-pointer flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 transition-all text-xs outline-none" onClick={() => {
     const connector = itemsSelecionados[index].term.endsWith('|') ? ';' : '|'; // Alterna entre "|" e ";" conforme necessário
     handleConnectorChange(index, connector);
+
+  
   }} >
     {itemsSelecionados[index].term.endsWith(';') ? "e" : "ou"}
   </button>

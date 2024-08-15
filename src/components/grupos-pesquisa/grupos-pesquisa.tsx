@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronLeft, Info, Plus, Shapes, Users } from "lucide-react";
+import { ArrowRight,  Info, Plus, Shapes, Users } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
@@ -29,16 +29,14 @@ interface Patrimonio {
 
       
 export function GruposPesquisaPage() {
-    const history = useNavigate();
+   
 
     const queryUrl = useQuery();
     const type_search = queryUrl.get('group_id');
   
  let programSelecionado = type_search || ''
 
-    const handleVoltar = () => {
-      history(-1);
-    }
+    
     const [isLoading, setIsLoading] = useState(false)
 
     const [total, setTotal] = useState<Patrimonio[]>([]);

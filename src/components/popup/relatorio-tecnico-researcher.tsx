@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 
 
 
@@ -22,12 +22,12 @@ import { useContext, useEffect, useMemo, useState } from "react";
   import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { Skeleton } from "../ui/skeleton";
 
-import { ChartBar,  SquaresFour, Rows, Book, X, ArrowUDownLeft, Books } from "phosphor-react";
+import { ChartBar,  SquaresFour, Rows, Book,  ArrowUDownLeft } from "phosphor-react";
 
 import { Button } from "../ui/button";
 import { UserContext } from "../../context/context";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
-import { GraficoArticleHome } from "../homepage/categorias/articles-home/grafico-articles-home";
+
 import { TableReseracherArticleshome } from "../homepage/categorias/articles-home/table-articles";
 
 import { BookBlockPopUp } from "./book-block-popup";
@@ -44,22 +44,17 @@ type Props = {
   name:string
 }
 
-interface ItemsSelecionados {
-  term:string
-}
-
 export function RelatorioTecnicoResearcherPopUp(props:Props) {
-  const [itemsSelecionadosCap , setItensSelecionadosCap] = useState<ItemsSelecionados[]>([])
 
-    const {urlGeral, valoresSelecionadosExport, navbar, searchType, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados} = useContext(UserContext)
+    const {urlGeral,  itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados} = useContext(UserContext)
   
    
     const [loading, isLoading] = useState(false)
   
-    const [distinct, setDistinct] = useState(false)
+    const [distinct] = useState(false)
     const [publicacoes, setPublicacoes] = useState<Livros[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')
-    const [capLivros, setCapLivros] = useState<Livros[]>([]);
+  
     const [filters, setFilters] = useState<Filter[]>([]);
 
     // Função para lidar com a atualização de researcherData
@@ -69,55 +64,12 @@ export function RelatorioTecnicoResearcherPopUp(props:Props) {
 
     };
 
-    function formatTerms(valores: { term: string }[]): string {
-      let result = '';
-      let tempTerms: string[] = [];
+   
     
-      valores.forEach(item => {
-        let term = item.term.trim();
-    
-        if (term.endsWith(';')) {
-          // Remove the final ';' and add the term to the temporary array
-          tempTerms.push(term.slice(0, -1));
-        } else if (term.endsWith('|')) {
-          // Remove the final '|' and add the term to the temporary array
-          tempTerms.push(term.slice(0, -1));
-    
-          // Add the temporary array to the result as a group and clear the array
-          if (tempTerms.length > 0) {
-            result += '(' + tempTerms.join(';') + ')' + '|';
-            tempTerms = [];
-          }
-        } else {
-          // Handle terms that don't end with ';' or '|'
-          if (tempTerms.length > 0) {
-            result += '(' + tempTerms.join(';') + ')' + '|';
-            tempTerms = [];
-          }
-          result += term + '|';
-        }
-      });
-    
-      // Handle any remaining terms in the tempTerms array
-      if (tempTerms.length > 0) {
-        result += '(' + tempTerms.join(';') + ')';
-      } else {
-        // Remove the last '|' if it exists
-        if (result.endsWith('|')) {
-          result = result.slice(0, -1);
-        }
-      }
-    
-      return result;
-    }
-    
-    
-    const resultadoFormatado = formatTerms(itemsSelecionadosPopUp);
-    
-         
+  
 
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
-    const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
+   
     let urlTermPublicacoes = `${urlGeral}researcher_report?researcher_id=${props.name}&year=${yearString}`;
 
    
@@ -153,39 +105,9 @@ export function RelatorioTecnicoResearcherPopUp(props:Props) {
             <Skeleton key={index} className="w-full rounded-md h-[170px]" />
           ));
 
-          useEffect(() => {
-            setItensSelecionadosCap(itemsSelecionadosPopUp)
-          }, []);
-
-
-          //conectores 
-const handleConnectorChange = (index: number, connector: string) => {
-  // Crie uma cópia do array de itens selecionados
-  const updatedItems = [...itemsSelecionadosPopUp];
-  // Substitua o último caractere pelo novo conector
-  updatedItems[index].term = updatedItems[index].term.slice(0, -1) + connector;
-  // Atualize o estado com os itens atualizados
-  setItensSelecionadosPopUp(updatedItems);
-};
-
-const handleConnectorChangeCap = (index: number, connector: string) => {
-  // Crie uma cópia do array de itens selecionados
-  const updatedItems = [...itemsSelecionadosPopUp];
-  // Substitua o último caractere pelo novo conector
-  updatedItems[index].term = updatedItems[index].term.slice(0, -1) + connector;
-  // Atualize o estado com os itens atualizados
-  setItensSelecionadosCap(updatedItems);
-};
-
-const handleRemoveItem = (indexToRemove: any) => {
-  setItensSelecionadosPopUp(prevItems => prevItems.filter((_, index) => index !== indexToRemove));
-}
-
-const handleRemoveItemCap = (indexToRemove: any) => {
-  setItensSelecionadosCap(prevItems => prevItems.filter((_, index) => index !== indexToRemove));
-}
-
     
+
+
 
     return(
         <>

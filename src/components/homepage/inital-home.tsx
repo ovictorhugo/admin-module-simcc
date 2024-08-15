@@ -1,28 +1,21 @@
 
-import { Circle } from "../svg/Circle";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
-import { ItemHome } from "./item-home";
 
-import bg_home from '../../assets/bg_home.png'
 
 import {
   Book,
   Books,
-  CaretRight,
-  Chats,
-  Code,
+
   Copyright,
-  Funnel,
-  MagnifyingGlass,
+
   Quotes,
-  StripeLogo,
+
 } from "phosphor-react";
-import { ArrowRight, Info, Stamp, User, User2, Users } from "lucide-react";
+import { ArrowRight, Info } from "lucide-react";
 import { Alert } from "../ui/alert";
-import { GraficoHome } from "./grafico-home";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
-import { useSpring, animated } from 'react-spring';
+import { useSpring } from 'react-spring';
 
 interface VisaoPrograma {
   article: number;
@@ -68,25 +61,12 @@ interface PosGraduationsProps {
   situation: string
 }
 
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "../../components/ui/carousel";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { useModal } from "../hooks/use-modal-store";
-import { Switch } from "../ui/switch";
-import { SelectTypeSearch } from "../search/select-type-search";
-import { Badge } from "../ui/badge";
-import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { AreaChart, Area,LineChart, Line, BarChart, Bar, XAxis, PieChart, Pie, YAxis, LabelList, Cell, CartesianGrid,  Legend, ResponsiveContainer } from 'recharts';
+import { Link, useNavigate } from "react-router-dom";
+
+import { AreaChart, Area,LineChart, Line, BarChart, Bar, XAxis, PieChart, Pie, LabelList, Cell, CartesianGrid,  Legend, ResponsiveContainer } from 'recharts';
 import { Label as LabelChart } from 'recharts';
-import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
+
 type Research = {
   count_article:number
   count_book:number
@@ -144,6 +124,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { GraficoRtTeachers } from "./components/grafico-teachers";
 import { FooterHome } from "../footer/footer-home";
 import { GraficoRtTechnician } from "./components/grafico-technician";
+import { useModalResult } from "../hooks/use-modal-result";
 
 
 interface Bolsistas {
@@ -555,6 +536,8 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
       { name: 'Outros docentes', value: totalCountR - pqCount -dtCount },
     ];
 
+    const { onOpen:onOpenResult } = useModalResult();
+
   return (
     <>
       {isModalOpen && (
@@ -654,6 +637,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                                         className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`}
                                     onClick={() => {
                                         handlePesquisaChange(word.term)
+                                        onOpenResult('researchers-home')
                                     }}
                                     >
                                         {word.term}
@@ -668,7 +652,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
           <div className=" w-full md:px-8 md:gap-8 gap-4 flex flex-col px-4">
            
            <Alert className="grid gap-3 lg:grid-cols-4 grid-cols-2">
-            <div>
+           <Link to={'/resultados?type_search=article&terms=&researcher=false'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                      <div>
                      <CardTitle className="text-sm font-medium">
@@ -687,8 +671,8 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   {VisaoPrograma.map((props) => (<>{props.article}</>))}
                  </span>
                   </CardContent>
-            </div>
-            <div>
+            </Link>
+            <Link to={'/resultados?type_search=book&terms=&researcher=false'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                      <div>
                      <CardTitle className="text-sm font-medium">
@@ -707,8 +691,8 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   {VisaoPrograma.map((props) => (<>{props.book}</>))}
                  </span>
                   </CardContent>
-            </div>
-             <div>
+            </Link>
+             <Link to={'/resultados?type_search=book&terms=&researcher=false'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                      <div>
                      <CardTitle className="text-sm font-medium">
@@ -727,9 +711,9 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   {VisaoPrograma.map((props) => (<>{props.book_chapter}</>))}
                  </span>
                   </CardContent>
-            </div>
+            </Link>
 
-            <div>
+            <Link to={'/resultados?type_search=patent&terms=&researcher=false'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                      <div>
                      <CardTitle className="text-sm font-medium">
@@ -748,7 +732,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                  </span>
                   </CardContent>
 
-            </div>
+            </Link>
 
            
 

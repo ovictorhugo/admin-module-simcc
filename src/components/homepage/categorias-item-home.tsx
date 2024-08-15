@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { useModalResult } from "../hooks/use-modal-result";
 import { UserContext } from "../../context/context";
 
 interface Props {
@@ -10,7 +9,7 @@ interface Props {
 }
 
 export function CategoriasItemHome(props: Props) {
-    const { mapModal, setMapModal} = useContext(UserContext)
+    const {  setMapModal} = useContext(UserContext)
 
     return (
         <div onClick={()=> setMapModal(false)} className={`rounded-full px-6 py-2 flex gap-3 transition-all cursor-pointer items-center ${

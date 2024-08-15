@@ -1,11 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext,  useState } from "react";
 import { useModal } from "../hooks/use-modal-store"
-import { Alert } from "../ui/alert";
+
 import { UserContext } from "../../context/context";
-import { ArrowSquareOut, DotsThree, Eye, EyeSlash, GraduationCap, Hash, MapPin, PencilSimple, Rows, SquaresFour, Star, Student, Trash } from "phosphor-react"; 
-import {ChevronLeft, Divide, GraduationCapIcon, Plus, Search, UserCheck } from "lucide-react";
-import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
-import { toast } from "sonner"
+
+import {ChevronLeft,  Plus, Search } from "lucide-react";
 
 
   interface PosGraduationsProps {
@@ -42,11 +40,7 @@ import { useNavigate } from "react-router-dom";
 
 
 export function PosGraducaoView() {
-  let qualisColor = {
-    'MESTRADO': 'bg-[#006837]',
-    'DOUTORADO': 'bg-[#8FC53E]',
 
-}
 
 const { isOpen, type} = useModalDashboard();
   
@@ -54,53 +48,11 @@ const isModalOpen = isOpen && type === "graduate-program";
 
     const { urlGeralAdm, user, defaultLayout } = useContext(UserContext);
 
-    const [visibleProgram, setVisibleProgram] = useState(false);
+  
     const { onOpen } = useModal();
 
 
 
-     const handleVisibleProgram = (id: string) => {
-
-        const urlVisibleProgram = urlGeralAdm  + `GraduateProgramRest/Update?graduate_program_id=${id}`
-        const fetchData = async () => {
-         
-          try {
-            const response = await fetch(urlVisibleProgram, {
-              mode: 'cors',
-              method: 'POST',
-              headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Max-Age': '3600',
-                'Content-Type': 'text/plain'
-              }
-            });
-            if (response.ok) {
-
-              setVisibleProgram(!visibleProgram)
-              toast("Visibilidade alterada", {
-                description: "Operação realizada com sucesso!",
-                action: {
-                  label: "Fechar",
-                  onClick: () => console.log("Undo"),
-                },
-              })
-            } 
-      
-          
-          } catch (err) {
-            toast("Erro ao mudar visibilidade", {
-              description: "Tente novamente",
-              action: {
-                label: "Fechar",
-                onClick: () => console.log("Undo"),
-              },
-            })
-          } 
-        };
-        fetchData()
-      };
 
       const [tab, setTab] = useState('all')
       const [search, setSearch] = useState('')

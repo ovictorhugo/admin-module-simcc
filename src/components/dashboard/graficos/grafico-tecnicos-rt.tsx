@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Alert } from "../../ui/alert";
-import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis,  LabelList, CartesianGrid,  ResponsiveContainer, Cell } from "recharts";
 import { ChartContainer, ChartTooltip, ChartConfig, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
 interface Docentes {
@@ -31,7 +31,7 @@ const chartConfig = {
     label: "40 Horas",
     color: "hsl(var(--chart-2))",
   },
-  DE: {
+  "DE": {
     label: "Dedicação Exclusiva",
     color: "hsl(var(--chart-3))",
   },
@@ -69,11 +69,11 @@ export function GraficoTecnicosRt({ docentes }: { docentes: Docentes[] }) {
     setChartData(data);
   }, [docentes]);
 
-  function getColorForRt(rt: string) {
+  function getColorForRt(rt: "20H"| "40H"| "DE" | "30H"| "PROJETO 30H") {
     const colors = {
       "20H": '#FFB74D',
       "40H": '#64B5F6',
-      DE: '#81C784',
+      "DE": '#81C784',
       "30H": '#FF8A65',
       "PROJETO 30H": '#E57373',
     };

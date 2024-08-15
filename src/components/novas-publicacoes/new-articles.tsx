@@ -1,9 +1,9 @@
-import { ArrowRight, ChevronLeft, Hash, Info, Plus } from "lucide-react";
+import {  ChevronLeft, Hash,  Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useMemo, useState } from "react";
-import { File, Graph, LinkBreak, MagnifyingGlass } from "phosphor-react";
+import {  LinkBreak, MagnifyingGlass } from "phosphor-react";
 import { Input } from "../ui/input";
 import { UserContext } from "../../context/context";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
@@ -36,6 +36,7 @@ type Publicacao = {
   jcr_link: string,
   jif: string
   researcher_id: string
+  distinct:boolean
 }
 
 export function NewsArticles() {
@@ -173,7 +174,6 @@ useMemo(() => {
                 </TabsList>
                
           
-                <Button size="sm">Button</Button>
               </div>
             </div>
 

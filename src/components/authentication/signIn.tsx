@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import {
@@ -13,7 +13,7 @@ import { Button } from "../ui/button";
 import { signInWithEmailAndPassword} from 'firebase/auth';
 import "firebase/auth";
 import { auth } from "../../lib/firebase";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import img1 from '../../assets/bg_home.png'
 import {
   Tabs,
@@ -36,8 +36,9 @@ interface User extends FirebaseAuthUser {
 
 
   import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import { GoogleLogo } from "phosphor-react";
+import { GoogleLogo, SignIn } from "phosphor-react";
 import { CookiesProvider, useCookies } from 'react-cookie'
+import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
 
 export function SignInContent() {
   const [cookies, setCookie] = useCookies(['user'])
@@ -194,69 +195,93 @@ export function SignInContent() {
 
       const [value, setValue] = useState('account')
 
+      //frases
+
+      const quotesWithAuthors = [
+        {
+          quote: 'O Programa Sempre UFMG tem o objetivo de promover a conexão entre a Universidade e seus egressos, incentivando a cultura do retorno e da retribuição à Universidade.',
+          author: 'Alfredo Tetse'
+        },
+        {
+          quote: 'A Universidade é um espaço de transformação e oportunidades.',
+          author: 'Maria Silva'
+        },
+        {
+          quote: 'Alunos e egressos são fundamentais para a continuidade do legado da UFMG.',
+          author: 'João Pereira'
+        },
+        {
+          quote: 'O conhecimento adquirido aqui é um patrimônio a ser partilhado.',
+          author: 'Ana Costa'
+        }
+      ];
+      
+        // Estado para a frase e autor atuais
+        const [currentQuote, setCurrentQuote] = useState({ quote: '', author: '' });
+      
+        // Função para selecionar uma frase aleatória
+        const getRandomQuote = () => {
+          const randomIndex = Math.floor(Math.random() * quotesWithAuthors.length);
+          return quotesWithAuthors[randomIndex];
+        };
+      
+        // Efeito para definir uma nova frase quando o componente é montado
+        useEffect(() => {
+          setCurrentQuote(getRandomQuote());
+        }, []);
+
     return(
         <div className="w-full h-screen flex">
-            <div className="w-1/2 h-full p-16 md:flex items-end hidden bg-cover bg-center bg-no-repeat bg-[#719CB8]" style={{ backgroundImage: `url(${img1})` }}>
+            <div className="w-1/2 h-full p-16 md:flex justify-between flex-col hidden bg-cover bg-center bg-no-repeat bg-[#719CB8]" style={{ backgroundImage: `url(${img1})` }}>
+           <Link to={'/'} className="w-fit">
+           <div className="h-[28px]"><LogoConecteeWhite/></div></Link>
             <div>
              <div>
              <p className="font-medium text-white max-w-[500px]">
-              "O Programa Sempre UFMG tem o objetivo de promover a conexão entre a Universidade e seus egressos, incentivando a cultura do retorno e da retribuição à Universidade"
-              </p>
-              <p className="text-white mt-2 text-sm">Alfredo Tetse</p>
+        "{currentQuote.quote}"
+      </p>
+      <p className="text-white mt-2 text-sm">{currentQuote.author}</p>
              </div>
             </div>
             </div>
 
-            <div className="md:w-1/2 w-full h-full flex items-center justify-center flex-col">
-            <Tabs defaultValue="account" value={value} className="w-[400px]">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="account" onClick={() => setValue('account')}>Email</TabsTrigger>
-        <TabsTrigger value="password" onClick={() => setValue('password')}>Senha</TabsTrigger>
-      </TabsList>
-      <TabsContent value="account">
-        <Card>
-          <CardHeader>
+            <div className="md:w-1/2 w-full h-full flex md:px-16 items-center justify-center flex-col">
+           
+
+    <div className="max-w-[400px] w-full">
+    <CardHeader className="p-0 pb-6">
             <CardTitle>Fazer login</CardTitle>
-            <CardDescription>
-              Coloque seu email cadastrado
+            <CardDescription className="pt-2">
+              Para docentes e técnicos, acessar com o Minha UFMG. Usuários externos, fazer login com o google ou email cadastrado.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2">
+
+    <div className="flex gap-3 flex-col">
+    <Link to={"/dashboard"}><Button className=" w-full" variant={'outline'} ><GoogleLogo size={16} className="" /> Login com Minha UFMG</Button></Link>
+        <Button className=" w-full" variant={'outline'} onClick={handleGoogleSignIn} ><GoogleLogo size={16} className="" /> Login com Google</Button>
+       
+        </div>
+
+    <div className="flex items-center gap-3 text-neutral-500 dark:text-neutral-800 my-6">
+          <div className="w-full h-[0.5px] bg-neutral-400 dark:bg-neutral-800"></div>
+          ou
+          <div className="w-full h-[0.5px]  bg-neutral-500 dark:bg-neutral-800"></div>
+        </div>
+
+    
+          <CardContent className=" p-0 w-full flex flex-col gap-3">
             <div className="space-y-1">
               <Label htmlFor="name">Email</Label>
-              <Input onChange={(e) => setEmail(e.target.value)} id="name" placeholder="Seu email" />
+              <Input onChange={(e) => setEmail(e.target.value)} id="name" />
             </div>
-        
-          </CardContent>
-          <CardFooter>
-         <div className="flex flex-col gap-4 w-full">
-         <Button className=" w-full" variant={'outline'} onClick={handleGoogleSignIn} ><GoogleLogo size={16} className="" /> Fazer login com o Google</Button>
-            <Button className="text-white dark:text-white w-full" onClick={() => setValue('password')}>Continuar</Button>
-         </div>
-          </CardFooter>
-        </Card>
-      </TabsContent>
-      <TabsContent value="password">
-        <Card>
-          <CardHeader>
-            <CardTitle>Senha</CardTitle>
-            <CardDescription>
-              Tudo certo, agora coloque sua senha
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
             <div className="space-y-1">
               <Label htmlFor="current">Senha</Label>
-              <Input onChange={(e) => setPassword(e.target.value)} id="current" type="password" placeholder="Sua senha" />
+              <Input onChange={(e) => setPassword(e.target.value)} id="current" type="password"  />
             </div>
-         
+
+            <Button onClick={handleLogin} className="text-white w-full dark:text-white"><SignIn size={16}/> Fazer login</Button>
           </CardContent>
-          <CardFooter>
-            <Button onClick={handleLogin} className="text-white w-full dark:text-white">Fazer login</Button>
-          </CardFooter>
-        </Card>
-      </TabsContent>
-    </Tabs>
+    </div>
                 
             </div>
         </div>

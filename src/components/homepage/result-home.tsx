@@ -21,84 +21,37 @@ const useQuery = () => {
 export function ResultHome() {
   const { isOpen, type } = useModalHomepage();
   const { onOpen, type: typeResult } = useModalResult();
-  const { mapModal, maria, messagesMaria, itemsSelecionados, searchType, setItensSelecionados } = useContext(UserContext);
+  const { mapModal, maria, messagesMaria, itemsSelecionados, searchType, setItensSelecionados, setSearchType, setValoresSelecionadosExport } = useContext(UserContext);
   const { onOpen: onOpenModal } = useModal();
   
   const [isOn, setIsOn] = useState(true);
   
   const queryUrl = useQuery();
-  const navigate = useNavigate();
-  const type_search = queryUrl.get('type_search');
-  const terms = queryUrl.get('terms');
 
-  useEffect(() => {
-    if (!typeResult) {
+  const terms = queryUrl.get('terms');
+  
+  const researcher = queryUrl.get('researcher');
+
+  useEffect(() => { 
+    if (researcher == 'false' && itemsSelecionados.length == 0) {
+          if(searchType == 'article') {
+            return onOpen('articles-home')
+          } else if(searchType == 'book') {
+            return onOpen('book-home')
+          } else if(searchType == 'patent') {
+            return onOpen('patent-home')
+          }
+    }
+    else if (!typeResult) {
       onOpen('researchers-home');
     }
-  }, [typeResult, onOpen]);
+  }, [typeResult, onOpen, searchType]);
+  
 
-  useEffect(() => {
-    if (terms) {
-      const parsedTerms = parseTerms(String(terms));
-      setItensSelecionados(parsedTerms);
-    }
-  }, [terms, setItensSelecionados]);
+
 
   const isModalOpen = isOpen && type === "result-home";
 
-  function parseTerms(encoded: string): { term: string }[] {
-    // Decode the URL-encoded string first
-    const formatted = decodeURIComponent(encoded);
-  
-    let result: { term: string }[] = [];
-    let temp = '';
-    let inGroup = false;
-  
-    for (let i = 0; i < formatted.length; i++) {
-      const char = formatted[i];
-  
-      if (char === '(') {
-        inGroup = true;
-        // Add any preceding term as an individual term
-        if (temp.trim()) {
-          result.push({ term: temp.trim() + '|' });
-          temp = '';
-        }
-      } else if (char === ')') {
-        inGroup = false;
-        // Process the grouped terms
-        if (temp.trim()) {
-          const terms = temp.split(';').map(t => t.trim());
-          terms.forEach(term => {
-            if (term) {
-              result.push({ term: term + ';' });
-            }
-          });
-          temp = '';
-        }
-      } else if (char === '|') {
-        if (!inGroup && temp.trim()) {
-          result.push({ term: temp.trim() + '|' });
-          temp = '';
-        }
-      } else {
-        temp += char;
-      }
-    }
-  
-    // Add any remaining term
-    if (temp.trim()) {
-      result.push({ term: temp.trim() + (inGroup ? ';' : '|') });
-    }
-  
-    // Handle final cleanup for separators
-    return result.map(item => {
-      if (item.term.endsWith('|') || item.term.endsWith(';')) {
-        item.term = item.term.slice(0, -1);
-      }
-      return item;
-    });
-  }
   
 
 
@@ -106,7 +59,7 @@ export function ResultHome() {
     <>
       {isModalOpen && (
         <div className="h-full w-full flex flex-col">
-          {itemsSelecionados.length > 0 && (
+          {(itemsSelecionados.length > 0 || researcher == 'false')  && (
             <div>
               <div className={`w-full ${isOn ? 'px-8' : 'px-4'} border-b border-b-neutral-200 dark:border-b-neutral-800`}>
                 {isOn && (
@@ -116,12 +69,14 @@ export function ResultHome() {
                 )}
                 <div className={`flex pt-2 justify-between  ${isOn ? '' : ''} `}>
                   <div className="flex items-center gap-2">
-                   <div className={`pb-2 border-b-2 transition-all ${typeResult == 'researchers-home' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
-                   <Button variant={typeResult == 'researchers-home' ? ('ghost'):('ghost')}  className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
-                      <Users className="h-4 w-4" />
-                      Pesquisadores
-                    </Button>
-                   </div>
+                   {!((researcher == 'false') && itemsSelecionados.length == 0) && (
+                    <div className={`pb-2 border-b-2 transition-all ${typeResult == 'researchers-home' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
+                    <Button variant={typeResult == 'researchers-home' ? ('ghost'):('ghost')}  className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
+                       <Users className="h-4 w-4" />
+                       Pesquisadores
+                     </Button>
+                    </div>
+                   )}
                     {searchType === 'article' && (
                        <div className={`pb-2 border-b-2  transition-all ${typeResult == 'articles-home' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
                       <Button variant={typeResult == 'articles-home' ? ('ghost'):('ghost')}  className="m-0" onClick={() => onOpen('articles-home')}>
@@ -131,31 +86,39 @@ export function ResultHome() {
                       </div>
                     )}
                     {searchType === 'book' && (
-                      <Button variant="ghost"  className="m-0" onClick={() => onOpen('researchers-home')}>
-                        <File className="h-4 w-4" />
-                        Livros e capítulos
-                      </Button>
+                    <div className={`pb-2 border-b-2  transition-all ${typeResult == 'book-home' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
+                    <Button variant={typeResult == 'book-home' ? ('ghost'):('ghost')}  className="m-0" onClick={() => onOpen('book-home')}>
+                    <File className="h-4 w-4" />
+                    Livros e capítulos
+                    </Button>
+                    </div>
                     )}
                     {searchType === 'patent' && (
-                      <Button variant="ghost" className="m-0" onClick={() => onOpen('researchers-home')}>
+                        <div className={`pb-2 border-b-2  transition-all ${typeResult == 'patent-home' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
+                        <Button variant={typeResult == 'patent-home' ? ('ghost'):('ghost')}  className="m-0" onClick={() => onOpen('patent-home')}>
                         <Copyright className="h-4 w-4" />
                         Patentes
-                      </Button>
+                        </Button>
+                        </div>
                     )}
                     {searchType === 'speaker' && (
-                      <Button variant="ghost" className="m-0" onClick={() => onOpen('researchers-home')}>
-                        <Ticket className="h-4 w-4" />
-                        Participação em eventos
-                      </Button>
+                    <div className={`pb-2 border-b-2  transition-all ${typeResult == 'speaker-home' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
+                    <Button variant={typeResult == 'speaker-home' ? ('ghost'):('ghost')}  className="m-0" onClick={() => onOpen('speaker-home')}>
+                    <Ticket className="h-4 w-4" />
+                    Participação em eventos
+                    </Button>
+                    </div>
                     )}
-                    <div onClick={() => onOpen('articles-home')}></div>
-                    <div onClick={() => onOpen('institutions-home')}></div>
+
+                   
                   </div>
                   <div>
-                    <Button onClick={() => onOpenModal('filters')} variant="ghost"  className="">
-                      <SlidersHorizontal size={16} className="" />
-                      Filtros
-                    </Button>
+                   {typeResult == 'researchers-home' && (
+                     <Button onClick={() => onOpenModal('filters')} variant="ghost"  className="">
+                     <SlidersHorizontal size={16} className="" />
+                     Filtros
+                   </Button>
+                   )}
                     <Button variant="ghost"  size="icon" onClick={() => setIsOn(!isOn)}>
                       {isOn ? (
                         <ChevronUp className="h-4 w-4" />
@@ -172,7 +135,7 @@ export function ResultHome() {
            
 
           <ScrollArea className="h-full">
-            {itemsSelecionados.length > 0 ? (
+            {(itemsSelecionados.length > 0 || researcher == 'false') ? (
               <div className="px-8">
                 <ResultProvider />
               </div>

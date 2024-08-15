@@ -1,21 +1,18 @@
 import { Toaster } from "sonner";
 import { Header } from "../components/header/Header";
 import { NavigationSidebar } from "../components/navigation/navigation-sidebar";
-import { SidebarProvider } from "../components/provider/sidebar-provider";
-import { Search } from "../components/search/search";
-import { GraficoHome } from "../components/homepage/grafico-home";
-import { useModalHomepage } from "../components/hooks/use-modal-homepage";
+
+
 import { TooltipProvider } from "../components/ui/tooltip"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../components/ui/resizable"
 import { cn } from "../lib"
-import { Link} from "react-router-dom";
 
-import { useContext, useState } from "react";
+
+import { useContext } from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { AlertCircle, BarChartBig, Blocks, Building, Building2, CandlestickChart, ClipboardEdit, FlaskConical, GraduationCap, Home, Info, LayoutDashboard, List, Mail, PieChart, Rows3, Rows4, SearchCheck, User, Weight, X } from "lucide-react";
-import { useTheme } from "next-themes";
-import { ScrollArea } from "../components/ui/scroll-area";
+import { Blocks,  Building2, ClipboardEdit, FlaskConical, GraduationCap,  Info, LayoutDashboard,  Mail, PieChart,  User, Users, Weight } from "lucide-react";
+
 import { UserConfigHeader } from "../components/header/user-config-header";
 
 interface MailProps {
@@ -33,11 +30,9 @@ export default function AdminLayout({
   children
 }: MailProps) {
   
-  const {isCollapsed, setIsCollapsed, loggedIn,user} = useContext(UserContext)
+  const {isCollapsed, setIsCollapsed, loggedIn} = useContext(UserContext)
   
-  const { isOpen: isOpenHomepage, type: typeHomepage } = useModalHomepage();
-  const isModalOpen = isOpenHomepage && typeHomepage === "initial-home";
-  
+
   
     return (
     <div>
@@ -76,6 +71,7 @@ export default function AdminLayout({
           <NavigationSidebar
             isCollapsed={isCollapsed}
             links={[
+
               {
                 title: "Dashboard",
                 label: "",
@@ -93,7 +89,7 @@ export default function AdminLayout({
               {
                 title: "Pesquisadores",
                 label: "",
-                icon: User,
+                icon: Users,
                 link: "/dashboard/pesquisadores",
               },
               

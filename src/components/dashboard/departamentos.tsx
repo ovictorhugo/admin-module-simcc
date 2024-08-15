@@ -1,17 +1,12 @@
-import { Building2, Check, ChevronLeft, Image, Plus, PlusCircle, Search } from "lucide-react";
-import { useModalDashboard } from "../hooks/use-modal-dashboard";
+import {  ChevronLeft, Plus,  Search } from "lucide-react";
+
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { Label } from "../ui/label";
+
 import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { Alert } from "../ui/alert";
-import { CardContent, CardHeader, CardTitle } from "../ui/card";
-import bg_popup from '../../assets/bg_popup.png';
-import { toast } from "sonner"
-import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
+
+
 import { UserContext } from "../../context/context";
 import { TooltipProvider } from "../ui/tooltip";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../ui/resizable";
@@ -34,11 +29,11 @@ interface Departamentos {
 }
 
 export function Departamentos() {
-    const { isOpen, type} = useModalDashboard();
+   
 
     const {urlGeralAdm} = useContext(UserContext)
   
-    const isModalOpen = isOpen && type === "departamento";
+   
 
     const history = useNavigate();
 
@@ -46,151 +41,14 @@ export function Departamentos() {
       history(-1);
     }
 
-    const uuid = uuidv4();
-  
-    // Extract numbers from the UUID and join them into a single string
-    const id = uuid.replace(/\D/g, '').slice(0, 10);
 
-    const [formData, setFormData] = useState([{
-      dep_id: id,
-      org_cod: '',
-      dep_nom: '',
-      dep_des: '',
-      dep_email: '',
-      dep_site: '',
-      dep_tel: '',
-      img_data: '',
-      dep_sigla: ''
-    }]);
-  
-    const [fileInfo, setFileInfo] = useState({
-      name: '',
-      size: 0
-    });
-  
-    const [pdfs, setPdfs] = useState({
-      img_data: null
-    });
-  
-    const handleChange = (e:any) => {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value
-      });
-    };
-  
-    const handleFileChange = (e:any) => {
-      setPdfs({
-        ...pdfs,
-        [e.target.name]: e.target.files[0]
-      });
-      setFileInfo({
-        name: e.target.files[0].name,
-        size: e.target.files[0].size
-      });
-    };
-  
-    const handleSubmit = () => {
-
-      handleSubmitDepartamento();
-    };
-
-    // Função para atualizar um item específico no formData
-  const updateItem = (index:any, field:any, value:any) => {
-    const newFormData = formData.map((item, i) => 
-      i === index ? { ...item, [field]: value } : item
-    );
-    setFormData(newFormData);
-  };
-
-  const formatPhone = (value:any) => {
-    value = value.replace(/\D/g, ''); // Remove todos os caracteres que não são dígitos
-    value = value.replace(/^(\d{2})(\d)/, '($1) $2'); // Adiciona parênteses em torno dos dois primeiros dígitos
-    value = value.replace(/(\d{1})(\d{4})(\d{4})/, '$1 $2-$3'); // Formata o restante como x xxxx-xxxx
-    return value.slice(0, 16); // Limita a 15 caracteres
-  };
-  
-  const handlePhoneChange = (index:any, e:any) => {
-    const formattedPhone = formatPhone(e.target.value);
-    updateItem(index, 'dep_tel', formattedPhone);
-  };
+   
 
 
-  console.log(formData)
-
-
-  const handleSubmitDepartamento = async () => {
-    try {
-      if (!pdfs.img_data) {
-        toast("Erro: Nenhuma imagem selecionada", {
-          description: "Por favor, selecione uma imagem para enviar.",
-          action: {
-            label: "Fechar",
-            onClick: () => console.log("Fechar"),
-          },
-        });
-        return;
-      }
-  
-      const urlDepartamentoInsert = 'http://150.164.32.238:8484/' + `departamento`; // Atualize a URL conforme necessário
-  
-      const data = new FormData();
-      Object.entries(formData[0]).forEach(([key, value]) => {
-        data.append(key, value);
-      });
-      data.append('img_data', pdfs.img_data);
-  
-      const response = await axios.post(urlDepartamentoInsert, data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        }
-      });
-  
-      if ((response.status === 201) || (response.status === 200)) {
-        toast("Dados enviados com sucesso", {
-          description: "Todos os dados foram enviados.",
-          action: {
-            label: "Fechar",
-            onClick: () => console.log("Fechar"),
-          },
-        });
-  
-        setFormData([{
-          dep_id: '',
-          org_cod: '',
-          dep_nom: '',
-          dep_des: '',
-          dep_email: '',
-          dep_site: '',
-          dep_tel: '',
-          img_data: '',
-          dep_sigla: ''
-        }]);
-        setFileInfo({
-          name: '',
-          size: 0
-        });
-        setPdfs({
-          img_data: null
-        });
-  
-     
-      }
-    } catch (error) {
-      console.error('Erro ao processar a requisição:', error);
-      toast("Erro ao processar a requisição", {
-        description: "Tente novamente mais tarde.",
-        action: {
-          label: "Fechar",
-          onClick: () => console.log("Fechar"),
-        },
-      });
-    }
-  };
 
   ///
 
-  const [tab, setTab] = useState('all')
+  const [tab] = useState('all')
   const [search, setSearch] = useState('')
   const [total, setTotal] = useState<Departamentos | null>(null);
 

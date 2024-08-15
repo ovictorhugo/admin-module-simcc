@@ -1,5 +1,5 @@
-import { AppWindow, Book, BookOpen,Ticket, IdentificationBadge, CalendarBlank, Check, Copyright, CurrencyCircleDollar, File, Graph, LinkBreak, Paperclip, PenNib, Quotes, SpinnerGap } from "phosphor-react";
-import { useEffect, useState, useContext } from "react";
+import { AppWindow, Ticket, IdentificationBadge, CalendarBlank,  Copyright, CurrencyCircleDollar,  LinkBreak, Paperclip, PenNib} from "phosphor-react";
+import {  useContext } from "react";
 
 import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
@@ -39,37 +39,87 @@ interface ItemsSelecionados {
 }
 
 const normalizeText = (text: string): string => {
-  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")  // Remove acentos
+    .replace(/[|();]/g, '')           // Remove caracteres especiais
+    .toLowerCase();
 };
 
 const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNode => {
-  if (terms.length === 0) {
-    return text;
+  if (!text || terms.length === 0) return text;
+
+  // Cria uma lista com os termos normalizados
+  const normalizedTerms = terms.map(term => normalizeText(term.term));
+
+  // Função para verificar se um trecho do texto contém algum dos termos
+  const containsTerm = (substring: string): boolean => {
+    const normalizedSubstring = normalizeText(substring);
+    return normalizedTerms.some(term => normalizedSubstring.includes(term));
+  };
+
+  // Divide o texto em palavras e processa cada uma
+  const parts = text.split(/(\s+)/); // Divide por espaços para preservar as palavras e espaços
+  const result: React.ReactNode[] = [];
+
+  let i = 0;
+  while (i < parts.length) {
+    const part = parts[i];
+
+    if (containsTerm(part)) {
+      const normalizedPart = normalizeText(part);
+      let j = 0;
+      let highlightStart = 0;
+
+      // Verifica a presença de cada termo na parte do texto
+      while (j < normalizedPart.length) {
+        let matchedTerm = false;
+
+        for (const term of normalizedTerms) {
+          if (normalizedPart.slice(j, j + term.length) === term) {
+            // Adiciona o texto não destacado antes do termo
+            if (j > highlightStart) {
+              result.push(part.slice(highlightStart, j));
+            }
+
+            // Adiciona o termo destacado
+            result.push(
+              <span key={`${i}-${j}`} className="text-blue-500 font-semibold">
+                {part.slice(j, j + term.length)}
+              </span>
+            );
+
+            j += term.length;
+            highlightStart = j;
+            matchedTerm = true;
+            break;
+          }
+        }
+
+        if (!matchedTerm) {
+          j++;
+        }
+      }
+
+      // Adiciona qualquer parte restante do texto
+      if (highlightStart < part.length) {
+        result.push(part.slice(highlightStart));
+      }
+    } else {
+      result.push(part);
+    }
+
+    i++;
   }
 
-  const normalizedTerms = terms.map(term => normalizeText(term.term));
-  const regexPattern = normalizedTerms.join('|');
-  const regex = new RegExp(`(${regexPattern})`, 'gi');
-  const normalizedText = normalizeText(text);
-  const parts = normalizedText.split(regex);
-
-  let originalIndex = 0;
-  const highlightedParts = parts.map((part, index) => {
-    const originalPart = text.substr(originalIndex, part.length);
-    originalIndex += part.length;
-
-    return regex.test(part)
-      ? <span key={index} className="text-blue-500 font-semibold">{originalPart}</span>
-      : originalPart;
-  });
-
-  return highlightedParts;
+  return result;
 };
+
 
 export function BookItem(props: Publicacao) {
 const {itemsSelecionados} = useContext(UserContext)
 
-   
+const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecionados);
     const highlightedTitle = highlightText(props.title || '', itemsSelecionados);
     return (
         <div className="flex  w-full" >
@@ -105,16 +155,13 @@ const {itemsSelecionados} = useContext(UserContext)
                           )}
 
 {props.type == 'patente' && (
-                             <h3 className="font-semibold mb-4 "> {highlightedTitle}</h3>
+                             <h3 className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal "> {highlightedTitle}</h3>
                           )}
 
 
-{props.type == 'patente' && (
-                           <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">{props.id}</p>
-                        )}
 
 {props.type == 'participacao-evento' && (
-                           <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">{props.event_name}</p>
+                           <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">{highlightedTitleEvent}</p>
                         )}
 
 {(props.type != 'patente' && props.type != 'speaker') && (

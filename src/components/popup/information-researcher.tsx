@@ -1,15 +1,12 @@
-import { useContext, useEffect, useMemo, useState } from "react"
+import { useContext,  useState } from "react"
 import { UserContext } from "../../context/context"
-import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, Copy, Export, FileCsv, GraduationCap, IdentificationBadge, LinkSimple, LinkedinLogo, MapPin, Plus, PuzzlePiece, QrCode, ShareNetwork, X } from "phosphor-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import {  BracketsCurly,  CaretDown, Copy, GraduationCap, IdentificationBadge, LinkSimple, LinkedinLogo, MapPin,  PuzzlePiece} from "phosphor-react"
+
 import { Button } from "../ui/button"
-import { MoreHorizontal } from "lucide-react"
-import { Separator } from "../ui/separator"
+
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
-import QRCode from "react-qr-code";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
-import { useModal } from "../hooks/use-modal-store"
+
 import htmlParser from 'html-react-parser';
 import useWindowSize from "./use-windows-size"
 
@@ -34,7 +31,7 @@ interface Props {
     software: string,
     brand: string,
     lattes_update: Date,
-    onResearcherUpdate: (newResearcher: Research[]) => void;
+    onResearcherUpdate?: (newResearcher: Research[]) => void;
 
     h_index:string,
     relevance_score:string,
@@ -65,71 +62,14 @@ interface Props {
   
 
  export function InformationResearcher(props:Props) {
-    const {urlGeral, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados, itemsSelecionados} = useContext(UserContext)
+    const { itemsSelecionados} = useContext(UserContext)
     const [isVisible, setIsVisible] = useState(false);
-    const [apiVisible, setApiVisible] = useState(false);
-    const payment = props.lattes_id
+
+    const {urlGeral} = useContext(UserContext)
 
     //data atualização
-  const currentDate = new Date();
-  const lattesUpdate = String(props.lattes_update).split('/');
-  const lattesMonth = parseInt(lattesUpdate[1]);
-  const lattesYear = parseInt(lattesUpdate[2]);
-
-  const monthDifference = (currentDate.getFullYear() - lattesYear) * 12 + (currentDate.getMonth() + 1 - lattesMonth);
-const [researcher, setResearcher] = useState<Research[]>([]); 
-  const isOutdated = monthDifference > 3;
-
-    // Atualize essa função para chamar a propriedade `onResearcherUpdate`
-    const updateResearcher = (newResearcher: Research[]) => {
-      if (props.onResearcherUpdate) {
-        props.onResearcherUpdate(newResearcher);
-      }
-    };
-
-  //openalex
-  //https://orcid.org/
-  const urlTermPesquisadores =`https://api.openalex.org/authors?filter=display_name.search:${props.name}`;
-  const urlTermPesquisadoresOrcid =`https://api.openalex.org/authors/https://orcid.org/${props.orcid}`;
-  const urlShare = `${urlGeral}researcher/${props.id}/${searchType}/${valoresSelecionadosExport}`
   const urlApi = `${urlGeral}researcherName?name=${props.name.split(' ').join(';')}`
-  const [orcid, setOrcid] = useState(props.orcid);
 
-
-
-//csv
-
-const [jsonData, setJsonData] = useState<any[]>([]);
-
-const convertJsonToCsv = (json: any[]): string => {
-  const items = json;
-  const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
-  const header = Object.keys(items[0]);
-  const csv = [
-    '\uFEFF' + header.join(';'), // Add BOM and CSV header
-    ...items.map((item) =>
-      header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
-    ) // CSV data
-  ].join('\r\n');
-
-  return csv;
-};
-
-const handleDownloadJson = async () => {
-  try {
-    const csvData = convertJsonToCsv(jsonData);
-    const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.download = `${props.name}.csv`;
-    link.href = url;
-    link.click();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const {onClose} = useModal()
 
 
 // 

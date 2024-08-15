@@ -1,8 +1,8 @@
-import { Archive, AreaChart, Barcode, Check, ChevronsUpDown, GraduationCap, Info, Link2, MapPin, MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, Star, User, Users, X } from "lucide-react";
+import {  AreaChart,  ChevronsUpDown, GraduationCap,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, Star, User, Users } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { Eye, EyeSlash, FileCsv, FileXls, MagnifyingGlass, Trash } from "phosphor-react";
+import { Eye, EyeSlash, MagnifyingGlass, Trash } from "phosphor-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { toast } from "sonner"
 import { useContext, useEffect, useState } from "react";
@@ -60,14 +60,6 @@ export function DisplayItem(props:Patrimonio) {
         'DOUTORADO': 'bg-blue-800',
       };
     
-      const csvCodToText = {
-        'BM': 'Bom',
-        'AE': 'Anti-Econômico',
-        'IR': 'Irrecuperável',
-        'OC': 'Ocioso',
-        'BX': 'Baixado',
-        'RE': 'Recuperável'
-      };
 
       const [type, setType] = useState('COLABORADOR');
       const [visibleProgram, setVisibleProgram] = useState(false);
@@ -361,7 +353,7 @@ const handleSubmit = async () => {
 
     const handleSubmitPesquisadorUnique = async () => {
       const currentYear = new Date().getFullYear();
-      const docId = uuidv4();
+
 
       
 
@@ -705,7 +697,7 @@ const handleSubmit = async () => {
                                     </Button>
                                   ))
                                 ) : (
-                            <div className="text-center w-full text-sm">Nenhuma sala encontrada</div>
+                            <div className="text-center w-full text-sm">Nenhum pesquisador encontrado</div>
                                 )}
                               </div>
                             </div>

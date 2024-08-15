@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Alert } from "../../ui/alert";
-import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis,  LabelList, CartesianGrid,  ResponsiveContainer, Cell } from "recharts";
 import { ChartContainer, ChartTooltip, ChartConfig, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
 interface Bolsistas {

@@ -1,29 +1,30 @@
-import { ChevronLeft } from "lucide-react";
+import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, Download, TrendingUp } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
 import { Helmet } from 'react-helmet';
   import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
+
     DrawerFooter,
     DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
+
   } from "../../components/ui/drawer"
 import { Button } from "../ui/button";
-import { useEffect, useMemo, useState } from "react";
-import bg from '../../assets/bg_researcher.png'
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "../../components/ui/sheet"
+
 
 import { InformationResearcher } from "../popup/information-researcher";
 import { useContext } from "react";
 import { UserContext } from "../../context/context";
 import QRCode from "react-qr-code";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
+import {  BracketsCurly, Buildings,  File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
 import { NuvemPalavras } from "../popup/nuvem-palavras";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { TotalViewResearcher } from "../popup/total-view-researcher";
 import { InformacoesGeraisResearcher } from "../popup/informacoes-gerais-researcher";
 import { ArticlesResearcherPopUp } from "../popup/articles-researcher";
@@ -36,7 +37,13 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Copy, MoreHorizontal, Plus } from "lucide-react";
 import { toast } from "sonner"
-import { Link } from "react-router-dom";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { TimeLineResearcher } from "./timeline-researcher";
+import { DialogHeader, DialogTitle } from "../ui/dialog";
+import { FilterYearTimeLine } from "../popup/filters-year-timeline";
+import { Skeleton } from "../ui/skeleton";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 type Research = {
   among: number,
@@ -58,6 +65,7 @@ type Research = {
   software: string,
   brand: string,
   lattes_update: Date,
+  entradanaufmg:Date
  
   h_index:string,
   relevance_score:string,
@@ -112,17 +120,7 @@ interface Bolsistas {
     name:string
   }
 
-  type ResearchOpenAlex = {
-    h_index: number;
-    relevance_score: number;
-    works_count: number;
-    cited_by_count: number;
-    i10_index: number;
-    scopus: string;
-    orcid:string
-    openalex:string
-    
-  }
+
 
 
       const useQuery = () => {
@@ -132,7 +130,7 @@ interface Bolsistas {
 
 export function ResearcherPage() {
 
-    const { urlGeral, itemsSelecionados, setSearchType, setValoresSelecionadosExport, itemsSelecionadosPopUp, setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados, setItensSelecionados } = useContext(UserContext);
+    const { urlGeral, itemsSelecionados, setSearchType, setValoresSelecionadosExport,  setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados, setItensSelecionados } = useContext(UserContext);
 
     const history = useNavigate();
 
@@ -203,19 +201,25 @@ export function ResearcherPage() {
     
 
       
-    const { onClose, isOpen, type: typeModal, data } = useModal();
-    const isModalOpen = isOpen && typeModal === "researcher-modal";
+    const { onClose, isOpen} = useModal();
+  
     const [researcher, setResearcher] = useState<Research[]>([]); 
     const [loading, isLoading] = useState(false)
    
 
   
+    type Filter = {
+      year: number[]
+      qualis: string[]
+    }
 
-    const [researcherData, setResearcherData] = useState<ResearchOpenAlex[]>([]);
+    const [filters, setFilters] = useState<Filter[]>([]);
 
     // Função para lidar com a atualização de researcherData
-    const handleResearcherUpdate = (newResearcherData: ResearchOpenAlex[]) => {
-      setResearcherData(newResearcherData);
+    const handleResearcherUpdate = (newResearcherData: Filter[]) => {
+      setFilters(newResearcherData);
+
+
     };
 
 
@@ -393,16 +397,33 @@ function generateNameVariations(name: string): string[] {
 }
 
 const researcherName = researcher.length > 0 ? researcher[0].name : "Desconhecido";
+const [tab, setTab] = useState('all')
+    
 
+const [expand, setExpand] = useState(false)
+
+const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
+    const [isOpenSheet, setIsOpenSheet] = useState(false); 
+
+
+    /////////////
+    const timelineRef = useRef();
+
+    const handleDownload = async () => {
+      const element = timelineRef.current;
+      const canvas = await html2canvas(element);
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, "PNG", 0, 0);
+      pdf.save("timeline.pdf");
+    };
 
     return(
-        <html>
-         <Helmet>
-        <title>Conectee | {researcherName}</title>
-      </Helmet>
-
+        <html className="w-full">
+       
        
           <main className="flex flex-1 flex-col  p-4 md:p-8 ">
+          <Tabs defaultValue={tab} value={tab} className="h-full" >
              <div className="w-full  gap-4 m pb-0 md:pb-0">
              <div className="flex items-center gap-4">
 
@@ -411,9 +432,18 @@ const researcherName = researcher.length > 0 ? researcher[0].name : "Desconhecid
                 <span className="sr-only">Voltar</span>
               </Button>
           
-              <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+             <div className="flex gap-3  items-center">
+             <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
                 Página do(a) pesquisador(a)
               </h1>
+              
+
+              </div>
+
+              <div className="flex gap-2 items-center md:ml-auto">
+
+
+</div>
 
              {researcher.slice(0, 1).map((props) => {
 
@@ -429,29 +459,123 @@ const researcherName = researcher.length > 0 ? researcher[0].name : "Desconhecid
    const lattesUpdate = String(props.lattes_update).split('/');
    const lattesMonth = parseInt(lattesUpdate[1]);
    const lattesYear = parseInt(lattesUpdate[2]);
- 
+
    const monthDifference = (currentDate.getFullYear() - lattesYear) * 12 + (currentDate.getMonth() + 1 - lattesMonth);
 
    const isOutdated = monthDifference > 3;
-   
+
+
 
    return(
-            
 
-              
-          
-       
-             
-
-                
             
-              <div className="hidden items-center gap-2 md:ml-auto md:flex">
+              <div className="hidden items-center gap-2  md:flex">
               
                
-          
-              <div className="flex gap-3">
+              <div className={`border dark:border-neutral-800 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated ? ('bg-red-500 text-white border-none') : ('')}`}>Atualização do Lattes: {String(props.lattes_update)}</div>
 
-              <div className={`border-[1px] border-gray-300 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated ? ('bg-red-500 text-white border-none') : ('')}`}>Atualização do Lattes: {String(props.lattes_update)}</div>
+              <div className="flex gap-3 items-center">
+
+              <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
+  <SheetTrigger>
+  <Button onClick={() => setExpand(false)} className="h-8" size={'sm'}><TrendingUp size={16}/>Linha do tempo</Button>
+  </SheetTrigger>
+  <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 ${expand ? ('min-w-[80vw]'):('min-w-[50vw]')}`}>
+  <DialogHeader className="h-16 p-4 border-b">
+
+ <div className="flex items-center gap-3">
+ <TooltipProvider>
+       <Tooltip>
+         <TooltipTrigger asChild>
+         <Button className="h-8 w-8" onClick={() => setExpand(!expand)} variant={'outline'} size={'icon'}>{expand ? (<ArrowRightFromLine size={16}/>):(<ArrowLeftFromLine size={16}/>)}</Button>
+         </TooltipTrigger>
+         <TooltipContent> Expandir linha do tempo</TooltipContent>
+       </Tooltip>
+       </TooltipProvider>
+
+       <TooltipProvider>
+       <Tooltip>
+         <TooltipTrigger asChild>
+         <Button className="h-8 w-8" variant={'outline'}  onClick={() => setIsOpenSheet(false)} size={'icon'}><X size={16}/></Button>
+         </TooltipTrigger>
+         <TooltipContent> Fechar</TooltipContent>
+       </Tooltip>
+       </TooltipProvider>
+          <div className="flex items-center w-full justify-between">
+
+          <DialogTitle className="text-xl font-medium flex items-center gap-3">
+          <TrendingUp size={24}/> Linha do tempo
+          </DialogTitle>
+
+          <div className="flex items-center gap-3"> 
+          <Button className="h-8 "  onClick={handleDownload} size={'sm'}><Download size={16}/>Fazer download</Button>
+           
+           
+          </div>
+          </div>
+ </div>
+         
+
+        
+        </DialogHeader>
+
+        <div className="p-4">
+        <FilterYearTimeLine
+                onFilterUpdate={handleResearcherUpdate}/>
+        </div>
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                  <div ref={timelineRef}>
+                    <TimeLineResearcher
+                  among={user.among}
+                    articles={user.articles}
+                    book={user.book}
+                    book_chapters={user.book_chapters}
+                    id={user.id}
+                    name={user.name}
+                    university={user.university}
+                    lattes_id={user.lattes_id}
+                    area={user.area}
+                    abstract={user.abstract}
+                    lattes_10_id={user.lattes_10_id}
+                    city={user.city}
+                    orcid={user.orcid}
+                    image={user.image}
+                    graduation={user.graduation}
+                    patent={user.patent}
+                    software={user.software}
+                    brand={user.brand}
+                    lattes_update={user.lattes_update}
+
+                    h_index={user.h_index}
+                    relevance_score={user.relevance_score}
+                    works_count={user.works_count}
+                    cited_by_count={user.cited_by_count}
+                    i10_index={user.i10_index}
+                    scopus={user.scopus}
+                    openalex={user.openalex}
+
+                    subsidy={user.subsidy}
+                    graduate_programs={user.graduate_programs}
+                    departments={user.departments}
+                    research_groups={user.research_groups}
+                
+                    cargo={user.cargo}
+                    clas={user.clas}
+                    classe={user.classe}
+                    rt={user.rt}
+                    situacao={user.situacao}
+
+                    year_filter={yearString}
+                    entradanaufmg={user.entradanaufmg}
+                  />
+                  </div>
+                  )
+                })}
+  </SheetContent>
+</Sheet>
+
+          
 
               <TooltipProvider>
        <Tooltip>
@@ -497,6 +621,7 @@ const researcherName = researcher.length > 0 ? researcher[0].name : "Desconhecid
          )}</TooltipContent>
        </Tooltip>
        </TooltipProvider>
+       
 
 
               <DropdownMenu>
@@ -562,6 +687,8 @@ const researcherName = researcher.length > 0 ? researcher[0].name : "Desconhecid
  </div>
             </div>
 
+            <TabsContent value="all" className="">
+
             {researcher.slice(0, 1).map((user) => {
                 return(
                   <div className="w-full flex justify-center ">
@@ -587,194 +714,288 @@ const researcherName = researcher.length > 0 ? researcher[0].name : "Desconhecid
                 })}
             <div className=" ">
       
-      <div className="   " >
-      <DrawerHeader className="p-0 ">
-          {researcher.slice(0, 1).map((user) => {
-              return(
-                 <div className="w-fit">
+      {researcher.length == 0 ? (
+        <div>
 
-                   <InformationResearcher
-                  among={user.among}
-                  articles={user.articles}
-                  book={user.book}
-                  book_chapters={user.book_chapters}
-                  id={user.id}
-                  name={user.name}
-                  university={user.university}
-                  lattes_id={user.lattes_id}
-                  area={user.area}
-                  abstract={user.abstract}
-                  lattes_10_id={user.lattes_10_id}
-                  city={user.city}
-                  orcid={user.orcid}
-                  image={user.image}
-                  graduation={user.graduation}
-                  patent={user.patent}
-                  software={user.software}
-                  brand={user.brand}
-                  lattes_update={user.lattes_update}
-                  onResearcherUpdate={handleResearcherUpdate}
-
-                  h_index={user.h_index}
-                  relevance_score={user.relevance_score}
-                  works_count={user.works_count}
-                  cited_by_count={user.cited_by_count}
-                  i10_index={user.i10_index}
-                  scopus={user.scopus}
-                  openalex={user.openalex}
-                
-
-                  openAPI={open}
-                  />
-
-                 </div>
-              )
-          })}
-
-<div className="flex gap-6 xl:flex-row flex-col-reverse">
-<div className="w-full flex-1">
-      <Tabs defaultValue="articles" value={value} className="">
-      {researcher.slice(0, 1).map((user) => (
-<TabsList className="mb-6">
-  <div className="flex overflow-x-auto ">
-  <TabsTrigger value="article" onClick={() => setValue('article')} className="flex gap-2 items-center"> <Quotes size={16} className="" />Artigos</TabsTrigger>
-  <TabsTrigger value="book" onClick={() => setValue('book')} className="flex gap-2 items-center"><File size={16} className="" />Livros e capítulos</TabsTrigger>
-  <TabsTrigger value="producao-tecnica" onClick={() => setValue('producao-tecnica')} className="flex gap-2 items-center"><Stamp size={16} className="" />Produção técnica</TabsTrigger>
-  <TabsTrigger value="relatorio-tecnico" onClick={() => setValue('relatorio-tecnico')} className="flex gap-2 items-center"><Files size={16} className="" />Relatório técnico</TabsTrigger>
-  <TabsTrigger value="orientacoes" onClick={() => setValue('orientacoes')} className="flex gap-2 items-center"><Student size={16} className="" />Orientações</TabsTrigger>
-  <TabsTrigger value="speaker" onClick={() => setValue('speaker')} className="flex gap-2 items-center"><Ticket size={16} className="" />Participação em eventos</TabsTrigger>
-  </div>
-</TabsList>
-))}
-<TabsContent value="article">
-{researcher.slice(0, 1).map((user) => {
-              return(
-                <ArticlesResearcherPopUp name={String(user.id)}/>
-                )
-              })}
-</TabsContent>
-<TabsContent value="book">
-{researcher.slice(0, 1).map((user) => {
-              return(
-                <BooksResearcherPopUp name={String(user.id)}/>
-                )
-              })}
-</TabsContent>
-
-<TabsContent value="producao-tecnica">
-{researcher.slice(0, 1).map((user) => {
-              return(
-                <ProducaoTecnicaResearcherPopUp name={String(user.id)}/>
-                )
-              })}
-</TabsContent>
-
-<TabsContent value="relatorio-tecnico">
-{researcher.slice(0, 1).map((user) => {
-              return(
-                <RelatorioTecnicoResearcherPopUp name={String(user.id)}/>
-                )
-              })}
-</TabsContent>
-
-<TabsContent value="orientacoes">
-{researcher.slice(0, 1).map((user) => {
-              return(
-                <OrientacoesResearcherPopUp name={String(user.id)}/>
-                )
-              })}
-</TabsContent>
-
-<TabsContent value="speaker">
-{researcher.slice(0, 1).map((user) => {
-              return(
-                <SpeakerResearcherPopUp name={String(user.id)}/>
-                )
-              })}
-</TabsContent>
-</Tabs>
-      </div>
-
-      <div className="xl:w-[350px] w-full gap-12 flex flex-col sticky"> 
-
-      {researcher.slice(0, 1).map((user) => {
-                
-                    return(
-                      <InformacoesGeraisResearcher
-                      h_index={user.h_index}
-                      relevance_score={user.relevance_score}
-                      works_count={user.works_count}
-                      cited_by_count={user.cited_by_count}
-                      i10_index={user.i10_index}
-                      scopus={user.scopus}
-                      orcid={user.orcid}
-                      openalex={user.openalex}
-                      subsidy={user.subsidy}
-                      graduate_programs={user.graduate_programs}
-                      departments={user.departments}
-
-                      cargo={user.cargo}
-                      clas={user.clas}
-                      classe={user.classe}
-                      rt={user.rt}
-                      situacao={user.situacao}
-
-                      research_groups={user.research_groups}
-                      
-                      />
-                    )
-                   
-          })}
-
-      {researcher.slice(0, 1).map((user) => {
-                    return(
-                      <TotalViewResearcher
-                      among={user.among}
-                      articles={user.articles}
-                      book={user.book}
-                      book_chapters={user.book_chapters}
-                      patent={user.patent}
-                      software={user.software}
-                      brand={user.brand}
-                      />
-                    )
-          })}
-
-    {researcher.slice(0, 1).map((user) => {
-                    return(
-                      <NuvemPalavras
-                      id={user.id}
-                      />
-                    )
-          })}
-
-
-      {researcher.slice(0, 1).map(() => {
-                    return(
-                      <div>
-          <div className="mb-6 font-medium text-2xl">Nomes de citação</div>
-          <div className="flex flex-wrap gap-1">
-          {variations.map((variation, index) => (
-                  <p className="text-xs " key={index}>{variation} /</p>
-              ))}
+          <div className=" w-full flex-col flex items-center justify-center">
+          <Skeleton className="w-28 h-28 rounded-md mb-4 md:mb-4"></Skeleton>
+          <Skeleton className="w-full max-w-[400px] h-8 rounded-md mb-4 md:mb-8"></Skeleton>
           </div>
-      </div>
+            <Skeleton className="w-full h-[150px] rounded-md"></Skeleton>
+
+            <div className="flex md:gap-8 gap-4 md:flex-row flex-col md:mt-8 mt-4">
+            <Skeleton className="w-full flex flex-1 h-[600px] rounded-md "></Skeleton>
+            <Skeleton className="md:w-[350px] h-[600px] rounded-md"></Skeleton>
+            </div>
+        </div>
+      ):(
+        <div className="   " >
+        <DrawerHeader className="p-0 ">
+            {researcher.slice(0, 1).map((user) => {
+                return(
+                   <div className="w-fit">
+  
+                     <InformationResearcher
+                    among={user.among}
+                    articles={user.articles}
+                    book={user.book}
+                    book_chapters={user.book_chapters}
+                    id={user.id}
+                    name={user.name}
+                    university={user.university}
+                    lattes_id={user.lattes_id}
+                    area={user.area}
+                    abstract={user.abstract}
+                    lattes_10_id={user.lattes_10_id}
+                    city={user.city}
+                    orcid={user.orcid}
+                    image={user.image}
+                    graduation={user.graduation}
+                    patent={user.patent}
+                    software={user.software}
+                    brand={user.brand}
+                    lattes_update={user.lattes_update}
+                  
+  
+                    h_index={user.h_index}
+                    relevance_score={user.relevance_score}
+                    works_count={user.works_count}
+                    cited_by_count={user.cited_by_count}
+                    i10_index={user.i10_index}
+                    scopus={user.scopus}
+                    openalex={user.openalex}
+                  
+  
+                    openAPI={open}
+                    />
+  
+                   </div>
+                )
+            })}
+  
+  <div className="flex gap-6 xl:flex-row flex-col-reverse">
+  <div className="w-full flex-1">
+        <Tabs defaultValue="articles" value={value} className="">
+        {researcher.slice(0, 1).map(() => (
+              <div className=" grid grid-cols-1 mb-6">
+                <ScrollArea className="">
+    <TabsList className="mb-4 flex h-auto">
+  
+      <TabsTrigger
+        value="article"
+        onClick={() => setValue('article')}
+        className="flex gap-2 items-center"
+      >
+        <Quotes size={16} className="" />
+        Artigos
+      </TabsTrigger>
+      <TabsTrigger
+        value="book"
+        onClick={() => setValue('book')}
+        className="flex gap-2 items-center"
+      >
+        <File size={16} className="" />
+        Livros e capítulos
+      </TabsTrigger>
+      <TabsTrigger
+        value="producao-tecnica"
+        onClick={() => setValue('producao-tecnica')}
+        className="flex gap-2 items-center"
+      >
+        <Stamp size={16} className="" />
+        Produção técnica
+      </TabsTrigger>
+      <TabsTrigger
+        value="relatorio-tecnico"
+        onClick={() => setValue('relatorio-tecnico')}
+        className="flex gap-2 items-center"
+      >
+        <Files size={16} className="" />
+        Relatório técnico
+      </TabsTrigger>
+      <TabsTrigger
+        value="orientacoes"
+        onClick={() => setValue('orientacoes')}
+        className="flex gap-2 items-center"
+      >
+        <Student size={16} className="" />
+        Orientações
+      </TabsTrigger>
+      <TabsTrigger
+        value="speaker"
+        onClick={() => setValue('speaker')}
+        className="flex gap-2 items-center"
+      >
+        <Ticket size={16} className="" />
+        Participação em eventos
+      </TabsTrigger>
+      <TabsTrigger
+        value="research-project"
+        onClick={() => setValue('research-project')}
+        className="flex gap-2 items-center"
+      >
+        <Boxes size={16} className="" />
+        Projetos de pesquisa
+      </TabsTrigger>
+   
+  </TabsList>
+  
+  <ScrollBar orientation="horizontal"/>
+  </ScrollArea>
+              </div>
+    ))}
+  <TabsContent value="article">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                  <ArticlesResearcherPopUp name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
+  <TabsContent value="book">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                  <BooksResearcherPopUp name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
+  
+  <TabsContent value="producao-tecnica">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                  <ProducaoTecnicaResearcherPopUp name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
+  
+  <TabsContent value="relatorio-tecnico">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                  <RelatorioTecnicoResearcherPopUp name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
+  
+  <TabsContent value="orientacoes">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                  <OrientacoesResearcherPopUp name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
+  
+  <TabsContent value="speaker">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                  <SpeakerResearcherPopUp name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
+  
+  <TabsContent value="research-project">
+    {researcher.slice(0, 1).map((user) => {
+                  return(
+                   <div></div>
                     )
-          })}
-
-
-      </div>
-</div>
-      </DrawerHeader>
-
-     
-
-
-      <DrawerFooter>
-        
-      </DrawerFooter>
-      </div>
+                  })}
+    </TabsContent>
+  </Tabs>
+        </div>
+  
+        <div className="xl:w-[350px]  w-full grid grid-cols-1"> 
+          <ResponsiveMasonry
+      columnsCountBreakPoints={{
+          350: 1,
+          750: 1,
+          900: 1,
+          1200: 1
+      }}
+  >
+                   <Masonry gutter="24px">
+  
+        {researcher.slice(0, 1).map((user) => {
+                  
+                      return(
+                        <InformacoesGeraisResearcher
+                        h_index={user.h_index}
+                        relevance_score={user.relevance_score}
+                        works_count={user.works_count}
+                        cited_by_count={user.cited_by_count}
+                        i10_index={user.i10_index}
+                        scopus={user.scopus}
+                        orcid={user.orcid}
+                        openalex={user.openalex}
+                        subsidy={user.subsidy}
+                        graduate_programs={user.graduate_programs}
+                        departments={user.departments}
+  
+                        cargo={user.cargo}
+                        clas={user.clas}
+                        classe={user.classe}
+                        rt={user.rt}
+                        situacao={user.situacao}
+  
+                        research_groups={user.research_groups}
+                        
+                        />
+                      )
+                     
+            })}
+  
+        {researcher.slice(0, 1).map((user) => {
+                      return(
+                        <TotalViewResearcher
+                        among={user.among}
+                        articles={user.articles}
+                        book={user.book}
+                        book_chapters={user.book_chapters}
+                        patent={user.patent}
+                        software={user.software}
+                        brand={user.brand}
+                        />
+                      )
+            })}
+  
+      {researcher.slice(0, 1).map((user) => {
+                      return(
+                        <NuvemPalavras
+                        id={user.id}
+                        />
+                      )
+            })}
+  
+  
+        {researcher.slice(0, 1).map(() => {
+                      return(
+                        <div>
+            <div className="mb-6 font-medium text-2xl">Nomes de citação</div>
+            <div className="flex flex-wrap gap-1">
+            {variations.map((variation, index) => (
+                    <p className="text-xs " key={index}>{variation} /</p>
+                ))}
+            </div>
+        </div>
+                      )
+            })}
+  
+  </Masonry>
+  </ResponsiveMasonry>
+        </div>
+  </div>
+        </DrawerHeader>
+  
+       
+  
+  
+        <DrawerFooter>
+          
+        </DrawerFooter>
+        </div>
+      )}
      </div>
+     </TabsContent>
+
+    
+     </Tabs>
         </main>
         </html>
     )

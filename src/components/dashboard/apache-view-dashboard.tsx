@@ -62,24 +62,26 @@ export function ApacheViewDashboard() {
 
     return(
       <div className="grid gap-4">
-      <div className="rounded-md bg-black p-6 h-[300px]">
+      <div className=" bg-neutral-800 p-6 ">
         <pre>
-          <code className="grid gap-1 text-sm text-muted-foreground [&_span]:h-4">
+    
         
 
-        <ScrollArea>
-          
+        <ScrollArea className="h-[300px]">
+       <code className="grid gap-1 text-sm text-muted-foreground [&_span]:h-4">
+       <span className="text-gray-500 text-sm text-muted-foreground">conectee: ~ <span className="text-sky-500">(apachehop)</span>$</span>
         {researcher.map((props) => {
                   return(
-                      <span className="text-gray-500 text-sm">{props.message}</span>
+                      <span className="text-gray-500 text-sm">conectee: ~ <span className="text-sky-500">(apachehop)</span>$ {props.message}</span>
                   )
               })}
+       </code>
          
 
         </ScrollArea>
 
            
-      </code>
+      
       </pre>
       </div>
       </div>

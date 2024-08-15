@@ -1,11 +1,11 @@
-import { ComponentProps, useContext, useEffect, useState } from "react"
-import formatDistanceToNow from "date-fns/formatDistanceToNow"
+import {  useEffect, useState } from "react"
+
 import { ScrollArea } from "../../ui/scroll-area"
-import { Badge } from "../../ui/badge"
+
 import { cn } from "../../../lib"
-import { UserContext } from "../../../context/context"
-import { Check, MapPin, User, X } from "phosphor-react"
-import { Barcode, GraduationCapIcon, MapPinIcon, Plus, Shapes, Star, StretchHorizontal, Users } from "lucide-react"
+
+
+import {  Plus, Shapes, Users } from "lucide-react"
 
 
 interface Patrimonio {
@@ -24,7 +24,7 @@ interface Patrimonio {
     search:string
   }
 
-  import { format, differenceInDays } from 'date-fns';
+
 import { Button } from "../../ui/button"
 import { Skeleton } from "../../ui/skeleton"
 
@@ -40,7 +40,7 @@ export function ItensListGrupoPesquisa(props:Props) {
       };
       const [isLoading, setIsLoading] = useState(false)
 
-    const {urlGeral} = useContext(UserContext)
+
 
     const urlPatrimonioInsert = props.url;
 

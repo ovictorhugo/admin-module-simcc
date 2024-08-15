@@ -38,6 +38,8 @@ import { Button } from "../../ui/button";
 import { useModalSidebar } from "../../hooks/use-modal-sidebar";
 import { FilterArticle } from "./articles-home/filters-articles";
 import { TableReseracherArticleshome } from "./articles-home/table-articles";
+import { Alert } from "../../ui/alert";
+import { CardContent, CardHeader, CardTitle } from "../../ui/card";
 
 type Filter = {
   year: number[]
@@ -56,6 +58,8 @@ export function ArticlesHome() {
     const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')
 
+    const idGraduateProgram = ''
+
     const [filters, setFilters] = useState<Filter[]>([]);
 
     // Função para lidar com a atualização de researcherData
@@ -65,14 +69,14 @@ export function ArticlesHome() {
 
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
     const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
-    let urlTermPublicacoes = ``;
+    let urlTermPublicacoes = "";
 
 if(valoresSelecionadosExport != '') {
   
   if (searchType == 'name') {
     urlTermPublicacoes = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=&type=ARTICLE&qualis=${qualisString}&year=${yearString}`;
 } else if (searchType == 'article') {
-  urlTermPublicacoes = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? ('1'):('0')}&graduate_program_id=`;
+  urlTermPublicacoes = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? ('1'):('0')}&graduate_program_id=${idGraduateProgram == "0" ? (''):(idGraduateProgram)}`;
 } else if (searchType == 'area') {
   urlTermPublicacoes = `${urlGeral}bibliographic_production_article_area?area_specialty=${valoresSelecionadosExport.replace(/;/g, ' ')}&great_area=&year=${yearString}&qualis=${qualisString}`
 } else if (searchType == 'abstract') {
@@ -116,7 +120,24 @@ if(valoresSelecionadosExport != '') {
     return(
         <>
         {isModalOpen && (
-            <div className="mt-4 md:mt-8">
+            <div className="">
+
+<div className="my-8">
+             <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Total de artigos
+                    </CardTitle>
+                    <Quotes className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{publicacoes.length}</div>
+                    <p className="text-xs text-muted-foreground">
+                      encontrados na busca
+                    </p>
+                  </CardContent>
+                  </Alert>
+             </div>
 
                 <FilterArticle
                 onFilterUpdate={handleResearcherUpdate}/>

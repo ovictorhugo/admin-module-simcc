@@ -1,14 +1,13 @@
 import { useMemo, useState } from "react";
 import { Alert } from "../ui/alert";
-import { Label } from "../ui/label";
+
 import { CalendarBlank, CheckSquare } from "phosphor-react";
 import { Slider } from "../ui/slider";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
+
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
 import { Button } from "../../components/ui/button";

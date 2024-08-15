@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../ui/select';
 
@@ -13,23 +13,8 @@ interface Disciplinas {
   schedule: string;
 }
 
-interface AreaChartConfig {
-  [key: string]: {
-    label: string;
-    color: string;
-  };
-}
 
-const areaChartConfig: AreaChartConfig = {
-  available_slots: {
-    label: 'Available Slots',
-    color: '#82ca9d',
-  },
-  occupied_slots: {
-    label: 'Occupied Slots',
-    color: '#8884d8',
-  },
-};
+
 
 export function GraficoDisciplinas({ disciplinas }: { disciplinas: Disciplinas[] }) {
   const [selectedDiscipline, setSelectedDiscipline] = useState<string>('');

@@ -68,7 +68,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
   } from "../../components/ui/tooltip"
-import {  BarChart, Clock, GraduationCap, Info, Mail, Phone, Shapes, SquareUser } from "lucide-react";
+import {  Clock, GraduationCap, Info, Mail, Phone, Shapes, SquareUser } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { Link } from "react-router-dom";
   

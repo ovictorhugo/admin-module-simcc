@@ -1,4 +1,4 @@
-import { ArrowUUpLeft, FileCsv, FileXls, Upload } from "phosphor-react";
+import { ArrowUUpLeft,  FileXls, Upload } from "phosphor-react";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";

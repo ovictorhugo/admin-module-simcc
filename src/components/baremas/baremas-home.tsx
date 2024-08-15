@@ -314,13 +314,14 @@ export function BaremasHome() {
   const [grupos, setGrupos] = useState<Grupo[]>([]);
 
   const [openPopovers, setOpenPopovers] = useState<boolean[][]>(
-    () => grupos.map(group => new Array(group.categorias.length).fill(false))
+    () => grupos.map(group => group.categorias.map(() => false))
   );
-
+  
   // Update openPopovers if grupos state changes, for instance, when groups are fetched from an API
   useEffect(() => {
-    setOpenPopovers(grupos.map(group => new Array(group.categorias.length).fill(false)));
+    setOpenPopovers(grupos.map(group => group.categorias.map(() => false)));
   }, [grupos]);
+  
 
       const [header, setHeader] = useState([
         {
@@ -469,13 +470,15 @@ export function BaremasHome() {
 
 
     //drag
-    const onDragEnd = (result:any) => {
+    const onDragEnd = (result: any) => {
         if (!result.destination) return;
+    
         const newGrupos = Array.from(grupos);
         const [reorderedItem] = newGrupos.splice(result.source.index, 1);
         newGrupos.splice(result.destination.index, 0, reorderedItem);
+    
         setGrupos(newGrupos);
-    };
+      };
 
     //select
 
@@ -890,7 +893,7 @@ console.log(somaTotalPorPesquisador);
 
             </div>
 
-            <TabsContent value="all" className="h-auto flex flex-col gap-4 md:gap-8  mt-2">
+            <TabsContent value="all" className="h-auto flex flex-col gap-4 md:gap-8 ">
             <div>
                
         
@@ -907,11 +910,11 @@ console.log(somaTotalPorPesquisador);
                   </div>
             </TabsContent>
 
-            <TabsContent value="unread" className=" flex flex-col gap-4 md:gap-8  mt-2">
+            <TabsContent value="unread" className=" flex flex-col gap-4 md:gap-8 ">
                     <ProcurarBaremas/>
             </TabsContent>
 
-            <TabsContent value="new" className="h-auto flex flex-col gap-4 md:gap-8  mt-2">
+            <TabsContent value="new" className="h-auto flex flex-col gap-4 md:gap-8 ">
             <HeaderBarema />
             <div className="flex">
             <Tabs defaultValue="1" value={valueTab} className="w-full">
@@ -999,19 +1002,27 @@ console.log(somaTotalPorPesquisador);
                         
                         </Alert>
                         </div>
-                            <DragDropContext onDragEnd={onDragEnd}>
-                                <Droppable droppableId="lista-grupo">
-                                    {(provided:any) => (
-                                        <div {...provided.droppableProps} ref={provided.innerRef} className="flex flex-col gap-3">
-                                            {grupos.map((grupo, grupoIndex) => (
-                                                <Draggable key={grupo.id} draggableId={grupo.id.toString()} index={grupoIndex}>
-                                                    {(provided:any) => (
-                                                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                        <DragDropContext onDragEnd={onDragEnd}>
+                        <Droppable droppableId="droppable-grupos" type="group">
+        {(provided) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className="flex flex-col gap-3 droppable-grupos"
+          >
+            {grupos.map((grupo, grupoIndex) => (
+              <Draggable key={grupo.id} draggableId={grupo.id} index={grupoIndex}>
+                      {(provided) => (
+                  <div
+                  key={grupo.id}
+                  ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
+                    className="w-full flex items-center border p-2 mb-2 rounded shadow"
+                  >
                                                             <div className="w-full flex">
                                                                 <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] whitespace-nowrap"></div>
                                                                 <div className="w-full">
                                                                     <Alert className="rounded-l-none rounded-b-none">
-                                                                        <div className="w-full flex items-center justify-center text-gray-500"><DotsSix size={20} /></div>
+                                                                        <div className="w-full flex items-center justify-center cursor-pointer text-gray-500"><DotsSix size={20} /></div>
                                                                         <div className="flex justify-between  mb-6">
                                                                             <div className="flex flex-col w-auto">
                                                                                 <div className="flex items-center gap-3 ">
@@ -1067,33 +1078,31 @@ console.log(somaTotalPorPesquisador);
                                                                                       
 
                                                                                         <Dialog
-                                                                                    key={index}
-                                                                                    open={openPopovers[index]}
-                                                                                    onOpenChange={(isOpen) => {
-                                                                                        // Create a copy of the current state
-                                                                                        const newOpenPopovers = [...openPopovers];
-                                                                                        
-                                                                                        // Update the specific index with the new state
-                                                                                        newOpenPopovers[index] = isOpen;
-                                                                                        
-                                                                                        // Update the state
-                                                                                        setOpenPopovers(newOpenPopovers);
-                                                                                    }}
-                                                                                    >
-                        <DialogTrigger className="w-full">
-                        <Button
-                              variant="outline"
-                              role="combobox"
-                              
-                              className="w-full justify-between"
+                              open={openPopovers[grupoIndex]?.[index] || false}
+                              onOpenChange={(isOpen) => {
+                                // Create a copy of the current state
+                                const newOpenPopovers = openPopovers.map((groupOpen, gi) =>
+                                  gi === grupoIndex
+                                    ? groupOpen.map((open, ci) => (ci === index ? isOpen : open))
+                                    : groupOpen
+                                );
+                                // Update the state
+                                setOpenPopovers(newOpenPopovers);
+                              }}
                             >
-                              {categoria.criterio.length == 0 ? ('Escolha um critério'):(categoria.criterio)}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="z-[9999]" >
-                                    {index}     {grupo.id}                                           
-                            </DialogContent>
+                              <DialogTrigger className="w-full">
+                                <Button
+                                  variant="outline"
+                                  role="combobox"
+                                  className="w-full justify-between"
+                                >
+                                  {categoria.criterio.length === 0 ? 'Escolha um critério' : categoria.criterio}
+                                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="z-[9999]">
+                                {index} {grupo.id}
+                              </DialogContent>
                             </Dialog>
                                                                                         </div>
                                                                                         </TableCell>
@@ -1145,8 +1154,9 @@ console.log(somaTotalPorPesquisador);
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    )}
-                                                </Draggable>
+                                                  )}
+                    </Draggable>
+                                            
                                             ))}
                                             {provided.placeholder}
                                         </div>

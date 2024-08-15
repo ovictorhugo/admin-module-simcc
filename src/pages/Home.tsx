@@ -1,5 +1,5 @@
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import SearchLayout from "../layout/search-layout";
 import { UserContext } from "../context/context";
 import { GeralProvider } from "../components/provider/geral-provider";
@@ -10,7 +10,7 @@ import { useLocation, useParams } from "react-router-dom";
 
 export function Home() {
     const { onOpen } = useModalHomepage();
-    const {navCollapsedSize, defaultLayout, isCollapsed,setIdGraduateProgram, idGraduateProgram, valoresSelecionadosExport, setValoresSelecionadosExport} = useContext(UserContext)
+    const {navCollapsedSize, defaultLayout, isCollapsed, idGraduateProgram,  setValoresSelecionadosExport} = useContext(UserContext)
 
   
 

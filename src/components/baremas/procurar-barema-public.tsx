@@ -5,9 +5,8 @@ import { Alert } from "../ui/alert";
 import { Funnel, MagnifyingGlass } from "phosphor-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Circle } from "../svg/Circle";
-import { Label } from "../ui/label";
-import { Link, useNavigate } from "react-router-dom";
+
+import {  useNavigate } from "react-router-dom";
 
 interface Firebase {
     id:string
@@ -71,7 +70,7 @@ import { updateDoc, deleteField, getFirestore, doc, getDocs, getDoc, collection,
 
 export function ProcurarBaremas() {
     const { isOpen, type } = useModalHomepage();
-    const isModalOpen = isOpen && type === 'procurar-baremas';
+   
     const { idDocumentBarema, setIdDocumentBarema, user } = useContext(UserContext)
     const [input, setInput] = useState("");
     const [userData, setUserData] = useState<Firebase[] | null>(null);

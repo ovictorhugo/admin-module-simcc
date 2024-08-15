@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { Alert } from "../../../ui/alert"
 import { UserContext } from "../../../../context/context"
-import { Buildings, MapPin, Plus, PuzzlePiece, Star, X } from "phosphor-react"
+import { Buildings, MapPin, Plus, PuzzlePiece, X } from "phosphor-react"
 import { GraduationCap } from "lucide-react"
 import { useModal } from "../../../hooks/use-modal-store"
 import { Button } from "../../../ui/button"
@@ -57,8 +57,8 @@ type Research = {
 
 export function ResearchItem(props: Research) {
     const { onOpen } = useModal();
-    const { urlGeral, valorDigitadoPesquisaDireta, valoresSelecionadosExport, searchType, setPesquisadoresSelecionados, pesquisadoresSelecionados} = useContext(UserContext)
-    const name = props.name
+    const { urlGeral,  setPesquisadoresSelecionados, pesquisadoresSelecionados} = useContext(UserContext)
+   
     return(
         <div onClick={() => onOpen('researcher-modal', {name:props.name})} className="flex group min=h-[170px] w-full cursor-pointer">
            
@@ -100,7 +100,7 @@ export function ResearchItem(props: Research) {
             )}
               </Button>
 
-              {props.subsidy.length != 0 && props.subsidy.slice(0,1).map((item) => (
+              {props.subsidy && props.subsidy.length != 0 && props.subsidy.slice(0,1).map((item) => (
                   <img src={item.modality_code == 'DT'  ? (dt):(pq)} className="w-8 relative -top-4" alt="" />
              ))}
             </div>

@@ -1,6 +1,5 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LogoSimcc } from "../svg/LogoSimcc";
-import { Separator } from "../ui/separator";
+import { Link, useNavigate } from "react-router-dom";
+
 import { useContext} from "react";
 
 import { cn } from "../../lib"
@@ -11,25 +10,16 @@ import * as React from "react"
 import logo_4 from '../../assets/logo_4.png';
 import logo_4_white from '../../assets/logo_4_white.png';
 
-import logo_1 from '../../assets/logo_1.png';
-import logo_1_white from '../../assets/logo_1_white.png';
 
 import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
     NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-    navigationMenuTriggerStyle,
   } from "../../components/ui/navigation-menu"
 
   
-import { ChartLine, Gear, GraduationCap, GridFour, ListDashes, SignIn, Textbox, UserPlus } from "phosphor-react";
-import { DotSquare, GitBranch, Grip, Laptop, LogIn, Moon, Search, Sun } from "lucide-react";
+
+import {  Grip, Laptop, LogIn, Moon, PanelRightOpen, Search, Sun } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { Button } from "../ui/button";
-import { UserConfigHeader } from "./user-config-header";
 
 import {
   DropdownMenu,
@@ -39,23 +29,27 @@ import {
 } from "../../components/ui/dropdown-menu"
 
 import { useTheme } from "next-themes"
-import { LogoWhite } from "../svg/LogoWhite";
-import { useModalHomepage } from "../hooks/use-modal-homepage";
+
 import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
 import { LogoConectee } from "../svg/LogoConectee";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { Input } from "../ui/input";
+import { SymbolEE } from "../svg/SymbolEE";
+import { SymbolVPWhite } from "../svg/SymbolVPWhite";
+import { SymbolVP } from "../svg/SymbolVp";
+import { SymbolEEWhite } from "../svg/SymbolEEWhite";
+import { useModal } from "../hooks/use-modal-store";
 
 export function Header() {
-  const {loggedIn, user, setItensSelecionados} = useContext(UserContext)
+  const {loggedIn,  setItensSelecionados} = useContext(UserContext)
 
   const { theme, setTheme } = useTheme()
-  const { onOpen } = useModalHomepage();
-  const location = useLocation();
-  const [versao, setVersao] = React.useState(true)
+
+
+
   const navigate = useNavigate()
   
-  const posGraduation = location.pathname == '/pos-graduacao'
+
 
   const handleClick = () => {
     navigate('/')
@@ -75,6 +69,7 @@ export function Header() {
     
   }, []);
   
+const {onOpen} = useModal()
 
     return(
       <header className={`h-[50px]  z-[3] flex justify-between border-b border-neutral-200 dark:border-neutral-800 px-4   items-center sticky top-0 `}>
@@ -150,18 +145,51 @@ export function Header() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+    
+{loggedIn && (
+  
+  <TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger asChild>
+    <Button  onClick={() => onOpen('minha-area')}  variant={'ghost'} size={'icon'}><PanelRightOpen size={16}/></Button>
+    </TooltipTrigger>
+    <TooltipContent> Minha área</TooltipContent>
+  </Tooltip>
+  </TooltipProvider>
+)}
 
-    <Link to={'/dashboard'}>admin</Link>
-
-            <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" >
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+      <Button variant="ghost" size="icon" >
                 <Grip className="h-4 w-4" />
                 <span className="sr-only">Menu de ações rápidas</span>
               </Button>
-            </TooltipTrigger>
-            <TooltipContent>Menu de ações rápidas</TooltipContent>
-          </Tooltip>
+
+              
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent align="end" >
+        <div className="grid gap-3 grid-cols-3">
+        <Link to={'https://vitrinepatrimonio.eng.ufmg.br/'} target="_blank">
+        <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
+                      <div className="h-8 mb-4">{(theme ==  'dark' ) ? (<SymbolVPWhite />):(<SymbolVP />)}</div>
+                      <div className="flex  text-xs font-medium max-w-[70px] truncate  text-center"> Vitrine Patrimônio</div>
+                      </DropdownMenuItem></Link>
+
+                      <Link to={'https://conectee.eng.ufmg.br/'} target="_blank">
+        <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
+                      <div className="h-8 mb-4">{(theme ==  'dark' ) ? (<SymbolEEWhite />):(<SymbolEE />)}</div>
+                      <div className="flex  text-xs font-medium max-w-[70px]  truncate text-center"> Conectee</div>
+                      </DropdownMenuItem></Link>
+
+                      <Link to={'/'}>
+        <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
+                      <div className="h-8 mb-4"></div>
+                      <div className="flex  text-xs font-medium max-w-[70px]  truncate text-center"> CEGRADEE</div>
+                      </DropdownMenuItem></Link>
+        </div>
+      </DropdownMenuContent>
+    </DropdownMenu>
 
 
          

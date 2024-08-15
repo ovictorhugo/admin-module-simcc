@@ -43,7 +43,7 @@ export function GrupoPesquisaView() {
   
       const isModalOpen = isOpen && type === "grupo-pesquisa";
 
-      const [tab, setTab] = useState('all')
+      const [tab] = useState('all')
       const [search, setSearch] = useState('')
     
       const [total, setTotal] = useState<PosGraduationsProps | null>(null);

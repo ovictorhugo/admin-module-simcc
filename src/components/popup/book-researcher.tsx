@@ -25,12 +25,11 @@ import { ChartBar,  SquaresFour, Rows, Book, X, ArrowUDownLeft, Books } from "ph
 import { Button } from "../ui/button";
 import { UserContext } from "../../context/context";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
-import { GraficoArticleHome } from "../homepage/categorias/articles-home/grafico-articles-home";
 
 import { BookBlockPopUp } from "./book-block-popup";
 import { FilterYearPopUp } from "./filters-year-popup";
 import { TableReseracherBookPopup } from "./columns/table-books-popup";
-import { TableReseracherArticleshome } from "../homepage/categorias/articles-home/table-articles";
+
 import { GraficoLivros } from "./graficos/grafico-livros";
 
 
@@ -50,12 +49,12 @@ interface ItemsSelecionados {
 export function BooksResearcherPopUp(props:Props) {
   const [itemsSelecionadosCap , setItensSelecionadosCap] = useState<ItemsSelecionados[]>([])
 
-    const {urlGeral, valoresSelecionadosExport, navbar, searchType, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados} = useContext(UserContext)
+    const {urlGeral,  searchType, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados} = useContext(UserContext)
   
    
     const [loading, isLoading] = useState(false)
     const [loading2, isLoading2] = useState(false)
-    const [distinct, setDistinct] = useState(false)
+    const [distinct] = useState(false)
     const [publicacoes, setPublicacoes] = useState<Livros[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')
     const [typeVisu2, setTypeVisu2] = useState('block')
@@ -72,24 +71,20 @@ export function BooksResearcherPopUp(props:Props) {
     function formatTerms(valores: { term: string }[]): string {
       let result = '';
       let tempTerms: string[] = [];
-    
+  
       valores.forEach(item => {
         let term = item.term.trim();
-    
+  
         if (term.endsWith(';')) {
-          // Remove the final ';' and add the term to the temporary array
           tempTerms.push(term.slice(0, -1));
         } else if (term.endsWith('|')) {
-          // Remove the final '|' and add the term to the temporary array
           tempTerms.push(term.slice(0, -1));
-    
-          // Add the temporary array to the result as a group and clear the array
+  
           if (tempTerms.length > 0) {
             result += '(' + tempTerms.join(';') + ')' + '|';
             tempTerms = [];
           }
         } else {
-          // Handle terms that don't end with ';' or '|'
           if (tempTerms.length > 0) {
             result += '(' + tempTerms.join(';') + ')' + '|';
             tempTerms = [];
@@ -97,19 +92,18 @@ export function BooksResearcherPopUp(props:Props) {
           result += term + '|';
         }
       });
-    
-      // Handle any remaining terms in the tempTerms array
+  
       if (tempTerms.length > 0) {
         result += '(' + tempTerms.join(';') + ')';
       } else {
-        // Remove the last '|' if it exists
         if (result.endsWith('|')) {
           result = result.slice(0, -1);
         }
       }
-    
+  
       return result;
     }
+  
     
     
     const resultadoFormatado = formatTerms(itemsSelecionadosPopUp);
@@ -117,7 +111,7 @@ export function BooksResearcherPopUp(props:Props) {
          
 
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
-    const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
+   
     let urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=${props.name}&year=${yearString}&term=`;
 
     if(searchType == "book") {

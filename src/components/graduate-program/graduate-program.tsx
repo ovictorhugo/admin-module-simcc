@@ -2,25 +2,17 @@ import { useContext, useEffect, useState } from "react";
 
 import { UserContext } from "../../context/context";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
-import { Label } from "@radix-ui/react-dropdown-menu";
+
 
 import { ProgramItem } from "./program-item";
 import { VisualizacaoPrograma } from "./visualizacao-programa";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "../ui/carousel"
+
 import { Alert } from "../ui/alert";
 import { MagnifyingGlass } from "phosphor-react";
 import { Input } from "../ui/input";
 import { ArrowRight, Info } from "lucide-react";
-import { Card } from "../ui/card";
-import { ScrollArea } from "../ui/scroll-area";
 
 import bg_graduate from '../../assets/bg_graduate.png'
 

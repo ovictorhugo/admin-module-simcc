@@ -1,10 +1,9 @@
-import { useContext, useState } from "react";
+import {  useState } from "react";
 
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { Button } from "../ui/button";
 import { Plus } from "phosphor-react";
-import { UserContext } from "../../context/context";
-import { useModalSidebar } from "../hooks/use-modal-sidebar";
+
 import { ArticleItem } from "../homepage/categorias/articles-home/article-item";
 
 type Articles = {
@@ -13,10 +12,10 @@ type Articles = {
 }
 
 export function ArticleBlockPopUp(props:Articles) {
-    const {navbar} = useContext(UserContext)
+   
     const [count, setCount] = useState(12)
 
-    const {isOpen} = useModalSidebar()
+ 
 
     return(
        <div>

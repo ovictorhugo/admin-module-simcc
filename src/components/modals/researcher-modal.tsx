@@ -2,13 +2,12 @@ import { useModal } from "../hooks/use-modal-store";
 
   import {
     Drawer,
-    DrawerClose,
+
     DrawerContent,
-    DrawerDescription,
+ 
     DrawerFooter,
     DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
+
   } from "../../components/ui/drawer"
 import { Button } from "../ui/button";
 import { useEffect, useMemo, useState } from "react";
@@ -94,7 +93,7 @@ type Research = {
 
 
   import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, CodesandboxLogo, File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
+import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
 import { NuvemPalavras } from "../popup/nuvem-palavras";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { TotalViewResearcher } from "../popup/total-view-researcher";
@@ -124,7 +123,7 @@ type ResearchOpenAlex = {
 }
 import { toast } from "sonner"
 import { Link } from "react-router-dom";
-import { Alert } from "../ui/alert";
+
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 export function ResearcherModal() {
@@ -132,12 +131,12 @@ export function ResearcherModal() {
     const { onClose, isOpen, type: typeModal, data } = useModal();
     const isModalOpen = isOpen && typeModal === "researcher-modal";
     const [researcher, setResearcher] = useState<Research[]>([]); 
-    const [loading, isLoading] = useState(false)
+    const [, isLoading] = useState(false)
     const {name} = data
-    const { urlGeral, itemsSelecionados, itemsSelecionadosPopUp, setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados } = useContext(UserContext);
+    const { urlGeral, itemsSelecionados,  setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados } = useContext(UserContext);
   
 
-    const [researcherData, setResearcherData] = useState<ResearchOpenAlex[]>([]);
+    const [, setResearcherData] = useState<ResearchOpenAlex[]>([]);
 
     // Função para lidar com a atualização de researcherData
     const handleResearcherUpdate = (newResearcherData: ResearchOpenAlex[]) => {
@@ -355,17 +354,14 @@ function generateNameVariations(name: string): string[] {
    const isOutdated = monthDifference > 3;
    
 
-   // Atualize essa função para chamar a propriedade `onResearcherUpdate`
-   const updateResearcher = (newResearcher: Research[]) => {
-    
-   };
+   
 
 
                 return(
                  <div className="px-16 pt-6 pb-2">
                    <div className="flex  justify-between items-center w-full"> 
        
-       <div className={`border-[1px] border-gray-300 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated ? ('bg-red-500 text-white border-none') : ('')}`}>Atualização do Lattes: {String(props.lattes_update)}</div>
+       <div className={`border dark:border-neutral-800 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated ? ('bg-red-500 text-white border-none') : ('')}`}>Atualização do Lattes: {String(props.lattes_update)}</div>
      
 
        <div className="flex gap-3">
@@ -568,7 +564,7 @@ function generateNameVariations(name: string): string[] {
 <div className="flex gap-6 xl:flex-row flex-col-reverse">
 <div className="w-full flex-1">
         <Tabs defaultValue="articles" value={value} className="">
-        {researcher.slice(0, 1).map((user) => (
+        {researcher.slice(0, 1).map(() => (
             <div className=" grid grid-cols-1 mb-6">
               <ScrollArea className="">
   <TabsList className="mb-4 flex h-auto">

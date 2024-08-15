@@ -40,11 +40,13 @@ type OpenAlex = {
   abstract: string
 
 }
-
+interface ItemsSelecionados {
+  term: string;
+}
 
 export function ArticleItem(props:Articles) {
 
-    const {urlGeral, valoresSelecionadosExport, valorDigitadoPesquisaDireta} = useContext(UserContext)
+    const {urlGeral, valoresSelecionadosExport, valorDigitadoPesquisaDireta, itemsSelecionados} = useContext(UserContext)
 
     let qualisColor = {
         'A1': 'bg-[#006837]',
@@ -72,6 +74,35 @@ export function ArticleItem(props:Articles) {
 
   const { onOpen } = useModal();
 
+  const normalizeText = (text: string): string => {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  };
+
+  const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNode => {
+    if (terms.length === 0) {
+      return text;
+    }
+  
+    const normalizedTerms = terms.map(term => normalizeText(term.term));
+    const regexPattern = normalizedTerms.join('|');
+    const regex = new RegExp(`(${regexPattern})`, 'gi');
+    const normalizedText = normalizeText(text);
+    const parts = normalizedText.split(regex);
+  
+    let originalIndex = 0;
+    const highlightedParts = parts.map((part, index) => {
+      const originalPart = text.substr(originalIndex, part.length);
+      originalIndex += part.length;
+  
+      return regex.test(part)
+        ? <span key={index} className="text-blue-500 font-semibold">{originalPart}</span>
+        : originalPart;
+    });
+  
+    return highlightedParts;
+  };
+
+  const highlightedTitleEvent = highlightText(props.title || '', itemsSelecionados);
     return(
         <div className="flex  h-full w-full" >
             
@@ -86,34 +117,7 @@ export function ArticleItem(props:Articles) {
                         <div>
                            <h3 className="font-semibold mb-4 ">{props.name_periodical}{props.magazine}</h3>
                             <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">
-                              {normalizedTitle
-      .split(/[\s.,;?!]+/)
-      .map((word, index) => {
-        const formattedWord = unorm.nfkd(word).replace(/[^\w\s]/gi, '').toLowerCase();
-        const formattedValoresSelecionadosExport = unorm.nfkd(valoresSelecionadosExport).replace(/[^\w\s]/gi, '').toLowerCase();
-        const formattedValorDigitadoPesquisaDireta = unorm.nfkd(valorDigitadoPesquisaDireta).replace(/[^\w\s]/gi, '').toLowerCase();
-        const alphabet = Array.from({ length: 26 }, (_, index) => String.fromCharCode('a'.charCodeAt(0) + index));
-        const ignoredWords = [...alphabet, 'do', 'da', `on`, `com`, 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '(', 'na', 'a'];
-        let formattedSpan;
-        
-     
-        if (
-         
-          (formattedValoresSelecionadosExport.includes(formattedWord) ||
-          formattedValorDigitadoPesquisaDireta.includes(formattedWord)) &&
-          !ignoredWords.includes(formattedWord)
-        ) {
-          formattedSpan = (
-            <span key={index} className="text-blue-700 font-bold">
-              {word.toUpperCase()}{' '}
-            </span>
-          );
-        } else {
-          formattedSpan = <span key={index}>{word} </span>;
-        }
-
-        return formattedSpan;
-      })}
+                              {highlightedTitleEvent}
                             </p>
                         </div>
                         <div>

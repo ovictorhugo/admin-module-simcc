@@ -6,29 +6,20 @@ import { HeaderResultTypeHome } from "./header-result-type-home";
 import { FadersHorizontal, ListNumbers, Rows, SquaresFour, UserList } from "phosphor-react";
 import { Button } from "../../ui/button";
 import { ResearchersBloco } from "./researchers-home/researchers-bloco";
-import { ResearcherMap } from "./researchers-home/researcher-map";
 import { TableReseracherhome } from "./researchers-home/table-reseracher-home";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../../components/ui/accordion";
 import { Skeleton } from "../../ui/skeleton";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { useModalSidebar } from "../../hooks/use-modal-sidebar";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { Alert } from "../../ui/alert";
-import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
-import { Trash, User } from "lucide-react";
+import { CardContent,  CardHeader, CardTitle } from "../../ui/card";
+import { Hash, Trash, User } from "lucide-react";
 import bg_popup from '../../../assets/bg_popup.png';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../../ui/dialog";
 import { useModal } from "../../hooks/use-modal-store";
 import { ToggleGroup, ToggleGroupItem } from "../../ui/toggle-group"
-import { AreaChart, Area,LineChart, Line, BarChart, Bar, XAxis, PieChart, Pie, YAxis, LabelList,  CartesianGrid,  Legend, ResponsiveContainer } from 'recharts';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent
-} from "../../ui/chart"
+
 import { Label } from "../../ui/label";
 
 
@@ -82,6 +73,11 @@ interface Bolsistas {
   
 interface ItemsSelecionados {
   term: string
+}
+
+interface ResearchOpenAlex {
+  term:string
+  type: string
 }
 
 const useQuery = () => {
@@ -200,13 +196,13 @@ export function FiltersModal({ researcher, setResearcher }) {
 
 export function ResearchersHome() {
   const { isOpen, type } = useModalResult();
-  const { isOpen: isOpenSidebar } = useModalSidebar();
+
   const [loading, setLoading] = useState(false);
   const [researcher, setResearcher] = useState<Research[]>([]);
   const [originalResearcher, setOriginalResearcher] = useState<Research[]>([]);
   const [typeVisu, setTypeVisu] = useState('block');
-  const { itemsSelecionados, setItensSelecionados, urlGeral, searchType, setSearchType, valoresSelecionadosExport, valorDigitadoPesquisaDireta, navbar, setValoresSelecionadosExport } = useContext(UserContext);
-  const { mapModal, setMapModal, pesquisadoresSelecionados, idGraduateProgram } = useContext(UserContext);
+  const { itemsSelecionados,  urlGeral, searchType, setSearchType, setValoresSelecionadosExport } = useContext(UserContext);
+  const { pesquisadoresSelecionados, idGraduateProgram } = useContext(UserContext);
 
   useEffect(() => {
     localStorage.setItem('pesquisadoresSelecionados', JSON.stringify(pesquisadoresSelecionados));
@@ -217,10 +213,7 @@ export function ResearchersHome() {
   const type_search = queryUrl.get('type_search');
   const terms = queryUrl.get('terms');
 
-  useEffect(() => {
-    setSearchType(String(type_search || ''));
-    setValoresSelecionadosExport(terms || '')
-  }, [type_search, terms]);
+
 
 
   const isModalOpen = isOpen && type === "researchers-home";
@@ -228,22 +221,47 @@ export function ResearchersHome() {
   let urlTermPesquisadores = ``;
 
   if (searchType === 'name') {
-    urlTermPesquisadores = `${urlGeral}/researcherName?name=${terms}`;
+    urlTermPesquisadores = `${urlGeral}researcherName?name=${terms}`;
   } else if (searchType === 'article') {
-    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ARTICLE&graduate_program_id=${idGraduateProgram}`;
+    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ARTICLE&graduate_program_id=${idGraduateProgram == '0' ? (''):(idGraduateProgram)}`;
   } else if (searchType === 'book') {
-    urlTermPesquisadores = `${urlGeral}researcherBook?term=${terms}&university=&type=BOOK&graduate_program_id=${idGraduateProgram}`; //
+    urlTermPesquisadores = `${urlGeral}researcherBook?term=${terms}&university=&type=BOOK&graduate_program_id=${idGraduateProgram == '0' ? (''):(idGraduateProgram)}`; //
   } else if (searchType === 'area') {
-    urlTermPesquisadores = `${urlGeral}/researcherArea_specialty?area_specialty=${terms}&university=&graduate_program_id=${idGraduateProgram}`;
+    urlTermPesquisadores = `${urlGeral}researcherArea_specialty?area_specialty=${terms}&university=&graduate_program_id=${idGraduateProgram == '0' ? (''):(idGraduateProgram)}`;
   } else if (searchType === 'speaker') {
-    urlTermPesquisadores = `${urlGeral}researcherParticipationEvent?term=${terms}&university=&graduate_program_id=${idGraduateProgram}`; //
+    urlTermPesquisadores = `${urlGeral}researcherParticipationEvent?term=${terms}&university=&graduate_program_id=${idGraduateProgram == '0' ? (''):(idGraduateProgram)}`; //
   } else if (searchType === 'patent') {
-    urlTermPesquisadores = `${urlGeral}/researcherPatent?term=${terms}&graduate_program_id=${idGraduateProgram}&university=`;
+    urlTermPesquisadores = `${urlGeral}researcherPatent?term=${terms}&graduate_program_id=${idGraduateProgram == '0' ? (''):(idGraduateProgram)}&university=`;
   } else if (searchType === 'abstract') {
-    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ABSTRACT&graduate_program_id=${idGraduateProgram}`;
+    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ABSTRACT&graduate_program_id=${idGraduateProgram == '0' ? (''):(idGraduateProgram)}`;
   }
 
   console.log(urlTermPesquisadores);
+
+  const urlOpenAlex =`https://api.openalex.org/authors?filter=display_name.search:${terms.replace(/[()|;]/g, "")}`;
+  const [researcherOpenAlex , setResearcherOpenAlex] = useState<ResearchOpenAlex[]>([])
+const [isOpenAlex, setIsOpenAlex] = useState(false)
+
+  const fetchDataOpenAlex = async () => {
+ 
+      try {
+        const response = await fetch(urlOpenAlex, {
+          mode: "cors",
+          headers: {
+            // Adicione quaisquer headers necessários aqui
+          },
+        });
+        const data = await response.json();
+        if (data.results && data.results.length > 0) {
+          const firstFiveResults = data.results.slice(0, 1);
+          
+          setResearcherOpenAlex(firstFiveResults);
+        }
+        
+      } catch (err) {
+        console.log(err);
+      }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -263,7 +281,15 @@ export function ResearchersHome() {
         if (data) {
           setResearcher(data);
           setOriginalResearcher(data);
-          setLoading(false);
+          setLoading(false)
+        } 
+        if(originalResearcher.length == 0) {
+          console.log(urlOpenAlex);
+          await fetchDataOpenAlex();
+          if (researcherOpenAlex.length > 0) {
+            setIsOpenAlex(true);
+            console.log(researcherOpenAlex);
+          }
         }
       } catch (err) {
         console.log(err);
@@ -279,43 +305,6 @@ export function ResearchersHome() {
 
   const totalAmong = researcher.reduce((sum, researcher) => sum + researcher.among, 0);
 
-  function formatTerms(valores: { term: string }[]): string {
-    let result = '';
-    let tempTerms: string[] = [];
-
-    valores.forEach(item => {
-      let term = item.term.trim();
-
-      if (term.endsWith(';')) {
-        tempTerms.push(term.slice(0, -1));
-      } else if (term.endsWith('|')) {
-        tempTerms.push(term.slice(0, -1));
-
-        if (tempTerms.length > 0) {
-          result += '(' + tempTerms.join(';') + ')' + '|';
-          tempTerms = [];
-        }
-      } else {
-        if (tempTerms.length > 0) {
-          result += '(' + tempTerms.join(';') + ')' + '|';
-          tempTerms = [];
-        }
-        result += term + '|';
-      }
-    });
-
-    if (tempTerms.length > 0) {
-      result += '(' + tempTerms.join(';') + ')';
-    } else {
-      if (result.endsWith('|')) {
-        result = result.slice(0, -1);
-      }
-    }
-
-    return result;
-  }
-
-  
 
 
   return (
@@ -330,7 +319,7 @@ export function ResearchersHome() {
          <CardTitle className="text-sm font-medium">
            Total de ocorrências
          </CardTitle>
-         <User className="h-4 w-4 text-muted-foreground" />
+         <Hash className="h-4 w-4 text-muted-foreground" />
        </CardHeader>
        <CardContent>
          <div className="text-2xl font-bold">{totalAmong}</div>

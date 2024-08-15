@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 
-export type ModalType = "articles-home" | "institutions-home" | "researchers-home"
+export type ModalType = "articles-home" | "institutions-home" | "researchers-home" | 'patent-home' | 'book-home' | 'speaker-home'
 
 
 interface ModalStore {

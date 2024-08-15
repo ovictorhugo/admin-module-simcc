@@ -1,25 +1,22 @@
-import { ChevronLeft, ChevronRight, Copy, CreditCard, Hash, MoreVertical, PenLineIcon, Trash, Truck } from "lucide-react";
+import {  Copy,  Hash,  PenLineIcon, Plus, Trash } from "lucide-react";
 import { Button } from "../../ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../ui/card";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../../ui/dropdown-menu";
+import {  CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../ui/card";
+
 import { toast } from "sonner"
+import funcionalidadesData from './data.json';
 import { Alert } from "../../ui/alert";
-import { Progress } from "../../ui/progress";
-import { useContext, useEffect, useState } from "react";
+import { useContext,  useState } from "react";
 import { UserContext } from "../../../context/context";
-import axios from 'axios';
-import { useModal } from "../../hooks/use-modal-store";
-import { useNavigate } from "react-router-dom";
-import { ChartBar } from "phosphor-react";
+
+import {  MagnifyingGlass } from "phosphor-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../../ui/dialog";
+import { Input } from "../../ui/input";
 
 interface Disciplinas {
     role:string
     id:string
   }
 
-  interface ProfessorImageProps {
-    name: string;
-  }
 
 
 export function DisplayCargo(props:Disciplinas) {
@@ -31,7 +28,7 @@ export function DisplayCargo(props:Disciplinas) {
 
           const data = [
               {
-                  role:props.role
+                  id:props.id
                 }
             ]
 
@@ -88,6 +85,28 @@ export function DisplayCargo(props:Disciplinas) {
     }
 
   }
+
+  ///
+  const [input, setInput] = useState('')
+
+  const [openPopo2, setOpenPopo2] = useState(false)
+
+    const normalizeString = (str:any) => {
+      return str
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+    };
+
+    
+
+const funcionalidades = funcionalidadesData;
+    
+    const filteredList = funcionalidades.filter((framework) =>
+      normalizeString(framework.name).includes(normalizeString(input))
+    );
+
+  
  
     return(
         <div className=" sticky top-8">
@@ -132,49 +151,64 @@ export function DisplayCargo(props:Disciplinas) {
             <div className="grid gap-3">
               <div className="font-semibold">Funcionalidades</div>
               <ul className="grid gap-3">
-                <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">
-                    Carga horária
-                  </span>
-                  <span>h</span>
-                </li>
-                <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">
-                    Status
-                  </span>
-                  <span></span>
-                </li>
+                
+              <Dialog open={openPopo2}  onOpenChange={setOpenPopo2}>
+                        <DialogTrigger className="w-full">
+                        <Button variant={'ghost'} className="w-full"><Plus size={16}/>Adicionar funcionalidade</Button>
+                        </DialogTrigger>
+                        <DialogContent className="z-[9999]" >
+    <DialogHeader>
+      <DialogTitle>Escolher funcionalidada</DialogTitle>
+      <DialogDescription>
+       Todas as funcionalidades cadastradas no Módulo Administrativo da instituição
+      </DialogDescription>
+    </DialogHeader>
 
-                <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">
-                    Departamento
-                  </span>
-                  <span className="text-right"></span>
-                </li>
+    <div className="border rounded-md px-6 h-12 flex items-center gap-1 border-neutral-200 dark:border-neutral-800">
+                                <MagnifyingGlass size={16} />
+                                <Input
+                                  className="border-0"
+                                  value={input}
+                                  onChange={(e) => setInput(e.target.value)}
+                                  placeholder="Buscar pesquisador"
+                                />
+                              </div>
+
+                              <div className={'max-h-[350px] overflow-y-auto elementBarra'}>
+                              
+                              <div className="flex flex-col gap-1 p-2">
+                                {filteredList.length > 0 ? (
+                                  filteredList.map((props, index) => (
+                                    <Button
+                                      variant={'ghost'}
+                                      key={index}
+                                      className="text-left justify-start"
+                                      onClick={() => {
+                                       
+                                  
+                                        setOpenPopo2(false); // Fechar o popover após a seleção
+                                      }}
+                                    >
+                                      {props.name}
+                                    </Button>
+                                  ))
+                                ) : (
+                            <div className="text-center w-full text-sm">Nenhuma funcionalidade encontrada</div>
+                                )}
+                              </div>
+                            </div>
+  </DialogContent>
+
+                        </Dialog>
               </ul>
             
             </div>
-            <div className="my-6 border-b dark:border-b-neutral-800" />
-            <div className="grid  gap-4">
-              <div className="grid gap-3">
-                <div className="font-semibold">Cursos demandantes</div>
-                <address className="grid gap-0.5 not-italic text-muted-foreground">
-                 
-                
-                </address>
-              </div>
-             
-            </div>
+         
 
             
             
             
-            <div className="grid gap-3">
-            <div className="font-semibold">Docentes</div>
-              <dl className="grid gap-3">
-              
-              </dl>
-            </div>
+           
           </CardContent>
           <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
             <div className="text-xs text-muted-foreground">

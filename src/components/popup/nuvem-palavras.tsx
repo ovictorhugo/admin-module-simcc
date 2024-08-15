@@ -24,11 +24,11 @@ export function NuvemPalavras(props:Grafico) {
     const [words, setWords] = useState<PalavrasChaves[]>([]);
     const {urlGeral} = useContext(UserContext)
     let urlPalavrasChaves = `${urlGeral}lists_word_researcher?researcher_id=${props.id}`
-    const [isLoading, setIsLoading] = useState(false);
+   
  
     useMemo(() => {
       const fetchData = async () => {
-        setIsLoading(true);
+  
         try {
           const response = await fetch(urlPalavrasChaves, {
             mode: 'cors',
@@ -46,8 +46,6 @@ export function NuvemPalavras(props:Grafico) {
           }
         } catch (err) {
           console.log(err);
-        } finally {
-          setIsLoading(false);
         }
       };
       fetchData();

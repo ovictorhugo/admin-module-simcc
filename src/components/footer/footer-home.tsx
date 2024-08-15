@@ -2,7 +2,7 @@
 import img_2 from '../../assets/logo_email_2.png';
 import img_1 from '../../assets/logo_email_4.png';
 import img_4 from '../../assets/logo_email_3.png';
-import { MapPin } from 'lucide-react';
+
 
 export function FooterHome() {
     return(

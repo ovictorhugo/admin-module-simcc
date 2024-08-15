@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import { ArrowRight, ChevronLeft, Info, Rows } from "lucide-react";
+import {  ChevronLeft,  Rows } from "lucide-react";
 import { SelectTypeSearch } from "../search/select-type-search";
 import { Input } from "../ui/input";
-import { MagnifyingGlass } from "phosphor-react";
+import { FileCsv, MagnifyingGlass } from "phosphor-react";
 import { UserContext } from "../../context/context";
 
 interface Post {
@@ -14,18 +14,20 @@ interface Post {
     checked: boolean;
     area_expertise: string;
     area_specialty: string;
+    type:string
 }
 
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
+import { useModalResult } from "../hooks/use-modal-result";
 
 export function Dicionario() {
-    const { onClose, isOpen, type: typeModal } = useModalHomepage();
+    const {  isOpen, type: typeModal } = useModalHomepage();
     const isModalOpen = (isOpen && typeModal === 'dicionario');
 
     const [words, setWords] = useState<Post[]>([]);
     const [pesquisaInput, setPesquisaInput] = useState('');
     const { searchType, urlGeral, setItensSelecionados } = useContext(UserContext);
-
+    const [jsonData, setJsonData] = useState<any[]>([]);
     const pesquisaInputFormatado = pesquisaInput.trim().replace(/\s+/g, ";");
 
     let urlTerms = urlGeral + `/originals_words?initials=&type=ARTICLE`;
@@ -66,6 +68,7 @@ export function Dicionario() {
                 }));
 
                 setWords(newData);
+                setJsonData(newData)
             })
             .catch((err) => {
                 console.log(err.message);
@@ -97,7 +100,36 @@ export function Dicionario() {
       }
   
     console.log(urlTerms)
+    const { onOpen:onOpenResult } = useModalResult();
 
+
+    const convertJsonToCsv = (json: any[]): string => {
+        const items = json;
+        const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+        const header = Object.keys(items[0]);
+        const csv = [
+          '\uFEFF' + header.join(';'), // Add BOM and CSV header
+          ...items.map((item) =>
+            header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+          ) // CSV data
+        ].join('\r\n');
+      
+        return csv;
+      };
+      
+      const handleDownloadJson = async () => {
+        try {
+          const csvData = convertJsonToCsv(jsonData);
+          const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.download = `dicionario.csv`;
+          link.href = url;
+          link.click();
+        } catch (error) {
+          console.error(error);
+        }
+      };
     return (
         <>
             {isModalOpen && (
@@ -121,7 +153,7 @@ export function Dicionario() {
               
                
           
-                <Button size="sm">Button</Button>
+                <Button size="sm" onClick={() => handleDownloadJson()} ><FileCsv size={16}/>Exportar termos</Button>
               </div>
             </div>
 
@@ -167,15 +199,18 @@ export function Dicionario() {
                             </div>
 
                             <div className="flex flex-wrap gap-3">
-                                {groupedWords[letter].map((word, index) => (
+                                {groupedWords[letter]
+                                .filter(word => searchType !== 'area' || word.type === 'AREA_SPECIALTY')
+                                .map((word, index) => (
                                     <div
                                         key={index}
                                         className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`}
                                     onClick={() => {
                                         handlePesquisaChange(word.term)
+                                        onOpenResult('researchers-home')
                                     }}
                                     >
-                                        {word.term} {searchType == 'AREA' && (`${word.area_expertise} - ${word.area_specialty}`)}
+                                        {word.term}
                                     </div>
                                 ))}
                             </div>

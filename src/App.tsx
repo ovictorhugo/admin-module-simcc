@@ -6,7 +6,7 @@ import  { UserContext }  from '../src/context/context'
 import {User as FirebaseAuthUser} from 'firebase/auth'
 import { Dashboard } from './pages/Dashboard';
 import DefaultLayout from './layout/default-layout';
-import { Indicators } from './pages/Indicators';
+
 import { Authentication } from './pages/Authentication';
 
 interface User extends FirebaseAuthUser {
@@ -31,13 +31,13 @@ interface PesquisadoresSelecionados {
   graduation: string,
 }
 
+
+
 import { CookiesProvider} from 'react-cookie'
-import { News } from './pages/News';
-import { Baremas } from './pages/Baremas';
-import { PosGraduation } from './pages/PosGraduation';
-import { Resultados } from './pages/Resultados';
 import LoadingWrapper from './components/loading';
-import { useModal } from './components/hooks/use-modal-store';
+
+
+
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [navbar, setNavbar] = useState(false);
@@ -70,7 +70,7 @@ const [defaultLayout, setDefaultLayout] = useState([0,440,655])
 const [mode, setMode] = useState('user')
 
 useEffect(() => {
- if(searchType.length == 0) {
+ if(searchType == "") {
   setSearchType('article')
   
  }
@@ -143,6 +143,7 @@ useEffect(() => {
     >
     
       <DefaultLayout>
+        <LoadingWrapper>
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/resultados' element={<Home/>}/>
@@ -155,9 +156,7 @@ useEffect(() => {
         <Route path='/departamentos' element={<Home/>}/>
         <Route path='/researcher' element={<Home/>}/>
 
-        <Route path='/taxonomia' element={<Indicators/>}/>
-
-        <Route path='/indicadores-pos-graduacao' element={<Indicators/>}/>
+        
         
         <Route
         path='/signIn'
@@ -169,20 +168,6 @@ useEffect(() => {
          element={loggedIn == false ? <Authentication/> : <Navigate to='/' />}
         />
       
-      <Route
-         path='/barema/:baremaId?'
-         element={loggedIn == false ? <Authentication/> : <Baremas/>}
-        />
-
-        <Route
-         path='/procurar-barema/:baremaId?'
-         element={loggedIn == false ? <Authentication/> : <Baremas/>}
-        />
-
-        <Route
-         path='/meus-baremas'
-         element={loggedIn == false ? <Authentication/> : <Baremas/>}
-        />
 
       
 
@@ -196,12 +181,16 @@ useEffect(() => {
 <Route path='/dashboard/baremas' element={<Dashboard/> }/>
 <Route path='/dashboard/enviar-notificacoes' element={<Dashboard/> }/>
 <Route path='/dashboard/informacoes' element={<Dashboard/> }/>
+<Route path='/dashboard/minha-area' element={<Dashboard/> }/>
+
 
 <Route
           path='/config'
           element={(user.state == 'master')  ? <Dashboard/> : <Navigate to='/' />}
         />
+        
       </Routes>
+      </LoadingWrapper>
       </DefaultLayout>
 
     </UserContext.Provider>

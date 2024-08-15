@@ -1,10 +1,10 @@
-import {  useContext, useEffect, useState } from "react"
+import {   useEffect, useState } from "react"
 
 import { ScrollArea } from "../../ui/scroll-area"
 import { cn } from "../../../lib"
-import { UserContext } from "../../../context/context"
 
-import {Building, GraduationCapIcon, Hash, Mail, MapPinIcon, Phone, Plus,  Users } from "lucide-react"
+
+import {Building,  Hash, Mail,  Phone, Plus} from "lucide-react"
 
 
 interface Departamentos {
@@ -76,10 +76,7 @@ export function ItensListDepartamento(props:Props) {
      
     }, [urlPatrimonioInsert]);
 
-    const qualisColor = {
-      'MESTRADO': 'bg-blue-200',
-      'DOUTORADO': 'bg-blue-800',
-    };
+
     
 
       console.log(total)

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Alert } from "../../../ui/alert";
-import { Label } from "../../../ui/label";
+
 import { CalendarBlank, CheckSquare } from "phosphor-react";
 import { Slider } from "../../../ui/slider";
 
@@ -122,7 +122,7 @@ export function FilterArticle(props:Props) {
     }, [filterYear, itensSelecionados]);
 
     return(
-       <div className="mb-6 flex gap-6">
+       <div className="mb-6 flex gap-6  lg:flex-row flex-col">
         <div className="flex flex-col">
            <div className="flex items-center gap-3 mb-4 ">
            <CheckSquare size={24} className="text-gray-400" />
@@ -137,7 +137,7 @@ export function FilterArticle(props:Props) {
 </Alert>
         </div>
 
-        <div className="w-full flex flex-1 flex-col">
+        <div className="w-full flex flex-1 flex-col min-w-[300px]">
            <div className="flex items-center gap-3 mb-4 ">
            <CalendarBlank size={24} className="text-gray-400" />
            <p className="text-sm font-bold">Selecione o ano</p>

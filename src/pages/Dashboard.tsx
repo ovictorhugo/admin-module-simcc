@@ -38,6 +38,8 @@ export function Dashboard() {
             onOpen('enviar-notificacoes')
         } else if (location.pathname == '/dashboard/informacoes') {
             onOpen('informacoes')
+        } else if (location.pathname == '/dashboard/minha-area') {
+            onOpen('minha-area')
         }
     }, [location]);
   

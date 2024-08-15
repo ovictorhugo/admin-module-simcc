@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
 
 import { Button } from "../ui/button";
-import { Check, ChevronLeft, Copy, GraduationCap, Play, RefreshCcw, User } from "lucide-react";
+import { Check, ChevronDown, ChevronLeft, ChevronUp, Copy, GraduationCap, Play, RefreshCcw, Terminal, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -18,7 +18,11 @@ import { toast } from "sonner"
 import { ApacheViewDashboard } from "./apache-view-dashboard";
 import { Checkbox } from "../ui/checkbox";
 import { CargosFuncoes } from "./components/cargos-funcoes";
+import { GraficoAnaliseUsuarios } from "./graficos/grafico-analise-usuarios";
+import { Label } from "../ui/label";
+import { ChartBar } from "phosphor-react";
 
+import teste from './components/directory.json'
 
 interface TotalPatrimonios {
    count_gp: string,
@@ -37,7 +41,7 @@ export function GeralViewDashboard() {
   
     const isModalOpen = isOpen && type === "general";
 
-    const [value, setValue] = useState('geral')
+
 
     ////
     const {user, urlGeralAdm } = useContext(UserContext);
@@ -204,13 +208,41 @@ const handleSubmitDiretorio = async () => {
 };
 
 
+const [tab, setTab] = useState('all')
+
+const [isOpenConsole, setIsOpenConsole] = useState(false)
+
+
+/// DITEORIO JSON
+const [directoryJson, setDirectoryJson] = useState("");
+
+  // Carregar o valor do JSON ao inicializar o componente
+  useEffect(() => {
+    fetch('public/directory.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setDirectoryJson(data[0].directory);
+      })
+      .catch(error => {
+        console.error('Erro ao carregar JSON:', error);
+      });
+  }, []);
+  
+
+  console.log(directoryJson)
+
     return  (
-       <>
-       {isModalOpen && (
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-             <Tabs defaultValue={'all'} className="h-full" >
+       <div className="w-full relative">
+      
+      <main className="flex flex-1 flex-col gap-4  md:gap-8 ">
+             <Tabs defaultValue={tab} value={tab} className="h-full" >
             <div className="w-full  gap-4">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 p-4 md:p-8 pb-0 md:pb-0">
           
             <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
                 <ChevronLeft className="h-4 w-4" />
@@ -227,21 +259,22 @@ const handleSubmitDiretorio = async () => {
               <div className="hidden items-center gap-2 md:ml-auto md:flex">
               <TabsList >
                 
-              <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
-              <TabsTrigger value="dep" className="text-zinc-600 dark:text-zinc-200">Departamentos</TabsTrigger>
-              <TabsTrigger value="cargos" className="text-zinc-600 dark:text-zinc-200">Cargos e funções</TabsTrigger>
-                <TabsTrigger value="unread" className="text-zinc-600 dark:text-zinc-200">Configurações</TabsTrigger>
+              <TabsTrigger value="all" onClick={() => setTab('all')} className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
+
+              <TabsTrigger value="cargos" onClick={() => setTab('cargos')} className="text-zinc-600 dark:text-zinc-200">Cargos e permissões</TabsTrigger>
+                <TabsTrigger value="unread" onClick={() => setTab('unread')}  className="text-zinc-600 dark:text-zinc-200">Configurações</TabsTrigger>
                
                 </TabsList>
                
           
-                <Button size="sm"><Check size={16}/>Button</Button>
+             
               </div>
             </div>
 
             </div>
 
-            <TabsContent value="all" className="h-auto flex flex-col gap-6 ">
+            <TabsContent value="all" className=" ">
+              <div className="p-4 md:p-8 pt-0 md:pt-0 h-auto flex flex-col gap-4 md:gap-8">
             {total.map((props) => {
                   return(
                     <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
@@ -310,21 +343,21 @@ const handleSubmitDiretorio = async () => {
 
 <div className="grid gap-4 h-full md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
                 <Alert  className="xl:col-span-2 p-0" x-chunk="dashboard-01-chunk-4" >
-                <CardHeader className="flex gap-6 flex-col md:flex-row items-center justify-between">
+                <CardHeader className="flex gap-6 flex-col md:flex-row  justify-between">
               <div className="grid gap-2 ">
               <CardTitle>Acessos na plataforma</CardTitle>
                 <CardDescription>
-                O Apache Hop atualiza diariamente os dados de todos os pesquisadores na plataforma. 
+                Dados do Google Analytics dos últimos 30 dias
                 </CardDescription>
                 </div>
 
                 <div className="flex gap-3">
-                <Button onClick={() => handleSubmit()} className="w-full "><Play size={16}/>Atualizar dados</Button>
+                  <ChartBar size={16}/>
                 </div>
                </CardHeader>
 
                <CardContent>
-                
+                <GraficoAnaliseUsuarios/>
                </CardContent>
 
                </Alert>
@@ -332,7 +365,7 @@ const handleSubmitDiretorio = async () => {
                <Alert  className=" p-0" x-chunk="dashboard-01-chunk-4" >
                 <CardHeader className="flex flex-row items-center">
               <div className="grid gap-2">
-              <CardTitle>Administradores</CardTitle>
+              <CardTitle>Acesso externo</CardTitle>
                 <CardDescription>
                   Recent transactions from your store.
                 </CardDescription>
@@ -346,50 +379,17 @@ const handleSubmitDiretorio = async () => {
               </div>
 
               <div className="w-full my-4 h-[0.5px] border-neutral-200 border-b dark:border-neutral-800"></div>
-             
-              <div>
-                <p className="font-medium text-sm mb-4">Responsável</p>
-
-                <div className="flex gap-3 items-center">
-                <Avatar className="cursor-pointer rounded-md  h-[36px] w-[36px]">
-                <AvatarImage  className={'rounded-md h-[36px] w-[36px]'} src={``} />
-                <AvatarFallback className="flex items-center justify-center"></AvatarFallback>
-            </Avatar>
-
-            <div >
-            <p className="font-medium text-sm">Responsável</p>
-            <p className=" text-sm">Responsável</p>
-            </div>
-                </div>
-              </div>
+           
 
               <div>
                 <p className="font-medium text-sm my-4">Pessoas com acesso</p>
 
-                <div className="flex gap-3 items-center">
-                <Avatar className="cursor-pointer rounded-md  h-[36px] w-[36px]">
-                <AvatarImage  className={'rounded-md h-[36px] w-[36px]'} src={``} />
-                <AvatarFallback className="flex items-center justify-center"></AvatarFallback>
-            </Avatar>
-
-            <div >
-            <p className="font-medium text-sm">Responsável</p>
-            <p className=" text-sm">Responsável</p>
-            </div>
-
-            <Select>
-  <SelectTrigger className="ml-auto w-[130px]">
-    <SelectValue placeholder="" />
-  </SelectTrigger>
-  <SelectContent>
-  <SelectItem value="administrador">Administrador</SelectItem>
-    <SelectItem value="colaborador">Colaborador</SelectItem>
-  </SelectContent>
-</Select>
-                </div>
+                
+                
               </div>
             </CardContent>
                 </Alert>
+               </div>
                </div>
 
             </TabsContent>
@@ -399,6 +399,8 @@ const handleSubmitDiretorio = async () => {
             </TabsContent>
 
             <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8 mt-2">
+           <div className=" p-4 md:p-8 pt-0 md:pt-0 flex flex-col md:gap-8 gap-4">
+           
             <Alert className="p-0">
               <CardHeader>
                 <CardTitle>Diretório de arquivos</CardTitle>
@@ -409,51 +411,84 @@ const handleSubmitDiretorio = async () => {
               </CardHeader>
               <CardContent>
                
-                 <div className="flex gap-3 items-center">
-                 <Input
+                 <div className="flex gap-3 items-end">
+                 <div className="flex flex-col space-y-1.5 w-full flex-1">
+           <Label htmlFor="name">Caminho do diretório</Label>
+           <Input
+           disabled
                     placeholder="Diretório"
-                    value={directory}
-                   onChange={(e) => setDirectory(e.target.value)}
+                    value={directoryJson}
+                   onChange={(e) => setDirectoryJson(e.target.value)}
                   />
+           </div>
+               
 
-                  <Button onClick={() => handleSubmitDiretorio()}><RefreshCcw size={16}/>Alterar diretório</Button>
+                
                  </div>
-                  <div className="flex mt-4 items-center space-x-2">
-                    <Checkbox id="include" defaultChecked />
-                    <label
-                      htmlFor="include"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Permitir que os administradores alterem o diretório.
-                    </label>
-                  </div>
+                 
                
               </CardContent>
               </Alert>
 
-            <Alert  className="xl:col-span-2 p-0" x-chunk="dashboard-01-chunk-4" >
-                <CardHeader className="flex gap-6 flex-col md:flex-row items-center justify-between">
-              <div className="grid gap-2 ">
-              <CardTitle>Atualizar dados da plataforma</CardTitle>
+              <Alert className="p-0">
+              <CardHeader>
+                <CardTitle>Diretório de arquivos</CardTitle>
                 <CardDescription>
-                O Apache Hop atualiza diariamente os dados de todos os pesquisadores na plataforma. 
+                O diretório dentro da plataforma, no qual os documentos e configurações estão
+                localizados.
                 </CardDescription>
-                </div>
+              </CardHeader>
+              <CardContent>
+               
+                 <div className="flex gap-3 items-end">
+                 <div className="flex flex-col space-y-1.5 w-full flex-1">
+           <Label htmlFor="name">Caminho do diretório</Label>
+           <Input
+                    placeholder="Diretório"
+                    value={directory}
+                   onChange={(e) => setDirectory(e.target.value)}
+                  />
+           </div>
+               
 
-                <div className="flex gap-3">
-                <Button onClick={() => handleSubmit()} className="w-full "><Play size={16}/>Atualizar dados</Button>
-                </div>
-               </CardHeader>
+                  <Button onClick={() => handleSubmitDiretorio()}><RefreshCcw size={16}/>Alterar diretório</Button>
+                 </div>
+                 
+               
+              </CardContent>
+              </Alert>
+              </div>
 
-               <CardContent>
-                  <ApacheViewDashboard/>
-               </CardContent>
-
-               </Alert>
             </TabsContent>
+
+           
             </Tabs>
       </main>
-       )}
-       </>
+
+
+{tab == 'unread' && (
+              <div className="absolute bottom-0 flex flex-col w-full ">
+                <div className=" relative">
+                  <div className="h-[50px] w-full border-t dark:border-neutral-800  px-4 bg-neutral-50 dark:bg-neutral-900 flex items-center justify-between ">
+                      <div className="flex items-center gap-3 font-medium text-sm">
+                        <Terminal size={16}/> Terminal Apache Hop
+                      </div>
+
+                      <div className="flex items-center gap-3 font-medium text-sm">
+                      
+                        <Button size={'sm'} onClick={() => handleSubmit()}  className="h-8"><Play size={16}/>Atualizar dados</Button>
+                        <Button size={'icon'} variant={'outline'} onClick={() => setIsOpenConsole(!isOpenConsole)} className="h-8 w-8">{isOpenConsole ? (<ChevronDown size={16}/>):(<ChevronUp size={16}/>)}</Button>
+                      </div>
+                  </div>
+
+                  {isOpenConsole && (
+                    <div>
+<ApacheViewDashboard/>
+                    </div>
+                  )}
+              </div>
+              </div>
+            )}
+       </div>
     )
 }

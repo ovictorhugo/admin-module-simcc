@@ -4,10 +4,10 @@ import { Button } from "../ui/button";
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
+
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+
     DialogFooter
   } from "../ui/dialog";
   import { toast } from "sonner"
@@ -20,7 +20,7 @@ import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { UserContext } from "../../context/context";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { Alert } from "../ui/alert";
+
 
   interface PesquisadorProps {
     name: string
@@ -28,7 +28,7 @@ import { Alert } from "../ui/alert";
   }
 
 export function AddStudentGraduationModal() {
-    const { onOpen, onClose, isOpen, type: typeModal, data:dataModal } = useModal();
+    const { onClose, isOpen, type: typeModal, data:dataModal } = useModal();
     const isModalOpen = isOpen && typeModal === "add-student-graduation";
     const [data, setData] = useState<PesquisadorProps[]>([]);
      //api rest
@@ -169,7 +169,7 @@ export function AddStudentGraduationModal() {
 
     const handleSubmitPesquisadorUnique = async () => {
 
-        const docId = uuidv4();
+       
 
         try {
           const data = [

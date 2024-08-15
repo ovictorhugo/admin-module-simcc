@@ -4,17 +4,11 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+
   DialogFooter
 } from "../ui/dialog";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/select";
+
 
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
@@ -29,6 +23,16 @@ import { ArrowUUpLeft, Plus } from "phosphor-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+
+import {
+  Sheet,
+  SheetContent,
+
+} from "../../components/ui/sheet"
+import { Building2, X } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { ScrollArea } from "../ui/scroll-area";
+
 
 export function AddDepartamento() {
   const { onClose, isOpen, type: typeModal, data } = useModal();
@@ -206,18 +210,40 @@ export function AddDepartamento() {
   console.log(formData)
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={onClose}>
-      <DialogContent className="min-w-[40vw] ">
-        <DialogHeader className="pt-8 px-6">
-          <DialogTitle className="text-2xl text-center font-medium">
-            Cadastrar programa de <strong className="bg-blue-700 text-white hover:bg-blue-800 transition duration-500 font-medium">pós-graduação</strong>
+    <Sheet open={isModalOpen} onOpenChange={onClose}>
+       <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[50vw]`}>
+        <DialogHeader className="h-16 p-4 border-b">
+
+        <div className="flex items-center gap-3">
+        <TooltipProvider>
+       <Tooltip>
+         <TooltipTrigger asChild>
+         <Button className="h-8 w-8" variant={'outline'}  onClick={() => onClose()} size={'icon'}><X size={16}/></Button>
+         </TooltipTrigger>
+         <TooltipContent> Fechar</TooltipContent>
+       </Tooltip>
+       </TooltipProvider>
+
+        <div className="flex items-center w-full justify-between">
+          <DialogTitle className="text-xl font-medium flex items-center gap-3">
+          <Building2 size={24}/> Cadastrar departamento
           </DialogTitle>
-          <DialogDescription className="text-center text-zinc-500">
-            Adicione as informações básicas do programa de pós-graduação como o nome, classificação e modalidade.
-          </DialogDescription>
+
+          <div className="flex items-center gap-3">
+
+          <Button onClick={() => handleSubmit()} size={'sm'} className="text-white dark:text-white h-8">
+            <Plus size={16} className="" />Adicionar
+          </Button>
+             </div>
+        </div>
+
+        </div>
+         
         </DialogHeader>
 
-        <div className="flex gap-3 flex-col">
+        <div>
+        <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-64px)] p-8 ">
+          <div className="flex gap-3 flex-col">
           <div className="flex flex-col gap-3 w-full">
             <div className="flex w-full gap-3 items-end">
               <div className="grid gap-3 w-full">
@@ -325,16 +351,12 @@ export function AddDepartamento() {
           </div>
         </div>
 
-        <DialogFooter className="py-4">
-          <Button variant={'ghost'} onClick={() => onClose()}>
-            <ArrowUUpLeft size={16} className="" />Voltar
-          </Button>
 
-          <Button onClick={() => handleSubmit()} className="text-white dark:text-white">
-            <Plus size={16} className="" />Adicionar
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </ScrollArea>
+        </div>
+
+      
+      </SheetContent>
+    </Sheet>
   );
 }

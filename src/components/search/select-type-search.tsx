@@ -23,7 +23,7 @@ export function SelectTypeSearch() {
                 <SelectValue placeholder="Escolha o tipo de pesquisa" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="article"> <div className="flex gap-4 items-center mr-2"><div className="bg-blue-500 flex rounded-sm h-4 w-4"></div> Artigos</div></SelectItem>
+                <SelectItem  value="article"> <div className="flex gap-4 items-center mr-2"><div className="bg-blue-500 flex rounded-sm h-4 w-4"></div> Artigos</div></SelectItem>
                 <SelectItem value="book"><div className="flex gap-4 items-center mr-2"><div className="bg-pink-500 flex rounded-sm h-4 w-4"></div>Livros e capítulos</div></SelectItem>
                 <SelectItem value="patent"><div className="flex gap-4 items-center mr-2"><div className="bg-cyan-500 flex rounded-sm h-4 w-4"></div>Patentes</div></SelectItem>
                 <SelectItem value="name"><div className="flex gap-4 items-center mr-2"><div className="bg-red-500 flex rounded-sm h-4 w-4"></div> Nome</div></SelectItem>

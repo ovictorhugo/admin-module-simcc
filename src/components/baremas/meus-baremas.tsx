@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 import { HeaderMeusBarema } from "./header-meus-baremas";
 import { UserContext } from "../../context/context";
-import { updateDoc, deleteField, getFirestore, doc, getDocs, getDoc, collection, addDoc, query, deleteDoc,  where,  Query } from 'firebase/firestore';
+import {  getFirestore, doc, getDocs, getDoc, collection, addDoc, query, deleteDoc,  where,  Query } from 'firebase/firestore';
 import { Link, useNavigate } from "react-router-dom";
 import { FileCsv, Plus, Trash, Users } from "phosphor-react";
 import { Alert } from "../ui/alert";

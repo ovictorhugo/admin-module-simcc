@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Alert } from "../../ui/alert";
-import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Legend } from "recharts";
-import { ChartTooltip, ChartTooltipContent, ChartConfig, ChartLegend, ChartLegendContent, ChartContainer } from "../../../components/ui/chart";
+import { BarChart, Bar, XAxis,  LabelList,  Tooltip, ResponsiveContainer,  Legend } from "recharts";
+import { ChartTooltip, ChartTooltipContent, ChartConfig,  ChartLegendContent, ChartContainer } from "../../../components/ui/chart";
 
 type Research = {
   count_article: number;
@@ -77,19 +77,6 @@ const chartConfig = {
     },
   } satisfies ChartConfig;
 
-  
-const qualisColors = {
-  A1: "#FFB74D",
-  A2: "#64B5F6",
-  A3: "#81C784",
-  A4: "#FF8A65",
-  B1: "#E57373",
-  B2: "#BA68C8",
-  B3: "#4DB6AC",
-  B4: "#7986CB",
-  C: "#FFD54F",
-  SQ: "#FF5252",
-};
 
 export function GraficoArtigosPorQualis({ dados }: { dados: Research[] }) {
   const [chartData, setChartData] = useState<any[]>([]);

@@ -1,10 +1,10 @@
-import { Hash, MapPin, Star } from "phosphor-react";
-import { Alert } from "../ui/alert";
+import {  Star } from "phosphor-react";
+
 import { GraduationCapIcon, MapPinIcon, Users } from "lucide-react";
 import { useModal } from "../hooks/use-modal-store";
 import { cn } from "../../lib"
 
-import { format, differenceInDays } from 'date-fns';
+import {  differenceInDays } from 'date-fns';
 import { useLocation, useNavigate } from "react-router-dom";
 
 interface GraduateProgram {
