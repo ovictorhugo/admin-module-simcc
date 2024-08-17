@@ -92,7 +92,7 @@ export function Departamentos() {
       </Button>
       <div className="relative w-full bg-white h-10 flex gap-2 items-center border pl-4 border-neutral-200 dark:border-neutral-800 rounded-md dark:bg-neutral-950">
         <Search size={16} />
-        <Input placeholder="Filtrar pelo nome do grupo..." className="border-none h-8" value={search}  onChange={(e) => setSearch(e.target.value)}/>
+        <Input placeholder="Filtrar pelo nome do departamento..." className="border-none h-8" value={search}  onChange={(e) => setSearch(e.target.value)}/>
       </div>
     </div>
   </div>

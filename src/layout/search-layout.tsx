@@ -39,7 +39,7 @@ export default function SearchLayout({
     // Função que será chamada quando o evento de teclado ocorrer
     const handleKeyDown = (event:any) => {
       // Verifica se Ctrl + Y foi pressionado
-      if (event.ctrlKey && event.key === 'y') {
+      if (event.ctrlKey && event.key === 'q') {
         onOpen('search')
       }
     };

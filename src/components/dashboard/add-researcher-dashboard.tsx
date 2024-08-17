@@ -203,10 +203,10 @@ export function AddResearcherDashboard() {
 
                 
             
-              <div className="hidden items-center gap-2 md:ml-auto md:flex">
+              <div className="hidden items-center h-10 gap-2 md:ml-auto md:flex">
 
           
-                <Button size="sm">Button</Button>
+             
               </div>
             </div>
 

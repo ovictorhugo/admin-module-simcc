@@ -50,6 +50,8 @@ function App() {
 
   const [mapModal, setMapModal] = useState(false)
 
+  const [version, setVersion] = useState(false)
+
   const [searchType, setSearchType] = useState('article');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [idGraduateProgram, setIdGraduateProgram] = useState('0');
@@ -137,7 +139,8 @@ useEffect(() => {
       isCollapsed, setIsCollapsed,
       mode, setMode,
       navCollapsedSize, setNavCollapsedSize,
-      defaultLayout, setDefaultLayout
+      defaultLayout, setDefaultLayout,
+      version, setVersion
 
     }}
     >

@@ -70,6 +70,18 @@ export function CargosFuncoes() {
     const handleSubmitPesquisador = async () => {
         try {
 
+          if(nomePesquisador.length === 0) {
+            toast("Preencha o nome do cargo", {
+              description: "Tente novamente!",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+
+            return
+          }
+
             const data = [
                 {
                     role:nomePesquisador
@@ -220,7 +232,7 @@ export function CargosFuncoes() {
                             <div className="flex cursor-pointer ">
             
                             <div className={`w-2 min-w-[8px]  flex flex-1 h-full bg-[#719CB8] rounded-l-lg border border-r-0 border-neutral-200 dark:border-neutral-800 ` }></div>
-                             <Alert onClick={() => setDataSelecionado(props)}>
+                             <Alert onClick={() => setDataSelecionado(props)} className="rounded-l-none">
                                   <div className="flex items-center gap-3">
                                
                                   <p className="font-medium text-sm ">{props.role}</p>

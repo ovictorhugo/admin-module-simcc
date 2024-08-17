@@ -441,7 +441,7 @@ const year2 = currentYear1 - 4;
             <div className="md:p-8 p-4 py-0 md:py-0 mt-2">
             <h1 className=" max-w-[700px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
         {departamento.map((props) => (
-          <>{props.dep_nom}</>
+          <>{props.dep_sigla} - {props.dep_nom}</>
         ))}
         </h1>
         {departamento.slice(0,1).map((props) => (
@@ -469,12 +469,13 @@ const year2 = currentYear1 - 4;
                   <div className="w-fit">Informações</div>
               
                 </CardTitle>
-<div className="flex gap-3 items-center ">
-<Button variant={'ghost'} className="hover:bg-neutral-200 dark:hover:bg-neutral-700"><Mail size={16}/> {props.dep_email}</Button>
+                <div className="flex gap-4 items-center justify-end flex-wrap ">
+<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Mail size={16}/> {props.dep_email}</div>
 
-<Link to={props.dep_site} target="_blank"><Button variant={'ghost'} className="hover:bg-neutral-200 dark:hover:bg-neutral-700"><Globe size={16}/> {props.dep_site}</Button></Link>
 
-<Button variant={'ghost'} className="hover:bg-neutral-200 dark:hover:bg-neutral-700"><Phone size={16}/> {props.dep_tel}</Button>
+<Link to={props.dep_site} target="_blank"><div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Globe size={16}/> {props.dep_site}</div></Link>
+<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Phone size={16}/> {props.dep_tel}</div>
+
 </div>
               </div>
               <div className="ml-auto flex items-center gap-1">

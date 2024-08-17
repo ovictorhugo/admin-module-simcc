@@ -14,6 +14,7 @@ import { Alert } from "../../ui/alert";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { GraficosEventos } from "../../popup/graficos/grafico-eventos";
 import { BlockItemGeral } from "./book-home/block-item-geral";
+import { HeaderResult } from "../header-results";
 
 type Patente = {
     event_name: string
@@ -81,7 +82,7 @@ export function SpeakerHome() {
 
     return(
         <div className="">
-
+<HeaderResult/>
 <div className="my-8">
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

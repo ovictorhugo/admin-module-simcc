@@ -1,4 +1,4 @@
-import {  AreaChart,  ChevronsUpDown, PencilLine, Plus, SquareArrowOutUpRight,User } from "lucide-react";
+import {  AreaChart,  ChevronsUpDown, Globe, Hash, Mail, PencilLine, Phone, Plus, SquareArrowOutUpRight,User } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
@@ -386,8 +386,60 @@ const handleSubmit = async () => {
         </div>
 
         <TabsContent value="all" className="mt-0">
+          <div className="md:p-8 p-4 ">
+          <h1 className=" max-w-[700px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
+          {props.dep_sigla} - {props.dep_nom}
+        </h1>
+
+        <div className="flex flex-wrap gap-4 mb-4 md:mb-8 ">
+  <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>CÓDIGO: {props.org_cod}</div>
+  <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>{props.dep_sigla}</div>
+  </div>
+
+  <div className=" py-0 md:py-0">
+        <div className="mb-4 md:mb-8">
+            <div
+                    className={`h-3 w-full rounded-t-md dark:border-neutral-800 border border-neutral-200 border-b-0 bg-[#719CB8]  `}
+                  ></div>
+  
+              <Alert
+                        className="p-0 rounded-t-none"  x-chunk="dashboard-05-chunk-4"
+                      >
+  
+  <CardHeader className="flex flex-row items-start bg-neutral-100 dark:bg-neutral-800">
+              <div className="flex items-center justify-between w-full">
+                <CardTitle className="group flex items-center w-fit gap-2 text-lg">
+                  <div className="w-fit">Informações</div>
+              
+                </CardTitle>
+<div className="flex gap-4 items-center justify-end flex-wrap ">
+<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Mail size={16}/> {props.dep_email}</div>
+
+
+<Link to={props.dep_site} target="_blank"><div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Globe size={16}/> {props.dep_site}</div></Link>
+<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Phone size={16}/> {props.dep_tel}</div>
+
+</div>
+              </div>
+              <div className="ml-auto flex items-center gap-1">
+               
+               
+              </div>
+              
+            </CardHeader>
+
+            <CardContent className="p-6 text-sm">
+              {props.dep_des}
+            </CardContent>
+          </Alert>
+            </div>
+
+        </div>
+
+        </div>
+
         
-              {props.dep_nom}
+              
             
         </TabsContent>
 

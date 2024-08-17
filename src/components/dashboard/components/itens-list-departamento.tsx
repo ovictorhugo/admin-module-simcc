@@ -130,10 +130,7 @@ export function ItensListDepartamento(props:Props) {
           
           return(
 <div className="flex" onClick={() => updateResearcher(item)}>
-<div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 bg-center   bg-no-repeat backdrop-blur-xl  border min-h-[120px]  border-neutral-200 border-r-0   relative `} style={{
-              backgroundImage: `url(data:image/jpeg;base64,${item.img_data})`,
-           
-            }}></div>
+<div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 bg-center  bg-[#719CB8]  bg-no-repeat backdrop-blur-xl  border min-h-[120px]  border-neutral-200 border-r-0 bg-  relative `} ></div>
   
             <button
        

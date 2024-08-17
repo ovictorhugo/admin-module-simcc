@@ -7,7 +7,7 @@ import {
 
   import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
   
-  
+  import { toast } from "sonner";
 import { useModal } from "../hooks/use-modal-store";
 import { SelectTypeSearch } from "../search/select-type-search";
 import { useContext, useEffect, useMemo, useState } from "react";
@@ -172,10 +172,13 @@ const terms = queryUrl.get('terms');
       setSearchType(newSearchType);
   };
 
+  const [isOpenAlex, setIsOpenAlex] = useState(false)
+
   const handlePesquisaOpenAlex = (value: string) => {
     setInput('');
     setShowInput(false)
     setBigrama([])
+    setIsOpenAlex(true)
 
     setItensSelecionadosPopUp([{term:value}]);
 
@@ -240,7 +243,23 @@ console.log(termosformatados)
 
     const posGrad = location.pathname == '/pos-graduacao'
 
+ 
+
   const handlePesquisaFinal = () => {
+
+
+
+    if (itemsSelecionadosPopUp.length == 0 && input.length == 0 ) {
+      toast("Tente novamente", {
+        description: "Selecione ou digite um termo para pesquisa",
+        action: {
+          label: "Fechar",
+          onClick: () => console.log("Fechar"),
+        },
+      });
+      return
+    }
+
     if(itemsSelecionadosPopUp.length > 0 && posGrad) {
       
       TypeSearch = searchType
@@ -287,21 +306,45 @@ console.log(termosformatados)
     onClose()
     
     } else if (itemsSelecionadosPopUp.length == 0 && input.length != 0) {
-      setItensSelecionadosPopUp([{term:input}])
+      setItensSelecionadosPopUp([{term:`${input}`}])
+      
       TypeSearch = searchType
       Terms = termosformatados
-      setInput('')
+     
+      
+      
+      
 
-      queryUrl.set('type_search', searchType);
+        if(posGrad) {
+          queryUrl.set('type_search', searchType);
       if(searchType == 'name') {
         queryUrl.set('terms', formatTerms(itemsSelecionadosPopUp));
       } else {
-        queryUrl.set('terms', formatTerms(itemsSelecionadosPopUp));
+        queryUrl.set('terms', `(${input.split(' ').join(';')})`);
+        setInput('')
+
       }
-        navigate({
-          pathname: '/resultados',
-          search: queryUrl.toString(),
-        });
+
+          navigate({
+            pathname: '/pos-graduacao',
+            search: queryUrl.toString(),
+          });
+        } else {
+
+          queryUrl.set('type_search', searchType);
+          
+      if(searchType == 'name') {
+        queryUrl.set('terms', formatTerms(itemsSelecionadosPopUp));
+      } else {
+        queryUrl.set('terms', `(${input.split(' ').join(';')})`);
+        setInput('')
+
+      }
+          navigate({
+            pathname: '/resultados',
+            search: queryUrl.toString(),
+          });
+        }
     
         onOpenResult('researchers-home')
     onClose()
@@ -391,6 +434,12 @@ console.log('fawefwef', urlOpenAlex)
       setInput(input + ' ' + itemsBigrama[0].word); // Selecionar a primeira sugestão
     }
   };
+
+  const handleEnterPress = (event:any) => {
+    if (event.key === "Enter") {
+      handlePesquisaFinal()
+    }
+  };
      //////////q
       console.log(itemsSelecionadosPopUp)
 
@@ -432,7 +481,7 @@ const handleConnectorChange = (index: number, connector: string) => {
         <DialogContent   className="p-0 border-none min-w-[60vw] bg-transparent dark:bg-transparent">
         <DialogClose className="hidden h-0 absolute z-[-9999]" />
       
-        <Alert  className="h-14 bg-white p-2 flex items-center gap-3 justify-between">
+        <Alert onKeyDown={handleEnterPress}  className="h-14 bg-white p-2 flex items-center gap-3 justify-between">
         <div className="flex items-center gap-2 w-full flex-1">
         <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
 

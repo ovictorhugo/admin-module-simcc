@@ -14,6 +14,7 @@ import { CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { GraficoLivros } from "../../popup/graficos/grafico-livros";
 import { TableReseracherBookPopup } from "../../popup/columns/table-books-popup";
 import { BlockItemGeral } from "./book-home/block-item-geral";
+import { HeaderResult } from "../header-results";
 
 type Patente = {
     id: string,
@@ -118,6 +119,7 @@ export function BookHome() {
 
     return(
         <div className=" ">
+          <HeaderResult/>
              <div className="my-8 grid gap-8 md:grid-cols-2">
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

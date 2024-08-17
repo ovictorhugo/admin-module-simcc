@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { XAxis, Tooltip, ResponsiveContainer, LabelList, BarChart , Bar } from "recharts";
+import { XAxis, Tooltip, ResponsiveContainer, LabelList, BarChart, Bar } from "recharts";
 import { ChartContainer, ChartConfig, ChartTooltip, ChartTooltipContent } from "../../../components/ui/chart";
-import { format, parse } from "date-fns"; // Importação para formatação de data
-
+import {  parse, format as formatDate } from "date-fns"; // Importação para formatação de data
 
 interface AnalyticsData {
   date: string;
@@ -20,7 +19,6 @@ const chartConfig: ChartConfig = {
 };
 
 const REFRESH_TOKEN = import.meta.env.VITE_REFRESH_TOKEN
-const CLIENT_ID = import.meta.env.VITE_CLIENT_ID
 
 const refreshAccessToken = async () => {
     try {
@@ -35,81 +33,81 @@ const refreshAccessToken = async () => {
       localStorage.setItem('access_token', access_token);
       return access_token;
     } catch (error) {
-     
-     
+      console.error('Erro ao renovar o token:', error);
     }
   };
   
-
-
 export function GraficoAnaliseUsuarios() {
   const [data, setData] = useState<AnalyticsData[]>([]);
 
-
-    useEffect(() => {
-        const fetchAnalyticsData = async () => {
-          try {
-            let accessToken = localStorage.getItem('access_token');
+  useEffect(() => {
+    const fetchAnalyticsData = async () => {
+      try {
+        let accessToken = localStorage.getItem('access_token');
     
-            if (!accessToken) {
-              accessToken = await refreshAccessToken();
-            }
+        if (!accessToken) {
+          accessToken = await refreshAccessToken();
+        }
     
-            const response = await axios.post(
-              `https://analyticsdata.googleapis.com/v1beta/properties/453631025:runReport`,
-              {
-                dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
-                dimensions: [{ name: 'date' }],
-                metrics: [{ name: 'activeUsers' }],
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${accessToken}`,
-                  'Content-Type': 'application/json',
-                },
-              }
-            );
-    
-            const reports = response.data.rows || [];
-            const formattedData = reports.map((row: any) => ({
-              date: format(parse(row.dimensionValues?.[0].value, "yyyyMMdd", new Date()), "yyyy-MM-dd"),
-              users: Number(row.metricValues?.[0].value),
-            }));
-    
-            setData(formattedData);
-          } catch (error) {
-            console.error('Erro ao buscar dados do Google Analytics:', error);
-            if (error.response?.status === 401) {
-              // Token expirado ou inválido, tenta renovar
-              try {
-                const newAccessToken = await refreshAccessToken();
-                localStorage.setItem('access_token', newAccessToken);
-                fetchAnalyticsData(); // Tenta buscar os dados novamente
-              } catch (tokenError) {
-                console.error('Erro ao renovar o token:', tokenError);
-              }
-            }
+        const response = await axios.post(
+          `https://analyticsdata.googleapis.com/v1beta/properties/453631025:runReport`,
+          {
+            dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+            dimensions: [{ name: 'date' }],
+            metrics: [{ name: 'activeUsers' }],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+            },
           }
-        };
+        );
     
-        fetchAnalyticsData();
-      }, []);
-    
+        const reports = response.data.rows || [];
+        const formattedData = reports.map((row: any) => ({
+          date: formatDate(parse(row.dimensionValues?.[0].value, "yyyyMMdd", new Date()), "dd/MM/yyyy"),
+          users: Number(row.metricValues?.[0].value),
+        }));
 
-  console.log(data)
+        // Ordena os dados pela data
+        const sortedData = formattedData.sort((a, b) => {
+          return new Date(a.date.split('/').reverse().join('-')).getTime() - new Date(b.date.split('/').reverse().join('-')).getTime();
+        });
+    
+        setData(sortedData);
+      } catch (error) {
+        console.error('Erro ao buscar dados do Google Analytics:', error);
+        if (error.response?.status === 401) {
+          // Token expirado ou inválido, tenta renovar
+          try {
+            const newAccessToken = await refreshAccessToken();
+            localStorage.setItem('access_token', newAccessToken);
+            fetchAnalyticsData(); // Tenta buscar os dados novamente
+          } catch (tokenError) {
+            console.error('Erro ao renovar o token:', tokenError);
+          }
+        }
+      }
+    };
+  
+    fetchAnalyticsData();
+  }, []);
+
+  console.log(data);
 
   return (
     <ChartContainer config={chartConfig} className="h-[300px] w-full">
-    <ResponsiveContainer>
-      <BarChart data={data} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
-        <XAxis dataKey="date" tickLine={false}  tickMargin={10} axisLine={false} />
-        <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-        <Tooltip />
-        <Bar dataKey="users" fill="#719CB8" radius={4}>
+      <ResponsiveContainer>
+        <BarChart data={data} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
+          <XAxis dataKey="date" tickLine={false} tickMargin={10} axisLine={false} />
+          <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+          <Tooltip />
+          <Bar dataKey="users" fill="#719CB8" radius={4}>
             <LabelList dataKey="users" position="top" offset={12} className="fill-foreground" fontSize={12} />
           </Bar>
-      </BarChart>
-    </ResponsiveContainer>
-  </ChartContainer>
+        </BarChart>
+      </ResponsiveContainer>
+    </ChartContainer>
   );
 }

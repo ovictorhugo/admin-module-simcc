@@ -39,9 +39,11 @@ import { SymbolVPWhite } from "../svg/SymbolVPWhite";
 import { SymbolVP } from "../svg/SymbolVp";
 import { SymbolEEWhite } from "../svg/SymbolEEWhite";
 import { useModal } from "../hooks/use-modal-store";
+import { LogoIapos } from "../svg/LogoIapos";
+import { LogoIaposWhite } from "../svg/LogoIaposWhite";
 
 export function Header() {
-  const {loggedIn,  setItensSelecionados} = useContext(UserContext)
+  const {loggedIn,  setItensSelecionados, version} = useContext(UserContext)
 
   const { theme, setTheme } = useTheme()
 
@@ -75,7 +77,11 @@ const {onOpen} = useModal()
       <header className={`h-[50px]  z-[3] flex justify-between border-b border-neutral-200 dark:border-neutral-800 px-4   items-center sticky top-0 `}>
       <div className="  flex items-center h-12 gap-4">
       <div className="flex gap-3 items-center h-full justify-center ">
-            <Link to={"/"} className="h-[18px]  " onClick={() => handleClick()} >{(theme ==  'dark' ) ? (<LogoConecteeWhite />):(<LogoConectee />)}</Link>
+          {version ? (
+              <Link to={"/"} className="h-[18px]  " onClick={() => handleClick()} >{(theme ==  'dark' ) ? (<LogoConecteeWhite />):(<LogoConectee />)}</Link>
+          ):(
+            <Link to={"/"} className="h-[18px]  " onClick={() => handleClick()} >{(theme ==  'dark' ) ? (<LogoIaposWhite />):(<LogoIapos />)}</Link>
+          )}
 
             <div className="h-4 w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>
 

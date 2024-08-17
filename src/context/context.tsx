@@ -81,6 +81,10 @@ interface UserContextType {
 
   isCollapsed:boolean, 
   setIsCollapsed:React.Dispatch<React.SetStateAction<boolean>>;
+
+  version:boolean, 
+  setVersion:React.Dispatch<React.SetStateAction<boolean>>;
+
       mode:string, 
       setMode:React.Dispatch<React.SetStateAction<string>>;
 
@@ -153,6 +157,10 @@ searchType:"",
 
   isCollapsed:false, 
   setIsCollapsed:() => {},
+
+  version:false, 
+  setVersion:() => {},
+  
 
   defaultLayout: [],
   setDefaultLayout:() => {},

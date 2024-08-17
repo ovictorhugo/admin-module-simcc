@@ -364,20 +364,18 @@ useEffect(() => {
       });
     }
   }  else {
-      if (terms) {
-        const parsedTerms = parseTerms(String(terms));
-        setItensSelecionados(parsedTerms);
-      } else {
-      // Se não houver itens selecionados, defina "terms" como vazio na URL
      
-    }
     
   }
 }, [itemsSelecionados]);
 
 
-
-
+useEffect(() => {
+  if (terms) {
+    const parsedTerms = parseTerms(String(terms));
+    setItensSelecionados(parsedTerms);
+  } 
+}, []);
 
     return  (
         <div className="bottom-0 mt-4 mb-2  w-full flex flex-col max-sm:flex  max-sm:flex-row">

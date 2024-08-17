@@ -305,8 +305,9 @@ setItensSelecionadosPopUp(itemsSelecionados)
         //csv
         const [jsonData, setJsonData] = useState<any[]>([]);
 
-        let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${(researcher.map((props) => (props.id)))}&type=ARTICLE&qualis=&qualis=${valoresSelecionadosExport}&year=1900`;
 
+        let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${terms}&researcher_id=${(researcher.slice(0,1).map((props) => (props.id)))}&type=ARTICLE&qualis=&year=1900`;
+console.log(urlPublicacoesPorPesquisador)
         useEffect(() => {
           const fetchData = async () => {
        

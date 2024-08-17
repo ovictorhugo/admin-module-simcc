@@ -21,6 +21,7 @@ import { useModal } from "../../hooks/use-modal-store";
 import { ToggleGroup, ToggleGroupItem } from "../../ui/toggle-group"
 
 import { Label } from "../../ui/label";
+import { HeaderResult } from "../header-results";
 
 
 type Research = {
@@ -76,8 +77,25 @@ interface ItemsSelecionados {
 }
 
 interface ResearchOpenAlex {
-  term:string
-  type: string
+  display_name:string
+  id: string
+  orcid:string
+  works_count:string
+  works_api_url:string
+  relevance_score:string
+  cited_by_count:string
+  summary_stats:SummaryStats
+  ids:Ids
+}
+
+interface SummaryStats {
+
+  h_index:string
+  i10_index:string
+}
+
+interface Ids {
+  scopus:string
 }
 
 const useQuery = () => {
@@ -212,7 +230,9 @@ export function ResearchersHome() {
   const navigate = useNavigate();
   const type_search = queryUrl.get('type_search');
   const terms = queryUrl.get('terms');
+  const openAlexState = queryUrl.get('open_alex');
 
+  let FinalOpenAlex = openAlexState || ''
 
 
 
@@ -283,7 +303,8 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
           setOriginalResearcher(data);
           setLoading(false)
         } 
-        if(originalResearcher.length == 0) {
+        if(originalResearcher.length == 0 && FinalOpenAlex == 'true') {
+          console.log('oi')
           console.log(urlOpenAlex);
           await fetchDataOpenAlex();
           if (researcherOpenAlex.length > 0) {
@@ -312,68 +333,73 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
       {isModalOpen && (
         <div className="w-full flex gap-6 mb-8 justify-center">
           <div className="flex-1 flex flex-col">
-          <div className="grid gap-4 mt-8 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-    {(searchType != 'abstract' && searchType != 'name' && searchType != 'area') && (
-       <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3"  style={{ backgroundImage: `url(${bg_popup})` }}>
-       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-         <CardTitle className="text-sm font-medium">
-           Total de ocorrências
-         </CardTitle>
-         <Hash className="h-4 w-4 text-muted-foreground" />
-       </CardHeader>
-       <CardContent>
-         <div className="text-2xl font-bold">{totalAmong}</div>
-        <div className="flex items-center gap-3">
-        <p className="text-xs text-muted-foreground">
-           pela pesquisa
-         </p>
-
-         <div className="flex gap-2">
-         {itemsSelecionados.map((valor, index) => {
-          return(
-              <>
-              <div key={index} className={`flex gap-2 items-center w-fit p-2 px-3 capitalize rounded-md text-xs ${searchType == 'article' && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract' && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker' && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book' && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent' && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name' && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area' && ('bg-green-500 dark:bg-green-500')} ${searchType == '' && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} >
-              {valor.term.replace(/[|;]/g, '')}
-                  
-                  {/* Adicionando a escolha entre "e" ou "ou" */}
-                  
-              </div>
-
-              {index < itemsSelecionados.length - 1 && (
-  <div className="rounded-full flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100  dark:bg-neutral-800 transition-all text-xs outline-none" onClick={() => {
-    const connector = itemsSelecionados[index].term.endsWith('|') ? ';' : '|'; // Alterna entre "|" e ";" conforme necessário
-   
-  }} >
-    {itemsSelecionados[index].term.endsWith(';') ? "e" : "ou"}
-  </div>
-)}
-
-              </>
-          );
-      })}
+           <div className="">
+           <HeaderResult/>
+           </div>
+         {(!isOpenAlex && FinalOpenAlex != 'true' ) && (
+           <div className="grid gap-4 md:mt-8 mt-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+           {(searchType != 'abstract' && searchType != 'name' && searchType != 'area') && (
+              <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3"  style={{ backgroundImage: `url(${bg_popup})` }}>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total de ocorrências
+                </CardTitle>
+                <Hash className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{totalAmong}</div>
+               <div className="flex items-center gap-3">
+               <p className="text-xs text-muted-foreground">
+                  pela pesquisa
+                </p>
+       
+                <div className="flex gap-2">
+                {itemsSelecionados.map((valor, index) => {
+                 return(
+                     <>
+                     <div key={index} className={`flex gap-2 items-center w-fit p-2 px-3 capitalize rounded-md text-xs ${searchType == 'article' && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract' && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker' && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book' && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent' && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name' && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area' && ('bg-green-500 dark:bg-green-500')} ${searchType == '' && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} >
+                     {valor.term.replace(/[|;]/g, '')}
+                         
+                         {/* Adicionando a escolha entre "e" ou "ou" */}
+                         
+                     </div>
+       
+                     {index < itemsSelecionados.length - 1 && (
+         <div className="rounded-full flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100  dark:bg-neutral-800 transition-all text-xs outline-none" onClick={() => {
+           const connector = itemsSelecionados[index].term.endsWith('|') ? ';' : '|'; // Alterna entre "|" e ";" conforme necessário
+          
+         }} >
+           {itemsSelecionados[index].term.endsWith(';') ? "e" : "ou"}
          </div>
-        </div>
-       </CardContent>
-       </Alert>
-    )}
-
-                  <Alert className={`p-0 bg-cover bg-no-repeat bg-center ${(searchType == 'abstract' || searchType == 'name' || searchType == 'area') && ('col-span-4')}`}  >
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total de pesquisadores
-                    </CardTitle>
-                    <User className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{researcher.length}</div>
-                    <p className="text-xs text-muted-foreground">
-                      encontrados na busca
-                    </p>
-                  </CardContent>
-                  </Alert>
-
-              
-     </div>
+       )}
+       
+                     </>
+                 );
+             })}
+                </div>
+               </div>
+              </CardContent>
+              </Alert>
+           )}
+       
+                         <Alert className={`p-0 bg-cover bg-no-repeat bg-center ${(searchType == 'abstract' || searchType == 'name' || searchType == 'area') && ('col-span-4')}`}  >
+                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                           <CardTitle className="text-sm font-medium">
+                             Total de pesquisadores
+                           </CardTitle>
+                           <User className="h-4 w-4 text-muted-foreground" />
+                         </CardHeader>
+                         <CardContent>
+                           <div className="text-2xl font-bold">{researcher.length}</div>
+                           <p className="text-xs text-muted-foreground">
+                             encontrados na busca
+                           </p>
+                         </CardContent>
+                         </Alert>
+       
+                     
+            </div>
+         )}
 
             {searchType !== 'abstract' && searchType !== 'name' && searchType !== 'area' && (
               <Accordion defaultValue="item-1" type="single" collapsible>
@@ -396,7 +422,8 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
               </Accordion>
             )}
 
-            <div>
+            {(!isOpenAlex && FinalOpenAlex != 'true' )&& (
+              <div>
               <Accordion defaultValue="item-1" type="single" collapsible>
                 <AccordionItem value="item-1">
                 <div className="flex mb-2">
@@ -445,6 +472,59 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
                 </AccordionItem>
               </Accordion>
             </div>
+            )}
+
+            {(isOpenAlex && FinalOpenAlex === 'true') && (
+              <div>
+                <Accordion defaultValue="item-1" type="single" collapsible>
+                <AccordionItem value="item-1">
+                <div className="flex mb-2">
+                <HeaderResultTypeHome title="Pesquisador encontrado no OpenAlex" icon={<UserList size={24} className="text-gray-400" />}>
+                      <div className="flex gap-3 mr-3">
+                      <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                        <Rows size={16} className="whitespace-nowrap" />
+                      </Button>
+                      <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'}  size={'icon'}>
+                        <SquaresFour size={16} className="whitespace-nowrap" />
+                      </Button>
+                      </div>
+                    </HeaderResultTypeHome>
+                  <AccordionTrigger>
+                 
+                  </AccordionTrigger>
+                  </div>
+                  <AccordionContent>
+                    {typeVisu === 'block' ? (
+                      loading ? (
+                        <ResponsiveMasonry
+                          columnsCountBreakPoints={{
+                            350: 1,
+                            750: 2,
+                            900: 3,
+                            1200: 4
+                          }}
+                        >
+                          <Masonry gutter="16px">
+                            {items.map((item, index) => (
+                              <div key={index}>{item}</div>
+                            ))}
+                          </Masonry>
+                        </ResponsiveMasonry>
+                      ) : (
+                        <ResearchersBloco researcher={researcher} />
+                      )
+                    ) : (
+                      loading ? (
+                        <Skeleton className="w-full rounded-md h-[400px]" />
+                      ) : (
+                        <TableReseracherhome researcher={researcher} />
+                      )
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+              </div>
+            )}
           </div>
 
 

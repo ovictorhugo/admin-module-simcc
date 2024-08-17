@@ -3,6 +3,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { LogoConectee } from './svg/LogoConectee';
 import { UserContext } from '../context/context';
+import { useTheme } from 'next-themes';
+import { LogoConecteeWhite } from './svg/LogoConecteeWhite';
 
 
 interface LoadingWrapperProps {
@@ -81,9 +83,11 @@ const LoadingWrapper: React.FC<LoadingWrapperProps> = ({ children }) => {
   
     console.log(userData)
 
+    const { theme } = useTheme()
+
   return <>{loading ? <main className='h-screen w-full flex items-center justify-center'>
         <div className='h-16 animate-pulse'>
-            <LogoConectee/>
+            {theme == 'dark' ? (<LogoConecteeWhite/>):(<LogoConectee/>)}
         </div>
   </main> : children}</>;
 };

@@ -40,6 +40,7 @@ import { FilterArticle } from "./articles-home/filters-articles";
 import { TableReseracherArticleshome } from "./articles-home/table-articles";
 import { Alert } from "../../ui/alert";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { HeaderResult } from "../header-results";
 
 type Filter = {
   year: number[]
@@ -121,7 +122,7 @@ if(valoresSelecionadosExport != '') {
         <>
         {isModalOpen && (
             <div className="">
-
+                <HeaderResult/>
 <div className="my-8">
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

@@ -8,7 +8,7 @@ import { UserContext } from "../../context/context";
 
 import { Button } from "../ui/button";
 import { Check, ChevronDown, ChevronLeft, ChevronUp, Copy, GraduationCap, Play, RefreshCcw, Terminal, User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -20,7 +20,7 @@ import { Checkbox } from "../ui/checkbox";
 import { CargosFuncoes } from "./components/cargos-funcoes";
 import { GraficoAnaliseUsuarios } from "./graficos/grafico-analise-usuarios";
 import { Label } from "../ui/label";
-import { ChartBar } from "phosphor-react";
+import { ArrowElbowDownRight, ChartBar, MagnifyingGlass } from "phosphor-react";
 
 import teste from './components/directory.json'
 
@@ -143,7 +143,7 @@ export function GeralViewDashboard() {
     
     fetchData();
 };
-
+const [directoryInput, setDirectoryInput] = useState("/");
 const [directory, setDirectory] = useState('');
 
   let urlDiretorio =`${urlGeralAdm}s/directory`
@@ -214,6 +214,7 @@ const [isOpenConsole, setIsOpenConsole] = useState(false)
 
 
 /// DITEORIO JSON
+
 const [directoryJson, setDirectoryJson] = useState("");
 
   // Carregar o valor do JSON ao inicializar o componente
@@ -278,7 +279,8 @@ const [directoryJson, setDirectoryJson] = useState("");
             {total.map((props) => {
                   return(
                     <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-                    <Alert className="p-0">
+                  <Link to={"/dashboard/pesquisadores"}>
+                  <Alert className="p-0">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                       Total de docentes
@@ -292,8 +294,10 @@ const [directoryJson, setDirectoryJson] = useState("");
                     </p>
                   </CardContent>
                   </Alert>
+                  </Link>
 
-                  <Alert className="p-0">
+                 <Link to={'/dashboad/indicadores'}>
+                 <Alert className="p-0">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                       Total de Técnicos
@@ -307,6 +311,7 @@ const [directoryJson, setDirectoryJson] = useState("");
                     </p>
                   </CardContent>
                   </Alert>
+                  </Link>
 
                   <Alert className="p-0">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -323,7 +328,8 @@ const [directoryJson, setDirectoryJson] = useState("");
                   </CardContent>
                   </Alert>
 
-                  <Alert className="p-0">
+                 <Link to={'/dashboard/programas'}>
+                 <Alert className="p-0">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                       Total de pós-graduação
@@ -336,7 +342,7 @@ const [directoryJson, setDirectoryJson] = useState("");
                       cadastrados
                     </p>
                   </CardContent>
-                  </Alert>
+                  </Alert></Link>
                     </div>
                   )
                 })}
@@ -345,7 +351,7 @@ const [directoryJson, setDirectoryJson] = useState("");
                 <Alert  className="xl:col-span-2 p-0" x-chunk="dashboard-01-chunk-4" >
                 <CardHeader className="flex gap-6 flex-col md:flex-row  justify-between">
               <div className="grid gap-2 ">
-              <CardTitle>Acessos na plataforma</CardTitle>
+              <CardTitle>Usuários ativos por dia</CardTitle>
                 <CardDescription>
                 Dados do Google Analytics dos últimos 30 dias
                 </CardDescription>
@@ -398,8 +404,8 @@ const [directoryJson, setDirectoryJson] = useState("");
               <CargosFuncoes/>
             </TabsContent>
 
-            <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8 mt-2">
-           <div className=" p-4 md:p-8 pt-0 md:pt-0 flex flex-col md:gap-8 gap-4">
+            <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8 mt-2 ">
+           <div className=" p-4 md:p-8 pt-0 md:pt-0 flex flex-col md:gap-8 gap-4 " >
            
             <Alert className="p-0">
               <CardHeader>
@@ -430,9 +436,9 @@ const [directoryJson, setDirectoryJson] = useState("");
               </CardContent>
               </Alert>
 
-              <Alert className="p-0">
+              <Alert className="p-0 ">
               <CardHeader>
-                <CardTitle>Diretório de arquivos</CardTitle>
+                <CardTitle>Localizar arquivos na API</CardTitle>
                 <CardDescription>
                 O diretório dentro da plataforma, no qual os documentos e configurações estão
                 localizados.
@@ -445,13 +451,20 @@ const [directoryJson, setDirectoryJson] = useState("");
            <Label htmlFor="name">Caminho do diretório</Label>
            <Input
                     placeholder="Diretório"
-                    value={directory}
-                   onChange={(e) => setDirectory(e.target.value)}
+                    value={directoryInput}
+                   onChange={(e) => setDirectoryInput(e.target.value)}
                   />
            </div>
                
 
-                  <Button onClick={() => handleSubmitDiretorio()}><RefreshCcw size={16}/>Alterar diretório</Button>
+                  <Button onClick={() => handleSubmitDiretorio()}><MagnifyingGlass size={16}/>Buscar arquivos</Button>
+                 </div>
+
+                 <div className="flex flex-col gap-1 mt-6">
+                 {Array.from(String(directory).split(',')).map((props, index) => (
+                    <p key={index} className="text-sm flex items-center gap-1"><ArrowElbowDownRight size={16}/>{props}</p>
+                  ))}
+
                  </div>
                  
                
@@ -459,14 +472,7 @@ const [directoryJson, setDirectoryJson] = useState("");
               </Alert>
               </div>
 
-            </TabsContent>
-
-           
-            </Tabs>
-      </main>
-
-
-{tab == 'unread' && (
+              {tab == 'unread' && (
               <div className="absolute bottom-0 flex flex-col w-full ">
                 <div className=" relative">
                   <div className="h-[50px] w-full border-t dark:border-neutral-800  px-4 bg-neutral-50 dark:bg-neutral-900 flex items-center justify-between ">
@@ -489,6 +495,15 @@ const [directoryJson, setDirectoryJson] = useState("");
               </div>
               </div>
             )}
+
+            </TabsContent>
+
+           
+            </Tabs>
+      </main>
+
+
+
        </div>
     )
 }

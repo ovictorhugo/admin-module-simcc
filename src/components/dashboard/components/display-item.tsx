@@ -547,34 +547,26 @@ const handleSubmit = async () => {
 
         <TabsContent value="all" className="mt-0">
         
-<div className="p-6 gap-4 md:gap-8 flex flex-col">
+<div className="md:p-8 p-4  flex flex-col">
   
-<Alert>
 
-<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-   <CardTitle className="text-sm font-medium">
-   {props.code != '' ? (props.code):('Sem código')}
-   </CardTitle>
-
-   <GraduationCap className="h-4 w-4 text-muted-foreground" />
- </CardHeader>
-<CardContent className="flex flex-col justify-between h-full">
    <div>
-     <div className="text-2xl font-bold">{props.name}</div>
-     <p className="text-xs text-muted-foreground">
-      
-     </p>
+   <h1 className=" max-w-[700px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
+          {props.name}
+        </h1>
    </div>
-   </CardContent>
 
-   <div className="flex mb-6 flex-wrap gap-4 px-6">
+
+   <div className="flex flex-wrap gap-4 mb-4 md:mb-8 ">
    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{props.type}</div>
  <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><MapPinIcon size={12}/>{props.city}</div>
  {props.rating != '' && (
                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12}/>{props.rating}</div>
              )}
+
+<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">{props.code != '' ? (props.code):('Sem código')}</div>
    </div>
-</Alert>
+
 
 <div className="w-full flex ">
                        <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#00A137] dark:bg-[#00A137] whitespace-nowrap"></div>

@@ -597,7 +597,7 @@ useMemo(() => {
                 </TabsList>
                
           
-                <Button size="sm">Button</Button>
+                <Button size="sm"><ChartBar size={16}/>Indicadores Power Bi</Button>
               </div>
             </div>
 

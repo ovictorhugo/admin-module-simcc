@@ -59,7 +59,7 @@ export function ResultHome() {
     <>
       {isModalOpen && (
         <div className="h-full w-full flex flex-col">
-          {(itemsSelecionados.length > 0 || researcher == 'false')  && (
+          {(itemsSelecionados.length > 0 || (researcher == 'false'))  && (
             <div>
               <div className={`w-full ${isOn ? 'px-8' : 'px-4'} border-b border-b-neutral-200 dark:border-b-neutral-800`}>
                 {isOn && (
@@ -69,7 +69,7 @@ export function ResultHome() {
                 )}
                 <div className={`flex pt-2 justify-between  ${isOn ? '' : ''} `}>
                   <div className="flex items-center gap-2">
-                   {!((researcher == 'false') && itemsSelecionados.length == 0) && (
+                   {!((researcher == 'false' && itemsSelecionados.length == 0) && itemsSelecionados.length == 0) && (
                     <div className={`pb-2 border-b-2 transition-all ${typeResult == 'researchers-home' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
                     <Button variant={typeResult == 'researchers-home' ? ('ghost'):('ghost')}  className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
                        <Users className="h-4 w-4" />
@@ -135,7 +135,7 @@ export function ResultHome() {
            
 
           <ScrollArea className="h-full">
-            {(itemsSelecionados.length > 0 || researcher == 'false') ? (
+            {(itemsSelecionados.length > 0 || (researcher == 'false')) ? (
               <div className="px-8">
                 <ResultProvider />
               </div>
