@@ -36,7 +36,7 @@ export function CargosFuncoes() {
     const [data, setData] = useState<Disciplinas[]>([]);
     const [dataSelecionado, setDataSelecionado] = useState<Disciplinas | null>(null);
 
-    const { urlGeralAdm, urlGeral } = useContext(UserContext)
+    const { urlGeralAdm, urlGeral, user} = useContext(UserContext)
     let urlDisciplinas = urlGeralAdm + `s/role`;
 
         const fetchDataGet = async () => {
@@ -228,6 +228,7 @@ export function CargosFuncoes() {
           {
             role_id: id_role,
             user_id: pesquisadoreSelecionado?.user_id,
+            institution_id:user?.institution_id || ''
           },
         ];
     

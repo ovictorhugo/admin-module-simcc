@@ -62,6 +62,11 @@ export default function AdminLayout({
     (perm) => perm.permission === 'visualizar_modulo_administrativo'
   );
 
+  const has_visualizar_gerencia_modulo_administrativo = permission.some(
+    (perm) => perm.permission === 'visualizar_gerencia_modulo_administrativo'
+  );
+
+
   const has_visualizar_todos_programas = permission.some(
     (perm) => perm.permission === 'visualizar_todos_programas'
   );
@@ -90,7 +95,7 @@ export default function AdminLayout({
       link: "/dashboard",
     },
 
-    ...(has_visualizar_modulo_administrativo
+    ...(has_visualizar_gerencia_modulo_administrativo
       ? [
           {
             title: "Administrativo",
