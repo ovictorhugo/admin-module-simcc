@@ -54,10 +54,10 @@ export function PesoProducoes() {
   const [patenteNaoConcedida, setPatenteNaoConcedida] = useState('');
   const [relTec, setRelTec] = useState('');
   
-  const urlGet = urlGeralAdm + `indprod/query?institution_id=${user.institution_id}`;
+  const urlGet = urlGeralAdm + `indprod/query?institution_id=${user?.institution_id}`;
   console.log(urlGet)
 
-  const { onOpen, onClose, isOpen, type: typeModal, data:dataModal } = useModal();
+  const { onOpen, onClose, isOpen, type: typeModal } = useModal();
   const isModalOpen = isOpen && typeModal === 'reset-peso-producoes'
   const [typeReset, setTypeReset] = useState('');
  
@@ -192,7 +192,7 @@ export function PesoProducoes() {
 
       const data = [
         {
-          institution_id:user.institution_id,
+          institution_id:user?.institution_id,
             A1: a1,
             A2: a2,
             A3: a3,
@@ -390,14 +390,20 @@ export function PesoProducoes() {
                        <div className="grid grid-cols-2 gap-6">
         
         <div className="flex items-center  gap-4  ">
-          <Label className="whitespace-nowrap">Livro</Label>
+       <div className="flex items-center gap-2">
+       <div className={`rounded-sm h-4 w-4 bg-[#792F4C]`}></div>
+       <Label className="whitespace-nowrap">Livro</Label>
+       </div>
           <Input value={livro} onChange={(e) => setLivro(e.target.value)} type="number" placeholder="Peso"/>
       </div>
      
 
   
         <div className="flex items-center  gap-4 ">
-          <Label className="whitespace-nowrap">Capítulo de livro</Label>
+        <div className="flex items-center gap-2">
+       <div className={`rounded-sm h-4 w-4 bg-[#DBAFD0]`}></div>
+       <Label className="whitespace-nowrap">Capítulo de livro</Label>
+       </div>
           <Input value={capLivro} onChange={(e) => setCapLivro(e.target.value)} type="number" placeholder="Peso"/>
       </div>
    
@@ -455,7 +461,11 @@ export function PesoProducoes() {
                        <div className="grid grid-cols-2 gap-4">
              
              <div className="flex items-center  gap-4  ">
-               <Label className="whitespace-nowrap min-w-[150px]">Patente concedida</Label>
+             <div className="flex items-center gap-2">
+       <div className={`rounded-sm h-4 w-4 bg-[#6BC26B]`}></div>
+       <Label className="whitespace-nowrap min-w-[150px]">Patente concedida</Label>
+       </div>
+            
                <Select defaultValue={patenteCondecida} value={patenteCondecida} onValueChange={(value) => setPatenteConcedida(value)}>
            <SelectTrigger className="w-full whitespace-nowrap">
                <SelectValue placeholder="Escolha o tipo" />
@@ -471,7 +481,11 @@ export function PesoProducoes() {
            </div>
 
            <div className="flex items-center  gap-4  ">
-               <Label className="whitespace-nowrap min-w-[150px]">Patente não concedida</Label>
+           <div className="flex items-center gap-2">
+       <div className={`rounded-sm h-4 w-4 bg-[#CE3830]`}></div>
+       <Label className="whitespace-nowrap min-w-[150px]">Patente não concedida</Label>
+       </div>
+             
                <Select defaultValue={patenteNaoConcedida} value={patenteNaoConcedida} onValueChange={(value) => setPatenteNaoConcedida(value)}>
            <SelectTrigger className="w-full whitespace-nowrap">
                <SelectValue placeholder="Escolha o tipo" />
@@ -489,7 +503,11 @@ export function PesoProducoes() {
 
         
              <div className="flex items-center  gap-4 ">
-               <Label className="whitespace-nowrap min-w-[150px]">Software</Label>
+             <div className="flex items-center gap-2">
+       <div className={`rounded-sm h-4 w-4 bg-[#096670]`}></div>
+       <Label className="whitespace-nowrap min-w-[150px]">Software</Label>
+       </div>
+             
                <Select defaultValue={software} value={software} onValueChange={(value) => setSoftware(value)}>
            <SelectTrigger className="w-full whitespace-nowrap">
                <SelectValue placeholder="Escolha o tipo" />
@@ -505,7 +523,11 @@ export function PesoProducoes() {
            </div>
 
            <div className="flex items-center  gap-4 ">
-               <Label className="whitespace-nowrap min-w-[150px]">Relatório técnico</Label>
+           <div className="flex items-center gap-2">
+       <div className={`rounded-sm h-4 w-4 bg-[#662D91]`}></div>
+       <Label className="whitespace-nowrap min-w-[150px]">Relatório técnico</Label>
+       </div>
+              
                <Select defaultValue={relTec} value={relTec} onValueChange={(value) => setRelTec(value)}>
            <SelectTrigger className="w-full whitespace-nowrap">
                <SelectValue placeholder="Escolha o tipo" />

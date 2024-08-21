@@ -22,7 +22,7 @@ import { GraficoAnaliseUsuarios } from "./graficos/grafico-analise-usuarios";
 import { Label } from "../ui/label";
 import { ArrowElbowDownRight, ChartBar, MagnifyingGlass } from "phosphor-react";
 
-import teste from './components/directory.json'
+
 
 interface TotalPatrimonios {
    count_gp: string,
@@ -47,7 +47,7 @@ export function GeralViewDashboard() {
     const {user, urlGeralAdm } = useContext(UserContext);
     const [total, setTotal] = useState<TotalPatrimonios[]>([]);
 
-    const urlPatrimonioInsert =  `${urlGeralAdm}/InstitutionRest/Query/Count?institution_id=${user.institution_id}`;
+    const urlPatrimonioInsert =  `${urlGeralAdm}/InstitutionRest/Query/Count?institution_id=${user?.institution_id}`;
 
     useEffect(() => {
       const fetchData = async () => {

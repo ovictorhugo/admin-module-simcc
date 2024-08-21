@@ -5,6 +5,7 @@ import { Alert } from "../ui/alert";
 import { Funnel, MagnifyingGlass } from "phosphor-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import bg from '../../assets/bg_search_barema.png'
 
 import {  useNavigate } from "react-router-dom";
 
@@ -69,7 +70,7 @@ type PesquisadorUpdate = {
 import { updateDoc, deleteField, getFirestore, doc, getDocs, getDoc, collection, addDoc, query, deleteDoc,  where,  Query } from 'firebase/firestore';
 
 export function ProcurarBaremas() {
-    const { isOpen, type } = useModalHomepage();
+
    
     const { idDocumentBarema, setIdDocumentBarema, user } = useContext(UserContext)
     const [input, setInput] = useState("");
@@ -123,7 +124,8 @@ export function ProcurarBaremas() {
    return(
     <>
     
-         <div className="w-full mr-16 mb-20 h-full flex flex-col items-center justify-center">
+         <div className="w-full  h-full flex flex-col items-center justify-center">
+            <div className="w-full h-[300px] mb-6 bg-contain bg-top bg-no-repeat"  style={{ backgroundImage: `url(${bg})` }}></div>
             <div className="w-full h-full items-center justify-center flex flex-col">
 
             <div className="flex flex-col justify-center max-w-[60vw] w-full">

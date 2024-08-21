@@ -364,7 +364,7 @@ const handleSubmit = async () => {
               name: nomePesquisador,
               lattes_id: lattesID,
               graduate_program_id: props.graduate_program_id,
-              institution_id: user.institution_id,
+              institution_id: user?.institution_id,
               year: currentYear
             }
         ]

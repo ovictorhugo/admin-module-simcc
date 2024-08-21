@@ -212,7 +212,7 @@ export function AddDepartamento() {
   return (
     <Sheet open={isModalOpen} onOpenChange={onClose}>
        <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[50vw]`}>
-        <DialogHeader className="h-16 p-4 border-b">
+        <DialogHeader className="h-[50px] px-4 justify-center border-b">
 
         <div className="flex items-center gap-3">
         <TooltipProvider>
@@ -224,16 +224,11 @@ export function AddDepartamento() {
        </Tooltip>
        </TooltipProvider>
 
-        <div className="flex items-center w-full justify-between">
-          <DialogTitle className="text-xl font-medium flex items-center gap-3">
-          <Building2 size={24}/> Cadastrar departamento
-          </DialogTitle>
+        <div className="flex ml-auto items-center w-full justify-between">
+        
+          <div className="flex ml-auto items-center gap-3">
 
-          <div className="flex items-center gap-3">
-
-          <Button onClick={() => handleSubmit()} size={'sm'} className="text-white dark:text-white h-8">
-            <Plus size={16} className="" />Adicionar
-          </Button>
+         
              </div>
         </div>
 
@@ -242,7 +237,16 @@ export function AddDepartamento() {
         </DialogHeader>
 
         <div>
-        <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-64px)] p-8 ">
+        <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
+        <div className="mb-8">
+                      <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
+                      Departamentos
+                        </p>
+
+                        <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+                           {typeModal == 'add-departamento' ? 'Adicionar departamento':'Editar departamento'}
+                        </h1>
+                      </div>
           <div className="flex gap-3 flex-col">
           <div className="flex flex-col gap-3 w-full">
             <div className="flex w-full gap-3 items-end">
@@ -349,6 +353,10 @@ export function AddDepartamento() {
               id="dep_des"
             />
           </div>
+
+          <Button onClick={() => handleSubmit()} size={'sm'} className="text-white dark:text-white mt-3 ml-auto flex ">
+   <Plus size={16} className="" />Adicionar
+ </Button>
         </div>
 
 

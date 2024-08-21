@@ -173,7 +173,7 @@ export function TimeLineResearcher(props:Research) {
         <div className="w-full">
           <div className="">
          
-                <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-156px)] p-8 pt-0 ">
+                <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-268px)] p-8 pt-0 ">
                
                 <div className=" flex flex-col  justify-center">
                 <div className={`flex gap-2   rounded-md `}>

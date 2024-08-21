@@ -57,7 +57,7 @@ export function SignInContent() {
       //firebase
       const [email, setEmail] = useState('');
       const [password, setPassword] = useState('');
-      const {setLoggedIn} = useContext(UserContext);
+      const {setLoggedIn, urlGeralAdm} = useContext(UserContext);
       const history = useNavigate();
       const { setUser, user } = useContext(UserContext);
 
@@ -127,58 +127,119 @@ export function SignInContent() {
     
         signInWithPopup(auth, provider)
           .then(async(result) => {
-            
-            const db = getFirestore();
-            const userDocRef = doc(db, 'institution', String(result.user.email));
-            const snapshot = await getDoc(userDocRef);
-            const userData: User = {
-              ...result.user,
-              img_url: '', // Set to the appropriate default value or leave it empty if you don't have a default
-              state: '',
-              name:  '',
-              email: result.user.email || '',
-              institution_id: '',
-            };
 
-            // Verifique se os dados personalizados existem antes de adicionar ao objeto result.user
-            if (snapshot.exists()) {
-              
-             
-              const userData = snapshot.data();
-
-              const userDataFinal: User = {
-                ...result.user,
-                img_url: userData.img_url || '', // Set to the appropriate default value or leave it empty if you don't have a default
-                state: userData.state || '',
-                name: userData.name || '',
-                email: result.user.email || '',
-                institution_id: userData.institution_id || '',
-              };
-             
-              // Adicione os dados personalizados diretamente ao objeto result.user
-
-              // Atualize o estado com o objeto modificado
-              setUser(userDataFinal)
-              localStorage.setItem('user', JSON.stringify(userDataFinal));
-              setCookie('user', (userDataFinal), { path: '/' })
-      
-            setUser(userDataFinal);
-            setLoggedIn(true);
-            setTimeout(() => {
-              history('/');
-            }, 0);
-          } else {
-            setUser(userData);
-            localStorage.setItem('user', JSON.stringify(userData));
-            setCookie('user', (userData), { path: '/' })
-            setLoggedIn(true);
-            setTimeout(() => {
-              history('/');
-            }, 0);
+      try {
+        const data = [
+          {
+            displayName:result.user.displayName,
+            email:result.user.email,
+            uid:result.user.uid,
+            photoURL:result.user.photoURL,
+            provider:result.user.providerId
           }
+        ]
 
+        let urlProgram = urlGeralAdm + 's/user'
+         let urlUser = urlGeralAdm + `s/user?uid=${result.user.uid}`
+
+        const fetchData = async () => {
+        
+          try {
+            const response = await fetch(urlProgram, {
+              mode: 'cors',
+              method: 'POST',
+              headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Max-Age': '3600',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+              const fetchDataLogin = async () => {
+                try {
+                  const response = await fetch(urlUser, {
+                    mode: "cors",
+                    method: 'GET',
+                    headers: {
+                      "Access-Control-Allow-Origin": "*",
+                      "Access-Control-Allow-Methods": "GET",
+                      "Access-Control-Allow-Headers": "Content-Type",
+                      "Access-Control-Max-Age": "3600",
+                      "Content-Type": "text/plain",
+                    },
+                  });
+                  const data = await response.json();
+                  if (data && Array.isArray(data) && data.length > 0) {
+                    data[0].roles = data[0].roles || [];
+                    setLoggedIn(true)
+                    setUser(data[0]);
+                   
+                 
+               
+                    history('/');
+                  }
+                } catch (err) {
+                  console.log(err);
+                }
+              };
+              fetchDataLogin();
           
-           
+             
+            } else {
+              const fetchDataLogin = async () => {
+                try {
+                  const response = await fetch(urlUser, {
+                    mode: "cors",
+                    method: 'GET',
+                    headers: {
+                      "Access-Control-Allow-Origin": "*",
+                      "Access-Control-Allow-Methods": "GET",
+                      "Access-Control-Allow-Headers": "Content-Type",
+                      "Access-Control-Max-Age": "3600",
+                      "Content-Type": "text/plain",
+                    },
+                  });
+                  const data = await response.json();
+                  if (data && Array.isArray(data) && data.length > 0) {
+                    data[0].roles = data[0].roles || [];
+                    setLoggedIn(true)
+                    setUser(data[0]);
+                   
+                 
+               
+                    history('/');
+                  }
+                } catch (err) {
+                  console.log(err);
+                }
+              };
+              fetchDataLogin();
+            }
+            
+          } catch (err) {
+            console.log(err);
+          } 
+         
+        };
+
+        fetchData();
+        
+      } catch (error) {
+          toast("Erro ao processar requisição", {
+              description: "Tente novamente",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+      }
+   
+
+
           })
           .catch((error) => {
             console.log(error)
@@ -191,6 +252,7 @@ export function SignInContent() {
             })
           })
       }
+      
       const location = useLocation();
 
       const [value, setValue] = useState('account')
@@ -199,12 +261,12 @@ export function SignInContent() {
 
       const quotesWithAuthors = [
         {
-          quote: 'O Programa Sempre UFMG tem o objetivo de promover a conexão entre a Universidade e seus egressos, incentivando a cultura do retorno e da retribuição à Universidade.',
-          author: 'Alfredo Tetse'
+          quote: 'A gente continua apaixonado pela Escola de Engenharia e pelas pessoas que flutuam nela',
+          author: 'Newton Urias Pinto, técnico em metalurgia aposentado. Na escola desde os 11 anos de idade.'
         },
         {
-          quote: 'A Universidade é um espaço de transformação e oportunidades.',
-          author: 'Maria Silva'
+          quote: 'Às vezes eles me perguntaravam onde que eu tinha estudado, simplesmente o nome da Escola quase que já bastava, né? Aquilo ali já falava tudo por você.',
+          author: 'Maria da Fátimo Solis Ribeiro. Engenheira Civil formada pela Escola em 1986.'
         },
         {
           quote: 'Alunos e egressos são fundamentais para a continuidade do legado da UFMG.',

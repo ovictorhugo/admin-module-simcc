@@ -8,12 +8,13 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../compone
 import { cn } from "../lib"
 
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
 import { Blocks,  Building2, ClipboardEdit, FlaskConical, GraduationCap,  Info, LayoutDashboard,  Mail, PieChart,  User, Users, Weight } from "lucide-react";
 
 import { UserConfigHeader } from "../components/header/user-config-header";
+import { useLocation } from "react-router-dom";
 
 interface MailProps {
  
@@ -22,6 +23,13 @@ interface MailProps {
   navCollapsedSize: number
   children:React.ReactNode
 }
+
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+}
+
+
+
 export default function AdminLayout({
 
   defaultLayout = [265, 440, 655],
@@ -30,9 +38,175 @@ export default function AdminLayout({
   children
 }: MailProps) {
   
-  const {isCollapsed, setIsCollapsed, loggedIn} = useContext(UserContext)
+  const {isCollapsed, setIsCollapsed, permission, pesquisadoresSelecionados, user, setPermission, urlGeralAdm} = useContext(UserContext)
   
 
+  //permissoes
+  const hasBaremaAvaliacao = permission.some(
+    (perm) => perm.permission === 'criar_barema_avaliacao'
+  );
+
+  const hasNotificacoes = permission.some(
+    (perm) => perm.permission === 'enviar_notificacoes'
+  );
+
+  const has_visualizar_pesquisadores = permission.some(
+    (perm) => perm.permission === 'visualizar_pesquisadores'
+  );
+
+  const has_visualizar_todos_departamentos = permission.some(
+    (perm) => perm.permission === 'visualizar_todos_departamentos'
+  );
+
+  const has_visualizar_modulo_administrativo = permission.some(
+    (perm) => perm.permission === 'visualizar_modulo_administrativo'
+  );
+
+  const has_visualizar_todos_programas = permission.some(
+    (perm) => perm.permission === 'visualizar_todos_programas'
+  );
+
+  const has_visualizar_grupos_pesquisa = permission.some(
+    (perm) => perm.permission === 'visualizar_grupos_pesquisa'
+  );
+
+  const has_visualizar_inct = permission.some(
+    (perm) => perm.permission === 'visualizar_inct'
+  );
+
+  const has_editar_pesos_avaliacao = permission.some(
+    (perm) => perm.permission === 'editar_pesos_avaliacao'
+  );
+
+  const has_visualizar_indicadores_instituicao = permission.some(
+    (perm) => perm.permission === 'visualizar_indicadores_instituicao'
+  );
+
+  const links2 = [
+    {
+      title: "Dashboard",
+      label: "",
+      icon: LayoutDashboard,
+      link: "/dashboard",
+    },
+
+    ...(has_visualizar_modulo_administrativo
+      ? [
+          {
+            title: "Administrativo",
+            label: "",
+            icon: LayoutDashboard,
+            link: "/dashboard/administrativo",
+          },
+        ]
+      : []),
+
+      ...(has_visualizar_todos_departamentos
+        ? [
+          {
+            title: "Departamentos",
+            label: "",
+            icon: Building2,
+            link: "/dashboard/departamentos",
+          },
+          ]
+        : []),
+
+    ...(has_visualizar_pesquisadores
+      ? [
+          {
+            title: "Pesquisadores",
+            label: "",
+            icon: Users,
+            link: "/dashboard/pesquisadores",
+          },
+        ]
+      : []),
+
+
+      ...(has_visualizar_todos_programas
+        ? [
+          {
+            title: "Programas",
+            label: "",
+            icon: GraduationCap,
+            link: "/dashboard/programas",
+          },
+          ]
+        : []),
+
+        ...(has_visualizar_grupos_pesquisa
+          ? [
+            {
+              title: "Grupos de pesquisa",
+              label: "",
+              icon: Blocks,
+              link: "/dashboard/grupos-pesquisa",
+            },
+            ]
+          : []),
+
+          ...(has_visualizar_inct
+            ? [
+              {
+                title: "INCT's",
+                label: "",
+                icon: FlaskConical,
+                link: "/dashboard/inct",
+              },
+              ]
+            : []),
+
+
+            ...(has_editar_pesos_avaliacao
+              ? [
+                {
+                  title: "Pesos de avaliação",
+                  label: "",
+                  icon: Weight,
+                  link: "/dashboard/pesos-avaliacao",
+                },
+                ]
+              : []),
+
+        
+              ...(has_visualizar_indicadores_instituicao
+                ? [
+                  {
+                    title: "Indicadores",
+                    label: "",
+                    icon: PieChart,
+                    link: "/dashboard/indicadores",
+                  },
+                  ]
+                : []),
+
+
+  ]
+
+  const links = [
+    ...(hasBaremaAvaliacao
+      ? [
+          {
+            title: "Baremas",
+            label: `${pesquisadoresSelecionados.length == 0 ? (''):(pesquisadoresSelecionados.length)}`,
+            icon: ClipboardEdit,
+            link: "/dashboard/baremas",
+          },
+        ]
+      : []),
+
+      ...(hasNotificacoes
+        ? [
+           {
+                title: "Enviar notificações",
+                label: "",
+                icon: Mail,
+                link: "/dashboard/enviar-notificacoes",
+              },
+          ]
+        : []),
+  ];
   
     return (
     <div>
@@ -70,86 +244,13 @@ export default function AdminLayout({
 
           <NavigationSidebar
             isCollapsed={isCollapsed}
-            links={[
-
-              {
-                title: "Dashboard",
-                label: "",
-                icon: LayoutDashboard,
-                link: "/dashboard",
-              },
-
-              {
-                title: "Departamentos",
-                label: "",
-                icon: Building2,
-                link: "/dashboard/departamentos",
-              },
-
-              {
-                title: "Pesquisadores",
-                label: "",
-                icon: Users,
-                link: "/dashboard/pesquisadores",
-              },
-              
-              {
-                title: "Programas",
-                label: "",
-                icon: GraduationCap,
-                link: "/dashboard/programas",
-              },
-              {
-                title: "Grupos de pesquisa",
-                label: "",
-                icon: Blocks,
-                link: "/dashboard/grupos-pesquisa",
-              },
-              {
-                title: "INCT's",
-                label: "",
-                icon: FlaskConical,
-                link: "/dashboard/inct",
-              },
-              {
-                title: "Pesos de avaliação",
-                label: "",
-                icon: Weight,
-                link: "/dashboard/pesos-avaliacao",
-              },
-              {
-                title: "Indicadores",
-                label: "",
-                icon: PieChart,
-                link: "/dashboard/indicadores",
-              },
-
-
-             
-            ]}
+            links={links2}
           />
 
           <div className="w-full h-[0.5px] bg-neutral-200 dark:bg-neutral-800"></div>
   
 
-          <NavigationSidebar
-            isCollapsed={isCollapsed}
-            links={[
-              {
-                title: "Baremas",
-                label: "",
-                icon: ClipboardEdit,
-                link: "/dashboard/baremas",
-              },
-              {
-                title: "Enviar notificações",
-                label: "",
-                icon: Mail,
-                link: "/dashboard/enviar-notificacoes",
-              },
-             
-            ]}
-          />
+          <NavigationSidebar isCollapsed={isCollapsed} links={links} />
 </div>
 
 <div className="flex flex-col ">
@@ -167,9 +268,7 @@ export default function AdminLayout({
             ]}
           />
 
-           {loggedIn && (
-             <UserConfigHeader/>
-           )}
+       
           </div>
           
           </ResizablePanel>

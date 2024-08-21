@@ -119,7 +119,7 @@ const isModalOpen = isOpen && type === "graduate-program";
           <TabsContent value="all" className="m-0">
            <ItensList
            onResearcherUpdate={handleResearcherUpdate}
-           url={`${urlGeralAdm}GraduateProgramRest/Query?institution_id=${user.institution_id}`}
+           url={`${urlGeralAdm}GraduateProgramRest/Query?institution_id=${user?.institution_id}`}
            search={search}
            />
           </TabsContent>

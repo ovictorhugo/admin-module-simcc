@@ -102,18 +102,23 @@ const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 }
 
-export function FiltersModal({ researcher, setResearcher }) {
+type FiltersModalProps = {
+  researcher: Research[];
+  setResearcher: React.Dispatch<React.SetStateAction<Research[]>>;
+};
+
+export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
 
   const { onClose, isOpen, type: typeModal } = useModal();
     const isModalOpen = isOpen && typeModal === "filters";
     const [selectedAreas, setSelectedAreas] = useState([]);
     const [selectedGraduations, setSelectedGraduations] = useState([]);
   
-    const handleAreaToggle = (value) => {
+    const handleAreaToggle = (value:any) => {
       setSelectedAreas(value);
     };
   
-    const handleGraduationToggle = (value) => {
+    const handleGraduationToggle = (value:any) => {
       setSelectedGraduations(value);
     };
 
@@ -151,6 +156,8 @@ export function FiltersModal({ researcher, setResearcher }) {
       setSelectedGraduations([]);
     }
   }, [researcher]);
+
+  
   
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -241,7 +248,7 @@ export function ResearchersHome() {
   let urlTermPesquisadores = ``;
 
   if (searchType === 'name') {
-    urlTermPesquisadores = `${urlGeral}researcherName?name=${terms}`;
+    urlTermPesquisadores = `${urlGeral}researcherName?name=${terms?.replace(/[;|()]/g, '')}`;
   } else if (searchType === 'article') {
     urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ARTICLE&graduate_program_id=${idGraduateProgram == '0' ? (''):(idGraduateProgram)}`;
   } else if (searchType === 'book') {
@@ -258,7 +265,7 @@ export function ResearchersHome() {
 
   console.log(urlTermPesquisadores);
 
-  const urlOpenAlex =`https://api.openalex.org/authors?filter=display_name.search:${terms.replace(/[()|;]/g, "")}`;
+  const urlOpenAlex =`https://api.openalex.org/authors?filter=display_name.search:${terms?.replace(/[()|;]/g, "")}`;
   const [researcherOpenAlex , setResearcherOpenAlex] = useState<ResearchOpenAlex[]>([])
 const [isOpenAlex, setIsOpenAlex] = useState(false)
 

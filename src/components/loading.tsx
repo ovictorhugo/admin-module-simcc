@@ -1,87 +1,139 @@
 // LoadingWrapper.tsx
 import React, { useState, useEffect, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
 import { LogoConectee } from './svg/LogoConectee';
 import { UserContext } from '../context/context';
 import { useTheme } from 'next-themes';
 import { LogoConecteeWhite } from './svg/LogoConecteeWhite';
-
+import { auth } from '../lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useLocation } from 'react-router-dom';
 
 interface LoadingWrapperProps {
   children: React.ReactNode;
 }
 
-interface UserData {
-  application_id:string
-  session_id:string
-  identity_provider:string
-  authentication_instant:string
-  authentication_method:string
-  authn_context_class:string
-  session_index:string
-  org_dn:string
-  org_unit_dn:string
-  primary_affiliation:string
-  given_name:string
-  common_name:string
-  email:string
+interface User {
+  institution_id: string
+  user_id:string
+  display_name:string
+  email:string 
   uid:string
-  surname:string
-  cpf:string
-  curso_nivel:string
-  data_nascimento:string
-  sexo:string
-  status:string
-  url_email:string
+  photo_url:string
+  dep_id:string
+  roles:Roles[]
 }
 
-const LoadingWrapper: React.FC<LoadingWrapperProps> = ({ children }) => {
-  const [loading, setLoading] = useState(false);
-  const location = useLocation();
 
-  const {urlGeral, loggedIn, setLoggedIn} = useContext(UserContext)
+interface Roles {
+  id:string
+  role:string
+}
+
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+}
+
+
+
+
+const LoadingWrapper: React.FC<LoadingWrapperProps> = ({ children }) => {
+  const [loading, setLoading] = useState(true);
+
+  const { setLoggedIn, setUser, urlGeralAdm, setPermission, permission, user, setRole } = useContext(UserContext)
 
     ///// LOGIN SHIBBOLETH
+    
+    const queryUrl = useQuery();
 
-    let urlMagazine = `${urlGeral}/login`;
+    const [userData, setUserData] = useState<User| null>(null);;
 
-    const [userData, setUserData] = useState<UserData[]>([]);
-  
-  useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true)
-        try {
-          const response = await fetch(urlMagazine, {
-            mode: 'cors',
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': 'GET',
-              'Access-Control-Allow-Headers': 'Content-Type',
-              'Access-Control-Max-Age': '3600',
-              'Content-Type': 'text/plain'
-            }
-          });
-          const data = await response.json();
-          if (data) {
-            setUserData(data);
-            setLoggedIn(true)
-            setTimeout(() => {
-              setLoading(false);
-            }, 2000); // Atraso de 2 segundos (2000 milissegundos)
-           
-          }
-        } catch (err) {
-          console.log(err);
-          setTimeout(() => {
+
+    useEffect(() => {
+      setLoading(true);
+
+      const storedPermission = localStorage.getItem('permission');
+      if (storedPermission) {
+        setPermission(JSON.parse(storedPermission));
+      }
+
+
+    
+      const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        
+        if (firebaseUser) {
+          console.log(firebaseUser.uid);
+          if (firebaseUser.uid !== '') {
+          
+    
+            // Recupera as informações adicionais do seu banco de dados aqui
+            const urlUser = `${urlGeralAdm}s/user?uid=${firebaseUser.uid}`;
+            console.log(urlUser);
+    
+            const fetchData = async () => {
+              try {
+                const response = await fetch(urlUser, {
+                  mode: 'cors',
+                  headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Max-Age': '3600',
+                    'Content-Type': 'text/plain',
+                  },
+                });
+                const data = await response.json();
+                if (data && Array.isArray(data) && data.length > 0) {
+                  setLoggedIn(true)
+                  data[0].roles = data[0].roles || [];
+                  setUser(data[0]);
+                 
+
+
+                  const storedUser = localStorage.getItem('permission');
+                  const storedRole = localStorage.getItem('role');
+                
+                    if (storedUser) {
+                      // Se as informações do usuário forem encontradas no armazenamento local, defina o usuário e marque como autenticado
+                      setPermission(JSON.parse(storedUser));
+                
+                    }
+
+                    if (storedRole) {
+                      // Se as informações do usuário forem encontradas no armazenamento local, defina o usuário e marque como autenticado
+                      setRole(JSON.parse(storedRole));
+                
+                    }
+                }
+              } catch (err) {
+                console.log(err);
+              } finally {
+                setLoading(false);
+              }
+            };
+    
+            fetchData();
+          } else {
+            setLoggedIn(false);
             setLoading(false);
-          }, 2000); // Atraso de 2 segundos (2000 milissegundos)
+          }
+        } else {
+          setLoggedIn(false);
+          setLoading(false);
         }
+
+        setLoading(false);
+      });
+    
+      return () => {
+        unsubscribe();
+       
       };
-      fetchData();
+
+     
     }, []);
+    
   
-  
-    console.log(userData)
+  console.log(permission)
 
     const { theme } = useTheme()
 

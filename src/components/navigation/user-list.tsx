@@ -31,6 +31,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { useTheme } from "next-themes"
 import { SymbolEEWhite } from "../svg/SymbolEEWhite"
 import { SymbolEE } from "../svg/SymbolEE"
+import { useNavigate } from "react-router-dom"
   
 
 export function AccountSwitcher({
@@ -38,14 +39,50 @@ export function AccountSwitcher({
 
 }: AccountSwitcherProps) {
 
-  const {user, setIsCollapsed, mode} = React.useContext(UserContext)
+  const {user, setIsCollapsed, mode, setPermission, urlGeralAdm, setRole, role} = React.useContext(UserContext)
   const { theme } = useTheme()
+
+
+
+
+
+
+const fetchDataPerm = async (role_id:string) => {
+  let urlPermission = urlGeralAdm + `s/permission?role_id=${role_id}`
+     console.log(urlPermission)
+  try {
+    const response = await fetch(urlPermission , {
+      mode: "cors",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Max-Age": "3600",
+        "Content-Type": "text/plain",
+      },
+    });
+    const data = await response.json();
+    if (data) {
+      setPermission(data)
+      localStorage.setItem('permission', JSON.stringify(data));
+      history('/dashboard');
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+const history = useNavigate();
+
+
+  
   return (
     <DropdownMenu>
-        <div className="w-full  gap-3 flex items-center">
-        <DropdownMenuTrigger className="w-full flex-1 items-center flex justify-center">
+        <div className={`w-full  flex-1 gap-3 flex items-center  ${isCollapsed ? ('px-2 '):('')}`}>
+        <DropdownMenuTrigger className={`flex-1 items-center flex justify-center hover:bg-neutral-100 rounded-md ${isCollapsed ? ('w-[36px] '):('w-full')} `}>
             <div className={cn(
-          "flex items-center w-full gap-2 ",
+          "flex items-center w-full gap-2 h-10 pr-4",
           isCollapsed &&
             "flex h-9 w-9 shrink-0 items-center justify-center p-0 "
         )}> 
@@ -57,7 +94,7 @@ export function AccountSwitcher({
            
                 {!isCollapsed && (
                 <div className="flex gap-3 items-center flex-1 w-full">
-                    <p className="text-sm font-medium w-full text-left">{mode}</p>
+                    <p className="text-sm font-medium w-full text-left">{role}</p>
          
 
             <ChevronDown size={16}/>
@@ -70,23 +107,35 @@ export function AccountSwitcher({
         
         </DropdownMenuTrigger>
 
-       {!isCollapsed && (
-         <Button onClick={() => setIsCollapsed(true)} variant="ghost" size="icon" >
-         <PanelLeftDashed className="h-4 w-4" />
-         <span className="sr-only">Menu de ações rápidas</span>
-       </Button>
-       )}
+       
 
 
         </div>
 
-        <DropdownMenuContent>
-    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-    <DropdownMenuSeparator />
-    <DropdownMenuItem>Profile</DropdownMenuItem>
-    <DropdownMenuItem>Billing</DropdownMenuItem>
-    <DropdownMenuItem>Team</DropdownMenuItem>
-    <DropdownMenuItem>Subscription</DropdownMenuItem>
+        <DropdownMenuContent className="min-w-[200px]">
+    <DropdownMenuLabel>Conta pessoal</DropdownMenuLabel>
+    <DropdownMenuItem onClick={() => {
+       history('/');
+    }}>Profile</DropdownMenuItem>
+   {user?.roles != undefined &&(
+    <div>
+       <DropdownMenuSeparator />
+       <DropdownMenuLabel>Cargos</DropdownMenuLabel>
+    </div>
+   )}
+
+{user?.roles != undefined && (
+  user.roles!.map((role) => (
+    <DropdownMenuItem onClick={() => {
+      fetchDataPerm(role.id)
+      localStorage.setItem('role', JSON.stringify(role.role_id));
+      setRole(role.role_id)
+      
+    }} key={role.id}>{role.role_id}</DropdownMenuItem>
+  ))
+)}
+
+   
   </DropdownMenuContent>
 
 

@@ -1,21 +1,21 @@
 import { useContext, useEffect, useState } from "react";
-import { useModalHomepage } from "../hooks/use-modal-homepage";
 import { HeaderBarema } from "./header-barema";
 import { Alert } from "../ui/alert";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { ArrowCounterClockwise, CaretDown, CaretUp, ChartBar, ChartLine, Check, Copy, DotsSix, Download, FileCsv, Gear, GearSix, PencilLine, PlusCircle, Rows, Trash, Users } from "phosphor-react";
+import {  ChartBar, ChartLine, Check, Copy, DotsSix, Download, FileCsv, Gear, GearSix, PencilLine, PlusCircle, Rows, Trash, Users } from "phosphor-react";
 import { Input } from "../ui/input";
 import { getFirestore, doc, getDocs, updateDoc, onSnapshot, collection, addDoc, query, deleteDoc,  where,  Query } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid'; 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../components/ui/accordion";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { toast } from "sonner"
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -918,7 +918,7 @@ console.log(somaTotalPorPesquisador);
             <HeaderBarema />
             <div className="flex">
             <Tabs defaultValue="1" value={valueTab} className="w-full">
-                        <div className="flex flex-col gap-3 w-full">
+                        <div className="flex flex-col gap-8 w-full">
                         <div className="w-full flex flex-col">
                             <div className=" dark:border-neutral-800 border border-b-0 border-neutral-200 h-3 rounded-t-md bg-[#719CB8] whitespace-nowrap"></div>
 
@@ -957,7 +957,7 @@ console.log(somaTotalPorPesquisador);
                             </div>
                             
                                 
-                           <TabsContent value="1" className="w-full flex gap-3 flex-col m-0 p-0">
+                           <TabsContent value="1" className="w-full flex gap-8 flex-col m-0 p-0">
                         <div className="w-full flex">
                         <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] whitespace-nowrap"></div>
 
@@ -1002,22 +1002,11 @@ console.log(somaTotalPorPesquisador);
                         
                         </Alert>
                         </div>
-                        <DragDropContext onDragEnd={onDragEnd}>
-                        <Droppable droppableId="droppable-grupos" type="group">
-        {(provided) => (
-          <div
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            className="flex flex-col gap-3 droppable-grupos"
-          >
+                      
+                            <div className="flex flex-col gap-8">
             {grupos.map((grupo, grupoIndex) => (
-              <Draggable key={grupo.id} draggableId={grupo.id} index={grupoIndex}>
-                      {(provided) => (
-                  <div
-                  key={grupo.id}
-                  ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
-                    className="w-full flex items-center border p-2 mb-2 rounded shadow"
-                  >
+            
+                 
                                                             <div className="w-full flex">
                                                                 <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] whitespace-nowrap"></div>
                                                                 <div className="w-full">
@@ -1101,7 +1090,31 @@ console.log(somaTotalPorPesquisador);
                                 </Button>
                               </DialogTrigger>
                               <DialogContent className="z-[9999]">
-                                {index} {grupo.id}
+                              <DialogHeader>
+      <DialogTitle>Escolher critério</DialogTitle>
+      <DialogDescription>
+       Todos os docentes cadastrado no Módulo Administrativo da instituição
+      </DialogDescription>
+    </DialogHeader>
+                              <div className={'max-h-[350px] overflow-y-auto elementBarra'}>
+                              
+                              <div className="flex flex-col gap-1 p-2">
+                              {criterios.map((criterio) => (
+                                <Button
+                                variant={'ghost'}
+                                className="text-left justify-start"
+                  key={criterio.id}
+                  value={criterio.value}
+                  onClick={() => selecionarCriterio(grupoIndex, index, criterio.id, criterio.value)}
+
+               
+              >
+                  <span>{criterio.value}</span>
+              </Button>
+                              ))}
+                              </div>
+                              </div>
+
                               </DialogContent>
                             </Dialog>
                                                                                         </div>
@@ -1153,28 +1166,26 @@ console.log(somaTotalPorPesquisador);
                                                                     </Alert>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                  )}
-                    </Draggable>
+                                                     
+                 
                                             
                                             ))}
-                                            {provided.placeholder}
-                                        </div>
-                                    )}
-                                </Droppable>
-                            </DragDropContext>
+
+</div>
+
+                                          
                             </TabsContent>
 
                             <TabsContent value="2" className="w-full flex gap-3 flex-col m-0 p-0">
                             <div className="w-full flex">
-                        <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-blue-700 whitespace-nowrap"></div>
+                        <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] whitespace-nowrap"></div>
 
                         <Alert  className="rounded-l-none ">
                         <div className="flex justify-between  mb-6">
                             <div className="flex flex-col ">
                             <div className="flex items-center gap-3 mb-2 mt-4 ">
                             <Users size={24} className="text-gray-400" />
-           <p className="text-sm font-bold">{pesquisadoresSelecionados.length} pesquisadores</p>
+           <p className="text-sm font-bold">{pesquisadoresSelecionados.length} {pesquisadoresSelecionados.length != 1 ? ('pesquisadores'):('pesquisador(a)')}</p>
            </div>
                             <p className="mt-2 max-w-[500px] text-gray-500 text-xs dark:text-gray-300">Estas configurações incluem o nome do barema para exportação, o período de ano a ser considerado para a análise e outras definições.</p>
                             </div>
@@ -1188,7 +1199,7 @@ console.log(somaTotalPorPesquisador);
                             </div>
 
                             <div className="w-full flex">
-                        <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-blue-700 whitespace-nowrap"></div>
+                        <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] whitespace-nowrap"></div>
 
                         <Alert  className="rounded-l-none ">
                         <div className="flex justify-between  mb-6">
@@ -1201,26 +1212,41 @@ console.log(somaTotalPorPesquisador);
                             </div>
 
                             <div className="flex gap-3">
-                            <Button variant={'ghost'} onClick={() => handleDownloadJson()}  className="text-blue-700 hover:text-blue-800"><Download size={16} />Baixar .csv com o resultado</Button>
+                            <Button variant={'ghost'} onClick={() => handleDownloadJson()}  ><Download size={16} />Baixar resultado</Button>
                             </div>
                         </div>
 
                         {grupos.length !=0 && (
                             <div>
-                            <div className="w-full flex border border-neutral-200 rounded-b-none  dark:border-neutral-800 py-3 px-4 rounded-md hover:bg-neutral-100/50 dark:hover:bg-neutral-800/50 transition-all">
-                                     
-                            <div className={`grid gap-3  w-full`} style={{ gridTemplateColumns: `repeat(${grupos.length + 2}, minmax(0, 1fr))` }}>
-                                     <p className="font-medium text-gray-600 text-sm dark:text-white">Pesquisador</p>
-                                         {grupos.map((grupo) => {
+                            <Table>
+                                   <TableHeader>
+                                <TableRow>
+                                <TableHead className="" >Pesquisadores</TableHead>
+                                {grupos.map((grupo) => {
                                          return (
-                                             <p  className="font-medium max-w-[100px] truncate text-gray-600 text-sm dark:text-white">{grupo.titulo}</p>
+                                            <TableHead >{grupo.titulo}</TableHead>
                                          );
                                      })}
-     <p className="font-medium text-gray-600 text-sm dark:text-white">Total</p>
-     
-                                     </div>
-                                     
-                                 </div>
+                                </TableRow>
+                            </TableHeader>
+
+                            <TableBody>
+                                <TableRow>
+                                {Object.values(somaTotalPorPesquisador)
+                                    .map((grupo) => grupo)
+                                    .sort((a, b) => parseFloat(b.total) - parseFloat(a.total))
+                                    .map((grupoOrdenado) => (
+                                        <TableCell>
+                                             <div className="flex items-center gap-3">
+                                <div className="rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat group-hover:rounded-l-lg group-hover:rounded-r-none whitespace-nowrap" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${grupoOrdenado.id})` }}></div>
+                                <p className="flex flex-1 text-gray-500 text-sm truncate dark:text-white">{grupoOrdenado.name}</p>
+                            </div>
+                                        </TableCell>
+
+                                    ))}
+                                </TableRow>
+                            </TableBody>
+                                    </Table>  
      
                                  
                                 

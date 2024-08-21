@@ -133,7 +133,7 @@ export function ResearcherModal() {
     const [researcher, setResearcher] = useState<Research[]>([]); 
     const [, isLoading] = useState(false)
     const {name} = data
-    const { urlGeral, itemsSelecionados,  setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados } = useContext(UserContext);
+    const { urlGeral, itemsSelecionados,  setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados, permission } = useContext(UserContext);
   
 
     const [, setResearcherData] = useState<ResearchOpenAlex[]>([]);
@@ -231,6 +231,7 @@ setItensSelecionadosPopUp(itemsSelecionados)
 
         let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=${(researcher.map((props) => (props.id)))}&type=ARTICLE&qualis=&qualis=&year=1900`;
 
+
         useEffect(() => {
           const fetchData = async () => {
        
@@ -258,7 +259,9 @@ setItensSelecionadosPopUp(itemsSelecionados)
           fetchData();
         }, [urlPublicacoesPorPesquisador]);
 
-
+  const hasBaremaAvaliacao = permission.some(
+    (perm) => perm.permission === 'criar_barema_avaliacao'
+  );
 
 
 const convertJsonToCsv = (json: any[]): string => {
@@ -369,50 +372,52 @@ function generateNameVariations(name: string): string[] {
 
       
 
-       <TooltipProvider>
-       <Tooltip>
-         <TooltipTrigger asChild>
-         <Button
-         variant={'default'}
-         onClick={() => {
-           // Verifica se o pesquisador já está selecionado pelo nome
-           if (pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name)) {
-             // Remove o pesquisador selecionado com o nome correspondente
-             setPesquisadoresSelecionados(prev => prev.filter(pesquisador => pesquisador.name !== props.name));
-           } else {
-             // Adiciona o novo pesquisador selecionado
-             setPesquisadoresSelecionados(prev => [
-               ...prev,
-               {
-                 id: props.id,
-                 name: props.name,
-                 university: props.university,
-                 lattes_id: props.lattes_id,
-                 city: props.city,
-                 area: props.area,
-                 graduation: props.graduation,
-               }
-             ]);
-           }
-         }}
-         className={`h-8 w-8 p-0 text-white dark:text-white ${
-           pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) && 'bg-red-500 hover:bg-red-600 text-white'
-         }`}
-       >
-         {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
-           <X size={16} className="" />
-         ) : (
-           <Plus size={16} className="" />
-         )}
-       </Button>
-         </TooltipTrigger>
-         <TooltipContent> {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
-          'Remover pesquisador(a)'
-         ) : (
-          'Adicionar pesquisador(a)'
-         )}</TooltipContent>
-       </Tooltip>
-       </TooltipProvider>
+       {hasBaremaAvaliacao && (
+        <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+          <Button
+          variant={'default'}
+          onClick={() => {
+            // Verifica se o pesquisador já está selecionado pelo nome
+            if (pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name)) {
+              // Remove o pesquisador selecionado com o nome correspondente
+              setPesquisadoresSelecionados(prev => prev.filter(pesquisador => pesquisador.name !== props.name));
+            } else {
+              // Adiciona o novo pesquisador selecionado
+              setPesquisadoresSelecionados(prev => [
+                ...prev,
+                {
+                  id: props.id,
+                  name: props.name,
+                  university: props.university,
+                  lattes_id: props.lattes_id,
+                  city: props.city,
+                  area: props.area,
+                  graduation: props.graduation,
+                }
+              ]);
+            }
+          }}
+          className={`h-8 w-8 p-0 text-white dark:text-white ${
+            pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) && 'bg-red-500 hover:bg-red-600 text-white'
+          }`}
+        >
+          {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
+            <X size={16} className="" />
+          ) : (
+            <Plus size={16} className="" />
+          )}
+        </Button>
+          </TooltipTrigger>
+          <TooltipContent> {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
+           'Remover pesquisador(a)'
+          ) : (
+           'Adicionar pesquisador(a)'
+          )}</TooltipContent>
+        </Tooltip>
+        </TooltipProvider>
+       )}
 
          
        <TooltipProvider>

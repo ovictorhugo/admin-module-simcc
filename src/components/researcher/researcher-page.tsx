@@ -44,6 +44,7 @@ import { FilterYearTimeLine } from "../popup/filters-year-timeline";
 import { Skeleton } from "../ui/skeleton";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { ResearcherIndicators } from "./researcher-indicators";
 
 type Research = {
   among: number,
@@ -130,7 +131,7 @@ interface Bolsistas {
 
 export function ResearcherPage() {
 
-    const { urlGeral, itemsSelecionados, setSearchType, setValoresSelecionadosExport,  setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados, setItensSelecionados } = useContext(UserContext);
+    const { urlGeral, itemsSelecionados, setSearchType, setValoresSelecionadosExport,  setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados, setItensSelecionados, permission } = useContext(UserContext);
 
     const history = useNavigate();
 
@@ -419,6 +420,14 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
       pdf.save("timeline.pdf");
     };
 
+
+
+    ////////////PERMISSÕES
+
+    const hasBaremaAvaliacao = permission.some(
+      (perm) => perm.permission === 'criar_barema_avaliacao'
+    );
+
     return(
         <html className="w-full">
        
@@ -434,9 +443,10 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
               </Button>
           
              <div className="flex gap-3  items-center">
-             <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                Página do(a) pesquisador(a)
-              </h1>
+             <TabsList>
+                  <TabsTrigger value="all" onClick={() => setTab('all')}>Visão geral</TabsTrigger>
+                  <TabsTrigger value="indicators" onClick={() => setTab('indicators')}>Indicadores de produção</TabsTrigger>
+                </TabsList>
               
 
               </div>
@@ -477,12 +487,14 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
               <div className="flex gap-3 items-center">
 
+               
+
               <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
   <SheetTrigger>
   <Button onClick={() => setExpand(false)} className="h-8" size={'sm'}><TrendingUp size={16}/>Linha do tempo</Button>
   </SheetTrigger>
   <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 ${expand ? ('min-w-[80vw]'):('min-w-[50vw]')}`}>
-  <DialogHeader className="h-16 p-4 border-b">
+  <DialogHeader className="h-[50px] justify-center px-4 border-b">
 
  <div className="flex items-center gap-3">
  <TooltipProvider>
@@ -490,7 +502,7 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
          <TooltipTrigger asChild>
          <Button className="h-8 w-8" onClick={() => setExpand(!expand)} variant={'outline'} size={'icon'}>{expand ? (<ArrowRightFromLine size={16}/>):(<ArrowLeftFromLine size={16}/>)}</Button>
          </TooltipTrigger>
-         <TooltipContent> Expandir linha do tempo</TooltipContent>
+         <TooltipContent> {expand ? ('Recolher'):('Expandir')}</TooltipContent>
        </Tooltip>
        </TooltipProvider>
 
@@ -502,14 +514,11 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
          <TooltipContent> Fechar</TooltipContent>
        </Tooltip>
        </TooltipProvider>
-          <div className="flex items-center w-full justify-between">
+          <div className="flex items-center flex-1  w-full justify-between">
 
-          <DialogTitle className="text-xl font-medium flex items-center gap-3">
-          <TrendingUp size={24}/> Linha do tempo
-          </DialogTitle>
 
-          <div className="flex items-center gap-3"> 
-          <Button className="h-8 "  onClick={handleDownload} size={'sm'}><Download size={16}/>Fazer download</Button>
+          <div className="flex items-center gap-3 ml-auto"> 
+          <Button className="h-8 ml-auto "  onClick={handleDownload} size={'sm'}><Download size={16}/>Fazer download</Button>
            
            
           </div>
@@ -520,10 +529,24 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
         
         </DialogHeader>
 
-        <div className="p-4">
-        <FilterYearTimeLine
+        <div className="p-8 pb-0">
+                      <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
+                      Trajetória do(a) pesquisador(a)
+                        </p>
+
+                        <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+                           Linha do tempo
+                        </h1>
+
+                        <div className="my-6 border-b dark:border-b-neutral-800"></div>
+
+                        <FilterYearTimeLine
                 onFilterUpdate={handleResearcherUpdate}/>
-        </div>
+                      </div>
+
+                    
+
+      
   {researcher.slice(0, 1).map((user) => {
                 return(
                   <div ref={timelineRef}>
@@ -576,52 +599,54 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
   </SheetContent>
 </Sheet>
 
-          
+         {hasBaremaAvaliacao && (
+ <TooltipProvider>
+ <Tooltip>
+   <TooltipTrigger asChild>
+   <Button
+   variant={'default'}
+   onClick={() => {
+     // Verifica se o pesquisador já está selecionado pelo nome
+     if (pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name)) {
+       // Remove o pesquisador selecionado com o nome correspondente
+       setPesquisadoresSelecionados(prev => prev.filter(pesquisador => pesquisador.name !== props.name));
+     } else {
+       // Adiciona o novo pesquisador selecionado
+       setPesquisadoresSelecionados(prev => [
+         ...prev,
+         {
+           id: props.id,
+           name: props.name,
+           university: props.university,
+           lattes_id: props.lattes_id,
+           city: props.city,
+           area: props.area,
+           graduation: props.graduation,
+         }
+       ]);
+     }
+   }}
+   className={`h-8 w-8 p-0 text-white dark:text-white ${
+     pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) && 'bg-red-500 hover:bg-red-600 text-white'
+   }`}
+ >
+   {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
+     <X size={16} className="" />
+   ) : (
+     <Plus size={16} className="" />
+   )}
+ </Button>
+   </TooltipTrigger>
+   <TooltipContent> {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
+    'Remover pesquisador(a)'
+   ) : (
+    'Adicionar pesquisador(a)'
+   )}</TooltipContent>
+ </Tooltip>
+ </TooltipProvider>
+         )} 
 
-              <TooltipProvider>
-       <Tooltip>
-         <TooltipTrigger asChild>
-         <Button
-         variant={'default'}
-         onClick={() => {
-           // Verifica se o pesquisador já está selecionado pelo nome
-           if (pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name)) {
-             // Remove o pesquisador selecionado com o nome correspondente
-             setPesquisadoresSelecionados(prev => prev.filter(pesquisador => pesquisador.name !== props.name));
-           } else {
-             // Adiciona o novo pesquisador selecionado
-             setPesquisadoresSelecionados(prev => [
-               ...prev,
-               {
-                 id: props.id,
-                 name: props.name,
-                 university: props.university,
-                 lattes_id: props.lattes_id,
-                 city: props.city,
-                 area: props.area,
-                 graduation: props.graduation,
-               }
-             ]);
-           }
-         }}
-         className={`h-8 w-8 p-0 text-white dark:text-white ${
-           pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) && 'bg-red-500 hover:bg-red-600 text-white'
-         }`}
-       >
-         {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
-           <X size={16} className="" />
-         ) : (
-           <Plus size={16} className="" />
-         )}
-       </Button>
-         </TooltipTrigger>
-         <TooltipContent> {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
-          'Remover pesquisador(a)'
-         ) : (
-          'Adicionar pesquisador(a)'
-         )}</TooltipContent>
-       </Tooltip>
-       </TooltipProvider>
+             
        
 
 
@@ -993,6 +1018,54 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
         </div>
       )}
      </div>
+     </TabsContent>
+
+     <TabsContent value="indicators">
+      {researcher.slice(0,1).map((user) => (
+        <ResearcherIndicators
+        among={user.among}
+        articles={user.articles}
+        book={user.book}
+        book_chapters={user.book_chapters}
+        id={user.id}
+        name={user.name}
+        university={user.university}
+        lattes_id={user.lattes_id}
+        area={user.area}
+        abstract={user.abstract}
+        lattes_10_id={user.lattes_10_id}
+        city={user.city}
+        orcid={user.orcid}
+        image={user.image}
+        graduation={user.graduation}
+        patent={user.patent}
+        software={user.software}
+        brand={user.brand}
+        lattes_update={user.lattes_update}
+  
+        h_index={user.h_index}
+        relevance_score={user.relevance_score}
+        works_count={user.works_count}
+        cited_by_count={user.cited_by_count}
+        i10_index={user.i10_index}
+        scopus={user.scopus}
+        openalex={user.openalex}
+  
+        subsidy={user.subsidy}
+        graduate_programs={user.graduate_programs}
+        departments={user.departments}
+        research_groups={user.research_groups}
+    
+        cargo={user.cargo}
+        clas={user.clas}
+        classe={user.classe}
+        rt={user.rt}
+        situacao={user.situacao}
+  
+        year_filter={yearString}
+        entradanaufmg={user.entradanaufmg}
+        />
+      ))}
      </TabsContent>
 
     

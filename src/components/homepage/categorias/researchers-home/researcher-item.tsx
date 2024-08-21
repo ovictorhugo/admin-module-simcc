@@ -8,6 +8,7 @@ import { Button } from "../../../ui/button"
 
 import dt from '../../../../assets/dt.png'
 import pq from '../../../../assets/pq.png'
+import { CardTitle } from "../../../ui/card"
 
 type Research = {
     among: number,
@@ -112,29 +113,27 @@ export function ResearchItem(props: Research) {
             
             </div>
 
-            <div className="h-full mx-6 mt-8 border-4 border-white dark:border-neutral-900 z-[0]  min-w-20 max-w-20 bg-cover bg-center bg-no-repeat rounded-xl aspect-square" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}></div>
+            <div className="h-full mx-6  mt-8 border-4 border-white dark:border-neutral-900 z-[0]  min-w-20 max-w-20 bg-cover bg-center bg-no-repeat rounded-xl aspect-square" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}></div>
             </div>
 
-            <div className="flex gap-2 px-6 flex-col  w-full  ">
-                <div className="flex gap-2 flex-col">
+            <div className="flex gap-2 px-6 flex-col pb-6  w-full  ">
+                <div className="flex gap-1 flex-col">
                 
 
-                <p className="font-semibold  text-xl">{props.name}</p>
+                <CardTitle className="text-lg font-medium">{props.name}</CardTitle>
 
-                {props.university.length > 0 && (
-                  <p className="text-xs flex font-medium text-center w-full items-center gap-1"><Buildings size={12}/> {props.university}</p>
-                )}
-                </div>
-
-                <div className="flex items-center flex-wrap gap-3 mt-4 mb-6">
+                <div className="flex items-center flex-wrap gap-3  mb-6">
                     <div className="flex gap-1 text-sm  items-center "><GraduationCap size={12}/>{props.graduation}</div>
 
                     <div className="flex gap-1 text-sm  items-center"><MapPin size={12}/>{props.city}</div>
 
                     
                 </div>
+                </div>
+
+              
               {props.area.length != 0 && (
-                  <div className="flex gap-3 flex-wrap mb-6">
+                  <div className="flex gap-3 flex-wrap">
                   {props.area != '' && (
                     props.area.split(';').map((value, index) => (
                       <li

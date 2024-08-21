@@ -184,8 +184,10 @@ export function HeaderBarema() {
                   
               })}
 
-              <Button variant={'secondary'}  onClick={() => setPesquisadoresSelecionados([])} size={'icon'}><Trash size={16} /></Button>
+            {pesquisadoresSelecionados.length > 0 && (
+                <Button variant={'secondary'}  onClick={() => setPesquisadoresSelecionados([])} size={'icon'}><Trash size={16} /></Button>
 
+            )}
               <Dialog open={openPopo2}  onOpenChange={setOpenPopo2}>
                         <DialogTrigger >
                        <Button className="" size={'icon'}><Plus size={16}/></Button>

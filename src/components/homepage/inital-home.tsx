@@ -211,7 +211,7 @@ export function InitialHome() {
         }
 
 
-  let urlGrupo =`${urlGeralAdm}researchGroupRest/Query?institution_id=${user.institution_id}`
+  let urlGrupo =`${urlGeralAdm}researchGroupRest/Query?institution_id=`
 
   const [grupos, setGrupos] = useState<GrupoPesquisa[]>([]);
 

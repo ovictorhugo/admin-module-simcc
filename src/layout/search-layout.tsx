@@ -10,11 +10,12 @@ import { cn } from "../lib"
 import { useContext, useEffect} from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { BarChartBig, Blocks, BookOpen, Building2, GraduationCap, Home, Info, List, SearchCheck } from "lucide-react";
+import { BarChartBig, Blocks, BookOpen, Building2, GraduationCap, Home, Info, List, PanelLeftDashed, SearchCheck, Sparkles } from "lucide-react";
 
 import { UserConfigHeader } from "../components/header/user-config-header";
 import { Footer } from "../components/footer/footer";
 import { useModal } from "../components/hooks/use-modal-store";
+import { Button } from "../components/ui/button";
 interface MailProps {
  
   defaultLayout: number[] | undefined
@@ -80,12 +81,26 @@ export default function SearchLayout({
             setIsCollapsed(false);
           }}
           className={cn('flex flex-col justify-between', isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out ")}
-        >
+          >
+  
+  <div>
+  <div className={cn("flex h-[50px] gap-1 items-center justify-center border-b border-b-neutral-200 dark:border-b-neutral-800", isCollapsed ? 'h-[50px]': 'px-2')}>
+  <AccountSwitcher isCollapsed={isCollapsed}  />
 
-<div>
-<div className={cn("flex h-[50px] items-center justify-center border-b border-b-neutral-200 dark:border-b-neutral-800", isCollapsed ? 'h-[50px]': 'px-2')}>
-<AccountSwitcher isCollapsed={isCollapsed}  />
-          </div>
+  {!isCollapsed && (
+                <Button 
+                  onClick={() => {
+                    setIsCollapsed(true)
+                  }} 
+                  variant="ghost" 
+                  size="icon"
+                >
+                  <PanelLeftDashed className="h-4 w-4" />
+                  <span className="sr-only">Recolher Menu</span>
+                </Button>
+              )}
+            </div>
+  
           
           <NavigationSidebar
             isCollapsed={isCollapsed}
@@ -101,6 +116,12 @@ export default function SearchLayout({
                 label: "",
                 icon: SearchCheck,
                 link: "/resultados",
+              },
+              {
+                title: "MarIA",
+                label: "",
+                icon: Sparkles,
+                link: "/marIA",
               },
               {
                 title: "Indicadores",
@@ -171,9 +192,6 @@ export default function SearchLayout({
             ]}
           />
 
-           {loggedIn && (
-             <UserConfigHeader/>
-           )}
           </div>
           
           </ResizablePanel>

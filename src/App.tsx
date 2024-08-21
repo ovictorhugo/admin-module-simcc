@@ -1,20 +1,38 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Home } from './pages/Home'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import  { UserContext }  from '../src/context/context'
 
-import {User as FirebaseAuthUser} from 'firebase/auth'
+
 import { Dashboard } from './pages/Dashboard';
 import DefaultLayout from './layout/default-layout';
 
 import { Authentication } from './pages/Authentication';
 
-interface User extends FirebaseAuthUser {
-  state: string;
-  name: string
-  email: string
-  img_url: string;
+interface User {
   institution_id: string
+  user_id:string
+  display_name:string
+  email:string 
+  uid:string
+  photo_url:string
+  dep_id:string
+  roles:Roles[]
+  linkedin:string
+  lattes_id:string
+  shib_id:string
+  graduate_program:GraduateProgram[]
+  researcger_name:string
+}
+
+interface GraduateProgram {
+  graduate_program_id:string
+  name:string
+}
+
+interface Roles {
+  id:string
+  role_id:string
 }
 
 interface ItemsSelecionados {
@@ -31,17 +49,23 @@ interface PesquisadoresSelecionados {
   graduation: string,
 }
 
-
+interface Permission {
+  permission:string
+  id:string
+}
 
 import { CookiesProvider} from 'react-cookie'
 import LoadingWrapper from './components/loading';
+import ProtectedRoute from './components/ProtectedRoute';
+import { Unauthorized } from './components/errors/Unauthorized';
+import { Error404 } from './components/errors/404';
 
 
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [navbar, setNavbar] = useState(false);
-  const [user, setUser] = useState<User>({  state: '', email: '', name: '', img_url: '', institution_id: '',...{} } as User);
+  const [user, setUser] = useState<User| null>(null);;
 
 
   const [urlGeral, setUrlGeral] = useState(import.meta.env.VITE_URL_GERAL);
@@ -50,7 +74,11 @@ function App() {
 
   const [mapModal, setMapModal] = useState(false)
 
-  const [version, setVersion] = useState(false)
+  const [role, setRole] = useState('')
+  const [permission , setPermission] = useState<Permission[]>([])
+
+
+  const [version, setVersion] = useState(Boolean(import.meta.env.VITE_VERSION))
 
   const [searchType, setSearchType] = useState('article');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
@@ -79,13 +107,12 @@ useEffect(() => {
 }, [searchType]);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem('permission');
 
     if (storedUser) {
       // Se as informações do usuário forem encontradas no armazenamento local, defina o usuário e marque como autenticado
-      setUser(JSON.parse(storedUser));
-      console.log(user)
-      setLoggedIn(true);
+      setPermission(JSON.parse(storedUser));
+
     }
   }, []);
 
@@ -105,6 +132,54 @@ useEffect(() => {
     setLoggedIn(false);
     localStorage.removeItem('user'); // Remover informações do usuário do localStorage ao fazer logout
   };
+
+
+  /////PERMISSÃO
+  const hasBaremaAvaliacao = permission.some(
+    (perm) => perm.permission === 'criar_barema_avaliacao'
+  );
+
+  const hasNotificacoes = permission.some(
+    (perm) => perm.permission === 'enviar_notificacoes'
+  );
+
+  const has_visualizar_pesquisadores = permission.some(
+    (perm) => perm.permission === 'visualizar_pesquisadores'
+  );
+
+  const has_visualizar_todos_departamentos = permission.some(
+    (perm) => perm.permission === 'visualizar_todos_departamentos'
+  );
+
+  const has_visualizar_gerencia_modulo_administrativo = permission.some(
+    (perm) => perm.permission === 'visualizar_modulo_administrativo'
+  );
+
+
+  const has_visualizar_modulo_administrativo = permission.some(
+    (perm) => perm.permission === 'visualizar_modulo_administrativo'
+  );
+
+  const has_visualizar_todos_programas = permission.some(
+    (perm) => perm.permission === 'visualizar_todos_programas'
+  );
+
+  const has_visualizar_grupos_pesquisa = permission.some(
+    (perm) => perm.permission === 'visualizar_grupos_pesquisa'
+  );
+
+  const has_visualizar_inct = permission.some(
+    (perm) => perm.permission === 'visualizar_inct'
+  );
+
+  const has_editar_pesos_avaliacao = permission.some(
+    (perm) => perm.permission === 'editar_pesos_avaliacao'
+  );
+
+  const has_visualizar_indicadores_instituicao = permission.some(
+    (perm) => perm.permission === 'visualizar_indicadores_instituicao'
+  );
+
 
  
 
@@ -140,7 +215,9 @@ useEffect(() => {
       mode, setMode,
       navCollapsedSize, setNavCollapsedSize,
       defaultLayout, setDefaultLayout,
-      version, setVersion
+      version, setVersion,
+      role, setRole,
+      permission , setPermission
 
     }}
     >
@@ -158,12 +235,13 @@ useEffect(() => {
         <Route path='/producoes-recentes' element={<Home/>}/>
         <Route path='/departamentos' element={<Home/>}/>
         <Route path='/researcher' element={<Home/>}/>
+        <Route path='/marIA' element={<Home/>}/>
 
         
         
         <Route
         path='/signIn'
-        element={loggedIn == false ? <Authentication/> : <Navigate to='/' />}
+        element={loggedIn == false ? <Authentication/> :  <Authentication/>}
         />
 
         <Route
@@ -172,25 +250,120 @@ useEffect(() => {
         />
       
 
-      
-
-<Route path='/dashboard' element={<Dashboard/> }/>
-<Route path='/dashboard/programas' element={<Dashboard/> }/>
-<Route path='/dashboard/departamentos' element={<Dashboard/> }/>
-<Route path='/dashboard/pesquisadores' element={<Dashboard/> }/>
-<Route path='/dashboard/pesos-avaliacao' element={<Dashboard/> }/>
-<Route path='/dashboard/grupos-pesquisa' element={<Dashboard/> }/>
-<Route path='/dashboard/indicadores' element={<Dashboard/> }/>
-<Route path='/dashboard/baremas' element={<Dashboard/> }/>
-<Route path='/dashboard/enviar-notificacoes' element={<Dashboard/> }/>
-<Route path='/dashboard/informacoes' element={<Dashboard/> }/>
-<Route path='/dashboard/minha-area' element={<Dashboard/> }/>
+<Route
+    path='/dashboard/administrativo'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_modulo_administrativo}
+      />
+    }
+  />
 
 
 <Route
-          path='/config'
-          element={(user.state == 'master')  ? <Dashboard/> : <Navigate to='/' />}
-        />
+    path='/dashboard'
+    element={<Dashboard />}
+  />
+
+
+<Route
+    path='/dashboard/programas'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_todos_programas}
+      />
+    }
+  />
+
+<Route
+    path='/dashboard/departamentos'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_todos_departamentos}
+      />
+    }
+  />
+
+<Route
+    path='/dashboard/pesquisadores'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_pesquisadores}
+      />
+    }
+  />
+
+<Route
+    path='/dashboard/inct'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_inct}
+      />
+    }
+  />
+
+
+<Route
+    path='/dashboard/pesos-avaliacao'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_editar_pesos_avaliacao}
+      />
+    }
+  />
+
+<Route
+    path='/dashboard/grupos-pesquisa'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_grupos_pesquisa}
+      />
+    }
+  />
+
+<Route
+    path='/dashboard/indicadores'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_indicadores_instituicao}
+      />
+    }
+  />
+
+  <Route
+    path='/dashboard/baremas'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={hasBaremaAvaliacao}
+      />
+    }
+  />
+
+<Route
+    path='/dashboard/enviar-notificacoes'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={hasNotificacoes}
+      />
+    }
+  />
+
+<Route path='/dashboard/informacoes' element={<Dashboard/> }/>
+
+
+<Route path='/unauthorized' element={<Unauthorized />} />
+
+<Route path='*' element={<Error404 />} />
         
       </Routes>
       </LoadingWrapper>

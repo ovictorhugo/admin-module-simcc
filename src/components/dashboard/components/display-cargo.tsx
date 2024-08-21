@@ -5,7 +5,7 @@ import {  CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from
 import { toast } from "sonner"
 import funcionalidadesData from './data.json';
 import { Alert } from "../../ui/alert";
-import { useContext,  useState } from "react";
+import { useContext,  useEffect,  useState } from "react";
 import { UserContext } from "../../../context/context";
 
 import {  MagnifyingGlass } from "phosphor-react";
@@ -16,6 +16,13 @@ interface Disciplinas {
     role:string
     id:string
   }
+
+
+  interface Permission {
+    permission:string
+    id:string
+  }
+  
 
 
 
@@ -86,6 +93,138 @@ export function DisplayCargo(props:Disciplinas) {
 
   }
 
+  const handleSubmitFuncionalidade = async (permission:string) => {
+    try {
+
+        const data = [
+            {
+              role_id:props.id,
+              permission:permission
+              }
+          ]
+
+           let urlProgram = urlGeralAdm + 's/permission'
+
+           console.log(urlProgram)
+           const fetchData = async () => {
+     
+            try {
+              const response = await fetch(urlProgram, {
+                mode: 'cors',
+                method: 'POST',
+                headers: {
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'POST',
+                  'Access-Control-Allow-Headers': 'Content-Type',
+                  'Access-Control-Max-Age': '3600',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+              });
+  
+              if (response.ok) {
+               
+                toast("Dados enviados com sucesso", {
+                    description: `Funcionalidade adicionado à ${props.role} `,
+                    action: {
+                      label: "Fechar",
+                      onClick: () => console.log("Undo"),
+                    },
+                  })
+                  fetchDataPerm();
+               
+              } else {
+               
+                toast("Tente novamente!", {
+                    description: `Erro ao cadastrar funcionalidade à ${props.role} `,
+                    action: {
+                      label: "Fechar",
+                      onClick: () => console.log("Undo"),
+                    },
+                  })
+              }
+              
+            } catch (err) {
+              console.log(err);
+            } 
+          };
+          fetchData();
+         
+          
+
+} catch (error) {
+    console.error('Erro ao processar a requisição:', error);
+  }
+
+}
+
+
+
+///delete
+const handleDeleteFuncionalidade = async (permission:string) => {
+  try {
+
+      const data = [
+          {
+            id:permission,
+            }
+        ]
+
+         let urlProgram = urlGeralAdm + 's/permission'
+
+         console.log(urlProgram)
+         const fetchData = async () => {
+   
+          try {
+            const response = await fetch(urlProgram, {
+              mode: 'cors',
+              method: 'DELETE',
+              headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'DELETE',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Max-Age': '3600',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+             
+              toast("Dados enviados com sucesso", {
+                  description:`Funcionalidade desvinculada à ${props.role}`,
+                  action: {
+                    label: "Fechar",
+                    onClick: () => console.log("Undo"),
+                  },
+                })
+            
+             
+            } else {
+             
+              toast("Tente novamente!", {
+                  description: `Erro ao desvincular funcionalidade à ${props.role} `,
+                  action: {
+                    label: "Fechar",
+                    onClick: () => console.log("Undo"),
+                  },
+                })
+            }
+            
+          } catch (err) {
+            console.log(err);
+          } 
+        };
+        fetchData();
+        fetchDataPerm();
+        
+
+} catch (error) {
+  console.error('Erro ao processar a requisição:', error);
+}
+
+}
+
   ///
   const [input, setInput] = useState('')
 
@@ -106,6 +245,44 @@ const funcionalidades = funcionalidadesData;
       normalizeString(framework.name).includes(normalizeString(input))
     );
 
+
+    let urlPermission = urlGeralAdm + `s/permission?role_id=${props.id}`
+    const [isLoading, setIsLoading] = useState(false)
+
+  const [total, setTotal] = useState<Permission[]>([]);
+
+  const fetchDataPerm = async () => {
+       
+    try {
+      setIsLoading(true)
+      const response = await fetch(urlPermission , {
+        mode: "cors",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Max-Age": "3600",
+          "Content-Type": "text/plain",
+        },
+      });
+      const data = await response.json();
+      if (data) {
+          setTotal(data)
+          setIsLoading(false)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+
+  
+  useEffect(() => {
+
+  fetchDataPerm()
+
+}, [urlPermission]);
   
  
     return(
@@ -151,6 +328,13 @@ const funcionalidades = funcionalidadesData;
             <div className="grid gap-3">
               <div className="font-semibold">Funcionalidades</div>
               <ul className="grid gap-3">
+
+              {Array.isArray(total) && total.length > 0 && total.map((props) => (
+                <div key={props.id} className="group w-full flex justify-between gap-3 h-8 ">
+                  <p className="capitalize">{props.permission.split('_').join(' ')}</p>
+                  <Button onClick={() => handleDeleteFuncionalidade (props.id)} variant={'destructive'} size={'icon'} className="w-8 h-8 group-hover:flex hidden"><Trash className="h-3.5 w-3.5"/></Button>
+                </div>
+              ))}
                 
               <Dialog open={openPopo2}  onOpenChange={setOpenPopo2}>
                         <DialogTrigger className="w-full">
@@ -158,7 +342,7 @@ const funcionalidades = funcionalidadesData;
                         </DialogTrigger>
                         <DialogContent className="z-[9999]" >
     <DialogHeader>
-      <DialogTitle>Escolher funcionalidada</DialogTitle>
+      <DialogTitle>Escolher funcionalidade</DialogTitle>
       <DialogDescription>
        Todas as funcionalidades cadastradas no Módulo Administrativo da instituição
       </DialogDescription>
@@ -170,7 +354,7 @@ const funcionalidades = funcionalidadesData;
                                   className="border-0"
                                   value={input}
                                   onChange={(e) => setInput(e.target.value)}
-                                  placeholder="Buscar pesquisador"
+                                  placeholder="Buscar fucnionalidade"
                                 />
                               </div>
 
@@ -185,8 +369,10 @@ const funcionalidades = funcionalidadesData;
                                       className="text-left justify-start"
                                       onClick={() => {
                                        
-                                  
-                                        setOpenPopo2(false); // Fechar o popover após a seleção
+                                        handleSubmitFuncionalidade(props.value)
+                                   
+                                        setOpenPopo2(false);
+                                        // Fechar o popover após a seleção
                                       }}
                                     >
                                       {props.name}
@@ -212,7 +398,7 @@ const funcionalidades = funcionalidadesData;
           </CardContent>
           <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
             <div className="text-xs text-muted-foreground">
-              Ano e semestre: 
+              Cargo | Conectee
             </div>
 
             

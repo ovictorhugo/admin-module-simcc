@@ -22,9 +22,17 @@ import { UserContext } from "../../context/context";
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { toast } from "sonner"
 import { Button } from "../ui/button";
-import { ArrowUUpLeft, Plus } from "phosphor-react";
+import { ArrowUUpLeft, Plus, X } from "phosphor-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+
+import {
+  Sheet,
+  SheetContent,
+
+} from "../../components/ui/sheet"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { ScrollArea } from "../ui/scroll-area";
 
 export function AddGraduateProgram() {
 
@@ -61,7 +69,7 @@ export function AddGraduateProgram() {
                 url_image: user.img_url,
                 city: city,
                 visible: false
-              }
+            }
           ]
 
           let urlProgram = urlGeralAdm + '/GraduateProgramRest/Insert'
@@ -180,21 +188,47 @@ export function AddGraduateProgram() {
       };
 
     return  (
-        <Dialog open={isModalOpen} onOpenChange={onClose}> 
- <DialogContent className="min-w-[40vw] ">
- <DialogHeader className="pt-8 px-6">
-          <DialogTitle className="text-2xl text-center font-medium">
-          Cadastrar programa de <strong className="bg-blue-700 text-white hover:bg-blue-800 transition duration-500 font-medium">pós-graduação</strong>
-          </DialogTitle>
-          <DialogDescription className="text-center text-zinc-500">
-          Adicione as informações básicas do programa de pós-graduação como o nome, classificação e modalidade.
-          </DialogDescription>
-        </DialogHeader>
+      <Sheet open={isModalOpen} onOpenChange={onClose}>
+       <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[50vw]`}>
+       <DialogHeader className="h-[50px] px-4 justify-center border-b">
+
+<div className="flex items-center gap-3">
+<TooltipProvider>
+<Tooltip>
+ <TooltipTrigger asChild>
+ <Button className="h-8 w-8" variant={'outline'}  onClick={() => onClose()} size={'icon'}><X size={16}/></Button>
+ </TooltipTrigger>
+ <TooltipContent> Fechar</TooltipContent>
+</Tooltip>
+</TooltipProvider>
+
+<div className="flex ml-auto items-center w-full justify-between">
+
+  <div className="flex ml-auto items-center gap-3">
+
+ 
+     </div>
+</div>
+
+</div>
+ 
+</DialogHeader>
+
+<ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
+        <div className="mb-8">
+                      <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
+                      Programas de pós-graduação
+                        </p>
+
+                        <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+                          Adicionar programa
+                        </h1>
+                      </div>
 
         <div>
             <div className="flex flex-col gap-2 mt-4">
                 <Label>Nome do programa*</Label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Nome do programa"/>
+                <Input value={name} onChange={(e) => setName(e.target.value)} type="text" />
             </div>
 
             <div className="mt-4 gap-4 grid grid-cols-2">
@@ -202,7 +236,7 @@ export function AddGraduateProgram() {
                 <Label>Modalidade*</Label>
                 <Select  onValueChange={(value) => setModality(value)}>
             <SelectTrigger className="w-full">
-                <SelectValue placeholder="Escolha a modalidade" />
+                <SelectValue />
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="ACADÊMICO">Acadêmico</SelectItem>
@@ -215,7 +249,7 @@ export function AddGraduateProgram() {
 
             <div className="flex flex-col gap-2">
                 <Label>Cidade*</Label>
-                <Input value={city} onChange={(e) => setCity(e.target.value)} type="text" placeholder="Cidade"/>
+                <Input value={city} onChange={(e) => setCity(e.target.value)} type="text" />
             </div>
             </div>
 
@@ -224,7 +258,7 @@ export function AddGraduateProgram() {
                 <Label>Tipo de programa*</Label>
                 <Select  onValueChange={(value) => setType(value)}>
             <SelectTrigger className="w-full">
-                <SelectValue placeholder="Escolha o tipo de programa" />
+                <SelectValue  />
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="DOUTORADO">Doutorado</SelectItem>
@@ -238,33 +272,29 @@ export function AddGraduateProgram() {
            <div className="w-1/2 flex gap-4">
            <div className="flex flex-col gap-2 w-2/3">
                 <Label>Área*</Label>
-                <Input value={area} onChange={(e) => setArea(e.target.value)} type="text" placeholder="Área"/>
+                <Input value={area} onChange={(e) => setArea(e.target.value)} type="text" />
             </div>
 
             <div className="flex flex-col gap-2 w-1/3">
                 <Label>Nota</Label>
-                <Input value={ranking} onChange={(e) => setRanking(e.target.value)} type="text" placeholder="Nota"/>
+                <Input value={ranking} onChange={(e) => setRanking(e.target.value)} type="text"/>
             </div>
            </div>
             </div>
 
             <div className="flex flex-col gap-2 mt-4">
                 <Label>Código do programa (Sucupira)</Label>
-                <Input value={code} onChange={(e) => setCode(e.target.value)} type="text" placeholder="Código do programa (Sucupira)"/>
+                <Input value={code} onChange={(e) => setCode(e.target.value)} type="text" />
             </div>
+
+            <Button onClick={() => handleSubmit()} size={'sm'} className="text-white dark:text-white mt-3 ml-auto flex ">
+   <Plus size={16} className="" />Adicionar
+ </Button>
         </div>
+        </ScrollArea>
+     
 
-        <DialogFooter className=" py-4 ">
-        <Button variant={'ghost'}   onClick={() => onClose()}>
-            <ArrowUUpLeft size={16} className="" />Voltar
-              </Button>
-
-              <Button  onClick={handleSubmit} className="text-white dark:text-white" >
-              <Plus size={16} className="" />Adicionar
-              </Button>
-            </DialogFooter>
-
- </DialogContent>
-        </Dialog>
+            </SheetContent>
+            </Sheet>
     )
 }

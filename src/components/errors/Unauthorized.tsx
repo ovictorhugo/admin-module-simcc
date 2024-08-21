@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import bg_popup from '../../assets/bg_home.png';
 import { Link } from "react-router-dom";
 
-export function Error404() {
+export function Unauthorized() {
     const { theme } = useTheme()
     const [clientId, setClientId] = useState<string | null>(null);
     const [provider, setProvider] = useState<string | null>(null);
@@ -29,11 +29,11 @@ export function Error404() {
             {theme == 'dark' ? (<LogoConecteeWhite/>):(<LogoConectee/>)}
         </Link>
         <div className="w-full flex flex-col items-center justify-center">
-                <p className="text-9xl text-[#719CB8] font-bold mb-16 animate-pulse">{`>_<`}</p>
-                <h1 className=" text-4xl text-neutral-400 font-medium leading-tight tracking-tighter lg:leading-[1.1] ">Página não encontrada</h1>
+                <p className="text-9xl text-[#719CB8] font-bold mb-16 animate-pulse">{`(¬_¬")`}</p>
+                <h1 className=" text-4xl text-neutral-400 font-medium leading-tight tracking-tighter lg:leading-[1.1] ">Você não tem permissão para acessar essa página</h1>
                
                 <p className="font-medium text-sm mt-2">
-                  Código do erro: 404
+                  Código do erro: 500
                 </p>
 
                 <p className="font-medium text-sm">

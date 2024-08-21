@@ -1,4 +1,4 @@
-import {  ChevronLeft, Copy,  FileJson, Mail, MapPin } from "lucide-react";
+import {  Building, Building2, ChevronLeft, Copy,  FileJson, Mail, MapPin } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ import {
   AccordionTrigger,
   
 } from "../../components/ui/accordion"
-
+import ColaboradoresData from './colaboradores.json';
 import {
   Table,
   TableBody,
@@ -183,7 +183,7 @@ export function Info() {
         const isHexColor = props.color.includes('#');
         return (
           <div
-            className={`w-8 h-8 rounded-md whitespace-nowrap flex ${
+            className={`w-full h-32 rounded-md whitespace-nowrap flex ${
               isHexColor ? '' : props.color
             }`}
             style={isHexColor ? { backgroundColor: props.color } : {}}
@@ -194,17 +194,7 @@ export function Info() {
       const version = getVersion();
 
 
-    const [colaboradores] = useState([
-        { id: 1, itens: 'https://www.ufba.br/sites/portal.ufba.br/files/brasao_ufba.jpg', name: `Victor Hugo de Jesus Oliveira`, inst: `Universidade Federal de Minas Gerais`, img:`../col_3.png`, mail: 'victorhugodejesusoliveira@gmail.com' },
-        { id: 2, itens: 'https://upload.wikimedia.org/wikipedia/commons/8/88/Bras%C3%A3o_da_UNEB.png', name: `Matheus Souza dos Santos`, inst: `Universidade do Estado da Bahia`, img:`../col_4.png`, mail:'ejorge@uneb.br' },
-        { id: 3, itens: 'https://upload.wikimedia.org/wikipedia/commons/8/88/Bras%C3%A3o_da_UNEB.png', name: `Eduardo Manuel de Freitas Jorge`, inst: `Universidade do Estado da Bahia`, img:`../col_2.png`, mail:'' },
-        { id: 4, itens: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Bras%C3%A3o_UESC.svg/1200px-Bras%C3%A3o_UESC.svg.png', name: `Gesil Sampaio Amarante Segundo`, inst: `Universidade Estadual de Santa Cruz`, img:`../col_5.png` },
-        { id: 4, itens: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Bras%C3%A3o_UESC.svg/1200px-Bras%C3%A3o_UESC.svg.png', name: `Gesil Sampaio Amarante Segundo`, inst: `Universidade Estadual de Santa Cruz`, img:`../col_5.png` },
-        { id: 4, itens: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Bras%C3%A3o_UESC.svg/1200px-Bras%C3%A3o_UESC.svg.png', name: `Gesil Sampaio Amarante Segundo`, inst: `Universidade Estadual de Santa Cruz`, img:`../col_5.png` },
-        { id: 4, itens: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Bras%C3%A3o_UESC.svg/1200px-Bras%C3%A3o_UESC.svg.png', name: `Gesil Sampaio Amarante Segundo`, inst: `Universidade Federal do Recôncavo da Bahia`, img:`../col_5.png` },
-        { id: 4, itens: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Bras%C3%A3o_UESC.svg/1200px-Bras%C3%A3o_UESC.svg.png', name: `Gesil Sampaio Amarante Segundo`, inst: `Universidade do Estado da Bahia`, img:`../col_5.png` },
-        { id: 5, itens: 'https://www.ufrb.edu.br/ascom/images/documentos/marca/01_-_Preferencial.png', name: `Gleidson de Meireles Costa`, inst: `Universidade Federal do Recôncavo da Bahia`, img:`../col_1.png`, mail:'' },
-      ]);
+    const colaboradores = ColaboradoresData;
 
        const urlApi = `${urlGeral}researcherName?name=`
        const urlApi2 = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=&type=&qualis=&year=`
@@ -262,20 +252,17 @@ export function Info() {
 
                 <div className="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8">
                     {colaboradores.map((props) => (
-                        <Alert className="flex gap-3">
-                            <div className="h-10 w-10 rounded-md bg-cover bg-center">
-
-                            </div>
+                        <Alert className="flex gap-3 p-8">
 
                             <div className="flex flex-1 flex-col">
-                             <div>
-                             <p className="text-lg font-semibold">{props.name}</p>
-                             <div className="flex gap-2 items-center text-xs"><Mail size={12}/>{props.inst}</div>
+                             <div className="mb-8">
+                             <p className="text-lg  font-medium">{props.name}</p>
+                             <div className="flex gap-2 items-center text-sm text-gray-500"><Building2 size={12}/>{props.inst}</div>
                              </div>
 
                                 <div className="flex gap-4 flex-wrap">
-                                  <Link to={''} target="_blank">  <div className="flex gap-2 items-center text-xs"><LinkSimple size={12}/>Currículo Lattes</div></Link>
-                                    {props.mail != '' && (
+                                  <Link to={props.lattes} target="_blank">  <div className="flex gap-2 items-center text-xs"><LinkSimple size={12}/>Currículo Lattes</div></Link>
+                                    {props.mail != "" && (
                                         <div className="flex gap-2 items-center text-xs"><Mail size={12}/>{props.mail}</div>
                                     )}
                                 </div>
@@ -977,16 +964,16 @@ export function Info() {
 
                 <ResponsiveMasonry
     columnsCountBreakPoints={{
-        350: 2,
-        750: 2,
-        900: 3,
-        1200: 5,
-        1700: 8
+        350: 3,
+        750: 4,
+        900: 7,
+        1200: 10,
+        1700: 14
     }}
 >
                  <Masonry gutter="16px">
                    {colors.map((props) => (
-                     <div className="flex gap-3 ">
+                     <div className="flex gap-3 flex-col ">
                      <Box color={props.color} ></Box>
                     <div className="flex flex-1 flex-col">
                     <p className="text-sm font-medium  uppercase">{props.name}</p>

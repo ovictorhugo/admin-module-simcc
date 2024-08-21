@@ -39,7 +39,7 @@ export function AddResearcherDashboard() {
                 researcher_id: docId,
                 name: nomePesquisador,
                 lattes_id: lattesID,
-                institution_id: user.institution_id,
+                institution_id: user?.institution_id,
               }
           ]
 
@@ -136,7 +136,7 @@ export function AddResearcherDashboard() {
 
       // upload
 
-      const urlGetResearcher = urlGeralAdm + `ResearcherRest/Query?institution_id=${user.institution_id}`;
+      const urlGetResearcher = urlGeralAdm + `ResearcherRest/Query?institution_id=${user?.institution_id}`;
 
 
       const fetchDataTable = async () => {

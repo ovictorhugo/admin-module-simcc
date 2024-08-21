@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useContext} from "react";
 
@@ -17,7 +17,7 @@ import {
 
   
 
-import {  Grip, Laptop, LogIn, Moon, PanelRightOpen, Search, Sun } from "lucide-react";
+import {  Grip, Laptop, LayoutDashboard, LogIn, Moon, PanelRightOpen,  Sun } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { Button } from "../ui/button";
 
@@ -41,36 +41,24 @@ import { SymbolEEWhite } from "../svg/SymbolEEWhite";
 import { useModal } from "../hooks/use-modal-store";
 import { LogoIapos } from "../svg/LogoIapos";
 import { LogoIaposWhite } from "../svg/LogoIaposWhite";
+import { CaretLeft, Funnel, MagnifyingGlass } from "phosphor-react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export function Header() {
-  const {loggedIn,  setItensSelecionados, version} = useContext(UserContext)
+  const {loggedIn,  setItensSelecionados, version, searchType , maria, user, permission} = useContext(UserContext)
 
   const { theme, setTheme } = useTheme()
 
-
-
   const navigate = useNavigate()
-  
-
 
   const handleClick = () => {
     navigate('/')
     setItensSelecionados([])
   }
-  const [isVisible, setIsVisible] = React.useState(false);
-  const SCROLL_THRESHOLD = 10; // Altura em pixels em que o elemento deve aparecer
 
-  React.useEffect(() => {
-   
-      if (window.scrollY > SCROLL_THRESHOLD) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+  const location = useLocation();
+  const isVisible = location.pathname != '/' && location.pathname != '/resultados' && location.pathname != '/marIA'
 
-    
-  }, []);
-  
 const {onOpen} = useModal()
 
     return(
@@ -101,12 +89,17 @@ const {onOpen} = useModal()
             </div>
 
 
-            <div className="flex gap-2 items-center justify-center">
+            <div className="flex gap-1 items-center justify-center">
 
             {isVisible && (
-        <div className="flex gap-3 h-8 border border-neutral-200 dark:border-neutral-800 px-4 rounded-md items-center">
-          <Search size={16} />
-          <Input className="border-0 h-full dark:bg-transparent" />
+        <div onClick={() => onOpen('search')} className="flex  h-8 border border-neutral-200 dark:border-neutral-800 px-1 bg-white dark:bg-neutral-950 rounded-md items-center">
+          <MagnifyingGlass size={16} className="w-8" />
+          <Input className="border-0 h-full flex flex-1 dark:bg-transparent" placeholder="Fazer pesquisa..." />
+<p className="bg-neutral-100 rounded-md text-[10px] mr-1  dark:bg-neutral-800 h-6 flex items-center justify-center px-2">Ctrl + Q</p>
+          <Button variant="outline"  className={` h-6 w-6 ${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${maria && ('bg-[#82AAC0]   dark:bg-[#82AAC0]  ')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} size={'icon'}>
+       <Funnel size={10} className="" /> 
+       
+        </Button>
         </div>
       )}
 
@@ -125,9 +118,16 @@ const {onOpen} = useModal()
                  <LogIn className="h-4 w-4" />
                  Criar conta
                </Button></Link>
-)}   <Link to={'/dashboard'}>   <Button variant="ghost" size="icon" >admin</Button></Link>
-             
-             <Link to={'/config'}>   <Button variant="ghost" size="icon" ></Button></Link>
+)}  
+           
+
+           {(loggedIn && permission.length > 0) && (
+  <Link to={'/dashboard'}>
+  <Button variant="ghost" size="sm" className="h-10" >
+                  <LayoutDashboard className="h-4 w-4" />
+                  Console
+                </Button></Link>
+)}
 
              <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -151,18 +151,6 @@ const {onOpen} = useModal()
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-    
-{loggedIn && (
-  
-  <TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger asChild>
-    <Button  onClick={() => onOpen('minha-area')}  variant={'ghost'} size={'icon'}><PanelRightOpen size={16}/></Button>
-    </TooltipTrigger>
-    <TooltipContent> Minha área</TooltipContent>
-  </Tooltip>
-  </TooltipProvider>
-)}
 
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -196,6 +184,26 @@ const {onOpen} = useModal()
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
+    
+{loggedIn && (
+  
+  <TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger asChild>
+    <Button  onClick={() => onOpen('minha-area')}  variant={'ghost'} className="px-2" >
+    <CaretLeft size={16}/>
+    <Avatar className="cursor-pointer rounded-md  h-6 w-6">
+      <AvatarImage  className={'rounded-md h-6 w-6'} src={`${user?.photo_url}`} />
+      <AvatarFallback className="flex items-center justify-center"></AvatarFallback>
+  </Avatar>
+      </Button>
+    </TooltipTrigger>
+    <TooltipContent> Minha área</TooltipContent>
+  </Tooltip>
+  </TooltipProvider>
+)}
+
+   
 
 
          

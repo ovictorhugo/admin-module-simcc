@@ -17,7 +17,7 @@ export function Dashboard() {
 
     useEffect(() => {
         if(location.pathname == '/dashboard') {
-            onOpen('general')
+            onOpen('home-dashboard')
         } else if (location.pathname == '/config') {
             onOpen('master')
         } else if (location.pathname == '/dashboard/programas') {
@@ -40,6 +40,8 @@ export function Dashboard() {
             onOpen('informacoes')
         } else if (location.pathname == '/dashboard/minha-area') {
             onOpen('minha-area')
+        } else if(location.pathname == '/dashboard/administrativo') {
+            onOpen('general')
         }
     }, [location]);
   

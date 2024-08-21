@@ -1,12 +1,29 @@
 import { createContext } from "react";
-import { User as FirebaseAuthUser } from 'firebase/auth';
 
-interface User extends FirebaseAuthUser {
-  state: string;
-  name: string;
-  email: string;
-  img_url: string;
+interface User {
   institution_id: string
+  user_id:string
+  display_name:string
+  email:string 
+  uid:string
+  photo_url:string
+  dep_id:string
+  roles:Roles[]
+  linkedin:string
+  lattes_id:string
+  shib_id:string
+  graduate_program:GraduateProgram[]
+  researcger_name:string
+}
+
+interface GraduateProgram {
+  graduate_program_id:string
+  name:string
+}
+
+interface Roles {
+  id:string
+  role_id:string
 }
 
 interface ItemsSelecionados {
@@ -23,6 +40,12 @@ interface PesquisadoresSelecionados {
   graduation: string,
 }
 
+interface Permission {
+  permission:string
+  id:string
+}
+
+
 interface UserContextType {
   loggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,8 +55,8 @@ interface UserContextType {
   setNavbar: React.Dispatch<React.SetStateAction<boolean>>;
   maria: boolean;
   setMaria: React.Dispatch<React.SetStateAction<boolean>>;
-  user: User;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 
   login: (user: User) => void; // Função de login
   logout: () => void; // Função de logout
@@ -88,6 +111,14 @@ interface UserContextType {
       mode:string, 
       setMode:React.Dispatch<React.SetStateAction<string>>;
 
+
+      role:string, 
+      setRole:React.Dispatch<React.SetStateAction<string>>;
+
+      permission: Permission[] , 
+      setPermission: React.Dispatch<React.SetStateAction<Permission[]>>,
+
+
       navCollapsedSize:number, 
       setNavCollapsedSize:React.Dispatch<React.SetStateAction<number>>;
 
@@ -119,6 +150,14 @@ itemsSelecionados: [] ,
 
   itemsSelecionadosPopUp:[] , 
   setItensSelecionadosPopUp:() => {},
+
+
+  role:"", 
+  setRole:() => {},
+
+  permission:[] , 
+  setPermission: () => {},
+
 
   sugestoes: [] , 
   setSugestoes: () => {},
