@@ -12,6 +12,7 @@ import { toast } from "sonner"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
 import { MagnifyingGlass, User, Users } from "phosphor-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../../ui/dialog";
+import { EditarInfoUsuarios } from "./editar-info-usuarios";
 
 
 interface Disciplinas {
@@ -604,7 +605,7 @@ export function CargosFuncoes() {
 
              <TabsContent value="pesquisadores">
              <main className=" p-4 md:p-8 md:gap-8  gap-4">
-
+                <EditarInfoUsuarios/>
              </main>
              </TabsContent>
         </Tabs>
