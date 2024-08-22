@@ -32,6 +32,9 @@ interface User extends FirebaseAuthUser {
 
   interface Uid {
     uid:string
+    provider:string
+    displayName:string
+    email:string
   }
 
 
@@ -365,12 +368,12 @@ export function SignInContent() {
 
       const [uid, setUid] = useState<Uid| null>(null);;
 
-
       const handleLoginMinhaUfmg = async () => {
         try {
          
-          let urlProgram = urlGeralAdm + 's/user/ufmg'
-          let urlUser = `${urlGeralAdm}s/user?uid=${uid}`;
+          let urlProgram = urlGeralAdm + 's/ufmg/user'
+          let urlPost = urlGeralAdm + 's/user'
+          let urlUser = `${urlGeralAdm}s/user?uid=${uid?.uid} `;
           console.log(urlUser)
 
           const fetchData = async () => {
@@ -378,14 +381,13 @@ export function SignInContent() {
             try {
               const response = await fetch(urlProgram, {
                 mode: "cors",
-                method: 'POST',
                 headers: {
                   "Access-Control-Allow-Origin": "*",
-                  "Access-Control-Allow-Methods": "POST",
+                  "Access-Control-Allow-Methods": "GET",
                   "Access-Control-Allow-Headers": "Content-Type",
                   "Access-Control-Max-Age": "3600",
                   "Content-Type": "text/plain",
-                },
+                }
               });
 
               const data = await response.json();
@@ -393,65 +395,109 @@ export function SignInContent() {
               if (data && Array.isArray(data) && data.length > 0) {
                 data[0].roles = data[0].roles || [];
                 setUid(data[0]);
-                const fetchDataLogin = async () => {
-                  try {
-                    const response = await fetch(urlUser, {
-                      mode: "cors",
-                      method: 'GET',
-                      headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Access-Control-Allow-Methods": "GET",
-                        "Access-Control-Allow-Headers": "Content-Type",
-                        "Access-Control-Max-Age": "3600",
-                        "Content-Type": "text/plain",
-                      },
-                    });
-                    const data = await response.json();
-                    if (data && Array.isArray(data) && data.length > 0) {
-                      data[0].roles = data[0].roles || [];
-                      setLoggedIn(true)
-                      setUser(data[0]);
-                     
-                   
-                 
-                      history('/');
+                console.log(uid)
+
+                const fetchDataPost = async () => {
+
+                  const data = [
+                    {
+                      displayName:uid?.displayName,
+                      email:uid?.uid,
+                      uid:uid?.uid,
+                      photoURL:'',
+                      provider:'shib'
                     }
+                  ]
+        
+                  try {
+                    const response = await fetch(urlProgram, {
+                      mode: 'cors',
+                      method: 'POST',
+                      headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'POST',
+                        'Access-Control-Allow-Headers': 'Content-Type',
+                        'Access-Control-Max-Age': '3600',
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(data),
+                    });
+        
+                    if (response.ok) {
+                      console.log('cadastrou')
+                      const fetchDataLogin = async () => {
+                        try {
+                          const response = await fetch(urlUser, {
+                            mode: "cors",
+                            method: 'GET',
+                            headers: {
+                              "Access-Control-Allow-Origin": "*",
+                              "Access-Control-Allow-Methods": "GET",
+                              "Access-Control-Allow-Headers": "Content-Type",
+                              "Access-Control-Max-Age": "3600",
+                              "Content-Type": "text/plain",
+                            },
+                          });
+                          const data = await response.json();
+                          if (data && Array.isArray(data) && data.length > 0) {
+                            console.log('logou')
+                            data[0].roles = data[0].roles || [];
+                            setLoggedIn(true)
+                            setUser(data[0]);
+                           
+                         
+                       
+                            history('/');
+                          }
+                        } catch (err) {
+                          console.log(err);
+                        }
+                      };
+                      fetchDataLogin();
+                  
+                     
+                    } else {
+                      const fetchDataLogin = async () => {
+                        try {
+                          const response = await fetch(urlUser, {
+                            mode: "cors",
+                            method: 'GET',
+                            headers: {
+                              "Access-Control-Allow-Origin": "*",
+                              "Access-Control-Allow-Methods": "GET",
+                              "Access-Control-Allow-Headers": "Content-Type",
+                              "Access-Control-Max-Age": "3600",
+                              "Content-Type": "text/plain",
+                            },
+                          });
+                          const data = await response.json();
+                          if (data && Array.isArray(data) && data.length > 0) {
+                            data[0].roles = data[0].roles || [];
+                            setLoggedIn(true)
+                            setUser(data[0]);
+                           
+                         
+                       
+                            history('/');
+                          }
+                        } catch (err) {
+                          console.log(err);
+                        }
+                      };
+                      fetchDataLogin();
+                    }
+                    
                   } catch (err) {
                     console.log(err);
-                  }
+                  } 
+                 
                 };
-                fetchDataLogin();
+        
+                fetchDataPost();
             
                
               } else {
-                const fetchDataLogin = async () => {
-                  try {
-                    const response = await fetch(urlUser, {
-                      mode: "cors",
-                      method: 'GET',
-                      headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Access-Control-Allow-Methods": "GET",
-                        "Access-Control-Allow-Headers": "Content-Type",
-                        "Access-Control-Max-Age": "3600",
-                        "Content-Type": "text/plain",
-                      },
-                    });
-                    const data = await response.json();
-                    if (data && Array.isArray(data) && data.length > 0) {
-                      data[0].roles = data[0].roles || [];
-                      setLoggedIn(true)
-                      setUser(data[0]);
-                     
-                   
-                 
-                      history('/');
-                    }
-                  } catch (err) {
-                    console.log(err);
-                  }
-                };
-                fetchDataLogin();
+               
               }
               
             } catch (err) {
