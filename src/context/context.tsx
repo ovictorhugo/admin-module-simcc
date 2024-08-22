@@ -15,6 +15,7 @@ interface User {
   graduate_program:GraduateProgram[]
   researcger_name:string
   departaments:Departaments[]
+  provider:string
 }
 
 interface Departaments {

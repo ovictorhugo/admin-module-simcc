@@ -229,7 +229,7 @@ export function AddResearcherDashboard() {
                   </CardContent>
                   </Alert>
 
-                  <Alert onClick={() => setIsOpenAdd(!onOpenAdd)} className="p-0 hover:bg-[#274B5E] bg-[#719CB8] text-white transition-all cursor-pointer "  >
+                  <Alert onClick={() => setIsOpenAdd(!onOpenAdd)} className="p-0 hover:bg-[#274B5E] bg-[#719CB8] dark:hover:bg-[#274B5E] dark:bg-[#719CB8] text-white transition-all cursor-pointer "  >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                       

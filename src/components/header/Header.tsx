@@ -20,7 +20,7 @@ import {
 
   
 
-import {  Grip, Laptop, LayoutDashboard, LogIn, Moon, PanelRightOpen,  Sun } from "lucide-react";
+import {  Grip, Laptop, LayoutDashboard, LogIn, Moon, PanelRightOpen,  Sun, User } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { Button } from "../ui/button";
 
@@ -201,7 +201,7 @@ const {onOpen} = useModal()
     <CaretLeft size={16}/>
     <Avatar className="cursor-pointer rounded-md  h-6 w-6">
       <AvatarImage  className={'rounded-md h-6 w-6'} src={`${user?.photo_url}`} />
-      <AvatarFallback className="flex items-center justify-center"></AvatarFallback>
+      <AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
   </Avatar>
       </Button>
     </TooltipTrigger>

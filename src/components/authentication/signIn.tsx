@@ -2,10 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import {
-    Card,
+
     CardContent,
     CardDescription,
-    CardFooter,
+
     CardHeader,
     CardTitle,
   } from "../ui/card"
@@ -15,12 +15,7 @@ import "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import img1 from '../../assets/bg_home.png'
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../ui/tabs"
+
 import { toast } from "sonner"
 
 import { User as FirebaseAuthUser} from 'firebase/auth'
@@ -35,9 +30,14 @@ interface User extends FirebaseAuthUser {
   }
 
 
-  import { getFirestore, doc, getDoc } from 'firebase/firestore';
+  interface Uid {
+    uid:string
+  }
+
+
+
 import { GoogleLogo, SignIn } from "phosphor-react";
-import { CookiesProvider, useCookies } from 'react-cookie'
+import { useCookies } from 'react-cookie'
 import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
 
 export function SignInContent() {
@@ -62,53 +62,156 @@ export function SignInContent() {
       const { setUser, user } = useContext(UserContext);
 
       const handleLogin = async () => {
-        try {
-         if(email.length != 0 && password.length != 0 && password.length >= 8 ) {
+        try { 
+          if(email.length == 0) {
+            toast("Erro ao fazer login", {
+              description: "Preencha o email",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+
+            return
+          }
+
+          if(password.length == 0) {
+            toast("Erro ao fazer login", {
+              description: "Preencha a senha",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+
+            return
+          }
+
+          if(password.length <= 7 ) {
+            toast("Erro ao fazer login", {
+              description: "Senha incorreta",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+
+            return
+          }
+
+         else if (email.length != 0 && password.length != 0 && password.length >= 8 ) {
           const result = await signInWithEmailAndPassword(auth, email, password);
-          setLoggedIn(true);
-      
-         
 
-           // Recupere dados personalizados do usuário no Firestore
-            const db = getFirestore();
-            const userDocRef = doc(db, 'institution', String(result.user.email));
-            const snapshot = await getDoc(userDocRef);
-            
-
-            // Verifique se os dados personalizados existem antes de adicionar ao objeto result.user
-            if (snapshot.exists()) {
-              
-             
-              const userData = snapshot.data();
-
-              const userDataFinal: User = {
-                ...result.user,
-                img_url: userData.img_url || '', // Set to the appropriate default value or leave it empty if you don't have a default
-                state: userData.state || '',
-                name: userData.name || '',
-                email: result.user.email || '',
-                institution_id: userData.institution_id || '',
-              };
-             
-              // Adicione os dados personalizados diretamente ao objeto result.user
-
-              // Atualize o estado com o objeto modificado
-              setUser(userDataFinal)
-              localStorage.setItem('user', JSON.stringify(userDataFinal));
-              setCookie('user', (userDataFinal), { path: '/' })
-            }
-
-             // Save user information to local storage
-          
+          try {
+            const data = [
+              {
+                displayName:result.user.displayName,
+                email:result.user.email,
+                uid:result.user.uid,
+                photoURL:result.user.photoURL,
+                provider:result.user.providerId
+              }
+            ]
     
+            let urlProgram = urlGeralAdm + 's/user'
+             let urlUser = urlGeralAdm + `s/user?uid=${result.user.uid}`
+    
+            const fetchData = async () => {
+            
+              try {
+                const response = await fetch(urlProgram, {
+                  mode: 'cors',
+                  method: 'POST',
+                  headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Max-Age': '3600',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data),
+                });
+    
+                if (response.ok) {
+                  const fetchDataLogin = async () => {
+                    try {
+                      const response = await fetch(urlUser, {
+                        mode: "cors",
+                        method: 'GET',
+                        headers: {
+                          "Access-Control-Allow-Origin": "*",
+                          "Access-Control-Allow-Methods": "GET",
+                          "Access-Control-Allow-Headers": "Content-Type",
+                          "Access-Control-Max-Age": "3600",
+                          "Content-Type": "text/plain",
+                        },
+                      });
+                      const data = await response.json();
+                      if (data && Array.isArray(data) && data.length > 0) {
+                        data[0].roles = data[0].roles || [];
+                        setLoggedIn(true)
+                        setUser(data[0]);
+                       
+                     
+                   
+                        history('/');
+                      }
+                    } catch (err) {
+                      console.log(err);
+                    }
+                  };
+                  fetchDataLogin();
+              
+                 
+                } else {
+                  const fetchDataLogin = async () => {
+                    try {
+                      const response = await fetch(urlUser, {
+                        mode: "cors",
+                        method: 'GET',
+                        headers: {
+                          "Access-Control-Allow-Origin": "*",
+                          "Access-Control-Allow-Methods": "GET",
+                          "Access-Control-Allow-Headers": "Content-Type",
+                          "Access-Control-Max-Age": "3600",
+                          "Content-Type": "text/plain",
+                        },
+                      });
+                      const data = await response.json();
+                      if (data && Array.isArray(data) && data.length > 0) {
+                        data[0].roles = data[0].roles || [];
+                        setLoggedIn(true)
+                        setUser(data[0]);
+                       
+                     
+                   
+                        history('/');
+                      }
+                    } catch (err) {
+                      console.log(err);
+                    }
+                  };
+                  fetchDataLogin();
+                }
+                
+              } catch (err) {
+                console.log(err);
+              } 
+             
+            };
+    
+            fetchData();
+            
+          } catch (error) {
+              toast("Erro ao processar requisição", {
+                  description: "Tente novamente",
+                  action: {
+                    label: "Fechar",
+                    onClick: () => console.log("Undo"),
+                  },
+                })
+          }
       
-          setTimeout(() => {
-            if(user.state =='admin') {
-              history('/admin');
-            } else {
-              history('/');
-            }
-          }, 0);
          }
         } catch (error) {
           console.error('Authentication error:', error);
@@ -135,7 +238,7 @@ export function SignInContent() {
             email:result.user.email,
             uid:result.user.uid,
             photoURL:result.user.photoURL,
-            provider:result.user.providerId
+            provider:'google'
           }
         ]
 
@@ -237,8 +340,6 @@ export function SignInContent() {
               },
             })
       }
-   
-
 
           })
           .catch((error) => {
@@ -251,6 +352,125 @@ export function SignInContent() {
               },
             })
           })
+      }
+
+
+
+      ///minha ufmg
+      const shibPersonUidMeta = document.querySelector('meta[name="Shib-Person-Uid"]');
+      const uidFromMeta = shibPersonUidMeta ? shibPersonUidMeta.getAttribute('content') : null;
+
+      // Opção 2: Acessar a variável global
+      const uidFromScript = (window as any).ShibPersonUid;
+
+      const [uid, setUid] = useState<Uid| null>(null);;
+
+
+      const handleLoginMinhaUfmg = async () => {
+        try {
+         
+          let urlProgram = urlGeralAdm + 's/user/ufmg'
+          let urlUser = `${urlGeralAdm}s/user?uid=${uid}`;
+          console.log(urlUser)
+
+          const fetchData = async () => {
+          
+            try {
+              const response = await fetch(urlProgram, {
+                mode: "cors",
+                method: 'POST',
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": "POST",
+                  "Access-Control-Allow-Headers": "Content-Type",
+                  "Access-Control-Max-Age": "3600",
+                  "Content-Type": "text/plain",
+                },
+              });
+
+              const data = await response.json();
+  
+              if (data && Array.isArray(data) && data.length > 0) {
+                data[0].roles = data[0].roles || [];
+                setUid(data[0]);
+                const fetchDataLogin = async () => {
+                  try {
+                    const response = await fetch(urlUser, {
+                      mode: "cors",
+                      method: 'GET',
+                      headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "GET",
+                        "Access-Control-Allow-Headers": "Content-Type",
+                        "Access-Control-Max-Age": "3600",
+                        "Content-Type": "text/plain",
+                      },
+                    });
+                    const data = await response.json();
+                    if (data && Array.isArray(data) && data.length > 0) {
+                      data[0].roles = data[0].roles || [];
+                      setLoggedIn(true)
+                      setUser(data[0]);
+                     
+                   
+                 
+                      history('/');
+                    }
+                  } catch (err) {
+                    console.log(err);
+                  }
+                };
+                fetchDataLogin();
+            
+               
+              } else {
+                const fetchDataLogin = async () => {
+                  try {
+                    const response = await fetch(urlUser, {
+                      mode: "cors",
+                      method: 'GET',
+                      headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "GET",
+                        "Access-Control-Allow-Headers": "Content-Type",
+                        "Access-Control-Max-Age": "3600",
+                        "Content-Type": "text/plain",
+                      },
+                    });
+                    const data = await response.json();
+                    if (data && Array.isArray(data) && data.length > 0) {
+                      data[0].roles = data[0].roles || [];
+                      setLoggedIn(true)
+                      setUser(data[0]);
+                     
+                   
+                 
+                      history('/');
+                    }
+                  } catch (err) {
+                    console.log(err);
+                  }
+                };
+                fetchDataLogin();
+              }
+              
+            } catch (err) {
+              console.log(err);
+            } 
+           
+          };
+  
+          fetchData();
+          
+        } catch (error) {
+            toast("Erro ao processar requisição", {
+                description: "Tente novamente",
+                action: {
+                  label: "Fechar",
+                  onClick: () => console.log("Undo"),
+                },
+              })
+        }
       }
       
       const location = useLocation();
@@ -319,7 +539,7 @@ export function SignInContent() {
           </CardHeader>
 
     <div className="flex gap-3 flex-col">
-    <Link to={"/dashboard"}><Button className=" w-full" variant={'outline'} ><GoogleLogo size={16} className="" /> Login com Minha UFMG</Button></Link>
+<Button onClick={() => (handleLoginMinhaUfmg())} className=" w-full" variant={'outline'} ><GoogleLogo size={16} className="" /> Login com Minha UFMG</Button>
         <Button className=" w-full" variant={'outline'} onClick={handleGoogleSignIn} ><GoogleLogo size={16} className="" /> Login com Google</Button>
        
         </div>

@@ -24,6 +24,7 @@ interface User {
   graduate_program:GraduateProgram[]
   researcger_name:string
   departaments:Departaments[]
+  provider:string
 }
 
 interface GraduateProgram {
@@ -84,7 +85,7 @@ function App() {
   const [permission , setPermission] = useState<Permission[]>([])
 
 
-  const [version, setVersion] = useState(false)
+  const [version, setVersion] = useState(true)
 
   const [searchType, setSearchType] = useState('article');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
@@ -247,7 +248,7 @@ useEffect(() => {
         
         <Route
         path='/signIn'
-        element={loggedIn == false ? <Authentication/> :  <Authentication/>}
+        element={loggedIn == false ? <Authentication/> :  <Navigate to='/' />}
         />
 
         <Route

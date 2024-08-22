@@ -3,6 +3,7 @@
     {"name": "Visualizar gerência módulo administrativo", "value": "visualizar_gerencia_modulo_administrativo", "area":"administrativo"},
     {"name": "Editar cargos e permissões", "value": "editar_cargos_permissoes", "area":"administrativo"},
     {"name": "Editar cargos de usuários", "value": "editar_cargos_usuarios", "area":"administrativo"},
+    {"name": "Editar informações do usuários", "value": "editar_informacoes_usuarios", "area":"administrativo"},
     {"name": "Editar configurações da plataforma", "value": "editar_configuracoes_plataforma", "area":"administrativo"},
     {"name": "Atualizar Apache Hop", "value": "atualizar_apache_hop", "area":"administrativo"},
     {"name": "Visualisar todos os departamentos", "value": "visualizar_todos_departamentos", "area":"departamentos"},

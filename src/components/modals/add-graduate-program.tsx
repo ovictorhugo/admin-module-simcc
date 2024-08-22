@@ -188,7 +188,7 @@ export function AddGraduateProgram() {
     return  (
       <Sheet open={isModalOpen} onOpenChange={onClose}>
        <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[50vw]`}>
-       <DialogHeader className="h-[50px] px-4 justify-center border-b">
+       <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-b-neutral-600">
 
 <div className="flex items-center gap-3">
 <TooltipProvider>

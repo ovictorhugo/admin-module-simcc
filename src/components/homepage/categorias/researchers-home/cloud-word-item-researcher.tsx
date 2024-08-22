@@ -19,7 +19,7 @@ export function CloudWordItemResearcher(props:Props) {
     
 
     return(
-        <li key={props.id} className="list-none list-item w-min" onClick={() => onOpen('researcher-modal', {name:props.name})} >
+        <li key={props.id} className="list-none list-item w-min group" onClick={() => onOpen('researcher-modal', {name:props.name})} >
         <div
          
           className="inline-flex whitespace-nowrap cursor-pointer"
@@ -40,7 +40,7 @@ export function CloudWordItemResearcher(props:Props) {
             style={{ fontSize: `${props.fontSize}%` }}
           >
             {props.name}
-            <Badge className={`text-[10px] text-white dark:text-white ${
+            <Badge className={`text-[10px] group-hover:flex hidden p-0 px-2 text-white dark:text-white ${
             ( searchType === 'article') && 'bg-blue-500 dark:bg-blue-500 hover:bg-blue-500 dark:hover:bg-blue-500 text-white' ||
             (searchType === 'abstract') && 'bg-yellow-500 dark:bg-yellow-500 hover:bg-yellow-500 dark:hover:bg-yellow-500 text-white' ||
             (searchType === 'speaker') && 'bg-orange-500 dark:bg-orange-500 hover:bg-orange-500 dark:hover:bg-orange-500 text-white' ||

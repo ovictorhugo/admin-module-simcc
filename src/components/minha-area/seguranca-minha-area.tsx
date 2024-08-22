@@ -4,8 +4,10 @@ import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { Lock, RefreshCcw, UserCheck } from "lucide-react"
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
+import { AlertDescription, AlertTitle } from "../ui/alert"
 import { toast } from "sonner"
+import { auth } from '../../lib/firebase';
+import { reauthenticateWithCredential, EmailAuthProvider, updatePassword } from 'firebase/auth';
 
 export function SegurancaMinhaArea() {
 
@@ -77,6 +79,61 @@ export function SegurancaMinhaArea() {
 
 
 
+  ///wfwfawfawre
+
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const handleSubmitChangeWord = async () => {
+    setError(null);
+    setSuccess(null);
+
+    // Verifica se as novas senhas coincidem
+    if (newPassword !== confirmNewPassword) {
+      setError('As novas senhas não coincidem.');
+      return;
+    }
+
+    const user = auth.currentUser;
+
+    if (user && user.email) {
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      );
+
+      try {
+        // Reautenticar o usuário com a senha atual
+        await reauthenticateWithCredential(user, credential);
+        // Atualizar a senha do usuário
+        await updatePassword(user, newPassword);
+        toast("Requisição enviada com sucesso", {
+            description: "Senha atualizada",
+            action: {
+                label: "Fechar",
+                onClick: () => console.log("Fechar"),
+            },
+        });
+      } catch (error) {
+        toast("Erro ao processar a requisição", {
+            description: "Senha não alterada",
+            action: {
+                label: "Fechar",
+                onClick: () => console.log("Fechar"),
+            },
+        });
+        console.error('Erro ao atualizar senha:', error);
+      }
+    } else {
+      setError('Usuário não autenticado.');
+    }
+  }
+
+
+
     return(
         <div className="flex flex-col flex-1 w-full">
                       <div>
@@ -127,6 +184,50 @@ export function SegurancaMinhaArea() {
       </div>
 
                     </div>
+
+                   {user?.provider == 'firebase' && (
+                    <div>
+                         <div className="my-6 border-b dark:border-b-neutral-800"></div>
+                    <h5 className="font-medium text-xl">Alterar senha</h5>
+
+
+                    <div className="flex w-full flex-col gap-2 mt-4">
+        <Label>Senha atual</Label>
+        <Input
+          type="password"
+          value={currentPassword}
+          onChange={(e) => setCurrentPassword(e.target.value)}
+        />
+      </div>
+                    <div className="flex w-full gap-4 items-end">
+                  
+                    <div className="flex w-full gap-4 items-end">
+        <div className="flex w-full flex-col gap-2 mt-4">
+          <Label>Nova senha</Label>
+          <Input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+        </div>
+
+      
+        <div className="flex w-full flex-col gap-2 mt-4">
+          <Label>Confirmar nova senha</Label>
+          <Input
+            type="password"
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
+          />
+        </div>
+
+            <Button onClick={() => handleSubmitChangeWord()}><RefreshCcw size={16}/>Atualizar senha</Button>
+                    </div>
+
+                  </div>
+                    </div>
+                   )}
+
                   </div>
     )
 }

@@ -213,7 +213,7 @@ export function ImportBolsistas() {
     return (
         <Sheet open={isModalOpen} onOpenChange={onClose}>
         <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[50vw]`}>
-        <DialogHeader className="h-[50px] px-4 justify-center border-b">
+        <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-b-neutral-600">
  
  <div className="flex items-center gap-3">
  <TooltipProvider>
@@ -249,7 +249,7 @@ export function ImportBolsistas() {
                         <Link to={'http://www.bi.cnpq.br/painel/mapa-fomento-cti/'} target="_blank"  className="inline-flex mt-2 items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como extrair os bolsistas CNPq<ArrowRight size={12}/></Link>
                       </div>
                 <div className="">
-                    <div {...getRootProps()} className="border-dashed mb-3 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 mt-4">
+                    <div {...getRootProps()} className="border-dashed mb-3 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-4">
                         <input {...getInputProps()} />
                         <div className="p-4  border rounded-md">
                             <FileXls size={24} className=" whitespace-nowrap" />

@@ -199,9 +199,9 @@ console.log(urlTermPesquisadores)
           
          </DialogHeader>
  
-         <div>
+         <div className="relative">
          <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
-              <div className="flex gap-6">
+              <div className="flex gap-6 relative">
                   <Tabs defaultValue={tab} value={tab} className="w-full flex flex-1">
                     <TabsContent value="all" className="w-full">
                     <div className="flex flex-col flex-1 w-full">

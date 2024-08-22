@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui
 import { MagnifyingGlass, User, Users } from "phosphor-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../../ui/dialog";
 import { EditarInfoUsuarios } from "./editar-info-usuarios";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 
 
 interface Disciplinas {
@@ -25,6 +26,7 @@ interface PesquisadorProps2 {
   email: string
   user_id:string
   roles:Roles[]
+  photo_url:string
 }
 
 interface Roles {
@@ -555,14 +557,20 @@ export function CargosFuncoes() {
                                     <Button
                                       variant={'ghost'}
                                       key={index}
-                                      className="text-left justify-start"
+                                      className="text-left justify-start h-auto"
                                       onClick={() => {
                                         setPesquisadorSelecionado(props);
                                   
                                         setOpenPopUpIndex(null);
                                       }}
                                     >
-                                      {props.display_name}
+                                    <Avatar className="cursor-pointer rounded-md  h-8 w-8">
+      <AvatarImage  className={'rounded-md  h-8 w-8'} src={`${props.photo_url}`} />
+      <AvatarFallback className="flex items-center justify-center"><User size={12}/></AvatarFallback>
+  </Avatar> <div>
+    <p>{props.display_name} </p>
+  <div className="text-xs text-gray-500 font-normal">({props.email})</div>
+  </div>
                                     </Button>
                                   ))
                                 ) : (
@@ -583,11 +591,17 @@ export function CargosFuncoes() {
         <Label htmlFor="name">Membros cadastrados</Label>
         </div>
 
-        <div>
+        <div className="flex-col flex gap-3">
         {filteredResearchers.map((researcher) => (
               <div key={researcher.user_id} className="group flex items-center justify-between h-10">
-               <div>
-               {researcher.display_name} ({researcher.email})
+               <div className="flex items-center gap-2">
+               <Avatar className="cursor-pointer rounded-md  h-8 w-8">
+      <AvatarImage  className={'rounded-md  h-8 w-8'} src={`${researcher.photo_url}`} />
+      <AvatarFallback className="flex items-center justify-center"><User size={12}/></AvatarFallback>
+  </Avatar> <div>
+    <p className="font-medium">{researcher.display_name} </p>
+  <div className="text-xs text-gray-500">({researcher.email})</div>
+  </div>
                </div>
 
                 <Button onClick={() => handleDeleteUsuario (props.id, researcher.user_id)} variant={'destructive'} size={'icon'} className="w-8 h-8 group-hover:flex hidden"><Trash className="h-3.5 w-3.5"/></Button>
