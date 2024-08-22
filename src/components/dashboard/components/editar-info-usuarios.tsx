@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/context";
 
 interface User {
@@ -33,7 +33,7 @@ export function EditarInfoUsuarios() {
 
     const [user, setUser] = useState<User[]>([])
 
-    const urlUser = `${urlGeralAdm}s/user/all`;
+    const urlUser = `${urlGeralAdm}/s/user/entrys`;
     console.log(urlUser);
 
     const fetchData = async () => {
@@ -51,11 +51,7 @@ export function EditarInfoUsuarios() {
         const data = await response.json();
         if (data ) {
 
-
           setUser(data);
-         
-
-
         }
       } catch (err) {
         console.log(err);
@@ -63,6 +59,10 @@ export function EditarInfoUsuarios() {
       
       }
     };
+
+useEffect(() => {
+    fetchData()
+    }, [])
 
     return(
         <div>

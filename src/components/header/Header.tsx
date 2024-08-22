@@ -10,6 +10,9 @@ import * as React from "react"
 import logo_4 from '../../assets/logo_4.png';
 import logo_4_white from '../../assets/logo_4_white.png';
 
+import logo_5 from '../../assets/logo_cimatec.png';
+import logo_5_white from '../../assets/logo_cimatec_white.png';
+
 
 import {
     NavigationMenuLink,
@@ -73,8 +76,12 @@ const {onOpen} = useModal()
 
             <div className="h-4 w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>
 
-            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
-
+           
+            {version ? (
+              <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
+          ):(
+            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_5_white):(logo_5)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
+          )}
             
             </div>
 

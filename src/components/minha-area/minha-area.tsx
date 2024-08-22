@@ -24,7 +24,7 @@ import { SegurancaMinhaArea } from "./seguranca-minha-area";
 import { LinhaTempoMinhaArea } from "./linha-tempo-minha-area";
 import { auth } from '../../lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type Research = {
   among: number,
@@ -122,10 +122,12 @@ export function MinhaArea() {
       }
     };
 
+    
 
 
-    let urlTermPesquisadores = urlGeral + `researcherName?name=`;
 
+    let urlTermPesquisadores = urlGeral + `researcherName?name=${user?.researcger_name}`;
+console.log(urlTermPesquisadores)
     const [researcher, setResearcher] = useState<Research[]>([]); 
     const [loading, isLoading] = useState(false)
 
@@ -233,13 +235,56 @@ export function MinhaArea() {
                     </TabsContent>
 
                     <TabsContent value="lin" className="w-full">
-                    <LinhaTempoMinhaArea/>
+                    {researcher.slice(0,1).map((user) => (
+                      <LinhaTempoMinhaArea
+                      among={user.among}
+                      articles={user.articles}
+                      book={user.book}
+                      book_chapters={user.book_chapters}
+                      id={user.id}
+                      name={user.name}
+                      university={user.university}
+                      lattes_id={user.lattes_id}
+                      area={user.area}
+                      abstract={user.abstract}
+                      lattes_10_id={user.lattes_10_id}
+                      city={user.city}
+                      orcid={user.orcid}
+                      image={user.image}
+                      graduation={user.graduation}
+                      patent={user.patent}
+                      software={user.software}
+                      brand={user.brand}
+                      lattes_update={user.lattes_update}
+  
+                      h_index={user.h_index}
+                      relevance_score={user.relevance_score}
+                      works_count={user.works_count}
+                      cited_by_count={user.cited_by_count}
+                      i10_index={user.i10_index}
+                      scopus={user.scopus}
+                      openalex={user.openalex}
+  
+                      subsidy={user.subsidy}
+                      graduate_programs={user.graduate_programs}
+                      departments={user.departments}
+                      research_groups={user.research_groups}
+                  
+                      cargo={user.cargo}
+                      clas={user.clas}
+                      classe={user.classe}
+                      rt={user.rt}
+                      situacao={user.situacao}
+  
+                      entradanaufmg={user.entradanaufmg}
+                      />
+                    ))}
                     </TabsContent>
                   </Tabs>
                   
 
                 
-                   <div className={`flex flex-col ${expand ? ('w-[300px]'):('')}`}>
+                   <div className={`flex flex-col sticky top-8 ${expand ? ('w-[300px]'):('')}`}>
                     {expand && (<p className="text-gray-500 uppercase text-xs font-medium mb-2">PÁGINAS</p>)}
                     <div className="flex flex-col gap-2 mb-8">
                     <Button onClick={() => setTab('all')} variant={'ghost'} className={`  ${!expand ? ('w-10'):('justify-start')} ${tab == 'all' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default'):('icon')}><Menu size={16}/>{expand && ('Minha área')}</Button>
@@ -251,7 +296,8 @@ export function MinhaArea() {
 
                    {expand && ( <p className="text-gray-500 uppercase text-xs font-medium mb-2">LINKS EXTERNOS</p>)}
                     <div className="flex flex-col gap-2 mb-8">
-                    <Button onClick={() => setTab('all')} variant={'ghost'} className={` ${!expand ? ('w-10'):('justify-start')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default'):('icon')}><Cube size={16}/>{expand && ('Meus bens patrimoniados')}</Button>
+                    <Button variant={'ghost'} className={` ${!expand ? ('w-10'):('justify-start w-full')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default'):('icon')}><Cube size={16}/>{expand && ('Meus bens patrimoniados')}</Button>
+                    <Link className="w-full" target="_blank" to={`/researcher?researcher_name=${user?.researcger_name}&search_type=&terms=`}><Button variant={'ghost'} className={` ${!expand ? ('w-10'):('justify-start w-full')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default'):('icon')}><User size={16}/>{expand && ('Página pública do pesquisador')}</Button></Link>
                    
                     </div>
 
@@ -260,7 +306,7 @@ export function MinhaArea() {
                     <Button onClick={() => {
                       onClose()
                       logOut()
-                      history('/')
+                      history(`/`)
                       localStorage.removeItem('permission');
                       localStorage.removeItem('role');
                     }} variant={'destructive'} className={` ${!expand ? ('w-10'):('justify-start')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default'):('icon')}><SignOut size={16}/>{expand && ('Encerrar sessão')}</Button>

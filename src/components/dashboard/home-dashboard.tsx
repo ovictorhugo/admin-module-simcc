@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Badge } from "../ui/badge";
 import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
-import { Blocks, Building2, ClipboardEdit, FlaskConical, GraduationCap, LayoutDashboard, Mail, PieChart, Users, Weight } from "lucide-react";
+import { Blocks, Building2, ClipboardEdit, FlaskConical, GraduationCap, LayoutDashboard, Mail, PieChart, SlidersHorizontal, Users, Weight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function HomeDashboard() {
@@ -56,7 +56,11 @@ export function HomeDashboard() {
 
     return(
         <main className="w-full md:p-8 p-4">
-            <div className=" bg-[rgb(113,156,184)] rounded-md w-full h-[40vh]  text-white p-8 flex items-end">
+            <div className=" bg-[rgb(113,156,184)] rounded-md w-full h-[40vh]  text-white p-8 flex flex-col justify-between">
+                   <div>
+                   <Badge className="mb-4 text-[rgb(113,156,184)]" variant={'secondary'} >{role}</Badge>
+                   </div>
+
                     <div>
                         <div className=" gap-2">
                        
@@ -68,11 +72,13 @@ export function HomeDashboard() {
                     </div>
             </div>
 
+            <h3 className="text-2xl font-medium my-4 md:my-8 ">Acesso rápido na plataforma</h3>
+
             <div className="grid lg:grid-cols-5 gap-4 md:grid-cols-3 grid-cols-2 2xl:grid-cols-6">
                {has_visualizar_gerencia_modulo_administrativo && (
                  <Link to={'/dashboard/administrativo'}>
                  <Alert className="h-[80px] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
-                 <LayoutDashboard size={16}/>Administrativo</div></Alert></Link>
+                 <SlidersHorizontal size={16}/>Administrativo</div></Alert></Link>
                )}
 
         {has_visualizar_todos_departamentos && (

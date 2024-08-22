@@ -23,11 +23,17 @@ interface User {
   shib_id:string
   graduate_program:GraduateProgram[]
   researcger_name:string
+  departaments:Departaments[]
 }
 
 interface GraduateProgram {
   graduate_program_id:string
   name:string
+}
+
+interface Departaments {
+  dep_nom:string
+  dep_id:string
 }
 
 interface Roles {
@@ -78,7 +84,7 @@ function App() {
   const [permission , setPermission] = useState<Permission[]>([])
 
 
-  const [version, setVersion] = useState(Boolean(import.meta.env.VITE_VERSION))
+  const [version, setVersion] = useState(false)
 
   const [searchType, setSearchType] = useState('article');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');

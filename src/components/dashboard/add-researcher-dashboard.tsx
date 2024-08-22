@@ -204,7 +204,7 @@ export function AddResearcherDashboard() {
                 
             
               <div className="hidden items-center h-10 gap-2 md:ml-auto md:flex">
-
+              <Button size={'sm'}  onClick={() => onOpen('import-bolsistas')}><FileXls size={16}/>Importar bolsistas CNPq</Button>
           
              
               </div>

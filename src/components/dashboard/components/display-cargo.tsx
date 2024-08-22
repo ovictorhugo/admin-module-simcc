@@ -23,7 +23,16 @@ interface Disciplinas {
     id:string
   }
   
-
+  interface Funcionalidade {
+    name: string;
+    value: string;
+    area: string;
+  }
+  
+  // Defina a interface para o agrupamento
+  interface FuncionalidadesAgrupadas {
+    [key: string]: Funcionalidade[];
+  }
 
 
 export function DisplayCargo(props:Disciplinas) {
@@ -241,9 +250,34 @@ const handleDeleteFuncionalidade = async (permission:string) => {
 
 const funcionalidades = funcionalidadesData;
     
-    const filteredList = funcionalidades.filter((framework) =>
+
+
+    // Agrupar as funcionalidades por área
+// Agrupar as funcionalidades por área
+const groupedByArea: FuncionalidadesAgrupadas = funcionalidadesData.reduce((acc: FuncionalidadesAgrupadas, funcionalidade: Funcionalidade) => {
+  const area = funcionalidade.area;
+  if (!acc[area]) {
+    acc[area] = [];
+  }
+  acc[area].push(funcionalidade);
+  return acc;
+}, {});
+
+// Ordenar as áreas e funcionalidades dentro de cada área
+const sortedAreas = Object.keys(groupedByArea).sort();
+sortedAreas.forEach((area) => {
+  groupedByArea[area].sort((a, b) => normalizeString(a.name).localeCompare(normalizeString(b.name)));
+});
+
+const filteredList = sortedAreas.map((area) => {
+  return {
+    area,
+    funcionalidades: groupedByArea[area].filter((framework) =>
       normalizeString(framework.name).includes(normalizeString(input))
-    );
+    ),
+  };
+}).filter(group => group.funcionalidades.length > 0);
+
 
 
     let urlPermission = urlGeralAdm + `s/permission?role_id=${props.id}`
@@ -354,33 +388,35 @@ const funcionalidades = funcionalidadesData;
                                   className="border-0"
                                   value={input}
                                   onChange={(e) => setInput(e.target.value)}
-                                  placeholder="Buscar fucnionalidade"
+                                  placeholder="Buscar funcionalidade"
                                 />
                               </div>
 
                               <div className={'max-h-[350px] overflow-y-auto elementBarra'}>
                               
                               <div className="flex flex-col gap-1 p-2">
-                                {filteredList.length > 0 ? (
-                                  filteredList.map((props, index) => (
-                                    <Button
-                                      variant={'ghost'}
-                                      key={index}
-                                      className="text-left justify-start"
-                                      onClick={() => {
-                                       
-                                        handleSubmitFuncionalidade(props.value)
-                                   
-                                        setOpenPopo2(false);
-                                        // Fechar o popover após a seleção
-                                      }}
-                                    >
-                                      {props.name}
-                                    </Button>
-                                  ))
-                                ) : (
-                            <div className="text-center w-full text-sm">Nenhuma funcionalidade encontrada</div>
-                                )}
+                              {filteredList.length > 0 ? (
+                                filteredList.map((group, groupIndex) => (
+                                  <div key={groupIndex}>
+                                    <h3 className="text-gray-500 uppercase text-xs font-medium mb-2 mt-2">{group.area.charAt(0).toUpperCase() + group.area.slice(1)}</h3>
+                                    {group.funcionalidades.map((props, index) => (
+                                      <Button
+                                        variant={'ghost'}
+                                        key={index}
+                                        className="text-left justify-start w-full"
+                                        onClick={() => {
+                                          handleSubmitFuncionalidade(props.value);
+                                          setOpenPopo2(false);
+                                        }}
+                                      >
+                                        {props.name}
+                                      </Button>
+                                    ))}
+                                  </div>
+                                ))
+                              ) : (
+                                <div className="text-center w-full text-sm">Nenhuma funcionalidade encontrada</div>
+                              )}
                               </div>
                             </div>
   </DialogContent>

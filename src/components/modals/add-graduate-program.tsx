@@ -1,11 +1,7 @@
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
+
     DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogFooter
+
   } from "../ui/dialog";
 
   import {
@@ -22,7 +18,7 @@ import { UserContext } from "../../context/context";
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { toast } from "sonner"
 import { Button } from "../ui/button";
-import { ArrowUUpLeft, Plus, X } from "phosphor-react";
+import { Plus, X } from "phosphor-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 
@@ -64,9 +60,9 @@ export function AddGraduateProgram() {
                 modality: modality.toUpperCase(),
                 type: type.toUpperCase(),
                 rating: ranking.toUpperCase(),
-                institution_id: user.institution_id,
+                institution_id: user?.institution_id,
                 description: descricao,
-                url_image: user.img_url,
+                url_image: ''   ,
                 city: city,
                 visible: false
             }
@@ -141,6 +137,8 @@ export function AddGraduateProgram() {
                       onClick: () => console.log("Undo"),
                     },
                   })
+
+                  onClose()
                
               } else {
                 console.error('Erro ao enviar dados para o servidor.');
@@ -285,6 +283,10 @@ export function AddGraduateProgram() {
             <div className="flex flex-col gap-2 mt-4">
                 <Label>Código do programa (Sucupira)</Label>
                 <Input value={code} onChange={(e) => setCode(e.target.value)} type="text" />
+            </div>
+
+            <div>
+              
             </div>
 
             <Button onClick={() => handleSubmit()} size={'sm'} className="text-white dark:text-white mt-3 ml-auto flex ">

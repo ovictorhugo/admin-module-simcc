@@ -14,6 +14,12 @@ interface User {
   shib_id:string
   graduate_program:GraduateProgram[]
   researcger_name:string
+  departaments:Departaments[]
+}
+
+interface Departaments {
+  dep_nom:string
+  dep_id:string
 }
 
 interface GraduateProgram {

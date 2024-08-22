@@ -7,6 +7,8 @@ import { LogoConecteeWhite } from './svg/LogoConecteeWhite';
 import { auth } from '../lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useLocation } from 'react-router-dom';
+import { LogoIapos } from './svg/LogoIapos';
+import { LogoIaposWhite } from './svg/LogoIaposWhite';
 
 interface LoadingWrapperProps {
   children: React.ReactNode;
@@ -39,7 +41,7 @@ const useQuery = () => {
 const LoadingWrapper: React.FC<LoadingWrapperProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
-  const { setLoggedIn, setUser, urlGeralAdm, setPermission, permission, user, setRole } = useContext(UserContext)
+  const { setLoggedIn, setUser, urlGeralAdm, setPermission, permission, user, setRole, version } = useContext(UserContext)
 
     ///// LOGIN SHIBBOLETH
     
@@ -139,7 +141,11 @@ const LoadingWrapper: React.FC<LoadingWrapperProps> = ({ children }) => {
 
   return <>{loading ? <main className='h-screen w-full flex items-center justify-center'>
         <div className='h-16 animate-pulse'>
-            {theme == 'dark' ? (<LogoConecteeWhite/>):(<LogoConectee/>)}
+        {version ? (
+              <div  className="h-16  "  >{(theme ==  'dark' ) ? (<LogoConecteeWhite />):(<LogoConectee />)}</div>
+          ):(
+            <div  className="h-16  " >{(theme ==  'dark' ) ? (<LogoIaposWhite />):(<LogoIapos />)}</div>
+          )}
         </div>
   </main> : children}</>;
 };

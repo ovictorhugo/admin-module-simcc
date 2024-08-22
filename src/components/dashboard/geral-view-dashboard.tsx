@@ -84,65 +84,7 @@ export function GeralViewDashboard() {
 
     //submit apanhe
 
-    const handleSubmit = async () => {
 
-      const data = [
-        {
-            state:true
-        }
-      ]
-
-      let urlProgram = urlGeralAdm + 'sys/requestUpdate'
-      const fetchData = async () => {
-      try {
-        const response = await fetch(urlProgram, {
-          mode: 'cors',
-          method: 'POST',
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Max-Age': '3600',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (response.ok) {
-         
-          toast("Apache hop iniciado", {
-              description: "Atualizando dados dos pesquisadores",
-              action: {
-                label: "Fechar",
-                onClick: () => console.log("Undo"),
-              },
-            })
-         
-        } else if (response.status === 423) {
-            toast("O Apache hop já está rodando, tente novamente mais tarde", {
-                description: "Em processo de atualização dos dados dos pesquisadores",
-                action: {
-                  label: "Fechar",
-                  onClick: () => console.log("Undo"),
-                },
-              })
-        } else {
-            toast("Erro ao iniciar o Apache Hop", {
-                description: "Tente novamente mais tarde",
-                action: {
-                  label: "Fechar",
-                  onClick: () => console.log("Undo"),
-                },
-              })
-        }
-        
-      } catch (err) {
-        console.log(err);
-      } 
-     }
-    
-    fetchData();
-};
 const [directoryInput, setDirectoryInput] = useState("/");
 const [directory, setDirectory] = useState('');
 
@@ -404,7 +346,7 @@ const [directoryJson, setDirectoryJson] = useState("");
               <CargosFuncoes/>
             </TabsContent>
 
-            <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8 mt-2 ">
+            <TabsContent value="unread" className="h-full flex flex-col gap-4 md:gap-8 mt-2 ">
            <div className=" p-4 md:p-8 pt-0 md:pt-0 flex flex-col md:gap-8 gap-4 " >
            
             <Alert className="p-0">
@@ -472,29 +414,7 @@ const [directoryJson, setDirectoryJson] = useState("");
               </Alert>
               </div>
 
-              {tab == 'unread' && (
-              <div className="absolute bottom-0 flex flex-col w-full ">
-                <div className=" relative">
-                  <div className="h-[50px] w-full border-t dark:border-neutral-800  px-4 bg-neutral-50 dark:bg-neutral-900 flex items-center justify-between ">
-                      <div className="flex items-center gap-3 font-medium text-sm">
-                        <Terminal size={16}/> Terminal Apache Hop
-                      </div>
-
-                      <div className="flex items-center gap-3 font-medium text-sm">
-                      
-                        <Button size={'sm'} onClick={() => handleSubmit()}  className="h-8"><Play size={16}/>Atualizar dados</Button>
-                        <Button size={'icon'} variant={'outline'} onClick={() => setIsOpenConsole(!isOpenConsole)} className="h-8 w-8">{isOpenConsole ? (<ChevronDown size={16}/>):(<ChevronUp size={16}/>)}</Button>
-                      </div>
-                  </div>
-
-                  {isOpenConsole && (
-                    <div>
-<ApacheViewDashboard/>
-                    </div>
-                  )}
-              </div>
-              </div>
-            )}
+             
 
             </TabsContent>
 
@@ -505,5 +425,7 @@ const [directoryJson, setDirectoryJson] = useState("");
 
 
        </div>
+
+
     )
 }

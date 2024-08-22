@@ -6,15 +6,16 @@ import { NavigationSidebar } from "../components/navigation/navigation-sidebar";
 import { TooltipProvider } from "../components/ui/tooltip"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../components/ui/resizable"
 import { cn } from "../lib"
+import { toast } from "sonner"
 
-
-import { useContext, useEffect } from "react";
+import { useContext,  useState } from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { Blocks,  Building2, ClipboardEdit, FlaskConical, GraduationCap,  Info, LayoutDashboard,  Mail, PieChart,  User, Users, Weight } from "lucide-react";
+import { Blocks,  Building2, ChevronDown, ChevronUp, ClipboardEdit, FlaskConical, GraduationCap,  Info, LayoutDashboard,  Mail, PieChart,  Play,  SlidersHorizontal,  Terminal,  User, Users, Weight } from "lucide-react";
 
-import { UserConfigHeader } from "../components/header/user-config-header";
 import { useLocation } from "react-router-dom";
+import { Button } from "../components/ui/button";
+import { ApacheViewDashboard } from "../components/dashboard/apache-view-dashboard";
 
 interface MailProps {
  
@@ -87,6 +88,11 @@ export default function AdminLayout({
     (perm) => perm.permission === 'visualizar_indicadores_instituicao'
   );
 
+  const has_atualizar_apache_hop = permission.some(
+    (perm) => perm.permission === 'atualizar_apache_hop'
+  );
+
+
   const links2 = [
     {
       title: "Dashboard",
@@ -100,7 +106,7 @@ export default function AdminLayout({
           {
             title: "Administrativo",
             label: "",
-            icon: LayoutDashboard,
+            icon: SlidersHorizontal,
             link: "/dashboard/administrativo",
           },
         ]
@@ -212,6 +218,71 @@ export default function AdminLayout({
           ]
         : []),
   ];
+
+  const location = useLocation()
+  const [isOpenConsole, setIsOpenConsole] = useState(false)
+
+  //apache
+
+  const handleSubmit = async () => {
+
+    const data = [
+      {
+          state:true
+      }
+    ]
+
+    let urlProgram = urlGeralAdm + 'sys/requestUpdate'
+    const fetchData = async () => {
+    try {
+      const response = await fetch(urlProgram, {
+        mode: 'cors',
+        method: 'POST',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST',
+          'Access-Control-Allow-Headers': 'Content-Type',
+          'Access-Control-Max-Age': '3600',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+       
+        toast("Apache hop iniciado", {
+            description: "Atualizando dados dos pesquisadores",
+            action: {
+              label: "Fechar",
+              onClick: () => console.log("Undo"),
+            },
+          })
+       
+      } else if (response.status === 423) {
+          toast("O Apache hop já está rodando, tente novamente mais tarde", {
+              description: "Em processo de atualização dos dados dos pesquisadores",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+      } else {
+          toast("Erro ao iniciar o Apache Hop", {
+              description: "Tente novamente mais tarde",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            })
+      }
+      
+    } catch (err) {
+      console.log(err);
+    } 
+   }
+  
+  fetchData();
+};
   
     return (
     <div>
@@ -288,7 +359,29 @@ export default function AdminLayout({
             <div className="h-full overflow-y-auto flex flex-1">
             {children}
             </div>
-
+              {(location.pathname == '/dashboard/administrativo' && has_atualizar_apache_hop) && (
+                 <div className="bottom-0 flex flex-col w-full ">
+                 <div className=" relative">
+                   <div className="h-[50px] w-full border-t dark:border-neutral-800  px-4 bg-neutral-50 dark:bg-neutral-900 flex items-center justify-between ">
+                       <div className="flex items-center gap-3 font-medium text-sm">
+                         <Terminal size={16}/> Terminal Apache Hop
+                       </div>
+             
+                       <div className="flex items-center gap-3 font-medium text-sm">
+                       
+                         <Button size={'sm'} onClick={() => handleSubmit()}  className="h-8"><Play size={16}/>Atualizar dados</Button>
+                         <Button size={'icon'} variant={'outline'} onClick={() => setIsOpenConsole(!isOpenConsole)} className="h-8 w-8">{isOpenConsole ? (<ChevronDown size={16}/>):(<ChevronUp size={16}/>)}</Button>
+                       </div>
+                   </div>
+             
+                   {isOpenConsole && (
+                     <div>
+             <ApacheViewDashboard/>
+                     </div>
+                   )}
+               </div>
+               </div>
+              )}
           
           </main>
 

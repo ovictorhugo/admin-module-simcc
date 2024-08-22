@@ -1,11 +1,7 @@
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
+
     DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogFooter
+
   } from "../ui/dialog";
 
   import {
@@ -19,10 +15,9 @@ import {
   import { useModal } from "../hooks/use-modal-store";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
-import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { toast } from "sonner"
 import { Button } from "../ui/button";
-import { ArrowUUpLeft, PencilSimple, Plus } from "phosphor-react";
+import { PencilSimple } from "phosphor-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Sheet, SheetContent } from "../ui/sheet";
@@ -73,9 +68,9 @@ export function EditGraduateProgram() {
                 modality: modality ? modality.toUpperCase() : '',
                 type: type ? type.toUpperCase() : '',
                 rating: ranking ? ranking.toUpperCase() : '',
-                institution_id: user.institution_id,
+                institution_id: user?.institution_id,
                 description: descricao,
-                url_image: user.img_url,
+                url_image: '',
                 city: city ? city : '',
                 visible: false
               }
@@ -150,6 +145,8 @@ export function EditGraduateProgram() {
                         onClick: () => console.log("Undo"),
                       },
                     })
+
+                    onClose()
                  
                 } else {
                   console.error('Erro ao enviar dados para o servidor.');
@@ -294,7 +291,7 @@ export function EditGraduateProgram() {
             </div>
 
             <Button onClick={() => handleSubmit()} size={'sm'} className="text-white dark:text-white mt-3 ml-auto flex ">
-   <Plus size={16} className="" />Adicionar
+   <PencilSimple size={16} className="" />Editar programa
  </Button>
         </div>
         </ScrollArea>

@@ -776,7 +776,7 @@ useMemo(() => {
                   <div className="flex gap-3 mt-3">
                     <Button size={'sm'} 
                     onClick={() => onOpen('import-docentes')}><FileXls size={16}/>Importar dados dos docentes</Button>
-                    <Button size={'sm'} variant={'ghost'} onClick={() => onOpen('import-bolsistas')}><FileXls size={16}/>Importar bolsistas CNPq</Button>
+                   
                   </div>
 
                   </div>

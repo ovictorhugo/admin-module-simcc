@@ -2,6 +2,7 @@ import { useContext, useMemo, useState } from "react";
 import { FilterYearTimeLine } from "../popup/filters-year-timeline";
 import { TimeLineResearcher } from "../researcher/timeline-researcher";
 import { UserContext } from "../../context/context";
+import { TimeLineResearcherMinhaArea } from "./timeline-researcher-minha-area";
 
 
 type Research = {
@@ -83,9 +84,9 @@ type Research = {
   
   
 
-export function LinhaTempoMinhaArea() {
+export function LinhaTempoMinhaArea(user:Research) {
 
-    const {urlGeral, user} = useContext(UserContext)
+    const {user:userAdm} = useContext(UserContext)
     const [researcher, setResearcher] = useState<Research[]>([]); 
     const [loading, isLoading] = useState(false)
 
@@ -106,42 +107,13 @@ export function LinhaTempoMinhaArea() {
       const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
 
-      let urlTermPesquisadores = urlGeral + `researcherName?name=`;
-
-      useMemo(() => {
-        const fetchData = async () => {
-            try {
-              isLoading(true)
-              const response = await fetch(urlTermPesquisadores, {
-                mode: "cors",
-                headers: {
-                  "Access-Control-Allow-Origin": "*",
-                  "Access-Control-Allow-Methods": "GET",
-                  "Access-Control-Allow-Headers": "Content-Type",
-                  "Access-Control-Max-Age": "3600",
-                  "Content-Type": "text/plain",
-                },
-              });
-              
-              const data = await response.json();
-              if (data) {
-                setResearcher(data);
-                isLoading(false)
-              } 
-              
-
-            } catch (err) {
-              console.log(err);
-            }
-          };
-          fetchData();
-        }, [urlTermPesquisadores]);
+     
 
     return(
         <div>
             <div className=" pb-0">
                       <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
-                      Olá, {user?.display_name}
+                      Olá, {userAdm?.display_name}
                         </p>
 
                         <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
@@ -154,10 +126,9 @@ export function LinhaTempoMinhaArea() {
                 onFilterUpdate={handleResearcherUpdate}/>
                       </div>
 
-                      {researcher.slice(0, 1).map((user) => {
-                return(
+                    
                   <div >
-                    <TimeLineResearcher
+                    <TimeLineResearcherMinhaArea
                   among={user.among}
                     articles={user.articles}
                     book={user.book}
@@ -201,8 +172,7 @@ export function LinhaTempoMinhaArea() {
                     entradanaufmg={user.entradanaufmg}
                   />
                   </div>
-                  )
-                })}
+                
         </div>
     )
 }

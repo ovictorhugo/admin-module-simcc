@@ -30,6 +30,18 @@ interface Patrimonio {
     quant_bolsa: string
 }
 
+import {
+    Sheet,
+    SheetContent,
+  
+  } from "../../components/ui/sheet"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { ArrowRight, Info, X } from "lucide-react";
+import { ScrollArea } from "../ui/scroll-area";
+import { columnsBolsistas } from "../componentsModal/columns-bolsistas";
+import { DataTableModal } from "../componentsModal/data-table";
+import { Link } from "react-router-dom";
+
 export function ImportBolsistas() {
     const { onClose, isOpen, type: typeModal } = useModal();
     
@@ -199,19 +211,45 @@ export function ImportBolsistas() {
     console.log(data)
 
     return (
-        <Dialog open={isModalOpen} onOpenChange={onClose}> 
-            <DialogContent className="min-w-[40vw] ">
-                <DialogHeader className="pt-8 px-6 flex flex-col items-center">
-                    <DialogTitle className="text-2xl text-center font-medium">
-                        Importar arquivo .xls
-                    </DialogTitle>
-                    <DialogDescription className="text-center text-zinc-500 max-w-[350px]">
-                        Atualize os itens do na Vitrine com a planilha .xls gerada no SICPAT
-                    </DialogDescription>
-                </DialogHeader>
+        <Sheet open={isModalOpen} onOpenChange={onClose}>
+        <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[50vw]`}>
+        <DialogHeader className="h-[50px] px-4 justify-center border-b">
+ 
+ <div className="flex items-center gap-3">
+ <TooltipProvider>
+ <Tooltip>
+  <TooltipTrigger asChild>
+  <Button className="h-8 w-8" variant={'outline'}  onClick={() => onClose()} size={'icon'}><X size={16}/></Button>
+  </TooltipTrigger>
+  <TooltipContent> Fechar</TooltipContent>
+ </Tooltip>
+ </TooltipProvider>
+ 
+ <div className="flex ml-auto items-center w-full justify-between">
+ 
+   <div className="flex ml-auto items-center gap-3">
+ 
+  
+      </div>
+ </div>
+ 
+ </div>
+  
+ </DialogHeader>
 
-                <div className="mb-4">
-                    <div {...getRootProps()} className="border-dashed mb-6 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 mt-4">
+ <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
+        <div className="mb-8">
+                      <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
+                      Pesquisadores
+                        </p>
+
+                        <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+                          Atualizar bolsistas CNPq
+                        </h1>
+                        <Link to={'http://www.bi.cnpq.br/painel/mapa-fomento-cti/'} target="_blank"  className="inline-flex mt-2 items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como extrair os bolsistas CNPq<ArrowRight size={12}/></Link>
+                      </div>
+                <div className="">
+                    <div {...getRootProps()} className="border-dashed mb-3 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 mt-4">
                         <input {...getInputProps()} />
                         <div className="p-4  border rounded-md">
                             <FileXls size={24} className=" whitespace-nowrap" />
@@ -235,17 +273,31 @@ export function ImportBolsistas() {
                     </div>
                 </div>
 
-                <DialogFooter>
-                    <Button onClick={() => onClose()} variant={'ghost'}>
-                        <ArrowUUpLeft size={16} className="" />Cancelar
-                    </Button>
-                    <Button onClick={() => handleSubmitPatrimonio()}>
+
+                {data.length > 0 && (
+                    <div className="">
+                        <div className="my-6 border-b dark:border-b-neutral-800"></div>
+                        <h5 className="font-medium text-xl mb-4">Tabela de dados</h5>
+                    <DataTableModal columns={columnsBolsistas} data={data} />
+                    <div className="mt-2 mb-6 border-b dark:border-b-neutral-800"></div>
+
+                    
+                    </div>
+                )}
+
+<Button onClick={() => handleSubmitPatrimonio()} className="ml-auto flex mt-3">
                         <Upload size={16} className="" />Atualizar dados
                     </Button>
+
+                
+                </ScrollArea>
+                <DialogFooter>
+
+                    
                 </DialogFooter>
 
                 <div></div>
-            </DialogContent>
-        </Dialog>
+                </SheetContent>
+                </Sheet>
     )
 }
