@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner"
@@ -104,9 +104,14 @@ export function MinhaUfmg() {
         }
       }
 
+
+      useEffect(() => {
+        handleLoginMinhaUfmg()
+      }, []);
+
     return(
         <div>
-            
+
         </div>
     )
 }
