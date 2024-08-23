@@ -229,7 +229,13 @@ useEffect(() => {
         <Route path='/researcher' element={<Home/>}/>
         <Route path='/marIA' element={<Home/>}/>
 
-        
+       
+
+          
+        <Route
+        path='/ufmg'
+        element={loggedIn == false ? <Authentication/> :  <Navigate to='/' />}
+        />
         
         <Route
         path='/signIn'
