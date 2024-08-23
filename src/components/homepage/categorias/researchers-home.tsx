@@ -11,7 +11,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { Skeleton } from "../../ui/skeleton";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation} from "react-router-dom";
 import { Alert } from "../../ui/alert";
 import { CardContent,  CardHeader, CardTitle } from "../../ui/card";
 import { Hash, Trash, User } from "lucide-react";
@@ -72,9 +72,6 @@ interface Bolsistas {
   }
 
   
-interface ItemsSelecionados {
-  term: string
-}
 
 interface ResearchOpenAlex {
   display_name:string
@@ -111,8 +108,8 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
 
   const { onClose, isOpen, type: typeModal } = useModal();
     const isModalOpen = isOpen && typeModal === "filters";
-    const [selectedAreas, setSelectedAreas] = useState([]);
-    const [selectedGraduations, setSelectedGraduations] = useState([]);
+    const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
+    const [selectedGraduations, setSelectedGraduations] = useState<string[]>([]);
   
     const handleAreaToggle = (value:any) => {
       setSelectedAreas(value);
@@ -226,7 +223,7 @@ export function ResearchersHome() {
   const [researcher, setResearcher] = useState<Research[]>([]);
   const [originalResearcher, setOriginalResearcher] = useState<Research[]>([]);
   const [typeVisu, setTypeVisu] = useState('block');
-  const { itemsSelecionados,  urlGeral, searchType, setSearchType, setValoresSelecionadosExport } = useContext(UserContext);
+  const { itemsSelecionados,  urlGeral, searchType } = useContext(UserContext);
   const { pesquisadoresSelecionados, idGraduateProgram } = useContext(UserContext);
 
   useEffect(() => {
@@ -234,8 +231,7 @@ export function ResearchersHome() {
   }, [pesquisadoresSelecionados]);
 
   const queryUrl = useQuery();
-  const navigate = useNavigate();
-  const type_search = queryUrl.get('type_search');
+
   const terms = queryUrl.get('terms');
   const openAlexState = queryUrl.get('open_alex');
 
@@ -373,7 +369,7 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
        
                      {index < itemsSelecionados.length - 1 && (
          <div className="rounded-full flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100  dark:bg-neutral-800 transition-all text-xs outline-none" onClick={() => {
-           const connector = itemsSelecionados[index].term.endsWith('|') ? ';' : '|'; // Alterna entre "|" e ";" conforme necessário
+          
           
          }} >
            {itemsSelecionados[index].term.endsWith(';') ? "e" : "ou"}

@@ -1,4 +1,4 @@
-import {  AreaChart,  ChevronsUpDown, GraduationCap,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, Star, User, Users } from "lucide-react";
+import {  AreaChart,  ChevronsUpDown,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, Star, User, Users } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
@@ -611,15 +611,17 @@ const handleSubmit = async () => {
                   </Alert>
       </div>
 
-              <Alert className="p-6">
-              <div>
-                <div className="text-2xl font-bold uppercase">Docentes vinculados ao programa</div>
-                <p className="mt-2 text-sm">
+      <div>
+                <div className="max-w-[500px] text-2xl font-bold leading-tight tracking-tighter md:text-3xl lg:leading-[1.1] md:block">Docentes vinculados ao programa</div>
+                <p className=" mt-2 text-lg font-light text-foreground mb-6">
                 Adicione ou remova os pesquisadores permanentes e colaboradores do programa de pós graduação
                 </p>
               </div>
 
-              <div className="gap-6 flex mt-6 items-end">
+              <Alert className="p-6">
+              
+
+              <div className="gap-6 flex  items-end">
 
               <div className="grid gap-3 w-full">
                         <Label htmlFor="name">Tipo</Label>
@@ -706,6 +708,13 @@ const handleSubmit = async () => {
 
               <div className="px-6">
               <DataTableModal columns={columns} data={researcher}/>
+              </div>
+
+              <div className="px-6">
+                <div className="max-w-[500px] text-2xl font-bold leading-tight tracking-tighter md:text-3xl lg:leading-[1.1] md:block">Docentes vinculados ao programa</div>
+                <p className=" mt-2 text-lg font-light text-foreground mb-6">
+                Adicione ou remova os pesquisadores permanentes e colaboradores do programa de pós graduação
+                </p>
               </div>
        </div>
         </TabsContent>

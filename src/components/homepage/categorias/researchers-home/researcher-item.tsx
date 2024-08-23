@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { Alert } from "../../../ui/alert"
 import { UserContext } from "../../../../context/context"
-import { Buildings, MapPin, Plus, PuzzlePiece, X } from "phosphor-react"
+import { MapPin, Plus, PuzzlePiece, X } from "phosphor-react"
 import { GraduationCap } from "lucide-react"
 import { useModal } from "../../../hooks/use-modal-store"
 import { Button } from "../../../ui/button"

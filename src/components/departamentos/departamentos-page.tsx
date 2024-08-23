@@ -1,4 +1,4 @@
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link,  useLocation, useNavigate } from "react-router-dom";
 import { VisualizacaoDepartamento } from "./visualizacao-departamento";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
@@ -29,7 +29,7 @@ const useQuery = () => {
 
 export function DepartamentPage() {
 
-    const history = useNavigate();
+ 
     const [total, setTotal] = useState<Departamentos[]>([]);
     const [totalSelecionado, setTotalSelecionado] = useState<Departamentos | null>(null);
 
@@ -40,11 +40,9 @@ export function DepartamentPage() {
 
     let departamentoSelecionado = type_search || ''
 
-    const handleVoltar = () => {
-      history(-1);
-    }
+ 
 
-    const {urlGeral, urlGeralAdm} = useContext(UserContext)
+    const {urlGeralAdm} = useContext(UserContext)
 
     const [search, setSearch] = useState('')
 

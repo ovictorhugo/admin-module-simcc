@@ -12,7 +12,7 @@ import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
 import { BarChartBig, Blocks, BookOpen, Building2, GraduationCap, Home, Info, List, PanelLeftDashed, SearchCheck, Sparkles } from "lucide-react";
 
-import { UserConfigHeader } from "../components/header/user-config-header";
+
 import { Footer } from "../components/footer/footer";
 import { useModal } from "../components/hooks/use-modal-store";
 import { Button } from "../components/ui/button";
@@ -31,7 +31,7 @@ export default function SearchLayout({
   children
 }: MailProps) {
   
-  const {isCollapsed, setIsCollapsed, loggedIn} = useContext(UserContext)
+  const {isCollapsed, setIsCollapsed} = useContext(UserContext)
   
  
   const {onOpen} = useModal()

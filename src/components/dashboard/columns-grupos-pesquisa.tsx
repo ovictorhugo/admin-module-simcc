@@ -4,10 +4,6 @@ import {  ClockClockwise} from "phosphor-react"
 
 import {GraduationCapIcon } from "lucide-react";
 
-import { useContext } from "react"
-import { UserContext } from "../../context/context"
-
-
 
 
 
@@ -34,9 +30,9 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
         accessorKey: "research_group_name",
         header: "Nome do grupo",
         cell: ({ row }) => {
-          const {user} = useContext(UserContext)
+         
 
-          return <div className="flex gap-2 items-center"> <img className="w-4  object-cover object-center  whitespace-nowrap" src={user.img_url}  /> {row.getValue("research_group_name")}</div>
+          return <div className="flex gap-2 items-center"> {row.getValue("research_group_name")}</div>
         }
       },
       {

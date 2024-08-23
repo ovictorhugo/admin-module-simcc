@@ -1,7 +1,7 @@
 import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, Download, TrendingUp } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
-import { Helmet } from 'react-helmet';
+
   import {
 
     DrawerFooter,
@@ -39,7 +39,7 @@ import { Copy, MoreHorizontal, Plus } from "lucide-react";
 import { toast } from "sonner"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { TimeLineResearcher } from "./timeline-researcher";
-import { DialogHeader, DialogTitle } from "../ui/dialog";
+import { DialogHeader } from "../ui/dialog";
 import { FilterYearTimeLine } from "../popup/filters-year-timeline";
 import { Skeleton } from "../ui/skeleton";
 import html2canvas from "html2canvas";
@@ -341,7 +341,7 @@ console.log(urlPublicacoesPorPesquisador)
 
 const convertJsonToCsv = (json: any[]): string => {
   const items = json;
-  const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+  const replacer = (_: string, value: any) => (value === null ? '' : value); // Handle null values
   const header = Object.keys(items[0]);
   const csv = [
     '\uFEFF' + header.join(';'), // Add BOM and CSV header

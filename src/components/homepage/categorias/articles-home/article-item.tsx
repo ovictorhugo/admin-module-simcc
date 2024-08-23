@@ -12,7 +12,7 @@ import {
 import { Button } from "../../../ui/button";
 import { Link } from "react-router-dom";
 import { useModal } from "../../../hooks/use-modal-store";
-import { Eye, Maximize, Maximize2 } from "lucide-react";
+import {  Maximize2 } from "lucide-react";
 
 type Articles = {
     id: string,

@@ -251,7 +251,7 @@ export function AddDepartamento() {
           <div className="flex flex-col gap-3 w-full">
             <div className="flex w-full gap-3 items-end">
               <div className="grid gap-3 w-full">
-                <Label htmlFor="dep_nom">Nome</Label>
+                <Label htmlFor="dep_nom">Nome do departamento*</Label>
                 <Input
                   name="dep_nom"
                   value={formData.dep_nom}
@@ -263,7 +263,7 @@ export function AddDepartamento() {
               </div>
 
               <div className="grid gap-3 w-full">
-                <Label htmlFor="dep_sigla">Sigla</Label>
+                <Label htmlFor="dep_sigla">Sigla*</Label>
                 <Input
                   name="dep_sigla"
                   value={formData.dep_sigla}
@@ -292,7 +292,7 @@ export function AddDepartamento() {
 
             <div className="flex w-full gap-3">
               <div className="grid gap-3 w-full">
-                <Label htmlFor="dep_site">Site</Label>
+                <Label htmlFor="dep_site">Site*</Label>
                 <Input
                   name="dep_site"
                   value={formData.dep_site}
@@ -318,7 +318,7 @@ export function AddDepartamento() {
 
             <div className="flex w-full gap-3">
               <div className="grid gap-3 w-full">
-                <Label htmlFor="dep_tel">Telefone</Label>
+                <Label htmlFor="dep_tel">Telefone*</Label>
                 <Input
                   name="dep_tel"
                   value={formData.dep_tel}
@@ -330,7 +330,7 @@ export function AddDepartamento() {
               </div>
 
               <div className="grid gap-3 w-full">
-                <Label htmlFor="dep_email">Email</Label>
+                <Label htmlFor="dep_email">Email*</Label>
                 <Input
                   name="dep_email"
                   value={formData.dep_email}

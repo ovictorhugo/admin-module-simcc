@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Badge } from "../ui/badge";
 import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
-import { Blocks, Building2, ClipboardEdit, FlaskConical, GraduationCap, LayoutDashboard, Mail, PieChart, SlidersHorizontal, Users, Weight } from "lucide-react";
+import { Blocks, Building2, ClipboardEdit, FlaskConical, GraduationCap, Mail, PieChart, SlidersHorizontal, Users, Weight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function HomeDashboard() {

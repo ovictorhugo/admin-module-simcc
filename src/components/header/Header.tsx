@@ -20,7 +20,7 @@ import {
 
   
 
-import {  Grip, Laptop, LayoutDashboard, LogIn, Moon, PanelRightOpen,  Sun, User } from "lucide-react";
+import {  Grip, Laptop, LayoutDashboard, LogIn, Moon,   Sun, User, UserPlus } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { Button } from "../ui/button";
 
@@ -122,7 +122,7 @@ const {onOpen} = useModal()
 {!loggedIn && (
  <Link to={'/signUp'}>
  <Button  size="sm" >
-                 <LogIn className="h-4 w-4" />
+                 <UserPlus className="h-4 w-4" />
                  Criar conta
                </Button></Link>
 )}  

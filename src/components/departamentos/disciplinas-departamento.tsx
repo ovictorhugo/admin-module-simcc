@@ -1,6 +1,6 @@
-import { ChevronLeft, ChevronRight, Clock, Copy, CreditCard, Hash, MoreVertical, Plus, Presentation, Truck } from "lucide-react";
+import {  Clock,  Hash,  Plus, Presentation} from "lucide-react";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import {  CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
 import { DisplayDisciplina } from "./display-disciplina";
 import { useContext, useEffect, useState } from "react";

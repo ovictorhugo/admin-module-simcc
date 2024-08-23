@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext } from "react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { useModalSidebar } from "../../../hooks/use-modal-sidebar";
 import { UserContext } from "../../../../context/context";

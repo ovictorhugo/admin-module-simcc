@@ -1,6 +1,6 @@
 
 
-import { ArrowLeftFromLine, ArrowRightFromLine, Box, Building2, Lock, Menu, TrendingUp, User, X } from "lucide-react";
+import { ArrowLeftFromLine, ArrowRightFromLine, Box, Building2, GraduationCap, Lock, Menu, TrendingUp, User, X } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -294,10 +294,26 @@ console.log(urlTermPesquisadores)
                    )}
                     </div>
 
+                    {(expand && (user && Array(user.graduate_program).length > 0 )) && ( <p className="text-gray-500 uppercase text-xs font-medium mb-2">PROGRAMAS DE PÓS-GRADUAÇÃO</p>)}
+
+                    {(user && Array(user.graduate_program).length > 0) && (
+                      <div className="flex flex-col gap-2 mb-8">
+                   
+                     {
+                      Array(user.graduate_program).map((program) => (
+                        <Link className="w-full" target="_blank" to={`/pos-graduacao?graduate_program_id=${program.graduate_program_id}`}><Button variant={'ghost'} className={` ${!expand ? ('w-10'):('justify-start w-full')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default'):('icon')}><GraduationCap size={16}/>{expand && (program.name)}</Button></Link>
+                      ))
+                     }
+                    
+                      </div>
+                    )}
+
                    {expand && ( <p className="text-gray-500 uppercase text-xs font-medium mb-2">LINKS EXTERNOS</p>)}
                     <div className="flex flex-col gap-2 mb-8">
-                    <Button variant={'ghost'} className={` ${!expand ? ('w-10'):('justify-start w-full')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default'):('icon')}><Cube size={16}/>{expand && ('Meus bens patrimoniados')}</Button>
-                    <Link className="w-full" target="_blank" to={`/researcher?researcher_name=${user?.researcger_name}&search_type=&terms=`}><Button variant={'ghost'} className={` ${!expand ? ('w-10'):('justify-start w-full')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default'):('icon')}><User size={16}/>{expand && ('Página pública do pesquisador')}</Button></Link>
+                    {user?.researcger_name != '' && (
+                      <Button variant={'ghost'} className={` ${!expand ? ('w-10'):('justify-start w-full')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default'):('icon')}><Cube size={16}/>{expand && ('Meus bens patrimoniados')}</Button>
+                    )}
+                  {user?.researcger_name != '' && (  <Link className="w-full" target="_blank" to={`/researcher?researcher_name=${user?.researcger_name}&search_type=&terms=`}><Button variant={'ghost'} className={` ${!expand ? ('w-10'):('justify-start w-full')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default'):('icon')}><User size={16}/>{expand && ('Página pública do pesquisador')}</Button></Link>)}
                    
                     </div>
 

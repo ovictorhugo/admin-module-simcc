@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FilterSidebar } from "../sidebar/filter-sidebar";
-import { InfoSidebar } from "../sidebar/info-sidebar";
+
 
 
 export const SidebarProvider = () => {
@@ -18,8 +17,7 @@ export const SidebarProvider = () => {
 
   return (
     <>
-    <FilterSidebar/>
-    <InfoSidebar/>
+
     </>
   )
 }

@@ -22,6 +22,7 @@ type Publicacao = {
     jcr_link: string,
     jif: string
     researcher_id: string
+    distinct:boolean
   }
 
 

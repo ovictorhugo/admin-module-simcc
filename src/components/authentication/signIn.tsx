@@ -13,21 +13,14 @@ import { Button } from "../ui/button";
 import { signInWithEmailAndPassword} from 'firebase/auth';
 import "firebase/auth";
 import { auth } from "../../lib/firebase";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
 import img1 from '../../assets/bg_home.png'
 
 import { toast } from "sonner"
 
-import { User as FirebaseAuthUser} from 'firebase/auth'
+
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { UserContext } from "../../context/context";
-interface User extends FirebaseAuthUser {
-    state: string;
-    name: string
-    email: string
-    img_url: string;
-    institution_id: string
-  }
 
 
   interface Uid {
@@ -40,29 +33,20 @@ interface User extends FirebaseAuthUser {
 
 
 import { GoogleLogo, SignIn } from "phosphor-react";
-import { useCookies } from 'react-cookie'
+
 import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
+import { MUfmg } from "../svg/MUfmg";
 
 export function SignInContent() {
-  const [cookies, setCookie] = useCookies(['user'])
-
-    const backgroundImages = [
-     'ewe'
-      ];
-    
-      //background
-      const [backgroundImage] = useState<string>(() => {
-        const randomIndex = Math.floor(Math.random() * backgroundImages.length);
-        return backgroundImages[randomIndex];
-      });
 
 
+  
       //firebase
       const [email, setEmail] = useState('');
       const [password, setPassword] = useState('');
       const {setLoggedIn, urlGeralAdm} = useContext(UserContext);
       const history = useNavigate();
-      const { setUser, user } = useContext(UserContext);
+      const { setUser } = useContext(UserContext);
 
       const handleLogin = async () => {
         try { 
@@ -360,11 +344,7 @@ export function SignInContent() {
 
 
       ///minha ufmg
-      const shibPersonUidMeta = document.querySelector('meta[name="Shib-Person-Uid"]');
-      const uidFromMeta = shibPersonUidMeta ? shibPersonUidMeta.getAttribute('content') : null;
-
-      // Opção 2: Acessar a variável global
-      const uidFromScript = (window as any).ShibPersonUid;
+    
 
       const [uid, setUid] = useState<Uid| null>(null);;
 
@@ -380,13 +360,14 @@ export function SignInContent() {
           
             try {
               const response = await fetch(urlProgram, {
+                method: "GET",
                 mode: "cors",
                 headers: {
                   "Access-Control-Allow-Origin": "*",
                   "Access-Control-Allow-Methods": "GET",
                   "Access-Control-Allow-Headers": "Content-Type",
                   "Access-Control-Max-Age": "3600",
-                  "Content-Type": "text/plain",
+                  "Content-Type": "application/json",
                 }
               });
 
@@ -397,104 +378,36 @@ export function SignInContent() {
                 setUid(data[0]);
                 console.log(uid)
 
-                const fetchDataPost = async () => {
-
-                  const data = [
-                    {
-                      displayName:uid?.displayName,
-                      email:uid?.uid,
-                      uid:uid?.uid,
-                      photoURL:'',
-                      provider:'shib'
-                    }
-                  ]
-        
+                
+                const fetchDataLogin = async () => {
                   try {
-                    const response = await fetch(urlProgram, {
-                      mode: 'cors',
-                      method: 'POST',
+                    const response = await fetch(urlUser, {
+                      mode: "cors",
+                      method: 'GET',
                       headers: {
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': 'POST',
-                        'Access-Control-Allow-Headers': 'Content-Type',
-                        'Access-Control-Max-Age': '3600',
-                        'Content-Type': 'application/json'
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "GET",
+                        "Access-Control-Allow-Headers": "Content-Type",
+                        "Access-Control-Max-Age": "3600",
+                        "Content-Type": "text/plain",
                       },
-                      body: JSON.stringify(data),
                     });
-        
-                    if (response.ok) {
-                      console.log('cadastrou')
-                      const fetchDataLogin = async () => {
-                        try {
-                          const response = await fetch(urlUser, {
-                            mode: "cors",
-                            method: 'GET',
-                            headers: {
-                              "Access-Control-Allow-Origin": "*",
-                              "Access-Control-Allow-Methods": "GET",
-                              "Access-Control-Allow-Headers": "Content-Type",
-                              "Access-Control-Max-Age": "3600",
-                              "Content-Type": "text/plain",
-                            },
-                          });
-                          const data = await response.json();
-                          if (data && Array.isArray(data) && data.length > 0) {
-                            console.log('logou')
-                            data[0].roles = data[0].roles || [];
-                            setLoggedIn(true)
-                            setUser(data[0]);
-                           
-                         
-                       
-                            history('/');
-                          }
-                        } catch (err) {
-                          console.log(err);
-                        }
-                      };
-                      fetchDataLogin();
-                  
+                    const data = await response.json();
+                    if (data && Array.isArray(data) && data.length > 0) {
+                      console.log('logou')
+                      data[0].roles = data[0].roles || [];
+                      setLoggedIn(true)
+                      setUser(data[0]);
                      
-                    } else {
-                      const fetchDataLogin = async () => {
-                        try {
-                          const response = await fetch(urlUser, {
-                            mode: "cors",
-                            method: 'GET',
-                            headers: {
-                              "Access-Control-Allow-Origin": "*",
-                              "Access-Control-Allow-Methods": "GET",
-                              "Access-Control-Allow-Headers": "Content-Type",
-                              "Access-Control-Max-Age": "3600",
-                              "Content-Type": "text/plain",
-                            },
-                          });
-                          const data = await response.json();
-                          if (data && Array.isArray(data) && data.length > 0) {
-                            data[0].roles = data[0].roles || [];
-                            setLoggedIn(true)
-                            setUser(data[0]);
-                           
-                         
-                       
-                            history('/');
-                          }
-                        } catch (err) {
-                          console.log(err);
-                        }
-                      };
-                      fetchDataLogin();
+                   
+                 
+                      history('/');
                     }
-                    
                   } catch (err) {
                     console.log(err);
-                  } 
-                 
+                  }
                 };
-        
-                fetchDataPost();
-            
+                fetchDataLogin();
                
               } else {
                
@@ -518,10 +431,7 @@ export function SignInContent() {
               })
         }
       }
-      
-      const location = useLocation();
 
-      const [value, setValue] = useState('account')
 
       //frases
 
@@ -532,16 +442,13 @@ export function SignInContent() {
         },
         {
           quote: 'Às vezes eles me perguntaravam onde que eu tinha estudado, simplesmente o nome da Escola quase que já bastava, né? Aquilo ali já falava tudo por você.',
-          author: 'Maria da Fátimo Solis Ribeiro. Engenheira Civil formada pela Escola em 1986.'
+          author: 'Maria da Fátima Solis Ribeiro. Engenheira Civil formada pela Escola em 1986.'
         },
         {
-          quote: 'Alunos e egressos são fundamentais para a continuidade do legado da UFMG.',
-          author: 'João Pereira'
+          quote: 'É difícil definir o que eu vou levar. Acho que o que pode resumir é minha formação. Enquanto pessoa e enquanto profissional.',
+          author: 'Paloma de Assis Ribeiro Batista, Aluna do 4º periodo de Engenharia de Produção e mebro da PJ Consultoria & Assesoria, empresa junior do seu curso. Na escola desde 2010.'
         },
-        {
-          quote: 'O conhecimento adquirido aqui é um patrimônio a ser partilhado.',
-          author: 'Ana Costa'
-        }
+     
       ];
       
         // Estado para a frase e autor atuais
@@ -585,7 +492,14 @@ export function SignInContent() {
           </CardHeader>
 
     <div className="flex gap-3 flex-col">
-<Button onClick={() => (handleLoginMinhaUfmg())} className=" w-full" variant={'outline'} ><GoogleLogo size={16} className="" /> Login com Minha UFMG</Button>
+<div>
+ 
+<Button onClick={() => (handleLoginMinhaUfmg())} className=" w-full" variant={'outline'} ><div className="h-[12px]"><MUfmg/></div>Login com Minha UFMG 
+<div className="relative float-right top-0 right-0">
+<div className="bg-[#719CB8] w-2 rounded-full h-2 animate-ping float-right flex right-0">
+</div><div className="bg-[#719CB8] w-2 rounded-full h-2"></div></div></Button>
+
+</div>
         <Button className=" w-full" variant={'outline'} onClick={handleGoogleSignIn} ><GoogleLogo size={16} className="" /> Login com Google</Button>
        
         </div>

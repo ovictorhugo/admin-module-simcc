@@ -15,7 +15,7 @@ import {
 import { ArrowRight, Info } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
-import { useSpring } from 'react-spring';
+
 
 interface VisaoPrograma {
   article: number;
@@ -47,19 +47,7 @@ interface GrupoPesquisa {
   situacao: string
 }
 
-interface PosGraduationsProps {
-  acronym: null,
-  area: string
-  institution_id: string
-  institution_name: string
-  last_date_sent: string
-  lattes_id: string
-  leader_name: string
-  research_group_id: string
-  research_group_name: string
-  researcher_id: string
-  situation: string
-}
+
 
 
 import { Link, useNavigate } from "react-router-dom";
@@ -98,7 +86,6 @@ import {
 } from "../../components/ui/chart"
 
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
@@ -114,7 +101,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../../components/ui/tooltip"
-import { Label } from "../ui/label";
+
 import { useTheme } from "next-themes";
 import { ArtigosRecentes } from "./components/artigos-recentes";
 import { Newsletter } from "./components/newsletter";
@@ -200,7 +187,7 @@ const chartConfig = {
 
 export function InitialHome() {
   const [VisaoPrograma, setVisaoPrograma] = useState<VisaoPrograma[]>([]);
-  const { setItensSelecionados, urlGeralAdm, urlGeral, user, maria, setMaria,  searchType } = useContext(UserContext);
+  const { setItensSelecionados, urlGeralAdm, urlGeral } = useContext(UserContext);
 
   const [year, setYear] = useState(new Date().getFullYear()-4);
 
@@ -296,7 +283,7 @@ useEffect(() => {
 }, [rt]);
 
 
-const { theme, setTheme } = useTheme()
+const { theme } = useTheme()
 // Crie uma constante para agrupar as áreas e calcular o total de grupos por área
 const areaTotais = grupos.reduce((acc, grupo) => {
   const area = grupo.area;
@@ -308,11 +295,7 @@ const areaTotais = grupos.reduce((acc, grupo) => {
   return acc;
 }, {});
 
-// Converta o objeto em um array para facilitar o uso posterior
-const areaTotaisArray = Object.keys(areaTotais).map((area) => ({
-  area: area,
-  total: areaTotais[area],
-}));
+
 
   let urlVisaoPrograma = `${urlGeral}/graduate_program_production?graduate_program_id=0&year=1900`;
   useMemo(() => {
@@ -483,8 +466,6 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
       return () => clearInterval(interval);
     }, [chartKeys.length]);
   
-    const lineProps = useSpring({ opacity: 1, from: { opacity: 0 }, reset: true });
-
     
     const navigate = useNavigate();
 
@@ -569,7 +550,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
         {chartKeys.map((key, index) => {
           const isVisible = visibleChart === index;
           const strokeColor = theme === 'dark' ? '#404040' : '#A3A3A3';
-          const fillColor = `url(#color${key.split('_')[1][0].toUpperCase() + key.split('_')[1].slice(1)})`;
+        
           const strokeOpacity = (chartKeys.length - index) / chartKeys.length;
 
           return !isVisible && (

@@ -8,7 +8,6 @@ import { HeaderResultTypeHome } from "./header-result-type-home";
 import { Button } from "../../ui/button";
 import {  Book, Books, ChartBar, Rows, SquaresFour } from "phosphor-react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { BlockItem } from "./patent-home/block";
 import { Alert } from "../../ui/alert";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { GraficoLivros } from "../../popup/graficos/grafico-livros";

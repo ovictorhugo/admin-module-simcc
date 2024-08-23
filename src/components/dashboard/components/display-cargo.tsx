@@ -248,9 +248,6 @@ const handleDeleteFuncionalidade = async (permission:string) => {
 
     
 
-const funcionalidades = funcionalidadesData;
-    
-
 
     // Agrupar as funcionalidades por área
 // Agrupar as funcionalidades por área

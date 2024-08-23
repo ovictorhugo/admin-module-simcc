@@ -70,7 +70,7 @@ import { Input } from "../../ui/input";
     
       const convertJsonToCsv = (json: any[]): string => {
         const items = json;
-        const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+        const replacer = (_: string, value: any) => (value === null ? '' : value); // Handle null values
         const header = Object.keys(items[0]);
         const csv = [
           '\uFEFF' + header.join(';'), // Add BOM and CSV header

@@ -1,10 +1,10 @@
 import {  Star } from "phosphor-react";
 
 import { GraduationCapIcon, MapPinIcon, Users } from "lucide-react";
-import { useModal } from "../hooks/use-modal-store";
+
 import { cn } from "../../lib"
 
-import {  differenceInDays } from 'date-fns';
+
 import { useLocation, useNavigate } from "react-router-dom";
 
 interface GraduateProgram {
@@ -34,7 +34,7 @@ interface GraduateProgram {
   
 
 export function ProgramItem(props:GraduateProgram) {
-  const { onOpen } = useModal()
+
 
   const qualisColor = {
     'MESTRADO': 'bg-blue-200',
@@ -44,11 +44,11 @@ export function ProgramItem(props:GraduateProgram) {
   const queryUrl = useQuery();
   const navigate = useNavigate();
 
-  const currentDate = new Date();
-  const itemDate = new Date(props.created_at);
+
+  
 
   // Calcula a diferença em dias entre a data atual e a data do item
-  const daysDifference = differenceInDays(currentDate, itemDate);
+  
 
   const handlePesquisaFinal = () => {
     queryUrl.set('graduate_program_id', props.graduate_program_id);
@@ -74,9 +74,7 @@ export function ProgramItem(props:GraduateProgram) {
             <div className="flex w-full flex-col gap-1">
            <div className="flex justify-between items-center">
            <div className="text-xs font-medium mb-2 flex items-center gap-2">{props.code != '' ? (props.code):('Sem código')}
-           {daysDifference <= 5 && (
-        <span className="flex h-2 w-2 rounded-full bg-blue-600" />
-      )}</div>
+           </div>
            <GraduationCapIcon size={16}/>
            </div>
               <div className="flex items-center">

@@ -6,10 +6,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { HeaderResultTypeHome } from "./header-result-type-home";
 import { Copyright } from "lucide-react";
 import { Button } from "../../ui/button";
-import { ArrowUDownLeft, ChartBar, Rows, SquaresFour } from "phosphor-react";
+import {  ChartBar, Rows, SquaresFour } from "phosphor-react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { TableReseracherPatentesPopup } from "../../popup/columns/producoes-tecnicas/table-patentes-popup";
-import { BookBlockPopUp } from "../../popup/book-block-popup";
+
 
 import { Alert } from "../../ui/alert";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";

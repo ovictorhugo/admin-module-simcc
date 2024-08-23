@@ -25,9 +25,6 @@ interface MailProps {
   children:React.ReactNode
 }
 
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
-}
 
 
 

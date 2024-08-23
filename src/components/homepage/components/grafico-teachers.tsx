@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { useState, useEffect } from 'react';
+import { BarChart, Bar, XAxis, LabelList,  Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { ChartContainer, ChartConfig, ChartTooltipContent, ChartLegendContent, ChartLegend, ChartTooltip } from '../../../components/ui/chart';
 
 interface Rt {

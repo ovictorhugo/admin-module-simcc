@@ -1,15 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/context";
-import { Label } from "../../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
-import { BarChart, Bar, XAxis, AreaChart, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Area } from "recharts";
-import { ChartContainer, ChartTooltip, ChartConfig, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
-import { GraficoDisciplinas } from "./grafico-disciplias";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
+
+
 import { Alert } from "../../ui/alert";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { Badge } from "../../ui/badge";
-import { Asterisk, Calendar, Eye, Languages, Presentation, Shapes, Plus, Hash, Clock } from "lucide-react";
+import {  Plus, Hash, Clock } from "lucide-react";
 import { Progress } from "../../ui/progress";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
@@ -37,16 +34,6 @@ interface Disciplinas {
     turmas_juntas?: string; // Novo campo
 }
 
-const chartConfig = {
-  available_slots: {
-    label: "Available Slots",
-    color: "#82ca9d",
-  },
-  occupied_slots: {
-    label: "Occupied Slots",
-    color: "#8884d8",
-  },
-} satisfies ChartConfig;
 
 interface Props {
   dep_id: string;
@@ -167,7 +154,7 @@ const combineItems = (items: Disciplinas[]) => {
 
 const {onOpen} = useModal()
   const combinedFilteredTotal = combineItems(filteredTotal);
-  const combinedFilteredTotalLenght = combineItems(data);
+
 
   const [count, setCount] = useState(12);
 

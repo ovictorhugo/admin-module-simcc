@@ -77,7 +77,7 @@ if(valoresSelecionadosExport != '') {
   if (searchType == 'name') {
     urlTermPublicacoes = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=&type=ARTICLE&qualis=${qualisString}&year=${yearString}`;
 } else if (searchType == 'article') {
-  urlTermPublicacoes = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? ('1'):('0')}&graduate_program_id=${idGraduateProgram == "0" ? (''):(idGraduateProgram)}`;
+  urlTermPublicacoes = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? ('1'):('0')}&graduate_program_id=${idGraduateProgram === "0" ? "" : idGraduateProgram}`;
 } else if (searchType == 'area') {
   urlTermPublicacoes = `${urlGeral}bibliographic_production_article_area?area_specialty=${valoresSelecionadosExport.replace(/;/g, ' ')}&great_area=&year=${yearString}&qualis=${qualisString}`
 } else if (searchType == 'abstract') {

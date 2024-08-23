@@ -2,9 +2,9 @@ import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../context/context"
 import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 import { Alert } from "../ui/alert"
-import { DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog"
+
 import { CalendarBlank, PuzzlePiece } from "phosphor-react"
-import { MapPin, TrendingUp, User } from "lucide-react"
+import { MapPin} from "lucide-react"
 
 import dt from '../../assets/dt.png'
 import pq from '../../assets/pq.png'

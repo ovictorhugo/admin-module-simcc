@@ -84,16 +84,21 @@ export function SegurancaMinhaArea() {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+
 
   const handleSubmitChangeWord = async () => {
-    setError(null);
-    setSuccess(null);
+
 
     // Verifica se as novas senhas coincidem
     if (newPassword !== confirmNewPassword) {
-      setError('As novas senhas não coincidem.');
+
+      toast("Tente novamente", {
+        description: "As novas senhas não coincidem",
+        action: {
+            label: "Fechar",
+            onClick: () => console.log("Fechar"),
+        },
+    });
       return;
     }
 
@@ -128,7 +133,14 @@ export function SegurancaMinhaArea() {
         console.error('Erro ao atualizar senha:', error);
       }
     } else {
-      setError('Usuário não autenticado.');
+
+      toast("Tente novamente", {
+        description: "Usuário não autenticado",
+        action: {
+            label: "Fechar",
+            onClick: () => console.log("Fechar"),
+        },
+    });
     }
   }
 

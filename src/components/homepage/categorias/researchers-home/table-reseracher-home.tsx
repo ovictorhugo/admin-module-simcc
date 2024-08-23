@@ -1,4 +1,4 @@
-import { Alert } from "../../../ui/alert";
+
 import { columns } from "./columns";
 
 import { DataTable } from "./data-table";

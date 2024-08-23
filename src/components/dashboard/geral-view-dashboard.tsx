@@ -1,5 +1,5 @@
 
-import { useModalDashboard } from "../hooks/use-modal-dashboard";
+
 
 import { useModalSidebar } from "../hooks/use-modal-sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../..//components/ui/tabs"
@@ -7,16 +7,14 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
 
 import { Button } from "../ui/button";
-import { Check, ChevronDown, ChevronLeft, ChevronUp, Copy, GraduationCap, Play, RefreshCcw, Terminal, User } from "lucide-react";
+import {  ChevronLeft,  Copy, GraduationCap,  User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+
 import { Input } from "../ui/input";
 import { toast } from "sonner"
-import { ApacheViewDashboard } from "./apache-view-dashboard";
-import { Checkbox } from "../ui/checkbox";
+
 import { CargosFuncoes } from "./components/cargos-funcoes";
 import { GraficoAnaliseUsuarios } from "./graficos/grafico-analise-usuarios";
 import { Label } from "../ui/label";
@@ -37,9 +35,8 @@ export function GeralViewDashboard() {
 
     console.log(isOpenSidebar)
 
-    const { isOpen, type} = useModalDashboard();
+    
   
-    const isModalOpen = isOpen && type === "general";
 
 
 
@@ -152,7 +149,6 @@ const handleSubmitDiretorio = async () => {
 
 const [tab, setTab] = useState('all')
 
-const [isOpenConsole, setIsOpenConsole] = useState(false)
 
 
 /// DITEORIO JSON

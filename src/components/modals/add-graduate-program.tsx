@@ -29,6 +29,7 @@ import {
 } from "../../components/ui/sheet"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { ScrollArea } from "../ui/scroll-area";
+import { Textarea } from "../ui/textarea";
 
 export function AddGraduateProgram() {
 
@@ -45,6 +46,8 @@ export function AddGraduateProgram() {
     const [area, setArea] = useState('');
     const [code, setCode] = useState('');
     const [descricao, setDescricao] = useState('');
+    const [site, setSite] = useState('');
+    const [sigla, setSigla] = useState('');
 
     const handleSubmit = async () => {
 
@@ -64,7 +67,9 @@ export function AddGraduateProgram() {
                 description: descricao,
                 url_image: ''   ,
                 city: city,
-                visible: false
+                visible: false,
+                acronym:sigla,
+                site:site
             }
           ]
 
@@ -168,6 +173,8 @@ export function AddGraduateProgram() {
             setModality('')
             setRanking('')
             setType('')
+            setSigla('')
+            setSite('')
           }
 
           
@@ -224,9 +231,16 @@ export function AddGraduateProgram() {
                       </div>
 
         <div>
-            <div className="flex flex-col gap-2 mt-4">
+            <div>
+            <div className="flex flex-col gap-2 mt-4 w-2/3">
                 <Label>Nome do programa*</Label>
                 <Input value={name} onChange={(e) => setName(e.target.value)} type="text" />
+            </div>
+
+            <div className="flex flex-col gap-2 mt-4 w-1/3">
+                <Label>Sigla*</Label>
+                <Input value={sigla} onChange={(e) => setSigla(e.target.value)} type="text" />
+            </div>
             </div>
 
             <div className="mt-4 gap-4 grid grid-cols-2">
@@ -285,9 +299,21 @@ export function AddGraduateProgram() {
                 <Input value={code} onChange={(e) => setCode(e.target.value)} type="text" />
             </div>
 
-            <div>
-              
+            <div className="flex flex-col gap-2 w-1/3">
+                <Label>Site</Label>
+                <Input value={site} onChange={(e) => setSite(e.target.value)} type="text"/>
             </div>
+
+            <div className="flex flex-col gap-2 w-full ">
+            <Label htmlFor="dep_des" className="h-fit">Descrição</Label>
+            <Textarea
+              name="dep_des"
+              className="h-full"
+              value={descricao}
+              onChange={(e) => setDescricao( e.target.value)}
+              id="dep_des"
+            />
+          </div>
 
             <Button onClick={() => handleSubmit()} size={'sm'} className="text-white dark:text-white mt-3 ml-auto flex ">
    <Plus size={16} className="" />Adicionar

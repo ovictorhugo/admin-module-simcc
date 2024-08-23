@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "../../../../components/ui/dropdown-menu"
 import { ArrowUpDown, Copy, MoreHorizontal } from "lucide-react"
-import { ArrowSquareOut, Buildings,Export,MapPin, Plus, ShareNetwork} from "phosphor-react"
+import { ArrowSquareOut, Buildings, MapPin, Plus, ShareNetwork} from "phosphor-react"
 import { GraduationCap} from "lucide-react"
 import { useContext } from "react"
 import { UserContext } from "../../../../context/context"

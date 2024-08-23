@@ -1,7 +1,5 @@
 import { useMemo, useState } from "react";
-import { Alert } from "../ui/alert";
 
-import { CalendarBlank } from "phosphor-react";
 import { Slider } from "../ui/slider";
 
 interface Props {

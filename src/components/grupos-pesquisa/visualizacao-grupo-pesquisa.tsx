@@ -1,13 +1,13 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { Button } from "../ui/button";
-import { Building, ChevronLeft, Rows, Shapes, SquareArrowOutUpRight, SquareArrowUpRight } from "lucide-react";
+import { Building, ChevronLeft, Rows, Shapes, SquareArrowOutUpRight } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
-import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
-import { SquaresFour, UserList } from "phosphor-react";
+
+import { SquaresFour } from "phosphor-react";
 import { ResearchersBloco } from "../homepage/categorias/researchers-home/researchers-bloco";
 import { Skeleton } from "../ui/skeleton";
 import { TableReseracherhome } from "../homepage/categorias/researchers-home/table-reseracher-home";

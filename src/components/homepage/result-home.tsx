@@ -2,17 +2,16 @@ import { useContext, useEffect, useState } from "react";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 import { useModalResult } from "../hooks/use-modal-result";
 import { ResultProvider } from "../provider/result-provider";
-import { CategoriasPesquisaHome } from "./categorias-pesquisa-home";
+
 import { UserContext } from "../../context/context";
-import { ChatItem } from "../chat/chat-item";
-import { HeaderResult } from "./header-results";
+
 import { Button } from "../ui/button";
 import { ChevronDown, ChevronUp, Copyright, SlidersHorizontal, Ticket, Users } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
 import { useModal } from "../hooks/use-modal-store";
-import { File, Quotes, Stamp } from "phosphor-react";
+import { File, Quotes } from "phosphor-react";
 import { Search } from "../search/search";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation} from "react-router-dom";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -21,14 +20,14 @@ const useQuery = () => {
 export function ResultHome() {
   const { isOpen, type } = useModalHomepage();
   const { onOpen, type: typeResult } = useModalResult();
-  const { mapModal, maria, messagesMaria, itemsSelecionados, searchType, setItensSelecionados, setSearchType, setValoresSelecionadosExport } = useContext(UserContext);
+  const { itemsSelecionados, searchType} = useContext(UserContext);
   const { onOpen: onOpenModal } = useModal();
   
   const [isOn, setIsOn] = useState(true);
   
   const queryUrl = useQuery();
 
-  const terms = queryUrl.get('terms');
+ 
   
   const researcher = queryUrl.get('researcher');
 

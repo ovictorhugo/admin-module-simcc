@@ -28,8 +28,9 @@ import {
 
 import { UserContext } from "../../context/context";
 import { User as FirebaseAuthUser} from 'firebase/auth'
-import { GoogleLogo } from "phosphor-react";
+import { GoogleLogo, SignIn } from "phosphor-react";
 import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
+import { UserPlus } from "lucide-react";
 
 interface User extends FirebaseAuthUser {
   img_url: string;
@@ -300,15 +301,11 @@ try {
   },
   {
     quote: 'Às vezes eles me perguntaravam onde que eu tinha estudado, simplesmente o nome da Escola quase que já bastava, né? Aquilo ali já falava tudo por você.',
-    author: 'Maria da Fátimo Solis Ribeiro. Engenheira Civil formada pela Escola em 1986.'
+    author: 'Maria da Fátima Solis Ribeiro. Engenheira Civil formada pela Escola em 1986.'
   },
   {
-    quote: 'Alunos e egressos são fundamentais para a continuidade do legado da UFMG.',
-    author: 'João Pereira'
-  },
-  {
-    quote: 'O conhecimento adquirido aqui é um patrimônio a ser partilhado.',
-    author: 'Ana Costa'
+    quote: 'É difícil definir o que eu vou levar. Acho que o que pode resumir é minha formação. Enquanto pessoa e enquanto profissional.',
+    author: 'Paloma de Assis Ribeiro Batista, Aluna do 4º periodo de Engenharia de Produção e mebro da PJ Consultoria & Assesoria, empresa junior do seu curso. Na escola desde 2010.'
   }
 ];
 
@@ -341,10 +338,10 @@ try {
              </div>
             </div>
             </div>
+            <div className="md:w-1/2 w-full h-full flex md:px-16 items-center justify-center flex-col">
+           
 
-            <div className="md:w-1/2 w-full h-full flex items-center justify-center flex-col">
-          
-            <div className="max-w-[400px] w-full">
+           <div className="max-w-[400px] w-full">
             <CardHeader className="p-0 pb-6">
             <CardTitle>Criar conta</CardTitle>
             <CardDescription className="pt-2">
@@ -386,7 +383,7 @@ try {
             </div>
         </div>
 
-            <Button onClick={handleSignOut} className="text-white dark:text-white w-full">Criar conta</Button>
+            <Button onClick={handleSignOut} className="text-white dark:text-white w-full"><UserPlus size={16}/>Criar conta</Button>
           </CardContent>
             </div>
           

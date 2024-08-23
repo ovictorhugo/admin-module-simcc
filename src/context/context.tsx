@@ -65,8 +65,6 @@ interface UserContextType {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 
-  login: (user: User) => void; // Função de login
-  logout: () => void; // Função de logout
 
   valoresSelecionadosExport: string;
   setValoresSelecionadosExport: React.Dispatch<React.SetStateAction<string>>;
@@ -145,8 +143,6 @@ export const UserContext = createContext<UserContextType>({
   setMaria: () => {},
   user: {} as User,
   setUser: () => {},
-  login: () => {}, // Definindo uma função vazia como padrão
-  logout: () => {}, // Definindo uma função vazia como padrão
 
   valoresSelecionadosExport: "",
 setValoresSelecionadosExport: () => {},

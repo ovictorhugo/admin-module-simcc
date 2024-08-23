@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { UserContext } from '../context/context';
+import React from 'react';
+import { Navigate, } from 'react-router-dom';
 
 interface ProtectedRouteProps {
   element: React.ReactElement;
@@ -9,8 +8,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element, hasPermission }) => {
 
-  const {setPermission} = useContext(UserContext)
-  const [load, setLoad] = useState(false)
+
  
 
   return (hasPermission) ? element : <Navigate to="/unauthorized" />;

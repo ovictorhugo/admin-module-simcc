@@ -1,7 +1,7 @@
-import { ArrowRight, Book, ChevronDown, ChevronLeft, ChevronUp, Copyright, File, Globe, Info, MapPinIcon, SlidersHorizontal, Star, Ticket, Users } from "lucide-react";
+import {  Book, ChevronDown, ChevronLeft, ChevronUp, Copyright, File,  Info, MapPinIcon, SlidersHorizontal, Star, Ticket, Users } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -17,8 +17,8 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import HC_wordcloud from 'highcharts/modules/wordcloud';
 
-import { AreaChart, Area,LineChart, Line, BarChart, Bar, XAxis, PieChart, Pie, YAxis, LabelList, Cell, CartesianGrid,  Legend, ResponsiveContainer } from 'recharts';
-import { Label as LabelChart } from 'recharts';
+import { BarChart, Bar, XAxis, LabelList, CartesianGrid,   } from 'recharts';
+
 
 
 import {
@@ -103,22 +103,6 @@ interface GraduateProgram {
     return new URLSearchParams(useLocation().search);
   }
 
-
-  const chartConfig5 = {
- 
-    'Produtividade em Pesquisa': {
-      label: "Produtividade em Pesquisa",
-      color: "#809BB5",
-    },
-    'Desen. Tec. e Extensão Inovadora': {
-      label: "Desen. Tec. e Extensão Inovadora",
-      color: "#A6BCCD",
-    },
-    'Outros docentes': {
-      label: "Outros docentes",
-      color: "#354A5C",
-    },
-  } satisfies ChartConfig
   
   
   const chartConfig = {
@@ -204,8 +188,7 @@ export function VisualizacaoPrograma() {
   }, [urlGraduateProgram]);
 
   const [totalProducao, setTotalProducao] = useState<Total[]>([]);
-  const currentYear1 = new Date().getFullYear();
-const year2 = currentYear1 - 4;
+
 
   const urlTotalProgram = `${urlGeral}graduate_program_production?graduate_program_id=${type_search}&year=1900`;
 
@@ -880,7 +863,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
                      modality={total.modality}
                      type={total.type}
                      rating={total.rating}
-                     institution_id={user.institution_id}
+                     institution_id={user?.institution_id || ''}
                      url_image={total.url_image}
                      city={total.city}
                      visible={Boolean(total.visible)}

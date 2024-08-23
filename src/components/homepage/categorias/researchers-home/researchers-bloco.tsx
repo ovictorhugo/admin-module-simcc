@@ -1,7 +1,6 @@
-import { useContext, useState } from "react";
+import {  useState } from "react";
 import { ResearchItem } from "./researcher-item";
-import { UserContext } from "../../../../context/context";
-import { useModalSidebar } from "../../../hooks/use-modal-sidebar";
+
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { Button } from "../../../ui/button";
 import { Plus } from "phosphor-react";
@@ -13,9 +12,7 @@ type Research = {
 export function ResearchersBloco(props: Research) {
 
     const [count, setCount] = useState(12)
-    const {navbar, mapModal} = useContext(UserContext)
-
-    const {isOpen} = useModalSidebar()
+    
 
     return(
        <div className="">

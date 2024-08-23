@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import {  useEffect, useState } from 'react'
 import { Home } from './pages/Home'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import  { UserContext }  from '../src/context/context'
@@ -125,20 +125,7 @@ useEffect(() => {
 
   console.log(user)
 
-  // Função para fazer login
-  const login = (user: User) => {
-    setUser(user);
-    setLoggedIn(true);
-    localStorage.setItem('user', JSON.stringify(user)); // Armazenar informações do usuário no localStorage
-  };
-
-
-  // Função para fazer logout
-  const logout = () => {
-    setUser({ state: '', email: '', name: '' } as User);
-    setLoggedIn(false);
-    localStorage.removeItem('user'); // Remover informações do usuário do localStorage ao fazer logout
-  };
+  
 
 
   /////PERMISSÃO
@@ -201,8 +188,6 @@ useEffect(() => {
       navbar, setNavbar,
       urlGeralAdm, setUrlGeralAdm,
       user, setUser,
-      login, // Passar a função de login para o contexto do usuário
-      logout, // Passar a função de logout para o contexto do usuário
       searchType, setSearchType,
       urlGeral, setUrlGeral,
       pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema,

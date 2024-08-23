@@ -1,8 +1,8 @@
-import { CalendarBlank, DotsThree, Graph, LinkBreak, LinkSimple } from "phosphor-react";
+import { CalendarBlank, DotsThree,  LinkBreak, LinkSimple } from "phosphor-react";
 import { Alert } from "../../ui/alert";
-import { useContext, useMemo, useState } from "react";
+import { useContext } from "react";
 import { UserContext } from "../../../context/context";
-import unorm from 'unorm';
+
 import {
     DropdownMenu,
     DropdownMenuItem,
@@ -33,20 +33,14 @@ type Articles = {
     distinct: boolean
 }
 
-type OpenAlex = {
-  pdf_url:string
-  issn: string
-  landing_page_url: string
-  abstract: string
 
-}
 interface ItemsSelecionados {
   term: string;
 }
 
 export function ArticleItem(props:Articles) {
 
-    const {urlGeral, valoresSelecionadosExport, valorDigitadoPesquisaDireta, itemsSelecionados} = useContext(UserContext)
+    const {urlGeral,  itemsSelecionados} = useContext(UserContext)
 
     let qualisColor = {
         'A1': 'bg-[#006837]',
@@ -63,11 +57,7 @@ export function ArticleItem(props:Articles) {
         'SQ': 'bg-[#560B11]'
     }
 
-    const normalizedTitle = props.title
-    .replace(/&quot;/g, '"')
-    .replace(/&#10;/g, '\n')
-    .toLowerCase();
-
+   
     const doi = props.doi.replace('http://dx.doi.org/', '');
 
 

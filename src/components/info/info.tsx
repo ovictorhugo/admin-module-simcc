@@ -1,9 +1,9 @@
-import {  Building, Building2, ChevronLeft, Copy,  FileJson, Mail, MapPin } from "lucide-react";
+import {   Building2, ChevronLeft, Copy,  FileJson, Mail, MapPin } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
 import { Duvidas } from "./duvidas";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Alert } from "../ui/alert";
 import { BracketsCurly, LinkSimple } from "phosphor-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"

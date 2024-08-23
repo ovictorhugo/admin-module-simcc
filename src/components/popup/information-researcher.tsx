@@ -88,7 +88,6 @@ const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNod
   console.log(`Generated regex pattern: ${regexPattern}`);
 
   const regex = new RegExp(`(${regexPattern})`, 'gi');
-  const normalizedText = normalizeText(text);
 
   // Use html-react-parser to parse the text and handle the highlighting
   const parseOptions = {

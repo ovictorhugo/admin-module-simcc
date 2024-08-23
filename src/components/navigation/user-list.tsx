@@ -3,13 +3,7 @@
 import * as React from "react"
 
 import { cn } from "../../lib/utils"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select"
+
 import { UserContext } from "../../context/context"
 
 interface AccountSwitcherProps {
@@ -25,9 +19,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from "../../components/ui/dropdown-menu"
-import { Button } from "../ui/button"
-import { ChevronDown, PanelLeftDashed } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+
+import {  ChevronsUpDown} from "lucide-react"
+
 import { useTheme } from "next-themes"
 import { SymbolEEWhite } from "../svg/SymbolEEWhite"
 import { SymbolEE } from "../svg/SymbolEE"
@@ -39,7 +33,7 @@ export function AccountSwitcher({
 
 }: AccountSwitcherProps) {
 
-  const {user, setIsCollapsed, mode, setPermission, urlGeralAdm, setRole, role} = React.useContext(UserContext)
+  const {user,  setPermission, urlGeralAdm, setRole, role} = React.useContext(UserContext)
   const { theme } = useTheme()
 
 
@@ -97,7 +91,7 @@ const history = useNavigate();
                     <p className="text-sm font-medium w-full text-left">{role}</p>
          
 
-            <ChevronDown size={16}/>
+            <ChevronsUpDown size={16}/>
 
                 </div>
              )}

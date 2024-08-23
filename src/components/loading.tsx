@@ -6,7 +6,7 @@ import { useTheme } from 'next-themes';
 import { LogoConecteeWhite } from './svg/LogoConecteeWhite';
 import { auth } from '../lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { useLocation } from 'react-router-dom';
+
 import { LogoIapos } from './svg/LogoIapos';
 import { LogoIaposWhite } from './svg/LogoIaposWhite';
 
@@ -14,26 +14,6 @@ interface LoadingWrapperProps {
   children: React.ReactNode;
 }
 
-interface User {
-  institution_id: string
-  user_id:string
-  display_name:string
-  email:string 
-  uid:string
-  photo_url:string
-  dep_id:string
-  roles:Roles[]
-}
-
-
-interface Roles {
-  id:string
-  role:string
-}
-
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
-}
 
 
 
@@ -41,14 +21,10 @@ const useQuery = () => {
 const LoadingWrapper: React.FC<LoadingWrapperProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
-  const { setLoggedIn, setUser, urlGeralAdm, setPermission, permission, user, setRole, version } = useContext(UserContext)
+  const { setLoggedIn, setUser, urlGeralAdm, setPermission, permission,  setRole, version } = useContext(UserContext)
 
     ///// LOGIN SHIBBOLETH
     
-    const queryUrl = useQuery();
-
-    const [userData, setUserData] = useState<User| null>(null);;
-
 
     useEffect(() => {
       setLoading(true);
@@ -105,25 +81,37 @@ const LoadingWrapper: React.FC<LoadingWrapperProps> = ({ children }) => {
                       setRole(JSON.parse(storedRole));
                 
                     }
+
+                    setTimeout(() => {
+                      setLoading(false);
+                    }, 2000); // 2000 ms = 2 segundos
                 }
               } catch (err) {
                 console.log(err);
               } finally {
-                setLoading(false);
+                setTimeout(() => {
+                  setLoading(false);
+                }, 2000); // 2000 ms = 2 segundos
               }
             };
     
             fetchData();
           } else {
             setLoggedIn(false);
-            setLoading(false);
+            setTimeout(() => {
+              setLoading(false);
+            }, 2000); // 2000 ms = 2 segundos
           }
         } else {
           setLoggedIn(false);
-          setLoading(false);
+          setTimeout(() => {
+            setLoading(false);
+          }, 2000); // 2000 ms = 2 segundos
         }
 
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000); // 2000 ms = 2 segundos
       });
     
       return () => {

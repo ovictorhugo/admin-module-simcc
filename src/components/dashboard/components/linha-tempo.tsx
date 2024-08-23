@@ -1,6 +1,6 @@
 import { Check, X } from "lucide-react";
 import { ScrollArea, ScrollBar } from "../../ui/scroll-area";
-import { useModal } from "../../hooks/use-modal-store";
+
 
 interface YearSemester {
     year: string;
@@ -17,7 +17,7 @@ interface YearSemester {
 
   
   export function LinhaTempoDocentes({ items }: Props) {
-    const {onOpen} = useModal()
+  
 
     return (
   
@@ -30,7 +30,7 @@ interface YearSemester {
               <div className="flex items-center w-full">
               <div className="border-b w-full  flex flex-1  "></div>
 
-              <div onClick={() => onOpen()} className={`w-8 h-8 cursor-pointer rounded-full border ${item.selected ? 'bg-[#719CB8] dark:bg-[#719CB8] text-white' : 'bg-neutral-50 dark:bg-neutral-900'} whitespace-nowrap flex items-center justify-center text-xl font-bold`}>
+              <div  className={`w-8 h-8 cursor-pointer rounded-full border ${item.selected ? 'bg-[#719CB8] dark:bg-[#719CB8] text-white' : 'bg-neutral-50 dark:bg-neutral-900'} whitespace-nowrap flex items-center justify-center text-xl font-bold`}>
                 {item.selected ? <Check size={12} /> : <X size={12} />}
               </div>
 

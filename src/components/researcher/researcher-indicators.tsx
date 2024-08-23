@@ -4,12 +4,11 @@ import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { GraduationCap, Info, MapPin, OctagonAlert } from "lucide-react";
-import { FilterYearPopUp } from "../popup/filters-year-popup";
+
 import { FilterYearIndicators } from "./filter-year-indicators";
 import { GraficoIndiceArticle } from "./gráficos/grafico-indice-artigo";
 import { GraficoIndiceBooksAndChapters } from "./gráficos/grafico-indice-livros";
-import { IdentificationBadge, PuzzlePiece } from "phosphor-react";
-import { Link } from "react-router-dom";
+import { PuzzlePiece } from "phosphor-react";
 
 type Dados = {
     count_article:number
