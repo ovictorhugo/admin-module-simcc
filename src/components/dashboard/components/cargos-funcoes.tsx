@@ -30,7 +30,20 @@ export function CargosFuncoes() {
     const [data, setData] = useState<Disciplinas[]>([]);
     const [dataSelecionado, setDataSelecionado] = useState<Disciplinas | null>(null);
 const [isLoad, setIsLoad] = useState(false)
-    const { urlGeralAdm} = useContext(UserContext)
+    const { urlGeralAdm, permission} = useContext(UserContext)
+
+    const has_editar_cargos_permissoes = permission.some(
+      (perm) => perm.permission === 'editar_cargos_permissoes'
+    );
+
+    const has_editar_cargos_usuarios = permission.some(
+      (perm) => perm.permission === 'editar_cargos_usuarios'
+    );
+
+    const has_editar_informacoes_usuarios = permission.some(
+      (perm) => perm.permission === 'editar_informacoes_usuarios'
+    );
+
     let urlDisciplinas = urlGeralAdm + `s/role`;
 
         const fetchDataGet = async () => {
@@ -149,6 +162,17 @@ const [isLoad, setIsLoad] = useState(false)
 
     const [tab, setTab] = useState('cargos')
 
+
+   useEffect(() => {
+        if(!has_editar_cargos_permissoes) {
+          setTab('usuarios')
+        } else if (!has_editar_cargos_usuarios) {
+          setTab('pesquisadores')
+        } else if (!has_editar_informacoes_usuarios) {
+            setTab('')
+        }
+    }, []);
+    
     ////LISTA USUARIOS
 
 
@@ -163,21 +187,21 @@ const [isLoad, setIsLoad] = useState(false)
                 <div className={`flex pt-2 justify-between  ${isOn ? '' : ''} `}>
                   <div className="flex items-center gap-2">
                   <div className={`pb-2 border-b-2 transition-all ${tab == 'cargos' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
-                    <Button variant={tab == 'cargos' ? ('ghost'):('ghost')}  onClick={() => setTab('cargos')}>
+                    <Button disabled={!has_editar_cargos_permissoes} variant={tab == 'cargos' ? ('ghost'):('ghost')}  onClick={() => setTab('cargos')}>
                        <BriefcaseBusiness className="h-4 w-4" />
                        Cargos
                      </Button>
                     </div>
 
                     <div className={`pb-2 border-b-2 transition-all ${tab == 'usuarios' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
-                    <Button variant={tab == 'usuarios' ? ('ghost'):('ghost')}  onClick={() => setTab('usuarios')}>
+                    <Button disabled={!has_editar_cargos_usuarios} variant={tab == 'usuarios' ? ('ghost'):('ghost')}  onClick={() => setTab('usuarios')}>
                        <Users className="h-4 w-4" />
                        Vincular usuário à cargo
                      </Button>
                     </div>
 
                     <div className={`pb-2 border-b-2 transition-all ${tab == 'pesquisadores' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
-                    <Button variant={tab == 'pesquisadores' ? ('ghost'):('ghost')}  onClick={() => setTab('pesquisadores')}>
+                    <Button disabled={!has_editar_informacoes_usuarios} variant={tab == 'pesquisadores' ? ('ghost'):('ghost')}  onClick={() => setTab('pesquisadores')}>
                        <UserCog className="h-4 w-4" />
                        Editar informações do usuário
                      </Button>

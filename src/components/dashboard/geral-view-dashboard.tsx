@@ -34,14 +34,34 @@ export function GeralViewDashboard() {
     const { isOpen: isOpenSidebar } = useModalSidebar();
 
     console.log(isOpenSidebar)
-
+    const {user, urlGeralAdm, permission} = useContext(UserContext);
     
+  
+    const has_editar_cargos_permissoes = permission.some(
+      (perm) => perm.permission === 'editar_cargos_permissoes'
+    );
+
+    const has_editar_cargos_usuarios = permission.some(
+      (perm) => perm.permission === 'editar_cargos_usuarios'
+    );
+
+    const has_editar_informacoes_usuarios = permission.some(
+      (perm) => perm.permission === 'editar_informacoes_usuarios'
+    );
+
+    const has_editar_configuracoes_plataforma = permission.some(
+      (perm) => perm.permission === 'editar_configuracoes_plataforma'
+    );
+  
+  
+  
+  
   
 
 
 
     ////
-    const {user, urlGeralAdm } = useContext(UserContext);
+  
     const [total, setTotal] = useState<TotalPatrimonios[]>([]);
 
     const urlPatrimonioInsert =  `${urlGeralAdm}/InstitutionRest/Query/Count?institution_id=${user?.institution_id}`;
@@ -200,8 +220,8 @@ const [directoryJson, setDirectoryJson] = useState("");
                 
               <TabsTrigger value="all" onClick={() => setTab('all')} className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
 
-              <TabsTrigger value="cargos" onClick={() => setTab('cargos')} className="text-zinc-600 dark:text-zinc-200">Cargos e permissões</TabsTrigger>
-                <TabsTrigger value="unread" onClick={() => setTab('unread')}  className="text-zinc-600 dark:text-zinc-200">Configurações</TabsTrigger>
+              <TabsTrigger value="cargos" disabled={!has_editar_cargos_permissoes && !has_editar_cargos_usuarios && !has_editar_informacoes_usuarios} onClick={() => setTab('cargos')} className="text-zinc-600 dark:text-zinc-200">Cargos e permissões</TabsTrigger>
+                <TabsTrigger value="unread" disabled={!has_editar_configuracoes_plataforma} onClick={() => setTab('unread')}  className="text-zinc-600 dark:text-zinc-200">Configurações</TabsTrigger>
                
                 </TabsList>
                
@@ -214,8 +234,6 @@ const [directoryJson, setDirectoryJson] = useState("");
 
             <TabsContent value="all" className=" ">
               <div className="p-4 md:p-8 pt-0 md:pt-0 h-auto flex flex-col gap-4 md:gap-8">
-            {total.map((props) => {
-                  return(
                     <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
                   <Link to={"/dashboard/pesquisadores"}>
                   <Alert className="p-0">
@@ -226,7 +244,7 @@ const [directoryJson, setDirectoryJson] = useState("");
                     <User className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{props.count_r}</div>
+                    <div className="text-2xl font-bold">{total.map((props) => props.count_r)}</div>
                     <p className="text-xs text-muted-foreground">
                       registrados
                     </p>
@@ -243,7 +261,7 @@ const [directoryJson, setDirectoryJson] = useState("");
                     <GraduationCap className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{props.count_gp}</div>
+                    <div className="text-2xl font-bold">{total.map((props) => props.count_r)}</div>
                     <p className="text-xs text-muted-foreground">
                       registrados
                     </p>
@@ -259,7 +277,7 @@ const [directoryJson, setDirectoryJson] = useState("");
                     <GraduationCap className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{props.count_gp}</div>
+                    <div className="text-2xl font-bold">{total.map((props) => props.count_r)}</div>
                     <p className="text-xs text-muted-foreground">
                       cadastrados
                     </p>
@@ -275,15 +293,14 @@ const [directoryJson, setDirectoryJson] = useState("");
                     <GraduationCap className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{props.count_gp}</div>
+                    <div className="text-2xl font-bold">{total.map((props) => props.count_gp)}</div>
                     <p className="text-xs text-muted-foreground">
                       cadastrados
                     </p>
                   </CardContent>
                   </Alert></Link>
                     </div>
-                  )
-                })}
+                 
 
 <div className="grid gap-4 h-full md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
                 <Alert  className="xl:col-span-2 p-0" x-chunk="dashboard-01-chunk-4" >

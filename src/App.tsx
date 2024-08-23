@@ -146,7 +146,7 @@ useEffect(() => {
   );
 
   const has_visualizar_gerencia_modulo_administrativo = permission.some(
-    (perm) => perm.permission === 'visualizar_modulo_administrativo'
+    (perm) => perm.permission === 'visualizar_gerencia_modulo_administrativo'
   );
 
 
@@ -253,7 +253,7 @@ useEffect(() => {
     element={
       <ProtectedRoute
         element={<Dashboard />}
-        hasPermission={has_visualizar_modulo_administrativo}
+        hasPermission={has_visualizar_gerencia_modulo_administrativo}
       />
     }
   />
