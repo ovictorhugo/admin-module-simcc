@@ -233,7 +233,7 @@ useEffect(() => {
 
           
         <Route
-        path='/ufmg'
+        path='/ufmg/'
         element={loggedIn == false ? <Authentication/> :  <Navigate to='/' />}
         />
         

@@ -494,7 +494,7 @@ export function SignInContent() {
     <div className="flex gap-3 flex-col">
 <div>
  
-<Link to={'/ufmg'}><Button  className=" w-full" variant={'outline'} ><div className="h-[12px]"><MUfmg/></div>Login com Minha UFMG 
+<Link to={'/ufmg/'}><Button  className=" w-full" variant={'outline'} ><div className="h-[12px]"><MUfmg/></div>Login com Minha UFMG 
 <div className="relative float-right top-0 right-0">
 <div className="bg-[#719CB8] w-2 rounded-full h-2 animate-ping float-right flex right-0">
 </div><div className="bg-[#719CB8] w-2 rounded-full h-2"></div></div></Button></Link>

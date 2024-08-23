@@ -12,7 +12,7 @@ export function Authentication() {
         <>
         {location.pathname === '/signIn' && (<SignInContent/>)}
         {location.pathname === '/signUp' && (<SignUpContent/>)}
-        {location.pathname === '/ufmg' && (<MinhaUfmg/>)}
+        {location.pathname === '/ufmg/' && (<MinhaUfmg/>)}
         </>
     )
 }
