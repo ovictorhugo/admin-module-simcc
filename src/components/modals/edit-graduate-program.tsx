@@ -24,6 +24,7 @@ import { Sheet, SheetContent } from "../ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { ScrollArea } from "../ui/scroll-area";
 import { X } from "lucide-react";
+import { Textarea } from "../ui/textarea";
 
 export function EditGraduateProgram() {
 
@@ -41,7 +42,10 @@ export function EditGraduateProgram() {
     const [ranking, setRanking] = useState(data && data.rating);
     const [area, setArea] = useState(data && data.area);
     const [code, setCode] = useState(data && data.code);
-    const [descricao, setDescricao] = useState('');
+    const [descricao, setDescricao] = useState(data && data.description);
+    const [site, setSite] = useState(data && data.site);
+    const [sigla, setSigla] = useState(data && data.acronym);
+    const [visible, setVisible] = useState(data && data.visible);
 
     useEffect(() => {
       setName(data.name)
@@ -52,6 +56,10 @@ export function EditGraduateProgram() {
       setArea(data.area)
       setCode(data.code)
       setIdProgram(data.graduate_program_id)
+      setDescricao(data.description)
+      setSigla(data.acronym)
+      setSite(data.site)
+      setVisible(data.visible)
   }, [data]);
 
     const handleSubmit = async () => {
@@ -72,7 +80,9 @@ export function EditGraduateProgram() {
                 description: descricao,
                 url_image: '',
                 city: city ? city : '',
-                visible: false
+                visible: visible,
+                acronym:sigla,
+                site:site
               }
           ]
 
@@ -176,6 +186,9 @@ export function EditGraduateProgram() {
             setModality('')
             setRanking('')
             setType('')
+            setSigla('')
+            setSite('')
+            setVisible('')
           }
     
           
@@ -229,9 +242,16 @@ export function EditGraduateProgram() {
                       </div>
 
         <div>
-            <div className="flex flex-col gap-2 mt-4">
+        <div className="flex gap-4">
+            <div className="flex flex-col gap-2 mt-4 w-2/3">
                 <Label>Nome do programa*</Label>
-                <Input defaultValue={name} value={name} onChange={(e) => setName(e.target.value)} type="text" />
+                <Input value={name} onChange={(e) => setName(e.target.value)} type="text" />
+            </div>
+
+            <div className="flex flex-col gap-2 mt-4 w-1/3">
+                <Label>Sigla*</Label>
+                <Input value={sigla} onChange={(e) => setSigla(e.target.value)} type="text" />
+            </div>
             </div>
 
             <div className="mt-4 gap-4 grid grid-cols-2">
@@ -285,10 +305,28 @@ export function EditGraduateProgram() {
            </div>
             </div>
 
-            <div className="flex flex-col gap-2 mt-4">
+            <div className="flex gap-4 mt-4">
+          <div className="flex flex-col gap-2  w-2/3">
                 <Label>Código do programa (Sucupira)</Label>
-                <Input defaultValue={code} value={code} onChange={(e) => setCode(e.target.value)} type="text" />
+                <Input value={code} onChange={(e) => setCode(e.target.value)} type="text" />
             </div>
+
+            <div className="flex flex-col gap-2 w-1/3">
+                <Label>Site</Label>
+                <Input value={site} onChange={(e) => setSite(e.target.value)} type="text"/>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2 w-full mt-4">
+            <Label htmlFor="dep_des" className="h-fit">Descrição</Label>
+            <Textarea
+              name="dep_des"
+              className="h-full"
+              value={descricao}
+              onChange={(e) => setDescricao( e.target.value)}
+              id="dep_des"
+            />
+          </div>
 
             <Button onClick={() => handleSubmit()} size={'sm'} className="text-white dark:text-white mt-3 ml-auto flex ">
    <PencilSimple size={16} className="" />Editar programa

@@ -231,7 +231,7 @@ export function AddGraduateProgram() {
                       </div>
 
         <div>
-            <div>
+            <div className="flex gap-4">
             <div className="flex flex-col gap-2 mt-4 w-2/3">
                 <Label>Nome do programa*</Label>
                 <Input value={name} onChange={(e) => setName(e.target.value)} type="text" />
@@ -294,7 +294,8 @@ export function AddGraduateProgram() {
            </div>
             </div>
 
-            <div className="flex flex-col gap-2 mt-4">
+          <div className="flex gap-4 mt-4">
+          <div className="flex flex-col gap-2  w-2/3">
                 <Label>Código do programa (Sucupira)</Label>
                 <Input value={code} onChange={(e) => setCode(e.target.value)} type="text" />
             </div>
@@ -303,8 +304,9 @@ export function AddGraduateProgram() {
                 <Label>Site</Label>
                 <Input value={site} onChange={(e) => setSite(e.target.value)} type="text"/>
             </div>
+          </div>
 
-            <div className="flex flex-col gap-2 w-full ">
+            <div className="flex flex-col gap-2 w-full mt-4">
             <Label htmlFor="dep_des" className="h-fit">Descrição</Label>
             <Textarea
               name="dep_des"

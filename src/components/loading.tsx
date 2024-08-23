@@ -118,6 +118,7 @@ const LoadingWrapper: React.FC<LoadingWrapperProps> = ({ children }) => {
                   console.log(err);
                 }
               };
+              
               fetchDataLogin();
              
             } else {
@@ -137,6 +138,8 @@ const LoadingWrapper: React.FC<LoadingWrapperProps> = ({ children }) => {
         
       }
     }
+
+    handleLoginMinhaUfmg()
   }, []);
     
   /// LOGIN FIREBASE
