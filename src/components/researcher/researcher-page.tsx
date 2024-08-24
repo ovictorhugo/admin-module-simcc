@@ -1,6 +1,8 @@
-import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, Download, TrendingUp } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, Download, OctagonAlert, TrendingUp } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
+import ReactDOMServer from 'react-dom/server';
+import html2canvas from 'html2canvas';
 
   import {
 
@@ -42,9 +44,10 @@ import { TimeLineResearcher } from "./timeline-researcher";
 import { DialogHeader } from "../ui/dialog";
 import { FilterYearTimeLine } from "../popup/filters-year-timeline";
 import { Skeleton } from "../ui/skeleton";
-import html2canvas from "html2canvas";
+
 import jsPDF from "jspdf";
 import { ResearcherIndicators } from "./researcher-indicators";
+import { AlertDescription, AlertTitle } from "../ui/alert";
 
 type Research = {
   among: number,
@@ -131,7 +134,7 @@ interface Bolsistas {
 
 export function ResearcherPage() {
 
-    const { urlGeral, itemsSelecionados, setSearchType, setValoresSelecionadosExport,  setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados, setItensSelecionados, permission } = useContext(UserContext);
+    const { urlGeral, user, itemsSelecionados, setSearchType, setValoresSelecionadosExport,  setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados, setItensSelecionados, permission } = useContext(UserContext);
 
     const history = useNavigate();
 
@@ -337,7 +340,10 @@ console.log(urlPublicacoesPorPesquisador)
         }, [urlPublicacoesPorPesquisador]);
 
 
-
+        const has_visualizar_indices_pesquisador = permission.some(
+          (perm) => perm.permission === 'visualizar_indices_pesquisador'
+        );
+      
 
 const convertJsonToCsv = (json: any[]): string => {
   const items = json;
@@ -409,19 +415,86 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
 
     /////////////
-    const timelineRef = useRef();
-
-    const handleDownload = async () => {
-      const element = timelineRef.current;
-      const canvas = await html2canvas(element);
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
-      pdf.addImage(imgData, "PNG", 0, 0);
-      pdf.save("timeline.pdf");
+    const DownloadButton = ({ user }:any) => {
+      const [isReady, setIsReady] = useState(false);
+    
+      // Função para lidar com o download
+      const handleDownload = async () => {
+        // Selecione o elemento que você deseja capturar
+        const element = document.getElementById(`timeline-researcher-${user.id}`);
+        
+        if (element) {
+          // Espere um pouco para garantir que o fetch e o componente estejam totalmente carregados
+          setTimeout(async () => {
+            // Capture o elemento como um canvas
+            const canvas = await html2canvas(element);
+            const imgData = canvas.toDataURL('image/png');
+    
+            // Crie um novo PDF
+            const pdf = new jsPDF();
+            // Adicione a imagem ao PDF
+            pdf.addImage(imgData, 'PNG', 0, 0);
+            // Salve o PDF
+            pdf.save('timeline_researcher.pdf');
+          }, 5000); // Ajuste o tempo de espera conforme necessário
+        }
+      };
+    
+      // Use um efeito para determinar quando o componente está pronto
+      useEffect(() => {
+        setIsReady(true);
+      }, []);
+    
+      return (
+        <>
+          <button onClick={handleDownload} disabled={!isReady}>
+            Baixar PDF do Componente
+          </button>
+          <div id={`timeline-researcher-${user.id}`}>
+            <TimeLineResearcher
+              among={user.among}
+              articles={user.articles}
+              book={user.book}
+              book_chapters={user.book_chapters}
+              id={user.id}
+              name={user.name}
+              university={user.university}
+              lattes_id={user.lattes_id}
+              area={user.area}
+              abstract={user.abstract}
+              lattes_10_id={user.lattes_10_id}
+              city={user.city}
+              orcid={user.orcid}
+              image={user.image}
+              graduation={user.graduation}
+              patent={user.patent}
+              software={user.software}
+              brand={user.brand}
+              lattes_update={user.lattes_update}
+              h_index={user.h_index}
+              relevance_score={user.relevance_score}
+              works_count={user.works_count}
+              cited_by_count={user.cited_by_count}
+              i10_index={user.i10_index}
+              scopus={user.scopus}
+              openalex={user.openalex}
+              subsidy={user.subsidy}
+              graduate_programs={user.graduate_programs}
+              departments={user.departments}
+              research_groups={user.research_groups}
+              cargo={user.cargo}
+              clas={user.clas}
+              classe={user.classe}
+              rt={user.rt}
+              situacao={user.situacao}
+              year_filter={user.year_filter}
+              entradanaufmg={user.entradanaufmg}
+            />
+          </div>
+        </>
+      );
     };
-
-
-
+    
     ////////////PERMISSÕES
 
     const hasBaremaAvaliacao = permission.some(
@@ -445,7 +518,7 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
              <div className="flex gap-3  items-center">
              <TabsList>
                   <TabsTrigger value="all" onClick={() => setTab('all')}>Visão geral</TabsTrigger>
-                  <TabsTrigger value="indicators" onClick={() => setTab('indicators')}>Indicadores de produção</TabsTrigger>
+                  <TabsTrigger disabled={!has_visualizar_indices_pesquisador} value="indicators" onClick={() => setTab('indicators')}>Indicadores de produção</TabsTrigger>
                 </TabsList>
               
 
@@ -506,6 +579,7 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
        </Tooltip>
        </TooltipProvider>
 
+      
        <TooltipProvider>
        <Tooltip>
          <TooltipTrigger asChild>
@@ -518,8 +592,10 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
 
           <div className="flex items-center gap-3 ml-auto"> 
-          <Button className="h-8 ml-auto "  onClick={handleDownload} size={'sm'}><Download size={16}/>Fazer download</Button>
-           
+        
+          {researcher.slice(0, 1).map((user) => (
+            <DownloadButton user={user}/>
+      ))}
            
           </div>
           </div>
@@ -549,7 +625,7 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
       
   {researcher.slice(0, 1).map((user) => {
                 return(
-                  <div ref={timelineRef}>
+                  <div >
                     <TimeLineResearcher
                   among={user.among}
                     articles={user.articles}
@@ -798,6 +874,18 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
                    </div>
                 )
             })}
+
+            {user?.lattes_id == researcher[0].lattes_id && (
+              <div className="bg-red-50 mb-6 flex gap-3 dark:bg-red-200/20 w-full p-8 rounded-md">
+              <div>  <OctagonAlert size={24}/></div>
+<div>
+<AlertTitle className="whitespace-normal">Dados da publicações</AlertTitle>
+<AlertDescription className="whitespace-normal">
+A plataforma gerencia publicações extraídas do currículo Lattes, associando o Qualis da revista conforme registrado na Plataforma Sucupira, além de integrar dados da base Journal Citation Reports (JCR) e do banco de dados Open Alex. Caso o artigo seja classificado como Qualis "Sem Qualificação" (SQ), recomendamos verificar o cadastro do nome da revista na plataforma Lattes.
+</AlertDescription>
+
+</div></div>
+            )}
   
   <div className="flex gap-6 xl:flex-row flex-col-reverse">
   <div className="w-full flex-1">

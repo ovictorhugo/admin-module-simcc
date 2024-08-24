@@ -12,7 +12,7 @@ import { UserContext } from "../../context/context";
 
 import { toast } from "sonner";
 import { Button } from "../ui/button";
-import { ArrowUUpLeft, Plus } from "phosphor-react";
+import { ArrowUUpLeft, PencilSimple, Plus } from "phosphor-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
@@ -40,16 +40,31 @@ export function AddDepartamento() {
   // Extract numbers from the UUID and join them into a single string
   const id = uuid.replace(/\D/g, "").slice(0, 10);
 
-  const [formData, setFormData] = useState({
-    dep_id: "",
-    org_cod: "",
-    dep_nom: "",
-    dep_des: "",
-    dep_email: "",
-    dep_site: "",
-    dep_tel: "",
-    dep_sigla: "",
-  });
+  const [depId, setDepId] = useState(id);
+  const [orgCod, setOrgCod] = useState('');
+  const [depNom, setDepNom] = useState('');
+  const [depDes, setDepDes] = useState('');
+  const [depEmail, setDepEmail] = useState('');
+  const [depSite, setDepSite] = useState('');
+  const [depTel, setDepTel] = useState('');
+  const [depSigla, setDepSigla] = useState('');
+  const [img, setImg] = useState('');
+
+  useEffect(() => {
+    if(typeModal == 'edit-departamento') {
+      setDepId(data.dep_id || ' ')
+      setOrgCod(data.org_cod  || '')
+      setDepNom(data.dep_nom || '')
+      setDepDes(data.dep_des || '')
+      setDepEmail(data.dep_email || '')
+      setDepSite(data.dep_site || '')
+      setDepEmail(data.dep_email || '')
+      setDepSigla(data.dep_sigla || '')
+      setDepTel(data.dep_tel || '')
+      setImg(data.img_data || '')
+    }
+}, [data]);
+  
 
   const [fileInfo, setFileInfo] = useState({
     name: "",
@@ -60,13 +75,7 @@ export function AddDepartamento() {
     img_data: null as File | null,
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-        ...prevData,
-        [name]: value, // Atualiza o valor correspondente no formData
-    }));
-};
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPdfs({
@@ -83,46 +92,6 @@ export function AddDepartamento() {
     handleSubmitDepartamento();
   };
 
-  useEffect(() => {
-  if (typeModal === "edit-departamento" && data) {
-    setFormData({
-      dep_id: data.dep_id || "",
-      org_cod: data.org_cod || "",
-      dep_nom: data.dep_nom || "",
-      dep_des: data.dep_des || "",
-      dep_email: data.dep_email || "",
-      dep_site: data.dep_site || "",
-      dep_tel: data.dep_tel || "",
-      dep_sigla: data.dep_sigla || "",
-    });
-
-    setPdfs({
-      img_data: data.img_data || null,
-    });
-  } else {
-    setFormData({
-      dep_id: id,
-      org_cod: "",
-      dep_nom: "",
-      dep_des: "",
-      dep_email: "",
-      dep_site: "",
-      dep_tel: "",
-      dep_sigla: "",
-    });
-
-    setPdfs({
-      img_data: null,
-    });
-  }
-}, [data, typeModal, id]);
-
-  const updateItem = (field: string, value: string) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  };
 
   const formatPhone = (value: string) => {
     value = value.replace(/\D/g, ""); // Remove todos os caracteres que não são dígitos
@@ -133,7 +102,7 @@ export function AddDepartamento() {
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formattedPhone = formatPhone(e.target.value);
-    updateItem("dep_tel", formattedPhone);
+    setDepTel(formattedPhone)
   };
 
   const handleSubmitDepartamento = async () => {
@@ -148,21 +117,37 @@ export function AddDepartamento() {
         });
         return;
       }
-
-      let urlDepartamentoInsert = urlGeralAdm + `departamentos`; // Atualize a URL conforme necessário
-
+  
+      let urlDepartamentoInsert = urlGeralAdm + `departamentos`;
+  
       if (typeModal === "edit-departamento") {
         urlDepartamentoInsert = urlGeralAdm + `departamentos/update`;
       }
-
+  
       const data = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
+  
+      const dataDep = {
+        dep_id: depId,
+        org_cod: orgCod,
+        dep_nom: depNom,
+        dep_des: depDes,
+        dep_email: depEmail,
+        dep_site: depSite,
+        dep_tel: depTel,
+        dep_sigla: depSigla,
+      };
+  
+      Object.entries(dataDep).forEach(([key, value]) => {
         data.append(key, value as string);
       });
-      if (pdfs.img_data) {
+  
+      // Adicionar o arquivo apenas se ele existir ou se estiver adicionando um novo departamento
+      if (pdfs.img_data && typeModal === "add-departamento") {
+        data.append("img_data", pdfs.img_data);
+      } else if (pdfs.img_data && typeModal === "edit-departamento") {
         data.append("img_data", pdfs.img_data);
       }
-
+  
       const response = await axios.post(urlDepartamentoInsert, data, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -172,7 +157,7 @@ export function AddDepartamento() {
           "Access-Control-Max-Age": "3600",
         },
       });
-
+  
       if (response.status === 201 || response.status === 200) {
         toast("Dados enviados com sucesso", {
           description: "Todos os dados foram enviados.",
@@ -181,25 +166,18 @@ export function AddDepartamento() {
             onClick: () => console.log("Fechar"),
           },
         });
-
-        setFormData({
-          dep_id: "",
-          org_cod: "",
-          dep_nom: "",
-          dep_des: "",
-          dep_email: "",
-          dep_site: "",
-          dep_tel: "",
-          dep_sigla: "",
-        });
-        setFileInfo({
-          name: "",
-          size: 0,
-        });
-        setPdfs({
-          img_data: null,
-        });
-
+  
+        setDepId("");
+        setOrgCod("");
+        setDepNom("");
+        setDepDes("");
+        setDepEmail("");
+        setDepSite("");
+        setDepTel("");
+        setDepSigla("");
+        setFileInfo({ name: "", size: 0 });
+        setPdfs({ img_data: null });
+  
         onClose();
       }
     } catch (error) {
@@ -213,6 +191,7 @@ export function AddDepartamento() {
       });
     }
   };
+  
 
   return (
     <Sheet open={isModalOpen} onOpenChange={onClose}>
@@ -245,7 +224,8 @@ export function AddDepartamento() {
 
         <div>
           <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
-            <div className="mb-8">
+            <div className="mb-8 flex justify-between items-center">
+            <div >
               <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
                 Departamentos
               </p>
@@ -256,101 +236,107 @@ export function AddDepartamento() {
                   : "Editar departamento"}
               </h1>
             </div>
+
+            <div>
+           {typeModal == 'edit-departamento' && ( <img className="h-12 mix-blend-multiply" src={`data:image/jpeg;base64,${img}`}  />)}
+            </div>
+            </div>
             <div className="flex gap-3 flex-col">
               <div className="flex flex-col gap-3 w-full">
                 <div className="flex w-full gap-3 items-end">
                   <div className="grid w-2/3 items-center gap-1.5">
-                    <Label>Nome</Label>
+                    <Label>Nome do departamento*</Label>
                     <Input
                       type="text"
                       name="dep_nom"
-                      value={formData.dep_nom}
-                      onChange={handleChange}
-                      placeholder="Digite o nome do departamento"
+                      value={depNom}
+                      onChange={(e) => setDepNom(e.target.value)}
+                    
                     />
                   </div>
                   <div className="grid w-1/3 items-center gap-1.5">
-                    <Label>Sigla</Label>
+                    <Label>Sigla*</Label>
                     <Input
                       type="text"
                       name="dep_sigla"
-                      value={formData.dep_sigla}
-                      onChange={handleChange}
-                      placeholder="Digite a sigla"
+                      value={depSigla}
+                      onChange={(e) => setDepSigla(e.target.value)}
+                   
                     />
                   </div>
                 </div>
                 <div className="flex w-full gap-3">
                   <div className="grid w-1/3 items-center gap-1.5">
-                    <Label>Organização</Label>
+                    <Label>Código</Label>
                     <Input
                       type="text"
                       name="org_cod"
-                      value={formData.org_cod}
-                      onChange={handleChange}
-                      placeholder="Digite o código da organização"
+                      value={orgCod}
+                      onChange={(e) => setOrgCod(e.target.value)}
+                     
                     />
                   </div>
                   <div className="grid w-2/3 items-center gap-1.5">
-                    <Label>Email</Label>
+                    <Label>Email*</Label>
                     <Input
                       type="email"
                       name="dep_email"
-                      value={formData.dep_email}
-                      onChange={handleChange}
-                      placeholder="Digite o email do departamento"
+                      value={depEmail}
+                      onChange={(e) => setDepEmail(e.target.value)}
+                    
                     />
                   </div>
+                </div>
+
+              
+                <div className="flex w-full gap-3">
+                <div className="grid w-2/3 items-center gap-1.5">
+                    <Label>Site*</Label>
+                    <Input
+                      type="text"
+                      name="dep_site"
+                      value={depSite}
+                      onChange={(e) => setDepSite(e.target.value)}
+                     
+                    />
+                  </div>
+                  <div className="grid w-1/3 items-center gap-1.5">
+                    <Label>Telefone*</Label>
+                    <Input
+                      type="tel"
+                      name="dep_tel"
+                      value={depTel}
+                      onChange={handlePhoneChange}
+                     
+                    />
+                  </div>
+                 
+                </div>
+                <div className="grid w-full items-center gap-1.5">
+                  <Label>Imagem</Label>
+                  <Input type="file" accept="image/*" onChange={handleFileChange} />
                 </div>
 
                 <div className="grid w-full items-center gap-1.5">
                   <Label>Descrição</Label>
                   <Textarea
                     name="dep_des"
-                    value={formData.dep_des}
-                    onChange={handleChange}
-                    placeholder="Digite uma descrição para o departamento"
+                    value={depDes}
+                    onChange={(e) => setDepDes(e.target.value)}
+                   
                   />
                 </div>
-                <div className="flex w-full gap-3">
-                  <div className="grid w-1/3 items-center gap-1.5">
-                    <Label>Telefone</Label>
-                    <Input
-                      type="tel"
-                      name="dep_tel"
-                      value={formData.dep_tel}
-                      onChange={handlePhoneChange}
-                      placeholder="Digite o telefone"
-                    />
-                  </div>
-                  <div className="grid w-2/3 items-center gap-1.5">
-                    <Label>Site</Label>
-                    <Input
-                      type="text"
-                      name="dep_site"
-                      value={formData.dep_site}
-                      onChange={handleChange}
-                      placeholder="Digite o site"
-                    />
-                  </div>
-                </div>
-                <div className="grid w-full items-center gap-1.5">
-                  <Label>Imagem</Label>
-                  <Input type="file" accept="image/*" onChange={handleFileChange} />
-                </div>
               </div>
+
+              <Button onClick={handleSubmit} className="mt-3 ml-auto flex ">
+              {typeModal === "edit-departamento" ? <PencilSimple size={16} className="" /> : <Plus size={16} className="" />}
+            {typeModal === "edit-departamento" ? "Editar departamento" : "Adicionar departamento"}
+          </Button>
             </div>
           </ScrollArea>
         </div>
 
-        <DialogFooter className="flex w-full gap-3 p-4 justify-end items-end">
-          <Button onClick={onClose} variant={"ghost"}>
-            Cancelar
-          </Button>
-          <Button onClick={handleSubmit}>
-            {typeModal === "edit-departamento" ? "Editar" : "Adicionar"}
-          </Button>
-        </DialogFooter>
+       
       </SheetContent>
     </Sheet>
   );

@@ -179,7 +179,7 @@ export function ItensListDepartamento(props:Props) {
             
 
            </div>
-           <img className="h-12 mix-blend-multiply" src={`data:image/jpeg;base64,${item.img_data}`} alt={item.dep_nom}  />
+           <img className="h-12 mix-blend-multiply" src={`data:image/jpeg;base64,${item.img_data}`} />
             
         </div>
            

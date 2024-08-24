@@ -150,6 +150,8 @@ export function ImportBolsistas() {
   
 
     console.log(data)
+    const [uploadProgress, setUploadProgress] = useState(0);
+
 
     const handleSubmitPatrimonio = async () => {
         try {
@@ -249,6 +251,17 @@ export function ImportBolsistas() {
                         <Link to={'http://www.bi.cnpq.br/painel/mapa-fomento-cti/'} target="_blank"  className="inline-flex mt-2 items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como extrair os bolsistas CNPq<ArrowRight size={12}/></Link>
                       </div>
                 <div className="">
+                {uploadProgress > 0 && (
+    <div className="w-full bg-gray-200 rounded-full h-2.5 my-4">
+        <div
+            className="bg-blue-600 h-2.5 rounded-full"
+            style={{ width: `${uploadProgress}%` }}
+        ></div>
+        <p className="text-sm text-gray-500 mt-1">{uploadProgress}% concluído</p>
+    </div>
+)}
+
+
                     <div {...getRootProps()} className="border-dashed mb-3 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-4">
                         <input {...getInputProps()} />
                         <div className="p-4  border rounded-md">
