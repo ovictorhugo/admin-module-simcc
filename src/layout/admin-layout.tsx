@@ -231,7 +231,7 @@ export default function AdminLayout({
       }
     ]
 
-    let urlProgram = urlGeralAdm + 'sys/requestUpdate'
+    let urlProgram = urlGeralAdm + 's/hop'
     const fetchData = async () => {
     try {
       const response = await fetch(urlProgram, {

@@ -10,7 +10,7 @@ interface PesquisadorProps {
 export function ApacheViewDashboard() {
     const { urlGeralAdm} = useContext(UserContext);
     const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
-    const urlGetApache = urlGeralAdm + `sys/checkHop`;
+    const urlGetApache = urlGeralAdm + `s/hop`;
 
     const fetchData = async () => {
       try {
