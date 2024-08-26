@@ -43,6 +43,8 @@ export function AddResearcherDashboard() {
               }
           ]
 
+          console.log(data)
+
           let urlProgram = urlGeralAdm + '/ResearcherRest/Insert'
 
           const fetchData = async () => {

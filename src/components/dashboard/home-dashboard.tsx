@@ -77,63 +77,63 @@ export function HomeDashboard() {
             <div className="grid lg:grid-cols-5 gap-4 md:grid-cols-3 grid-cols-2 2xl:grid-cols-6">
                {has_visualizar_gerencia_modulo_administrativo && (
                  <Link to={'/dashboard/administrativo'}>
-                 <Alert className="h-[80px] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                 <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
                  <SlidersHorizontal size={16}/>Administrativo</div></Alert></Link>
                )}
 
         {has_visualizar_todos_departamentos && (
                  <Link to={'/dashboard/departamentos'}>
-                 <Alert className="h-[80px] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                 <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
                  <Building2 size={16}/>Departamentos</div></Alert></Link>
                )}
 
             {has_visualizar_pesquisadores && (
                             <Link to={'/dashboard/pesquisadores'}>
-                            <Alert className="h-[80px] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
                             <Users size={16}/>Pesquisadores</div></Alert></Link>
                         )}
 
 
 {has_visualizar_todos_programas && (
                             <Link to={'/dashboard/programas'}>
-                            <Alert className="h-[80px] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
                             <GraduationCap size={16}/>Programas</div></Alert></Link>
                         )}
 
 {has_visualizar_grupos_pesquisa && (
                             <Link to={'/dashboard/grupos-pesquisa'}>
-                            <Alert className="h-[80px] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
                             <Blocks size={16}/>Grupos de pesquisa</div></Alert></Link>
                         )}
 
 {has_visualizar_inct && (
                             <Link to={'/dashboard/inct'}>
-                            <Alert className="h-[80px] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
                             <FlaskConical size={16}/>INCT's</div></Alert></Link>
                         )}
 
 
 {has_editar_pesos_avaliacao && (
                             <Link to={'/dashboard/pesos-avaliacao'}>
-                            <Alert className="h-[80px] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
                             <Weight size={16}/>Pesos de avaliação</div></Alert></Link>
                         )}
 
 {has_visualizar_indicadores_instituicao && (
                             <Link to={'/dashboard/indicadores'}>
-                            <Alert className="h-[80px] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
                             <PieChart size={16}/>Indicadores</div></Alert></Link>
                         )}
 
 {hasBaremaAvaliacao && (
                             <Link to={'/dashboard/baremas'}>
-                            <Alert className="h-[80px] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
                             <ClipboardEdit size={16}/>Baremas</div></Alert></Link>
                         )}
 
 {hasNotificacoes && (
                             <Link to={'/dashboard/enviar-notificacoes'}>
-                            <Alert className="h-[80px] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
                             <Mail size={16}/>Enviar notificações</div></Alert></Link>
                         )}
             

@@ -702,7 +702,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
           config={chartConfig}
           className="aspect-auto h-[300px] w-full"
         >
-  <BarChart accessibilityLayer data={dados}>
+  <BarChart accessibilityLayer data={dados} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
   <CartesianGrid vertical={false}  horizontal={false}/>
   <ChartLegend content={<ChartLegendContent />} />
   

@@ -3,11 +3,12 @@ import { UserContext } from "../../context/context"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
-import { Lock, RefreshCcw, UserCheck } from "lucide-react"
+import { Lock, RefreshCcw, User, UserCheck } from "lucide-react"
 import { AlertDescription, AlertTitle } from "../ui/alert"
 import { toast } from "sonner"
 import { auth } from '../../lib/firebase';
 import { reauthenticateWithCredential, EmailAuthProvider, updatePassword } from 'firebase/auth';
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 
 export function SegurancaMinhaArea() {
 
@@ -148,6 +149,7 @@ export function SegurancaMinhaArea() {
 
     return(
         <div className="flex flex-col flex-1 w-full">
+                      <div className="flex justify-between items-center">
                       <div>
                       <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
                        Olá, {user?.display_name}
@@ -156,6 +158,13 @@ export function SegurancaMinhaArea() {
                         <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
                           Perfil e segurança
                         </h1>
+                      </div>
+
+                      
+                      <Avatar className="cursor-pointer rounded-md  h-16 w-16">
+      <AvatarImage  className={'rounded-md h-16 w-16'} src={`${user?.photo_url}`} />
+      <AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
+  </Avatar>
                       </div>
 
                       <div className="my-6 border-b dark:border-b-neutral-800"></div>

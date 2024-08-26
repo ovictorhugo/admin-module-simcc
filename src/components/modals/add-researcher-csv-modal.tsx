@@ -12,11 +12,13 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/
 import { ScrollArea } from "../ui/scroll-area";
 import { DataTableModal } from "../componentsModal/data-table";
 import { columnsPesquisadoresModal } from "../componentsModal/columns-pesquisadores-modal";
-import { X } from "lucide-react";
-
+import { LoaderCircle, X } from "lucide-react";
+import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 interface Bolsista {
   name: string
-  id_lattes: string
+  lattes_id: string
+  researcher_id:string 
+  institution_id:string
 }
 
 export function AddResearcherCsvModal() {
@@ -24,7 +26,7 @@ export function AddResearcherCsvModal() {
   
   const isModalOpen = (isOpen && typeModal === 'add-researcher-csv')
 
-  const { urlGeral } = useContext(UserContext)
+  const { urlGeralAdm, user } = useContext(UserContext)
   const [fileInfo, setFileInfo] = useState({ name: '', size: 0 });
 
   const [data, setData] = useState<Bolsista[]>([]);
@@ -68,19 +70,21 @@ export function AddResearcherCsvModal() {
           // Map headers to your interface keys
           const headerMap: { [key: string]: keyof Bolsista } = {
               'name': 'name',
-              'id_lattes': 'id_lattes'
+              'lattes_id': 'lattes_id'
           };
 
           // Convert rows to an array of objects
           const jsonData = rows.map((row: any) => {
               const obj: Bolsista = {
+                researcher_id:  uuidv4(),
                   name: '',
-                  id_lattes: ''
+                  lattes_id: '',
+                  institution_id: user?.institution_id ||   '',
               };
               headers.forEach((header, index) => {
                   const key = headerMap[header];
                   if (key) {
-                      obj[key] = row[index] || "";
+                      obj[key] = String(row[index])|| "";
                   }
               });
               return obj;
@@ -90,6 +94,8 @@ export function AddResearcherCsvModal() {
       };
       reader.readAsArrayBuffer(file);
   };
+
+  const [uploadProgress, setUploadProgress] = useState(false);
 
   const handleSubmitBolsista = async () => {
       try {
@@ -103,8 +109,8 @@ export function AddResearcherCsvModal() {
               });
               return;
           }
-  
-          let urlBolsistaInsert = `${urlGeral}ResearcherRest/Insert`;
+          setUploadProgress(true)
+          let urlBolsistaInsert = `${urlGeralAdm}ResearcherRest/Insert`;
       
           const response = await fetch(urlBolsistaInsert, {
               mode: 'cors',
@@ -129,6 +135,8 @@ export function AddResearcherCsvModal() {
               });
           }
 
+          setUploadProgress(false)
+
           setData([])
           setFileInfo({
               name: '',
@@ -144,6 +152,7 @@ export function AddResearcherCsvModal() {
                   onClick: () => console.log("Fechar"),
               },
           });
+          setUploadProgress(false)
       }
   };
   
@@ -224,9 +233,15 @@ export function AddResearcherCsvModal() {
                     </div>
                 )}
 
+<div className="flex items-center justify-between">
+    <div className="text-sm font-gray-500">
+    {uploadProgress ? ('Isso pode demorar bastante, não feche a página.'):('')}
+    </div>
 <Button onClick={() => handleSubmitBolsista()} className="ml-auto flex mt-3">
-                        <Upload size={16} className="" />Atualizar dados
+                        {uploadProgress ? (<LoaderCircle size={16} className="an animate-spin" />):(<Upload size={16} className="" />)}  {uploadProgress ? ('Atualizando dados'):('Atualizar dados')} 
                     </Button>
+
+</div>
 
               </ScrollArea>
              

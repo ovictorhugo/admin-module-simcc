@@ -7,32 +7,15 @@ import { ArrowUpDown } from "lucide-react"
 
 
 interface Patrimonio {
-  id: string
-  id_lattes: string
-  nome_beneficiario: string
-  cpf_beneficiario: string
-  nome_pais: string
-  nome_regiao: string
-  nome_uf: string
-  nome_cidade: string
-  nome_grande_area: string
-  nome_area: string
-  nome_sub_area: string
-  cod_modalidade: string
-  nome_modalidade: string
-  titulo_chamada: string
-  cod_categoria_nivel: string
-  nome_programa_fomento: string
-  nome_instituto: string
-  quant_auxilio: string
-  quant_bolsa: string
+  name:string
+  lattes_id:string
 }
 
 
 
 export const columnsPesquisadoresModal: ColumnDef<Patrimonio>[] = [
   {
-    accessorKey: "nome_beneficiario",
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button
@@ -48,15 +31,15 @@ export const columnsPesquisadoresModal: ColumnDef<Patrimonio>[] = [
       
       
      
-      return <div className="flex gap-3 items-center" > {row.getValue("nome_beneficiario")}</div>
+      return <div className="flex gap-3 items-center" > {row.getValue("name")}</div>
     },
   },
   {
-    accessorKey: "nome_modalidade",
+    accessorKey: "lattes_id",
     header: () => <div className="text-right flex items-center">Id Lattes</div>,
     cell: ({ row }) => {
     
-      return  <div className="flex w-fit gap-1 text-xs  ">{row.getValue("nome_modalidade")}</div>
+      return  <div className="flex w-fit gap-1 text-xs  ">{row.getValue("lattes_id")}</div>
       
     },
   },

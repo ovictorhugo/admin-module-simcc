@@ -20,7 +20,7 @@ import {
 
   
 
-import {  Grip, Laptop, LayoutDashboard, LogIn, Moon,   Sun, User, UserPlus } from "lucide-react";
+import {   Grip, Laptop, LayoutDashboard, LogIn, Moon,   Sun, User, UserPlus } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { Button } from "../ui/button";
 
@@ -46,9 +46,10 @@ import { LogoIapos } from "../svg/LogoIapos";
 import { LogoIaposWhite } from "../svg/LogoIaposWhite";
 import { CaretLeft, Funnel, MagnifyingGlass } from "phosphor-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Badge } from "../ui/badge";
 
 export function Header() {
-  const {loggedIn,  setItensSelecionados, version, searchType , maria, user, permission} = useContext(UserContext)
+  const {loggedIn, role,  setItensSelecionados, version, searchType , maria, user, permission} = useContext(UserContext)
 
   const { theme, setTheme } = useTheme()
 
@@ -82,6 +83,8 @@ const {onOpen} = useModal()
           ):(
             <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_5_white):(logo_5)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
           )}
+
+{role != '' && (<Badge className="  " variant={'outline'} >{role}</Badge>)}
             
             </div>
 

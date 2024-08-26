@@ -9,6 +9,7 @@ import { FilterYearIndicators } from "./filter-year-indicators";
 import { GraficoIndiceArticle } from "./gráficos/grafico-indice-artigo";
 import { GraficoIndiceBooksAndChapters } from "./gráficos/grafico-indice-livros";
 import { PuzzlePiece } from "phosphor-react";
+import { GraficoIndiceProdTec } from "./gráficos/grafico-indice-tecnica";
 
 type Dados = {
     count_article:number
@@ -49,17 +50,17 @@ type Dados = {
     b4: string;
     c: string;
     sq: string;
-    t1: string;
-    t2: string;
-    t3: string;
-    t4: string;
-    t5: string;
+    f1: string;
+    f2: string;
+    f3: string;
+    f4: string;
+    f5: string;
     livro: string;
     cap_livro: string;
     software: string;
-    patente_concedida: string;
-    patente_nao_concedida: string;
-    rel_tec: string;
+    patent_granted: string;
+    patent_not_granted: string;
+    report: string;
   };
   
 
@@ -197,17 +198,17 @@ export function ResearcherIndicators(props:Research) {
         b4: b4,
         c: c,
         sq: sq,
-        t1: t1,
-        t2: t2,
-        t3: t3,
-        t4: t4,
-        t5: t5,
+        f1: t1,
+        f2: t2,
+        f3: t3,
+        f4: t4,
+        f5: t5,
         livro: livro,
         cap_livro: capLivro,
         software: software,
-        patente_concedida: patenteCondecida,
-        patente_nao_concedida: patenteNaoConcedida,
-        rel_tec: relTec,
+        patent_granted: patenteCondecida,
+        patent_not_granted: patenteNaoConcedida,
+        report: relTec,
       })
     
 
@@ -297,7 +298,7 @@ useEffect(() => {
       };
       fetchData();
     }, [urlDados]);
-
+console.log(urlDados)
     return(
         <div>
  <div className="mt-6 mb-16">
@@ -432,7 +433,7 @@ useEffect(() => {
                     <CardTitle className="text-sm font-medium">
                     Índice de produção de artigos
                     </CardTitle>
-                    <CardDescription>Termos mais presentes nos artigos</CardDescription>
+                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
                     </div>
 
                     <TooltipProvider>
@@ -456,7 +457,7 @@ useEffect(() => {
                     <CardTitle className="text-sm font-medium">
                     índice de produção técnica
                     </CardTitle>
-                    <CardDescription>Termos mais presentes nos artigos</CardDescription>
+                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
                     </div>
 
                     <TooltipProvider>
@@ -470,7 +471,9 @@ useEffect(() => {
                    
                   </CardHeader>
                   <CardContent>
-
+                  <CardContent className="mt-4 p-0">
+                    <GraficoIndiceProdTec articles={dados} pesosProducao={pesosProducao} />
+                  </CardContent>
                   </CardContent>
                     </Alert>
 
@@ -480,7 +483,7 @@ useEffect(() => {
                     <CardTitle className="text-sm font-medium">
                     índice de livros e capítulos
                     </CardTitle>
-                    <CardDescription>Termos mais presentes nos artigos</CardDescription>
+                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
                     </div>
 
                     <TooltipProvider>

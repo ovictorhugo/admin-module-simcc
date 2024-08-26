@@ -5,17 +5,28 @@ import { NavigationSidebar } from "../components/navigation/navigation-sidebar";
 import { TooltipProvider } from "../components/ui/tooltip"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../components/ui/resizable"
 import { cn } from "../lib"
+import bg_popup from '../assets/bg_welcome.png';
 
-
-import { useContext, useEffect} from "react";
+import { useContext, useEffect, useState} from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { BarChartBig, Blocks, BookOpen, Building2, GraduationCap, Home, Info, List, PanelLeftDashed, SearchCheck, Sparkles } from "lucide-react";
+import { BarChartBig, Blocks, BookOpen, Building2, GraduationCap, Home, Info, InfoIcon, List, PanelLeftDashed, SearchCheck, Sparkles, X } from "lucide-react";
 
 
 import { Footer } from "../components/footer/footer";
 import { useModal } from "../components/hooks/use-modal-store";
 import { Button } from "../components/ui/button";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../components/ui/dialog"
+import { Link } from "react-router-dom";
+
 interface MailProps {
  
   defaultLayout: number[] | undefined
@@ -53,6 +64,27 @@ export default function SearchLayout({
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
+
+
+  ///popup
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+      // Verifica no localStorage se o modal já foi exibido
+      const hasVisited = localStorage.getItem('hasVisited');
+
+      if (!hasVisited) {
+          // Se não foi exibido, abre o modal
+          setIsModalOpen(true);
+          // Marca no localStorage que o modal foi exibido
+          localStorage.setItem('hasVisited', 'true');
+      }
+  }, []);
+
+  const handleClose = () => {
+      setIsModalOpen(false);
+  };
 
     return (
     <div>
@@ -217,6 +249,28 @@ export default function SearchLayout({
         <Toaster/>
         </ResizablePanelGroup>
       </TooltipProvider >
+
+
+      <Dialog open={isModalOpen} onOpenChange={handleClose}>
+            <DialogContent className="p-0">
+              <div className="h-[300px] w-full bg-cover bg-no-repeat bg-center"  style={{ backgroundImage: `url(${bg_popup})` }}></div>
+                <DialogHeader className="p-6">
+                    <DialogTitle className="text-2xl font-medium">Apresentamos a plataforma Conectee</DialogTitle>
+                    <DialogDescription>
+                        O jeito mais fácil de visualizar e filtrar as produções técnicas e bibliográficas dos pesquisadores da Escola de Engenharia da UFMG.
+                    </DialogDescription>
+                   <div className="flex pt-6 items-center justify-between">
+                 <div></div>
+
+                   <div className="flex gap-3">
+                   <Link to={'/informacoes'}> <Button variant={'ghost'}><InfoIcon size={16}/> Informações</Button></Link>
+                   <Button onClick={handleClose}><X size={16}/>Continuar</Button>
+                   </div>
+                   </div>
+                </DialogHeader>
+                
+            </DialogContent>
+        </Dialog>
     </div>
     );
   };

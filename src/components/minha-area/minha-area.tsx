@@ -1,6 +1,6 @@
 
 
-import { ArrowLeftFromLine, ArrowRightFromLine, Box, Building2, GraduationCap, Lock, Menu, OctagonAlert, TrendingUp, User, X } from "lucide-react";
+import { ArrowLeftFromLine, ArrowRightFromLine, Blocks, Box, Building2, ChevronsUpDown, ClipboardEdit, FlaskConical, GraduationCap, LayoutDashboard, Lock, Mail, Menu, OctagonAlert, PieChart, SlidersHorizontal, TrendingUp, User, Users, Weight, X } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -25,6 +25,16 @@ import { LinhaTempoMinhaArea } from "./linha-tempo-minha-area";
 import { auth } from '../../lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { Link, useNavigate } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu"
+
 
 type Research = {
   among: number,
@@ -108,7 +118,7 @@ export function MinhaArea() {
     const [expand, setExpand] = useState(true)
     const { theme, setTheme } = useTheme()
 
-    const {user, setUser, setLoggedIn, urlGeral} = useContext(UserContext)
+    const {user, setUser, setLoggedIn, urlGeral, role, urlGeralAdm,permission, setPermission, setRole} = useContext(UserContext)
 
     const [tab, setTab] = useState('all')
 
@@ -162,6 +172,80 @@ console.log(urlTermPesquisadores)
         fetchData();
       }, [urlTermPesquisadores]);
 
+      console.log(user)
+
+      const fetchDataPerm = async (role_id:string) => {
+        let urlPermission = urlGeralAdm + `s/permission?role_id=${role_id}`
+           console.log(urlPermission)
+        try {
+          const response = await fetch(urlPermission , {
+            mode: "cors",
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET",
+              "Access-Control-Allow-Headers": "Content-Type",
+              "Access-Control-Max-Age": "3600",
+              "Content-Type": "text/plain",
+            },
+          });
+          const data = await response.json();
+          if (data) {
+            setPermission(data)
+            localStorage.setItem('permission', JSON.stringify(data));
+            
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+
+      //permissoes
+      const hasBaremaAvaliacao = permission.some(
+        (perm) => perm.permission === 'criar_barema_avaliacao'
+      );
+    
+      const hasNotificacoes = permission.some(
+        (perm) => perm.permission === 'enviar_notificacoes'
+      );
+    
+      const has_visualizar_pesquisadores = permission.some(
+        (perm) => perm.permission === 'visualizar_pesquisadores'
+      );
+    
+      const has_visualizar_todos_departamentos = permission.some(
+        (perm) => perm.permission === 'visualizar_todos_departamentos'
+      );
+    
+      const has_visualizar_modulo_administrativo = permission.some(
+        (perm) => perm.permission === 'visualizar_modulo_administrativo'
+      );
+    
+      const has_visualizar_todos_programas = permission.some(
+        (perm) => perm.permission === 'visualizar_todos_programas'
+      );
+    
+      const has_visualizar_grupos_pesquisa = permission.some(
+        (perm) => perm.permission === 'visualizar_grupos_pesquisa'
+      );
+    
+      const has_visualizar_inct = permission.some(
+        (perm) => perm.permission === 'visualizar_inct'
+      );
+    
+      const has_editar_pesos_avaliacao = permission.some(
+        (perm) => perm.permission === 'editar_pesos_avaliacao'
+      );
+    
+      const has_visualizar_indicadores_instituicao = permission.some(
+        (perm) => perm.permission === 'visualizar_indicadores_instituicao'
+      );
+
+      
+  const has_visualizar_gerencia_modulo_administrativo = permission.some(
+    (perm) => perm.permission === 'visualizar_gerencia_modulo_administrativo'
+  );
+
     return(
         <Sheet open={isModalOpen} onOpenChange={() => {
           onClose()
@@ -205,7 +289,8 @@ console.log(urlTermPesquisadores)
                   <Tabs defaultValue={tab} value={tab} className="w-full flex flex-1">
                     <TabsContent value="all" className="w-full">
                     <div className="flex flex-col flex-1 w-full">
-                      <div>
+                    <div className="flex justify-between items-center">
+                    <div>
                       <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
                       Olá, {user?.display_name}
                         </p>
@@ -215,8 +300,76 @@ console.log(urlTermPesquisadores)
                         </h1>
                       </div>
 
+                      <Avatar className="cursor-pointer rounded-md  h-16 w-16">
+      <AvatarImage  className={'rounded-md h-16 w-16'} src={`${user?.photo_url}`} />
+      <AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
+  </Avatar>
+                    </div>
+
                       <div className="my-6 border-b dark:border-b-neutral-800"></div>
 
+
+                <div className="flex items-center gap-3">
+                 <p className="text-sm"> Você está acessando como </p>
+                 <DropdownMenu>
+        <div className={`   `}>
+        <DropdownMenuTrigger className={`flex-1 items-center flex justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all w-fit rounded-md  `}>
+        <Button
+                variant="outline"
+                role="combobox"
+               
+                className="justify-between"
+              >
+                {role != '' ? (role):(user?.display_name)}
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+        
+        </DropdownMenuTrigger>
+
+       
+
+
+        </div>
+
+        <DropdownMenuContent className="min-w-[200px]  gap-1 flex flex-col ">
+    <DropdownMenuLabel>Conta pessoal</DropdownMenuLabel>
+    <DropdownMenuItem className="flex gap-2 items-center" onClick={() => {
+       history('/');
+       setRole('')
+       setPermission([])
+       localStorage.removeItem('role');
+       localStorage.removeItem('permission');
+    }}>
+       <Avatar className="cursor-pointer rounded-md  h-6 w-6">
+      <AvatarImage  className={'rounded-md h-6 w-6'} src={`${user?.photo_url}`} />
+      <AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
+  </Avatar>
+  {user?.display_name}</DropdownMenuItem>
+    {user?.roles != undefined &&(
+    <div>
+       <DropdownMenuSeparator />
+       <DropdownMenuLabel>Cargos</DropdownMenuLabel>
+    </div>
+   )}
+
+{user?.roles != undefined && (
+  user.roles!.map((rola) => (
+    <DropdownMenuItem className={`flex gap-2 items-center ${role == rola.role_id && ('bg-neutral-100 dark:bg-neutral-800')}`} onClick={() => {
+      fetchDataPerm(rola.id)
+      localStorage.setItem('role', JSON.stringify(rola.role_id));
+      setRole(rola.role_id)
+      
+    }} key={rola.id}> <div className="h-6 w-6 flex items-center justify-center"><User size={16}/></div>{rola.role_id}</DropdownMenuItem>
+  ))
+)}
+
+   
+  </DropdownMenuContent>
+
+
+    
+    </DropdownMenu>
+                </div>
 
                       {researcher && researcher.slice(0, 1).map((props) => {
                         const currentDate = new Date();
@@ -245,6 +398,82 @@ console.log(urlTermPesquisadores)
                         }
 
                       })}
+
+<div className="my-6 border-b dark:border-b-neutral-800"></div>
+
+
+<h5 className="font-medium text-xl mb-4">Acesso rápido</h5>
+<div className="grid lg:grid-cols-3 gap-4 md:grid-cols-2 grid-cols-1 2xl:grid-cols-4">
+             
+{has_visualizar_modulo_administrativo && (
+                 <Link to={'/dashboard'}  onClick={() => onClose()}>
+                 <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                 <LayoutDashboard size={16}/>Dashboard</div></Alert></Link>
+               )}
+
+               {has_visualizar_gerencia_modulo_administrativo && (
+                 <Link to={'/dashboard/administrativo'}  onClick={() => onClose()}>
+                 <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                 <SlidersHorizontal size={16}/>Administrativo</div></Alert></Link>
+               )}
+
+        {has_visualizar_todos_departamentos && (
+                 <Link to={'/dashboard/departamentos'}  onClick={() => onClose()}>
+                 <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                 <Building2 size={16}/>Departamentos</div></Alert></Link>
+               )}
+
+            {has_visualizar_pesquisadores && (
+                            <Link to={'/dashboard/pesquisadores'}  onClick={() => onClose()}>
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <Users size={16}/>Pesquisadores</div></Alert></Link>
+                        )}
+
+
+{has_visualizar_todos_programas && (
+                            <Link to={'/dashboard/programas'}  onClick={() => onClose()}>
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <GraduationCap size={16}/>Programas</div></Alert></Link>
+                        )}
+
+{has_visualizar_grupos_pesquisa && (
+                            <Link to={'/dashboard/grupos-pesquisa'} onClick={() => onClose()}>
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <Blocks size={16}/>Grupos de pesquisa</div></Alert></Link>
+                        )}
+
+{has_visualizar_inct && (
+                            <Link to={'/dashboard/inct'}  onClick={() => onClose()}>
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <FlaskConical size={16}/>INCT's</div></Alert></Link>
+                        )}
+
+
+{has_editar_pesos_avaliacao && (
+                            <Link to={'/dashboard/pesos-avaliacao'}  onClick={() => onClose()}>
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <Weight size={16}/>Pesos de avaliação</div></Alert></Link>
+                        )}
+
+{has_visualizar_indicadores_instituicao && (
+                            <Link to={'/dashboard/indicadores'}  onClick={() => onClose()}>
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <PieChart size={16}/>Indicadores</div></Alert></Link>
+                        )}
+
+{hasBaremaAvaliacao && (
+                            <Link to={'/dashboard/baremas'}  onClick={() => onClose()}>
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <ClipboardEdit size={16}/>Baremas</div></Alert></Link>
+                        )}
+
+{hasNotificacoes && (
+                            <Link to={'/dashboard/enviar-notificacoes'}  onClick={() => onClose()}>
+                            <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
+                            <Mail size={16}/>Enviar notificações</div></Alert></Link>
+                        )}
+            
+            </div>
                     
 
       
@@ -315,17 +544,35 @@ console.log(urlTermPesquisadores)
                    )}
                     </div>
 
-                    {(expand && (user && Array(user.graduate_program).length > 0 )) && ( <p className="text-gray-500 uppercase text-xs font-medium mb-2">PROGRAMAS DE PÓS-GRADUAÇÃO</p>)}
+                    {expand && user?.graduate_program?.length > 0 && (
+                        <p className="text-gray-500 uppercase text-xs font-medium mb-2">
+                          PROGRAMAS DE PÓS-GRADUAÇÃO
+                        </p>
+                      )}
 
-                    {(user && Array(user.graduate_program).length > 0) && (
+
+
+                    {user?.graduate_program?.length > 0 && (
                       <div className="flex flex-col gap-2 mb-8">
-                   
-                     {
-                      Array(user.graduate_program).map((program) => (
-                        <Link className="w-full" target="_blank" to={`/pos-graduacao?graduate_program_id=${program.graduate_program_id}`}><Button variant={'ghost'} className={` ${!expand ? ('w-10'):('justify-start w-full')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default'):('icon')}><GraduationCap size={16}/>{expand && (program.name)}</Button></Link>
-                      ))
-                     }
-                    
+                        {user.graduate_program.map((program) => (
+                          <Link
+                            key={program.graduate_program_id}
+                            className="w-full"
+                            target="_blank"
+                            to={`/pos-graduacao?graduate_program_id=${program.graduate_program_id}`}
+                          >
+                            <Button
+                              variant="ghost"
+                              className={`${
+                                !expand ? 'w-10' : 'justify-start truncate w-full'
+                              } ${tab === '' && 'bg-neutral-100 dark:bg-neutral-800'}`}
+                              size={expand ? 'default' : 'icon'}
+                            >
+                              <GraduationCap size={16} />
+                              {expand && program.name}
+                            </Button>
+                          </Link>
+                        ))}
                       </div>
                     )}
 

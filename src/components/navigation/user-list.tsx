@@ -20,12 +20,13 @@ import {
     DropdownMenuTrigger,
   } from "../../components/ui/dropdown-menu"
 
-import {  ChevronsUpDown} from "lucide-react"
+import {  ChevronsUpDown, User} from "lucide-react"
 
 import { useTheme } from "next-themes"
 import { SymbolEEWhite } from "../svg/SymbolEEWhite"
 import { SymbolEE } from "../svg/SymbolEE"
 import { useNavigate } from "react-router-dom"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
   
 
 export function AccountSwitcher({
@@ -59,7 +60,7 @@ const fetchDataPerm = async (role_id:string) => {
     if (data) {
       setPermission(data)
       localStorage.setItem('permission', JSON.stringify(data));
-      history('/dashboard');
+   
     }
   } catch (err) {
     console.log(err);
@@ -74,7 +75,7 @@ const history = useNavigate();
   return (
     <DropdownMenu>
         <div className={`w-full  flex-1 gap-3 flex items-center  ${isCollapsed ? ('px-2 '):('')}`}>
-        <DropdownMenuTrigger className={`flex-1 items-center flex justify-center hover:bg-neutral-100 rounded-md ${isCollapsed ? ('w-[36px] '):('w-full')} `}>
+        <DropdownMenuTrigger className={`flex-1 items-center flex justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all rounded-md ${isCollapsed ? ('w-[36px] '):('w-full')} `}>
             <div className={cn(
           "flex items-center w-full gap-2 h-10 pr-4",
           isCollapsed &&
@@ -88,7 +89,7 @@ const history = useNavigate();
            
                 {!isCollapsed && (
                 <div className="flex gap-3 items-center flex-1 w-full">
-                    <p className="text-sm font-medium w-full text-left">{role}</p>
+                    <p className="text-sm font-medium w-full text-left "> {role != '' ? (role):(user?.display_name)}</p>
          
 
             <ChevronsUpDown size={16}/>
@@ -106,12 +107,21 @@ const history = useNavigate();
 
         </div>
 
-        <DropdownMenuContent className="min-w-[200px]">
+        <DropdownMenuContent className="min-w-[200px] ml-4 gap-1 flex flex-col mt-4">
     <DropdownMenuLabel>Conta pessoal</DropdownMenuLabel>
-    <DropdownMenuItem onClick={() => {
+    <DropdownMenuItem className="flex gap-2 items-center" onClick={() => {
        history('/');
-    }}>Profile</DropdownMenuItem>
-   {user?.roles != undefined &&(
+       setRole('')
+       setPermission([])
+       localStorage.removeItem('role');
+       localStorage.removeItem('permission');
+    }}>
+       <Avatar className="cursor-pointer rounded-md  h-6 w-6">
+      <AvatarImage  className={'rounded-md h-6 w-6'} src={`${user?.photo_url}`} />
+      <AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
+  </Avatar>
+  {user?.display_name}</DropdownMenuItem>
+    {user?.roles != undefined &&(
     <div>
        <DropdownMenuSeparator />
        <DropdownMenuLabel>Cargos</DropdownMenuLabel>
@@ -119,13 +129,13 @@ const history = useNavigate();
    )}
 
 {user?.roles != undefined && (
-  user.roles!.map((role) => (
-    <DropdownMenuItem onClick={() => {
-      fetchDataPerm(role.id)
-      localStorage.setItem('role', JSON.stringify(role.role_id));
-      setRole(role.role_id)
+  user.roles!.map((rola) => (
+    <DropdownMenuItem className={`flex gap-2 items-center ${role == rola.role_id && ('bg-neutral-100 dark:bg-neutral-800')}`} onClick={() => {
+      fetchDataPerm(rola.id)
+      localStorage.setItem('role', JSON.stringify(rola.role_id));
+      setRole(rola.role_id)
       
-    }} key={role.id}>{role.role_id}</DropdownMenuItem>
+    }} key={rola.id}> <div className="h-6 w-6 flex items-center justify-center"><User size={16}/></div>{rola.role_id}</DropdownMenuItem>
   ))
 )}
 

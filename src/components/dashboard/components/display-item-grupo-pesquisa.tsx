@@ -10,12 +10,12 @@ import { useModal } from "../../hooks/use-modal-store";
 
 interface Patrimonio {
 
-    area: string,
-    institution: string,
-    leader_one: string,
-    leader_one_id: string,
-    leader_two:string,
-    leader_two_id: string,
+  area: string,
+  institution: string,
+  first_leader: string,
+  first_leader_id: string,
+  second_leader:string,
+second_leader_id: string,
     name: string,
     
   }

@@ -309,11 +309,20 @@ export function InformacoesGeraisResearcher(props:Research) {
                 to={`/pos-graduacao?graduate_program_id=${item.graduate_program_id}`}
                 target="_blank"
               >
-                <div className="border-neutral-200 border dark:border-neutral-800 bg-white dark:bg-black py-2 px-4 rounded-md text-xs flex gap-2 items-center">
-                  <GraduationCap size={12} className="whitespace-nowrap w-3 flex" />
-                  {item.name}
-                </div>
+                 <Alert className="flex justify-center gap-6 ">
+          <div className="flex flex-col flex-1 justify-center h-full">
+          <div className="text-xs text-gray-500 mb-2 flex items-center gap-2 justify-between">
+          PROGRAMA DE PÓS-GRADUAÇÃO
+      <GraduationCap size={14}/>
+      </div>
+          <p className="font-medium">{item.name}</p>
+
+
+          </div>          
+      </Alert>
+                
               </Link>
+              
             ))}
           </div>
         </div>

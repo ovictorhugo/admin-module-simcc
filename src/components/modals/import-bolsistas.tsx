@@ -36,7 +36,7 @@ import {
   
   } from "../../components/ui/sheet"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
-import { ArrowRight, Info, X } from "lucide-react";
+import { ArrowRight, Info, LoaderCircle, X } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
 import { columnsBolsistas } from "../componentsModal/columns-bolsistas";
 import { DataTableModal } from "../componentsModal/data-table";
@@ -137,7 +137,7 @@ export function ImportBolsistas() {
                 headers.forEach((header, index) => {
                     const key = headerMap[header];
                     if (key) {
-                        obj[key] = row[index] || "";
+                        obj[key] = String(row[index] || "");
                     }
                 });
                 return obj;
@@ -150,7 +150,7 @@ export function ImportBolsistas() {
   
 
     console.log(data)
-    const [uploadProgress, setUploadProgress] = useState(0);
+    const [uploadProgress, setUploadProgress] = useState(false);
 
 
     const handleSubmitPatrimonio = async () => {
@@ -165,6 +165,8 @@ export function ImportBolsistas() {
                 });
                 return;
             }
+
+            setUploadProgress(true)
     
             let urlPatrimonioInsert = `${urlGeralAdm}ResearcherRest/InsertGrant`;
         
@@ -189,6 +191,8 @@ export function ImportBolsistas() {
                         onClick: () => console.log("Fechar"),
                     },
                 });
+
+                setUploadProgress(false)
             }
 
             setData([])
@@ -207,6 +211,7 @@ export function ImportBolsistas() {
                 },
             });
         }
+        setUploadProgress(false)
     };
     
 
@@ -251,15 +256,7 @@ export function ImportBolsistas() {
                         <Link to={'http://www.bi.cnpq.br/painel/mapa-fomento-cti/'} target="_blank"  className="inline-flex mt-2 items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como extrair os bolsistas CNPq<ArrowRight size={12}/></Link>
                       </div>
                 <div className="">
-                {uploadProgress > 0 && (
-    <div className="w-full bg-gray-200 rounded-full h-2.5 my-4">
-        <div
-            className="bg-blue-600 h-2.5 rounded-full"
-            style={{ width: `${uploadProgress}%` }}
-        ></div>
-        <p className="text-sm text-gray-500 mt-1">{uploadProgress}% concluído</p>
-    </div>
-)}
+                
 
 
                     <div {...getRootProps()} className="border-dashed mb-3 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-4">
@@ -298,16 +295,18 @@ export function ImportBolsistas() {
                     </div>
                 )}
 
+<div className="flex items-center justify-between">
+    <div className="text-sm font-gray-500">
+    {uploadProgress ? ('Isso pode demorar bastante, não feche a página.'):('')}
+    </div>
 <Button onClick={() => handleSubmitPatrimonio()} className="ml-auto flex mt-3">
-                        <Upload size={16} className="" />Atualizar dados
+                        {uploadProgress ? (<LoaderCircle size={16} className="an animate-spin" />):(<Upload size={16} className="" />)}  {uploadProgress ? ('Atualizando dados'):('Atualizar dados')} 
                     </Button>
 
+</div>
                 
                 </ScrollArea>
-                <DialogFooter>
-
-                    
-                </DialogFooter>
+     
 
                 <div></div>
                 </SheetContent>

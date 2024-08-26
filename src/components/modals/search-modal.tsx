@@ -479,7 +479,7 @@ const handleConnectorChange = (index: number, connector: string) => {
     return  (
         <Dialog open={isModalOpen} onOpenChange={onClose}  >
         <DialogContent   className="p-0 border-none min-w-[60vw] bg-transparent dark:bg-transparent">
-        <DialogClose className="hidden h-0 absolute z-[-9999]" />
+      
       
         <Alert onKeyDown={handleEnterPress}  className="h-14 bg-white p-2 flex items-center gap-3 justify-between">
         <div className="flex items-center gap-2 w-full flex-1">

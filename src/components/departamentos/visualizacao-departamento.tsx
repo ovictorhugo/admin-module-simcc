@@ -703,7 +703,7 @@ const year2 = currentYear1 - 4;
           config={chartConfig}
           className="aspect-auto h-[300px] w-full"
         >
-  <BarChart accessibilityLayer data={dados}>
+  <BarChart accessibilityLayer data={dados} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
   <CartesianGrid vertical={false}  horizontal={false}/>
   <ChartLegend content={<ChartLegendContent />} />
   

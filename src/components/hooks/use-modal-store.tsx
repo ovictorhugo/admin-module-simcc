@@ -43,7 +43,9 @@ graduate_program_id?: string
     qtd_discente?:string
     qtd_colaborador?:string
     qtd_permanente?:string
-   
+    acronym?:string
+    site?:string
+
     type_reset?:string
 
     dep_id?:string

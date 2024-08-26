@@ -8,11 +8,12 @@ import {ArrowRight, ChevronLeft, Info, Search } from "lucide-react";
   interface PosGraduationsProps {
   area: string,
   institution: string,
-  leader_one: string,
-  leader_one_id: string,
-  leader_two:string,
+  first_leader: string,
+  first_leader_id: string,
+  second_leader:string,
   leader_two_id: string,
-  name: string,
+second_leader_id: string,
+name:string
 }
 
 
@@ -114,12 +115,12 @@ export function GrupoPesquisaView() {
                {total ? (
       <DisplayItemGrupoPesquisa
       area={total.area}
-  institution={total.institution}
-  leader_one={total.leader_one}
-  leader_one_id={total.leader_one_id}
-  leader_two={total.leader_two}
-  leader_two_id={total.leader_two_id}
-  name={total.name}
+    institution={total.institution}
+    name={total.name}
+    first_leader={total.first_leader}
+    first_leader_id={total.first_leader_id}
+    second_leader={total.second_leader}
+    second_leader_id={total.second_leader_id}
       />
     ):(
       <div className="w-full h-full flex flex-col items-center justify-center">

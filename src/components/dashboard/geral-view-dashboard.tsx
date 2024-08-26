@@ -27,6 +27,9 @@ interface TotalPatrimonios {
    count_gpr: string,
    institution_id: string,
    count_r:string
+   count_d:string 
+   count_gps:string 
+   count_t:string
  }
 
 export function GeralViewDashboard() {
@@ -64,7 +67,9 @@ export function GeralViewDashboard() {
   
     const [total, setTotal] = useState<TotalPatrimonios[]>([]);
 
-    const urlPatrimonioInsert =  `${urlGeralAdm}/InstitutionRest/Query/Count?institution_id=${user?.institution_id}`;
+    const urlPatrimonioInsert =  `${urlGeralAdm}InstitutionRest/Query/Count?institution_id=${user?.institution_id}`;
+
+    console.log(urlPatrimonioInsert)
 
     useEffect(() => {
       const fetchData = async () => {
@@ -252,7 +257,7 @@ const [directoryJson, setDirectoryJson] = useState("");
                   </Alert>
                   </Link>
 
-                 <Link to={'/dashboad/indicadores'}>
+                 <Link to={'/dashboard/indicadores'}>
                  <Alert className="p-0">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
@@ -261,7 +266,7 @@ const [directoryJson, setDirectoryJson] = useState("");
                     <GraduationCap className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{total.map((props) => props.count_r)}</div>
+                    <div className="text-2xl font-bold">{total.map((props) => props.count_t)}</div>
                     <p className="text-xs text-muted-foreground">
                       registrados
                     </p>
@@ -277,7 +282,7 @@ const [directoryJson, setDirectoryJson] = useState("");
                     <GraduationCap className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{total.map((props) => props.count_r)}</div>
+                    <div className="text-2xl font-bold">{total.map((props) => props.count_gps)}</div>
                     <p className="text-xs text-muted-foreground">
                       cadastrados
                     </p>
@@ -318,7 +323,7 @@ const [directoryJson, setDirectoryJson] = useState("");
                </CardHeader>
 
                <CardContent>
-                <GraficoAnaliseUsuarios/>
+               
                </CardContent>
 
                </Alert>
@@ -350,17 +355,37 @@ const [directoryJson, setDirectoryJson] = useState("");
               </div>
             </CardContent>
                 </Alert>
+
+                <Alert  className="xl:col-span-3 p-0" x-chunk="dashboard-01-chunk-4" >
+                <CardHeader className="flex gap-6 flex-col md:flex-row  justify-between">
+              <div className="grid gap-2 ">
+              <CardTitle>Usuários ativos por dia</CardTitle>
+                <CardDescription>
+                Dados do Google Analytics dos últimos 30 dias
+                </CardDescription>
+                </div>
+
+                <div className="flex gap-3">
+                  <ChartBar size={16}/>
+                </div>
+               </CardHeader>
+
+               <CardContent>
+                <GraficoAnaliseUsuarios/>
+               </CardContent>
+
+               </Alert>
                </div>
                </div>
 
             </TabsContent>
 
-            <TabsContent value="cargos" className="h-auto flex flex-col gap-6 mt-2">
+            <TabsContent value="cargos" className="h-auto flex flex-col gap-8">
               <CargosFuncoes/>
             </TabsContent>
 
-            <TabsContent value="unread" className="h-full flex flex-col gap-4 md:gap-8 mt-2 ">
-           <div className=" p-4 md:p-8 pt-0 md:pt-0 flex flex-col md:gap-8 gap-4 " >
+            <TabsContent value="unread" className="h-full flex flex-col gap-4 md:gap-8  ">
+           <div className=" p-4 md:p-8 pt-0 md:pt-0 flex flex-col md:gap-8 gap-4" >
            
             <Alert className="p-0">
               <CardHeader>

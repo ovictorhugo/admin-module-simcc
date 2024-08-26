@@ -11,11 +11,12 @@ import {  Plus, Shapes, Users } from "lucide-react"
 interface Patrimonio {
   area: string,
   institution: string,
-  leader_one: string,
-  leader_one_id: string,
-  leader_two:string,
+  first_leader: string,
+  first_leader_id: string,
+  second_leader:string,
   leader_two_id: string,
-  name: string,
+second_leader_id: string,
+name:string
   }
 
   interface Props {
@@ -38,6 +39,13 @@ export function ItensListGrupoPesquisa(props:Props) {
           setSelectedResearcher(newResearcher);
         }
       };
+
+      useEffect(() => {
+        if (selectedResearcher) {
+          props.onResearcherUpdate(selectedResearcher);
+        }
+      }, [selectedResearcher, props]);
+      
       const [isLoading, setIsLoading] = useState(false)
 
 
@@ -240,8 +248,8 @@ export function ItensListGrupoPesquisa(props:Props) {
               
             </div>
             <div className="line-clamp-2 text-xs text-muted-foreground flex flex-wrap gap-4">
-            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{item.leader_one}</div>
-{item.leader_two != 'nan' && ( <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{item.leader_two}</div>)}
+            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{item.first_leader}</div>
+{item.second_leader != 'nan' && ( <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{item.second_leader}</div>)}
           
             </div>
            

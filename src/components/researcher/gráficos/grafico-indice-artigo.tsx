@@ -42,17 +42,11 @@ type PesosProducao = {
   b4: string;
   c: string;
   sq: string;
-  t1: string;
-  t2: string;
-  t3: string;
-  t4: string;
-  t5: string;
+ 
   livro: string;
   cap_livro: string;
   software: string;
-  patente_concedida: string;
-  patente_nao_concedida: string;
-  rel_tec: string;
+
 };
 
 type Articles = {
@@ -146,7 +140,7 @@ export function GraficoIndiceArticle(props: Articles) {
                   radius={4}
                 >
                   <LabelList
-                    dataKey={key}
+                
                     position="top"
                     formatter={(value) => (value ? value.toFixed(2) : '0')}
                     fontSize={12}
@@ -155,16 +149,7 @@ export function GraficoIndiceArticle(props: Articles) {
                 </Bar>
               )
             ))}
-            {chartData.map((entry) => (
-              <LabelList
-                key={entry.year}
-                dataKey="total"
-                position="top"
-                formatter={(value) => (value ? value.toFixed(2) : '0')}
-                fontSize={12}
-                className="fill-foreground"
-              />
-            ))}
+            
           </BarChart>
         </ResponsiveContainer>
       </ChartContainer>
