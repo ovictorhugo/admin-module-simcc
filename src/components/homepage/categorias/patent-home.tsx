@@ -49,7 +49,7 @@ export function PatentHome() {
 
     let urlTermPublicacoes = `${urlGeral}patent_production_researcher?researcher_id=&year=${yearString}&term=${valoresSelecionadosExport}`;
     const [distinct] = useState(false)
-
+    console.log(urlTermPublicacoes)
     useMemo(() => {
         const fetchData = async () => {
             try {

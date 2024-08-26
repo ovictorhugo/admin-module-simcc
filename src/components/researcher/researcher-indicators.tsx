@@ -10,6 +10,7 @@ import { GraficoIndiceArticle } from "./gráficos/grafico-indice-artigo";
 import { GraficoIndiceBooksAndChapters } from "./gráficos/grafico-indice-livros";
 import { PuzzlePiece } from "phosphor-react";
 import { GraficoIndiceProdTec } from "./gráficos/grafico-indice-tecnica";
+import { Skeleton } from "../ui/skeleton";
 
 type Dados = {
     count_article:number
@@ -426,83 +427,91 @@ console.log(urlDados)
 
             <FilterYearIndicators
               onFilterUpdate={handleResearcherUpdate}/>
-            <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
-            <Alert className=" h-[400px] lg:col-span-3 ">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                    Índice de produção de artigos
-                    </CardTitle>
-                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Fonte: Plataforma Lattes</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-                  <CardContent className="mt-4">
-                    <GraficoIndiceArticle articles={dados} pesosProducao={pesosProducao} />
-                  </CardContent>
-                    </Alert>
-
-            <Alert className=" h-[400px] ">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                    índice de produção técnica
-                    </CardTitle>
-                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Fonte: Plataforma Lattes</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-                  <CardContent>
-                  <CardContent className="mt-4 p-0">
-                    <GraficoIndiceProdTec articles={dados} pesosProducao={pesosProducao} />
-                  </CardContent>
-                  </CardContent>
-                    </Alert>
-
-                    <Alert className=" h-full lg:col-span-2 ">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                    índice de livros e capítulos
-                    </CardTitle>
-                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Fonte: Plataforma Lattes</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-                  <CardContent className="mt-4">
-                    <GraficoIndiceBooksAndChapters articles={dados} pesosProducao={pesosProducao} />
-                  </CardContent>
-                    </Alert>
-
-                   
-            </div>
+            {loading? (
+               <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
+                <Skeleton className="h-[400px] rounded-md lg:col-span-3"></Skeleton>
+                <Skeleton className="h-[400px] rounded-md "></Skeleton>
+                <Skeleton className="h-[400px] rounded-md lg:col-span-2"></Skeleton>
+               </div>
+            ): (
+              <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
+              <Alert className=" h-[400px] lg:col-span-3 ">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <div>
+                      <CardTitle className="text-sm font-medium">
+                      Índice de produção de artigos
+                      </CardTitle>
+                      <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                      </div>
+  
+                      <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                      <TooltipContent>
+                        <p>Fonte: Plataforma Lattes</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                     
+                    </CardHeader>
+                    <CardContent className="mt-4">
+                      <GraficoIndiceArticle articles={dados} pesosProducao={pesosProducao} />
+                    </CardContent>
+                      </Alert>
+  
+              <Alert className=" h-[400px] ">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <div>
+                      <CardTitle className="text-sm font-medium">
+                      índice de produção técnica
+                      </CardTitle>
+                      <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                      </div>
+  
+                      <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                      <TooltipContent>
+                        <p>Fonte: Plataforma Lattes</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                     
+                    </CardHeader>
+                    <CardContent>
+                    <CardContent className="mt-4 p-0">
+                      <GraficoIndiceProdTec articles={dados} pesosProducao={pesosProducao} />
+                    </CardContent>
+                    </CardContent>
+                      </Alert>
+  
+                      <Alert className=" h-full lg:col-span-2 ">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <div>
+                      <CardTitle className="text-sm font-medium">
+                      índice de livros e capítulos
+                      </CardTitle>
+                      <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                      </div>
+  
+                      <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                      <TooltipContent>
+                        <p>Fonte: Plataforma Lattes</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                     
+                    </CardHeader>
+                    <CardContent className="mt-4">
+                      <GraficoIndiceBooksAndChapters articles={dados} pesosProducao={pesosProducao} />
+                    </CardContent>
+                      </Alert>
+  
+                     
+              </div>
+            )}
         </div>
     )
 }

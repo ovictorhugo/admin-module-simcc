@@ -3,15 +3,14 @@ import { HeaderBarema } from "./header-barema";
 import { Alert } from "../ui/alert";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-import {  ChartBar, ChartLine, Check, Copy, DotsSix, Download, FileCsv, Gear, GearSix, PencilLine, PlusCircle, Rows, Trash, Users } from "phosphor-react";
+import {  ChartBar, ChartLine, Check, Copy, DotsSix, Download, FileCsv, Gear,  PencilLine, PlusCircle, Rows, Trash, Users } from "phosphor-react";
 import { Input } from "../ui/input";
-import { getFirestore, doc, getDocs, updateDoc, onSnapshot, collection, addDoc, query, deleteDoc,  where,  Query } from 'firebase/firestore';
+import { getFirestore, doc, getDocs, updateDoc,  collection, addDoc,  } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid'; 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../components/ui/accordion";
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
 import { toast } from "sonner"
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+
 
 import {
     Table,
@@ -73,21 +72,8 @@ type Research = {
         graduation: string,
       }
 
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-  } from "../../components/ui/popover"
 
-  import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList
-  } from "../../components/ui/command"
-import { ArrowRight, ChevronLeft, ChevronsUpDown, Info, MoreHorizontal, Plus } from "lucide-react";
+import {  ChevronLeft, ChevronsUpDown,  MoreHorizontal, Plus } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { PesquisadorItemBarema } from "./pesquisdor-item-barema";
 
@@ -162,7 +148,7 @@ import {
 
 
 import { GraficoBarema } from "./grafico-barema";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { ProcurarBaremas } from "./procurar-barema-public";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";

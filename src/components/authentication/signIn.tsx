@@ -23,14 +23,6 @@ import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { UserContext } from "../../context/context";
 
 
-  interface Uid {
-    uid:string
-    provider:string
-    displayName:string
-    email:string
-  }
-
-
 
 import { GoogleLogo, SignIn } from "phosphor-react";
 
@@ -346,92 +338,7 @@ export function SignInContent() {
       ///minha ufmg
     
 
-      const [uid, setUid] = useState<Uid| null>(null);;
-
-      const handleLoginMinhaUfmg = async () => {
-        try {
-         
-          let urlProgram = urlGeralAdm + 's/ufmg/user'
-          let urlPost = urlGeralAdm + 's/user'
-          let urlUser = `${urlGeralAdm}s/user?uid=${uid?.uid} `;
-          console.log(urlUser)
-
-          const fetchData = async () => {
-          
-            try {
-              const response = await fetch(urlProgram, {
-                method: "GET",
-                mode: "cors",
-                headers: {
-                  "Access-Control-Allow-Origin": "*",
-                  "Access-Control-Allow-Methods": "GET",
-                  "Access-Control-Allow-Headers": "Content-Type",
-                  "Access-Control-Max-Age": "3600",
-                  "Content-Type": "application/json",
-                }
-              });
-
-              const data = await response.json();
-  
-              if (data && Array.isArray(data) && data.length > 0) {
-                data[0].roles = data[0].roles || [];
-                setUid(data[0]);
-                console.log(uid)
-
-                
-                const fetchDataLogin = async () => {
-                  try {
-                    const response = await fetch(urlUser, {
-                      mode: "cors",
-                      method: 'GET',
-                      headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Access-Control-Allow-Methods": "GET",
-                        "Access-Control-Allow-Headers": "Content-Type",
-                        "Access-Control-Max-Age": "3600",
-                        "Content-Type": "text/plain",
-                      },
-                    });
-                    const data = await response.json();
-                    if (data && Array.isArray(data) && data.length > 0) {
-                      console.log('logou')
-                      data[0].roles = data[0].roles || [];
-                      setLoggedIn(true)
-                      setUser(data[0]);
-                     
-                   
-                 
-                      history('/');
-                    }
-                  } catch (err) {
-                    console.log(err);
-                  }
-                };
-                fetchDataLogin();
-               
-              } else {
-               
-              }
-              
-            } catch (err) {
-              console.log(err);
-            } 
-           
-          };
-  
-          fetchData();
-          
-        } catch (error) {
-            toast("Erro ao processar requisição", {
-                description: "Tente novamente",
-                action: {
-                  label: "Fechar",
-                  onClick: () => console.log("Undo"),
-                },
-              })
-        }
-      }
-
+ 
 
       //frases
 

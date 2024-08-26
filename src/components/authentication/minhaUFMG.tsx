@@ -24,7 +24,6 @@ export function MinhaUfmg() {
         try {
          
           let urlProgram = urlGeralAdm + 's/ufmg/user'
-          let urlPost = urlGeralAdm + 's/user'
           let urlUser = `${urlGeralAdm}s/user?uid=${uid?.uid} `;
           console.log(urlUser)
 

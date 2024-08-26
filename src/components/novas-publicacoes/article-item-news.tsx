@@ -1,6 +1,6 @@
-import { CalendarBlank, DotsThree, Graph, LinkBreak, LinkSimple } from "phosphor-react";
+import { CalendarBlank, DotsThree,  LinkBreak, LinkSimple } from "phosphor-react";
 import { Alert } from "../ui/alert";
-import { useContext, useMemo, useState } from "react";
+import { useContext, } from "react";
 import { UserContext } from "../../context/context";
 import unorm from 'unorm';
 import {
@@ -32,13 +32,7 @@ type Articles = {
     distinct: boolean
 }
 
-type OpenAlex = {
-  pdf_url:string
-  issn: string
-  landing_page_url: string
-  abstract: string
 
-}
 
 
 export function ArticleItem(props:Articles) {

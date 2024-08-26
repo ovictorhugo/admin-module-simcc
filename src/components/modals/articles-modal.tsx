@@ -1,13 +1,12 @@
 import { useContext, useMemo, useState } from "react";
-import { Drawer, DrawerContent, DrawerHeader } from "../ui/drawer";
 import { useModal } from "../hooks/use-modal-store";
 import { UserContext } from "../../context/context";
 import unorm from 'unorm';
-import { Buildings, CalendarBlank, DownloadSimple, File, Globe, Graph, Hash, LinkBreak, LinkSimple, Quotes } from "phosphor-react";
+import { Buildings, CalendarBlank, DownloadSimple, File, Globe, Hash, LinkBreak, LinkSimple, Quotes } from "phosphor-react";
 import { Link } from "react-router-dom";
 import { AvatarResearcher } from "../homepage/categorias/researchers-home/avatar-researcher";
 import { ScrollArea } from "../ui/scroll-area";
-import { BracketsCurly, CaretDown, Copy, Export, FileCsv, GraduationCap, IdentificationBadge, LinkedinLogo, MapPin, Plus, PuzzlePiece, QrCode, ShareNetwork } from "phosphor-react"
+import { BracketsCurly,  Copy, FileCsv,  Plus,  ShareNetwork } from "phosphor-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Button } from "../ui/button";
 import { MoreHorizontal } from "lucide-react";
@@ -30,10 +29,7 @@ type OpenAlex = {
   import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+
     DialogClose
   } from "../../components/ui/dialog"
 

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Alert } from "../ui/alert";
 import {  Chats,  Funnel, MagnifyingGlass, X } from "phosphor-react";
 
@@ -6,12 +6,12 @@ import {  Chats,  Funnel, MagnifyingGlass, X } from "phosphor-react";
 import { Button } from "../ui/button";
 import { useModal} from "../hooks/use-modal-store";
 import { UserContext } from "../../context/context";
-import { useModalSidebar } from "../hooks/use-modal-sidebar";
+
 import { SelectTypeSearch } from "./select-type-search";
 import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
-import { useModalHomepage } from "../hooks/use-modal-homepage";
+
 import { useLocation, useNavigate } from "react-router-dom";
 const API_KEY = import.meta.env.VITE_API_KEY
 
@@ -103,12 +103,12 @@ function parseTerms(encoded: string): { term: string }[] {
 
 
     const { onOpen } = useModal();
-    const { onOpen: onOpenHomepage } = useModalHomepage();
-    const {navbar, searchType, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, setValoresSelecionadosExport, setMessagesMaria, itemsSelecionados , setItensSelecionados, setSugestoes, sugestoes, itemsSelecionadosPopUp} = useContext(UserContext)
 
-    const { isOpen: isOpenSidebar } = useModalSidebar();
+    const { searchType, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, setValoresSelecionadosExport, setMessagesMaria, itemsSelecionados , setItensSelecionados, setSugestoes, sugestoes, itemsSelecionadosPopUp} = useContext(UserContext)
+
+  
     const [input, setInput] = useState("");
-    const [dataModificacao, setDataModificacao] = useState('');
+    const [, setDataModificacao] = useState('');
 
   useEffect(() => {
     const dataAtual = new Date();
@@ -140,8 +140,8 @@ const handlePopUppesquisa = () => {
 
 //
 
-const [messages, setMessages] = useState([]);
-const [isTyping, setIsTyping] = useState(false);
+const [, setMessages] = useState([]);
+const [, setIsTyping] = useState(false);
   
 
 const handleSend = async (message: any) => {
@@ -158,8 +158,7 @@ const handleSend = async (message: any) => {
   await processMessageToChatGPT(newMessage);
 };
 
-let TypeSearch = type_search ?? ''
-  let Terms = terms ?? ''
+
 
 async function processMessageToChatGPT(messageObject:any) {
   const apiRequestBody = {
@@ -188,7 +187,7 @@ async function processMessageToChatGPT(messageObject:any) {
       const chatGptMessage = data.choices[0].message;
   const { content } = chatGptMessage;
   const parsedContent = JSON.parse(content);
-  const { type, term, message, sugestion } = parsedContent;
+  const { type, term, message } = parsedContent;
       
   console.log('chatGptMessage',chatGptMessage)
     

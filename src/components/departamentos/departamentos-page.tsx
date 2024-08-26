@@ -35,7 +35,7 @@ export function DepartamentPage() {
 
     const queryUrl = useQuery();
     const type_search = queryUrl.get('dep_id');
-    const [isLoading, setIsLoading] = useState(false)
+    const [, setIsLoading] = useState(false)
 
 
     let departamentoSelecionado = type_search || ''

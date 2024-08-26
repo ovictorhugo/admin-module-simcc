@@ -1,7 +1,7 @@
-import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, Download, OctagonAlert, TrendingUp } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, OctagonAlert, TrendingUp } from "lucide-react";
+import {  useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
-import ReactDOMServer from 'react-dom/server';
+
 import html2canvas from 'html2canvas';
 
   import {
@@ -11,7 +11,7 @@ import html2canvas from 'html2canvas';
 
   } from "../../components/ui/drawer"
 import { Button } from "../ui/button";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo,  useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -404,7 +404,6 @@ function generateNameVariations(name: string): string[] {
   return variations;
 }
 
-const researcherName = researcher.length > 0 ? researcher[0].name : "Desconhecido";
 const [tab, setTab] = useState('all')
     
 

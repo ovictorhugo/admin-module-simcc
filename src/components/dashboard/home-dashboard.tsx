@@ -25,9 +25,6 @@ export function HomeDashboard() {
         (perm) => perm.permission === 'visualizar_todos_departamentos'
       );
     
-      const has_visualizar_modulo_administrativo = permission.some(
-        (perm) => perm.permission === 'visualizar_modulo_administrativo'
-      );
     
       const has_visualizar_todos_programas = permission.some(
         (perm) => perm.permission === 'visualizar_todos_programas'

@@ -2,56 +2,33 @@ import { useContext, useEffect, useState } from "react";
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import {
-    Card,
+  
     CardContent,
     CardDescription,
-    CardFooter,
+
     CardHeader,
     CardTitle,
   } from "../ui/card"
 import { Button } from "../ui/button";
 import { toast } from "sonner"
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+
 import "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { updateProfile, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../ui/tabs"
+
 
 
 import { UserContext } from "../../context/context";
-import { User as FirebaseAuthUser} from 'firebase/auth'
-import { GoogleLogo, SignIn } from "phosphor-react";
+import { GoogleLogo } from "phosphor-react";
 import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
 import { UserPlus } from "lucide-react";
 
-interface User extends FirebaseAuthUser {
-  img_url: string;
-  state: string;
-  name: string
-  email: string
-  institution_id: string
-}
-
-
 
 export function SignUpContent() {
-    const backgroundImages = [
-     'ewe'
-      ];
-    
-      //background
-      const [backgroundImage] = useState<string>(() => {
-        const randomIndex = Math.floor(Math.random() * backgroundImages.length);
-        return backgroundImages[randomIndex];
-      });
+   
 
 
       //firebase
@@ -63,10 +40,8 @@ export function SignUpContent() {
       const history = useNavigate();
       const { setUser, urlGeralAdm } = useContext(UserContext);
 
-      const [value, setValue] = useState('account')
 
-
-      const [createUserWithEmailAndPassword, userw, loading, error] =
+      const [createUserWithEmailAndPassword] =
   useCreateUserWithEmailAndPassword(auth);
 
   const handleSignOut = async (e: any) => {

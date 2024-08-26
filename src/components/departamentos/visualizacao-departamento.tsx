@@ -16,7 +16,7 @@ import { Books, Quotes } from "phosphor-react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import HC_wordcloud from 'highcharts/modules/wordcloud';
-import { AreaChart, Area,LineChart, Line, BarChart, Bar, XAxis, PieChart, Pie, YAxis, LabelList, Cell, CartesianGrid,  Legend, ResponsiveContainer } from 'recharts';
+import {  BarChart, Bar, XAxis,  LabelList, CartesianGrid } from 'recharts';
 
 import {
   ChartConfig,
@@ -26,7 +26,7 @@ import {
   ChartLegend,
   ChartLegendContent
 } from "../../components/ui/chart"
-import { useModalResult } from "../hooks/use-modal-result";
+
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -49,28 +49,7 @@ interface Patrimonio {
     among: number;
   }
   
-  interface GraduateProgram {
-      area: string;
-      code: string;
-      graduate_program_id: string;
-      modality: string;
-      name: string;
-      rating: string;
-      type: string;
-      city: string
-      state: string
-      instituicao: string
-      url_image: string
-      region: string
-      sigla: string
-      latitude: string
-      longitude: string
-      visible:string
-      qtd_discente:string
-      qtd_colaborador:string
-      qtd_permanente:string
-    }
-  
+
     interface Total {
       article:string
       book:string
@@ -113,22 +92,7 @@ interface Patrimonio {
 
   
   
-    const chartConfig5 = {
-   
-      'Produtividade em Pesquisa': {
-        label: "Produtividade em Pesquisa",
-        color: "#809BB5",
-      },
-      'Desen. Tec. e Extensão Inovadora': {
-        label: "Desen. Tec. e Extensão Inovadora",
-        color: "#A6BCCD",
-      },
-      'Outros docentes': {
-        label: "Outros docentes",
-        color: "#354A5C",
-      },
-    } satisfies ChartConfig
-    
+  
     
     const chartConfig = {
       views: {
@@ -223,8 +187,7 @@ export function VisualizacaoDepartamento() {
 
     
   const [totalProducao, setTotalProducao] = useState<Total[]>([]);
-  const currentYear1 = new Date().getFullYear();
-const year2 = currentYear1 - 4;
+
 
   const urlTotalProgram = `${urlGeral}graduate_program_production?dep_id=${type_search}&year=1900`;
 
@@ -252,7 +215,7 @@ const year2 = currentYear1 - 4;
     fetchData();
   }, [urlTotalProgram]);
 
-  const [isOn, setIsOn] = useState(true);
+
 
  
       /////////////////////////
@@ -315,7 +278,7 @@ const year2 = currentYear1 - 4;
      /////////
  
   
-     const [visibleChart, setVisibleChart] = useState(0);
+     const [, setVisibleChart] = useState(0);
      const chartKeys = ['count_article', 'count_patent', 'count_guidance_in_progress'];
    
      useEffect(() => {

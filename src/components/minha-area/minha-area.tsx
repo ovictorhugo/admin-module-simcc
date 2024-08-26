@@ -1,21 +1,20 @@
 
 
-import { ArrowLeftFromLine, ArrowRightFromLine, Blocks, Box, Building2, ChevronsUpDown, ClipboardEdit, FlaskConical, GraduationCap, LayoutDashboard, Lock, Mail, Menu, OctagonAlert, PieChart, SlidersHorizontal, TrendingUp, User, Users, Weight, X } from "lucide-react";
+import { ArrowLeftFromLine, ArrowRightFromLine, Blocks,  Building2, ChevronsUpDown, ClipboardEdit, FlaskConical, GraduationCap, LayoutDashboard, Lock, Mail, Menu, OctagonAlert, PieChart, SlidersHorizontal, TrendingUp, User, Users, Weight, X } from "lucide-react";
 import {
   Sheet,
   SheetContent,
 
 } from "../../components/ui/sheet"
-import bg_popup from '../../assets/bg-minha-area.png'
+
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
-import { DialogHeader, DialogTitle } from "../ui/dialog";
+import { DialogHeader } from "../ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { ScrollArea } from "../ui/scroll-area";
 import { useContext, useMemo, useState } from "react";
-import { SymbolEE } from "../svg/SymbolEE";
-import { useTheme } from "next-themes";
-import { SymbolEEWhite } from "../svg/SymbolEEWhite";
+
+
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { ChartLine, Cube, Shield, SignOut } from "phosphor-react";
 import { UserContext } from "../../context/context";
@@ -23,7 +22,7 @@ import { Tabs, TabsContent } from "../ui/tabs";
 import { SegurancaMinhaArea } from "./seguranca-minha-area";
 import { LinhaTempoMinhaArea } from "./linha-tempo-minha-area";
 import { auth } from '../../lib/firebase';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import {  signOut } from 'firebase/auth';
 import { Link, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
@@ -113,10 +112,10 @@ interface Bolsistas {
 
 
 export function MinhaArea() {
-    const { onClose, isOpen, type: typeModal, data } = useModal();
+    const { onClose, isOpen, type: typeModal } = useModal();
     const isModalOpen = (isOpen && typeModal === "minha-area") 
     const [expand, setExpand] = useState(true)
-    const { theme, setTheme } = useTheme()
+   
 
     const {user, setUser, setLoggedIn, urlGeral, role, urlGeralAdm,permission, setPermission, setRole} = useContext(UserContext)
 
@@ -139,7 +138,7 @@ export function MinhaArea() {
     let urlTermPesquisadores = urlGeral + `researcherName?name=${user?.researcger_name}`;
 console.log(urlTermPesquisadores)
     const [researcher, setResearcher] = useState<Research[]>([]); 
-    const [loading, isLoading] = useState(false)
+    const [, isLoading] = useState(false)
 
     const history = useNavigate();
 

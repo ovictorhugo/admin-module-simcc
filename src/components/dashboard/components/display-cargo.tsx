@@ -278,7 +278,7 @@ const filteredList = sortedAreas.map((area) => {
 
 
     let urlPermission = urlGeralAdm + `s/permission?role_id=${props.id}`
-    const [isLoading, setIsLoading] = useState(false)
+    const [, setIsLoading] = useState(false)
 
   const [total, setTotal] = useState<Permission[]>([]);
 

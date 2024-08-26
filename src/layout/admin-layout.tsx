@@ -11,7 +11,7 @@ import { toast } from "sonner"
 import { useContext,  useState } from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { Blocks,  Building2, ChevronDown, ChevronUp, ClipboardEdit, FlaskConical, GraduationCap,  Info, LayoutDashboard,  Mail, PieChart,  Play,  SlidersHorizontal,  Terminal,  User, Users, Weight } from "lucide-react";
+import { Blocks,  Building2, ChevronDown, ChevronUp, ClipboardEdit, FlaskConical, GraduationCap,  Info, LayoutDashboard,  Mail, PieChart,  Play,  SlidersHorizontal,  Terminal,   Users, Weight } from "lucide-react";
 
 import { useLocation } from "react-router-dom";
 import { Button } from "../components/ui/button";
@@ -36,7 +36,7 @@ export default function AdminLayout({
   children
 }: MailProps) {
   
-  const {isCollapsed, setIsCollapsed, permission, pesquisadoresSelecionados, user, setPermission, urlGeralAdm} = useContext(UserContext)
+  const {isCollapsed, setIsCollapsed, permission, pesquisadoresSelecionados,  urlGeralAdm} = useContext(UserContext)
   
 
   //permissoes
