@@ -166,7 +166,7 @@ export function AddDepartamento() {
           },
         });
   
-        setDepId("");
+        setDepId(uuid.replace(/\D/g, "").slice(0, 10));
         setOrgCod("");
         setDepNom("");
         setDepDes("");

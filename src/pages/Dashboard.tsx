@@ -20,27 +20,27 @@ export function Dashboard() {
             onOpen('home-dashboard')
         } else if (location.pathname == '/config') {
             onOpen('master')
-        } else if (location.pathname == '/dashboard/programas') {
+        } else if (location.pathname == '/dashboard/programas' || location.pathname == '/minhaufmg/dashboard/programas') {
             onOpen('graduate-program')
-        } else if (location.pathname == '/dashboard/departamentos') {
+        } else if (location.pathname == '/dashboard/departamentos' || location.pathname == '/minhaufmg/dashboard/departamentos') {
             onOpen('departamento')
-        } else if (location.pathname == '/dashboard/pesquisadores') {
+        } else if (location.pathname == '/dashboard/pesquisadores' || location.pathname == '/minhaufmg/dashboard/pesquisadores') {
             onOpen('researcher')
-        } else if (location.pathname == '/dashboard/pesos-avaliacao') {
+        } else if (location.pathname == '/dashboard/pesos-avaliacao' || location.pathname == '/minhaufmg/dashboard/pesos-avaliacao') {
             onOpen('peso-producao')
-        } else if (location.pathname == '/dashboard/grupos-pesquisa') {
+        } else if (location.pathname == '/dashboard/grupos-pesquisa' || location.pathname == '/minhaufmg/dashboard/grupos-pesquisa') {
             onOpen('grupo-pesquisa')
-        } else if (location.pathname == '/dashboard/indicadores') {
+        } else if (location.pathname == '/dashboard/indicadores' || location.pathname == '/minhaufmg/dashboard/indicadores') {
             onOpen('indicadores')
-        } else if (location.pathname == '/dashboard/baremas') {
+        } else if (location.pathname == '/dashboard/baremas' || location.pathname == '/minhaufmg/dashboard/baremas') {
             onOpen('baremas')
-        } else if (location.pathname == '/dashboard/enviar-notificacoes') {
+        } else if (location.pathname == '/dashboard/enviar-notificacoes' || location.pathname == '/minhaufmg/dashboard/enviar-notificacoes') {
             onOpen('enviar-notificacoes')
-        } else if (location.pathname == '/dashboard/informacoes') {
+        } else if (location.pathname == '/dashboard/informacoes' || location.pathname == '/minhaufmg/dashboard/informacoes') {
             onOpen('informacoes')
-        } else if (location.pathname == '/dashboard/minha-area') {
+        } else if (location.pathname == '/dashboard/minha-area' || location.pathname == '/minhaufmg/dashboard/minha-area') {
             onOpen('minha-area')
-        } else if(location.pathname == '/dashboard/administrativo') {
+        } else if(location.pathname == '/dashboard/administrativo' || location.pathname == '/minhaufmg/dashboard/administrativo') {
             onOpen('general')
         }
     }, [location]);

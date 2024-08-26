@@ -223,6 +223,7 @@ useEffect(() => {
         <Route path='/departamentos' element={<Home/>}/>
         <Route path='/researcher' element={<Home/>}/>
         <Route path='/marIA' element={<Home/>}/>
+        <Route path='/relatar-problema' element={<Home/>}/>
 
        
 
