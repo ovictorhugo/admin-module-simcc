@@ -34,7 +34,7 @@ export function AccountSwitcher({
 
 }: AccountSwitcherProps) {
 
-  const {user,  setPermission, urlGeralAdm, setRole, role} = React.useContext(UserContext)
+  const {user,  setPermission, urlGeralAdm, setRole, role, loggedIn} = React.useContext(UserContext)
   const { theme } = useTheme()
 
 
@@ -75,7 +75,7 @@ const history = useNavigate();
   return (
     <DropdownMenu>
         <div className={`w-full  flex-1 gap-3 flex items-center  ${isCollapsed ? ('px-2 '):('')}`}>
-        <DropdownMenuTrigger className={`flex-1 items-center flex justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all rounded-md ${isCollapsed ? ('w-[36px] '):('w-full')} `}>
+        <DropdownMenuTrigger disabled={!loggedIn} className={`flex-1 items-center flex justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all rounded-md ${isCollapsed ? ('w-[36px] '):('w-full')} `}>
             <div className={cn(
           "flex items-center w-full gap-2 h-10 pr-4",
           isCollapsed &&

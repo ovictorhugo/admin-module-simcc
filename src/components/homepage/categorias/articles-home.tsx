@@ -70,7 +70,7 @@ export function ArticlesHome() {
 
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
     const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
-    let urlTermPublicacoes = "";
+    let urlTermPublicacoes = `${urlGeral}bibliographic_production_article?terms=&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? ('1'):('0')}&graduate_program_id=${idGraduateProgram === "0" ? "" : idGraduateProgram}`;;
 
 if(valoresSelecionadosExport != '') {
   

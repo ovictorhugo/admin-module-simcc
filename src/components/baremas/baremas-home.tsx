@@ -165,8 +165,7 @@ export function BaremasHome() {
         baremaId:string
       }>();
 
-      const [openPopo2, setOpenPopo2] = useState(false)
-
+  
     const [anoArtigo, setAnoArtigo] = useState(Number(new Date().getFullYear() - 4));
     const [anoWorkInEvent, setAnoWorkInEvent] = useState(Number(new Date().getFullYear() - 4));
     const [anoLivro, setAnoLivro] = useState(Number(new Date().getFullYear() - 4));
@@ -497,7 +496,7 @@ export function BaremasHome() {
     //mudar titulo
 
     const [editingGrupoIndex, setEditingGrupoIndex] = useState(null); // Estado para controlar o índice do grupo em modo de edição
-    const [editingDescricaoGrupoIndex, setEditingDescricaoGrupoIndex] = useState(null);
+    const [, setEditingDescricaoGrupoIndex] = useState(null);
 const toggleEditTitulo = (grupoIndex:any, type:any) => {
     if(type === 'titulo') {
         setEditingGrupoIndex(grupoIndex === editingGrupoIndex ? null : grupoIndex);
@@ -512,19 +511,6 @@ const handleTituloChange = (e:any, grupoIndex:any) => {
     setGrupos(novosGrupos);
 };
 
-const toggleEditDescricao = (grupoIndex:any, type:any) => {
-   if(type === 'descricao') {
-    setEditingDescricaoGrupoIndex(grupoIndex === editingDescricaoGrupoIndex ? null : grupoIndex);
-    setEditingGrupoIndex(null)
-   }
-};
-
-const handleDescricaoChange = (e:any, grupoIndex:any) => {
-    const { value } = e.target;
-    const novosGrupos = [...grupos];
-    novosGrupos[grupoIndex].descricao = value;
-    setGrupos(novosGrupos);
-};
 
 
 
@@ -573,7 +559,7 @@ const resetConfig = async () => {
       })
   }
 
-  const [isOpenConfig, setIsOpenConfig] = useState(false)
+
 
   // Função para calcular a soma das pontuações máximas de todas as categorias do grupo
 const calcularSomaPontuacaoMaxima = (grupo:any) => {

@@ -21,8 +21,19 @@ export function AddResearcherDashboard() {
     const [nomePesquisador, setNomePesquisador] = useState('');
     const [lattesID, setLattesID] = useState('');
 
+  
 
-    const { user, urlGeralAdm } = useContext(UserContext);
+    const { user, urlGeralAdm, permission } = useContext(UserContext);
+
+
+    const has_editar_pesquisadores = permission.some(
+      (perm) => perm.permission === 'editar_pesquisadores'
+    );
+
+    const has_importar_bolsistas_cnpq = permission.some(
+      (perm) => perm.permission === 'importar_bolsistas_cnpq'
+    );
+
 
     const { isOpen, type} = useModalDashboard();
   
@@ -206,7 +217,7 @@ export function AddResearcherDashboard() {
                 
             
               <div className="hidden items-center h-10 gap-2 md:ml-auto md:flex">
-              <Button size={'sm'}  onClick={() => onOpen('import-bolsistas')}><FileXls size={16}/>Importar bolsistas CNPq</Button>
+            {has_importar_bolsistas_cnpq && (  <Button size={'sm'}  onClick={() => onOpen('import-bolsistas')}><FileXls size={16}/>Importar bolsistas CNPq</Button>)}
           
              
               </div>
@@ -215,35 +226,52 @@ export function AddResearcherDashboard() {
             </div>
 
      <div className="gap-4 md:gap-8 flex flex-col md:pb-8 pb-4">
-     <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-     <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3"  style={{ backgroundImage: `url(${bg_popup})` }}>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total de pesquisadores
-                    </CardTitle>
-                    <User className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{researcher.length}</div>
-                    <p className="text-xs text-muted-foreground">
-                      registrados
-                    </p>
-                  </CardContent>
-                  </Alert>
-
-                  <Alert onClick={() => setIsOpenAdd(!onOpenAdd)} className="p-0 hover:bg-[#274B5E] bg-[#719CB8] dark:hover:bg-[#274B5E] dark:bg-[#719CB8] text-white transition-all cursor-pointer "  >
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      
-                    </CardTitle>
-                    <Plus className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-
-                  <CardContent>
-                    <h2 className="font-medium text-xl">Adicionar <br/> pesquisador(a)</h2>
-                  </CardContent>
-                  </Alert>
-     </div>
+    {has_editar_pesquisadores ? (
+       <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+       <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3"  style={{ backgroundImage: `url(${bg_popup})` }}>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
+                        Total de pesquisadores
+                      </CardTitle>
+                      <User className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">{researcher.length}</div>
+                      <p className="text-xs text-muted-foreground">
+                        registrados
+                      </p>
+                    </CardContent>
+                    </Alert>
+  
+                    <Alert onClick={() => setIsOpenAdd(!onOpenAdd)} className="p-0 hover:bg-[#274B5E] bg-[#719CB8] dark:hover:bg-[#274B5E] dark:bg-[#719CB8] text-white transition-all cursor-pointer "  >
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
+                        
+                      </CardTitle>
+                      <Plus className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+  
+                    <CardContent>
+                      <h2 className="font-medium text-xl">Adicionar <br/> pesquisador(a)</h2>
+                    </CardContent>
+                    </Alert>
+       </div>
+    ): (
+      <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3"  style={{ backgroundImage: `url(${bg_popup})` }}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">
+          Total de pesquisadores
+        </CardTitle>
+        <User className="h-4 w-4 text-muted-foreground" />
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{researcher.length}</div>
+        <p className="text-xs text-muted-foreground">
+          registrados
+        </p>
+      </CardContent>
+      </Alert>
+    )}
 
  
     {onOpenAdd && (

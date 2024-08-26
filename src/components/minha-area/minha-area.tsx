@@ -381,9 +381,9 @@ console.log(urlTermPesquisadores)
                         const isOutdated = monthDifference > 3;
 
 
-                        if(isOutdated) {
+                        if(isOutdated && user?.lattes_id != '') {
                           return(
-                            <div className="bg-red-50 flex gap-3 dark:bg-red-200/20 w-full p-8 rounded-md">
+                            <div className="bg-red-50 flex gap-3 dark:bg-red-200/20 w-full mt-6 p-8 rounded-md">
                             <div>  <OctagonAlert size={24}/></div>
           <div>
           <AlertTitle className="whitespace-normal">Currículo Lattes desatualizado</AlertTitle>
@@ -563,11 +563,11 @@ console.log(urlTermPesquisadores)
                             <Button
                               variant="ghost"
                               className={`${
-                                !expand ? 'w-10' : 'justify-start truncate w-full'
+                                !expand ? 'w-10' : 'justify-start  w-full'
                               } ${tab === '' && 'bg-neutral-100 dark:bg-neutral-800'}`}
                               size={expand ? 'default' : 'icon'}
                             >
-                              <GraduationCap size={16} />
+                             <div> <GraduationCap size={16} className="whitespace-nowrap" /></div>
                               {expand && program.name}
                             </Button>
                           </Link>

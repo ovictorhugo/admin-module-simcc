@@ -200,6 +200,15 @@ const [directoryJson, setDirectoryJson] = useState("");
 
   console.log(directoryJson)
 
+
+  useEffect(() => {
+    if(!has_editar_cargos_permissoes) {
+      setTab('all')
+    } else if (!has_editar_configuracoes_plataforma) {
+      setTab('all')
+    }
+}, [permission]);
+
     return  (
        <div className="w-full relative">
       

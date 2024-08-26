@@ -5,11 +5,11 @@ import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
 import { MagnifyingGlass } from "phosphor-react";
 import { Input } from "../ui/input";
-import { ArrowRight, Info } from "lucide-react";
-import bg_popup from '../../assets/bg_home.png'
-import { ScrollArea } from "../ui/scroll-area";
+import { ArrowRight, Building, Hash, Info, Mail, Phone } from "lucide-react";
+import { cn } from "../../lib"
 import { Button } from "../ui/button";
-
+import bg_graduate from '../../assets/bg_graduate.png'
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 interface Departamentos {
     dep_id:string
     org_cod: string
@@ -108,12 +108,11 @@ export function DepartamentPage() {
         {departamentoSelecionado.length == 0 ? (
              <div className="w-full">
 
-             <div className="h-0">
-             <div className=" bg-cover bg-no-repeat bg-center h-[calc(100vh-82px)] w-full" style={{ backgroundImage: `url(${bg_popup})` }}></div>
-             </div>
-              <main className="flex flex-1 flex-col gap-4 md:gap-8 ">
+             
+<main className="  gap-4 md:gap-8 flex flex-col  p-4 md:p-8 pt-0 md:pt-0 w-full">
 
-<div className="justify-center m w-full px-4 md:px-8 h-[50vh]  flex max-w-[980px] flex-col items-center lg:items-start  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
+              <div className="bg-cover bg-bottom bg-no-repeat" style={{ backgroundImage: `url(${bg_graduate})` }}>
+              <div className="justify-center m w-full  flex max-w-[980px] flex-col items-center lg:items-start  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
 <Link to={'/informacoes'}  className="inline-flex z-[2] w-fit items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
 
 {totalSelecionado ? (
@@ -156,20 +155,82 @@ da Escola de Engenharia
 
 
 </div>
-
-
-
-<div className="p-4 pt-0 md:p-8 md:pt-0">
- <div className="grid grid-cols-1">
-   <ScrollArea>
-     {filteredTotal.map((item) => (
-       <Alert onClick={() => setTotalSelecionado(item)} className={`w-[300px] cursor-pointer p-8 flex items-center justify-center ${totalSelecionado?.dep_id == item.dep_id && ('border-[#82AAC0] border-2')}`}>
-           <img className="h-20" src={`data:image/jpeg;base64,${item.img_data}`} alt={item.dep_nom} />
-       </Alert>
-     ))}
-   </ScrollArea>
- </div>
 </div>
+
+
+<ResponsiveMasonry
+   columnsCountBreakPoints={{
+       350: 1,
+       750: 2,
+       900: 2,
+       1200: 3,
+       1700: 4
+   }}
+>
+                <Masonry gutter="16px" className="w-full">
+     {filteredTotal.map((item) => (
+     <div className="flex" onClick={() => handlePesquisaFinal(item.dep_id)} >
+     <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 bg-center  bg-[#719CB8]  bg-no-repeat backdrop-blur-xl  border min-h-[120px]  border-neutral-200 border-r-0 bg-  relative `} ></div>
+       
+                 <button
+            
+                 className={cn(
+                   `flex flex-col rounded-lg w-full rounded-l-none  dark:border-neutral-700 items-start gap-2  border p-3 text-left text-sm transition-all hover:bg-accent`,
+                 
+                 )}
+                
+               >
+     
+     <div className="flex justify-between items-center w-full">
+                <div className="text-xs font-medium mb-2 flex items-center gap-2">{item.dep_id}
+               </div>
+                <Building size={16}/>
+                </div>
+                
+             <div className="flex justify-between w-full items-center">
+             <div className="flex w-full flex-col">
+                <div className="flex w-full flex-col gap-1">
+               
+                   <div className="flex items-center">
+     
+                 
+                     
+                     <div className="flex items-center gap-2">
+                         
+                       <div className="font-semibold text-lg">{item.dep_sigla} - {item.dep_nom}</div>
+                       
+                      
+                     </div>
+                     <div
+                       
+                     >
+                       
+                     </div>
+     
+                   </div>
+                   
+                 </div>
+                 <div className="line-clamp-2 text-xs text-muted-foreground flex gap-4">
+                 <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>{item.org_cod}</div>
+                 <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Mail size={12}/>{item.dep_email}</div>
+                 <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Phone size={12}/>{item.dep_tel}</div>
+                 </div>
+     
+                 
+     
+                </div>
+                <img className="h-12 mix-blend-multiply" src={`data:image/jpeg;base64,${item.img_data}`} />
+                 
+             </div>
+                
+               </button>
+     
+               
+               </div>
+     ))}
+        </Masonry>
+      </ResponsiveMasonry>
+
 </main>
              </div>
         ):(

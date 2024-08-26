@@ -26,6 +26,8 @@ interface Patrimonio {
   qtd_discente:string
   qtd_colaborador:string
   qtd_permanente:string
+  site:string 
+  acronym:string 
   }
 
   interface Props {

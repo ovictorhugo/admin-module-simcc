@@ -10,7 +10,7 @@ import bg_popup from '../assets/bg_welcome.png';
 import { useContext, useEffect, useState} from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { BarChartBig, Blocks, BookOpen, Building2, GraduationCap, Home, Info, InfoIcon, List, PanelLeftDashed, SearchCheck, Sparkles, X } from "lucide-react";
+import { BarChartBig, Blocks, BookOpen, Bug, Building2, GraduationCap, Home, Info, InfoIcon, List, PanelLeftDashed, SearchCheck, Sparkles, X } from "lucide-react";
 
 
 import { Footer } from "../components/footer/footer";
@@ -212,6 +212,12 @@ export default function SearchLayout({
           <NavigationSidebar
             isCollapsed={isCollapsed}
             links={[
+              {
+                title: "Relatar problema",
+                label: "",
+                icon: Bug,
+                link: "/relatar-problema",
+              },
               {
                 title: "Informações",
                 label: "",

@@ -334,7 +334,7 @@ const handleSubmit = async () => {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link to={'/'}>
+              <Link to={`/departamentos?dep_id=${props.dep_id}`} target="_blank">
               <Button variant="ghost" size="icon"   >
               <SquareArrowOutUpRight size={16}/>
                 <span className="sr-only">Arquivar</span>

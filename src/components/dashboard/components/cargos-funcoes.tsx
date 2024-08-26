@@ -171,7 +171,7 @@ const [isLoad, setIsLoad] = useState(false)
         } else if (!has_editar_informacoes_usuarios) {
             setTab('')
         }
-    }, []);
+    }, [permission]);
     
     ////LISTA USUARIOS
 

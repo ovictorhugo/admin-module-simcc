@@ -24,6 +24,8 @@ import {ChevronLeft,  Plus, Search } from "lucide-react";
     qtd_discente:string
     qtd_colaborador:string
     qtd_permanente:string
+    site:string 
+    acronym:string 
   }
 
 
@@ -151,6 +153,8 @@ const isModalOpen = isOpen && type === "graduate-program";
       qtd_discente={total.qtd_discente}
       qtd_colaborador={total.qtd_colaborador}
       qtd_permanente={total.qtd_permanente}
+      site={total.site}
+      acronym={total.acronym}
       />
     ):(
       <div className="w-full h-full flex flex-col items-center justify-center">

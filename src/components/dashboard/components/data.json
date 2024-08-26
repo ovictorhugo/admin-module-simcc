@@ -27,6 +27,7 @@
     {"name": "Enviar notificações", "value": "enviar_notificacoes", "area":"outros"},
     {"name": "Editar pesquisadores", "value": "editar_pesquisadores", "area":"pesquisadores"},
     {"name": "Visualizar pesquisadores", "value": "visualizar_pesquisadores", "area":"pesquisadores"},
-    {"name": "Visualizar índices do pesquisador", "value": "visualizar_indices_pesquisador", "area":"pesquisadores"}
+    {"name": "Visualizar índices do pesquisador", "value": "visualizar_indices_pesquisador", "area":"pesquisadores"},
+    {"name": "Importar bolsistas CNPq", "value": "importar_bolsistas_cnpq", "area":"pesquisadores"}
   ]
   

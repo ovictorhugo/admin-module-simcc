@@ -1,6 +1,5 @@
 import {
   DialogHeader,
-  DialogFooter,
 } from "../ui/dialog";
 
 import { v4 as uuidv4 } from "uuid";
@@ -12,7 +11,7 @@ import { UserContext } from "../../context/context";
 
 import { toast } from "sonner";
 import { Button } from "../ui/button";
-import { ArrowUUpLeft, PencilSimple, Plus } from "phosphor-react";
+import { PencilSimple, Plus } from "phosphor-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
@@ -66,7 +65,7 @@ export function AddDepartamento() {
 }, [data]);
   
 
-  const [fileInfo, setFileInfo] = useState({
+  const [, setFileInfo] = useState({
     name: "",
     size: 0,
   });
@@ -297,7 +296,6 @@ export function AddDepartamento() {
                       name="dep_site"
                       value={depSite}
                       onChange={(e) => setDepSite(e.target.value)}
-                     
                     />
                   </div>
                   <div className="grid w-1/3 items-center gap-1.5">

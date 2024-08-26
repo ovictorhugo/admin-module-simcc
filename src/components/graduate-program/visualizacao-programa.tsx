@@ -1,7 +1,7 @@
-import {  Book, ChevronDown, ChevronLeft, ChevronUp, Copyright, File,  Info, MapPinIcon, SlidersHorizontal, Star, Ticket, Users } from "lucide-react";
+import {  Book, ChevronDown, ChevronLeft, ChevronUp, Copyright, File,  Globe,  Info, MapPinIcon, SlidersHorizontal, Star, Ticket, Users } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import {  useLocation, useNavigate } from "react-router-dom";
+import {  Link, useLocation, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -58,6 +58,9 @@ interface GraduateProgram {
     qtd_discente:string
     qtd_colaborador:string
     qtd_permanente:string
+    site:string 
+    acronym:string
+    description?: string
   }
 
   interface Total {
@@ -146,7 +149,7 @@ interface GraduateProgram {
 
 
 export function VisualizacaoPrograma() {
-  const {urlGeral, itemsSelecionados, searchType, user} = useContext(UserContext)
+  const {urlGeral, itemsSelecionados, searchType, user, permission} = useContext(UserContext)
   const { onOpen: onOpenModal } = useModal();
     const history = useNavigate();
 
@@ -294,6 +297,11 @@ export function VisualizacaoPrograma() {
   
 
     ///
+    const qualisColor = {
+      'MESTRADO': 'bg-blue-200',
+      'DOUTORADO': 'bg-blue-800',
+    };
+  
 
     //palavars
 const [words, setWords] = useState<PalavrasChaves[]>([]);
@@ -367,6 +375,18 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
     },
   };
 
+  
+  const has_visualizar_indicadores_pos_graduacao = permission.some(
+    (perm) => perm.permission === 'visualizar_indicadores_pos_graduacao'
+  );
+
+  const [tab, setTab] = useState('all')
+  useEffect(() => {
+    if(!has_visualizar_indicadores_pos_graduacao) {
+      setTab('all')
+    } 
+}, [permission]);
+
     return(
         <main className="flex flex-1 flex-col gap-4 md:gap-8 ">
             <Tabs defaultValue={'all'} className="h-full" >
@@ -388,10 +408,10 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
               <div className="hidden items-center gap-2 md:ml-auto md:flex">
               <TabsList >
                 
-              <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
-              <TabsTrigger value="doc" className="text-zinc-600 dark:text-zinc-200">Docentes</TabsTrigger>
-              <TabsTrigger value="ind" className="text-zinc-600 dark:text-zinc-200">Indicadores</TabsTrigger>
-                <TabsTrigger value="unread" className="text-zinc-600 dark:text-zinc-200">Administrativo</TabsTrigger>
+              <TabsTrigger value="all" onClick={() =>setTab('all')} className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
+              <TabsTrigger value="doc" onClick={() =>setTab('doc')}className="text-zinc-600 dark:text-zinc-200">Docentes</TabsTrigger>
+              <TabsTrigger disabled={!has_visualizar_indicadores_pos_graduacao} value="ind" onClick={() =>setTab('ind')}className="text-zinc-600 dark:text-zinc-200">Indicadores</TabsTrigger>
+           
 
               
                 </TabsList>
@@ -492,6 +512,46 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
                        <div className="mb-6">
                        <Search />
                        </div>
+
+                      {graduatePrograms.slice(0,1).map((props) => (
+                         <div className="mb-4 md:mb-8">
+                         <div
+                                 className={`h-3 w-full rounded-t-md dark:border-neutral-800 border border-neutral-200 border-b-0 ${qualisColor[props.type.trim() as keyof typeof qualisColor]}  `}
+                               ></div>
+               
+                           <Alert
+                                     className="p-0 rounded-t-none"  x-chunk="dashboard-05-chunk-4"
+                                   >
+               
+               <CardHeader className="flex flex-row items-start bg-neutral-100 dark:bg-neutral-800">
+                           <div className="flex items-center justify-between w-full">
+                             <CardTitle className="group flex items-center w-fit gap-2 text-lg">
+                               <div className="w-fit">Informações</div>
+                           
+                             </CardTitle>
+             <div className="flex gap-4 items-center justify-end flex-wrap ">
+             
+             
+             
+             <Link to={props.site} target="_blank"><div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Globe size={16}/> {props.site}</div></Link>
+             
+             
+             </div>
+                           </div>
+                           <div className="ml-auto flex items-center gap-1">
+                            
+                            
+                           </div>
+                           
+                         </CardHeader>
+             
+                         <CardContent className="p-6 text-sm">
+                           {props.description}
+                         </CardContent>
+                       </Alert>
+                         </div>
+                      ))}
+
                       <Alert className="grid gap-3 lg:grid-cols-4 grid-cols-2 mb-4 md:mb-8">
                       <div>
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -588,9 +648,9 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
                     <CardHeader className="flex p-10 flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
-                      Total de   docentes
+                    Índice de produção de artigos
                     </CardTitle>
-                    <CardDescription>no programa</CardDescription>
+                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
                    
                     </div>
 
@@ -598,7 +658,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                    <p>Fonte: Escola de Engenharia</p>
+                    <p>Fonte: Plataforma Lattes</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -615,16 +675,16 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
                     <CardHeader className="flex flex-row p-10 items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
-                     Total de técnicos
+                    índice de livros e capítulos
                     </CardTitle>
-                    <CardDescription>na Escola de Engenharia</CardDescription>
+                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
                     </div>
 
                     <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                      <p>Fonte: Escola de Engenharia</p>
+                      <p>Fonte: Plataforma Lattes</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -853,26 +913,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
 
 
             <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8  ">
-                 <div className="px-">
-                 {graduatePrograms.map((total) => (
-                     <DisplayItem
-                     graduate_program_id={total.graduate_program_id}
-                     code={total.code}
-                     name={total.name}
-                     area={total.area}
-                     modality={total.modality}
-                     type={total.type}
-                     rating={total.rating}
-                     institution_id={user?.institution_id || ''}
-                     url_image={total.url_image}
-                     city={total.city}
-                     visible={Boolean(total.visible)}
-                     qtd_discente={total.qtd_discente}
-                     qtd_colaborador={total.qtd_colaborador}
-                     qtd_permanente={total.qtd_permanente}
-                     />
-                  ))}
-                 </div>
+               
             </TabsContent>
             </Tabs>
         </main>

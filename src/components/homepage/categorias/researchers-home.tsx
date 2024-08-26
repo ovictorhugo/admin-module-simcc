@@ -14,7 +14,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { useLocation} from "react-router-dom";
 import { Alert } from "../../ui/alert";
 import { CardContent,  CardHeader, CardTitle } from "../../ui/card";
-import { Hash, Trash, User } from "lucide-react";
+import { Hash, Sparkles, Trash, User } from "lucide-react";
 import bg_popup from '../../../assets/bg_popup.png';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../../ui/dialog";
 import { useModal } from "../../hooks/use-modal-store";
@@ -22,6 +22,10 @@ import { ToggleGroup, ToggleGroupItem } from "../../ui/toggle-group"
 
 import { Label } from "../../ui/label";
 import { HeaderResult } from "../header-results";
+import { SymbolEEWhite } from "../../svg/SymbolEEWhite";
+import { SymbolEE } from "../../svg/SymbolEE";
+import { useTheme } from "next-themes";
+import { MariaHome } from "../maria-home";
 
 
 type Research = {
@@ -329,7 +333,7 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
 
   const totalAmong = researcher.reduce((sum, researcher) => sum + researcher.among, 0);
 
-
+  const {theme} = useTheme()
 
   return (
     <>
@@ -403,6 +407,8 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
                      
             </div>
          )}
+
+        <MariaHome/>
 
             {searchType !== 'abstract' && searchType !== 'name' && searchType !== 'area' && (
               <Accordion defaultValue="item-1" type="single" collapsible>

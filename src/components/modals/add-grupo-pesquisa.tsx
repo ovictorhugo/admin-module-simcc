@@ -1,4 +1,4 @@
-import { ArrowUUpLeft, FileCsv, FileXls, Plus } from "phosphor-react";
+import { ArrowUUpLeft,  FileXls} from "phosphor-react";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
 import * as XLSX from 'xlsx';
@@ -8,18 +8,18 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+
     DialogFooter
   } from "../ui/dialog";
   import { toast } from "sonner"
 
-  import Papa from 'papaparse';
+
 import { useCallback, useContext, useState } from "react";
-import { DataTableModal } from "../componentsModal/data-table";
+
 import {useDropzone} from 'react-dropzone'
-import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
+
 import { UserContext } from "../../context/context";
-import { columns } from "../componentsModal/columns-grupo-pesquisa";
+
 import { Upload } from "lucide-react";
 
 interface GrupoPesquisa {

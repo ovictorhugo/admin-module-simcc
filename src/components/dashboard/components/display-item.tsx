@@ -1,4 +1,4 @@
-import {  AreaChart,  ChevronsUpDown,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, Star, User, Users } from "lucide-react";
+import {  AreaChart,  ChevronsUpDown,  Globe,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, Star, User, Users } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
@@ -37,6 +37,8 @@ interface Patrimonio {
   qtd_discente:string
   qtd_colaborador:string
   qtd_permanente:string
+  site:string 
+  acronym:string 
   }
 
   export interface PesquisadorProps {
@@ -539,10 +541,6 @@ const handleSubmit = async () => {
         </div>
         <div className="w-full border-b border-neutral-200 dark:border-neutral-800 "></div>
 
-        <div >
-        <div className={`w-full h-2 ${qualisColor[props.type.trim() as keyof typeof qualisColor]}`}></div>
-      
-        </div>
         </div>
 
         <TabsContent value="all" className="mt-0">
@@ -572,6 +570,43 @@ const handleSubmit = async () => {
                        <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#00A137] dark:bg-[#00A137] whitespace-nowrap"></div>
 
 </div>
+
+<div className="mb-4 md:mb-8">
+            <div
+                    className={`h-3 w-full rounded-t-md dark:border-neutral-800 border border-neutral-200 border-b-0 ${qualisColor[props.type.trim() as keyof typeof qualisColor]}  `}
+                  ></div>
+  
+              <Alert
+                        className="p-0 rounded-t-none"  x-chunk="dashboard-05-chunk-4"
+                      >
+  
+  <CardHeader className="flex flex-row items-start bg-neutral-100 dark:bg-neutral-800">
+              <div className="flex items-center justify-between w-full">
+                <CardTitle className="group flex items-center w-fit gap-2 text-lg">
+                  <div className="w-fit">Informações</div>
+              
+                </CardTitle>
+<div className="flex gap-4 items-center justify-end flex-wrap ">
+
+
+
+<Link to={props.site} target="_blank"><div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Globe size={16}/> {props.site}</div></Link>
+
+
+</div>
+              </div>
+              <div className="ml-auto flex items-center gap-1">
+               
+               
+              </div>
+              
+            </CardHeader>
+
+            <CardContent className="p-6 text-sm">
+              {props.description}
+            </CardContent>
+          </Alert>
+            </div>
 </div>
             
         </TabsContent>

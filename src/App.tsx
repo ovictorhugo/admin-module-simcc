@@ -149,11 +149,6 @@ useEffect(() => {
     (perm) => perm.permission === 'visualizar_gerencia_modulo_administrativo'
   );
 
-
-  const has_visualizar_modulo_administrativo = permission.some(
-    (perm) => perm.permission === 'visualizar_modulo_administrativo'
-  );
-
   const has_visualizar_todos_programas = permission.some(
     (perm) => perm.permission === 'visualizar_todos_programas'
   );
@@ -355,6 +350,128 @@ useEffect(() => {
       />
     }
   />
+
+
+ {/*
+        Este é um comentário de múltiplas linhas dentro do JSX.
+        Pode ser usado para descrições mais longas.
+      */}
+<Route
+    path='/minhaufmg/dashboard/administrativo'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_gerencia_modulo_administrativo}
+      />
+    }
+  />
+
+
+<Route
+    path='/minhaufmg/dashboard'
+    element={<Dashboard />}
+  />
+
+
+<Route
+    path='/minhaufmg/dashboard/programas'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_todos_programas}
+      />
+    }
+  />
+
+<Route
+    path='/minhaufmg/dashboard/departamentos'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_todos_departamentos}
+      />
+    }
+  />
+
+<Route
+    path='/minhaufmg/dashboard/pesquisadores'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_pesquisadores}
+      />
+    }
+  />
+
+<Route
+    path='/minhaufmg/dashboard/inct'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_inct}
+      />
+    }
+  />
+
+
+<Route
+    path='/minhaufmg/dashboard/pesos-avaliacao'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_editar_pesos_avaliacao}
+      />
+    }
+  />
+
+<Route
+    path='/minhaufmg/dashboard/grupos-pesquisa'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_grupos_pesquisa}
+      />
+    }
+  />
+
+<Route
+    path='/minhaufmg/dashboard/indicadores'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_visualizar_indicadores_instituicao}
+      />
+    }
+  />
+
+  <Route
+    path='/minhaufmg/dashboard/baremas'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={hasBaremaAvaliacao}
+      />
+    }
+  />
+
+<Route
+    path='/minhaufmg/dashboard/enviar-notificacoes'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={hasNotificacoes}
+      />
+    }
+  />
+
+<Route path='/minhaufmg/dashboard/informacoes' element={<Dashboard/> }/>
+
+
+ {/*
+        Este é um comentário de múltiplas linhas dentro do JSX.
+        Pode ser usado para descrições mais longas.
+      */}
+
 
 <Route path='/dashboard/informacoes' element={<Dashboard/> }/>
 
