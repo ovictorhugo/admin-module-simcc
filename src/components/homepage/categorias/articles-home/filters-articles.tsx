@@ -87,7 +87,7 @@ export function FilterArticle(props:Props) {
           onMouseDown={(e) => e.preventDefault()}
         >
           <label
-            className={` cursor-pointer gap-3 transition-all flex h-10 items-center px-4  rounded-md text-xs font-medium hover:bg-gray-100 ${isChecked ? 'bg-gray-200 ' : ''}`}
+            className={` cursor-pointer gap-3 transition-all flex h-10 items-center px-4  rounded-md text-xs font-medium hover:bg-gray-100 dark:hover:bg-neutral-800 ${isChecked ? 'bg-neutral-100 dark:bg-neutral-800 ' : ''}`}
           >
             <div className={`rounded-sm h-4 w-4 ${qualisColor[quali.itens]}`}></div>
             <span className="text-center block">{quali.itens}</span>

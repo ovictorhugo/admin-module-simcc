@@ -30,6 +30,17 @@ type Articles = {
     jcr_link: string
     researcher_id: string
     distinct: boolean
+
+    abstract:string,
+    article_institution:string,
+    authors:string
+    authors_institution:string
+    citations_count:string 
+    issn:string 
+    keywords:string 
+    landing_page_url:string 
+    language:string 
+    pdf:string
 }
 
 
@@ -147,13 +158,41 @@ export function ArticleItem(props: Articles) {
       <Alert className="rounded-l-none flex flex-col justify-between">
         <div>
           <div>
-           <div className="flex mb-1 justify-between">
+           <div className="flex mb-1 gap-3 justify-between">
            <h3 className="font-semibold mb-4 ">{props.name_periodical}{props.magazine}</h3>
 
            <div className="h-8 w-8">
-           <Button variant="outline" size={'icon'} className="ml-auto hidden group-hover:flex text-sm h-8 w-8 text-gray-500 dark:text-gray-300">
-            <Maximize2 onClick={() => onOpen('articles-modal', {doi:doi, qualis:props.qualis, title:props.title, year:props.year, jif:props.jif, lattes_10_id:props.lattes_10_id, researcher_id:props.researcher_id, magazine:props.name_periodical})} size={16}/>
-            </Button>
+           
+<Button
+  onClick={() =>
+    onOpen('articles-modal', {
+      doi: doi,
+      qualis: props.qualis,
+      title: props.title,
+      year: props.year,
+      jif: props.jif,
+      lattes_10_id: props.lattes_10_id,
+      researcher_id: props.researcher_id,
+      magazine: props.name_periodical,
+      abstract: props.abstract,
+      article_institution: props.article_institution,
+      authors: props.authors,
+      authors_institution: props.authors_institution,
+      citations_count: props.citations_count,
+      issn: props.issn,
+      keywords: props.keywords,
+      landing_page_url: props.landing_page_url,
+      language: props.language,
+      pdf: props.pdf,
+      researcher:props.researcher
+    })
+  }
+  variant="outline"
+  size={'icon'}
+  className="ml-auto hidden group-hover:flex text-sm h-8 w-8 text-gray-500 dark:text-gray-300"
+>
+  <Maximize2 size={16} />
+</Button>
            </div>
            </div>
            <div>

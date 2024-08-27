@@ -992,14 +992,14 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                     <tspan
                       x={viewBox.cx}
                       y={viewBox.cy}
-                      className="fill-foreground text-4xl font-bold"
+                      className=" dark:fill-gray-500 text-4xl font-bold"
                     >
                       {bolsistas.length.toLocaleString()}
                     </tspan>
                     <tspan
                       x={viewBox.cx}
                       y={(viewBox.cy || 0) + 24}
-                      className="fill-muted-foreground"
+                      className="dark:fill-gray-500"
                     >
                       Bolsistas
                     </tspan>

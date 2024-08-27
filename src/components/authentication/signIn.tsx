@@ -28,6 +28,7 @@ import { GoogleLogo, SignIn } from "phosphor-react";
 
 import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
 import { MUfmg } from "../svg/MUfmg";
+import { useTheme } from "next-themes";
 
 export function SignInContent() {
 
@@ -379,6 +380,8 @@ export function SignInContent() {
         useEffect(() => {
           setCurrentQuote(getRandomQuote());
         }, []);
+
+       
 
     return(
         <div className="w-full h-screen flex">

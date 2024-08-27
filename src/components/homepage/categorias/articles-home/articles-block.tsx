@@ -48,6 +48,16 @@ export function ArticleBlock(props:Articles) {
                     jif={props.jif}
                     researcher_id={props.researcher_id}
                     distinct={props.distinct}
+                    abstract={props.abstract}
+                    article_institution={props.article_institution}
+                    authors={props.authors}
+                    authors_institution={props.authors_institution}
+                    citations_count={props.citations_count}
+                    issn={props.issn}
+                    keywords={props.keywords}
+                    landing_page_url={props.landing_page_url}
+                    language={props.language}
+                    pdf={props.pdf}
             />
         );
         })}

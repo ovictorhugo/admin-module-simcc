@@ -3,6 +3,17 @@ import { useModalResult } from "../../hooks/use-modal-result";
 import { UserContext } from "../../../context/context";
 
 type Publicacao = {
+    abstract:string,
+    article_institution:string,
+    authors:string
+    authors_institution:string
+    citations_count:string 
+    issn:string 
+    keywords:string 
+    landing_page_url:string 
+    language:string 
+    pdf:string
+
     id: string,
     doi: string,
     name_periodical: string,
@@ -36,11 +47,12 @@ import { GraficoArticleHome } from "./articles-home/grafico-articles-home";
 import { ArticleBlock } from "./articles-home/articles-block";
 import { Button } from "../../ui/button";
 import { useModalSidebar } from "../../hooks/use-modal-sidebar";
-import { FilterArticle } from "./articles-home/filters-articles";
+
 import { TableReseracherArticleshome } from "./articles-home/table-articles";
 import { Alert } from "../../ui/alert";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { HeaderResult } from "../header-results";
+import { FilterArticle } from "./articles-home/filters-articles";
 
 type Filter = {
   year: number[]
@@ -66,24 +78,32 @@ export function ArticlesHome() {
     // Função para lidar com a atualização de researcherData
     const handleResearcherUpdate = (newResearcherData: Filter[]) => {
       setFilters(newResearcherData);
+
+
     };
+// Atualização de `yearString` e `qualisString` dentro do useMemo
+const urlTermPublicacoes = useMemo(() => {
+  const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
+  const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
+  console.log('yearString', yearString)
+  let url = `${urlGeral}bibliographic_production_article?terms=&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=${idGraduateProgram === "0" ? "" : idGraduateProgram}`;
 
-    const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
-    const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
-    let urlTermPublicacoes = `${urlGeral}bibliographic_production_article?terms=&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? ('1'):('0')}&graduate_program_id=${idGraduateProgram === "0" ? "" : idGraduateProgram}`;;
-
-if(valoresSelecionadosExport != '') {
-  
-  if (searchType == 'name') {
-    urlTermPublicacoes = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=&type=ARTICLE&qualis=${qualisString}&year=${yearString}`;
-} else if (searchType == 'article') {
-  urlTermPublicacoes = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? ('1'):('0')}&graduate_program_id=${idGraduateProgram === "0" ? "" : idGraduateProgram}`;
-} else if (searchType == 'area') {
-  urlTermPublicacoes = `${urlGeral}bibliographic_production_article_area?area_specialty=${valoresSelecionadosExport.replace(/;/g, ' ')}&great_area=&year=${yearString}&qualis=${qualisString}`
-} else if (searchType == 'abstract') {
-  urlTermPublicacoes = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? ('1'):('0')}`
+  if (valoresSelecionadosExport !== '') {
+    if (searchType === 'name') {
+      url = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=&type=ARTICLE&qualis=${qualisString}&year=${yearString}`;
+    } else if (searchType === 'article') {
+      url = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=${idGraduateProgram === "0" ? "" : idGraduateProgram}`;
+    } else if (searchType === 'area') {
+      url = `${urlGeral}bibliographic_production_article_area?area_specialty=${valoresSelecionadosExport.replace(/;/g, ' ')}&great_area=&year=${yearString}&qualis=${qualisString}`;
+    } else if (searchType === 'abstract') {
+      url = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}`;
+    }
   }
-}
+
+  console.log('urlTermPublicacoes', url);
+  return url;
+}, [filters, searchType, valoresSelecionadosExport, distinct, idGraduateProgram]);
+
 
     console.log('urlTermPublicacoes', urlTermPublicacoes)
     useMemo(() => {

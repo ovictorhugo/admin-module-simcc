@@ -24,8 +24,19 @@ interface ModalData {
   researcher_id?: string
   magazine?:string
   lattes_id?:string
-
+  researcher?:string
   id_delete?: string
+
+  abstract?:string,
+  article_institution?:string,
+  authors?:string
+  authors_institution?:string
+  citations_count?:string 
+  issn?:string 
+  keywords?:string 
+  landing_page_url?:string 
+  language?:string 
+  pdf?:string
 
 //program edit
 graduate_program_id?: string

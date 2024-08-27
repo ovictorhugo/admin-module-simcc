@@ -1,4 +1,4 @@
-import {  AreaChart,  ChevronsUpDown,  Globe,  MapPinIcon, PencilLine, Plus, RefreshCcw, SquareArrowOutUpRight, Star, User, UserIcon, Users } from "lucide-react";
+import {  AreaChart,  ChevronsUpDown,  Globe,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, Star, User, Users } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
@@ -18,9 +18,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from "../../ui/input";
 import { v4 as uuidv4 } from 'uuid';
 import { columnsStudent } from "../../componentsModal/columns-student-program";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../ui/accordion";
-import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
-import { ToggleGroup, ToggleGroupItem } from "../../ui/toggle-group";
 
 interface Patrimonio {
   graduate_program_id: string
@@ -68,7 +65,7 @@ export function DisplayItem(props:Patrimonio) {
 
       const [type, setType] = useState('COLABORADOR');
       const [visibleProgram, setVisibleProgram] = useState(false);
-      const { urlGeralAdm, user, urlGeral } = useContext(UserContext);
+      const { urlGeralAdm, user } = useContext(UserContext);
       const { onOpen, isOpen, type:typeModal } = useModal();
 
       const [isVisible, setIsVisible] = useState(props.visible)
@@ -461,8 +458,6 @@ const handleSubmit = async () => {
     const [openPopUpIndex, setOpenPopUpIndex] = useState<number | null>(null);
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
-    const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 4 }, (_, i) => currentYear - i); 
 
     return(
       <Tabs defaultValue={tab} value={tab} className="h-full" >
@@ -673,6 +668,19 @@ const handleSubmit = async () => {
 
               <div className="gap-6 flex  items-end">
 
+              <div className="grid gap-3 w-full">
+                        <Label htmlFor="name">Tipo</Label>
+              <Select defaultValue={type} value={type}  onValueChange={(value) => setType(value)}>
+            <SelectTrigger className="">
+                <SelectValue placeholder="Tipo" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem value="COLABORADOR">Colaborador</SelectItem>
+                <SelectItem value="PERMANENTE">Permanente</SelectItem>
+
+            </SelectContent>
+            </Select>
+            </div>
 
             <div className="grid gap-3 w-full">
                         <Label htmlFor="name">Pesquisador</Label>
@@ -744,64 +752,15 @@ const handleSubmit = async () => {
               </CardContent>
 
               <div className="px-6">
-              <Accordion type="single" collapsible className="flex flex-col gap-4">
-           {researcher.map((props, index) => (
-             <Alert key={index}>
-                 <AccordionItem value={String(index)}>
-                 <div className="flex justify-between items-center h-10">
-                <div className="h-10">
-                  <div className="flex items-center gap-2">
-                    <Avatar className="cursor-pointer rounded-md h-8 w-8">
-                      <AvatarImage className="rounded-md h-8 w-8" src={`${urlGeral}ResearcherData/Image?name=${props.name}`} />
-                      <AvatarFallback className="flex items-center justify-center">
-                        <UserIcon size={12} />
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="font-medium">{props.name}</p>
-                      <div className="text-xs text-gray-500">{props.lattes_id}</div>
-                    </div>
-                  </div>
-                </div>
-                <AccordionTrigger></AccordionTrigger>
+              <DataTableModal columns={columns} data={researcher}/>
               </div>
 
-              <AccordionContent className="p-0">
-              <div className="grid gap-4 w-full  mt-4">
-                        <Label htmlFor="name">Tipo</Label>
-              <Select defaultValue={type} value={type}  onValueChange={(value) => setType(value)}>
-            <SelectTrigger className="">
-                <SelectValue placeholder="Tipo" />
-            </SelectTrigger>
-            <SelectContent>
-                <SelectItem value="COLABORADOR">Colaborador</SelectItem>
-                <SelectItem value="PERMANENTE">Permanente</SelectItem>
-
-            </SelectContent>
-            </Select>
-            </div>
-            <div className="flex w-full gap-4 items-end">
-              <div>
-              <ToggleGroup type="multiple" className="gap-4">
-      {years.map((year) => (
-        <ToggleGroupItem key={year} value={year.toString()} aria-label={`Toggle ${year}`}>
-          {year}
-        </ToggleGroupItem>
-      ))}
-    </ToggleGroup>
+              <div className="px-6">
+                <div className="max-w-[500px] text-2xl font-bold leading-tight tracking-tighter md:text-3xl lg:leading-[1.1] md:block">Docentes vinculados ao programa</div>
+                <p className=" mt-2 text-lg font-light text-foreground mb-6">
+                Adicione ou remova os pesquisadores permanentes e colaboradores do programa de pós graduação
+                </p>
               </div>
-            <Button >
-                    <RefreshCcw size={16} /> Atualizar dados
-                  </Button>
-            </div>
-              </AccordionContent>
-                 </AccordionItem>
-             </Alert>
-           ))}
-           </Accordion>
-              </div>
-
-             
        </div>
         </TabsContent>
 

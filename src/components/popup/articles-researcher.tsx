@@ -16,6 +16,16 @@ type Publicacao = {
     jcr_link: string,
     jif: string
     researcher_id: string
+    abstract:string,
+    article_institution:string,
+    authors:string
+    authors_institution:string
+    citations_count:string 
+    issn:string 
+    keywords:string 
+    landing_page_url:string 
+    language:string 
+    pdf:string
   }
 
 

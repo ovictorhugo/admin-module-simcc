@@ -165,11 +165,11 @@ export function ImportBolsistas() {
                 });
                 return;
             }
-
-            setUploadProgress(true)
+    
+            setUploadProgress(true);
     
             let urlPatrimonioInsert = `${urlGeralAdm}ResearcherRest/InsertGrant`;
-        
+    
             const response = await fetch(urlPatrimonioInsert, {
                 mode: 'cors',
                 method: 'POST',
@@ -178,11 +178,12 @@ export function ImportBolsistas() {
                     'Access-Control-Allow-Methods': 'POST',
                     'Access-Control-Allow-Headers': 'Content-Type',
                     'Access-Control-Max-Age': '3600',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Connection': 'keep-alive', // Mantém a conexão aberta
                 },
                 body: JSON.stringify(data),
             });
-
+    
             if (response.ok) {
                 toast("Dados enviados com sucesso", {
                     description: "Todos os dados foram enviados.",
@@ -191,15 +192,15 @@ export function ImportBolsistas() {
                         onClick: () => console.log("Fechar"),
                     },
                 });
-
-                setUploadProgress(false)
+    
+                setData([]);
+                setFileInfo({
+                    name: '',
+                    size: 0,
+                });
+            } else {
+                throw new Error('Erro ao enviar os dados.');
             }
-
-            setData([])
-            setFileInfo({
-                name: '',
-                size: 0,
-            });
     
         } catch (error) {
             console.error('Erro ao processar a requisição:', error);
@@ -210,8 +211,9 @@ export function ImportBolsistas() {
                     onClick: () => console.log("Fechar"),
                 },
             });
+        } finally {
+            setUploadProgress(false);
         }
-        setUploadProgress(false)
     };
     
 
