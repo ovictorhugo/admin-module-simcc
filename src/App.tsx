@@ -85,7 +85,7 @@ function App() {
   const [permission , setPermission] = useState<Permission[]>([])
 
 
-  const [version, setVersion] = useState(false)
+  const [version, setVersion] = useState(import.meta.env.VITE_VERSION == 'false' ? (false):(true))
 
   const [searchType, setSearchType] = useState('article');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
