@@ -67,7 +67,7 @@ const terms = queryUrl.get('terms');
     const [researcherOpenAlex , setResearcherOpenAlex] = useState<ResearchOpenAlex[]>([])
     const [showInput, setShowInput] = useState(true);
     const isModalOpen = isOpen && type === "search";
-    const {setValoresSelecionadosExport, setMode, searchType, setSearchType, urlGeral, itemsSelecionados , setItensSelecionados, setValorDigitadoPesquisaDireta} = useContext(UserContext)
+    const {setValoresSelecionadosExport, setMode, searchType, setSearchType, urlGeral, itemsSelecionados , setItensSelecionados, setValorDigitadoPesquisaDireta, version} = useContext(UserContext)
     const db = getFirestore();
     const [input, setInput] = useState('')
 
@@ -91,7 +91,7 @@ const terms = queryUrl.get('terms');
       if(prefix.length >= 3) {
         try {
           // Consulta os documentos cujo term começa com o prefixo fornecido
-          const filesRef = collection(db, 'termos_busca');
+          const filesRef = collection(db, `${version ? ('termos_busca'):('termos_busca_cimatec')}`);
           const q = query(filesRef, where('term_normalize', '>=', prefix), where('term_normalize', '<=', prefix + '\uf8ff'));
 
           const querySnapshot = await getDocs(q);

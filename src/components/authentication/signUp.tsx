@@ -25,6 +25,7 @@ import { UserContext } from "../../context/context";
 import { GoogleLogo } from "phosphor-react";
 import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
 import { UserPlus } from "lucide-react";
+import { LogoIaposWhite } from "../svg/LogoIaposWhite";
 
 
 export function SignUpContent() {
@@ -36,7 +37,7 @@ export function SignUpContent() {
         const [email, setEmail] = useState('');
         const [password, setPassword] = useState('');
         const [confPassword, setConfPassword] = useState('');
-      const {setLoggedIn} = useContext(UserContext);
+      const {setLoggedIn, version} = useContext(UserContext);
       const history = useNavigate();
       const { setUser, urlGeralAdm } = useContext(UserContext);
 
@@ -310,15 +311,22 @@ try {
     return(
         <div className="w-full h-screen flex">
            <div className="w-1/2 h-full p-16 md:flex justify-between flex-col hidden bg-cover bg-center bg-no-repeat bg-[#274B5E]" >
-           <Link to={'/'} className="w-fit">
+           {version ? (
+            <Link to={'/'} className="w-fit">
            <div className="h-[28px]"><LogoConecteeWhite/></div></Link>
+           ): (
+            <Link to={'/'} className="w-fit">
+           <div className="h-[28px]"><LogoIaposWhite/></div></Link>
+           )}
             <div>
-             <div>
-             <p className="font-medium text-white max-w-[500px]">
-        "{currentQuote.quote}"
-      </p>
-      <p className="text-white mt-2 text-sm">{currentQuote.author}</p>
-             </div>
+            {version && (
+               <div>
+               <p className="font-medium text-white max-w-[500px]">
+          "{currentQuote.quote}"
+        </p>
+        <p className="text-white mt-2 text-sm">{currentQuote.author}</p>
+               </div>
+            )}
             </div>
             </div>
             <div className="md:w-1/2 w-full h-full flex md:px-16 items-center justify-center flex-col">

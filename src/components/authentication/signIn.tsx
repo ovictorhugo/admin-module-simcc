@@ -29,6 +29,7 @@ import { GoogleLogo, SignIn } from "phosphor-react";
 import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
 import { MUfmg } from "../svg/MUfmg";
 import { useTheme } from "next-themes";
+import { LogoIaposWhite } from "../svg/LogoIaposWhite";
 
 export function SignInContent() {
 
@@ -37,7 +38,7 @@ export function SignInContent() {
       //firebase
       const [email, setEmail] = useState('');
       const [password, setPassword] = useState('');
-      const {setLoggedIn, urlGeralAdm} = useContext(UserContext);
+      const {setLoggedIn, urlGeralAdm, version} = useContext(UserContext);
       const history = useNavigate();
       const { setUser } = useContext(UserContext);
 
@@ -386,15 +387,22 @@ export function SignInContent() {
     return(
         <div className="w-full h-screen flex">
             <div className="w-1/2 h-full p-16 md:flex justify-between flex-col hidden bg-cover bg-center bg-no-repeat bg-[#719CB8]" style={{ backgroundImage: `url(${img1})` }}>
-           <Link to={'/'} className="w-fit">
+           {version ? (
+            <Link to={'/'} className="w-fit">
            <div className="h-[28px]"><LogoConecteeWhite/></div></Link>
+           ): (
+            <Link to={'/'} className="w-fit">
+           <div className="h-[28px]"><LogoIaposWhite/></div></Link>
+           )}
             <div>
-             <div>
-             <p className="font-medium text-white max-w-[500px]">
-        "{currentQuote.quote}"
-      </p>
-      <p className="text-white mt-2 text-sm">{currentQuote.author}</p>
-             </div>
+            {version && (
+               <div>
+               <p className="font-medium text-white max-w-[500px]">
+          "{currentQuote.quote}"
+        </p>
+        <p className="text-white mt-2 text-sm">{currentQuote.author}</p>
+               </div>
+            )}
             </div>
             </div>
 

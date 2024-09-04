@@ -187,7 +187,7 @@ const chartConfig = {
 
 export function InitialHome() {
   const [VisaoPrograma, setVisaoPrograma] = useState<VisaoPrograma[]>([]);
-  const { setItensSelecionados, urlGeralAdm, urlGeral } = useContext(UserContext);
+  const { setItensSelecionados, urlGeralAdm, urlGeral, version } = useContext(UserContext);
 
   const [year, setYear] = useState(new Date().getFullYear()-4);
 
@@ -728,7 +728,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                     <CardTitle className="text-sm font-medium">
                       Total de  {VisaoPrograma.map((props) => (<>{props.researcher}</>))} docentes
                     </CardTitle>
-                    <CardDescription>na Escola de Engenharia</CardDescription>
+                    <CardDescription>{version ? ('na Escola de Engenharia'):('no SENAI CIMATEC')}</CardDescription>
                    
                     </div>
 
@@ -736,7 +736,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                    <p>Fonte: Escola de Engenharia</p>
+                    <p>Fonte: {version ? ('Escola de Engenharia'):('SENAI CIMATEC')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -755,14 +755,14 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                     <CardTitle className="text-sm font-medium">
                      Total de {totalTechnicianCounts} técnicos
                     </CardTitle>
-                    <CardDescription>na Escola de Engenharia</CardDescription>
+                    <CardDescription>{version ? ('na Escola de Engenharia'):('no SENAI CIMATEC')}</CardDescription>
                     </div>
 
                     <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                      <p>Fonte: Escola de Engenharia</p>
+                      <p>Fonte: {version ? ('Escola de Engenharia'):('SENAI CIMATEC')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -954,7 +954,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                     <CardTitle className="text-sm font-medium">
                     Gráfico percentual de bolsistas CNPq
                     </CardTitle>
-                    <CardDescription>Visão geral da Escola de Engenharia</CardDescription>
+                    <CardDescription>Visão geral {version ? ('da Escola de Engenharia'):('do SENAI CIMATEC')}</CardDescription>
                     </div>
 
                     <TooltipProvider>
@@ -1019,7 +1019,9 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   <Instrucoes/>
                   <Newsletter/>
 
-                  <FooterHome/>
+                 {version && (
+                   <FooterHome/>
+                 )}
           </div>
 
          

@@ -4,13 +4,18 @@ import { Button } from "../../ui/button";
 import { Filter, List, MessagesSquare, TextCursorInput } from "lucide-react";
 import { Link } from "react-router-dom";
 import { CardDescription, CardHeader, CardTitle } from "../../ui/card";
+import { useContext } from "react";
+import { UserContext } from "../../../context/context";
 
 export function Instrucoes() {
+
+    const {version} = useContext(UserContext)
+
     return(
         <div className="grid gap-6 lg:grid-cols-2 md:min-h-screen">
             <div className="h-screen flex justify-center flex-col lg:sticky top-0">
                 <h2 className="text-5xl  lg:leading-[1.1] leading-tight tracking-tighter font-bold max-w-[420px] mb-4">O que a plataforma pode fazer e como ela pode te auxiliar?</h2>
-                <p className="max-w-[550px] mb-4  text-lg font-light text-foreground">O Conectee é uma plataforma desenvolvida com o objetivo de auxiliar na seleção e filtragem das produções dos pesquisadores da Escola de Engenharia da UFMG. </p>
+                <p className="max-w-[550px] mb-4  text-lg font-light text-foreground">O Conectee é uma plataforma desenvolvida com o objetivo de auxiliar na seleção e filtragem das produções dos pesquisadores {version ? ('da Escola de Engenharia.'):('do SENAI CIMATEC.')} </p>
                <div className="flex gap-3">
               
               <Link to={'/resultados'}> <Button className="w-fit"><MagnifyingGlass size={16}/>Fazer uma pesquisa</Button></Link>

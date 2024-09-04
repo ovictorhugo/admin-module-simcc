@@ -85,7 +85,7 @@ function App() {
   const [permission , setPermission] = useState<Permission[]>([])
 
 
-  const [version, setVersion] = useState(true)
+  const [version, setVersion] = useState(false)
 
   const [searchType, setSearchType] = useState('article');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');

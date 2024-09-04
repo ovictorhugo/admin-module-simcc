@@ -2,16 +2,24 @@ import {  Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { ChevronLeft, SquareArrowOutUpRight } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../../context/context";
 
 export function ContentIndicators() {
     const history = useNavigate();
+
+    const {version} = useContext(UserContext)
 
     const handleVoltar = () => {
       history(-1);
     }
 
-    const url = 'https://app.powerbi.com/view?r=eyJrIjoiNTBjNmQ3NWQtODNmZC00MWZkLThjNWEtZjU5YmE2ZDkwMjVkIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
+    let url = 'https://app.powerbi.com/view?r=eyJrIjoiNTBjNmQ3NWQtODNmZC00MWZkLThjNWEtZjU5YmE2ZDkwMjVkIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
+
+    if (!version) {
+      url = 'https://app.powerbi.com/view?r=eyJrIjoiOTMwMGE2ODAtYTNkYy00MDI1LWIyZjQtYTgwNjIwM2IzNzgyIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
+    }
+
     const [value, setValue] = useState('article')
   const url2 = 'https://app.powerbi.com/view?r=eyJrIjoiNTEwMjUxMzktMzZjYS00ZjM1LWJhYzYtZDY3Y2I2YzE1ZGRiIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
     return (
@@ -49,10 +57,10 @@ export function ContentIndicators() {
                 <strong className="bg-[#709CB6] rounded-md px-3 pb-2 text-white font-medium">
                 estatísticas de produção
                 </strong>{" "}
-                da Escola de Engenharia
+                {version ? ('da Escola de Engenharia'):('do SENAI CIMATEC')}
             </h1>
             <p className="max-w-[600px] text-lg font-light text-foreground">
-           Produção bibliográfica e técnica, grupos de pesquisa, bolsistas de proatividade e dados sociais da Escola.
+           Produção bibliográfica e técnica, grupos de pesquisa, bolsistas de proatividade e dados sociais da instituição.
             </p>
             
         </div>
@@ -69,13 +77,15 @@ export function ContentIndicators() {
 Produção geral
 </TabsTrigger>
 
-<TabsTrigger
-      value="2"
-      onClick={() => setValue('2')}
-      className=" gap-2 items-center"
-    >
+{version && (
+  <TabsTrigger
+  value="2"
+  onClick={() => setValue('2')}
+  className=" gap-2 items-center"
+>
 Painel da instituição
 </TabsTrigger>
+)}
                 </TabsList>
                 
 
