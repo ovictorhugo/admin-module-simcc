@@ -19,7 +19,7 @@ import { Input } from "../../ui/input";
 import { LinhaTempoDisciplinas } from "./linha-tempo-disciplinas";
 import { PainelDisciplinas } from "./painel-disciplinas";
 import { columnsDepartament } from "../../componentsModal/columns-researchers-departament";
-
+import { DocentesDepartamentoDisplay } from "./docentes-departamento";
 
 
 
@@ -445,108 +445,9 @@ const handleSubmit = async () => {
 
         <TabsContent value="unread" className="mt-0">
         <div className=" overflow-y-auto h-[calc(100vh-115px)] elementBarra ">
-        <CardContent className="flex flex-col justify-between pt-6 ">
-        <Alert className="p-0 mb-4 md:mb-8">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total de docentes 
-                    </CardTitle>
-                    <User className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{researcher.length}</div>
-                    <p className="text-xs text-muted-foreground">
-                    registrados no departamento
-                    </p>
-                  </CardContent>
-                  </Alert>
-
-                  <Alert className="p-6">
-              <div>
-                <div className="text-2xl font-bold uppercase">Docentes vinculados ao departamento</div>
-                <p className="mt-2 text-sm">
-                Adicione ou remova os pesquisadores do departamento
-                </p>
-              </div>
-
-              <div className="gap-6 flex mt-6 items-end">
-
-            
-
-            <div className="grid gap-3 w-full">
-                        <Label htmlFor="name">Pesquisador</Label>
-
-                        <Dialog open={openPopo2}  onOpenChange={setOpenPopo2}>
-                        <DialogTrigger className="w-full">
-                        <Button
-                              variant="outline"
-                              role="combobox"
-                              aria-expanded={openPopo2}
-                              className="w-full justify-between"
-                            >
-                              {pesquisadoreSelecionado
-                                ? researcherSearch.find((framework) => framework.name === pesquisadoreSelecionado.name)?.name
-                                : 'Selecione um pesquisador'}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="z-[9999]" >
-    <DialogHeader>
-      <DialogTitle>Escolher pesquisador</DialogTitle>
-      <DialogDescription>
-        This action cannot be undone. This will permanently delete your account
-        and remove your data from our servers.
-      </DialogDescription>
-    </DialogHeader>
-
-    <div className="border rounded-md px-6 h-12 flex items-center gap-1 border-neutral-200 dark:border-neutral-800">
-                                <MagnifyingGlass size={16} />
-                                <Input
-                                  className="border-0"
-                                  value={input}
-                                  onChange={(e) => setInput(e.target.value)}
-                                  placeholder="Buscar pesquisador"
-                                />
-                              </div>
-
-                              <div className={'max-h-[350px] overflow-y-auto elementBarra'}>
-                              
-                              <div className="flex flex-col gap-1 p-2">
-                                {filteredList.length > 0 ? (
-                                  filteredList.map((props, index) => (
-                                    <Button
-                                      variant={'ghost'}
-                                      key={index}
-                                      className="text-left justify-start"
-                                      onClick={() => {
-                                        setPesquisadorSelecionado(props);
-                                  
-                                        setOpenPopo2(false); // Fechar o popover após a seleção
-                                      }}
-                                    >
-                                      {props.name}
-                                    </Button>
-                                  ))
-                                ) : (
-                            <div className="text-center w-full text-sm">Nenhuma sala encontrada</div>
-                                )}
-                              </div>
-                            </div>
-  </DialogContent>
-
-                        </Dialog>
-                </div>
-
-                <Button onClick={() => handleSubmit()}><Plus size={16}/>Adicionar</Button>
-
-              </div>
-              </Alert>
-        </CardContent>
-
-        <div className="px-6">
-              <DataTableModal columns={columnsDepartament} data={researcher}/>
-              </div>
+          <DocentesDepartamentoDisplay  graduate_program_id={props.dep_id}/>
         </div>
+       
         </TabsContent>
 
         <TabsContent value="dis" className="mt-0 p-4 md:p-8">

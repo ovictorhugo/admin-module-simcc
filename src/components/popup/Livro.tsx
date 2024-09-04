@@ -4,9 +4,12 @@ import {  useContext } from "react";
 import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
 import { Link } from "react-router-dom";
+import { Maximize2, SquareAsterisk } from "lucide-react";
+import { Button } from "../ui/button";
+import { useModal } from "../hooks/use-modal-store";
 
 type Publicacao = {
-    id?: string,
+  
     title?: string | '',
     year?: string,
     isbn?: string,
@@ -18,20 +21,53 @@ type Publicacao = {
   grant_date?: string,
 
   financing?: string,
-  project_name?: string
 
 
-  nature?: string,
+
   oriented?: string,
-  status?: string,
+
 
 
   event_name?: string
    
     participation?: string
  
+    agency_code?: string
+    agency_name?: string
+    nature?: string
+    description?: string
+    end_year?: string
+    id?: string
+    number_academic_masters?: string
+    number_phd?: string
+    number_specialists?: string
+    number_undergraduates?:string
+    project_name?:string
+    start_year?:string
+    status?:string
+    researcher_id?:string
+    production?:Production[]
+    foment?:Forment[]
+    components?:Components[]
+  }
 
-}
+  interface Components {
+    title:string 
+    type:string 
+  }
+
+  interface Production {
+    citations:string 
+    lattes_id:string 
+    name:string
+  }
+
+  interface Forment {
+    agency_code:string
+    agency_name:string
+    nature:string
+  }
+
 
 
 interface ItemsSelecionados {
@@ -121,8 +157,12 @@ const {itemsSelecionados} = useContext(UserContext)
 
 const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecionados);
     const highlightedTitle = highlightText(props.title || '', itemsSelecionados);
+    const highlightedTitleProject = highlightText(props.project_name || '', itemsSelecionados);
+   
+    const {onOpen} = useModal()
+   
     return (
-        <div className="flex  w-full" >
+        <div className="flex group  w-full" >
             
                     <div
                       className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0  ${props.type == 'relatorio-tecnico' && ('bg-[#662D91]')}  ${props.type == 'livro' && ('bg-pink-800')} ${props.type == 'software' && ('bg-[#096670]')} ${props.type == 'marca' && ('bg-[#1B1464]')}  ${( props.nature=='Iniciação Científica') && ('bg-[#8BFBD3]')}
@@ -134,7 +174,9 @@ const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecio
                         ${( props.nature=='Orientacao-De-Outra-Natureza') && ('bg-[#577E74]')}
                         ${( props.nature=='Monografia de Conclusao de Curso Aperfeicoamento e Especializacao') && ('bg-[#2F7F7C]')}
                         ${( props.nature=='Supervisão De Pós-Doutorado') && ('bg-[#46724B]')}
-                      ${( props.type=='patente') && ('bg-[#66B4D0]')} ${props.type == 'capLivro' && ('bg-pink-300')} ${(props.nature == "Congresso" ) && ('bg-[#FF5800]') } ${(props.nature == "Oficina" ) && ('bg-[#FCEE21]') } ${(props.nature == "Simpósio" ) && ('bg-[#D53A2C]') } ${(props.nature == "Encontro" ) && ('bg-[#E9A700]') }  ${(props.nature == "Outra" ) && ('bg-[#7F400B]') } ${(props.nature == "Seminário" ) && ('bg-[#FFBD7B]') }`}
+                      ${( props.type=='patente') && ('bg-[#66B4D0]')} ${props.type == 'capLivro' && ('bg-pink-300')} ${(props.nature == "Congresso" ) && ('bg-[#FF5800]') } ${(props.nature == "Oficina" ) && ('bg-[#FCEE21]') } ${(props.nature == "Simpósio" ) && ('bg-[#D53A2C]') } ${(props.nature == "Encontro" ) && ('bg-[#E9A700]') }  ${(props.nature == "Outra" ) && ('bg-[#7F400B]') } ${(props.nature == "Seminário" ) && ('bg-[#FFBD7B]') }
+                      ${(props.type == 'research-project') && ('bg-[#bae6fd]')}
+                      `}
                     > 
                     </div>
                 
@@ -153,6 +195,49 @@ const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecio
 {props.type == 'relatorio-tecnico' && (
                              <h3 className="font-semibold mb-4 ">{props.project_name}</h3>
                           )}
+
+{props.type == 'research-project' && (
+                           <div className="flex justify-between gap-6">
+                              <h3 className="font-semibold mb-4 ">{props.agency_name}</h3>
+
+                              <div className="h-8 w-8">
+           
+                              <Button
+ onClick={() =>
+  onOpen('project-modal', {
+    agency_code: props.agency_code,
+    agency_name: props.agency_name,
+    nature: props.nature,
+    description: props.description,
+    end_year: props.end_year,
+    id: props.id,
+    number_academic_masters: props.number_academic_masters,
+    number_phd: props.number_phd,
+    number_specialists: props.number_specialists,
+    number_undergraduates: props.number_undergraduates,
+    project_name: props.project_name,
+    start_year: props.start_year,
+    status: props.status,
+    researcher_id: props.researcher_id,
+    production: props.production,
+    foment: props.foment,
+    components: props.components,
+  })
+}
+  variant="outline"
+  size="icon"
+  className="ml-auto hidden group-hover:flex text-sm h-8 w-8 text-gray-500 dark:text-gray-300"
+>
+  <Maximize2 size={16} />
+</Button>
+
+                      </div>
+                           </div>
+                          )}
+
+{props.type == 'research-project' && (
+                           <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">{highlightedTitleProject}</p>
+                        )}
 
 {props.type == 'patente' && (
                              <h3 className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal "> {highlightedTitle}</h3>
@@ -179,7 +264,7 @@ const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecio
 
                     <div className="flex items-center flex-wrap mt-4 gap-4">
                         <div className="flex items-center gap-4">
-                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><CalendarBlank size={12}/>{props.year}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><CalendarBlank size={12}/>{props.year}{props.type == 'research-project' && (`${props.start_year} - ${props.end_year == '' ? ('atual'):(props.end_year)}`)}</div>
                         
 
                         {(props.isbn != undefined) && (
@@ -189,6 +274,10 @@ const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecio
 
                         {props.type == 'software' && (
                             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><AppWindow size={12}/>Software</div>
+                        )}
+
+{props.type == 'research-project' && (
+                            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><SquareAsterisk size={12}/>{props.nature}</div>
                         )}
 
 {props.type == 'marca' && (
@@ -228,6 +317,8 @@ const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecio
                                  
                                    {(props.grant_date == 'NaT' || props.grant_date == "None" || props.grant_date == "") ? "Sem concessão" : props.grant_date}</div>
                         )}
+
+
                        
                         
                     </div>

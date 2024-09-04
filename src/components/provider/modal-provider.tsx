@@ -28,6 +28,7 @@ import { ConfirmDeleteDepartamento } from "../modals/confirm-delete-departamento
 import { ImportDisciplina } from "../modals/import-disciplina";
 import { ConfirmDeleteResearcherDepartament } from "../modals/confirm-delete-researcher-departament";
 import { MinhaArea } from "../minha-area/minha-area";
+import { ProjectModal } from "../modals/project-modal";
 
 const ModalContent = () => {
   const { type } = useModal();
@@ -74,6 +75,8 @@ const ModalContent = () => {
         return <ConfirmDeleteResearcherDepartament/>
       case 'minha-area':
         return <MinhaArea/>
+      case 'project-modal':
+        return <ProjectModal/>
 
     default:
       return null;

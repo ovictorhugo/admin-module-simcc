@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
 
 import { Button } from "../ui/button";
-import {  ChevronLeft,  Copy, GraduationCap,  User } from "lucide-react";
+import {  ChevronLeft,  Copy, GraduationCap,  User, UserCog } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -18,7 +18,7 @@ import { toast } from "sonner"
 import { CargosFuncoes } from "./components/cargos-funcoes";
 import { GraficoAnaliseUsuarios } from "./graficos/grafico-analise-usuarios";
 import { Label } from "../ui/label";
-import { ArrowElbowDownRight, ChartBar, MagnifyingGlass } from "phosphor-react";
+import { ArrowElbowDownRight, ChartBar, MagnifyingGlass, Student } from "phosphor-react";
 
 
 
@@ -26,9 +26,9 @@ interface TotalPatrimonios {
    count_gp: string,
    count_gpr: string,
    institution_id: string,
-   count_r:string
-   count_d:string 
-   count_gps:string 
+   count_r:string,
+   count_d:string,
+   count_gps:string,
    count_t:string
  }
 
@@ -272,7 +272,7 @@ const [directoryJson, setDirectoryJson] = useState("");
                     <CardTitle className="text-sm font-medium">
                       Total de Técnicos
                     </CardTitle>
-                    <GraduationCap className="h-4 w-4 text-muted-foreground" />
+                    <UserCog className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{total.map((props) => props.count_t)}</div>
@@ -288,7 +288,7 @@ const [directoryJson, setDirectoryJson] = useState("");
                     <CardTitle className="text-sm font-medium">
                       Total de discentes
                     </CardTitle>
-                    <GraduationCap className="h-4 w-4 text-muted-foreground" />
+                    <Student className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{total.map((props) => props.count_gps)}</div>

@@ -1,4 +1,4 @@
-import {  Book, ChevronDown, ChevronLeft, ChevronUp, Copyright, File,  Globe,  Info, MapPinIcon, SlidersHorizontal, Star, Ticket, Users } from "lucide-react";
+import {  ArrowLeftFromLine, ArrowRightFromLine, Book, ChevronDown, ChevronLeft, ChevronUp, Copyright, File,  Globe,  Info, LayoutDashboard, MapPinIcon, SlidersHorizontal, Star, Ticket, Users, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import {  Link, useLocation, useNavigate } from "react-router-dom";
@@ -10,7 +10,6 @@ import { Alert } from "../ui/alert";
 import { Search } from "../search/search";
 import { useModalResult } from "../hooks/use-modal-result";
 import { useModal } from "../hooks/use-modal-store";
-import { DisplayItem } from "../dashboard/components/display-item";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import Highcharts from "highcharts";
@@ -18,8 +17,6 @@ import HighchartsReact from "highcharts-react-official";
 import HC_wordcloud from 'highcharts/modules/wordcloud';
 
 import { BarChart, Bar, XAxis, LabelList, CartesianGrid,   } from 'recharts';
-
-
 
 import {
   ChartConfig,
@@ -32,6 +29,12 @@ import {
 import { GraficoArtigosPorQualis } from "../dashboard/graficos/grafico-qualis";
 import { DocentesPrograma } from "./docentes-programa";
 import { IndicatorsGraduate } from "./indicators-graduate";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { DialogHeader } from "../ui/dialog";
+import { ScrollArea } from "../ui/scroll-area";
+import { DisplayItem } from "../dashboard/components/display-item";
+import { DocentesGraduate } from "../dashboard/components/docentes-graduate";
+import { DiscentesGraduate } from "../dashboard/components/discentes-graduate";
 
 interface PalavrasChaves {
   term: string;
@@ -381,11 +384,23 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
   );
 
   const [tab, setTab] = useState('all')
+  const [tab2, setTab2] = useState('all')
+
   useEffect(() => {
     if(!has_visualizar_indicadores_pos_graduacao) {
       setTab('all')
     } 
 }, [permission]);
+
+const [isOpenSheet, setIsOpenSheet] = useState(false); 
+const [expand, setExpand] = useState(false)
+
+const has_editar_informacoes_programa = permission.some(
+  (perm) => perm.permission === 'editar_informacoes_programa'
+);
+
+const graduate_program_id = graduatePrograms && graduatePrograms[0] ? graduatePrograms[0].graduate_program_id : null;
+
 
     return(
         <main className="flex flex-1 flex-col gap-4 md:gap-8 ">
@@ -415,9 +430,73 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${
 
               
                 </TabsList>
-               
+               {has_editar_informacoes_programa && (
+                 <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
+                 <SheetTrigger>
+   <Button onClick={() => setExpand(false)} className="h-8" size={'sm'}><LayoutDashboard size={16}/>Painel administrativo</Button>
+   </SheetTrigger>
+ 
+   <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 ${expand ? ('min-w-[80vw]'):('min-w-[50vw]')}`}>
+   <Tabs defaultValue={tab2} value={tab2} className="h-full" >
+   <DialogHeader className="h-[50px] justify-center px-4 border-b">
+ 
+  <div className="flex items-center gap-3">
+  <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+          <Button className="h-8 w-8" onClick={() => setExpand(!expand)} variant={'outline'} size={'icon'}>{expand ? (<ArrowRightFromLine size={16}/>):(<ArrowLeftFromLine size={16}/>)}</Button>
+          </TooltipTrigger>
+          <TooltipContent> {expand ? ('Recolher'):('Expandir')}</TooltipContent>
+        </Tooltip>
+        </TooltipProvider>
+ 
+       
+        <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+          <Button className="h-8 w-8" variant={'outline'}  onClick={() => setIsOpenSheet(false)} size={'icon'}><X size={16}/></Button>
+          </TooltipTrigger>
+          <TooltipContent> Fechar</TooltipContent>
+        </Tooltip>
+        </TooltipProvider>
+           <div className="flex items-center flex-1  w-full justify-between">
+ 
+ 
+           <div className="flex items-center gap-3 ml-auto"> 
+           <TabsList >
+              <TabsTrigger value="all" onClick={() => setTab2('all')} className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
+                <TabsTrigger value="unread" onClick={() => setTab2('unread')} className="text-zinc-600 dark:text-zinc-200">Docentes</TabsTrigger>
+                <TabsTrigger value="movimentacao-bens" onClick={() => setTab2('movimentacao-bens')} className="text-zinc-600 dark:text-zinc-200">Discentes</TabsTrigger>
+                </TabsList>
+           
+            
+           </div>
+           </div>
+  </div>
           
-                <Button size="sm">Button</Button>
+ 
+         
+         </DialogHeader>
+
+         <ScrollArea className="relative whitespace-nowrap h-[calc(100vh-50px)] ">
+         <TabsContent value="all" className="">
+             
+               </TabsContent>
+
+               <TabsContent value="unread" className="">
+               <DocentesGraduate graduate_program_id={graduate_program_id || ''}/>
+               </TabsContent>
+
+               <TabsContent value="movimentacao-bens" className="">
+               <DiscentesGraduate graduate_program_id={graduate_program_id || ''}/>
+               </TabsContent>
+         </ScrollArea>
+ </Tabs>
+         </SheetContent>
+                 </Sheet>
+               )}
+          
+              
               </div>
             </div>
 

@@ -240,7 +240,7 @@ const handleRemoveItem = (indexToRemove: any) => {
                 <FilterYearPopUp
                 onFilterUpdate={handleResearcherUpdate}/>
               
-                        <Accordion  type="single" collapsible >
+                        <Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
                 <div className="flex mb-2">
                 <HeaderResultTypeHome title="Gráfico de quantidade total de produção técnica" icon={<ChartBar size={24} className="text-gray-400" />}>
@@ -371,7 +371,7 @@ const handleRemoveItem = (indexToRemove: any) => {
                 </AccordionItem>
                 </Accordion>
 
-                <Accordion   type="single" collapsible >
+                <Accordion defaultValue="item-1"   type="single" collapsible >
                 <AccordionItem value="item-1" >
                 <div className="flex mb-2">
                 <div className="flex gap-4 w-full  justify-between items-center ">
@@ -443,7 +443,7 @@ const handleRemoveItem = (indexToRemove: any) => {
                 </AccordionItem>
                 </Accordion>
 
-                <Accordion  type="single" collapsible >
+                <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >
                 <div className="flex mb-2">
                 <div className="flex gap-4 w-full  justify-between items-center ">

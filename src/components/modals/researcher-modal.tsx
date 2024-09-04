@@ -106,7 +106,7 @@ import { RelatorioTecnicoResearcherPopUp } from "../popup/relatorio-tecnico-rese
 import { SpeakerResearcherPopUp } from "../popup/speaker-researcher";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Boxes, Copy, MoreHorizontal, Plus } from "lucide-react";
+import { Boxes, Copy, FolderKanban, MoreHorizontal, Plus } from "lucide-react";
 
 import QRCode from "react-qr-code";
 
@@ -125,6 +125,7 @@ import { toast } from "sonner"
 import { Link } from "react-router-dom";
 
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { ResearchProject } from "../popup/research-project";
 
 export function ResearcherModal() {
    
@@ -266,7 +267,7 @@ setItensSelecionadosPopUp(itemsSelecionados)
 
 const convertJsonToCsv = (json: any[]): string => {
   const items = json;
-  const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+  const replacer = (_: string, value: any) => (value === null ? '' : value); // Handle null values
   const header = Object.keys(items[0]);
   const csv = [
     '\uFEFF' + header.join(';'), // Add BOM and CSV header
@@ -627,7 +628,7 @@ function generateNameVariations(name: string): string[] {
       onClick={() => setValue('research-project')}
       className="flex gap-2 items-center"
     >
-      <Boxes size={16} className="" />
+      <FolderKanban size={16} className="" />
       Projetos de pesquisa
     </TabsTrigger>
  
@@ -687,7 +688,7 @@ function generateNameVariations(name: string): string[] {
   <TabsContent value="research-project">
   {researcher.slice(0, 1).map((user) => {
                 return(
-                 <div></div>
+                 <ResearchProject name={String(user.id)}/>
                   )
                 })}
   </TabsContent>

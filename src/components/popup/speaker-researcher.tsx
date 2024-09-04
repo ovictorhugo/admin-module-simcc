@@ -172,12 +172,12 @@ const handleRemoveItem = (indexToRemove: any) => {
     return(
         <>
   
-            <div className="mb-[150px]">
+            <div className="">
 
                 <FilterYearPopUp
                 onFilterUpdate={handleResearcherUpdate}/>
               
-                        <Accordion  type="single" collapsible >
+                        <Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
                 <div className="flex mb-2">
                 <HeaderResultTypeHome title="Gráfico de quantidade total de participações em eventos" icon={<ChartBar size={24} className="text-gray-400" />}>

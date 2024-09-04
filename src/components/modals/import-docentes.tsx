@@ -1,15 +1,20 @@
-import { ArrowUUpLeft, FileXls, Upload } from "phosphor-react";
+import { FileXls, Upload } from "phosphor-react";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { DialogHeader} from "../ui/dialog";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { UserContext } from "../../context/context";
 import * as XLSX from 'xlsx';
 import { useDropzone } from 'react-dropzone';
-import { Label } from "../ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Progress } from "../ui/progress"; // Assuming you have a ProgressBar component
+
+import { Sheet, SheetContent } from "../ui/sheet";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { ArrowRight, Info, LoaderCircle, X } from "lucide-react";
+import { ScrollArea } from "../ui/scroll-area";
+import { Link } from "react-router-dom";
+import { DataTableModal } from "../componentsModal/data-table";
+import { columnsDocentes } from "../componentsModal/columns-docentes";
 
 interface Patrimonio {
     matric: string;
@@ -36,8 +41,13 @@ export function ImportDocentes() {
     const [fileInfo, setFileInfo] = useState({ name: '', size: 0 });
     const [data, setData] = useState<Patrimonio[]>([]);
     const [year, setYear] = useState(new Date().getFullYear());
-    const [semester, setSemester] = useState('1');
-    const [uploadProgress, setUploadProgress] = useState(0);
+
+    const [semester, setSemester] = useState(() => {
+        const currentMonth = new Date().getMonth(); // Obtém o mês atual (0 a 11)
+        return currentMonth < 6 ? '1' : '2'; // Define o semestre como '1' se estiver entre janeiro e junho, caso contrário '2'
+      });
+
+      const [uploadProgress, setUploadProgress] = useState(false);
 
     const onDrop = useCallback((acceptedFiles: any) => {
         handleFileUpload(acceptedFiles);
@@ -71,18 +81,18 @@ export function ImportDocentes() {
 
             const headerMap: { [key: string]: keyof Patrimonio } = {
                 'MATRIC': 'matric',
-                'INSC UFMG': 'inscUFMG',
+                'InscUfmg': 'inscUFMG',
                 'NOME': 'nome',
-                'GÊNERO': 'genero',
-                'SITUAÇÃO': 'situacao',
+                'SEXO': 'genero',
+                'SIT': 'situacao',
                 'RT': 'rt',
                 'CLAS': 'clas',
-                'CARGO': 'cargo',
-                'CLASSE': 'classe',
+                'DenoCarg': 'cargo',
+                'DenoClasse': 'classe',
                 'REF': 'ref',
-                'TITULAÇÃO': 'titulacao',
-                'ENTRADA NA UFMG': 'entradaNaUFMG',
-                'PROGRESSÃO': 'progressao'
+                'DenoTit': 'titulacao',
+                'DtIngOrg': 'entradaNaUFMG',
+                'DataProg': 'progressao'
             };
 
             const jsonData = rows.map((row: any) => {
@@ -100,14 +110,16 @@ export function ImportDocentes() {
                     titulacao: '',
                     entradaNaUFMG: '',
                     progressao: '',
-                    year_charge: '',
-                    semester: ''
+                    year_charge: String(year),
+                    semester: String(semester)
                 };
                 headers.forEach((header, index) => {
                     const key = headerMap[header];
                     if (key) {
-                        if ((header === 'ENTRADA NA UFMG' || header === 'PROGRESSÃO') && typeof row[index] === 'number') {
-                            obj[key] = XLSX.SSF.format('dd/mm/yyyy', row[index]);
+                        if ((header === 'DtIngOrg' || header === 'DataProg') && typeof row[index] === 'number') {
+                            // Converte o número serial em uma data
+                            const date = XLSX.SSF.format('dd/mm/yyyy', new Date(Math.round((row[index] - 25569) * 86400 * 1000)));
+                            obj[key] = date;
                         } else if (header === 'CLAS') {
                             obj[key] = row[index] === 0 ? '0' : String(row[index]);
                         } else {
@@ -134,6 +146,7 @@ export function ImportDocentes() {
         setData(updatedData);
     }, [year, semester]);
 
+
     const handleSubmitPatrimonio = async () => {
         try {
             if (data.length === 0) {
@@ -146,6 +159,8 @@ export function ImportDocentes() {
                 });
                 return;
             }
+
+            setUploadProgress(true)
 
             const urlPatrimonioInsert = urlGeralAdm + `docentes`;
 
@@ -170,6 +185,9 @@ export function ImportDocentes() {
                         onClick: () => console.log("Fechar"),
                     },
                 });
+
+
+                setUploadProgress(false)
             }
 
             setData([]);
@@ -177,6 +195,7 @@ export function ImportDocentes() {
                 name: '',
                 size: 0,
             });
+            setUploadProgress(false)
 
         } catch (error) {
             console.error('Erro ao processar a requisição:', error);
@@ -187,6 +206,8 @@ export function ImportDocentes() {
                     onClick: () => console.log("Fechar"),
                 },
             });
+
+            setUploadProgress(false)
         }
     };
 
@@ -199,52 +220,51 @@ export function ImportDocentes() {
     console.log(data)
     console.log(year)
 
+    
+
     return (
-        <Dialog open={isModalOpen} onOpenChange={onClose}>
-            <DialogContent className="min-w-[40vw]">
-                <DialogHeader className="pt-8 px-6 flex flex-col items-center">
-                    <DialogTitle className="text-2xl text-center font-medium">
-                        Importar arquivo .xls
-                    </DialogTitle>
-                    <DialogDescription className="text-center text-zinc-500 max-w-[350px]">
-                        Atualize os itens do na Vitrine com a planilha .xls gerada no SICPAT
-                    </DialogDescription>
-                </DialogHeader>
+        <Sheet open={isModalOpen} onOpenChange={onClose}>
+        <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[50vw]`}>
+        <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-b-neutral-600">
+ 
+ <div className="flex items-center gap-3">
+ <TooltipProvider>
+ <Tooltip>
+  <TooltipTrigger asChild>
+  <Button className="h-8 w-8" variant={'outline'}  onClick={() => onClose()} size={'icon'}><X size={16}/></Button>
+  </TooltipTrigger>
+  <TooltipContent> Fechar</TooltipContent>
+ </Tooltip>
+ </TooltipProvider>
+ 
+ <div className="flex ml-auto items-center w-full justify-between">
+ 
+   <div className="flex ml-auto items-center gap-3">
+ 
+  
+      </div>
+ </div>
+ 
+ </div>
+  
+ </DialogHeader>
 
-                <div className={`grid gap-8 w-full sm:grid-cols-2 grid-cols-1`}>
-                    <div className="grid gap-3 w-full">
-                        <Label htmlFor="year">Ano</Label>
-                        <Select value={String(year)} onValueChange={(value) => setYear(Number(value))}>
-                            <SelectTrigger className="">
-                                <SelectValue placeholder="Selecione o ano" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {years.map((year) => (
-                                    <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
+ <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
+ <div className="mb-8">
+                      <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
+                      Indicadores 
+                        </p>
 
-                    <div className="grid gap-3 w-full">
-                        <Label htmlFor="semester">Semestre</Label>
-                        <Select value={semester} onValueChange={(value) => setSemester(value)}>
-                            <SelectTrigger className="">
-                                <SelectValue placeholder="Selecione o semestre" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value={'1'}>Primeiro</SelectItem>
-                                <SelectItem value={'2'}>Segundo</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
+                        <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+                          Atualizar dados dos docentes
+                        </h1>
+                        <Link to={'/dashboard/informacoes'} target="_blank"  className="inline-flex mt-2 items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Veja o modelo do documento .xls<ArrowRight size={12}/></Link>
+                      </div>
 
-                <div className="mb-4">
-                    <div {...getRootProps()} className="border-dashed mb-6 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm cursor-pointer transition-all gap-3 w-full flex items-center justify-center hover:bg-neutral-100 mt-4">
+                      <div {...getRootProps()} className="border-dashed mb-3 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-4">
                         <input {...getInputProps()} />
-                        <div className="p-4 border rounded-md">
-                            <FileXls size={24} className="whitespace-nowrap" />
+                        <div className="p-4  border rounded-md">
+                            <FileXls size={24} className=" whitespace-nowrap" />
                         </div>
                         {isDragActive ? (
                             <p>Solte os arquivos aqui ...</p>
@@ -257,30 +277,36 @@ export function ImportDocentes() {
                         {fileInfo.name && (
                             <div className="justify-center flex items-center gap-3">
                                 <FileXls size={16} />
-                                <p className="text-center text-zinc-500 text-sm">
+                                <p className=" text-center  text-zinc-500 text-sm">
                                     Arquivo selecionado: <strong>{fileInfo.name}</strong> ({(fileInfo.size / 1024).toFixed(2)} KB)
                                 </p>
                             </div>
                         )}
                     </div>
-                </div>
 
-                {uploadProgress > 0 && (
-                    <div className="mb-4">
-                        <Label>Progresso do upload</Label>
-                        <Progress value={uploadProgress} max={100} />
+
+                    {data.length > 0 && (
+                    <div className="">
+                        <div className="my-6 border-b dark:border-b-neutral-800"></div>
+                        <h5 className="font-medium text-xl mb-4">Tabela de dados</h5>
+                    <DataTableModal columns={columnsDocentes} data={data} />
+                    <div className="mt-2 mb-6 border-b dark:border-b-neutral-800"></div>
+
+                    
                     </div>
                 )}
 
-                <DialogFooter>
-                    <Button onClick={() => onClose()} variant={'ghost'}>
-                        <ArrowUUpLeft size={16} className="" />Cancelar
+                    <div className="flex items-center justify-between">
+    <div className="text-sm font-gray-500">
+    {uploadProgress ? ('Isso pode demorar bastante, não feche a página.'):('')}
+    </div>
+<Button onClick={() => handleSubmitPatrimonio()} className="ml-auto flex mt-3">
+                        {uploadProgress ? (<LoaderCircle size={16} className="an animate-spin" />):(<Upload size={16} className="" />)}  {uploadProgress ? ('Atualizando dados'):('Atualizar dados')} 
                     </Button>
-                    <Button onClick={() => handleSubmitPatrimonio()}>
-                        <Upload size={16} className="" />Atualizar dados
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+
+</div>
+ </ScrollArea>
+            </SheetContent>
+        </Sheet>
     );
 }

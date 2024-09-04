@@ -104,7 +104,7 @@ function parseTerms(encoded: string): { term: string }[] {
 
     const { onOpen } = useModal();
 
-    const { searchType, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, setValoresSelecionadosExport, setMessagesMaria, itemsSelecionados , setItensSelecionados, setSugestoes, sugestoes, itemsSelecionadosPopUp} = useContext(UserContext)
+    const { searchType, setMode, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, mode,  setValoresSelecionadosExport, setMessagesMaria, itemsSelecionados , setItensSelecionados, setSugestoes, sugestoes, itemsSelecionadosPopUp} = useContext(UserContext)
 
   
     const [input, setInput] = useState("");
@@ -205,6 +205,7 @@ async function processMessageToChatGPT(messageObject:any) {
 
       queryUrl.set('type_search', searchType);
       queryUrl.set('terms', termsArray);
+      setMode(input)
       navigate({
         pathname: '/resultados',
         search: queryUrl.toString(),

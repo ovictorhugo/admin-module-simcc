@@ -1,11 +1,11 @@
-import { CornerDownLeft, Info, Mic, Send, User } from "lucide-react";
+import {  Info,  Send, User } from "lucide-react";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Label } from "../ui/label";
 import { Skeleton } from "../ui/skeleton";
-import { useContext, useEffect, useState } from "react";
-import axios from 'axios';
+import { useContext,  useState } from "react";
+
 import { ScrollArea } from "../ui/scroll-area";
 import { useTheme } from "next-themes";
 import { SymbolEE } from "../svg/SymbolEE";
@@ -15,6 +15,7 @@ import { SelectTypeSearch } from "../search/select-type-search";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Alert } from "../ui/alert";
+import { useModal } from "../hooks/use-modal-store";
 
 
 interface Query {
@@ -129,11 +130,11 @@ export function Maria() {
     if (searchType === 'name') {
       urlTermPesquisadores = `${urlGeral}maria/researcher?query=${question}`;
     } else if (searchType === 'article') {
-      urlTermPesquisadores = `${urlGeral}maria/researcher/articlequery=${question}`;
+      urlTermPesquisadores = `${urlGeral}maria/researcher/article?query=${question}`;
     } else if (searchType === 'book') {
       urlTermPesquisadores = `${urlGeral}maria/researcher/book?query=${question}`; //
     } else if (searchType === 'area') {
-      urlTermPesquisadores = `${urlGeral}maria/researcher/`;
+      urlTermPesquisadores = `${urlGeral}maria/researcher/area?query=${question}`;
     } else if (searchType === 'speaker') {
       urlTermPesquisadores = `${urlGeral}maria/researcher/event?query=${question}`; //
     } else if (searchType === 'patent') {
@@ -186,31 +187,14 @@ export function Maria() {
     fetchData();
 };
 
+const {onOpen} = useModal()
 
     return(
-        <main className="w-full p-4 md:p-8 backgroundMaria">
-             <main className="grid h-full flex-1 gap-4 md:gap-8 overflow-auto  md:grid-cols-2 lg:grid-cols-4">
-             <div
-            className="relative w-full hidden flex-col items-start gap-8 md:flex" x-chunk="dashboard-03-chunk-0"
-          >
-            <fieldset className="grid w-full gap-6 rounded-lg border dark:border-neutral-800 bg-white dark:bg-neutral-950 p-4">
-                  <legend className="-ml-1 px-1 text-sm font-medium">
-                    Configurações
-                  </legend>
-                  <div className="grid gap-3">
-                </div>
-            </fieldset>
+        <main className="w-full p-4 md:p-8 pb-2 md:pb-2 backgroundMaria">
+             <main className="grid h-full flex-1 gap-4 md:gap-8 overflow-auto   ">
+           
 
-            <fieldset className="grid w-full h-full gap-6 rounded-lg border dark:border-neutral-800 bg-white dark:bg-neutral-950 p-4">
-                  <legend className="-ml-1 px-1 text-sm font-medium">
-                    Exemplos
-                  </legend>
-                  <div className="grid gap-3">
-                </div>
-            </fieldset>
-            </div>
-
-            <div className="relative  flex h-full min-h-[50vh] flex-col rounded-xl bg-muted/50  lg:col-span-3">
+            <div className="relative  flex h-full min-h-[50vh] flex-col rounded-xl bg-muted/50  ">
             
         {message.length == 0 ? (
  <div className="h-full">
@@ -230,27 +214,49 @@ export function Maria() {
           </div>
           </div>
         ):(
- <ScrollArea className="flex flex-col flex-1 h-full  ">
+ <ScrollArea className="flex flex-col flex-1 h-full px-6   ">
             <div>
               {message.map((props, index) => {
                 return(
-                  <div className={`flex gap-3 ${index % 2 == 0 ? ('ml-auto flex-row-reverse text-right'):('')}`}>
-                      <Avatar className="cursor-pointer rounded-md  h-6 w-6">
-                      <AvatarImage  className={'rounded-md h-6 w-6'} src={`${user?.photo_url}`} />
-                      <AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
-                  </Avatar>
+                  <div className={`flex gap-3 pb-6 ${index % 2 == 0 ? ('ml-auto flex-row-reverse text-right'):('')}`}>
+                      
+
+                  {props.user == 'MarIA' ? (
+                   <div className="rounded-md h-6 w-6 flex items-center justify-center">
+{theme == 'dark '? (<SymbolEEWhite/>):(<SymbolEE/>)}
+                   </div>
+                  ):(
+                    <Avatar className="cursor-pointer rounded-md  h-6 w-6">
+                    <AvatarImage  className={'rounded-md h-6 w-6'} src={`${user?.photo_url}`} />
+                    <AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
+                </Avatar>
+                  )}
 
                  <div className={`flex flex-col`}>
-                 <Alert className={`p-4 px-6 border dark:border-neutral-800 max-w-[500px] rounded-md ${index % 2 == 0 ? ('rounded-tr-none'):('rounded-tl-none')}`}>
+                 <Alert className={`p-4 px-6 border dark:border-neutral-800 max-w-[700px] rounded-md ${index % 2 == 0 ? ('rounded-tr-none'):('rounded-tl-none')}`}>
                     <p className="font-medium">{props.user}</p>
                     <p className="text-gray-500 text-sm">{props.query}</p>
                   </Alert>
 
                   {props.user == 'MarIA' && (
-                    <div className="flex fles-wrap gap-3">
-                      
+                    <div className="flex flex-wrap gap-3 mt-3 max-w-[900px]">
+                      {props.researcher?.map((item) => (
+                         <div 
+                         key={index} 
+                         onClick={() => {
+                          onOpen('researcher-modal', {name:item.name})
+                         }}
+                         className="border-neutral-200 cursor-pointer bg-white dark:bg-neutral-950 border dark:border-neutral-800 py-2 px-2 rounded-md text-xs flex gap-2 items-center">
+                         <Avatar className="cursor-pointer rounded-md  h-6 w-6">
+     <AvatarImage  className={'rounded-md h-6 w-6'} src={`${urlGeral}ResearcherData/Image?name=${item.name}`} />
+     <AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
+ </Avatar> {item.name}
+                       </div>
+                      ))}
                     </div>
                   )}
+
+                  
                   <p className="text-xs text-gray-500 pt-3">{props.time}</p>
                  </div>
                
@@ -276,6 +282,7 @@ export function Maria() {
               <Label htmlFor="message" className="sr-only">
                 Message
               </Label>
+
               <Textarea
                value={question}
                onChange={(e) => setQuestion(e.target.value)}

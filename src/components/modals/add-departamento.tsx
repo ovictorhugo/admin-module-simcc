@@ -51,7 +51,7 @@ export function AddDepartamento() {
 
   useEffect(() => {
     if(typeModal == 'edit-departamento') {
-      setDepId(data.dep_id || ' ')
+      setDepId(data.dep_id || uuid.replace(/\D/g, "").slice(0, 10))
       setOrgCod(data.org_cod  || '')
       setDepNom(data.dep_nom || '')
       setDepDes(data.dep_des || '')

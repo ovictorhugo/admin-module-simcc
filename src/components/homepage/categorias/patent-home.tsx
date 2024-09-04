@@ -15,6 +15,7 @@ import { Alert } from "../../ui/alert";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { BlockItemGeral } from "./book-home/block-item-geral";
 import { HeaderResult } from "../header-results";
+import { GraficoPatente } from "./patent-home/grafico-patent";
 
 type Patente = {
     id: string,
@@ -104,7 +105,7 @@ export function PatentHome() {
              <FilterYearPopUp
                 onFilterUpdate={handleResearcherUpdate}/>
 
-<Accordion  type="single" collapsible >
+<Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
                 <div className="flex mb-2">
                 <HeaderResultTypeHome title="Gráfico de quantidade total de produção técnica" icon={<ChartBar size={24} className="text-gray-400" />}>
@@ -117,7 +118,7 @@ export function PatentHome() {
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
-                     ''
+                     <GraficoPatente publicacoes={publicacoes}/>
                     )}
                     </AccordionContent>
                 </AccordionItem>

@@ -1,30 +1,17 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext } from "react";
 import { useModal } from "../hooks/use-modal-store";
 import { UserContext } from "../../context/context";
-import unorm from 'unorm';
-import { Buildings, CalendarBlank, DownloadSimple, File, Globe, Hash, LinkBreak, LinkSimple, Quotes } from "phosphor-react";
-import { Link } from "react-router-dom";
-import { AvatarResearcher } from "../homepage/categorias/researchers-home/avatar-researcher";
-import { ScrollArea } from "../ui/scroll-area";
-import { BracketsCurly,  Copy, FileCsv,  Plus,  ShareNetwork } from "phosphor-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
-import { Button } from "../ui/button";
-import { Asterisk, MoreHorizontal, SquareAsterisk, User, X } from "lucide-react";
-import QRCode from "react-qr-code";
 
-type OpenAlex = {
-    pdf_url:string
-    issn: string
-    landing_page_url: string
-    abstract: string
-    cited_by_count:string, 
-    language:string, 
-    keywords: any[], 
-    authorships: any[]
-    host_organization_name: string
-    doi: string
-  
-  }  
+import { Buildings, CalendarBlank, DownloadSimple, File, Globe,  LinkBreak, Quotes } from "phosphor-react";
+import { Link } from "react-router-dom";
+
+import { ScrollArea } from "../ui/scroll-area";
+
+import { Button } from "../ui/button";
+import { Asterisk, User, X } from "lucide-react";
+
+
+
 
   interface ItemsSelecionados {
     term: string;
@@ -122,10 +109,7 @@ export function ArticlesModal() {
     const { onClose, isOpen, type: typeModal, data } = useModal();
     const isModalOpen = isOpen && typeModal === "articles-modal";
 
-    const [article, setArticle] = useState<OpenAlex[]>([])
-    /////////////////
-
-
+    
   
 
   let qualisColor = {
@@ -142,17 +126,6 @@ export function ArticlesModal() {
     'None': 'bg-[#560B11]',
     'SQ': 'bg-[#560B11]'
 }
-
-const normalizedTitle = data.title ? 
-    data.title
-        .replace(/&quot;/g, '"')
-        .replace(/&#10;/g, '\n')
-        .toLowerCase() 
-    : '';
-
-    const [isVisible, setIsVisible] = useState(false);
-    const [apiVisible, setApiVisible] = useState(false);
-    const urlApi = `${urlGeral}researcherName?name=`
 
 
     const teste = highlightText(data.title || '', itemsSelecionados)
@@ -274,7 +247,7 @@ const normalizedTitle = data.title ?
                       
                        <div className="my-6 border-b dark:border-b-neutral-800"></div>
                         <h4 className="font-medium text-xl mb-4">Resumo</h4>
-                       <p className="text-sm text-gray-500 flex flex-wrap">{data.abstract}</p>
+                       <p className="text-sm text-gray-500 flex flex-wrap text-justify">{data.abstract}</p>
                         </div>  
                     )}
 

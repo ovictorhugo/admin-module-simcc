@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 
 
 
@@ -69,7 +69,7 @@ export function OrientacoesResearcherPopUp(props:Props) {
     };
 
    
-    
+    const [type, setType] = useState('')
 
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
    
@@ -111,9 +111,23 @@ export function OrientacoesResearcherPopUp(props:Props) {
      
 
           //conectores 
+          const [filteredPublicacoes, setFilteredPublicacoes] = useState<Livros[]>([]);
 
+            // Função para normalizar strings, removendo acentos e caracteres especiais
+  const normalizeString = (str: string) =>
+    str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove diacríticos
+      .toLowerCase(); // Transforma em minúsculas para comparação case-insensitive
 
-    const [type, setType] = useState('')
+         useEffect(() => {
+    const filtered = publicacoes.filter((pub) =>
+      type
+        ? normalizeString(pub.nature).includes(normalizeString(type))
+        : true
+    );
+    setFilteredPublicacoes(filtered);
+  }, [type, publicacoes]);
 
     return(
         <>
@@ -132,6 +146,7 @@ export function OrientacoesResearcherPopUp(props:Props) {
                 <SelectValue placeholder="Escolha o tipo de orientação" />
             </SelectTrigger>
             <SelectContent>
+            <SelectItem value=" "> <div className="flex gap-4 items-center mr-2"><div className="border dark:border-neutral-800 flex rounded-sm h-4 w-4 min-w-4"></div> Todas as orientações</div></SelectItem>
                 <SelectItem value="Iniciação científica"> <div className="flex gap-4 items-center mr-2"><div className="bg-[#8BFBD3] flex rounded-sm h-4 w-4 min-w-4"></div> Iniciação científica</div></SelectItem>
                 <SelectItem value="Dissertação De Mestrado"><div className="flex gap-4 items-center mr-2"><div className="bg-[#67A896] flex rounded-sm h-4 w-4 min-w-4"></div>Dissertação De Mestrado</div></SelectItem>
                 <SelectItem value="Tese de Doutorado"><div className="flex gap-4 items-center mr-2"><div className="bg-[#425450] flex rounded-sm h-4 w-4 min-w-4"></div>Tese de Doutorado</div></SelectItem>
@@ -150,7 +165,7 @@ export function OrientacoesResearcherPopUp(props:Props) {
               </div>
              </div>
               
-                        <Accordion  type="single" collapsible >
+                        <Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
                 <div className="flex mb-2">
                     <HeaderResultTypeHome title="Gráfico de orientações em andamento e concluídas " icon={<ChartBar size={24} className="text-gray-400" />}>
@@ -165,7 +180,7 @@ export function OrientacoesResearcherPopUp(props:Props) {
                     ):(
                       <GraficoOrientacoes
                     
-                      livros={publicacoes} // Passa um array com um único item para o componente
+                      livros={filteredPublicacoes} // Passa um array com um único item para o componente
                     />
                       
                     )}
@@ -232,7 +247,7 @@ export function OrientacoesResearcherPopUp(props:Props) {
                           <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
                          ):(
                         <BookBlockPopUp
-                        articles={publicacoes}
+                        articles={filteredPublicacoes}
                         distinct={distinct}
                         type={'orientacoes'}
                         />
@@ -244,7 +259,7 @@ export function OrientacoesResearcherPopUp(props:Props) {
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
                         <TableReseracherOrientacoesPopup
-                        orientacoes={publicacoes}
+                        orientacoes={filteredPublicacoes}
                         />
                       )
                     )}

@@ -82,7 +82,7 @@ export function ConfirmDeleteResearcherGraduateProgram() {
              } else {
                console.error('Erro ao enviar dados para o servidor.');
                toast("Tente novamente!", {
-                   description: "Erro ao cadastrar pesquisador ao programa",
+                   description: "Erro ao remover pesquisador do programa de pós-graduação",
                    action: {
                      label: "Fechar",
                      onClick: () => console.log("Undo"),

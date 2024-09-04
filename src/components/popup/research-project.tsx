@@ -1,60 +1,77 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react"
+import { UserContext } from "../../context/context"
+import { Skeleton } from "../ui/skeleton"
+import { FilterYearPopUp } from "./filters-year-popup"
 
-
-
-  type Livros = {
-
-    id: string,
-    grant_date: string,
-    title: string,
-    year: string,
-    financing: string,
-    project_name: string
-  }
-
-  import {
+import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
     
   } from "../../components/ui/accordion"
-  import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
-import { Skeleton } from "../ui/skeleton";
-
-import { ChartBar,  SquaresFour, Rows, Book,  ArrowUDownLeft } from "phosphor-react";
-
-import { Button } from "../ui/button";
-import { UserContext } from "../../context/context";
-import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
-
-import { TableReseracherArticleshome } from "../homepage/categorias/articles-home/table-articles";
-
-import { BookBlockPopUp } from "./book-block-popup";
-import { FilterYearPopUp } from "./filters-year-popup";
-import { GraficoRelatorio } from "./graficos/grafico-relatório";
-
+import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home"
+import { ArrowUDownLeft, ChartBar, Rows, SquaresFour } from "phosphor-react"
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import { BookBlockPopUp } from "./book-block-popup"
+import { Button } from "../ui/button"
+import { FolderKanban } from "lucide-react"
 
 type Filter = {
-  year: number[]
-  qualis: string[]
-}
-
-type Props = {
-  name:string
-}
-
-export function RelatorioTecnicoResearcherPopUp(props:Props) {
-
-    const {urlGeral,  itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados} = useContext(UserContext)
+    year: number[]
+    qualis: string[]
+  }
   
-   
+  type Props = {
+    name:string
+  }
+
+  type Livros = {
+    agency_code: string
+    agency_name: string
+    nature: string
+    description: string
+    end_year: string
+    id: string
+    number_academic_masters: string
+    number_phd: string
+    number_specialists: string
+    number_undergraduates:string
+    project_name:string
+    start_year:string
+    status:string
+    researcher_id:string
+    production:Production[]
+    foment:Forment[]
+    components:Components[]
+  }
+
+  interface Components {
+    title:string 
+    type:string 
+  }
+
+  interface Production {
+    citations:string 
+    lattes_id:string 
+    name:string
+  }
+
+  interface Forment {
+    agency_code:string
+    agency_name:string
+    nature:string
+  }
+
+  
+export function ResearchProject(props:Props) {
+
+    const {urlGeral, searchType, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados} = useContext(UserContext)
     const [loading, isLoading] = useState(false)
-  
-    const [distinct] = useState(false)
     const [publicacoes, setPublicacoes] = useState<Livros[]>([]);
+
     const [typeVisu, setTypeVisu] = useState('block')
-  
+
     const [filters, setFilters] = useState<Filter[]>([]);
 
     // Função para lidar com a atualização de researcherData
@@ -64,15 +81,11 @@ export function RelatorioTecnicoResearcherPopUp(props:Props) {
 
     };
 
-   
-    
-  
 
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
    
-    let urlTermPublicacoes = `${urlGeral}researcher_report?researcher_id=${props.name}&year=${yearString}`;
+    let urlTermPublicacoes = `${urlGeral}researcher_research_project?researcher_id=${props.name}&term=&year=${yearString}`;
 
-   
     useMemo(() => {
         const fetchData = async () => {
             try {
@@ -100,54 +113,57 @@ export function RelatorioTecnicoResearcherPopUp(props:Props) {
         }, [ urlTermPublicacoes]);
 
 
-
         const items = Array.from({ length: 12 }, (_, index) => (
             <Skeleton key={index} className="w-full rounded-md h-[170px]" />
           ));
 
+      
+          const [distinct] = useState(false)
+          //conectores 
+
+
     
-
-
-
     return(
-        <>
-  
-            <div className="mb-[150px]">
-
-                <FilterYearPopUp
+        <div className="">
+            
+            <FilterYearPopUp
                 onFilterUpdate={handleResearcherUpdate}/>
-              
-                        <Accordion  type="single" collapsible defaultValue="item-1" >
+
+
+<Accordion  type="single" collapsible defaultValue="item-1" >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <HeaderResultTypeHome title="Gráfico de orientações em andamento e concluídas " icon={<ChartBar size={24} className="text-gray-400" />}>
+                <div className="flex mb-2">
+                <HeaderResultTypeHome title="Gráfico de quantidade total de projetos de pesquisa" icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
+
+                    <AccordionTrigger>
+                
                     </AccordionTrigger>
+                    </div>
                     <AccordionContent >
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
-                      <GraficoRelatorio
-                      publicacoes={publicacoes}
-                      />
+                     ''
                     )}
                     </AccordionContent>
                 </AccordionItem>
                 </Accordion>
 
+
                 <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <div className="flex gap-4 w-full justify-between items-center ">
+                  <div className="flex mb-2">
+                  <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
-            <Book size={24} className="text-gray-400" />
-            <p className="text-sm font-bold">Todos os relatórios técnicos</p>
+            <FolderKanban size={24} className="text-gray-400" />
+            <p className="text-sm font-bold">Todos os projetos de pesquisa</p>
             </div>
 
-            <div className="flex gap-3  items-center h-full">
-            {itemsSelecionadosPopUp != itemsSelecionados && (
+            <div className="flex gap-3 mr-3  items-center h-full">
+            {(itemsSelecionadosPopUp != itemsSelecionados && searchType == '') && (
               <div className="flex gap-3  items-center">
-                <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+                <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="ghost" size={'icon'}>
                             <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
                         </Button>
 
@@ -155,18 +171,22 @@ export function RelatorioTecnicoResearcherPopUp(props:Props) {
               </div>
             )}
 
-            <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+            <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu == 'block' ? 'ghost' : 'outline' }  size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
                         </Button>
 
-                        <Button  onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
+                        <Button  onClick={() => setTypeVisu('block')}  variant={typeVisu == 'block' ? 'outline' : 'ghost' } size={'icon'}>
                             <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
             </div>
 
           </div>
+
+                  <AccordionTrigger>
+                  
                    
                     </AccordionTrigger>
+                  </div>
                     <AccordionContent >
 
 {typeVisu == 'block' ? (
@@ -176,7 +196,7 @@ export function RelatorioTecnicoResearcherPopUp(props:Props) {
                             350: 1,
                             750: 1,
                             900: 2,
-                            1200: 3
+                            1200: 2
                         }}
                     >
                                      <Masonry gutter="16px">
@@ -192,7 +212,7 @@ export function RelatorioTecnicoResearcherPopUp(props:Props) {
                         <BookBlockPopUp
                         articles={publicacoes}
                         distinct={distinct}
-                        type={'relatorio-tecnico'}
+                        type={'research-project'}
                         />
                          )
                       )
@@ -201,19 +221,12 @@ export function RelatorioTecnicoResearcherPopUp(props:Props) {
                         
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
-                        <TableReseracherArticleshome
-                        articles={publicacoes}
-                        />
+                       ''
                       )
                     )}
                     </AccordionContent>
                 </AccordionItem>
                 </Accordion>
-
-              
-                       
-            </div>
-
-        </>
+        </div>
     )
 }

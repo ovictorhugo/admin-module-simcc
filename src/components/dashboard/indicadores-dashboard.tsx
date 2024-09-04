@@ -3,7 +3,7 @@ import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { Alert } from "../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
@@ -13,14 +13,9 @@ import { Label as LabelInput } from "../ui/label";
 
 import {
   Label,
-  PolarGrid,
-  PolarRadiusAxis,
-  RadialBar,
-  RadialBarChart,
   Cell,
   PieChart,
   Pie,
-  Sector,
   CartesianGrid,
   Bar, 
   LabelList,
@@ -37,10 +32,13 @@ import {
 
 
 interface TotalPatrimonios {
-    count_gp: string,
-    count_gpr: string,
-    institution_id: string,
-    count_r:string
+  count_gp: string,
+  count_gpr: string,
+  institution_id: string,
+  count_r:string
+  count_d:string 
+  count_gps:string 
+  count_t:string
   }
 
   interface Bolsistas {
@@ -129,7 +127,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "../../components/ui/alert-dialog"
 
 
@@ -162,12 +159,12 @@ import { GraficoProgressaoDocentes } from "./graficos/grafico-progressao-docente
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { ScrollArea } from "../ui/scroll-area";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
-import { Input } from "../ui/input";
+
 import { GraficoTecnicosRt } from "./graficos/grafico-tecnicos-rt";
 import { GraficoTecnicosGenero } from "./graficos/grafico-tecnicos-genero";
 import { GraficoProgressaoTecnicos } from "./graficos/grafico-progressao-tecnicos";
 import { GraficoTecnicosCargo } from "./graficos/grafico-tecnico-cargo";
-import { LinhaTempoDocentes } from "./components/linha-tempo";
+
 
 const chartConfig = {
  
@@ -330,9 +327,7 @@ export function IndicadoresDashboard() {
     //
 console.log(urlBolsistas)
 console.log(bolsistas)
-    const [open, setOpen] = useState(false)
-    const [open2, setOpen2] = useState(false)
-
+  
 
     //
 
@@ -407,7 +402,7 @@ console.log(bolsistas)
 
          const [yearDocentes, setYearDocentes] = useState<YearSemester[]>([]);
 
-         let urlYearDocentes = urlGeralAdm + `docentes/semestres`
+         let urlYearDocentes = urlGeralAdm + `docentes`
  
          console.log(urlYearDocentes)
      
@@ -565,7 +560,7 @@ useMemo(() => {
 }, [urlVisaoPrograma]);
 
 
-
+ const url = 'https://app.powerbi.com/view?r=eyJrIjoiNTBjNmQ3NWQtODNmZC00MWZkLThjNWEtZjU5YmE2ZDkwMjVkIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
     return(
         <>
         {isModalOpen && (
@@ -593,19 +588,19 @@ useMemo(() => {
              
                 <TabsTrigger value="unread" className="text-zinc-600 dark:text-zinc-200">Docentes</TabsTrigger>
                 <TabsTrigger value="tec" className="text-zinc-600 dark:text-zinc-200">Técnicos</TabsTrigger>
-                <TabsTrigger value="dis" className="text-zinc-600 dark:text-zinc-200">Discentes</TabsTrigger>
+              
                 </TabsList>
                
           
-                <Button size="sm"><ChartBar size={16}/>Indicadores Power Bi</Button>
+                <Link target="_blank" to={url}><Button size="sm"><ChartBar size={16}/>Indicadores Power Bi</Button></Link>
               </div>
             </div>
 
             </div>
 
             <TabsContent value="all" className="h-auto flex flex-col gap-4 md:gap-8  mt-2">
-            {total.map((props) => {
-                  return(
+           
+           
                     <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
                     <Alert className="p-0">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -615,7 +610,7 @@ useMemo(() => {
                     <User className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{props.count_r}</div>
+                    <div className="text-2xl font-bold">{total.map((props) => props.count_r)}</div>
                     <p className="text-xs text-muted-foreground">
                       registrados
                     </p>
@@ -630,7 +625,7 @@ useMemo(() => {
                     <UserCog className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{taes.length}</div>
+                    <div className="text-2xl font-bold">{total.map((props) => props.count_t)}</div>
                     <p className="text-xs text-muted-foreground">
                       registrados
                     </p>
@@ -642,10 +637,10 @@ useMemo(() => {
                     <CardTitle className="text-sm font-medium">
                       Total de discentes
                     </CardTitle>
-                    <GraduationCap className="h-4 w-4 text-muted-foreground" />
+                    <Student className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{props.count_gp}</div>
+                    <div className="text-2xl font-bold">{total.map((props) => props.count_gps)}</div>
                     <p className="text-xs text-muted-foreground">
                       cadastrados
                     </p>
@@ -660,15 +655,14 @@ useMemo(() => {
                     <GraduationCap className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{props.count_gp}</div>
+                    <div className="text-2xl font-bold">{total.map((props) => props.count_gp)}</div>
                     <p className="text-xs text-muted-foreground">
                       cadastrados
                     </p>
                   </CardContent>
                   </Alert>
                     </div>
-                  )
-                })}
+                 
 
                 <Alert className=" bg-cover bg-no-repeat bg-center"  style={{ backgroundImage: `url(${bg_popup})` }}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -691,55 +685,13 @@ useMemo(() => {
                   </div>
                 </Alert>
 
-                <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-                <Alert className="">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                      Regime de trabalho
-                    </CardTitle>
-                    <CardDescription>Carga horária semanal</CardDescription>
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Add to library</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-
-
-               
-                    </Alert>
-                
-                <Alert className="lg:col-span-2 h-[400px]">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                      Perfil da carreira
-                    </CardTitle>
-                    <CardDescription>Classe de trabalho</CardDescription>
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Add to library</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-
-                    </Alert>
-
-                   
-                </div>
+                <div className="w-full h-screen flex  rounded-md">
+                <iframe
+                title="Report Section"
+                className="w-full h-screen rounded-md mb-8 border dark:border-neutral-800 "
+                src={url}
+            ></iframe>
+            </div>
             </TabsContent>
 
             <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8">
@@ -762,7 +714,7 @@ useMemo(() => {
                 
                 
                   <div className="mt-2">
-                  <Link to={'http://www.bi.cnpq.br/painel/mapa-fomento-cti/'} target="_blank"  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como extrair os bolsistas CNPq<ArrowRight size={12}/></Link>
+               
         
         <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
           Painel dos{" "}
@@ -781,48 +733,7 @@ useMemo(() => {
 
                   </div>
 
-                 <div className="grid grid-cols-1">
-                 <LinhaTempoDocentes items={items} />
-                 </div>
-
-
-                 <Alert className="flex gap-6">
-                 <div className="grid gap-3 w-full">
-                <LabelInput >Departamento</LabelInput>
-                <Input
-                  name="dep_nom"
-                 
                
-                  id="dep_nom"
-                  type="text"
-                  className="flex flex-1"
-                />
-              </div>
-
-              <div className="grid gap-3 w-full">
-                <LabelInput >Ano</LabelInput>
-                <Input
-                  name="dep_nom"
-                 
-               
-                  id="dep_nom"
-                  type="text"
-                  className="flex flex-1"
-                />
-              </div>
-
-              <div className="grid gap-3 w-full">
-                <LabelInput >Semestre</LabelInput>
-                <Input
-                  name="dep_nom"
-                 
-               
-                  id="dep_nom"
-                  type="text"
-                  className="flex flex-1"
-                />
-              </div>
-                 </Alert>
 
                   <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
                     <Alert className="lg:col-span-2 h-[400px]">
@@ -1630,7 +1541,7 @@ useMemo(() => {
 
             <TabsContent value="tec" className="h-auto flex flex-col gap-4 md:gap-8">
             <div className="mt-2">
-                  <Link to={''}  className="inline-flex items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
+               
         
         <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
           Painel dos{" "}

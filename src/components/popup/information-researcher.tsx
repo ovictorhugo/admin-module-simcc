@@ -161,7 +161,7 @@ if (size.width > 1600) {
                   )}
   
 
-  {(props.orcid != '0' )  && (
+  {(props.orcid != '0' && props.orcid != ''  )  && (
     <Link  to={`https://orcid.org/${props.orcid}`} target="_blank" className="bg-[#A6CE39] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
         <IdentificationBadge size={12} className="" />
         Orcid: {props.orcid ? props.orcid.replace(/[^\d-]/g, '') : props.orcid}

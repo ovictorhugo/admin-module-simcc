@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 
-export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program' | 'edit-graduate-program' | 'add-researcher-graduation' | 'add-researcher-csv' | 'add-student-graduation' | 'add-grupo-pesquisa' | 'filters' | 'pesquisadores-selecionados' | 'list-student-program' | 'add-researcher-graduation-two' | 'gratuate-program' | 'confirm-delete-researcher-graduate-program' | 'reset-peso-producoes' | 'confirm-delete-student-graduate-program' | 'import-bolsistas' | 'import-docentes' | 'import-taes' | 'add-departamento' | 'confirm-delete-departamento' | 'edit-departamento' | 'import-disciplina' | 'confirm-delete-researcher-departament' | 'minha-area'
+export type ModalType = "search" | "add-graduate-program" | "cookies" | "map-researchers-modal" | 'researcher-modal' | 'articles-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program' | 'edit-graduate-program' | 'add-researcher-graduation' | 'add-researcher-csv' | 'add-student-graduation' | 'add-grupo-pesquisa' | 'filters' | 'pesquisadores-selecionados' | 'list-student-program' | 'add-researcher-graduation-two' | 'gratuate-program' | 'confirm-delete-researcher-graduate-program' | 'reset-peso-producoes' | 'confirm-delete-student-graduate-program' | 'import-bolsistas' | 'import-docentes' | 'import-taes' | 'add-departamento' | 'confirm-delete-departamento' | 'edit-departamento' | 'import-disciplina' | 'confirm-delete-researcher-departament' | 'minha-area' | 'project-modal'
 
 interface ModalData {
   id?: string,
@@ -57,6 +57,8 @@ graduate_program_id?: string
     acronym?:string
     site?:string
 
+    id_dep?:string
+
     type_reset?:string
 
     dep_id?:string
@@ -68,8 +70,45 @@ graduate_program_id?: string
     dep_tel?: string
     img_data?:string
     dep_sigla?: string
- 
-}
+
+
+ agency_code?: string
+    agency_name?: string
+    nature?: string
+  
+    end_year?: string
+   
+    number_academic_masters?: string
+    number_phd?: string
+    number_specialists?: string
+    number_undergraduates?:string
+    project_name?:string
+    start_year?:string
+    status?:string
+
+    production?:Production[]
+    foment?:Forment[]
+    components?:Components[]
+  }
+
+  interface Components {
+    title:string 
+    type:string 
+  }
+
+  interface Production {
+    citations:string 
+    lattes_id:string 
+    name:string
+  }
+
+  interface Forment {
+    agency_code:string
+    agency_name:string
+    nature:string
+  }
+
+
 
 interface ModalStore {
   type: ModalType | null;

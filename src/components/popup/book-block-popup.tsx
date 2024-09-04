@@ -40,30 +40,32 @@ export function BookBlockPopUp(propsGeral:Articles) {
             id={props.id}
             title={props.title}
             year={props.year}
-            isbn= {props.isbn}
-            publishing_company= {props.publishing_company}
-
-
+            isbn={props.isbn}
+            publishing_company={props.publishing_company}
             type={propsGeral.type}
-
             event_name={props.event_name}
-  
-    nature={props.nature}
-    participation={props.participation}
-   
-
-        
+            nature={props.nature}
+            participation={props.participation}
+            grant_date={props.grant_date}
+            financing={props.financing}
+            project_name={props.project_name}
+            oriented={props.oriented}
+            status={props.status}
+            agency_code={props.agency_code}
+            agency_name={props.agency_name}
+            description={props.description}
+            end_year={props.end_year}
+            number_academic_masters={props.number_academic_masters}
+            number_phd={props.number_phd}
+            number_specialists={props.number_specialists}
+            number_undergraduates={props.number_undergraduates}
+            start_year={props.start_year}
+            researcher_id={props.researcher_id}
+            production={props.production}
+            foment={props.foment}
+            components={props.components}
+          />
           
-          grant_date={props.grant_date}
-        
-          financing={props.financing}
-          project_name={props.project_name}
-        
-
-          oriented={props.oriented}
-          status={props.status}
-
-        />
         );
         })}
         </Masonry>

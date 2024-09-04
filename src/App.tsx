@@ -104,7 +104,7 @@ const [idDocumentBarema, setIdDocumentBarema] = useState('')
 const [isCollapsed, setIsCollapsed] = useState(false)
 const [navCollapsedSize, setNavCollapsedSize] = useState(0)
 const [defaultLayout, setDefaultLayout] = useState([0,440,655])
-const [mode, setMode] = useState('user')
+const [mode, setMode] = useState('')
 
 useEffect(() => {
  if(searchType == "") {

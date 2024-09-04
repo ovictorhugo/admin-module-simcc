@@ -67,7 +67,7 @@ const terms = queryUrl.get('terms');
     const [researcherOpenAlex , setResearcherOpenAlex] = useState<ResearchOpenAlex[]>([])
     const [showInput, setShowInput] = useState(true);
     const isModalOpen = isOpen && type === "search";
-    const {setValoresSelecionadosExport,  searchType, setSearchType, urlGeral, itemsSelecionados , setItensSelecionados, setValorDigitadoPesquisaDireta} = useContext(UserContext)
+    const {setValoresSelecionadosExport, setMode, searchType, setSearchType, urlGeral, itemsSelecionados , setItensSelecionados, setValorDigitadoPesquisaDireta} = useContext(UserContext)
     const db = getFirestore();
     const [input, setInput] = useState('')
 
@@ -347,6 +347,7 @@ console.log(termosformatados)
         }
     
         onOpenResult('researchers-home')
+        setMode('')
     onClose()
     }
     

@@ -223,7 +223,7 @@ const handleRemoveItemCap = (indexToRemove: any) => {
                 <FilterYearPopUp
                 onFilterUpdate={handleResearcherUpdate}/>
               
-                        <Accordion  type="single" collapsible >
+                        <Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
                 <div className="flex mb-2">
                    <HeaderResultTypeHome title="Gráfico de quantidade total de livros e capítulos" icon={<ChartBar size={24} className="text-gray-400" />}>

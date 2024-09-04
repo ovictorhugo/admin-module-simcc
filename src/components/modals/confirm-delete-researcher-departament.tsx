@@ -22,29 +22,24 @@ export function ConfirmDeleteResearcherDepartament() {
 
      const id_delete = String(dataModal.id_delete)
  
-     const [id_program , setIdProgram] = useState(dataModal && dataModal.graduate_program_id)
+     const [id_program , setIdProgram] = useState(dataModal && dataModal.id_dep)
      const [lattes_id, setLattesId] = useState(dataModal && dataModal.lattes_id)
 
      useEffect(() => {
-       setIdProgram(dataModal.graduate_program_id || '')
+       setIdProgram(dataModal?.id_dep || '')
        setLattesId(dataModal?.lattes_id || '')
      }, [dataModal]);
  
-     const handleSubmitDelete = async ( researcher_id:string, id_programaa:string) => {
-
+     const handleSubmitDelete = async () => {
 
        try {
          const data = [
            {
-             dep_id: id_programaa,
-             researcher_id:researcher_id,
-             }
+             dep_id: id_program,
+             lattes_id:lattes_id
+           }
          ]
-
-         console.log(data)
- 
-         console.log('dataa reesfs', data)
- 
+   
          let urlProgram = urlGeralAdm + 'ResearcherRest/departament'
  
  
@@ -56,7 +51,7 @@ export function ConfirmDeleteResearcherDepartament() {
                method: 'DELETE',
                headers: {
                  'Access-Control-Allow-Origin': '*',
-                 'Access-Control-Allow-Methods': 'POST',
+                 'Access-Control-Allow-Methods': 'DELETE',
                  'Access-Control-Allow-Headers': 'Content-Type',
                  'Access-Control-Max-Age': '3600',
                  'Content-Type': 'application/json'
@@ -67,24 +62,20 @@ export function ConfirmDeleteResearcherDepartament() {
              if (response.ok) {
               
                toast("Dados enviados com sucesso", {
-                   description: "Pesquisador removido no programa de pós-graduação",
+                   description: "Pesquisador removido do departamento",
                    action: {
                      label: "Fechar",
                      onClick: () => console.log("Undo"),
                    },
                  })
              
-                 onOpen('add-researcher-graduation')
                  
-         const {urlGeralAdm} = useContext(UserContext)
-         const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
-      
-       
+       onClose()
               
              } else {
                console.error('Erro ao enviar dados para o servidor.');
                toast("Tente novamente!", {
-                   description: "Erro ao cadastrar pesquisador ao programa",
+                   description: "Erro ao remover pesquisador do departamento",
                    action: {
                      label: "Fechar",
                      onClick: () => console.log("Undo"),
@@ -124,7 +115,7 @@ export function ConfirmDeleteResearcherDepartament() {
         <strong className="bg-red-500 text-white hover:bg-red-600 transition duration-500 font-medium">Deletar</strong> pesquisador(a) {dataModal.nome} do departamento
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
-          Você tem certeza de que deseja prosseguir com a exclusão do pesquisador que está atualmente vinculado a este programa de pós-graduação?
+          Você tem certeza de que deseja prosseguir com a exclusão do pesquisador que está atualmente vinculado a este departamento?
           </DialogDescription>
             </DialogHeader>
 
@@ -133,7 +124,7 @@ export function ConfirmDeleteResearcherDepartament() {
             <ArrowUUpLeft size={16} className="" />Cancelar
               </Button>
 
-              <Button variant={'destructive'}    onClick={() =>handleSubmitDelete(lattes_id, id_program)}>
+              <Button variant={'destructive'}    onClick={() =>handleSubmitDelete()}>
               <Trash size={16} className="" />Deletar
               </Button>
             </DialogFooter>

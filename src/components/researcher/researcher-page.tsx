@@ -1,4 +1,4 @@
-import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, OctagonAlert, TrendingUp } from "lucide-react";
+import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, FolderKanban, OctagonAlert, TrendingUp } from "lucide-react";
 import {  useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
 
@@ -48,6 +48,7 @@ import { Skeleton } from "../ui/skeleton";
 import jsPDF from "jspdf";
 import { ResearcherIndicators } from "./researcher-indicators";
 import { AlertDescription, AlertTitle } from "../ui/alert";
+import { ResearchProject } from "../popup/research-project";
 
 type Research = {
   among: number,
@@ -343,6 +344,12 @@ console.log(urlPublicacoesPorPesquisador)
         const has_visualizar_indices_pesquisador = permission.some(
           (perm) => perm.permission === 'visualizar_indices_pesquisador'
         );
+      
+        useEffect(() => {
+          if(!has_visualizar_indices_pesquisador) {
+            setTab('all')
+          } 
+      }, [permission]);
       
 
 const convertJsonToCsv = (json: any[]): string => {
@@ -947,7 +954,7 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
         onClick={() => setValue('research-project')}
         className="flex gap-2 items-center"
       >
-        <Boxes size={16} className="" />
+        <FolderKanban size={16} className="" />
         Projetos de pesquisa
       </TabsTrigger>
    
@@ -1007,7 +1014,7 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
   <TabsContent value="research-project">
     {researcher.slice(0, 1).map((user) => {
                   return(
-                   <div></div>
+                    <ResearchProject name={String(user.id)}/>
                     )
                   })}
     </TabsContent>

@@ -23,7 +23,7 @@ import { SegurancaMinhaArea } from "./seguranca-minha-area";
 import { LinhaTempoMinhaArea } from "./linha-tempo-minha-area";
 import { auth } from '../../lib/firebase';
 import {  signOut } from 'firebase/auth';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   DropdownMenu,
@@ -245,6 +245,9 @@ console.log(urlTermPesquisadores)
     (perm) => perm.permission === 'visualizar_gerencia_modulo_administrativo'
   );
 
+
+  const location = useLocation();
+
     return(
         <Sheet open={isModalOpen} onOpenChange={() => {
           onClose()
@@ -333,7 +336,10 @@ console.log(urlTermPesquisadores)
         <DropdownMenuContent className="min-w-[200px]  gap-1 flex flex-col ">
     <DropdownMenuLabel>Conta pessoal</DropdownMenuLabel>
     <DropdownMenuItem className="flex gap-2 items-center" onClick={() => {
-       history('/');
+      
+      if (location.pathname.includes('dashboard')) {
+        history('/');
+      }
        setRole('')
        setPermission([])
        localStorage.removeItem('role');

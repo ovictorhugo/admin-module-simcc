@@ -103,7 +103,7 @@ export function SpeakerHome() {
               <FilterYearPopUp
                 onFilterUpdate={handleResearcherUpdate}/>
 
-<Accordion  type="single" collapsible >
+<Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
                 <div className="flex mb-2">
                 <HeaderResultTypeHome title="Gráfico de quantidade total de participação em eventos" icon={<ChartBar size={24} className="text-gray-400" />}>

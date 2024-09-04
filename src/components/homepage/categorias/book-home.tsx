@@ -14,6 +14,7 @@ import { GraficoLivros } from "../../popup/graficos/grafico-livros";
 import { TableReseracherBookPopup } from "../../popup/columns/table-books-popup";
 import { BlockItemGeral } from "./book-home/block-item-geral";
 import { HeaderResult } from "../header-results";
+import { Switch } from "../../ui/switch";
 
 type Patente = {
     id: string,
@@ -44,13 +45,13 @@ export function BookHome() {
         setFilters(newResearcherData);
   
     }
-
+    const [distinct, setDistinct] = useState(false)
+    const [distinct2, setDistinct2] = useState(false)
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
     const {urlGeral, valoresSelecionadosExport} = useContext(UserContext)
 
-    let urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=&year=${yearString}&term=${valoresSelecionadosExport}`;
-    const [distinct] = useState(false)
+    let urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=&year=${yearString}&term=${valoresSelecionadosExport}&distinct=${distinct ? '1' : '0'}`;
 
     useMemo(() => {
         const fetchData = async () => {
@@ -86,7 +87,7 @@ export function BookHome() {
 
     ///cap
     
-    let urlTermCap = `${urlGeral}book_chapter_production_researcher?researcher_id=&year=${yearString}&term=${valoresSelecionadosExport}`
+    let urlTermCap = `${urlGeral}book_chapter_production_researcher?researcher_id=&year=${yearString}&term=${valoresSelecionadosExport}&distinct=${distinct2 ? '1' : '0'}`
 
    
     useMemo(() => {
@@ -155,7 +156,7 @@ export function BookHome() {
              <FilterYearPopUp
                 onFilterUpdate={handleResearcherUpdate}/>
 
-<Accordion  type="single" collapsible >
+<Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
                 <div className="flex mb-2">
                 <HeaderResultTypeHome title="Gráfico de quantidade total de livros e capítulos" icon={<ChartBar size={24} className="text-gray-400" />}>
@@ -184,7 +185,17 @@ export function BookHome() {
             </div>
 
             <div className="flex gap-3 mr-3  items-center h-full">
-           
+            <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
+                        <p>Livros:</p>
+                        Iguais
+                    <Switch
+                     checked={distinct}
+                     onCheckedChange={(value) => setDistinct(value)}
+
+                />
+
+                Distintos
+                    </div>
 
             <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu == 'block' ? 'ghost' : 'outline' } size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
@@ -255,7 +266,17 @@ export function BookHome() {
             </div>
 
             <div className="flex gap-3 mr-3  items-center h-full">
-           
+            <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
+                        <p>Capítulos de livros:</p>
+                        Iguais
+                    <Switch
+                     checked={distinct2}
+                     onCheckedChange={(value) => setDistinct2(value)}
+
+                />
+
+                Distintos
+                    </div>
 
             <Button onClick={() => setTypeVisu2('rows')}  variant={typeVisu2 == 'block' ? 'ghost' : 'outline' } size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
@@ -264,6 +285,8 @@ export function BookHome() {
                         <Button  onClick={() => setTypeVisu2('block')}  variant={typeVisu2 == 'block' ? 'outline' : 'ghost' }  size={'icon'}>
                             <SquaresFour size={16} className=" whitespace-nowrap" />
                         </Button>
+
+                       
             </div>
 
           </div>

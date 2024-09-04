@@ -25,7 +25,7 @@ import {  ChevronsUpDown, User} from "lucide-react"
 import { useTheme } from "next-themes"
 import { SymbolEEWhite } from "../svg/SymbolEEWhite"
 import { SymbolEE } from "../svg/SymbolEE"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
   
 
@@ -68,9 +68,9 @@ const fetchDataPerm = async (role_id:string) => {
 };
 
 
-const history = useNavigate();
+const history = useNavigate()
 
-
+const location = useLocation()
   
   return (
     <DropdownMenu>
@@ -110,7 +110,9 @@ const history = useNavigate();
         <DropdownMenuContent className="min-w-[200px] ml-4 gap-1 flex flex-col mt-4">
     <DropdownMenuLabel>Conta pessoal</DropdownMenuLabel>
     <DropdownMenuItem className="flex gap-2 items-center" onClick={() => {
-       history('/');
+        if (location.pathname.includes('dashboard')) {
+          history('/');
+        }
        setRole('')
        setPermission([])
        localStorage.removeItem('role');
