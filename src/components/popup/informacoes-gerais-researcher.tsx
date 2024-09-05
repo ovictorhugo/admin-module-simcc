@@ -231,7 +231,7 @@ export function InformacoesGeraisResearcher(props:Research) {
                </div>
        
 
-          {props.departments.length != 0 && (
+          {props.departments && props.departments.length != 0 && (
 
           props.departments.slice(0,1).map((item) => (
             <div>
