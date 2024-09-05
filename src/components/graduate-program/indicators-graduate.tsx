@@ -11,7 +11,7 @@ export function IndicatorsGraduate() {
     let url = 'https://app.powerbi.com/view?r=eyJrIjoiNTEwMjUxMzktMzZjYS00ZjM1LWJhYzYtZDY3Y2I2YzE1ZGRiIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
 
     if (!version) {
-        url = ''
+        url = 'https://app.powerbi.com/view?r=eyJrIjoiZWYwOGJjZjctMjUwZi00MmViLTllYzQtNGI5OTgxMzVhMjFmIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9&pageName=ReportSection309e0a94f2ddc295a361'
     }
     const [value, setValue] = useState('article')
   let url2 = 'https://app.powerbi.com/view?r=eyJrIjoiNTEwMjUxMzktMzZjYS00ZjM1LWJhYzYtZDY3Y2I2YzE1ZGRiIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'

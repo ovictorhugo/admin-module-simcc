@@ -726,7 +726,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                     <CardHeader className="flex p-10 flex-row items-center justify-between space-y-0 pb-2">
                     <div>
                     <CardTitle className="text-sm font-medium">
-                      Total de  {VisaoPrograma.map((props) => (<>{props.researcher}</>))} docentes
+                      Total de  {VisaoPrograma.map((props) => (<>{props.researcher}</>))} pesquisadores
                     </CardTitle>
                     <CardDescription>{version ? ('na Escola de Engenharia'):('no SENAI CIMATEC')}</CardDescription>
                    
