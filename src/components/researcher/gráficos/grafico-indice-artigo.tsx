@@ -130,26 +130,29 @@ export function GraficoIndiceArticle(props: Articles) {
             <CartesianGrid vertical={false} horizontal={false} />
             <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-            {availableQualis.map((key) => (
-              chartData.some(d => d[key] > 0) && (
-                <Bar
-                  key={key}
-                  dataKey={key}
-                  fill={chartConfig[key].color}
-                  stackId="a"
-                  radius={4}
-                >
-                  <LabelList
-                
-                    position="top"
-                    formatter={(value) => (value ? value.toFixed(2) : '0')}
-                    fontSize={12}
-                    className="fill-foreground"
-                  />
-                </Bar>
-              )
-            ))}
-            
+            {availableQualis.map((key, index) => (
+  chartData.some(d => d[key] > 0) && (
+    <Bar
+      key={key}
+      dataKey={key}
+      fill={chartConfig[key].color}
+      stackId="a"
+      radius={4}
+    >
+      
+      {index === chartData.length - 1 && (
+        <LabelList
+          position="top"
+          formatter={(value) => (value ? value.toFixed(2) : '0')}
+          offset={12}
+          className="fill-foreground"
+          fontSize={12}
+        />
+      )}
+    </Bar>
+  )
+))}
+
           </BarChart>
         </ResponsiveContainer>
       </ChartContainer>

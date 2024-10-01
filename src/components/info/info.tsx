@@ -281,7 +281,7 @@ export function Info() {
                         className="p-0 rounded-t-none"  x-chunk="dashboard-05-chunk-4"
                       >
                          <CardHeader className="flex flex-row items-start bg-neutral-100 dark:bg-neutral-800">
-                         <div className='flex gap-2 items-center text-sm text-gray-500'>O CONECTEE é uma plataforma desenvolvida pela Escola de Engenharia da Universidade Federal de Minas Gerais (UFMG) com o objetivo de centralizar e visualizar de forma abrangente os dados dos pesquisadores da instituição. Integrando informações provenientes de diversas fontes como Lattes, Sucupira, Diretório dos Grupos de Pesquisa (DGP), OpenAlex e Journal Citation Reports (JCR), o CONECTEE fornece uma visão detalhada e acessível das competências e produções acadêmicas da escola. Todas as informações de produção bibliográfica e técnica apresentadas, foram retiradas da Plataforma Lattes com autorização do CNPq e OpenAlex.</div>
+                         <div className='flex gap-2 items-center text-sm text-gray-500'>O {version ? ('Conectee'):('Iapós')} é uma plataforma desenvolvida {version ? ('pela Escola de Engenharia da Universidade Federal de Minas Gerais (UFMG'):('pelo SENAI CIMATEC')} com o objetivo de centralizar e visualizar de forma abrangente os dados dos pesquisadores da instituição. Integrando informações provenientes de diversas fontes como Lattes, Sucupira, Diretório dos Grupos de Pesquisa (DGP), OpenAlex e Journal Citation Reports (JCR), o CONECTEE fornece uma visão detalhada e acessível das competências e produções acadêmicas da escola. Todas as informações de produção bibliográfica e técnica apresentadas, foram retiradas da Plataforma Lattes com autorização do CNPq e OpenAlex.</div>
                          </CardHeader>
 
                          <CardContent className="p-6 text-sm">
@@ -300,7 +300,7 @@ export function Info() {
                  
                  </div>
                  <div className='flex gap-2 items-center text-sm text-gray-500'>A plataforma possui operadores booleanos de busca (E ou OU) e é capaz de fazer buscas a partir de perguntas com processamento de linguagem natural</div>
-               <div className='flex gap-2 items-center text-sm text-gray-500'>A plataforma se destaca como uma ferramenta para fomentar a interação entre a UFMG e outras instituições públicas e privadas, ao mesmo tempo que potencializa a visibilidade das competências e produções da Escola de Engenharia. Com sua interface intuitiva, a plataforma facilita a exploração e entendimento das contribuições acadêmicas e tecnológicas da UFMG, promovendo colaborações e inovações significativas.</div>
+             
                <div className='flex gap-2 items-center text-sm text-gray-500'>Versão da plataforma: {version}</div>
                </div>
 
@@ -313,8 +313,8 @@ export function Info() {
 
 
                 <div className="flex flex-col gap-3">
-                <div className='flex gap-2 items-center text-sm text-gray-500'><MapPin size={16}/> Av. Pres. Antônio Carlos, 6627 - Pampulha, Belo Horizonte - MG, 31270-901</div>
-                <div className='flex gap-2 items-center text-sm text-gray-500'><Mail size={16}/> conectee@eng.ufmg.br</div>
+                <div className='flex gap-2 items-center text-sm text-gray-500'><MapPin size={16}/> {version ? ('Av. Pres. Antônio Carlos, 6627 - Pampulha, Belo Horizonte - MG, 31270-901'):(' Av. Orlando Gomes, 1845 - Piatã, Salvador - BA, 41650-010')}</div>
+                <div className='flex gap-2 items-center text-sm text-gray-500'><Mail size={16}/> {version ? ('conectee@eng.ufmg.br'):('o SENAI CIMATEC')}</div>
                 </div>
             </TabsContent>
 

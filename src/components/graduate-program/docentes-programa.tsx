@@ -3,9 +3,11 @@ import { UserContext } from "../../context/context";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { ResearchItem } from "../homepage/categorias/researchers-home/researcher-item";
 import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
+import { Plus, User } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { Skeleton } from "../ui/skeleton";
+import { Alert } from "../ui/alert";
+import { CardContent, CardHeader, CardTitle } from "../ui/card";
 
 interface GraduateProgram {
     among: number,
@@ -58,6 +60,32 @@ interface GraduateProgram {
     }
 
     
+    interface GraduateProgram {
+      area: string;
+      code: string;
+      graduate_program_id: string;
+      modality: string;
+      name: string;
+      rating: string;
+      type: string;
+      city: string
+      state: string
+      instituicao: string
+      url_image: string
+      region: string
+      sigla: string
+      latitude: string
+      longitude: string
+      visible:string
+      qtd_discente:string
+      qtd_colaborador:string
+      qtd_permanente:string
+      site:string 
+      acronym:string
+      description?: string
+    }
+  
+    
   const useQuery = () => {
     return new URLSearchParams(useLocation().search);
   }
@@ -65,9 +93,38 @@ interface GraduateProgram {
 export function DocentesPrograma() {
     const { urlGeral } = useContext(UserContext)
 
+    const [dados, setDados] = useState<GraduateProgram[]>([]);
+
     const queryUrl = useQuery();
 
     const type_search = queryUrl.get('graduate_program_id');
+
+    const urlGraduateProgram2 = `${urlGeral}graduate_program_profnit?id=${type_search}`;
+    
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(urlGraduateProgram2, {
+            mode: "cors",
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET",
+              "Access-Control-Allow-Headers": "Content-Type",
+              "Access-Control-Max-Age": "3600",
+              "Content-Type": "text/plain",
+            },
+          });
+          const data = await response.json();
+          if (data) {
+            setDados(data);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchData();
+    }, [urlGraduateProgram2]);
+
 
     const urlGraduateProgram = `${urlGeral}researcherName?name=&graduate_program_id=${type_search}`
 
@@ -104,9 +161,16 @@ export function DocentesPrograma() {
 
     const [count, setCount] = useState(12)
 
+
+    const permanenteCount = dados.length > 0 ? dados[0].qtd_permanente : 0;
+    const colaboradorCount = dados.length > 0 ? dados[0].qtd_colaborador : 0;
+    
+
+
     return (
         <div className="px-4 md:px-8">
-              <div className=" mt-2 pb-4 md:pb-8">
+            <div>
+            <div className=" mt-2 pb-4 md:pb-8">
                  
         
                  <h1 className=" max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
@@ -120,6 +184,39 @@ export function DocentesPrograma() {
                            </div>
          
                            </div>
+
+                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 ">
+       <Alert className="p-0 mb-4 md:mb-8">
+                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                     <CardTitle className="text-sm font-medium">
+                       Total de docentes 
+                     </CardTitle>
+                     <User className="h-4 w-4 text-muted-foreground" />
+                   </CardHeader>
+                   <CardContent>
+                     <div className="text-2xl font-bold">{permanenteCount}</div>
+                     <p className="text-xs text-muted-foreground">
+                     permenentes registrados
+                     </p>
+                   </CardContent>
+                   </Alert>
+ 
+                   <Alert className="p-0 mb-4 md:mb-8">
+                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                     <CardTitle className="text-sm font-medium">
+                       Total de docentes 
+                     </CardTitle>
+                     <User className="h-4 w-4 text-muted-foreground" />
+                   </CardHeader>
+                   <CardContent>
+                     <div className="text-2xl font-bold">{colaboradorCount}</div>
+                     <p className="text-xs text-muted-foreground">
+                     colaboradores registrados
+                     </p>
+                   </CardContent>
+                   </Alert>
+       </div>
+            </div>
 
                            {isLoading ? (
                 <div className="mb-4 md:mb-8 w-full">

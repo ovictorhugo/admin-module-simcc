@@ -79,7 +79,9 @@ export function GraficoLivros({ capLivros, publicacoes }: { capLivros: Livro[], 
                     stackId="a"
                     radius={4}
                   >
+                    {index === Object.keys(chartConfig).length - 1 && (
                     <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+                  )}
                   </Bar>
                 );
               }

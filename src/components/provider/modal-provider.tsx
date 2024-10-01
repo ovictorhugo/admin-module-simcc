@@ -29,6 +29,8 @@ import { ImportDisciplina } from "../modals/import-disciplina";
 import { ConfirmDeleteResearcherDepartament } from "../modals/confirm-delete-researcher-departament";
 import { MinhaArea } from "../minha-area/minha-area";
 import { ProjectModal } from "../modals/project-modal";
+import { AddBackground } from "../modals/add-background";
+import { CookiesModal } from "../modals/cookies";
 
 const ModalContent = () => {
   const { type } = useModal();
@@ -77,6 +79,10 @@ const ModalContent = () => {
         return <MinhaArea/>
       case 'project-modal':
         return <ProjectModal/>
+      case 'add-background':
+        return <AddBackground/>
+      case 'cookies':
+        return <CookiesModal/>
 
     default:
       return null;

@@ -7,7 +7,7 @@ import { Alert } from "../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
-import { Books, ChartBar, Code, FileXls, Quotes, StripeLogo, Student, Warning } from "phosphor-react";
+import { Books, ChartBar, Code, FileCsv, FileXls, Quotes, StripeLogo, Student, Warning } from "phosphor-react";
 import { Label as LabelInput } from "../ui/label";
 
 
@@ -558,6 +558,40 @@ useMemo(() => {
   };
   fetchData();
 }, [urlVisaoPrograma]);
+
+/////////////// csv
+
+const handleBtnCsv = () => {
+  try {
+
+const convertJsonToCsv = (json: any[]): string => {
+const items = json;
+const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+const header = Object.keys(items[0]);
+const csv = [
+  '\uFEFF' + header.join(';'), // Add BOM and CSV header
+  ...items.map((item) =>
+    header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+  ) // CSV data
+].join('\r\n');
+
+return csv;
+};
+
+
+  const csvData = convertJsonToCsv(bolsistas);
+  const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.download = `bolsistas_escola_engenharia.csv`;
+  link.href = url;
+  link.click();
+
+} catch (error) {
+  console.error('Error:', error);
+}
+
+};
 
 
  const url = 'https://app.powerbi.com/view?r=eyJrIjoiNTBjNmQ3NWQtODNmZC00MWZkLThjNWEtZjU5YmE2ZDkwMjVkIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
@@ -1478,14 +1512,7 @@ useMemo(() => {
                     <CardDescription>Bolsistas de Produtividade em Pesquisa</CardDescription>
                     </div>
 
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Add to library</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                    <Button variant={'outline'} onClick={() => handleBtnCsv()}><FileCsv size={16}/> Exportar csv</Button>
                    
                   </CardHeader>
 
@@ -1677,7 +1704,7 @@ useMemo(() => {
 
                     <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipTrigger></TooltipTrigger>
                     <TooltipContent>
                       <p>Add to library</p>
                     </TooltipContent>

@@ -211,19 +211,18 @@ export function InformacoesGeraisResearcher(props:Research) {
                     
                    )}
 
-{props.cargo.length != 0 && (
-        <div  className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><ChalkboardSimple size={12} className="textwhite" />{props.cargo}</div>
-                    
-                   )}
+
 
 
 {props.rt.length != 0 && (
-        <div  className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><Clock size={12} className="textwhite" /> {props.rt}</div>
+        <div  className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><Clock size={12} className="textwhite" />Regime de trabalho: {props.rt}</div>
                     
                    )}
 
-{props.situacao.length != 0 && (
-        <div  className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><SquareUser size={12} className="textwhite" />{props.situacao}</div>
+
+
+{props.cargo.length != 0 && (
+        <div  className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><ChalkboardSimple size={12} className="textwhite" />{props.cargo}</div>
                     
                    )}
    
@@ -238,13 +237,15 @@ export function InformacoesGeraisResearcher(props:Research) {
             <div className="font-medium text-2xl mb-6 pr-12">
           Departamento
           </div>
-            <div className="flex mb-6 ">
+           <Link  to={`/departamentos?dep_id=${item.dep_id}`}
+                target="_blank">
+           <div className="flex mb-6 w-full relative">
             
-            <div className={`w-2 min-w-[8px] min-h-[125px] flex flex-1 h-full rounded-l-lg border border-r-0 border-neutral-200 dark:border-neutral-800 ` }></div>
+            <div className={`w-2 min-w-[8px] min-h-[125px] relative bg-[#719CB8]  flex flex-1  rounded-l-lg border border-r-0 border-neutral-200 dark:border-neutral-800 ` }></div>
 
             <Alert className="flex justify-center  rounded-l-none gap-6 ">
               <div className="flex flex-col flex-1 justify-center  h-full">
-              <img className="h-12 mix-blend-multiply" src={`data:image/jpeg;base64,${item.img_data}`} alt={item.dep_nom}  />
+           
               <p className="mb-2 font-medium">{item.dep_sigla} - {item.dep_nom}</p>
 
               <div className="line-clamp-2 flex-wrap text-xs text-muted-foreground flex gap-4">
@@ -256,7 +257,7 @@ export function InformacoesGeraisResearcher(props:Research) {
 
               
           </Alert>
-          </div>
+          </div></Link>
           </div>
           ))
 
@@ -271,9 +272,9 @@ export function InformacoesGeraisResearcher(props:Research) {
               <div className="font-medium text-2xl mb-6 pr-12">
             Bolsa CNPq
             </div>
-              <div className="flex">
+              <div className="flex relative flex-1">
               
-              <div className={`w-2 min-w-[8px] min-h-[125px] flex flex-1 h-full rounded-l-lg ${item.modality_code == 'DT'? ('bg-[#183EFF]'):('bg-[#00D000]')} border border-r-0 border-neutral-200 dark:border-neutral-800 ` }></div>
+              <div className={`w-2 min-w-[8px] min-h-[125px] flex flex-1 relative rounded-l-lg ${item.modality_code == 'DT'? ('bg-[#183EFF]'):('bg-[#00D000]')} border border-r-0 border-neutral-200 dark:border-neutral-800 ` }></div>
             
               <Alert className="flex justify-center  rounded-l-none gap-8 ">
                 <div className="flex flex-col flex-1 justify-center h-full">
@@ -308,6 +309,7 @@ export function InformacoesGeraisResearcher(props:Research) {
                 key={item.graduate_program_id}
                 to={`/pos-graduacao?graduate_program_id=${item.graduate_program_id}`}
                 target="_blank"
+                className="w-full"
               >
                  <Alert className="flex justify-center gap-6 ">
           <div className="flex flex-col flex-1 justify-center h-full">
@@ -348,7 +350,7 @@ Grupos de pequisa
 
       <div className="flex flex-col gap-6">
       {props.research_groups.map((item) => (
-        <Link to={`/grupos-pesquisa?group_id=${item.group_id}`} target="_blank">
+        <Link to={`/grupos-pesquisa?group_id=${item.group_id}`} target="_blank" className="w-full">
         
         <div className="flex ">
         

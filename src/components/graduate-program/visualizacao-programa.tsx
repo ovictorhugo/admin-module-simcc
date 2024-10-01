@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import HC_wordcloud from 'highcharts/modules/wordcloud';
-
+import bg_popup from '../../assets/bg_home.png';
 import { BarChart, Bar, XAxis, LabelList, CartesianGrid,   } from 'recharts';
 
 import {
@@ -32,9 +32,15 @@ import { IndicatorsGraduate } from "./indicators-graduate";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { DialogHeader } from "../ui/dialog";
 import { ScrollArea } from "../ui/scroll-area";
-import { DisplayItem } from "../dashboard/components/display-item";
+
 import { DocentesGraduate } from "../dashboard/components/docentes-graduate";
 import { DiscentesGraduate } from "../dashboard/components/discentes-graduate";
+
+import { GraficoIndiceProdBibli } from "./grafico-indice-producao-bibliografica";
+import { useTheme } from "next-themes";
+import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
+import { LogoConectee } from "../svg/LogoConectee";
+import { GraduateProgram } from "./graduate-program";
 
 interface PalavrasChaves {
   term: string;
@@ -90,18 +96,45 @@ interface GraduateProgram {
     count_patent_granted:number
     count_patent_not_granted:number
     count_brand:number
+    graduantion:string
     year:number
+
     A1:number
-    A2:number
-    A3:number 
-    A4:number
-    B1:number 
-    B2:number
-    B3:number
-    B4:number 
-    C:number
-    SQ:number
+  A2:number
+  A3:number 
+  A4:number
+  B1:number 
+  B2:number
+  B3:number
+  B4:number 
+  C:number
+  SQ:number
   }
+
+  type PesosProducao = {
+    a1: string;
+    a2: string;
+    a3: string;
+    a4: string;
+    b1: string;
+    b2: string;
+    b3: string;
+    b4: string;
+    c: string;
+    sq: string;
+    f1: string;
+    f2: string;
+    f3: string;
+    f4: string;
+    f5: string;
+    livro: string;
+    cap_livro: string;
+    software: string;
+    patent_granted: string;
+    patent_not_granted: string;
+    report: string;
+  };
+  
   
   HC_wordcloud(Highcharts);
 
@@ -152,7 +185,7 @@ interface GraduateProgram {
 
 
 export function VisualizacaoPrograma() {
-  const {urlGeral, itemsSelecionados, searchType, user, permission} = useContext(UserContext)
+  const {urlGeral, itemsSelecionados, searchType, permission, urlGeralAdm} = useContext(UserContext)
   const { onOpen: onOpenModal } = useModal();
     const history = useNavigate();
 
@@ -192,6 +225,8 @@ export function VisualizacaoPrograma() {
     };
     fetchData();
   }, [urlGraduateProgram]);
+
+  console.log(graduatePrograms)
 
   const [totalProducao, setTotalProducao] = useState<Total[]>([]);
 
@@ -401,8 +436,156 @@ const has_editar_informacoes_programa = permission.some(
 
 const graduate_program_id = graduatePrograms && graduatePrograms[0] ? graduatePrograms[0].graduate_program_id : null;
 
+//pesos prod
+
+const [a1, seta1] = useState('');
+const [a2, seta2] = useState('');
+const [a3, seta3] = useState('');
+const [a4, seta4] = useState('');
+const [b1, setb1] = useState('');
+const [b2, setb2] = useState('');
+const [b3, setb3] = useState('');
+const [b4, setb4] = useState('');
+const [c, setc] = useState('');
+const [sq, setsq] = useState('');
+
+const [livro, setLivro] = useState('');
+const [capLivro, setCapLivro] = useState('');
+
+const [t1, setT1] = useState('');
+const [t2, setT2] = useState('');
+const [t3, setT3] = useState('');
+const [t4, setT4] = useState('');
+const [t5, setT5] = useState('');
+
+const [software, setSoftware] = useState('');
+const [patenteCondecida, setPatenteConcedida] = useState('');
+const [patenteNaoConcedida, setPatenteNaoConcedida] = useState('');
+const [relTec, setRelTec] = useState('');
+
+const [pesosProducao, setPesosProducao] = useState<PesosProducao>({
+    a1: a1,
+    a2: a2,
+    a3: a3,
+    a4: a4,
+    b1: b1,
+    b2: b2,
+    b3: b3,
+    b4: b4,
+    c: c,
+    sq: sq,
+    f1: t1,
+    f2: t2,
+    f3: t3,
+    f4: t4,
+    f5: t5,
+    livro: livro,
+    cap_livro: capLivro,
+    software: software,
+    patent_granted: patenteCondecida,
+    patent_not_granted: patenteNaoConcedida,
+    report: relTec,
+  })
+
+
+  const urlGet = urlGeralAdm + `indprod/query?institution_id=083a16f0-cccf-47d2-a676-d10b8931f66b`;
+
+  console.log(urlGet)
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await fetch(urlGet, {
+        mode: "cors",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Max-Age": "3600",
+          "Content-Type": "text/plain",
+        },
+      });
+      const data = await response.json();
+      if (data.length != 0) {
+        const newData = data[0] // Assumindo que data é um array e tem apenas um elemento
+        seta1(newData.a1);
+        seta2(newData.a2);
+        seta3(newData.a3);
+        seta4(newData.a4);
+        setb1(newData.b1);
+        setb2(newData.b2);
+        setb3(newData.b3);
+        setb4(newData.b4);
+        setc(newData.c);
+        setsq(newData.sq);
+        setT1(newData.f1);
+        setT2(newData.f2);
+        setT3(newData.f3);
+        setT4(newData.f4);
+        setT5(newData.f5);
+        setLivro(newData.book);
+        setCapLivro(newData.book_chapter);
+        setSoftware(newData.software);
+        setPatenteConcedida(newData.patent_granted);
+        setPatenteNaoConcedida(newData.patent_not_granted);
+        setRelTec(newData.report);
+
+        setPesosProducao(newData)
+
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  fetchData();
+}, []);
+
+const { theme } = useTheme()
+
+const [clientId, setClientId] = useState<string | null>(null);
+const [provider, setProvider] = useState<string | null>(null);
+
+useEffect(() => {
+    const url = new URL(window.location.href);
+    const pathname = url.pathname.split('/');
+    
+    // Supondo que o ID do cliente seja o segundo segmento do caminho da URL
+    const id = pathname[1] || null;
+    setClientId(id);
+
+    // Supondo que o provedor seja o hostname do URL
+    const providerName = url.hostname;
+    setProvider(providerName);
+}, []);
+
 
     return(
+       <>
+         {graduatePrograms.slice(0,1).map((props) => (
+      props.visible === 'false' ? (
+        <div style={{ backgroundImage: `url(${bg_popup})` }} className="h-screen bg-cover bg-no-repeat bg-center w-full flex flex-col items-center justify-center bg-neutral-50 dark:bg-neutral-900">
+                        <Link to={'/'} className='h-10 mb-24 absolute top-16 '>
+            {theme == 'dark' ? (<LogoConecteeWhite/>):(<LogoConectee/>)}
+        </Link>
+        <div className="w-full flex flex-col items-center justify-center">
+                <p className="text-9xl text-[#719CB8] font-bold mb-16 animate-pulse">{`(⊙﹏⊙)`}</p>
+                <h1 className=" text-4xl text-neutral-400 font-medium leading-tight tracking-tighter lg:leading-[1.1] ">Parece que não é possível acessar as informações desse programa</h1>
+               
+                <p className="font-medium text-sm mt-2">
+                  Código do erro: 404
+                </p>
+
+                <p className="font-medium text-sm">
+                Servidor: {provider}
+                </p>
+
+                <p className="font-medium text-sm ">
+                  Caminho da URL: {clientId}
+                </p>
+
+              </div>
+     
+        </div>
+      ) : (
         <main className="flex flex-1 flex-col gap-4 md:gap-8 ">
             <Tabs defaultValue={'all'} className="h-full" >
             <div className="w-full  gap-4 md:p-8 p-4 pb-0 md:pb-0">
@@ -744,37 +927,13 @@ const graduate_program_id = graduatePrograms && graduatePrograms[0] ? graduatePr
                    
                   </CardHeader>
 
-                <div className="flex flex-1 px-6">
-           
-                </div>
+                  <CardContent className="px-2 sm:p-6">
+                <GraficoIndiceProdBibli articles={dados} pesosProducao={pesosProducao} />
+                </CardContent>
 
                     </Alert>
 
-                    <Alert className="p-0 ">
-                    <CardHeader className="flex flex-row p-10 items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                    índice de livros e capítulos
-                    </CardTitle>
-                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Fonte: Plataforma Lattes</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
                    
-                  </CardHeader>
-
-                  <div className="flex flex-1 px-6">
-             
-                </div>
-
-                    </Alert>
                     </div>
 
                  
@@ -996,5 +1155,8 @@ const graduate_program_id = graduatePrograms && graduatePrograms[0] ? graduatePr
             </TabsContent>
             </Tabs>
         </main>
+      )
+    ))}
+       </>
     )
 }

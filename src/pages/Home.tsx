@@ -53,6 +53,8 @@ export function Home() {
     onOpen('pesquisador')
 } else if(location.pathname == '/marIA') {
     onOpen('maria')
+} else if(location.pathname == '/pesquisadores') {
+    onOpen('pesquisadores')
 } 
     }, [location]);
   

@@ -397,10 +397,28 @@ console.log(urlTermPesquisadores)
           Seu currículo na plataforma Lattes está sem alterações tem {monthDifference} meses. Última atualização em {String(props.lattes_update)}. 
             </AlertDescription>
       
-           <Link to={'https://lattes.cnpq.br/'}> <Button variant={'destructive'}>Acessar plataforma Lattes</Button></Link>
+           <Link to={'https://lattes.cnpq.br/'} target="_blank"> <Button variant={'destructive'}>Acessar plataforma Lattes</Button></Link>
             </div></div>
                           )
                         }
+
+                      })}
+
+{researcher && researcher.slice(0, 1).map((props) => {
+                       if(props.orcid == "") {
+                        return(
+                          <div className="bg-red-50 flex gap-3 dark:bg-red-200/20 w-full mt-6 p-8 rounded-md">
+                          <div>  <OctagonAlert size={24}/></div>
+        <div>
+        <AlertTitle className="whitespace-normal">Currículo Lattes desatualizado</AlertTitle>
+          <AlertDescription className="whitespace-normal mb-6">
+        Adicione o ORCID no seu Lattes
+          </AlertDescription>
+    
+         <Link to={'https://lattes.cnpq.br/'}> <Button variant={'destructive'}>Acessar plataforma Lattes</Button></Link>
+          </div></div>
+                        )
+                      }
 
                       })}
 

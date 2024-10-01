@@ -12,6 +12,16 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Autoplay from "embla-carousel-autoplay"
 import { ArticleItem } from "../homepage/components/article-item";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../components/ui/select"
+import { Label } from "../ui/label";
+
+
 type Magazine = {
   id: string,
   issn: string,
@@ -39,6 +49,19 @@ type Publicacao = {
   distinct:boolean
 }
 
+interface Departamentos {
+  dep_id:string
+  org_cod: string
+  dep_nom: string
+  dep_des: string
+  dep_email: string
+  dep_site: string
+  dep_tel: string
+  img_data:string
+  dep_sigla: string
+}
+
+
 export function NewsArticles() {
     const history = useNavigate();
 
@@ -48,7 +71,10 @@ export function NewsArticles() {
 
     const [tab, setTab] = useState('all')
 
-    const {urlGeral} = useContext(UserContext)
+    const {urlGeral, version, urlGeralAdm} = useContext(UserContext)
+
+    const [total, setTotal] = useState<Departamentos[]>([]);
+    const [totalSelecionado, setTotalSelecionado] = useState<Departamentos | null>(null);
 
     const [pesquisaInput, setPesquisaInput] = useState('');
 
@@ -112,13 +138,14 @@ useEffect(() => {
 }
 
 const [count, setCount] = useState(12)
-
+const [gg, setGG] = useState('')
 //
 
 const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
 
-const urlTermPublicacoes = urlGeral + 'recently_updated?year=2024&university='
 
+const urlTermPublicacoes = urlGeral + `recently_updated?year=2024&university=&dep_id=${(totalSelecionado?.dep_id == undefined && gg == 'Todos os departamentos') ? (''):(totalSelecionado?.dep_id)}`
+console.log(urlTermPublicacoes)
 useMemo(() => {
     const fetchData = async () => {
         try {
@@ -145,6 +172,41 @@ useMemo(() => {
       fetchData();
     }, [ urlTermPublicacoes]);
 
+    //const urlPatrimonioInsert = `${urlGeralAdm}departamentos`
+
+    const urlPatrimonioInsert = `${urlGeralAdm}departamentos`
+
+    useEffect(() => {
+ 
+    const fetchData = async () => {
+     
+      try {
+          
+        const response = await fetch(urlPatrimonioInsert , {
+          mode: "cors",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Max-Age": "3600",
+            "Content-Type": "text/plain",
+          },
+        });
+        const data = await response.json();
+        if (data) {
+            setTotal(data)
+ 
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData()
+
+   
+  }, [urlPatrimonioInsert]);
+
+console.log(totalSelecionado?.dep_nom || '')
 
     return(
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -186,15 +248,43 @@ useMemo(() => {
             
 
                         <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
-                           Pesquise{" "}
+                          Todas os artigos mais{" "}
                             <strong className="bg-[#709CB6] rounded-md px-3 pb-2 text-white font-medium">
-                            o nome ou ISSN
+                            recentes
                             </strong>{" "}
-                            da revista para ver as informações
+                            {totalSelecionado != null ? (totalSelecionado.dep_nom):('da instituição')}
                         </h1>
-                        <p className="max-w-[750px] text-lg font-light text-foreground">
-                        Para ajudar a sua pesquisa, fornecemos uma lista extensa de revistas e suas classificações.
-                        </p>
+
+                       <div>
+                      {version && (
+                          <div className="flex flex-col gap-2 mt-4 ">
+                               <Label>Departamento</Label>
+                               <Select defaultValue="Todos os departamentos" onValueChange={(value) => {
+                          const selectedDep = total.find((dep) => dep.dep_id === value);
+                          if (selectedDep) {
+                            setTotalSelecionado(selectedDep);
+                          }
+                        }}>
+                        <SelectTrigger className="">
+                          <SelectValue placeholder="Escolha o departamento" />
+                        </SelectTrigger>
+                        <SelectContent>
+                        <SelectItem onClick={() => {
+                          setGG('Todos os departamentos')
+                          setTotalSelecionado(null)
+                        }} value={'Todos os departamentos'}>
+                              Todos os departamentos
+                            </SelectItem>
+                          {total.map((dep) => (
+                            <SelectItem key={dep.dep_id} value={dep.dep_id} onClick={() => setGG('')}>
+                              {dep.dep_nom}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                       </div>
+                      )}
+                       </div>
                         
                     </div>
 

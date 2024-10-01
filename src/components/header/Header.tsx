@@ -61,7 +61,7 @@ export function Header() {
   }
 
   const location = useLocation();
-  const isVisible = location.pathname != '/' && location.pathname != '/resultados' && location.pathname != '/marIA'
+  const isVisible = location.pathname != '/' && location.pathname != '/resultados' && location.pathname != '/marIA' && location.pathname != '/pos-graduacao'
 
 const {onOpen} = useModal()
 

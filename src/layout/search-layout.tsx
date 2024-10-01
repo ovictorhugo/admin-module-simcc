@@ -41,7 +41,7 @@ export default function SearchLayout({
   children
 }: MailProps) {
   
-  const {isCollapsed, setIsCollapsed} = useContext(UserContext)
+  const {isCollapsed, setIsCollapsed, version} = useContext(UserContext)
   
  
   const {onOpen} = useModal()
@@ -84,6 +84,86 @@ export default function SearchLayout({
   const handleClose = () => {
       setIsModalOpen(false);
   };
+
+//cokkies
+  useEffect(() => {
+    // Verifica no localStorage se o modal já foi exibido
+    const hasVisited = localStorage.getItem('cookies');
+
+    if (!hasVisited ) {
+        // Se não foi exibido, abre o modal
+       onOpen('cookies')
+        // Marca no localStorage que o modal foi exibido
+        localStorage.setItem('cookies', 'true');
+    }
+}, []);
+
+const links = [
+  {
+    title: "Página inicial",
+    label: "",
+    icon: Home,
+    link: "/",
+  },
+  {
+    title: "Pesquisar",
+    label: "",
+    icon: SearchCheck,
+    link: "/resultados",
+  },
+  {
+    title: "MarIA",
+    label: "",
+    icon: Sparkles,
+    link: "/marIA",
+  },
+  {
+    title: "Indicadores",
+    label: "",
+    icon: BarChartBig,
+    link: "/indicadores",
+  },
+  {
+    title: "Dicionário",
+    label: "",
+    icon: List,
+    link: "/dicionario",
+  },
+  {
+    title: "Produções recentes",
+    label: "",
+    icon: BookOpen,
+    link: "/producoes-recentes",
+  },
+]
+
+const links2 = [
+
+  ...(version
+    ? [
+      {
+        title: "Departamentos",
+        label: "",
+        icon: Building2,
+        link: "/departamentos",
+      },
+      ]
+    : []),
+
+  {
+    title: "Pós-graduação",
+    label: "",
+    icon: GraduationCap,
+    link: "/pos-graduacao",
+  },
+
+  {
+    title: "Grupos de pesquisa",
+    label: "",
+    icon: Blocks,
+    link: "/grupos-pesquisa",
+  },
+]
 
     return (
     <div>
@@ -135,45 +215,7 @@ export default function SearchLayout({
           
           <NavigationSidebar
             isCollapsed={isCollapsed}
-            links={[
-              {
-                title: "Página inicial",
-                label: "",
-                icon: Home,
-                link: "/",
-              },
-              {
-                title: "Pesquisar",
-                label: "",
-                icon: SearchCheck,
-                link: "/resultados",
-              },
-              {
-                title: "MarIA",
-                label: "",
-                icon: Sparkles,
-                link: "/marIA",
-              },
-              {
-                title: "Indicadores",
-                label: "",
-                icon: BarChartBig,
-                link: "/indicadores",
-              },
-              {
-                title: "Dicionário",
-                label: "",
-                icon: List,
-                link: "/dicionario",
-              },
-              {
-                title: "Produções recentes",
-                label: "",
-                icon: BookOpen,
-                link: "/producoes-recentes",
-              },
-             
-            ]}
+            links={links}
           />
 
           <div className="w-full h-[0.5px] bg-neutral-200 dark:bg-neutral-800"></div>
@@ -181,30 +223,7 @@ export default function SearchLayout({
 
           <NavigationSidebar
             isCollapsed={isCollapsed}
-            links={[
-              
-              {
-                title: "Departamentos",
-                label: "",
-                icon: Building2,
-                link: "/departamentos",
-              },
-
-              {
-                title: "Pós-graduação",
-                label: "",
-                icon: GraduationCap,
-                link: "/pos-graduacao",
-              },
-
-              {
-                title: "Grupos de pesquisa",
-                label: "",
-                icon: Blocks,
-                link: "/grupos-pesquisa",
-              },
-             
-            ]}
+            links={links2}
           />
 </div>
 
@@ -260,9 +279,9 @@ export default function SearchLayout({
             <DialogContent className="p-0">
               <div className="h-[300px] w-full bg-cover bg-no-repeat bg-center"  style={{ backgroundImage: `url(${bg_popup})` }}></div>
                 <DialogHeader className="p-6">
-                    <DialogTitle className="text-2xl font-medium">Apresentamos a plataforma Conectee</DialogTitle>
+                    <DialogTitle className="text-2xl font-medium">Apresentamos a plataforma {version ? ('Conectee'):('Iapós')}</DialogTitle>
                     <DialogDescription>
-                        O jeito mais fácil de visualizar e filtrar as produções técnicas e bibliográficas dos pesquisadores da Escola de Engenharia da UFMG.
+                        O jeito mais fácil de visualizar e filtrar as produções técnicas e bibliográficas dos pesquisadores {version ? ('da Escola de Engenharia da UFMG'):('do SENAI CIMATEC')}.
                     </DialogDescription>
                    <div className="flex pt-6 items-center justify-between">
                  <div></div>
@@ -276,6 +295,8 @@ export default function SearchLayout({
                 
             </DialogContent>
         </Dialog>
+
+    
     </div>
     );
   };

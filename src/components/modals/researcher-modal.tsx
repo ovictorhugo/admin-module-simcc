@@ -106,7 +106,7 @@ import { RelatorioTecnicoResearcherPopUp } from "../popup/relatorio-tecnico-rese
 import { SpeakerResearcherPopUp } from "../popup/speaker-researcher";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Boxes, Copy, FolderKanban, MoreHorizontal, Plus } from "lucide-react";
+import { BookOpenText, Boxes, Briefcase, Copy, FolderKanban, MoreHorizontal, Plus } from "lucide-react";
 
 import QRCode from "react-qr-code";
 
@@ -126,6 +126,8 @@ import { Link } from "react-router-dom";
 
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { ResearchProject } from "../popup/research-project";
+import { WorkEvent } from "../popup/trabalho-evento";
+import { TextoRevista } from "../popup/texto-revista";
 
 export function ResearcherModal() {
    
@@ -631,6 +633,25 @@ function generateNameVariations(name: string): string[] {
       <FolderKanban size={16} className="" />
       Projetos de pesquisa
     </TabsTrigger>
+
+
+    <TabsTrigger
+      value="texto-revista"
+      onClick={() => setValue('texto-revista')}
+      className="flex gap-2 items-center"
+    >
+      <BookOpenText size={16} className="" />
+      Textos em revista
+    </TabsTrigger>
+
+    <TabsTrigger
+      value="trabalho-evento"
+      onClick={() => setValue('trabalho-evento')}
+      className="flex gap-2 items-center"
+    >
+      <Briefcase size={16} className="" />
+      Trabalhos em evento
+    </TabsTrigger>
  
 </TabsList>
 
@@ -689,6 +710,22 @@ function generateNameVariations(name: string): string[] {
   {researcher.slice(0, 1).map((user) => {
                 return(
                  <ResearchProject name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
+
+  <TabsContent value="texto-revista">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                 <TextoRevista name={String(user.id)}/>
+                  )
+                })}
+  </TabsContent>
+
+  <TabsContent value="trabalho-evento">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                 <WorkEvent name={String(user.id)}/>
                   )
                 })}
   </TabsContent>

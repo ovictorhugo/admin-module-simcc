@@ -112,6 +112,9 @@ import { GraficoRtTeachers } from "./components/grafico-teachers";
 import { FooterHome } from "../footer/footer-home";
 import { GraficoRtTechnician } from "./components/grafico-technician";
 import { useModalResult } from "../hooks/use-modal-result";
+import { Button } from "../ui/button";
+import { useModal } from "../hooks/use-modal-store";
+import { TodosPesquisadores } from "./categorias/researchers-home/todos-pesquisadores";
 
 
 interface Bolsistas {
@@ -198,7 +201,7 @@ export function InitialHome() {
         }
 
 
-  let urlGrupo =`${urlGeralAdm}researchGroupRest/Query?institution_id=`
+  let urlGrupo =`${urlGeral}fomente`
 
   const [grupos, setGrupos] = useState<GrupoPesquisa[]>([]);
 
@@ -519,6 +522,8 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
 
     const { onOpen:onOpenResult } = useModalResult();
 
+    const {onOpen} = useModal()
+
   return (
     <>
       {isModalOpen && (
@@ -608,6 +613,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
 
 
            <div className="lg:max-w-[60vw] lg:w-[60vw] w-full ">
+          
             <Search/>
            </div>
 
@@ -721,60 +727,88 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
            </Alert>
       
           <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-                    <div className="h-full gap-8 grid">
+                   {version ? (
+                     <div className="h-full gap-8 grid">
+                     <Alert className="p-0 ">
+                     <CardHeader className="flex p-10 flex-row items-center justify-between space-y-0 pb-2">
+                     <div>
+                     <CardTitle className="text-sm font-medium">
+                       Total de  {VisaoPrograma.map((props) => (<>{props.researcher}</>))} pesquisadores
+                     </CardTitle>
+                     <CardDescription>{version ? ('na Escola de Engenharia'):('no SENAI CIMATEC')}</CardDescription>
+                    
+                     </div>
+ 
+                     <TooltipProvider>
+                   <Tooltip>
+                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                     <TooltipContent>
+                     <p>Fonte: {version ? ('Escola de Engenharia'):('SENAI CIMATEC')}</p>
+                     </TooltipContent>
+                   </Tooltip>
+                 </TooltipProvider>
+                    
+                   </CardHeader>
+ 
+                 <div className="flex flex-1 px-6">
+                 <GraficoRtTeachers rtData={rt}/>
+                 </div>
+ 
+                     </Alert>
+ 
+                     <Alert className="p-0 ">
+                     <CardHeader className="flex flex-row p-10 items-center justify-between space-y-0 pb-2">
+                     <div>
+                     <CardTitle className="text-sm font-medium">
+                      Total de {totalTechnicianCounts} técnicos
+                     </CardTitle>
+                     <CardDescription>{version ? ('na Escola de Engenharia'):('no SENAI CIMATEC')}</CardDescription>
+                     </div>
+ 
+                     <TooltipProvider>
+                   <Tooltip>
+                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                     <TooltipContent>
+                       <p>Fonte: {version ? ('Escola de Engenharia'):('SENAI CIMATEC')}</p>
+                     </TooltipContent>
+                   </Tooltip>
+                 </TooltipProvider>
+                    
+                   </CardHeader>
+ 
+                   <div className="flex flex-1 px-6">
+                 <GraficoRtTechnician rtData={rt}/>
+                 </div>
+ 
+                     </Alert>
+                     </div>
+                   ) : (
                     <Alert className="p-0 ">
-                    <CardHeader className="flex p-10 flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                      Total de  {VisaoPrograma.map((props) => (<>{props.researcher}</>))} pesquisadores
-                    </CardTitle>
-                    <CardDescription>{version ? ('na Escola de Engenharia'):('no SENAI CIMATEC')}</CardDescription>
-                   
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                    <p>Fonte: {version ? ('Escola de Engenharia'):('SENAI CIMATEC')}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-
-                <div className="flex flex-1 px-6">
-                <GraficoRtTeachers rtData={rt}/>
-                </div>
-
-                    </Alert>
-
-                    <Alert className="p-0 ">
-                    <CardHeader className="flex flex-row p-10 items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                     Total de {totalTechnicianCounts} técnicos
-                    </CardTitle>
-                    <CardDescription>{version ? ('na Escola de Engenharia'):('no SENAI CIMATEC')}</CardDescription>
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Fonte: {version ? ('Escola de Engenharia'):('SENAI CIMATEC')}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-
-                  <div className="flex flex-1 px-6">
-                <GraficoRtTechnician rtData={rt}/>
-                </div>
-
-                    </Alert>
-                    </div>
+                     <CardHeader className="flex flex-row p-10 items-center justify-between space-y-0 pb-2">
+                     <div>
+                     <CardTitle className="text-sm font-medium">
+                      Total de {VisaoPrograma.map((props) => (<>{props.researcher}</>))} pesquisadores
+                     </CardTitle>
+                     <CardDescription>{version ? ('na Escola de Engenharia'):('no SENAI CIMATEC')}</CardDescription>
+                     </div>
+ 
+                     <TooltipProvider>
+                   <Tooltip>
+                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                     <TooltipContent>
+                       <p>Fonte: {version ? ('Escola de Engenharia'):('SENAI CIMATEC')}</p>
+                     </TooltipContent>
+                   </Tooltip>
+                 </TooltipProvider>
+                    
+                   </CardHeader>
+ 
+                   <div className="flex flex-1 px-6">
+              
+                 </div>
+ 
+                     </Alert>
+                   )}
 
                  
 
@@ -1018,6 +1052,8 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
 
                   <Instrucoes/>
                   <Newsletter/>
+
+              
 
                  {version && (
                    <FooterHome/>

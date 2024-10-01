@@ -66,6 +66,7 @@ import LoadingWrapper from './components/loading';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Unauthorized } from './components/errors/Unauthorized';
 import { Error404 } from './components/errors/404';
+import { TermosUso } from './pages/TermosUso';
 
 
 
@@ -225,8 +226,10 @@ useEffect(() => {
         <Route path='/marIA' element={<Home/>}/>
         <Route path='/relatar-problema' element={<Home/>}/>
 
-       
+        <Route path='/pesquisadores' element={<Home/>}/>
 
+       
+        <Route path='/termos-uso' element={<TermosUso/>}/>
           
         <Route
         path='/ufmg/'
@@ -443,7 +446,7 @@ useEffect(() => {
         hasPermission={has_visualizar_indicadores_instituicao}
       />
     }
-  />
+/>
 
   <Route
     path='/minhaufmg/dashboard/baremas'
@@ -475,7 +478,6 @@ useEffect(() => {
 
 
 <Route path='/dashboard/informacoes' element={<Dashboard/> }/>
-
 
 <Route path='/unauthorized' element={<Unauthorized />} />
 

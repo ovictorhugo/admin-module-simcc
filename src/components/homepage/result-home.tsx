@@ -31,37 +31,8 @@ export function ResultHome() {
   
   const researcher = queryUrl.get('researcher');
 
-  useEffect(() => { 
- 
-    if ( itemsSelecionados.length == 0) {
-      if(searchType == 'article') {
-        return onOpen('articles-home')
-      } else if(searchType == 'book') {
-        return onOpen('book-home')
-      } else if(searchType == 'patent') {
-        return onOpen('patent-home')
-      } else if(searchType == 'name') {
-        return onOpen('researchers-home')
-      } else if(searchType == 'area') {
-        return onOpen('researchers-home')
-      } else if(searchType == 'abstract') {
-        return onOpen('researchers-home')
-      } else if(searchType == 'speaker') {
-        return onOpen('speaker-home')
-      }
-}
-  if (!typeResult) {
-      onOpen('researchers-home');
-    }
-  }, [typeResult, onOpen, searchType]);
-  
-
-
 
   const isModalOpen = isOpen && type === "result-home";
-
-  
-
 
   return (
     <>

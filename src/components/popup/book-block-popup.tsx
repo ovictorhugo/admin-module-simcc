@@ -64,6 +64,16 @@ export function BookBlockPopUp(propsGeral:Articles) {
             production={props.production}
             foment={props.foment}
             components={props.components}
+            authors={props.authors}
+            homepage={props.homepage}
+            language={props.language}
+            means_divulgation={props.means_divulgation}
+           
+            relevance={props.relevance}
+            scientific_divulgation={props.scientific_divulgation}
+           
+            title_en={props.title_en}
+            year_={props.year_}
           />
           
         );

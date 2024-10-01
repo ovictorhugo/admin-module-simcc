@@ -4,29 +4,34 @@ import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, Respons
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
 type Livro = {
-  id: string,
-  grant_date: string,
-  title: string,
-  year: string,
-  financing: string,
-  project_name: string
+  authors: string;
+  homepage: string;
+  language: string;
+  means_divulgation: string;
+  nature: string;
+  relevance: boolean;
+  scientific_divulgation: boolean;
+  title: string;
+  title_en: string ;
+  year_: string;
 };
+
 
 const chartConfig = {
   'publicacoes': {
-    label: "Relatórios técnicos",
-    color: "#662D91",
+    label: "Projeto de pesquisa",
+    color: "#DE2834",
   },
 } satisfies ChartConfig;
 
-export function GraficoRelatorio({ publicacoes }: { publicacoes: Livro[] }) {
+export function GraficoTrabalhoEvento({ publicacoes }: { publicacoes: Livro[] }) {
   const [chartData, setChartData] = useState<{ year: string; count: number }[]>([]);
 
   useEffect(() => {
     const counts: { [key: string]: number } = {};
 
     publicacoes.forEach(publicacao => {
-      const year = publicacao.year;
+      const year = publicacao.year_;
       counts[year] = (counts[year] || 0) + 1;
     });
 
@@ -44,11 +49,11 @@ export function GraficoRelatorio({ publicacoes }: { publicacoes: Livro[] }) {
     <Alert className="pt-12">
       <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <ResponsiveContainer>
-          <BarChart data={chartData}  margin={{ top: 20,  right: -10, left: -10, bottom: 0 }}>
+          <BarChart data={chartData}  margin={{ top: 20,  right: -5, left: -5, bottom: 0 }}>
           <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
 
           
-            <CartesianGrid horizontal={false} />
+            <CartesianGrid vertical={false} horizontal={false} />
             <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Bar dataKey="count" fill={chartConfig.publicacoes.color} radius={4}>

@@ -14,14 +14,14 @@ export function ContentIndicators() {
       history(-1);
     }
 
-    let url = 'https://app.powerbi.com/view?r=eyJrIjoiNTBjNmQ3NWQtODNmZC00MWZkLThjNWEtZjU5YmE2ZDkwMjVkIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
+    let url = 'https://app.powerbi.com/view?r=eyJrIjoiODJlNTM2NDYtMzBhMi00ZThmLTkyZjQtYjY5NDE5M2Y1NDhkIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
 
     if (!version) {
       url = 'https://app.powerbi.com/view?r=eyJrIjoiOTMwMGE2ODAtYTNkYy00MDI1LWIyZjQtYTgwNjIwM2IzNzgyIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
     }
 
     const [value, setValue] = useState('article')
-  const url2 = 'https://app.powerbi.com/view?r=eyJrIjoiNTEwMjUxMzktMzZjYS00ZjM1LWJhYzYtZDY3Y2I2YzE1ZGRiIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
+  const url2 = 'https://app.powerbi.com/view?r=eyJrIjoiZTg2MTFiN2ItMjJjNS00Y2EzLWJjNTgtNzE3Yzg2YWZhNDM2IiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
     return (
         <main className="flex flex-1 flex-col gap-4  p-4 md:p-8 ">
                  <div className="w-full  gap-4">

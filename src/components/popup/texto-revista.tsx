@@ -15,8 +15,8 @@ import { ArrowUDownLeft, ChartBar, Rows, SquaresFour } from "phosphor-react"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { BookBlockPopUp } from "./book-block-popup"
 import { Button } from "../ui/button"
-import { FolderKanban } from "lucide-react"
-import { GraficoProjetoPesquisa } from "./graficos/grafico-projeto-pesquisa"
+import { BookOpenText, Briefcase } from "lucide-react"
+import { GraficoTextoRevista } from "./graficos/grafico-texto-revista"
 
 type Filter = {
     year: number[]
@@ -28,44 +28,20 @@ type Filter = {
   }
 
   type Livros = {
-    agency_code: string
-    agency_name: string
-    nature: string
-    description: string
-    end_year: string
-    id: string
-    number_academic_masters: string
-    number_phd: string
-    number_specialists: string
-    number_undergraduates:string
-    project_name:string
-    start_year:string
-    status:string
-    researcher_id:string
-    production:Production[]
-    foment:Forment[]
-    components:Components[]
-  }
+    authors: string;
+    homepage: string;
+    language: string;
+    means_divulgation: string;
+    nature: string;
+    relevance: boolean;
+    scientific_divulgation: boolean;
+    title: string;
+    title_en: string ;
+    year_: string;
+  };
 
-  interface Components {
-    title:string 
-    type:string 
-  }
 
-  interface Production {
-    citations:string 
-    lattes_id:string 
-    name:string
-  }
-
-  interface Forment {
-    agency_code:string
-    agency_name:string
-    nature:string
-  }
-
-  
-export function ResearchProject(props:Props) {
+export function TextoRevista(props:Props) {
 
     const {urlGeral, searchType, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados} = useContext(UserContext)
     const [loading, isLoading] = useState(false)
@@ -85,7 +61,9 @@ export function ResearchProject(props:Props) {
 
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
    
-    let urlTermPublicacoes = `${urlGeral}researcher_research_project?researcher_id=${props.name}&term=&year=${yearString}`;
+    let urlTermPublicacoes = `${urlGeral}researcher_production/papers_magazine?researcher_id=${props.name}&year=${yearString}`;
+
+    console.log(urlTermPublicacoes)
 
     useMemo(() => {
         const fetchData = async () => {
@@ -134,7 +112,7 @@ export function ResearchProject(props:Props) {
 <Accordion  type="single" collapsible defaultValue="item-1" >
                 <AccordionItem value="item-1" >
                 <div className="flex mb-2">
-                <HeaderResultTypeHome title="Gráfico de quantidade total de projetos de pesquisa" icon={<ChartBar size={24} className="text-gray-400" />}>
+                <HeaderResultTypeHome title="Gráfico de quantidade total de textos em revistas" icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
 
                     <AccordionTrigger>
@@ -145,7 +123,7 @@ export function ResearchProject(props:Props) {
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
-                      <GraficoProjetoPesquisa
+                      <GraficoTextoRevista
                       publicacoes={publicacoes}
                       />
                     )}
@@ -159,20 +137,12 @@ export function ResearchProject(props:Props) {
                   <div className="flex mb-2">
                   <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
-            <FolderKanban size={24} className="text-gray-400" />
-            <p className="text-sm font-bold">Todos os projetos de pesquisa</p>
+            <BookOpenText size={24} className="text-gray-400" />
+            <p className="text-sm font-bold">Todos os textos em revista</p>
             </div>
 
             <div className="flex gap-3 mr-3  items-center h-full">
-            {(itemsSelecionadosPopUp != itemsSelecionados && searchType == '') && (
-              <div className="flex gap-3  items-center">
-                <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="ghost" size={'icon'}>
-                            <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
-                        </Button>
-
-              <div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
-              </div>
-            )}
+            
 
             <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu == 'block' ? 'ghost' : 'outline' }  size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
@@ -215,7 +185,7 @@ export function ResearchProject(props:Props) {
                         <BookBlockPopUp
                         articles={publicacoes}
                         distinct={distinct}
-                        type={'research-project'}
+                        type={'texto-revista'}
                         />
                          )
                       )

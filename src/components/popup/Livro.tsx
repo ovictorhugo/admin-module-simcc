@@ -4,7 +4,7 @@ import {  useContext } from "react";
 import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
 import { Link } from "react-router-dom";
-import { Maximize2, SquareAsterisk } from "lucide-react";
+import { Maximize2, SquareArrowOutUpRight, SquareAsterisk } from "lucide-react";
 import { Button } from "../ui/button";
 import { useModal } from "../hooks/use-modal-store";
 
@@ -49,6 +49,19 @@ type Publicacao = {
     production?:Production[]
     foment?:Forment[]
     components?:Components[]
+
+
+
+    authors?: string;
+    homepage?: string;
+    language?: string;
+    means_divulgation?: string;
+   
+    relevance?: boolean;
+    scientific_divulgation?: boolean;
+ 
+    title_en?: string ;
+    year_?: string;
   }
 
   interface Components {
@@ -176,6 +189,8 @@ const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecio
                         ${( props.nature=='Supervisão De Pós-Doutorado') && ('bg-[#46724B]')}
                       ${( props.type=='patente') && ('bg-[#66B4D0]')} ${props.type == 'capLivro' && ('bg-pink-300')} ${(props.nature == "Congresso" ) && ('bg-[#FF5800]') } ${(props.nature == "Oficina" ) && ('bg-[#FCEE21]') } ${(props.nature == "Simpósio" ) && ('bg-[#D53A2C]') } ${(props.nature == "Encontro" ) && ('bg-[#E9A700]') }  ${(props.nature == "Outra" ) && ('bg-[#7F400B]') } ${(props.nature == "Seminário" ) && ('bg-[#FFBD7B]') }
                       ${(props.type == 'research-project') && ('bg-[#bae6fd]')}
+                       ${(props.type == 'work-event') && ('bg-[#DE2834]')}
+                       ${(props.type == 'texto-revista') && ('bg-[#E9A700]')}
                       `}
                     > 
                     </div>
@@ -235,6 +250,29 @@ const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecio
                            </div>
                           )}
 
+{(props.type == 'work-event' || props.type == 'texto-revista')  && (
+                           <div className="flex justify-between gap-6">
+                                <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">
+                          {highlightedTitle}
+                        </p>
+
+                              <div className="h-8 w-8">
+           
+                        {(props.homepage != '' && props.homepage != null) && (
+                                <Link to={props.homepage} target="_blank">
+                                <Button
+                                variant="outline"
+                                size="icon"
+                                className="ml-auto hidden group-hover:flex text-sm h-8 w-8 text-gray-500 dark:text-gray-300"
+                              >
+                                <SquareArrowOutUpRight size={16} />
+                              </Button></Link>
+                        )}
+
+                      </div>
+                           </div>
+                          )}
+
 {props.type == 'research-project' && (
                            <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">{highlightedTitleProject}</p>
                         )}
@@ -249,7 +287,7 @@ const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecio
                            <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">{highlightedTitleEvent}</p>
                         )}
 
-{(props.type != 'patente' && props.type != 'speaker') && (
+{(props.type != 'patente' && props.type != 'speaker' && props.type != 'work-event' && props.type != 'texto-revista') && (
                           <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">
                           {highlightedTitle}
                         </p>
@@ -264,13 +302,28 @@ const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecio
 
                     <div className="flex items-center flex-wrap mt-4 gap-4">
                         <div className="flex items-center gap-4">
-                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><CalendarBlank size={12}/>{props.year}{props.type == 'research-project' && (`${props.start_year} - ${props.end_year == '' ? ('atual'):(props.end_year)}`)}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><CalendarBlank size={12}/>{props.year}{props.type == 'research-project' && (`${props.start_year} - ${props.end_year == '' ? ('atual'):(props.end_year)}`)}{props.year_}</div>
                         
 
                         {(props.isbn != undefined) && (
                                <Link to={`https://www.cblservicos.org.br/isbn/pesquisa/?page=1&q=${props.isbn}&filtrar_por%5B0%5D=todos&ord%5B0%5D=relevancia&dir%5B0%5D=asc`} target="_blank"  className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><LinkBreak size={16} className="" />ISBN {props.isbn}</Link>
                             )}
                         </div>
+
+                        {(props.type == 'work-event' || props.type == 'texto-revista')  && (
+                            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><AppWindow size={12}/>{props.means_divulgation?.split('_').join(' ')}</div>
+                        )}
+
+{(props.type == 'work-event' || props.type == 'texto-revista') && (
+                            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><AppWindow size={12}/>{props.nature?.split('_').join(' ')}</div>
+                        )}
+
+{(props.type == 'work-event' || props.type == 'texto-revista')  && (
+                            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><AppWindow size={12}/>{props.language}</div>
+                        )}
+
+
+                        
 
                         {props.type == 'software' && (
                             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><AppWindow size={12}/>Software</div>

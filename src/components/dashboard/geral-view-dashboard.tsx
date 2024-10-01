@@ -7,18 +7,21 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
 
 import { Button } from "../ui/button";
-import {  ChevronLeft,  Copy, GraduationCap,  User, UserCog } from "lucide-react";
+import {  ChevronLeft,  Copy, GraduationCap,  Plus,  Trash,  User, UserCog } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
 import { Input } from "../ui/input";
 import { toast } from "sonner"
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs, query, where } from 'firebase/firestore';
 
 import { CargosFuncoes } from "./components/cargos-funcoes";
 import { GraficoAnaliseUsuarios } from "./graficos/grafico-analise-usuarios";
 import { Label } from "../ui/label";
 import { ArrowElbowDownRight, ChartBar, MagnifyingGlass, Student } from "phosphor-react";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { useModal } from "../hooks/use-modal-store";
 
 
 
@@ -32,8 +35,15 @@ interface TotalPatrimonios {
    count_t:string
  }
 
+ type Background = {
+  id: string;
+  imgURL: string;
+  titulo:string
+};
+
 export function GeralViewDashboard() {
-    
+
+    const db = getFirestore();
     const { isOpen: isOpenSidebar } = useModalSidebar();
 
     console.log(isOpenSidebar)
@@ -209,6 +219,63 @@ const [directoryJson, setDirectoryJson] = useState("");
     }
 }, [permission]);
 
+
+///delatra bg
+const [background, setBackground] = useState<Background[]>([]);
+
+const deleteItem = async (id: string) => {
+  if (!id) {
+    console.error("ID is undefined");
+    return;
+  }
+
+  try {
+    // Cria uma query para buscar o documento com o campo 'id' igual ao id fornecido
+    const q = query(collection(db, 'background'), where('id', '==', id));
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(async (docSnapshot) => {
+      // Referência do documento no Firestore
+      const docRef = doc(db, 'background', docSnapshot.id);
+      await deleteDoc(docRef);
+      
+      // Atualiza o estado para remover o item excluído
+      setBackground(prevBackground => prevBackground.filter(item => item.id !== id));
+
+      toast("Background deletado", {
+          description: "Operação realizada com sucesso",
+          action: {
+            label: "Fechar",
+            onClick: () => console.log("Undo"),
+          },
+        })
+    });
+  } catch (error) {
+    console.error("Erro ao excluir documento: ", error);
+  }
+};
+
+
+useEffect(() => {
+  const fetchEmails = async () => {
+    const querySnapshot = await getDocs(collection(db, 'background'));
+    const emailsData = querySnapshot.docs.map(doc => ({
+      id: doc.data().id,
+      titulo:doc.data().titulo,
+      imgURL:doc.data().imgURL
+
+    }));
+         
+            
+            setBackground(emailsData);
+      
+  };
+
+  fetchEmails();
+}, []);
+
+const {onOpen} = useModal()
+
     return  (
        <div className="w-full relative">
       
@@ -320,20 +387,37 @@ const [directoryJson, setDirectoryJson] = useState("");
                 <Alert  className="xl:col-span-2 p-0" x-chunk="dashboard-01-chunk-4" >
                 <CardHeader className="flex gap-6 flex-col md:flex-row  justify-between">
               <div className="grid gap-2 ">
-              <CardTitle>Usuários ativos por dia</CardTitle>
+              <CardTitle>Todos os backgrounds</CardTitle>
                 <CardDescription>
-                Dados do Google Analytics dos últimos 30 dias
+              Fundos e campanhas exibidos na plataforma 
                 </CardDescription>
                 </div>
 
                 <div className="flex gap-3">
-                  <ChartBar size={16}/>
+                 <Button onClick={() => onOpen('add-background')}><Plus size={16}/>Adicionar background</Button>
                 </div>
                </CardHeader>
 
-               <CardContent>
-               
-               </CardContent>
+               <CardContent className="flex flex-col gap-3 p-8 pt-0">
+                    
+                       <ScrollArea className="flex flex-col gap-3 h-[250px]">
+                       <div className="flex flex-col gap-3">
+                       {background.map((props) => {
+                            return(
+                                <Alert className="flex justify-between group  p-2">
+                                    <div className="flex items-center gap-3">
+                                    <div className="w-6 h-6 rounded-md whitespace-nowrap bg-cover bg-center bg-no-repeat " style={{ backgroundImage: `url(${props.imgURL})` }} />
+                                        <p className="max-w-[150px] truncate text-sm text-gray-500">{props.titulo}</p>
+                                    </div>
+
+                                    <Button onClick={() => deleteItem(props.id)} variant={'destructive'} size={'icon'} className="h-8 w-8 hidden transition-all group-hover:flex"><Trash size={13}/></Button>
+                                </Alert>
+                            )
+                        })}
+                       </div>
+                        <ScrollBar/>
+                       </ScrollArea>
+                        </CardContent>
 
                </Alert>
 

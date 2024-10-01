@@ -85,7 +85,9 @@ export function GraficosEventos({ publicacoes }: { publicacoes: Livros[] }) {
                 fill={chartConfig[nature].color}
                 radius={4}
               >
-                <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+                {index === Object.keys(chartConfig).length - 1 && (
+                    <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+                  )}
               </Bar>
             ))}
           </BarChart>

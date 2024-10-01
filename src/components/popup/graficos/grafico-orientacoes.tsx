@@ -86,9 +86,11 @@ export function GraficoOrientacoes(props: { livros: Livro[] }) {
             <CartesianGrid vertical={false} horizontal={false} />
             <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-            {Object.keys(normalizedChartConfig).map((nature) => (
+            {Object.keys(normalizedChartConfig).map((nature, index) => (
               <Bar key={nature} dataKey={nature} stackId="a" fill={normalizedChartConfig[nature].color} radius={4}>
-                 <LabelList dataKey="total" position="top" offset={12} className="fill-foreground" fontSize={12} />
+                {index === Object.keys(normalizedChartConfig).length - 1 && (
+                    <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+                  )}
               </Bar>
             ))}
           </BarChart>

@@ -8,16 +8,16 @@ import { UserContext } from "../../context/context";
 export function IndicatorsGraduate() {
    const {version} = useContext(UserContext)
    
-    let url = 'https://app.powerbi.com/view?r=eyJrIjoiNTEwMjUxMzktMzZjYS00ZjM1LWJhYzYtZDY3Y2I2YzE1ZGRiIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
+    let url = 'https://app.powerbi.com/view?r=eyJrIjoiNTUwYTBmMGYtMDY0Mi00OTlmLWJjZDctODJhY2QyNTIyNTg1IiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
 
     if (!version) {
         url = 'https://app.powerbi.com/view?r=eyJrIjoiZWYwOGJjZjctMjUwZi00MmViLTllYzQtNGI5OTgxMzVhMjFmIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9&pageName=ReportSection309e0a94f2ddc295a361'
     }
     const [value, setValue] = useState('article')
-  let url2 = 'https://app.powerbi.com/view?r=eyJrIjoiNTEwMjUxMzktMzZjYS00ZjM1LWJhYzYtZDY3Y2I2YzE1ZGRiIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
+  let url2 = 'https://app.powerbi.com/view?r=eyJrIjoiN2FkNjkzMmMtYjZmNy00MjY1LWFjNDktNzE3MWFiNjljZDhkIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
 
   if(!version) {
-    url2 = ''
+    url2 = 'https://app.powerbi.com/view?r=eyJrIjoiMjA2NzFlMDEtNGQ2My00MzgzLTk5OTUtNjhmNzZkMmU1MGI4IiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
   }
     return (
         <main className="flex flex-1 flex-col gap-4  px-4 md:px-8 ">

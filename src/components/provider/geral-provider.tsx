@@ -15,6 +15,7 @@ import { GruposPesquisaPage } from "../grupos-pesquisa/grupos-pesquisa";
 import { DepartamentPage } from "../departamentos/departamentos-page";
 import { ResearcherPage } from "../researcher/researcher-page";
 import { Maria } from "../maria/maria";
+import { TodosPesquisadores } from "../homepage/categorias/researchers-home/todos-pesquisadores";
 
 const ModalContent = () => {
   const { type } = useModalHomepage();
@@ -42,6 +43,8 @@ const ModalContent = () => {
       return <ResearcherPage/>
     case 'maria':
       return <Maria/>
+    case 'pesquisadores':
+      <TodosPesquisadores/>
   }
 }
 

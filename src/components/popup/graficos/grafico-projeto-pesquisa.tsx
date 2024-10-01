@@ -4,29 +4,57 @@ import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, Respons
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
 type Livro = {
-  id: string,
-  grant_date: string,
-  title: string,
-  year: string,
-  financing: string,
-  project_name: string
-};
+  agency_code: string
+  agency_name: string
+  nature: string
+  description: string
+  end_year: string
+  id: string
+  number_academic_masters: string
+  number_phd: string
+  number_specialists: string
+  number_undergraduates:string
+  project_name:string
+  start_year:string
+  status:string
+  researcher_id:string
+  production:Production[]
+  foment:Forment[]
+  components:Components[]
+}
+
+interface Components {
+  title:string 
+  type:string 
+}
+
+interface Production {
+  citations:string 
+  lattes_id:string 
+  name:string
+}
+
+interface Forment {
+  agency_code:string
+  agency_name:string
+  nature:string
+}
 
 const chartConfig = {
   'publicacoes': {
-    label: "Relatórios técnicos",
-    color: "#662D91",
+    label: "Projeto de pesquisa",
+    color: "#bae6fd",
   },
 } satisfies ChartConfig;
 
-export function GraficoRelatorio({ publicacoes }: { publicacoes: Livro[] }) {
+export function GraficoProjetoPesquisa({ publicacoes }: { publicacoes: Livro[] }) {
   const [chartData, setChartData] = useState<{ year: string; count: number }[]>([]);
 
   useEffect(() => {
     const counts: { [key: string]: number } = {};
 
     publicacoes.forEach(publicacao => {
-      const year = publicacao.year;
+      const year = publicacao.start_year;
       counts[year] = (counts[year] || 0) + 1;
     });
 
@@ -44,11 +72,11 @@ export function GraficoRelatorio({ publicacoes }: { publicacoes: Livro[] }) {
     <Alert className="pt-12">
       <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <ResponsiveContainer>
-          <BarChart data={chartData}  margin={{ top: 20,  right: -10, left: -10, bottom: 0 }}>
+          <BarChart data={chartData}  margin={{ top: 20,  right: -5, left: -5, bottom: 0 }}>
           <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
 
           
-            <CartesianGrid horizontal={false} />
+            <CartesianGrid vertical={false} horizontal={false} />
             <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Bar dataKey="count" fill={chartConfig.publicacoes.color} radius={4}>
