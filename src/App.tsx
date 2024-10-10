@@ -224,9 +224,11 @@ useEffect(() => {
         <Route path='/departamentos' element={<Home/>}/>
         <Route path='/researcher' element={<Home/>}/>
         <Route path='/marIA' element={<Home/>}/>
-        <Route path='/relatar-problema' element={<Home/>}/>
 
-        <Route path='/pesquisadores' element={<Home/>}/>
+        <Route path='/relatar-problema' element={<Home/>}/>
+        <Route path='/pesquisadores-selecionados' element={<Home/>}/>
+
+        <Route path='/docentes-tecnicos' element={<Home/>}/>
 
        
         <Route path='/termos-uso' element={<TermosUso/>}/>
@@ -262,6 +264,9 @@ useEffect(() => {
     path='/dashboard'
     element={<Dashboard />}
   />
+
+<Route path='/dashboard/relatar-problema' element={<Dashboard />}/>
+<Route path='/dashboard/pesquisadores-selecionados' element={<Dashboard />}/>
 
 
 <Route

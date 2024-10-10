@@ -149,6 +149,8 @@ export function GraficoIndiceArticle(props: Articles) {
           fontSize={12}
         />
       )}
+
+      
     </Bar>
   )
 ))}

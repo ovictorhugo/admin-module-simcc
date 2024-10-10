@@ -4,11 +4,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 
 import { HeaderResultTypeHome } from "../header-result-type-home";
 import { Button } from "../../../ui/button";
-import { Rows } from "lucide-react";
-import { SquaresFour, UserList } from "phosphor-react";
+
+import { Rows, SquaresFour, UserList } from "phosphor-react";
 
 import { ResearchersBloco } from "./researchers-bloco";
 import { TableReseracherhome } from "./table-reseracher-home";
+import { Link } from "react-router-dom";
+import { ArrowRight, Info } from "lucide-react";
 type Research = {
     among: number,
     articles: number,
@@ -60,7 +62,7 @@ scholarship_quantity:string
 
 export function TodosPesquisadores() {
     
-    const {urlGeral} = useContext(UserContext)
+    const {urlGeral , version} = useContext(UserContext)
     
         const [researcher, setResearcher] = useState<Research[]>([]);
 
@@ -94,7 +96,39 @@ export function TodosPesquisadores() {
             }, [urlTermPesquisadores]);
 
     return(
-        <main className="px-4 md:px-8 ">
+        <main className="px-4 md:px-8 w-full ">
+
+<div className="justify-center px-4 md:px-8 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
+        <Link to={'/informacoes'}  className="inline-flex z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
+        
+          {version ? (
+              <h1 className="z-[2] text-center max-w-[650px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
+              Todos os{" "}
+              <strong className="bg-[#82AAC0]  rounded-md px-3 pb-2 text-white font-medium">
+                {" "}
+                docentes e técnicos
+              </strong>{" "}
+             da Escola de Engenharia
+            </h1>
+          ):(
+            <h1 className="z-[2] text-center max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
+            Todos os{" "}
+            <strong className="bg-[#82AAC0]  rounded-md px-3 pb-2 text-white font-medium">
+              {" "}
+              docentes e técnicos
+            </strong>{" "}
+           que fazem parte da Escola de Engenharia
+          </h1>
+          )}
+            <p className="max-w-[750px] text-center text-lg font-light text-foreground"></p>
+
+
+
+              
+
+             
+          </div>
+
             <Accordion defaultValue="item-1" type="single" collapsible>
                 <AccordionItem value="item-1">
                 <div className="flex mb-2">

@@ -201,7 +201,7 @@ export function InitialHome() {
         }
 
 
-  let urlGrupo =`${urlGeral}fomente`
+  let urlGrupo =`${urlGeral}foment`
 
   const [grupos, setGrupos] = useState<GrupoPesquisa[]>([]);
 
@@ -524,6 +524,8 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
 
     const {onOpen} = useModal()
 
+
+
   return (
     <>
       {isModalOpen && (
@@ -639,7 +641,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
           <div className=" w-full md:px-8 md:gap-8 gap-4 flex flex-col px-4">
            
            <Alert className="grid gap-3 lg:grid-cols-4 grid-cols-2">
-           <Link to={'/resultados?type_search=article&terms=&researcher=false'}>
+           <Link onClick={() => onOpenResult('articles-home')}  to={'/resultados?type_search=article&terms=&researcher=false'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                      <div>
                      <CardTitle className="text-sm font-medium">
@@ -659,7 +661,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                  </span>
                   </CardContent>
             </Link>
-            <Link to={'/resultados?type_search=book&terms=&researcher=false'}>
+            <Link onClick={() => onOpenResult('book-home')} to={'/resultados?type_search=book&terms=&researcher=false'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                      <div>
                      <CardTitle className="text-sm font-medium">
@@ -679,7 +681,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                  </span>
                   </CardContent>
             </Link>
-             <Link to={'/resultados?type_search=book&terms=&researcher=false'}>
+             <Link onClick={() => onOpenResult('book-home')}  to={'/resultados?type_search=book&terms=&researcher=false'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                      <div>
                      <CardTitle className="text-sm font-medium">
@@ -700,7 +702,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                   </CardContent>
             </Link>
 
-            <Link to={'/resultados?type_search=patent&terms=&researcher=false'}>
+            <Link onClick={() => onOpenResult('patent-home')}  to={'/resultados?type_search=patent&terms=&researcher=false'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                      <div>
                      <CardTitle className="text-sm font-medium">
@@ -729,6 +731,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
           <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
                    {version ? (
                      <div className="h-full gap-8 grid">
+                           <Link to={'/docentes-tecnicos'}>
                      <Alert className="p-0 ">
                      <CardHeader className="flex p-10 flex-row items-center justify-between space-y-0 pb-2">
                      <div>
@@ -755,7 +758,9 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                  </div>
  
                      </Alert>
- 
+                     </Link>
+                     
+                     <Link to={'/docentes-tecnicos'}>
                      <Alert className="p-0 ">
                      <CardHeader className="flex flex-row p-10 items-center justify-between space-y-0 pb-2">
                      <div>
@@ -780,7 +785,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                  <GraficoRtTechnician rtData={rt}/>
                  </div>
  
-                     </Alert>
+                     </Alert></Link>
                      </div>
                    ) : (
                     <Alert className="p-0 ">

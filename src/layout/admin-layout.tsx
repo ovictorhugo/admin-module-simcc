@@ -8,14 +8,15 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../compone
 import { cn } from "../lib"
 import { toast } from "sonner"
 
-import { useContext,  useState } from "react";
+import { useContext,  useEffect,  useState } from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { Blocks,  Building2, ChevronDown, ChevronUp, ClipboardEdit, FlaskConical, GraduationCap,  Info, LayoutDashboard,  Mail, PieChart,  Play,  SlidersHorizontal,  Terminal,   Users, Weight } from "lucide-react";
+import { Blocks,  Bug,  Building2, ChevronDown, ChevronUp, ClipboardEdit, FlaskConical, GraduationCap,  Info, LayoutDashboard,  Mail, PieChart,  Play,  SlidersHorizontal,  Terminal,   UserPlus,   Users, Weight } from "lucide-react";
 
 import { useLocation } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { ApacheViewDashboard } from "../components/dashboard/apache-view-dashboard";
+import { useModal } from "../components/hooks/use-modal-store";
 
 interface MailProps {
  
@@ -221,6 +222,16 @@ export default function AdminLayout({
   const location = useLocation()
   const [isOpenConsole, setIsOpenConsole] = useState(false)
 
+  const {onOpen} = useModal()
+
+useEffect(() => {
+  if(location.pathname == '/dashboard/relatar-problema') {
+  onOpen('relatar-problema')
+} else  if(location.pathname == '/dashboard/pesquisadores-selecionados') {
+  onOpen('pesquisadores-selecionados')
+} 
+}, [location]);
+
   //apache
 
   const handleSubmit = async () => {
@@ -282,6 +293,33 @@ export default function AdminLayout({
   
   fetchData();
 };
+
+
+const links3 = [
+  ...(hasBaremaAvaliacao
+    ? [
+        {
+          title: "Pesquisadores selecionados",
+          label: `${pesquisadoresSelecionados.length == 0 ? (''):(pesquisadoresSelecionados.length)}`,
+          icon: UserPlus,
+          link: "/dashboard/pesquisadores-selecionados",
+        },
+      ]
+    : []),
+
+  {
+    title: "Relatar problema",
+    label: "",
+    icon: Bug,
+    link: "/dashboard/relatar-problema",
+  },
+  {
+    title: "Informações",
+    label: "",
+    icon: Info,
+    link: "/dashboard/informacoes",
+  },
+]
   
     return (
     <div>
@@ -331,16 +369,7 @@ export default function AdminLayout({
 <div className="flex flex-col ">
           <NavigationSidebar
             isCollapsed={isCollapsed}
-            links={[
-              {
-                title: "Informações",
-                label: "",
-                icon: Info,
-                link: "/dashboard/informacoes",
-              },
-           
-             
-            ]}
+            links={links3}
           />
 
        

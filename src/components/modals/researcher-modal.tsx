@@ -358,7 +358,7 @@ function generateNameVariations(name: string): string[] {
    const monthDifference = (currentDate.getFullYear() - lattesYear) * 12 + (currentDate.getMonth() + 1 - lattesMonth);
 
    const isOutdated = monthDifference > 3;
-   
+   const isOutdated6 = monthDifference > 6;
 
    
 
@@ -367,7 +367,7 @@ function generateNameVariations(name: string): string[] {
                  <div className="px-16 pt-6 pb-2">
                    <div className="flex  justify-between items-center w-full"> 
        
-       <div className={`border dark:border-neutral-800 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated ? ('bg-red-500 text-white border-none') : ('')}`}>Atualização do Lattes: {String(props.lattes_update)}</div>
+       <div className={`border dark:border-neutral-800 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none' ): ('')}`}>Atualização do Lattes: {String(props.lattes_update)}</div>
      
 
        <div className="flex gap-3">

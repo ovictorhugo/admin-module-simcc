@@ -13,29 +13,40 @@ import {
 import { Button } from "../../ui/button";
 import { Link } from "react-router-dom";
 import { useModal } from "../../hooks/use-modal-store";
-import { Eye } from "lucide-react";
+import { Eye, Maximize2 } from "lucide-react";
 
 type Articles = {
-    id: string,
-    doi: string,
-    name_periodical: string,
-    qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "NP" | "SQ",
-    title: string,
-    year: string,
-    color: string,
-    researcher: string,
-    lattes_id: string,
-    magazine: string,
-    lattes_10_id: string,
-    jif: string,
-    jcr_link: string
-    researcher_id: string
-    distinct: boolean
+  id: string,
+  doi: string,
+  name_periodical: string,
+  qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "SQ",
+  title: string,
+  year: string,
+  color: string,
+  researcher: string,
+  lattes_id: string,
+  magazine: string,
+  lattes_10_id: string,
+  jif: string,
+  jcr_link: string
+  researcher_id: string
+  distinct: boolean
+
+  abstract:string,
+  article_institution:string,
+  authors:string
+  authors_institution:string
+  citations_count:string 
+  issn:string 
+  keywords:string 
+  landing_page_url:string 
+  language:string 
+  pdf:string
 }
 
 
 interface ItemsSelecionados {
-  term: string;
+term: string;
 }
 
 export function ArticleItem(props:Articles) {
@@ -94,7 +105,7 @@ export function ArticleItem(props:Articles) {
 
   const highlightedTitleEvent = highlightText(props.title || '', itemsSelecionados);
     return(
-        <div className="flex  h-full w-full" >
+        <div className="flex  h-full w-full group" >
             
                     <div
                       className={` w-2 min-h-[200px] h-full rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${qualisColor[props.qualis as keyof typeof qualisColor]} `}
@@ -105,7 +116,43 @@ export function ArticleItem(props:Articles) {
                 <Alert className="rounded-l-none h-full flex flex-col justify-between">
                     <div>
                         <div>
-                           <h3 className="font-semibold mb-4 ">{props.name_periodical}{props.magazine}</h3>
+                        <div className="flex mb-1 gap-3 justify-between">
+           <h3 className="font-semibold mb-4 ">{props.name_periodical}{props.magazine}</h3>
+
+           <div className="h-8 w-8">
+           
+<Button
+  onClick={() =>
+    onOpen('articles-modal', {
+      doi: doi,
+      qualis: props.qualis,
+      title: props.title,
+      year: props.year,
+      jif: props.jif,
+      lattes_10_id: props.lattes_10_id,
+      researcher_id: props.researcher_id,
+      magazine: props.name_periodical,
+      abstract: props.abstract,
+      article_institution: props.article_institution,
+      authors: props.authors,
+      authors_institution: props.authors_institution,
+      citations_count: props.citations_count,
+      issn: props.issn,
+      keywords: props.keywords,
+      landing_page_url: props.landing_page_url,
+      language: props.language,
+      pdf: props.pdf,
+      researcher:props.researcher
+    })
+  }
+  variant="outline"
+  size={'icon'}
+  className="ml-auto hidden group-hover:flex text-sm h-8 w-8 text-gray-500 dark:text-gray-300"
+>
+  <Maximize2 size={16} />
+</Button>
+           </div>
+           </div>
                             <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">
                               {highlightedTitleEvent}
                             </p>
@@ -126,31 +173,32 @@ export function ArticleItem(props:Articles) {
                         </div>
 
                       <div className=" ml-auto flex items-center gap-2">
-                      <Button variant="outline" size={'icon'} className="ml-auto text-sm h-8 w-8 text-gray-500 dark:text-gray-300">
-            <Eye onClick={() => onOpen('articles-modal', {doi:doi, qualis:props.qualis, title:props.title, year:props.year, jif:props.jif, lattes_10_id:props.lattes_10_id, researcher_id:props.researcher_id, magazine:props.name_periodical})} size={16}/>
-            </Button>
-                        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size={'icon'} className="ml-auto text-sm h-8 w-8 text-gray-500 dark:text-gray-300">
-            <DotsThree size={16}/>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-auto">
-          {props.doi != 'None' && (
-            <Link target="_blank" to={`http://dx.doi.org/${props.doi}`}>
-        
-            <DropdownMenuItem className="flex items-center gap-3"><LinkSimple className="h-4 w-4" />Link DOI</DropdownMenuItem>
-          </Link>
-          )}
-          <DropdownMenuSeparator />
+                     
+            <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size={'icon'} className="ml-auto text-sm w-8 h-8 text-gray-500 dark:text-gray-300">
+                <DotsThree size={16} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-auto">
+              {props.doi != 'None' && (
+                <div>
+                  <Link target="_blank" to={`http://dx.doi.org/${props.doi}`}>
+                  <DropdownMenuItem className="flex items-center gap-3">
+                    <LinkSimple className="h-4 w-4" />Link DOI da publicação
+                  </DropdownMenuItem>
+                </Link>
 
-          <DropdownMenuItem className="gap-3 flex items-center">
-          <div className={`border-[1px] border-gray-300 rounded-sm h-6 w-6 bg-cover bg-center bg-no-repeat`} style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.researcher_id}) ` }}></div>
-          {props.researcher}
-            </DropdownMenuItem>
-
-          </DropdownMenuContent>
-        </DropdownMenu>
+<DropdownMenuSeparator />
+                </div>
+              )}
+              
+              <DropdownMenuItem className="gap-3 flex items-center" onClick={() => onOpen('researcher-modal', {name:props.researcher})}>
+                <div className={`border-[1px] border-gray-300 rounded-md h-6 w-6 bg-cover bg-center bg-no-repeat`} style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.researcher_id}) ` }}></div>
+                {props.researcher}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
                       </div>
                         
                     </div>

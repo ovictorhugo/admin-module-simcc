@@ -190,7 +190,9 @@ da Escola de Engenharia
              <div className="flex justify-between w-full items-center">
              <div className="flex w-full flex-col">
                 <div className="flex w-full flex-col gap-1">
-               
+               <div>
+               <img className="h-12 mix-blend-multiply" src={`data:image/jpeg;base64,${item.img_data}`} />
+               </div>
                    <div className="flex items-center">
      
                  
@@ -219,7 +221,7 @@ da Escola de Engenharia
                  
      
                 </div>
-                <img className="h-12 mix-blend-multiply" src={`data:image/jpeg;base64,${item.img_data}`} />
+               
                  
              </div>
                 

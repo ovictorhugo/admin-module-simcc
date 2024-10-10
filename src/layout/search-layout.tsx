@@ -10,7 +10,7 @@ import bg_popup from '../assets/bg_welcome.png';
 import { useContext, useEffect, useState} from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { BarChartBig, Blocks, BookOpen, Bug, Building2, GraduationCap, Home, Info, InfoIcon, List, PanelLeftDashed, SearchCheck, Sparkles, X } from "lucide-react";
+import { BarChartBig, Blocks, BookOpen, Bug, Building2, GraduationCap, Home, Info, InfoIcon, List, PanelLeftDashed, SearchCheck, Sparkles, UserPlus, X } from "lucide-react";
 
 
 import { Footer } from "../components/footer/footer";
@@ -24,7 +24,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../components/ui/dialog"
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface MailProps {
  
@@ -41,7 +41,7 @@ export default function SearchLayout({
   children
 }: MailProps) {
   
-  const {isCollapsed, setIsCollapsed, version} = useContext(UserContext)
+  const {isCollapsed, setIsCollapsed, version, permission, pesquisadoresSelecionados} = useContext(UserContext)
   
  
   const {onOpen} = useModal()
@@ -97,6 +97,17 @@ export default function SearchLayout({
         localStorage.setItem('cookies', 'true');
     }
 }, []);
+
+///BUG
+const location = useLocation();
+
+useEffect(() => {
+  if(location.pathname == '/relatar-problema') {
+  onOpen('relatar-problema')
+} else  if(location.pathname == '/pesquisadores-selecionados') {
+  onOpen('pesquisadores-selecionados')
+} 
+}, [location]);
 
 const links = [
   {
@@ -165,6 +176,37 @@ const links2 = [
   },
 ]
 
+const hasBaremaAvaliacao = permission.some(
+  (perm) => perm.permission === 'criar_barema_avaliacao'
+);
+
+
+const links3 = [
+  ...(hasBaremaAvaliacao
+    ? [
+        {
+          title: "Pesquisadores selecionados",
+          label: `${pesquisadoresSelecionados.length == 0 ? (''):(pesquisadoresSelecionados.length)}`,
+          icon: UserPlus,
+          link: "/pesquisadores-selecionados",
+        },
+      ]
+    : []),
+
+  {
+    title: "Relatar problema",
+    label: "",
+    icon: Bug,
+    link: "/relatar-problema",
+  },
+  {
+    title: "Informações",
+    label: "",
+    icon: Info,
+    link: "/informacoes",
+  },
+]
+
     return (
     <div>
       
@@ -230,22 +272,7 @@ const links2 = [
 <div className="flex flex-col ">
           <NavigationSidebar
             isCollapsed={isCollapsed}
-            links={[
-              {
-                title: "Relatar problema",
-                label: "",
-                icon: Bug,
-                link: "/relatar-problema",
-              },
-              {
-                title: "Informações",
-                label: "",
-                icon: Info,
-                link: "/informacoes",
-              },
-           
-             
-            ]}
+            links={links3}
           />
 
           </div>

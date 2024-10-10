@@ -161,39 +161,42 @@ const {onOpen} = useModal()
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+    
+{version && (
+  
+  <DropdownMenu>
+  <DropdownMenuTrigger asChild>
+  <Button variant="ghost" size="icon" >
+            <Grip className="h-4 w-4" />
+            <span className="sr-only">Menu de ações rápidas</span>
+          </Button>
 
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-      <Button variant="ghost" size="icon" >
-                <Grip className="h-4 w-4" />
-                <span className="sr-only">Menu de ações rápidas</span>
-              </Button>
+          
+  </DropdownMenuTrigger>
 
-              
-      </DropdownMenuTrigger>
+  <DropdownMenuContent align="end" >
+    <div className="grid gap-3 grid-cols-3">
+    <Link to={'https://vitrinepatrimonio.eng.ufmg.br/'} target="_blank">
+    <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
+                  <div className="h-8 mb-4">{(theme ==  'dark' ) ? (<SymbolVPWhite />):(<SymbolVP />)}</div>
+                  <div className="flex  text-xs font-medium max-w-[70px] truncate  text-center"> Vitrine Patrimônio</div>
+                  </DropdownMenuItem></Link>
 
-      <DropdownMenuContent align="end" >
-        <div className="grid gap-3 grid-cols-3">
-        <Link to={'https://vitrinepatrimonio.eng.ufmg.br/'} target="_blank">
-        <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
-                      <div className="h-8 mb-4">{(theme ==  'dark' ) ? (<SymbolVPWhite />):(<SymbolVP />)}</div>
-                      <div className="flex  text-xs font-medium max-w-[70px] truncate  text-center"> Vitrine Patrimônio</div>
-                      </DropdownMenuItem></Link>
+                  <Link to={'https://conectee.eng.ufmg.br/'} target="_blank">
+    <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
+                  <div className="h-8 mb-4">{(theme ==  'dark' ) ? (<SymbolEEWhite />):(<SymbolEE />)}</div>
+                  <div className="flex  text-xs font-medium max-w-[70px]  truncate text-center"> Conectee</div>
+                  </DropdownMenuItem></Link>
 
-                      <Link to={'https://conectee.eng.ufmg.br/'} target="_blank">
-        <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
-                      <div className="h-8 mb-4">{(theme ==  'dark' ) ? (<SymbolEEWhite />):(<SymbolEE />)}</div>
-                      <div className="flex  text-xs font-medium max-w-[70px]  truncate text-center"> Conectee</div>
-                      </DropdownMenuItem></Link>
-
-                      <Link to={'/'}>
-        <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
-                      <div className="h-8 mb-4"></div>
-                      <div className="flex  text-xs font-medium max-w-[70px]  truncate text-center"> CEGRADEE</div>
-                      </DropdownMenuItem></Link>
-        </div>
-      </DropdownMenuContent>
-    </DropdownMenu>
+                  <Link to={'/'}>
+    <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
+                  <div className="h-8 mb-4"></div>
+                  <div className="flex  text-xs font-medium max-w-[70px]  truncate text-center"> CEGRADEE</div>
+                  </DropdownMenuItem></Link>
+    </div>
+  </DropdownMenuContent>
+</DropdownMenu>
+)}
     
 {loggedIn && (
   

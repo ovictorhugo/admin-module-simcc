@@ -1,17 +1,19 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { Button } from "../ui/button";
-import { Building, ChevronLeft, Rows, Shapes, SquareArrowOutUpRight } from "lucide-react";
+import { Building, ChevronLeft, Eye, Plus, Shapes, SquareArrowOutUpRight, UserIcon } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 
-import { SquaresFour } from "phosphor-react";
+import { Rows, SquaresFour } from "phosphor-react";
 import { ResearchersBloco } from "../homepage/categorias/researchers-home/researchers-bloco";
 import { Skeleton } from "../ui/skeleton";
 import { TableReseracherhome } from "../homepage/categorias/researchers-home/table-reseracher-home";
 import { Alert } from "../ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useModal } from "../hooks/use-modal-store";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -248,7 +250,7 @@ console.log(urlLinhasPequisa)
 
    
 
-    const items = Array.from({ length: 12 }, (_, index) => (
+    const items = Array.from({ length: 2 }, (_, index) => (
       <Skeleton key={index} className="w-full rounded-md h-[170px]" />
     ));
 
@@ -347,6 +349,8 @@ console.log(urlLinhasPequisa)
     };
     
   
+    const [count, setCount] = useState(12)
+    const {onOpen} = useModal()
 
     return(
         <main className="flex flex-1 flex-col gap-4 md:gap-8 ">
@@ -440,7 +444,43 @@ console.log(urlLinhasPequisa)
                           </Masonry>
                         </ResponsiveMasonry>
                       ) : (
-                        <ResearchersBloco researcher={researcher} />
+                        <div className="flex flex-col gap-4">
+                        {researcher.map((props, index) => (
+           <Alert key={index}>
+           <div className="flex justify-between items-center h-10 group">
+                <div className="h-10">
+                  <div className="flex items-center gap-2">
+                    <Avatar className="cursor-pointer rounded-md h-8 w-8">
+                      <AvatarImage
+                        className="rounded-md h-8 w-8"
+                        src={`${urlGeral}ResearcherData/Image?name=${props.name}`}
+                      />
+                      <AvatarFallback className="flex items-center justify-center">
+                        <UserIcon size={12} />
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-medium">{props.name}</p>
+                      <div className="text-xs text-gray-500">{props.university}</div>
+                    </div>
+                  </div>
+                </div>
+               <div className="flex items-center gap-3">
+              <div className=" items-center gap-3 hidden group-hover:flex transition-all">
+              <Button size={'icon'}  onClick={() => onOpen('researcher-modal', {name:props.name})} variant={'ghost'} className="h-10 w-10 ">
+                   <Eye size={16}  />
+             </Button>
+ 
+          
+          
+              </div>
+          
+               
+               </div>
+              </div>
+          </Alert>
+                        ))}
+                      </div>
                       )
                     ) : (
                       loading ? (
@@ -476,15 +516,15 @@ console.log(urlLinhasPequisa)
                           }}
                         >
                           <Masonry gutter="16px">
-                            {linhasPesquisa.map((props) => (
+                            {linhasPesquisa.slice(0, count).map((props) => (
                             <div className="flex" >
                                 <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border min-h-[120px] border-neutral-200 border-r-0 ${qualisColor[normalizeArea(props.area || '')]} min-h-full relative`}></div>
                                 <Alert className="rounded-l-none">
                                  <p className="text-xs text-gray-500 mb-2 flex items-center gap-2 justify-between">{props.area}</p>
                                 <h5 className="font-semibold mb-4  ">{props.line}</h5>
                                <div className="flex flex-wrap gap-3 mt-4">
-                                {props.keywords.split(';').map((item) => (
-                                  <div className=" w-fit border-neutral-200 border dark:border-neutral-800 py-2 px-4  rounded-md text-xs  flex gap-2 items-center">{item}</div>
+                                {props.keywords.split(';').map((item, index) => (
+                                  <div className=" text-xs" key={String(index)}> {item}</div>
                                 ))}
                                </div>
                                 </Alert>
@@ -492,6 +532,10 @@ console.log(urlLinhasPequisa)
                             ))}
                           </Masonry>
                           </ResponsiveMasonry>
+
+                          {linhasPesquisa.length > count && (
+            <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
+        )}
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

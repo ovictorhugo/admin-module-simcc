@@ -53,8 +53,8 @@ export function Home() {
     onOpen('pesquisador')
 } else if(location.pathname == '/marIA') {
     onOpen('maria')
-} else if(location.pathname == '/pesquisadores') {
-    onOpen('pesquisadores')
+} else if(location.pathname == '/docentes-tecnicos') {
+    onOpen('docentes-tecnicos')
 } 
     }, [location]);
   

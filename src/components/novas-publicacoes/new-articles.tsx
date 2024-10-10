@@ -144,7 +144,7 @@ const [gg, setGG] = useState('')
 const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
 
 
-const urlTermPublicacoes = urlGeral + `recently_updated?year=2024&university=&dep_id=${(totalSelecionado?.dep_id == undefined && gg == 'Todos os departamentos') ? (''):(totalSelecionado?.dep_id)}`
+const urlTermPublicacoes = urlGeral + `recently_updated?year=2024&university=&dep_id=${totalSelecionado != null ? (totalSelecionado?.dep_id):('')}`
 console.log(urlTermPublicacoes)
 useMemo(() => {
     const fetchData = async () => {
@@ -244,10 +244,10 @@ console.log(totalSelecionado?.dep_nom || '')
             <TabsContent value="all" className="max-h-[calc(100vh-162px)] h-full ">
            
  <div className="flex  flex-col  h-full ">
- <div className="lg:max-w-[500px]  mt-2">
+ <div className="  mt-2">
             
 
-                        <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
+                        <h1 className={`  ${totalSelecionado != null ? ('max-w-[800px]'):('max-w-[500px]')} text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3`}>
                           Todas os artigos mais{" "}
                             <strong className="bg-[#709CB6] rounded-md px-3 pb-2 text-white font-medium">
                             recentes
@@ -265,7 +265,7 @@ console.log(totalSelecionado?.dep_nom || '')
                             setTotalSelecionado(selectedDep);
                           }
                         }}>
-                        <SelectTrigger className="">
+                        <SelectTrigger className="max-w-[500px]">
                           <SelectValue placeholder="Escolha o departamento" />
                         </SelectTrigger>
                         <SelectContent>

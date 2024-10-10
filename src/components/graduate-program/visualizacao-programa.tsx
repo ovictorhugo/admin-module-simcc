@@ -41,6 +41,7 @@ import { useTheme } from "next-themes";
 import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
 import { LogoConectee } from "../svg/LogoConectee";
 import { GraduateProgram } from "./graduate-program";
+import { Badge } from "../ui/badge";
 
 interface PalavrasChaves {
   term: string;
@@ -599,7 +600,11 @@ useEffect(() => {
               <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
                 Pós-graduação
               </h1>
-             
+             <Badge variant={'outline'} className="max-w-[500px] truncate">
+             {graduatePrograms.map((props) => (
+          <>{props.name}</>
+        ))}
+             </Badge>
 
                 
             

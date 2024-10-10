@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ModalType = "initial-home" | "maria-home" | "result-home" | 'graduation-home' | 'baremas'| 'meus-baremas' | 'procurar-baremas' | 'result-procurar-baremas' | 'dicionario' |'indicadores' | 'producoes-recentes' | 'informacoes' | 'grupos-pesquisa' | 'departamentos' | 'pesquisador' |'maria' | 'pesquisadores'
+export type ModalType = "initial-home" | "maria-home" | "result-home" | 'graduation-home' | 'baremas'| 'meus-baremas' | 'procurar-baremas' | 'result-procurar-baremas' | 'dicionario' |'indicadores' | 'producoes-recentes' | 'informacoes' | 'grupos-pesquisa' | 'departamentos' | 'pesquisador' |'maria' | 'pesquisadores' | 'docentes-tecnicos'
 
 
 interface ModalStore {

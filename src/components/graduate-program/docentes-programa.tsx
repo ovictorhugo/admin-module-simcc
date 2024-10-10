@@ -178,8 +178,7 @@ export function DocentesPrograma() {
                  </h1>
                  <p className="max-w-[750px]  text-lg font-light text-foreground">Todos os pesquisadores que fazem parte do programa de pós-graduação </p>
                            <div className="flex gap-3 mt-3">
-                             <Button size={'sm'} 
-                            >Importar dados dos docentes</Button>
+                            
                             
                            </div>
          

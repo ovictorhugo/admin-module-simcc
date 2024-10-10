@@ -31,6 +31,8 @@ import { MinhaArea } from "../minha-area/minha-area";
 import { ProjectModal } from "../modals/project-modal";
 import { AddBackground } from "../modals/add-background";
 import { CookiesModal } from "../modals/cookies";
+import { RelatarBug } from "../modals/relatar-bug";
+import { PesquisadoresSelecionadosModal } from "../modals/pesquisadores-selecionados-modal";
 
 const ModalContent = () => {
   const { type } = useModal();
@@ -83,6 +85,10 @@ const ModalContent = () => {
         return <AddBackground/>
       case 'cookies':
         return <CookiesModal/>
+      case 'relatar-problema':
+        return <RelatarBug/>
+      case 'pesquisadores-selecionados':
+        return <PesquisadoresSelecionadosModal/>
 
     default:
       return null;

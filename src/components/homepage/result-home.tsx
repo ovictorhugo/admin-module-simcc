@@ -31,8 +31,30 @@ export function ResultHome() {
   
   const researcher = queryUrl.get('researcher');
 
+  const type_search = queryUrl.get('type_search');
+  const terms = queryUrl.get('terms');
 
   const isModalOpen = isOpen && type === "result-home";
+
+  useEffect(() => {
+    if (type_search == 'patent' && terms == '') {
+      onOpen('patent-home')
+    } else if (type_search == 'area' && terms == '') {
+      onOpen('researchers-home')
+    } else if (type_search == 'abstract' && terms == '') {
+      onOpen('researchers-home')
+    } else if (type_search == 'speaker' && terms == '') {
+      onOpen('speaker-home')
+    } else if (type_search == 'book' && terms == '') {
+      onOpen('book-home')
+    } else if (type_search == 'article' && terms == '') {
+      onOpen('articles-home')
+    } else if (type_search == 'name' && terms == '') {
+      onOpen('researchers-home')
+    } else if(typeResult == null || typeResult == undefined) {
+      onOpen('researchers-home')
+    }
+    }, [ typeResult]);
 
   return (
     <>

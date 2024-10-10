@@ -43,8 +43,8 @@ const ModalContent = () => {
       return <ResearcherPage/>
     case 'maria':
       return <Maria/>
-    case 'pesquisadores':
-      <TodosPesquisadores/>
+    case 'docentes-tecnicos':
+      return <TodosPesquisadores/>
   }
 }
 
