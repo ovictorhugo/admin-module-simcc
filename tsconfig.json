@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-  
+    "types": [
+      "node",
+      "vite/client"
+    ],
+    
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable", "esnext"],
     "module": "ESNext",
@@ -27,5 +31,5 @@
 
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src", "@/lib", "declarations.d.ts"]
+  "include": ["src", "@/lib"]
 }
