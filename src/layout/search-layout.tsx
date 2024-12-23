@@ -10,7 +10,7 @@ import bg_popup from '../assets/bg_welcome.png';
 import { useContext, useEffect, useState} from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { BarChartBig, Blocks, BookOpen, Bug, Building2, GraduationCap, Home, Info, InfoIcon, List, PanelLeftDashed, SearchCheck, Sparkles, UserPlus, X } from "lucide-react";
+import { BarChartBig, Blocks, BookOpen, Bug, Building2, GraduationCap, Home, Info, InfoIcon, Link2, List, PanelLeftDashed, SearchCheck, Sparkles, UserPlus, X } from "lucide-react";
 
 
 import { Footer } from "../components/footer/footer";
@@ -44,7 +44,7 @@ export default function SearchLayout({
   const {isCollapsed, setIsCollapsed, version, permission, pesquisadoresSelecionados} = useContext(UserContext)
   
  
-  const {onOpen} = useModal()
+  const {onOpen, isOpen, type: typeModal } = useModal()
 
   useEffect(() => {
     // Função que será chamada quando o evento de teclado ocorrer
@@ -73,7 +73,7 @@ export default function SearchLayout({
       // Verifica no localStorage se o modal já foi exibido
       const hasVisited = localStorage.getItem('hasVisited');
 
-      if (!hasVisited) {
+      if (!hasVisited && (!isOpen)) {
           // Se não foi exibido, abre o modal
           setIsModalOpen(true);
           // Marca no localStorage que o modal foi exibido
@@ -173,6 +173,12 @@ const links2 = [
     label: "",
     icon: Blocks,
     link: "/grupos-pesquisa",
+  },
+  {
+    title: "Painéis de dados externos",
+    label: "",
+    icon: Link2,
+    link: "/paines-dados-externos",
   },
 ]
 
@@ -302,8 +308,8 @@ const links3 = [
       </TooltipProvider >
 
 
-      <Dialog open={isModalOpen} onOpenChange={handleClose}>
-            <DialogContent className="p-0">
+      <Dialog open={isModalOpen} >
+            <DialogContent className="p-0 ">
               <div className="h-[300px] w-full bg-cover bg-no-repeat bg-center"  style={{ backgroundImage: `url(${bg_popup})` }}></div>
                 <DialogHeader className="p-6">
                     <DialogTitle className="text-2xl font-medium">Apresentamos a plataforma {version ? ('Conectee'):('Iapós')}</DialogTitle>

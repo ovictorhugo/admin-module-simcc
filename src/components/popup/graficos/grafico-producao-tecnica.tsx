@@ -34,7 +34,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GraficoProducaoTecnica({ software, publicacoes, marca }: { software: Livros[], publicacoes: Patente[], marca: Livros[] }) {
-  const [chartData, setChartData] = useState<{ year: string; [key: string]: number }[]>([]);
+  const [chartData, setChartData] = useState<{ year: number; [key: string]: number }[]>([]);
 
   useEffect(() => {
     const counts: { [year: string]: { [key: string]: number } } = {};
@@ -57,8 +57,19 @@ export function GraficoProducaoTecnica({ software, publicacoes, marca }: { softw
       counts[year].marca = (counts[year].marca || 0) + 1;
     });
 
-    const data = Object.entries(counts).map(([year, counts]) => ({ year, ...counts }));
-    setChartData(data);
+    const data = Object.entries(counts).map(([year, counts]) => ({
+      year: Number(year),
+      software: counts.software || 0,
+      publicacoes: counts.publicacoes || 0,
+      marca: counts.marca || 0,
+    }));
+
+    const transformedData = data.map(item => ({
+      year: item.year,
+      ...Object.fromEntries(Object.entries(item).filter(([key]) => key !== 'year'))
+    }));
+
+    setChartData(transformedData);
   }, [software, publicacoes, marca]);
 
   return (

@@ -567,7 +567,7 @@ console.log(urlTermPesquisadores)
                    )}
                     </div>
 
-                    {expand && user?.graduate_program?.length > 0 && (
+                    {expand &&  user?.graduate_program && user.graduate_program.length > 0 && (
                         <p className="text-gray-500 uppercase text-xs font-medium mb-2">
                           PROGRAMAS DE PÓS-GRADUAÇÃO
                         </p>
@@ -575,7 +575,7 @@ console.log(urlTermPesquisadores)
 
 
 
-                    {user?.graduate_program?.length > 0 && (
+                    { user?.graduate_program && user.graduate_program.length > 0 && (
                       <div className="flex flex-col gap-2 mb-8">
                         {user.graduate_program.map((program) => (
                           <Link

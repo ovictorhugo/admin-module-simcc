@@ -12,7 +12,6 @@ import { Asterisk, User, X } from "lucide-react";
 
 
 
-
   interface ItemsSelecionados {
     term: string;
   }
@@ -109,8 +108,6 @@ export function ArticlesModal() {
     const { onClose, isOpen, type: typeModal, data } = useModal();
     const isModalOpen = isOpen && typeModal === "articles-modal";
 
-    
-  
 
   let qualisColor = {
     'A1': 'bg-[#006837]',
@@ -161,7 +158,7 @@ export function ArticlesModal() {
 
             <div className="flex ml-auto items-center w-full justify-between">
               <div className="flex ml-auto items-center gap-3">
-              <Link target="_blank" to={data.pdf != '' ? (data.pdf):(data.landing_page_url != '' ? (data.landing_page_url):(`https://doi.org/${data.doi}`))}>
+              <Link target="_blank" to={data.pdf || data.landing_page_url || `https://doi.org/${data.doi || 'default-doi'}`}>
            <Button variant={'default'} className="h-8  text-white dark:text-white">
            Download do arquivo
            <DownloadSimple size={8} className="h-4 w-4" />
@@ -213,13 +210,16 @@ export function ArticlesModal() {
                 
                 </div>    
                    
+
                 <div>
                      <div className="my-6 border-b dark:border-b-neutral-800"></div>
                       {((data.jif != "None" && data.jif != "") || data.citations_count != '' || data.issn != '' || data.doi != '') && (<h4 className="font-medium text-xl mb-4">Informações gerais</h4>)}
 
                       <div className="flex gap-3 flex-wrap">
-                      {(data.jif != "None" && data.jif != "") && (
-                                <Link target="_blank"  to={data ? (data.jcr_link):('')} className=" border-neutral-200 border dark:border-neutral-800 py-2 px-4  rounded-md text-xs  flex gap-2 items-center"><LinkBreak size={16}/>JCR {data.jif}</Link>
+                      {data?.jcr_link && (
+                                <Link target="_blank" to={data.jcr_link} className=" border-neutral-200 border dark:border-neutral-800 py-2 px-4  rounded-md text-xs  flex gap-2 items-center">
+                                <LinkBreak size={16} /> JCR {data.jif}
+                                </Link>
                                 )}
 
 {data.citations_count != '' && (<div  className=" border-neutral-200 border dark:border-neutral-800 py-2 px-4  rounded-md text-xs  flex gap-2 items-center"><Quotes size={16}/>Citações {data.citations_count}</div>)}
@@ -245,6 +245,7 @@ export function ArticlesModal() {
                     {data.abstract != '' && (
                        <div>
                       
+
                        <div className="my-6 border-b dark:border-b-neutral-800"></div>
                         <h4 className="font-medium text-xl mb-4">Resumo</h4>
                        <p className="text-sm text-gray-500 flex flex-wrap text-justify">{data.abstract}</p>

@@ -4,111 +4,95 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner"
 
 interface Uid {
-    uid:string
-    provider:string
-    displayName:string
-    email:string
-  }
+    uid: string
+    provider: string
+    displayName: string
+    email: string
+}
 
 export function MinhaUfmg() {
+    const { setLoggedIn, urlGeralAdm, setUser } = useContext(UserContext);
+    const [uid, setUid] = useState<Uid | null>(null);
+    const history = useNavigate();
 
     const handleLoginMinhaUfmg = async () => {
-
-        const {setLoggedIn, urlGeralAdm, setUser} = useContext(UserContext);
-
-        const [uid, setUid] = useState<Uid| null>(null);
-
-
-        const history = useNavigate();
-
         try {
-         
-          let urlProgram = urlGeralAdm + 's/ufmg/user'
-          let urlUser = `${urlGeralAdm}s/user?uid=${uid?.uid} `;
-          console.log(urlUser)
+            const urlProgram = urlGeralAdm + 's/ufmg/user';
+            const urlUser = `${urlGeralAdm}s/user?uid=${uid?.uid}`;
+            console.log(urlUser);
 
-          const fetchData = async () => {
-          
-            try {
-              const response = await fetch(urlProgram, {
-                method: "GET",
-                mode: "cors",
-                headers: {
-                  "Access-Control-Allow-Origin": "*",
-                  "Access-Control-Allow-Methods": "GET",
-                  "Access-Control-Allow-Headers": "Content-Type",
-                  "Access-Control-Max-Age": "3600",
-                  "Content-Type": "application/json",
-                }
-              });
-
-              const data = await response.json();
-  
-              if (data && Array.isArray(data) && data.length > 0) {
-                data[0].roles = data[0].roles || [];
-                setUid(data[0]);
-                console.log(uid)
-
-                
-                const fetchDataLogin = async () => {
-                  try {
-                    const response = await fetch(urlUser, {
-                      mode: "cors",
-                      method: 'GET',
-                      headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Access-Control-Allow-Methods": "GET",
-                        "Access-Control-Allow-Headers": "Content-Type",
-                        "Access-Control-Max-Age": "3600",
-                        "Content-Type": "text/plain",
-                      },
+            const fetchData = async () => {
+                try {
+                    const response = await fetch(urlProgram, {
+                        method: "GET",
+                        mode: "cors",
+                        headers: {
+                            "Access-Control-Allow-Origin": "*",
+                            "Access-Control-Allow-Methods": "GET",
+                            "Access-Control-Allow-Headers": "Content-Type",
+                            "Access-Control-Max-Age": "3600",
+                            "Content-Type": "application/json",
+                        }
                     });
+
                     const data = await response.json();
+
                     if (data && Array.isArray(data) && data.length > 0) {
-                      console.log('logou')
-                      data[0].roles = data[0].roles || [];
-                      setLoggedIn(true)
-                      setUser(data[0]);
-                     
-                   
-                 
-                      history('/');
+                        data[0].roles = data[0].roles || [];
+                        setUid(data[0]);
+                        console.log(uid);
+
+                        const fetchDataLogin = async () => {
+                            try {
+                                const response = await fetch(urlUser, {
+                                    mode: "cors",
+                                    method: 'GET',
+                                    headers: {
+                                        "Access-Control-Allow-Origin": "*",
+                                        "Access-Control-Allow-Methods": "GET",
+                                        "Access-Control-Allow-Headers": "Content-Type",
+                                        "Access-Control-Max-Age": "3600",
+                                        "Content-Type": "text/plain",
+                                    },
+                                });
+                                const data = await response.json();
+                                if (data && Array.isArray(data) && data.length > 0) {
+                                    console.log('logou');
+                                    data[0].roles = data[0].roles || [];
+                                    setLoggedIn(true);
+                                    setUser(data[0]);
+                                    history('/');
+                                }
+                            } catch (err) {
+                                console.log(err);
+                            }
+                        };
+                        await fetchDataLogin();
                     }
-                  } catch (err) {
+                } catch (err) {
                     console.log(err);
-                  }
-                };
-                fetchDataLogin();
-               
-              } else {
-               
-              }
-              
-            } catch (err) {
-              console.log(err);
-            } 
-           
-          };
-  
-          fetchData();
-          
+                }
+            };
+
+            await fetchData();
+
         } catch (error) {
             toast("Erro ao processar requisição", {
                 description: "Tente novamente",
                 action: {
-                  label: "Fechar",
-                  onClick: () => console.log("Undo"),
+                    label: "Fechar",
+                    onClick: () => { console.log("Undo"); }
                 },
-              })
+            });
+            console.log(error);
         }
-      }
+    };
 
-
-      useEffect(() => {
+    useEffect(() => {
         handleLoginMinhaUfmg()
-      }, []);
+    }, []);
 
-    return(
+    return (
         <div>
 
         </div>

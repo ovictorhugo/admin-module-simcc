@@ -56,14 +56,14 @@ const chartConfig = {
 export function GraficoArticleHome(props: Articles) {
   type Qualis = "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "SQ" | "NP";
 
-  const [chartData, setChartData] = useState<{ year: string; [qualis: string]: number }[]>([]);
+  const [chartData, setChartData] = useState<{ year: number; [qualis: string]: number }[]>([]);
 
   useEffect(() => {
     if (props.articles) {
-      const counts: { [year: string]: { [qualis: string]: number } } = {};
+      const counts: { [year: number]: { [qualis: string]: number } } = {};
 
       props.articles.forEach((publicacao) => {
-        const year = publicacao.year;
+        const year = Number(publicacao.year);
         const qualis = publicacao.qualis;
 
         if (!counts[year]) {
@@ -74,7 +74,7 @@ export function GraficoArticleHome(props: Articles) {
       });
 
       const data = Object.entries(counts).map(([year, qualisCounts]) => ({
-        year,
+        year: Number(year),
         ...qualisCounts,
       }));
 
@@ -106,7 +106,7 @@ export function GraficoArticleHome(props: Articles) {
         <ResponsiveContainer>
           <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
-          
+
             <CartesianGrid vertical={false} horizontal={false} />
             <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
@@ -120,16 +120,15 @@ export function GraficoArticleHome(props: Articles) {
                     stackId="a"
                     radius={4}
                   >
-                   {index === Object.keys(chartConfig).length - 1 && (
-    <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
-  )}
+                    {index === Object.keys(chartConfig).length - 1 && (
+                      <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+                    )}
                   </Bar>
                 );
               }
               return null;
             })}
 
-            
           </BarChart>
         </ResponsiveContainer>
       </ChartContainer>

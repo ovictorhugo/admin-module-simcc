@@ -314,6 +314,20 @@ export function PesoProducoes() {
 
             </div>
 
+            <div className="flex gap-8">
+
+              <div className="bg-[#719CB8] rounded-md flex items-center justify-center w-10 h-10">1</div>
+              <div>
+                <p className="text-lg font-medium">Primeiro passo</p>
+                <p className="text-gray-500">Selecione a área do programa de acordo com a classificação do CAPES</p>
+              </div>
+
+            </div>
+
+            <div>
+              
+            </div>
+
              <div className="mt-2 flex flex-col w-full pb-4 md:pb-8 gap-4 md:gap-8">
              <div className="flex flex-col gap-4 md:gap-8 ">
           

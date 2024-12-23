@@ -426,24 +426,7 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
     
       // Função para lidar com o download
       const handleDownload = async () => {
-        // Selecione o elemento que você deseja capturar
-        const element = document.getElementById(`timeline-researcher-${user.id}`);
-        
-        if (element) {
-          // Espere um pouco para garantir que o fetch e o componente estejam totalmente carregados
-          setTimeout(async () => {
-            // Capture o elemento como um canvas
-            const canvas = await html2canvas(element);
-            const imgData = canvas.toDataURL('image/png');
-    
-            // Crie um novo PDF
-            const pdf = new jsPDF();
-            // Adicione a imagem ao PDF
-            pdf.addImage(imgData, 'PNG', 0, 0);
-            // Salve o PDF
-            pdf.save('timeline_researcher.pdf');
-          }, 5000); // Ajuste o tempo de espera conforme necessário
-        }
+      
       };
     
       // Use um efeito para determinar quando o componente está pronto

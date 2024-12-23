@@ -12,8 +12,6 @@ import { EditGraduateProgram } from "../modals/edit-graduate-program";
 
 import { AddResearcherCsvModal } from "../modals/add-researcher-csv-modal";
 
-import { AddGrupoPesquisaModal } from "../modals/add-grupo-pesquisa";
-
 
 
 import { ConfirmDeleteResearcherGraduateProgram } from "../modals/confirm-delete-researcher-graduate-program";
@@ -65,8 +63,6 @@ const ModalContent = () => {
         return <ImportTaes/>
       case 'add-researcher-csv':
         return <AddResearcherCsvModal/>
-      case 'add-grupo-pesquisa':
-        return <AddGrupoPesquisaModal/>
       case 'add-departamento':
         return <AddDepartamento/>
       case 'confirm-delete-departamento':

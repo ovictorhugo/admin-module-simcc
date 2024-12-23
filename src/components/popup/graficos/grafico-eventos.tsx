@@ -39,13 +39,13 @@ const chartConfig = {
 } as ChartConfig;
 
 export function GraficosEventos({ publicacoes }: { publicacoes: Livros[] }) {
-  const [chartData, setChartData] = useState<{ year: string; [nature: string]: number }[]>([]);
+  const [chartData, setChartData] = useState<{ year: number; [nature: string]: number }[]>([]);
 
   useEffect(() => {
     const counts: { [year: string]: { [nature: string]: number } } = {};
 
     publicacoes.forEach((livro) => {
-      const year = livro.year;
+      const year = livro.year.toString();
       const nature = livro.nature;
 
       if (!counts[year]) {
@@ -56,8 +56,8 @@ export function GraficosEventos({ publicacoes }: { publicacoes: Livros[] }) {
     });
 
     const data = Object.entries(counts).map(([year, natureCounts]) => ({
-      year,
-      ...natureCounts,
+      year: Number(year),
+      ...Object.fromEntries(Object.entries(natureCounts).map(([nature, count]) => [nature, Number(count) ?? 0])),
     }));
 
     setChartData(data);

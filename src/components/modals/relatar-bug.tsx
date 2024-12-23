@@ -43,14 +43,14 @@ export function RelatarBug() {
 
     const handleSubmit = async () => {
       try {
-        const data = [
+        const data = 
           {
             name: nome,
             email:email,
             rating:avaliacao,
             description:descricao
             }
-        ]
+        
   
 
   

@@ -55,6 +55,8 @@ export function Home() {
     onOpen('maria')
 } else if(location.pathname == '/docentes-tecnicos') {
     onOpen('docentes-tecnicos')
+} else if(location.pathname == '/paines-dados-externos') {
+    onOpen('paines-dados-externos')
 } 
     }, [location]);
   

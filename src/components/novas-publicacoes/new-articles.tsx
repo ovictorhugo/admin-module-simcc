@@ -35,7 +35,7 @@ type Publicacao = {
   id: string,
   doi: string,
   name_periodical: string,
-  qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "SQ" | "NP",
+  qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "SQ" | "NP",
   title: string,
   year: string,
   color: string,
@@ -43,10 +43,21 @@ type Publicacao = {
   lattes_id: string,
   magazine: string,
   lattes_10_id: string,
-  jcr_link: string,
-  jif: string
+  jif: string,
+  jcr_link: string
   researcher_id: string
-  distinct:boolean
+  distinct: boolean
+
+  abstract:string,
+  article_institution:string,
+  authors:string
+  authors_institution:string
+  citations_count:string 
+  issn:string 
+  keywords:string 
+  landing_page_url:string 
+  language:string 
+  pdf:string
 }
 
 interface Departamentos {
@@ -304,21 +315,31 @@ console.log(totalSelecionado?.dep_nom || '')
             <div className="p-1 h-full">
             <ArticleItem
     id={props.id}
-            doi={props.doi}
-            name_periodical={props.name_periodical}
-            qualis={props.qualis}
-            title={props.title.toUpperCase()}
-            year={props.year}
-            color={props.color}
-            researcher={props.researcher}
-            lattes_id={props.lattes_id}
-            magazine={props.magazine}
-            lattes_10_id={props.lattes_10_id}
-            jcr_link={props.jcr_link}
-            jif={props.jif}
-            researcher_id={props.researcher_id}
-            distinct={props.distinct}
-    />
+    doi={props.doi}
+    name_periodical={props.name_periodical}
+    qualis={props.qualis}
+    title={props.title.toUpperCase()}
+    year={props.year}
+    color={props.color}
+    researcher={props.researcher}
+    lattes_id={props.lattes_id}
+    magazine={props.magazine}
+    lattes_10_id={props.lattes_10_id}
+    jcr_link={props.jcr_link}
+    jif={props.jif}
+    researcher_id={props.researcher_id}
+    distinct={props.distinct}
+    abstract={props.abstract}
+    article_institution={props.article_institution}
+    authors={props.authors}
+    authors_institution={props.authors_institution}
+    citations_count={props.citations_count} // Adicione aqui
+    issn={props.issn}                       // Adicione aqui
+    keywords={props.keywords}               // Adicione aqui
+    landing_page_url={props.landing_page_url} // Adicione aqui
+    language={props.language}               // Adicione aqui
+    pdf={props.pdf}                         // Adicione aqui
+/>
             </div>
           </CarouselItem>
         ))}

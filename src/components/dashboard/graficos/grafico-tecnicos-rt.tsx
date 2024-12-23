@@ -92,9 +92,14 @@ export function GraficoTecnicosRt({ docentes }: { docentes: Docentes[] }) {
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
             <Bar dataKey="count" radius={4}>
               <LabelList dataKey="count" position="top" offset={12} className="fill-foreground" fontSize={12} />
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getColorForRt(entry.rt)} />
-              ))}
+              {chartData.map((entry, index) => {
+                const rt = entry.rt;
+                let color = '#000000'; // Default color
+                if (['20H', '40H', 'DE', '30H', 'PROJETO 30H'].includes(rt)) {
+                  color = getColorForRt(rt as '20H' | '40H' | 'DE' | '30H' | 'PROJETO 30H');
+                }
+                return <Cell key={`cell-${index}`} fill={color} />;
+              })}
             </Bar>
           </BarChart>
         </ResponsiveContainer>

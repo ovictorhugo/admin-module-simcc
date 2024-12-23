@@ -225,7 +225,7 @@ export function VisualizacaoDepartamento() {
   const [year, setYear] = useState(new Date().getFullYear()-4);
 
   const currentYear = new Date().getFullYear();
-  const years = [];
+  const years: number[] = [];
   for (let i = currentYear; i > currentYear - 30; i--) {
       years.push(i);
   }

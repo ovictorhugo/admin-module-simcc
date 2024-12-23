@@ -32,8 +32,12 @@ const refreshAccessToken = async () => {
       const { access_token } = response.data;
       localStorage.setItem('access_token', access_token);
       return access_token;
-    } catch (error) {
-      console.error('Erro ao renovar o token:', error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Erro ao renovar o token:', error.message);
+      } else {
+        console.error('Unexpected error', error);
+      }
     }
   };
   
@@ -77,16 +81,10 @@ export function GraficoAnaliseUsuarios() {
     
         setData(sortedData);
       } catch (error) {
-        console.error('Erro ao buscar dados do Google Analytics:', error);
-        if (error.response?.status === 401) {
-          // Token expirado ou inválido, tenta renovar
-          try {
-            const newAccessToken = await refreshAccessToken();
-            localStorage.setItem('access_token', newAccessToken);
-            fetchAnalyticsData(); // Tenta buscar os dados novamente
-          } catch (tokenError) {
-            console.error('Erro ao renovar o token:', tokenError);
-          }
+        if (axios.isAxiosError(error) && error.response) {
+            console.error('Error response:', error.response);
+        } else {
+            console.error('Error:', error);
         }
       }
     };

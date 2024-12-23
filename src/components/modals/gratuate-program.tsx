@@ -55,7 +55,7 @@ export function GratuateProgramModal() {
                </div>
 
                  <div className="ml-auto flex gap-3">
-                 <Button variant={'outline'}> <UserCheck size={16} className="" />{Number(data.qtd_colaborador + data.qtd_permanente)}</Button>
+                 <Button variant={'outline'}> <UserCheck size={16} className="" />{Number(data.qtd_colaborador ?? 0) + Number(data.qtd_permanente ?? 0)}</Button>
                   <Button variant={'outline'}> <Student size={16} className="" />{data.qtd_discente}</Button>
                  </div>
                 
@@ -73,7 +73,7 @@ export function GratuateProgramModal() {
 
               <Link to={`/pos-graduacao/${data.graduate_program_id}`}>
               <Button onClick={() => {
-                setIdGraduateProgram(data.graduate_program_id)
+                setIdGraduateProgram(data.graduate_program_id || '')
                 onClose()
               }}  className="text-white dark:text-white" >
               <Check size={16} className="" />Ir para página

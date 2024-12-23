@@ -19,7 +19,7 @@ type Articles = {
   id: string,
   doi: string,
   name_periodical: string,
-  qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "SQ",
+  qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "SQ" | "NP",
   title: string,
   year: string,
   color: string,
@@ -65,7 +65,8 @@ export function ArticleItem(props:Articles) {
         'B5': 'bg-[#F2D3BB]',
         'C': 'bg-[#EC1C22]',
         'None': 'bg-[#560B11]',
-        'SQ': 'bg-[#560B11]'
+        'SQ': 'bg-[#560B11]',
+        'NP': 'bg-[#FFCC00]',
     }
 
    

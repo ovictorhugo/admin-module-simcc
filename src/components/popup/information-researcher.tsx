@@ -62,7 +62,7 @@ interface Props {
   
 
  export function InformationResearcher(props:Props) {
-    const { itemsSelecionados} = useContext(UserContext)
+    const { itemsSelecionados, version} = useContext(UserContext)
     const [isVisible, setIsVisible] = useState(false);
 
     const {urlGeral} = useContext(UserContext)
@@ -109,29 +109,41 @@ const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNod
   return htmlParser(text, parseOptions);
 };
 
-
+// const highlightedAbstract = highlightText(props.abstract, itemsSelecionados);
 const highlightedAbstract = highlightText(props.abstract, itemsSelecionados);
 
 
 const size = useWindowSize();
 
 let charLimit;
-if (size.width > 1600) {
-  charLimit = 820; // Aumenta o limite para telas grandes
-} else if (size.width > 1500) {
-  charLimit = 500; // Aumenta o limite para telas grandes
-} else if (size.width > 1200) {
-  charLimit = 500;
-} else if (size.width > 768) {
-  charLimit = 500;
+if (size && size.width !== undefined) {
+  if (size.width > 1600) {
+    charLimit = 820; // Aumenta o limite para telas grandes
+  } else if (size.width > 1500) {
+    charLimit = 500; // Aumenta o limite para telas grandes
+  } else if (size.width > 1200) {
+    charLimit = 500;
+  } else if (size.width > 768) {
+    charLimit = 500;
+  } else {
+    charLimit = 300;
+  }
 } else {
-  charLimit = 300;
+  charLimit = 300; // Default value if size or size.width is undefined
 }
 
+const formatString = (input) => {
+  return input
+    .normalize('NFD') // Decompor caracteres acentuados
+    .replace(/[\u0300-\u036f]/g, '') // Remover marcas diacríticas
+    .replace(/[^a-zA-Z0-9 ]/g, '') // Remover caracteres especiais
+    .trim() // Remover espaços nas extremidades
+    .replace(/\s+/g, '-') // Substituir espaços por hifens
+    .toLowerCase(); // Converter para letras minúsculas
+};
 
     return (
         <div className="flex flex-col">
-
           
          
 
@@ -175,6 +187,14 @@ if (size.width > 1600) {
         Scopus
     </Link>
 )}
+
+{version && (
+    <Link  to={`https://somos.ufmg.br/professor/${formatString(props.name)}`} target="_blank" className="bg-[#F3A01E] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
+        <IdentificationBadge size={12} className="" />
+        Somos UFMG
+    </Link>
+)}
+
 
   
   
@@ -234,4 +254,3 @@ if (size.width > 1600) {
     )
 
 }
-

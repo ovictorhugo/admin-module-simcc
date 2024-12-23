@@ -31,6 +31,7 @@ type Dados = {
   SQ: number;
 };
 
+
 type PesosProducao = {
   a1: string;
   a2: string;
@@ -42,10 +43,19 @@ type PesosProducao = {
   b4: string;
   c: string;
   sq: string;
+  f1: string;
+  f2: string;
+  f3: string;
+  f4: string;
+  f5: string;
   livro: string;
   cap_livro: string;
   software: string;
- 
+  patent_granted: string;
+  patent_not_granted: string;
+  report: string;
+  book: string;
+  book_chapter: string;
 };
 
 type BooksAndChaptersProps = {
@@ -63,7 +73,7 @@ export function GraficoIndiceBooksAndChapters(props: BooksAndChaptersProps) {
 console.log(props.pesosProducao)
 useEffect(() => {
   if (props.articles && props.pesosProducao) {
-    const pesos = props.pesosProducao;
+    const pesos: PesosProducao = props.pesosProducao;
 
     // Convert weights to numbers, handle the format of the string values
     const pesosNumericos = {

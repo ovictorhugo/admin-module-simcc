@@ -27,11 +27,11 @@ interface Patrimonio {
     language: string;
     professor: string;
     status: string;
-    dep_id:string
+    dep_id: string
 }
 
 export function ImportDisciplina() {
-    const { onClose, isOpen, type: typeModal, data:dataModal } = useModal();
+    const { onClose, isOpen, type: typeModal, data: dataModal } = useModal();
     const isModalOpen = (isOpen && typeModal === 'import-disciplina');
     const { urlGeralAdm } = useContext(UserContext);
     const [fileInfo, setFileInfo] = useState({ name: '', size: 0 });
@@ -44,7 +44,6 @@ export function ImportDisciplina() {
 
     useEffect(() => {
 
-        
         setDepId(dataModal.dep_id)
     }, [dataModal]);
 
@@ -72,12 +71,12 @@ export function ImportDisciplina() {
             const workbook = XLSX.read(data, { type: 'array' });
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
-    
+
             const json = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
-    
+
             const headers: string[] = json[0] as string[];
             const rows = json.slice(1);
-    
+
             const headerMap: { [key: string]: keyof Patrimonio } = {
                 'Semestre': 'semester',
                 'Departamento': 'department',
@@ -95,7 +94,7 @@ export function ImportDisciplina() {
                 'Professores (nome, nº de inscrição, encargo)': 'professor',
                 'Sit.': 'status'
             };
-    
+
             const jsonData = rows.map((row: any) => {
                 const obj: Patrimonio = {
                     semester: '',
@@ -113,12 +112,12 @@ export function ImportDisciplina() {
                     language: '',
                     professor: '',
                     status: '',
-                    dep_id: depId
+                    dep_id: depId || ''
                 };
                 headers.forEach((header, index) => {
                     const key = headerMap[header];
                     if (key) {
-                        let value = row[index];
+                        let value = row[index] !== undefined ? String(row[index]) : '';
                         // Fix the semester value if it's a number
                         if (key === 'semester') {
                             value = String(value).trim();
@@ -139,26 +138,22 @@ export function ImportDisciplina() {
                 });
                 return obj;
             });
-    
+
             setData(jsonData);
         };
         reader.readAsArrayBuffer(file);
     };
-    
-    
 
     useEffect(() => {
 
-        
-        // Update year_charge and semester in data whenever year or semester changes
-        const updatedData = data.map(item => ({
+        const dataToSet = data.map(item => ({
             ...item,
-            dep_id:depId
+            dep_id: item.dep_id || 'default_value'
         }));
-        setData(updatedData);
+        setData(dataToSet);
     }, [depId]);
 
-    console.log('deep',depId)
+    console.log('deep', depId)
 
     const handleSubmitPatrimonio = async () => {
         try {
@@ -217,7 +212,7 @@ export function ImportDisciplina() {
     };
 
     const currentYear = new Date().getFullYear();
-    const years = [];
+    const years: any[] = [];
     for (let i = currentYear; i > currentYear - 4; i--) {
         years.push(i);
     }
@@ -235,8 +230,6 @@ export function ImportDisciplina() {
                         Atualize os itens do na Vitrine com a planilha .xls gerada no SICPAT
                     </DialogDescription>
                 </DialogHeader>
-
-               
 
                 <div className="mb-4">
                     <div {...getRootProps()} className="border-dashed mb-6 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm cursor-pointer transition-all gap-3 w-full flex items-center justify-center hover:bg-neutral-100 mt-4">

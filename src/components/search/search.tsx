@@ -11,6 +11,11 @@ import { SelectTypeSearch } from "./select-type-search";
 import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
+interface Message {
+  message: any; 
+  direction: string;
+  sender: string;
+}
 
 import { useLocation, useNavigate } from "react-router-dom";
 const API_KEY = import.meta.env.VITE_API_KEY
@@ -140,12 +145,12 @@ const handlePopUppesquisa = () => {
 
 //
 
-const [, setMessages] = useState([]);
+const [messages, setMessages] = useState<Message[]>([]);
 const [, setIsTyping] = useState(false);
   
 
 const handleSend = async (message: any) => {
-  const newMessage = {
+  const newMessage: Message = {
     message,
     direction: 'outgoing',
     sender: "user"
@@ -157,7 +162,6 @@ const handleSend = async (message: any) => {
   setIsTyping(true);
   await processMessageToChatGPT(newMessage);
 };
-
 
 
 async function processMessageToChatGPT(messageObject:any) {

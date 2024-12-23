@@ -46,8 +46,8 @@ type PesosProducao = {
   c: string;
   sq: string;
 
-  livro: string;
-  cap_livro: string;
+  book: string;
+  book_chapter: string;
   software: string;
 };
 
@@ -78,8 +78,8 @@ export function GraficoIndiceProdBibli(props: Articles) {
         B4: parseFloat(props.pesosProducao.b4) || 0,
         C: parseFloat(props.pesosProducao.c) || 0,
         SQ: parseFloat(props.pesosProducao.sq) || 0,
-        livro: parseFloat(props.pesosProducao.livro) || 0,
-        cap_livro: parseFloat(props.pesosProducao.cap_livro) || 0,
+        livro: parseFloat(props.pesosProducao.book) || 0,
+        cap_livro: parseFloat(props.pesosProducao.book_chapter) || 0,
       };
 
       const counts: { [year: string]: { totalArticles: number; totalBooks: number; totalChapters: number } } = {};
@@ -107,8 +107,8 @@ export function GraficoIndiceProdBibli(props: Articles) {
         });
 
         // Adicionar valores de livros e capítulos de livros separadamente
-        const totalBooks = count_book * pesosNumericos.livro;
-        const totalChapters = count_book_chapter * pesosNumericos.cap_livro;
+        const totalBooks = count_book * pesosNumericos.book;
+        const totalChapters = count_book_chapter * pesosNumericos.book_chapter;
 
         counts[year].totalArticles += totalArticles;
         counts[year].totalBooks += totalBooks;

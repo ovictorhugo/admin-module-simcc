@@ -1,6 +1,7 @@
 
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
+import bg_graduate from '../../assets/bg_home.png'
 
 
 import {
@@ -190,12 +191,12 @@ const chartConfig = {
 
 export function InitialHome() {
   const [VisaoPrograma, setVisaoPrograma] = useState<VisaoPrograma[]>([]);
-  const { setItensSelecionados, urlGeralAdm, urlGeral, version } = useContext(UserContext);
+  const { setItensSelecionados, urlGeral, version } = useContext(UserContext);
 
   const [year, setYear] = useState(new Date().getFullYear()-4);
 
         const currentYear = new Date().getFullYear();
-        const years = [];
+        const years: number[] = [];
         for (let i = currentYear; i > currentYear - 30; i--) {
             years.push(i);
         }
@@ -483,7 +484,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
     /////////
     const [bolsistas, setBolsistas] = useState<Bolsistas[]>([]);
 
-    let urlBolsistas = urlGeralAdm + `ResearcherRest/Query/Subsidy`
+    let urlBolsistas = urlGeral + `foment`
 
     useEffect(() => {
       const fetchData = async () => {
@@ -577,30 +578,32 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
       </ChartContainer>
 
       <ChartContainer config={chartConfig} className="h-[55vh] w-full top-[-55vh] relative">
-      {chartKeys.map((key, index) => {
-        const isVisible = visibleChart === index;
-        const strokeColor = theme === 'dark' ? '#262626' : '#E5E5E5';
-        const fillColor = `url(#color${key.split('_')[1][0].toUpperCase() + key.split('_')[1].slice(1)})`;
+  {chartKeys.map((key, index) => {
+    if (visibleChart !== index) return null;
 
-        return isVisible && (
-          <AreaChart key={key} data={dados} className="absolute top-0">
+    const strokeColor = theme === 'dark' ? '#262626' : '#E5E5E5';
+    const fillColor = `url(#color${key.split('_')[1][0].toUpperCase() + key.split('_')[1].slice(1)})`;
+
+    return (
+      <AreaChart key={key} data={dados} className="absolute top-0">
+        <Area
+          dataKey={key}
+          type="monotone"
+          stroke={'#82AAC0'}
+          fill={fillColor}
+          strokeWidth={6}
+          dot={false}
+        />
+      </AreaChart>
+    );
+  }).find((chart) => chart !== null) || <div />}
+</ChartContainer>
 
 
-            <Area
-              dataKey={key}
-              type="monotone"
-              stroke={'#82AAC0'}
-              fill={fillColor}
-              strokeWidth={6}
-              dot={false}
-            />
-          </AreaChart>
-        );
-      })}
-    </ChartContainer>
+
           </div>
             
-          <div className="justify-center px-4 md:px-8 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
+    <div className="justify-center px-4 md:px-8 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >      
         <Link to={'/informacoes'}  className="inline-flex z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
         
             <h1 className="z-[2] text-center max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
@@ -788,14 +791,9 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                      </Alert></Link>
                      </div>
                    ) : (
-                    <Alert className="p-0 ">
+                    <Alert className="p-0 relative flex flex-col bg-cover bg-right bg-no-repeat"  style={{ backgroundImage: `url(${bg_graduate})` }}>
                      <CardHeader className="flex flex-row p-10 items-center justify-between space-y-0 pb-2">
-                     <div>
-                     <CardTitle className="text-sm font-medium">
-                      Total de {VisaoPrograma.map((props) => (<>{props.researcher}</>))} pesquisadores
-                     </CardTitle>
-                     <CardDescription>{version ? ('na Escola de Engenharia'):('no SENAI CIMATEC')}</CardDescription>
-                     </div>
+                    <div></div>
  
                      <TooltipProvider>
                    <Tooltip>
@@ -808,8 +806,13 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                     
                    </CardHeader>
  
-                   <div className="flex flex-1 px-6">
-              
+                   <div className="flex flex-1 px-6 w-full h-full">
+                   <div className="flex flex-col items-center justify-center gap-2 w-full h-full">
+                     <CardTitle className="text-8xl font-medium text-center">
+                      {VisaoPrograma.map((props) => (<>{props.researcher}</>))}
+                     </CardTitle>
+                     <CardDescription className="dark:text-white">{version ? ('na Escola de Engenharia'):(' pesquisadores no SENAI CIMATEC')}</CardDescription>
+                     </div>
                  </div>
  
                      </Alert>
@@ -1031,14 +1034,14 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                     <tspan
                       x={viewBox.cx}
                       y={viewBox.cy}
-                      className=" dark:fill-gray-500 text-4xl font-bold"
+                      className=" dark:fill-white text-4xl font-bold"
                     >
                       {bolsistas.length.toLocaleString()}
                     </tspan>
                     <tspan
                       x={viewBox.cx}
                       y={(viewBox.cy || 0) + 24}
-                      className="dark:fill-gray-500"
+                      className="dark:fill-white"
                     >
                       Bolsistas
                     </tspan>

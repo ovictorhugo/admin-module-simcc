@@ -42,16 +42,21 @@ type PesosProducao = {
   b4: string;
   c: string;
   sq: string;
- 
+
   livro: string;
   cap_livro: string;
   software: string;
-
 };
 
 type Articles = {
   articles: Dados[];
   pesosProducao: PesosProducao;
+};
+
+type ChartDataItem = {
+  year: string;
+  total: number;
+  [qualis: string]: string | number;
 };
 
 const chartConfig = {
@@ -68,7 +73,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GraficoIndiceArticle(props: Articles) {
-  const [chartData, setChartData] = useState<{ year: string; [qualis: string]: number }[]>([]);
+  const [chartData, setChartData] = useState<ChartDataItem[]>([]);
 
   useEffect(() => {
     if (props.articles && props.pesosProducao) {
@@ -97,7 +102,7 @@ export function GraficoIndiceArticle(props: Articles) {
         }
 
         Object.keys(qualisData).forEach((qualisKey) => {
-          const weight = pesosNumericos[qualisKey as keyof typeof pesosNumericos];
+          const weight = pesosNumericos[qualisKey];
           if (!isNaN(weight) && weight > 0) {
             const value = qualisData[qualisKey as keyof typeof qualisData];
             if (value !== 0) {
@@ -107,12 +112,17 @@ export function GraficoIndiceArticle(props: Articles) {
         });
       });
 
-      const data = Object.entries(counts).map(([year, qualisCounts]) => ({
-        year,
-        ...qualisCounts,
-        total: Object.values(qualisCounts).reduce((acc, val) => acc + val, 0) || 0,  // Ensure total is a number
-      }));
+      const data: ChartDataItem[] = Object.entries(counts).map(([year, qualisCounts]) => {
+        const total = Object.entries(qualisCounts).reduce((acc, [_, val]) => acc + val, 0);
+        return {
+          year,
+          ...qualisCounts,
+          total: total || 0,
+        };
+      });
 
+      // Sort data by year
+      data.sort((a, b) => a.year.localeCompare(b.year));
       setChartData(data);
     }
   }, [props.articles, props.pesosProducao]);
@@ -121,42 +131,42 @@ export function GraficoIndiceArticle(props: Articles) {
   const availableQualis = Object.keys(chartConfig);
 
   return (
-
-      <ChartContainer config={chartConfig} className="h-[260px] w-full">
-        <ResponsiveContainer>
-          <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
-            <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
-            <YAxis tickLine={false} tickMargin={10} axisLine={false} />
-            <CartesianGrid vertical={false} horizontal={false} />
-            <ChartLegend content={<ChartLegendContent />} />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-            {availableQualis.map((key, index) => (
-  chartData.some(d => d[key] > 0) && (
-    <Bar
-      key={key}
-      dataKey={key}
-      fill={chartConfig[key].color}
-      stackId="a"
-      radius={4}
-    >
-      
-      {index === chartData.length - 1 && (
-        <LabelList
-          position="top"
-          formatter={(value) => (value ? value.toFixed(2) : '0')}
-          offset={12}
-          className="fill-foreground"
-          fontSize={12}
-        />
-      )}
-
-      
-    </Bar>
-  )
-))}
-
-          </BarChart>
-        </ResponsiveContainer>
-      </ChartContainer>
+    <ChartContainer config={chartConfig} className="h-[260px] w-full">
+      <ResponsiveContainer>
+        <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
+          <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
+          <YAxis tickLine={false} tickMargin={10} axisLine={false} />
+          <CartesianGrid vertical={false} horizontal={false} />
+          <ChartLegend content={<ChartLegendContent />} />
+          <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+          {availableQualis.map((key) => (
+            chartData.some((d) => typeof d[key] === 'number' && typeof d[key] === 'number' && d[key] > 0) && (
+              <Bar
+                key={key}
+                dataKey={key}
+                fill={chartConfig[key].color}
+                stackId="a"
+                radius={4}
+              >
+                <LabelList
+                  position="top"
+                  formatter={(value, entry, index) => {
+                    // Only show label for the topmost non-zero value in each stack
+                    const dataPoint = chartData[index];
+                    const isTopBar = Object.keys(chartConfig)
+                      .slice(Object.keys(chartConfig).indexOf(key) + 1)
+                      .every((k) => !dataPoint[k]);
+                    return isTopBar && value ? value.toFixed(2) : "";
+                  }}
+                  offset={12}
+                  className="fill-foreground"
+                  fontSize={12}
+                />
+              </Bar>
+            )
+          ))}
+        </BarChart>
+      </ResponsiveContainer>
+    </ChartContainer>
   );
 }

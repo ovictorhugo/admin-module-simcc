@@ -1,4 +1,3 @@
-
 import { DialogFooter, DialogHeader, Dialog, DialogContent, DialogDescription, DialogTitle } from "../ui/dialog";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
@@ -13,7 +12,6 @@ export interface PesquisadorProps {
   name: string
   type_: string
 }
-
 
 export function ConfirmDeleteResearcherGraduateProgram() {
     const { onOpen, onClose, isOpen, type: typeModal, data:dataModal } = useModal();
@@ -30,7 +28,7 @@ export function ConfirmDeleteResearcherGraduateProgram() {
        setLattesId(dataModal?.lattes_id || '')
      }, [dataModal]);
  
-     const handleSubmitDelete = async ( researcher_id:string, id_programaa:string) => {
+     const handleSubmitDelete = async ( researcher_id:string, id_programaa:string) =>{
 
 
        try {
@@ -40,12 +38,12 @@ export function ConfirmDeleteResearcherGraduateProgram() {
              lattes_id:researcher_id,
              }
          ]
- 
+
          console.log('dataa reesfs', data)
- 
+
          let urlProgram = urlGeralAdm + 'GraduateProgramResearcherRest/Delete'
- 
- 
+
+
          const fetchData = async () => {
          
            try {
@@ -61,7 +59,7 @@ export function ConfirmDeleteResearcherGraduateProgram() {
                },
                body: JSON.stringify(data),
              });
- 
+
              if (response.ok) {
               
                toast("Dados enviados com sucesso", {
@@ -112,8 +110,6 @@ export function ConfirmDeleteResearcherGraduateProgram() {
      };
 
 
-
-
     return(
         <Dialog open={isModalOpen} onOpenChange={onClose}> 
         <DialogContent>
@@ -131,7 +127,11 @@ export function ConfirmDeleteResearcherGraduateProgram() {
             <ArrowUUpLeft size={16} className="" />Cancelar
               </Button>
 
-              <Button variant={'destructive'}    onClick={() =>handleSubmitDelete(lattes_id, id_program)}>
+              <Button variant={'destructive'} onClick={() => {
+                if (lattes_id && id_program) {
+                  handleSubmitDelete(lattes_id, id_program);
+                }
+              }}>
               <Trash size={16} className="" />Deletar
               </Button>
             </DialogFooter>

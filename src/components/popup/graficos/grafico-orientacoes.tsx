@@ -50,7 +50,7 @@ const normalizedChartConfig: ChartConfig = {
 };
 
 export function GraficoOrientacoes(props: { livros: Livro[] }) {
-  const [chartData, setChartData] = useState<{ year: string; [key: string]: number }[]>([]);
+  const [chartData, setChartData] = useState<{ total: number; year: string; }[]>([]);
 
   useEffect(() => {
     if (props.livros) {

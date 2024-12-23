@@ -198,7 +198,7 @@ export function BaremasHome() {
       const fetchData = async () => {
        if(idDocumentBarema != '') {
         try {
-            if (user.uid) {
+            if (user) {
               console.log('userId:', user.uid);
       
               const userDocsRef = collection(db, 'baremas');
@@ -222,7 +222,7 @@ export function BaremasHome() {
   
                   // Definir os valores de grupos e pesquisadores selecionados
                   setGrupos(userData.grupos);
-                  setPesquisadoresSelecionados(userData.pesquisadores);
+                  setPesquisadoresSelecionados(userData.pesquisadores as Research[]);
   
                   setAnoArtigo(Number(userData.anoArtigo))
                   setAnoWorkInEvent(Number(userData.anoWorkInEvent))
@@ -569,18 +569,20 @@ const calcularSomaPontuacaoMaxima = (grupo:any) => {
 
 
 // soma de pontos
-const handleResearcherUpdate = (newResearcherData: PesquisadorUpdate[]) => {
+const handleResearcherUpdate = (newResearcherData: PesquisadorUpdate) => {
     const updatedGrupos = grupos.map(grupo => {
         const updatedCategorias = grupo.categorias.map(categoria => {
             // Encontrar os novos pesquisadores correspondentes a esta categoria
-            const updatedPesquisadores = newResearcherData.filter(item => item.id_criterio === categoria.id_criterio);
-
-            // Se não houver novos pesquisadores correspondentes, manter os antigos
-            const pesquisadores = updatedPesquisadores.length > 0 ? updatedPesquisadores : categoria.pesquisadores;
+            const updatedPesquisadores = categoria.pesquisadores.map(pesquisador => {
+                if (pesquisador.id === newResearcherData.id) {
+                    return newResearcherData;
+                }
+                return pesquisador;
+            });
 
             return {
                 ...categoria,
-                pesquisadores: pesquisadores,
+                pesquisadores: updatedPesquisadores,
             };
         });
 
@@ -731,7 +733,7 @@ console.log(somaTotalPorPesquisador);
                     id:idBaremaData,
                     name:tituloBarema,
                     createdAt:createdAt,
-                    userId:user.uid,
+                    userId:user ? user.uid : 'defaultUserId',
                     pesquisadores:pesquisadoresSelecionados,
                     grupos:grupos,
     
@@ -766,7 +768,7 @@ console.log(somaTotalPorPesquisador);
                     id:idBarema,
                     name:tituloBarema,
                     createdAt:createdAt,
-                    userId:user.uid,
+                    userId:user ? user.uid : 'defaultUserId',
                     pesquisadores:pesquisadoresSelecionados,
                     grupos:grupos,
     
@@ -1103,7 +1105,7 @@ console.log(somaTotalPorPesquisador);
                                                                                                 pontuacao_max={Number(categoria.pontuacao_max)}  
                                                                                                 id_criterio={categoria.id_criterio}
 
-                                                                                                researcherSelecionados={researcherSelecionados}
+                                                                                                researcherSelecionados={researcherSelecionados[0]}
 
                                                                                                 onPesquisadoresUpdate={handleResearcherUpdate}
                                                                                                 />

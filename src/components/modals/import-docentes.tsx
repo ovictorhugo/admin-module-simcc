@@ -212,7 +212,7 @@ export function ImportDocentes() {
     };
 
     const currentYear = new Date().getFullYear();
-    const years = [];
+    const years: any[] = [];
     for (let i = currentYear; i > currentYear - 4; i--) {
         years.push(i);
     }

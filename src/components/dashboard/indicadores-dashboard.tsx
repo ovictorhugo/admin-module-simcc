@@ -8,7 +8,6 @@ import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
 import { Books, ChartBar, Code, FileCsv, FileXls, Quotes, StripeLogo, Student, Warning } from "phosphor-react";
-import { Label as LabelInput } from "../ui/label";
 
 
 import {
@@ -478,7 +477,7 @@ console.log(bolsistas)
         const [year, setYear] = useState(new Date().getFullYear()-9);
 
        
-        const years = [];
+        const years: number[] = [];
         for (let i = currentYear; i > currentYear - 30; i--) {
             years.push(i);
         }

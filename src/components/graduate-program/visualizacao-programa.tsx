@@ -134,6 +134,8 @@ interface GraduateProgram {
     patent_granted: string;
     patent_not_granted: string;
     report: string;
+    book: string;
+  book_chapter: string;
   };
   
   
@@ -231,7 +233,6 @@ export function VisualizacaoPrograma() {
 
   const [totalProducao, setTotalProducao] = useState<Total[]>([]);
 
-
   const urlTotalProgram = `${urlGeral}graduate_program_production?graduate_program_id=${type_search}&year=1900`;
 
   useEffect(() => {
@@ -269,7 +270,7 @@ export function VisualizacaoPrograma() {
   const [year, setYear] = useState(new Date().getFullYear()-4);
 
   const currentYear = new Date().getFullYear();
-  const years = [];
+  const years: number[] = [];
   for (let i = currentYear; i > currentYear - 30; i--) {
       years.push(i);
   }
@@ -486,6 +487,8 @@ const [pesosProducao, setPesosProducao] = useState<PesosProducao>({
     patent_granted: patenteCondecida,
     patent_not_granted: patenteNaoConcedida,
     report: relTec,
+    book: livro,
+  book_chapter: capLivro
   })
 
 
@@ -576,7 +579,7 @@ useEffect(() => {
                 </p>
 
                 <p className="font-medium text-sm">
-                Servidor: {provider}
+                  Servidor: {provider}
                 </p>
 
                 <p className="font-medium text-sm ">
@@ -616,7 +619,7 @@ useEffect(() => {
               <TabsTrigger disabled={!has_visualizar_indicadores_pos_graduacao} value="ind" onClick={() =>setTab('ind')}className="text-zinc-600 dark:text-zinc-200">Indicadores</TabsTrigger>
            
 
-              
+　　 　 　 　
                 </TabsList>
                {has_editar_informacoes_programa && (
                  <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
@@ -648,7 +651,6 @@ useEffect(() => {
         </Tooltip>
         </TooltipProvider>
            <div className="flex items-center flex-1  w-full justify-between">
- 
  
            <div className="flex items-center gap-3 ml-auto"> 
            <TabsList >
@@ -684,7 +686,7 @@ useEffect(() => {
                  </Sheet>
                )}
           
-              
+　　 　 　 　
               </div>
             </div>
 
@@ -869,18 +871,19 @@ useEffect(() => {
                              
                                
                                </div>
-           
+　　 　 　
                                <Books className="h-4 w-4 text-muted-foreground" />
                               
                              </CardHeader>
-           
+　　 　 　
+
                             <CardContent>
                             <span className="text-lg font-bold leading-none sm:text-3xl">
                             {totalProducao.map((props) => (<>{props.book_chapter}</>))}
                            </span>
                             </CardContent>
                       </div>
-          
+　　　 　
                       <div>
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                <div>
@@ -889,22 +892,25 @@ useEffect(() => {
                                </CardTitle>
                               
                                </div>
-           
+　　 　 　
+
                                <Copyright className="h-4 w-4 text-muted-foreground" />
                               
                              </CardHeader>
-           
+　　 　 　
+
                             <CardContent>
                             <span className="text-lg font-bold leading-none sm:text-3xl">
                             {totalProducao.map((props) => (<>{props.patent}</>))}
                            </span>
                             </CardContent>
-          
+　　　 　
                       </div>
-          
-                     
-          
-                     
+　　　 　
+　　　　　　　　　　
+
+　　　　　　　　　　
+
                      </Alert>
 
 

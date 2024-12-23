@@ -214,7 +214,7 @@ export function ImportTaes() {
         return currentMonth < 6 ? '1' : '2'; // Define o semestre como '1' se estiver entre janeiro e junho, caso contrário '2'
       });
 
-    const years = [];
+      const years: number[] = [];
     for (let i = currentYear; i > currentYear - 4; i--) {
         years.push(i);
     }

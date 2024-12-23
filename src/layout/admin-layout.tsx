@@ -2,7 +2,6 @@ import { Toaster } from "sonner";
 import { Header } from "../components/header/Header";
 import { NavigationSidebar } from "../components/navigation/navigation-sidebar";
 
-
 import { TooltipProvider } from "../components/ui/tooltip"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../components/ui/resizable"
 import { cn } from "../lib"
@@ -25,9 +24,6 @@ interface MailProps {
   navCollapsedSize: number
   children:React.ReactNode
 }
-
-
-
 
 export default function AdminLayout({
 
@@ -65,7 +61,6 @@ export default function AdminLayout({
     (perm) => perm.permission === 'visualizar_gerencia_modulo_administrativo'
   );
 
-
   const has_visualizar_todos_programas = permission.some(
     (perm) => perm.permission === 'visualizar_todos_programas'
   );
@@ -89,9 +84,6 @@ export default function AdminLayout({
   const has_atualizar_apache_hop = permission.some(
     (perm) => perm.permission === 'atualizar_apache_hop'
   );
-
-  
-
 
   const links2 = [
     {
@@ -168,7 +160,6 @@ export default function AdminLayout({
               ]
             : []),
 
-
             ...(has_editar_pesos_avaliacao
               ? [
                 {
@@ -191,7 +182,6 @@ export default function AdminLayout({
                   },
                   ]
                 : []),
-
 
   ]
 
@@ -217,6 +207,7 @@ export default function AdminLayout({
               },
           ]
         : []),
+
   ];
 
   const location = useLocation()
@@ -264,26 +255,26 @@ useEffect(() => {
             description: "Atualizando dados dos pesquisadores",
             action: {
               label: "Fechar",
-              onClick: () => console.log("Undo"),
+              onClick: () => { console.log("Undo"); }
             },
-          })
+          });
        
       } else if (response.status === 423) {
           toast("O Apache hop já está rodando, tente novamente mais tarde", {
               description: "Em processo de atualização dos dados dos pesquisadores",
               action: {
                 label: "Fechar",
-                onClick: () => console.log("Undo"),
+                onClick: () => { console.log("Undo"); }
               },
-            })
+          });
       } else {
           toast("Erro ao iniciar o Apache Hop", {
               description: "Tente novamente mais tarde",
               action: {
                 label: "Fechar",
-                onClick: () => console.log("Undo"),
+                onClick: () => { console.log("Undo"); }
               },
-            })
+            });
       }
       
     } catch (err) {
@@ -326,9 +317,7 @@ const links3 = [
       
         <TooltipProvider delayDuration={0}>
 
-       
-
-<ResizablePanelGroup
+        <ResizablePanelGroup
 
         direction="horizontal"
         onLayout={() => defaultLayout}
@@ -395,13 +384,16 @@ const links3 = [
                          <Terminal size={16}/> Terminal Apache Hop
                        </div>
              
+
                        <div className="flex items-center gap-3 font-medium text-sm">
                        
+
                          <Button size={'sm'} onClick={() => handleSubmit()}  className="h-8"><Play size={16}/>Atualizar dados</Button>
                          <Button size={'icon'} variant={'outline'} onClick={() => setIsOpenConsole(!isOpenConsole)} className="h-8 w-8">{isOpenConsole ? (<ChevronDown size={16}/>):(<ChevronUp size={16}/>)}</Button>
                        </div>
                    </div>
              
+
                    {isOpenConsole && (
                      <div>
              <ApacheViewDashboard/>
@@ -423,4 +415,3 @@ const links3 = [
     </div>
     );
   };
-  

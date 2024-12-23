@@ -76,9 +76,9 @@ function App() {
   const [user, setUser] = useState<User| null>(null);;
 
 
-  const [urlGeral, setUrlGeral] = useState(import.meta.env.VITE_URL_GERAL);
+  const [urlGeral, setUrlGeral] = useState(import.meta.env.VITE_URL_GERAL || '');
 
-  const [urlGeralAdm, setUrlGeralAdm] = useState(import.meta.env.VITE_URL_GERAL_ADM);
+  const [urlGeralAdm, setUrlGeralAdm] = useState(import.meta.env.VITE_URL_GERAL_ADM || '');
 
   const [mapModal, setMapModal] = useState(false)
 
@@ -224,6 +224,7 @@ useEffect(() => {
         <Route path='/departamentos' element={<Home/>}/>
         <Route path='/researcher' element={<Home/>}/>
         <Route path='/marIA' element={<Home/>}/>
+        <Route path='/paines-dados-externos' element={<Home/>}/>
 
         <Route path='/relatar-problema' element={<Home/>}/>
         <Route path='/pesquisadores-selecionados' element={<Home/>}/>
@@ -245,6 +246,16 @@ useEffect(() => {
 
         <Route
          path='/signUp'
+         element={loggedIn == false ? <Authentication/> : <Navigate to='/' />}
+        />
+
+<Route
+         path='/recoverPassword'
+         element={loggedIn == false ? <Authentication/> : <Navigate to='/' />}
+        />
+
+<Route
+         path='/updatePassword'
          element={loggedIn == false ? <Authentication/> : <Navigate to='/' />}
         />
       

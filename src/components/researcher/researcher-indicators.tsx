@@ -62,9 +62,9 @@ type Dados = {
     patent_granted: string;
     patent_not_granted: string;
     report: string;
-  };
-  
-
+    book: string;
+    book_chapter: string;
+    };
 
   type Research = {
     among: number,
@@ -210,6 +210,8 @@ export function ResearcherIndicators(props:Research) {
         patent_granted: patenteCondecida,
         patent_not_granted: patenteNaoConcedida,
         report: relTec,
+        book: livro,
+        book_chapter: capLivro,
       })
     
 
@@ -306,16 +308,14 @@ console.log(urlDados)
                
         
                <h1 className=" max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
-              Índices de produção de {props.name}
-               </h1>
+              Índices de produção de {props.name}</h1>
                <div className="flex flex-wrap flex-1 items-center gap-3 mt-2">
                                 {props.area != '' && (
                   props.area.split(';').map((value, index) => (
                     <li
-                      key={index}
-                  className={`py-2 whitespace-nowrap px-4 rounded-md text-xs font-bold flex gap-2 text-white items-center ${value.includes('CIENCIAS AGRARIAS') ? 'bg-red-400' : value.includes('CIENCIAS EXATAS E DA TERRA') ? 'bg-green-400' : value.includes('CIENCIAS DA SAUDE') ? 'bg-[#20BDBE]' : value.includes('CIENCIAS HUMANAS') ? 'bg-[#F5831F]' : value.includes('CIENCIAS BIOLOGICAS') ? 'bg-[#EB008B]' : value.includes('ENGENHARIAS') ? 'bg-[#FCB712]' : value.includes('CIENCIAS SOCIAIS APLICADAS') ? 'bg-[#009245]' : value.includes('LINGUISTICA LETRAS E ARTES') ? 'bg-[#A67C52]' : value.includes('OUTROS') ? 'bg-[#1B1464]' : 'bg-[#000]'}
-                                  `}
-                    >
+                      key={index} 
+                  className={`py-2 whitespace-nowrap px-4 rounded-md text-xs font-bold flex gap-2 text-white items-center ${value.includes('CIENCIAS AGRARIAS') ? 'bg-red-400' : value.includes('CIENCIAS EXATAS E DA TERRA') ? 'bg-green-400' : value.includes('CIENCIAS DA SAUDE') ? 'bg-[#20BDBE]' : value.includes('CIENCIAS HUMANAS') ? 'bg-[#F5831F]' : value.includes('CIENCIAS BIOLOGICAS') ? 'bg-[#EB008B]' : value.includes('ENGENHARIAS') ? 'bg-[#FCB712]' : value.includes('CIENCIAS SOCIAIS APLICADAS') ? 'bg-[#009245]' : value.includes('LINGUISTICA LETRAS E ARTES') ? 'bg-[#A67C52]' : value.includes('OUTROS') ? 'bg-[#1B1464]' : 'bg-[#000]'}`}
+                           >
                       <PuzzlePiece size={12} className="text-white" /> {value.trim()}
                     </li>
                   ))
@@ -443,7 +443,7 @@ console.log(urlDados)
                       </CardTitle>
                       <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
                       </div>
-  
+
                       <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
@@ -453,12 +453,13 @@ console.log(urlDados)
                     </Tooltip>
                   </TooltipProvider>
                      
+
                     </CardHeader>
                     <CardContent className="mt-4">
                       <GraficoIndiceArticle articles={dados} pesosProducao={pesosProducao} />
                     </CardContent>
                       </Alert>
-  
+
               <Alert className=" h-[400px] ">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <div>
@@ -467,7 +468,7 @@ console.log(urlDados)
                       </CardTitle>
                       <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
                       </div>
-  
+
                       <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
@@ -477,6 +478,7 @@ console.log(urlDados)
                     </Tooltip>
                   </TooltipProvider>
                      
+
                     </CardHeader>
                     <CardContent>
                     <CardContent className="mt-4 p-0">
@@ -484,7 +486,7 @@ console.log(urlDados)
                     </CardContent>
                     </CardContent>
                       </Alert>
-  
+
                       <Alert className=" h-full lg:col-span-2 ">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <div>
@@ -493,7 +495,7 @@ console.log(urlDados)
                       </CardTitle>
                       <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
                       </div>
-  
+
                       <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
@@ -503,13 +505,15 @@ console.log(urlDados)
                     </Tooltip>
                   </TooltipProvider>
                      
+
                     </CardHeader>
                     <CardContent className="mt-4">
                       <GraficoIndiceBooksAndChapters articles={dados} pesosProducao={pesosProducao} />
                     </CardContent>
                       </Alert>
-  
+
                      
+
               </div>
             )}
         </div>

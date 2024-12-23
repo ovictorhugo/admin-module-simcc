@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Alert } from "../../ui/alert";
 import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, ChartConfig } from "../../../components/ui/chart";
 
 interface Docentes {
   matric: string;
