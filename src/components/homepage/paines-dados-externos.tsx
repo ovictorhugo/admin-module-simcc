@@ -29,7 +29,8 @@ export function PaineisDadosExternos() {
                 link:"http://bi.cnpq.br/painel/fomento-cti/index.html"
                 },
     
-          
+
+            
 
             
     ]
@@ -69,7 +70,7 @@ export function PaineisDadosExternos() {
         <main className="flex flex-1 flex-col relative  p-4 md:p-8 ">
 
            <div className="relative ">
-           <div className="w-full rounded-lg absolute bg-[#82AAC0] h-[270px]"></div>
+           <div className="w-full rounded-lg absolute bg-eng-blue h-[270px]"></div>
            </div>
 
 

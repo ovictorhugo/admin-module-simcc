@@ -52,9 +52,9 @@ export function ContentIndicators() {
             <div className="lg:max-w-[900px]  mt-2">
             
 
-            <h1 className="max-w-[550px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
+            <h1 className="max-w-[650px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
                Confira as {" "}
-                <strong className="bg-[#709CB6] rounded-md px-3 pb-2 text-white font-medium">
+                <strong className="bg-eng-blue rounded-md px-3 pb-2 text-white font-medium">
                 estatísticas de produção
                 </strong>{" "}
                 {version ? ('da Escola de Engenharia'):('do SENAI CIMATEC')}

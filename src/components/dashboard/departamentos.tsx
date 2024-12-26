@@ -126,7 +126,7 @@ export function Departamentos() {
     />
   ):(
     <div className="w-full h-full flex flex-col items-center justify-center">
-     <p className="text-9xl  text-[#719CB8]  font-bold mb-16 animate-pulse">^____^</p>
+     <p className="text-9xl  text-eng-blue  font-bold mb-16 animate-pulse">^____^</p>
       <p className="font-medium text-lg">Nenhum departamento selecionado</p>
     </div>
   )}

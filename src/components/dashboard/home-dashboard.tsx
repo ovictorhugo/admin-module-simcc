@@ -53,9 +53,9 @@ export function HomeDashboard() {
 
     return(
         <main className="w-full md:p-8 p-4">
-            <div className=" bg-[rgb(113,156,184)] rounded-md w-full h-[40vh]  text-white p-8 flex flex-col justify-between">
+            <div className=" bg-eng-blue rounded-md w-full h-[40vh]  text-white p-8 flex flex-col justify-between">
                    <div>
-                   <Badge className="mb-4 text-[rgb(113,156,184)]" variant={'secondary'} >{role}</Badge>
+                   <Badge className="mb-4 text-eng-blue" variant={'secondary'} >{role}</Badge>
                    </div>
 
                     <div>

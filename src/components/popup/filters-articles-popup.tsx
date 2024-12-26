@@ -59,7 +59,7 @@ export function FilterArticlePopUp(props: Props) {
 
   console.log(itensSelecionados);
 
-  const [checkboxStates, setCheckboxStates] = useState<CheckboxStates>({});
+  const [checkboxStates, setCheckboxStates] = useState<CheckboxStates>( {});
 
   const handleCheckboxChangeInput = (itemId: number, isChecked: boolean) => {
     setCheckboxStates((prevStates) => ({ ...prevStates, [itemId]: isChecked }));
@@ -123,6 +123,7 @@ export function FilterArticlePopUp(props: Props) {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
              
+
               {qualis.map((quali) => (
                 <DropdownMenuCheckboxItem
                   key={quali.id}
@@ -154,7 +155,7 @@ export function FilterArticlePopUp(props: Props) {
             max={year}
             min={1990}
             step={1}
-            className="color-blue-700"
+            className="eng-blue"
           ></Slider>
           <p className="text-sm font-bold">{filterYear}</p>
         </Alert>

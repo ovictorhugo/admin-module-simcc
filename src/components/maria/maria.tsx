@@ -96,7 +96,7 @@ interface Bolsistas {
     area:string
     group_id:string
     name:string
-  }
+}
 
 
 interface Message {
@@ -203,8 +203,9 @@ const {onOpen} = useModal()
              <div>
              <div className="flex gap-3">
                 <div className="h-12">{theme == 'dark '? (<SymbolEEWhite/>):(<SymbolEE/>)}</div>
-              <h2 className="font-bold text-5xl text-neutral-400 dark:text-neutral-300"><strong className="bg-gradient-to-r from-[#719CB8]  to-[#1B1464] text-transparent bg-clip-text">Olá,</strong> <br/>como posso ajudar?</h2>
+              <h2 className="font-bold text-5xl text-neutral-400 dark:text-neutral-300"><strong className="bg-gradient-to-r from-eng-blue  to-[#1B1464] text-transparent bg-clip-text">Olá,</strong> <br/>como posso ajudar?</h2>
              
+
               </div>
               <p className="ml-12 mt-2  max-w-[550px]">Faça perguntas relacionadas as produções de artigos, resumo cadastrado no Lattes, livros, capítulos e patentes dos docentes vinculados na plataforma </p>
              </div>
@@ -214,6 +215,7 @@ const {onOpen} = useModal()
           </div>
           </div>
         ):(
+
  <ScrollArea className="flex flex-col flex-1 h-full px-6   ">
             <div>
               {message.map((props, index) => {
@@ -226,6 +228,7 @@ const {onOpen} = useModal()
 {theme == 'dark '? (<SymbolEEWhite/>):(<SymbolEE/>)}
                    </div>
                   ):(
+
                     <Avatar className="cursor-pointer rounded-md  h-6 w-6">
                     <AvatarImage  className={'rounded-md h-6 w-6'} src={`${user?.photo_url}`} />
                     <AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
@@ -257,6 +260,7 @@ const {onOpen} = useModal()
                   )}
 
                   
+
                   <p className="text-xs text-gray-500 pt-3">{props.time}</p>
                  </div>
                

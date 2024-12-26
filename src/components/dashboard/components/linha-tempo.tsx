@@ -27,7 +27,7 @@ export function LinhaTempoDocentes({ items }: Props) {
               <div className="flex items-center w-full">
                 <div className="border-b w-full  flex flex-1  "></div>
 
-                <div className={`w-8 h-8 cursor-pointer rounded-full border ${item.selected ? 'bg-eng-blue dark:bg-eng-blue text-white' : 'bg-neutral-50 dark:bg-neutral-900'} whitespace-nowrap flex items-center justify-center text-xl font-bold`}>
+                <div className={`w-8 h-8 cursor-pointer rounded-full border ${item.selected ? 'bg-eng-dark-blue dark:bg-eng-dark-blue text-white' : 'bg-neutral-50 dark:bg-neutral-900'} whitespace-nowrap flex items-center justify-center text-xl font-bold`}>
                   {item.selected ? <Check size={12} /> : <X size={12} />}
                 </div>
 

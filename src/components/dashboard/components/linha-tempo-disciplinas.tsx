@@ -33,7 +33,7 @@ export function LinhaTempoDisciplinas({ items, depId }: Props) {
                   onClick={() => onOpen("import-disciplina", { dep_id: depId })}
                   className={`w-8 h-8 cursor-pointer rounded-full border ${
                     item.selected
-                      ? "bg-eng-blue dark:bg-eng-blue text-white"
+                      ? "bg-eng-dark-blue dark:bg-eng-dark-blue text-white"
                       : "bg-neutral-50 dark:bg-neutral-900"
                   } whitespace-nowrap flex items-center justify-center text-xl font-bold`}
                 >

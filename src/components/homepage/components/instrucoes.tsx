@@ -26,7 +26,7 @@ export function Instrucoes() {
             <div className="flex flex-col gap-8 lg:ml-24 xl:ml-48">
                 <Alert className="">
                     <CardHeader>
-                    <div className="h-[300px] flex items-center justify-center"><TextCursorInput size={120} className="text-[#719CB8]"/></div>
+                    <div className="h-[300px] flex items-center justify-center"><TextCursorInput size={120} className="text-eng-blue"/></div>
                         <CardTitle className="font-medium text-3xl">1. Use palavras-chave específicas</CardTitle>
                         <CardDescription>Tente usar palavras-chave específicas que descrevem o tópico que você está procurando. Por exemplo, em vez de pesquisar por "robótica", pesquise por "robótica educacional". Você pode fazer a pesquisa com mais de uma palavra-chave e concatenar com 'E' ou 'OU'</CardDescription>
                     </CardHeader>
@@ -34,7 +34,7 @@ export function Instrucoes() {
 
                 <Alert className="">
                     <CardHeader>
-                        <div className="h-[300px] flex items-center justify-center"><MessagesSquare size={120} className="text-[#719CB8]"/></div>
+                        <div className="h-[300px] flex items-center justify-center"><MessagesSquare size={120} className="text-eng-blue"/></div>
                         <CardTitle className="font-medium text-3xl">2. Você pode utilizar a MarIA para aprimorar a busca</CardTitle>
                         <CardDescription>Tente usar palavras-chave específicas que descrevem o tópico que você está procurando. Por exemplo, em vez de pesquisar por "robótica", pesquise por "robótica educacional". Você pode fazer a pesquisa com mais de uma palavra-chave e concatenar com 'E' ou 'OU'</CardDescription>
                     </CardHeader>
@@ -42,7 +42,7 @@ export function Instrucoes() {
 
                 <Alert className="">
                     <CardHeader>
-                    <div className="h-[300px] flex items-center justify-center"><Filter size={120} className="text-[#719CB8]"/></div>
+                    <div className="h-[300px] flex items-center justify-center"><Filter size={120} className="text-eng-blue"/></div>
                         <CardTitle className="font-medium text-3xl">3. Utilize filtros de pesquisa</CardTitle>
                         <CardDescription>Limite os resultados da pesquisa usando categorias que possuem diferentes critérios de seleção. Por exemplo, é possível buscar por termos em artigos, em resumo, patentes, nome de pesquisador ou por área de especialidade. Você pode usar os filtros na plataforma para refinar o resultado da pesquisa por qualis, ano ou área de atuação.</CardDescription>
                     </CardHeader>
@@ -50,7 +50,7 @@ export function Instrucoes() {
 
                 <Alert className="">
                     <CardHeader>
-                    <div className="h-[300px] flex items-center justify-center"><List size={120} className="text-[#719CB8]"/></div>
+                    <div className="h-[300px] flex items-center justify-center"><List size={120} className="text-eng-blue"/></div>
                         <CardTitle className="font-medium text-3xl">4. Veja o dicionário de termos</CardTitle>
                         <CardDescription>Em caso de dúvida de qual palavra utilizar para realizar sua pesquisa, acesse o dicionário de termos com mais de 36 mil palavras disponíveis para refinar a sua busca. Você também pode pesquisar as informações das revistas (ISSN, qualis e JCR).</CardDescription>
                     </CardHeader>

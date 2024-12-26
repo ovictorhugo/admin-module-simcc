@@ -34,7 +34,7 @@ module.exports = {
       // => @media (min-width: 1536px) { ... }
     },
     fontFamily: {
-      sans: 'Ubuntu, sans-serif'
+      sans: 'Lexend, sans-serif'
     },
     extend: {
       keyframes: {

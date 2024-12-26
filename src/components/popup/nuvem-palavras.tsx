@@ -15,6 +15,7 @@ import HighchartsReact from 'highcharts-react-official'
 import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
 import HC_wordcloud from 'highcharts/modules/wordcloud';
+import { Weight } from "lucide-react";
 
 HC_wordcloud(Highcharts);
 
@@ -74,7 +75,8 @@ export function NuvemPalavras(props:Grafico) {
         })),
 
         style: {
-          fontFamily: 'Ubuntu, sans-serif',
+          fontFamily: 'Lexend, sans-serif',
+          weight: '200',
         },
       },
     ],

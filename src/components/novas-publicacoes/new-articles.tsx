@@ -259,8 +259,8 @@ console.log(totalSelecionado?.dep_nom || '')
             
 
                         <h1 className={`  ${totalSelecionado != null ? ('max-w-[800px]'):('max-w-[500px]')} text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3`}>
-                          Todas os artigos mais{" "}
-                            <strong className="bg-[#709CB6] rounded-md px-3 pb-2 text-white font-medium">
+                          Todos os artigos mais{" "}
+                            <strong className="bg-eng-blue rounded-md px-3 pb-2 text-white font-medium">
                             recentes
                             </strong>{" "}
                             {totalSelecionado != null ? (totalSelecionado.dep_nom):('da instituição')}
@@ -359,14 +359,14 @@ console.log(totalSelecionado?.dep_nom || '')
             <div className="mt-4 ">
          
 
-                        <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
+                        <h1 className="max-w-[600px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
                            Pesquise{" "}
-                            <strong className="bg-[#709CB6] rounded-md px-3 pb-2 text-white font-medium">
+                            <strong className="bg-eng-blue rounded-md px-3 pb-2 text-white font-medium">
                             o nome ou ISSN
                             </strong>{" "}
                             da revista para ver as informações
                         </h1>
-                        <p className="max-w-[750px] text-lg font-light text-foreground">
+                        <p className="max-w-[500px] text-lg font-light text-foreground">
                         Para ajudar a sua pesquisa, fornecemos uma lista extensa de revistas e suas classificações.
                         </p>
                         <div className="flex gap-3 mt-3">

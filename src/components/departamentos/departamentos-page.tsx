@@ -22,6 +22,7 @@ interface Departamentos {
     dep_sigla: string
   }
 
+
 const useQuery = () => {
     return new URLSearchParams(useLocation().search);
   }
@@ -33,6 +34,7 @@ export function DepartamentPage() {
     const [total, setTotal] = useState<Departamentos[]>([]);
     const [totalSelecionado, setTotalSelecionado] = useState<Departamentos | null>(null);
 
+
     const queryUrl = useQuery();
     const type_search = queryUrl.get('dep_id');
     const [, setIsLoading] = useState(false)
@@ -40,7 +42,7 @@ export function DepartamentPage() {
 
     let departamentoSelecionado = type_search || ''
 
- 
+
 
     const {urlGeralAdm} = useContext(UserContext)
 
@@ -92,6 +94,7 @@ export function DepartamentPage() {
         return searchString.includes(normalizedSearch);
       }) : [];
 
+
       const navigate = useNavigate();
 
       const handlePesquisaFinal = (dep_id:string) => {
@@ -108,8 +111,7 @@ export function DepartamentPage() {
         {departamentoSelecionado.length == 0 ? (
              <div className="w-full">
 
-             
-<main className="  gap-4 md:gap-8 flex flex-col  p-4 md:p-8 pt-0 md:pt-0 w-full">
+              <main className="  gap-4 md:gap-8 flex flex-col  p-4 md:p-8 pt-0 md:pt-0 w-full">
 
               <div className="bg-cover bg-bottom bg-no-repeat" style={{ backgroundImage: `url(${bg_graduate})` }}>
               <div className="justify-center m w-full  flex max-w-[980px] flex-col items-center lg:items-start  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
@@ -120,18 +122,15 @@ export function DepartamentPage() {
  {totalSelecionado.dep_nom}
 </h1>
 ):(
-<h1 className="z-[2] lg:text-left text-center max-w-[600px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
+<h1 className="z-[2] lg:text-left text-center max-w-[700px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
 Explore um  {" "}
-<strong className="bg-[#82AAC0]  rounded-md px-3 pb-2 text-white font-medium">
+<strong className="bg-eng-blue  rounded-md px-3 pb-2 text-white font-medium">
   {" "}
   departamento
 </strong>{" "}
 da Escola de Engenharia
 </h1>
 )}
-
-
-
 
 {totalSelecionado ? (
 <div className="flex items-center gap-2">
@@ -151,8 +150,9 @@ da Escola de Engenharia
   </Alert>
 )}
 
-
-
+{/*
+<Link to={'/departamentos'}  className="inline-flex z-[2] w-fit items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Ver todos os departamentos<ArrowRight size={12}/></Link>
+*/}
 
 </div>
 </div>
@@ -177,6 +177,7 @@ da Escola de Engenharia
                  className={cn(
                    `flex flex-col rounded-lg w-full rounded-l-none  dark:border-neutral-700 items-start gap-2  border p-3 text-left text-sm transition-all hover:bg-accent`,
                  
+
                  )}
                 
                >
@@ -196,21 +197,27 @@ da Escola de Engenharia
                    <div className="flex items-center">
      
                  
-                     
-                     <div className="flex items-center gap-2">
+
+                      <div className="flex items-center gap-2">
                          
+
                        <div className="font-semibold text-lg">{item.dep_sigla} - {item.dep_nom}</div>
                        
+
                       
+
                      </div>
                      <div
                        
+
                      >
                        
+
                      </div>
      
                    </div>
                    
+
                  </div>
                  <div className="line-clamp-2 text-xs text-muted-foreground flex gap-4">
                  <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12}/>{item.org_cod}</div>
@@ -219,10 +226,12 @@ da Escola de Engenharia
                  </div>
      
                  
+
      
                 </div>
                
                  
+
              </div>
                 
                </button>
@@ -236,6 +245,7 @@ da Escola de Engenharia
 </main>
              </div>
         ):(
+
             <VisualizacaoDepartamento/>
         )}
         </>

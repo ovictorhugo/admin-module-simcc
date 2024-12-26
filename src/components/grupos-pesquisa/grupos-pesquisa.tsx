@@ -207,9 +207,9 @@ export function GruposPesquisaPage() {
            <div className="justify-center md:px-8 px-4 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
        <Link to={'/informacoes'}  className="inline-flex z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
        
-           <h1 className="z-[2] text-center max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
+           <h1 className="z-[2] text-center max-w-[600px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
              Explore as informações dos{" "}
-             <strong className="bg-[#82AAC0]  rounded-md px-3 pb-2 text-white font-medium">
+             <strong className="bg-eng-blue  rounded-md px-3 pb-2 text-white font-medium">
                {" "}
                grupos de pesquisa
              </strong>{" "}

@@ -162,9 +162,9 @@ export function Dicionario() {
                     <div>
                       
 
-                        <h1 className="max-w-[450px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
+                        <h1 className="max-w-[550px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
                             Todas as {" "}
-                            <strong className="bg-[#709CB6] rounded-md px-3 pb-2 text-white font-medium">
+                            <strong className="bg-eng-blue rounded-md px-3 pb-2 text-white font-medium">
                                 palavras
                             </strong>{" "}
                             cadastradas na plataforma

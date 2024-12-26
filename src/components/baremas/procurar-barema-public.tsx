@@ -130,7 +130,7 @@ export function ProcurarBaremas() {
 
             <div className="flex flex-col justify-center max-w-[60vw] w-full">
             <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
-            Coloque o   <strong className="bg-[#82AAC0]  rounded-md px-3 pb-2 text-white font-medium">código</strong> do barema <br/> e consulte os resultados.
+            Coloque o   <strong className="bg-eng-blue  rounded-md px-3 pb-2 text-white font-medium">código</strong> do barema <br/> e consulte os resultados.
         </h1>
            
           </div>
