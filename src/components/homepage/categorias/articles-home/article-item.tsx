@@ -13,6 +13,7 @@ import { Button } from "../../../ui/button";
 import { Link } from "react-router-dom";
 import { useModal } from "../../../hooks/use-modal-store";
 import {  Maximize2 } from "lucide-react";
+import { useModalSecundary } from "../../../hooks/use-modal-store-secundary";
 
 type Articles = {
     id: string,
@@ -147,7 +148,7 @@ export function ArticleItem(props: Articles) {
 
   const doi = props.doi.replace('http://dx.doi.org/', '');
 
-  const { onOpen } = useModal();
+  const { onOpen } = useModalSecundary();
 
 
   const highlightedTitleEvent = highlightText(props.title , itemsSelecionados);
@@ -218,31 +219,7 @@ export function ArticleItem(props: Articles) {
 
        <div className="flex gap-2 items-center ml-auto">
       
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size={'icon'} className="ml-auto text-sm w-8 h-8 text-gray-500 dark:text-gray-300">
-                <DotsThree size={16} />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-auto">
-              {props.doi != 'None' && (
-                <div>
-                  <Link target="_blank" to={`http://dx.doi.org/${props.doi}`}>
-                  <DropdownMenuItem className="flex items-center gap-3">
-                    <LinkSimple className="h-4 w-4" />Link DOI da publicação
-                  </DropdownMenuItem>
-                </Link>
-
-<DropdownMenuSeparator />
-                </div>
-              )}
-              
-              <DropdownMenuItem className="gap-3 flex items-center" onClick={() => onOpen('researcher-modal', {name:props.researcher})}>
-                <div className={`border-[1px] border-gray-300 rounded-md h-6 w-6 bg-cover bg-center bg-no-repeat`} style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.researcher_id}) ` }}></div>
-                {props.researcher}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        
        </div>
         </div>
       </Alert>

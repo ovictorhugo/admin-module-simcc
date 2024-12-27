@@ -2,6 +2,7 @@ import { ThemeProvider } from "../components/provider/theme-provider";
 import { cn } from "../lib/utils";
 import { ModalProvider } from "../components/provider/modal-provider";
 import { Mobile } from "../components/mobile";
+import { ModalProviderSecundary } from "../components/provider/modal-provider-secundary";
 
 export default function DefaultLayout({
     children,
@@ -19,7 +20,8 @@ export default function DefaultLayout({
             storageKey="discord-theme"
             >
               <ModalProvider/>
-              <Mobile/>
+              <ModalProviderSecundary/>
+     
             {children}
             </ThemeProvider>
             

@@ -23,7 +23,7 @@
    "noUnusedLocals": false, // Desativa o aviso para variáveis locais não usadas
     "noUnusedParameters": false, // Desativa o aviso para parâmetros não usados
     "noFallthroughCasesInSwitch": false,
-"skipLibCheck": false,
+"skipLibCheck": true,
 
 
     "moduleResolution": "node",

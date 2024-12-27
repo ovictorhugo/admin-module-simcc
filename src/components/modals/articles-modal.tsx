@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useModal } from "../hooks/use-modal-store";
+
 import { UserContext } from "../../context/context";
 
 import { Buildings, CalendarBlank, DownloadSimple, File, Globe,  LinkBreak, Quotes } from "phosphor-react";
@@ -23,6 +23,7 @@ import { Asterisk, User, X } from "lucide-react";
 import { Sheet, SheetContent } from "../ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useModalSecundary } from "../hooks/use-modal-store-secundary";
 
 const normalizeText = (text: string): string => {
   return text
@@ -105,7 +106,7 @@ export function ArticlesModal() {
 
     const {urlGeral, itemsSelecionados} = useContext(UserContext)
 
-    const { onClose, isOpen, type: typeModal, data } = useModal();
+    const { onClose, isOpen, type: typeModal, data } = useModalSecundary();
     const isModalOpen = isOpen && typeModal === "articles-modal";
 
 

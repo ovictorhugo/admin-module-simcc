@@ -25,6 +25,7 @@ import {
   DialogTitle,
 } from "../components/ui/dialog"
 import { Link, useLocation } from "react-router-dom";
+import { useModalSecundary } from "../components/hooks/use-modal-store-secundary";
 
 interface MailProps {
  
@@ -45,6 +46,7 @@ export default function SearchLayout({
   
  
   const {onOpen, isOpen, type: typeModal } = useModal()
+  const {onOpen:onOpenSecundary } = useModalSecundary()
 
   useEffect(() => {
     // Função que será chamada quando o evento de teclado ocorrer
@@ -85,14 +87,14 @@ export default function SearchLayout({
       setIsModalOpen(false);
   };
 
-//cokkies
+//cookies
   useEffect(() => {
     // Verifica no localStorage se o modal já foi exibido
     const hasVisited = localStorage.getItem('cookies');
 
     if (!hasVisited ) {
         // Se não foi exibido, abre o modal
-       onOpen('cookies')
+        onOpenSecundary('cookies')
         // Marca no localStorage que o modal foi exibido
         localStorage.setItem('cookies', 'true');
     }

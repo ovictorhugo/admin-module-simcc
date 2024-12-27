@@ -1,16 +1,15 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Alert } from "../ui/alert";
-
 import { CalendarBlank, CheckSquare } from "phosphor-react";
 import { Slider } from "../ui/slider";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
 import { Button } from "../../components/ui/button";
+import debounce from "lodash.debounce"; // Importing debounce
 
 interface Props {
   onFilterUpdate: (newResearcher: Filter[]) => void;
@@ -53,13 +52,20 @@ export function FilterArticlePopUp(props: Props) {
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const [filterYear, setFilterYear] = useState([1990]);
+
   type CheckboxStates = {
     [index: number]: boolean;
   };
 
-  console.log(itensSelecionados);
+  const [checkboxStates, setCheckboxStates] = useState<CheckboxStates>({});
 
-  const [checkboxStates, setCheckboxStates] = useState<CheckboxStates>( {});
+  const mountedRef = useRef(true); // Ref to track if component is mounted
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false; // Mark as unmounted when component unmounts
+    };
+  }, []);
 
   const handleCheckboxChangeInput = (itemId: number, isChecked: boolean) => {
     setCheckboxStates((prevStates) => ({ ...prevStates, [itemId]: isChecked }));
@@ -72,41 +78,42 @@ export function FilterArticlePopUp(props: Props) {
         } else {
           return prevSelecionados.filter((item) => item !== selectedQualis.itens);
         }
-      } else {
-        // handle the case where selectedQualis is undefined
-        return prevSelecionados;
       }
+      return prevSelecionados;
     });
   };
 
-  const updateResearcher = (newResearcher: Filter[]) => {
-    if (props.onFilterUpdate) {
+  // Debounced update function
+
+  // Função para debounced update
+  const updateResearcher = useCallback(
+    debounce((newResearcher: Filter[]) => {
       props.onFilterUpdate(newResearcher);
-    }
-  };
+    }, 500), // 500ms debounce
+    []
+  );
 
-  const filtros = {
-    year: filterYear,
-    qualis: itensSelecionados,
-  };
+  // Atualizando filtros quando filterYear ou itensSelecionados mudarem
+  useEffect(() => {
+    const filtros = {
+      year: filterYear,
+      qualis: itensSelecionados,
+    };
+    updateResearcher([filtros]); // Chamando a função de update
+  }, [filterYear, itensSelecionados, updateResearcher]);
 
-  useMemo(() => {
-    updateResearcher([filtros]);
-  }, [filterYear, itensSelecionados]);
-
-  console.log('ED',itensSelecionados)
 
   return (
     <div className="mb-6 flex gap-6">
       <div className="flex flex-col">
-        <div className="flex items-center gap-3 mb-4 ">
+        <div className="flex items-center gap-3 mb-4">
           <CheckSquare size={24} className="text-gray-400" />
           <p className="text-sm font-bold">Selecione o Qualis</p>
         </div>
         <Alert className="w-full">
           <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="w-full  justify-start font-normal min-w-[220px]">
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="w-full justify-start font-normal min-w-[220px]">
                 {itensSelecionados.length > 0 ? (
                   <div className="flex flex-wrap gap-4">
                     {itensSelecionados.map((item) => (
@@ -122,8 +129,6 @@ export function FilterArticlePopUp(props: Props) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-             
-
               {qualis.map((quali) => (
                 <DropdownMenuCheckboxItem
                   key={quali.id}
@@ -144,7 +149,7 @@ export function FilterArticlePopUp(props: Props) {
       </div>
 
       <div className="w-full flex flex-1 flex-col">
-        <div className="flex items-center gap-3 mb-4 ">
+        <div className="flex items-center gap-3 mb-4">
           <CalendarBlank size={24} className="text-gray-400" />
           <p className="text-sm font-bold">Selecione o ano</p>
         </div>
@@ -156,10 +161,12 @@ export function FilterArticlePopUp(props: Props) {
             min={1990}
             step={1}
             className="eng-blue"
-          ></Slider>
+          />
           <p className="text-sm font-bold">{filterYear}</p>
         </Alert>
       </div>
+
+  
     </div>
   );
 }

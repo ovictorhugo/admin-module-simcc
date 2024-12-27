@@ -2,7 +2,7 @@
   "name": "conectee",
   "private": true,
   "version": "1.5.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "clean": "del-cli src/**/*.js src/**/*.d.ts",
     "dev": "vite",
@@ -64,6 +64,7 @@
     "html2canvas": "^1.4.1",
     "js-cookie": "^3.0.5",
     "jspdf": "^2.5.1",
+    "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.354.0",
     "next-themes": "^0.2.1",
     "node-correios": "^3.0.2",
@@ -123,7 +124,7 @@
     "postcss": "^8.4.35",
     "rimraf": "^6.0.1",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.2.2",
+    "typescript": "^5.7.2",
     "vite": "^6.0.3",
     "vite-plugin-remove-console": "^2.2.0"
   }

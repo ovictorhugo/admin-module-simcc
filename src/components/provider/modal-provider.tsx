@@ -51,8 +51,6 @@ const ModalContent = () => {
      
       case 'edit-graduate-program':
         return <EditGraduateProgram/>
-      case 'articles-modal':
-        return <ArticlesModal/>
       case 'researcher-modal':
         return <ResearcherModal/>
       case 'import-bolsistas':
@@ -79,8 +77,7 @@ const ModalContent = () => {
         return <ProjectModal/>
       case 'add-background':
         return <AddBackground/>
-      case 'cookies':
-        return <CookiesModal/>
+
       case 'relatar-problema':
         return <RelatarBug/>
       case 'pesquisadores-selecionados':
