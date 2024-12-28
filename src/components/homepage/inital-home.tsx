@@ -1063,9 +1063,9 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
 
               
 
-                 {version && (
+                
                    <FooterHome/>
-                 )}
+                
           </div>
 
          

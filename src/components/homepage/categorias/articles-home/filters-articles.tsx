@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Alert } from "../../../ui/alert";
 
 import { CalendarBlank, CheckSquare } from "phosphor-react";
 import { Slider } from "../../../ui/slider";
+import debounce from "lodash.debounce"; // Importing debounce
 
 interface Props {
     onFilterUpdate: (newResearcher: Filter[]) => void;
@@ -107,20 +108,24 @@ export function FilterArticle(props:Props) {
     //ano atual
    
 
-    const updateResearcher = (newResearcher: Filter[]) => {
-        if (props.onFilterUpdate) {
-          props.onFilterUpdate(newResearcher);
-        }
-      };
-
+    // Função para debounced update
+    const updateResearcher = useCallback(
+      debounce((newResearcher: Filter[]) => {
+        props.onFilterUpdate(newResearcher);
+      }, 500), // 500ms debounce
+      []
+    );
+  
+    // Atualizando filtros quando filterYear ou itensSelecionados mudarem
+    useEffect(() => {
       const filtros = {
-        year: filterYear, // assuming filterYear is correct
-        qualis: itensSelecionados // assuming itensSelecionados is correct
-    };
-    useMemo(() => {
-      updateResearcher([filtros])
-    }, [filterYear, itensSelecionados]);
+        year: filterYear,
+        qualis: itensSelecionados,
+      };
+      updateResearcher([filtros]); // Chamando a função de update
+    }, [filterYear, itensSelecionados, updateResearcher]);
 
+    
     return(
        <div className="mb-6 flex gap-6  lg:flex-row flex-col">
         <div className="flex flex-col">

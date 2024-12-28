@@ -334,6 +334,15 @@ function generateNameVariations(name: string): string[] {
         <>
         <Drawer open={isModalOpen} onClose={onClose}    >
         <DrawerContent onInteractOutside={onClose} className={`max-h-[88%]`} >
+          {researcher.length == 0 && (
+            <div className="flex justify-center items-center h-full">
+              <div className="w-full flex flex-col items-center justify-center h-full">
+                <p className="text-9xl text-[#719CB8] font-bold mb-16 animate-pulse">^_^</p>
+                <p className="font-medium text-lg max-w-[500px] text-center">Estamos pesquisando todas as informações do pesquisador no nosso banco de dados, aguarde.</p>
+                </div>
+            </div>
+          )}
+
         {researcher.slice(0, 1).map((user) => {
                 return(
                   <div className="w-full flex justify-center ">
@@ -473,6 +482,8 @@ function generateNameVariations(name: string): string[] {
          </DropdownMenuItem>
 
          <DropdownMenuItem className="flex items-center gap-3" onClick={() => handleDownloadJson()}><FileCsv className="h-4 w-4" />Baixar CSV das publicações</DropdownMenuItem>
+
+         <DropdownMenuItem className="flex items-center gap-3" ><File className="h-4 w-4" />Baixar Dicionário de dados</DropdownMenuItem>
 
          <DropdownMenuItem className="flex items-center gap-3" onClick={() => setOpen(!open)} ><BracketsCurly className="h-4 w-4" />API da consulta</DropdownMenuItem>
 

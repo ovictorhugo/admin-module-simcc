@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Slider } from "../ui/slider";
-
+import debounce from "lodash.debounce"; // Importing debounce
 interface Props {
     onFilterUpdate: (newResearcher: Filter[]) => void;
 }
@@ -27,20 +27,24 @@ export function FilterYearTimeLine(props:Props) {
  
     //ano atual
    
+  // Função para debounced update
+  const updateResearcher = useCallback(
+    debounce((newResearcher: Filter[]) => {
+      props.onFilterUpdate(newResearcher);
+    }, 500), // 500ms debounce
+    []
+  );
 
-    const updateResearcher = (newResearcher: Filter[]) => {
-        if (props.onFilterUpdate) {
-          props.onFilterUpdate(newResearcher);
-        }
-      };
-
-      const filtros = {
-        year: filterYear, // assuming filterYear is correct
-        qualis: itensSelecionados // assuming itensSelecionados is correct
+  // Atualizando filtros quando filterYear ou itensSelecionados mudarem
+  useEffect(() => {
+    const filtros = {
+      year: filterYear,
+      qualis: itensSelecionados,
     };
-    useMemo(() => {
-      updateResearcher([filtros])
-    }, [filterYear]);
+    updateResearcher([filtros]); // Chamando a função de update
+  }, [filterYear, itensSelecionados, updateResearcher]);
+
+    
 
     return(
        <div className="mb-6 flex gap-6">

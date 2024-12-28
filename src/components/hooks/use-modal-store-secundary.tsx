@@ -1,5 +1,5 @@
-
 import { create } from "zustand";
+import { useModal } from "./use-modal-store";
 
 export type ModalType = 'articles-modal' | 'cookies'
 
@@ -37,69 +37,60 @@ interface ModalData {
   language?:string 
   pdf?:string
 
-//program edit
+  code?: string
+  area?: string
+  modality?: string
+  type?: string
+  rating?: string
+  institution_id?: string
+  description?: string
+  url_image?: string
+  city?:string
+  visible?: string
+  qtd_discente?:string
+  qtd_colaborador?:string
+  qtd_permanente?:string
+  acronym?:string
 
-    code?: string
+  id_dep?:string
 
-    area?: string
-    modality?: string
-    type?: string
-    rating?: string
-    institution_id?: string
-    description?: string
-    url_image?: string
-    city?:string
-    visible?: string
-    qtd_discente?:string
-    qtd_colaborador?:string
-    qtd_permanente?:string
-    acronym?:string
+  type_reset?:string
 
-
-    id_dep?:string
-
-    type_reset?:string
-
+  agency_code?: string
+  agency_name?: string
+  nature?: string
   
-
-
- agency_code?: string
-    agency_name?: string
-    nature?: string
-  
-    end_year?: string
+  end_year?: string
    
-    number_academic_masters?: string
-    number_phd?: string
-    number_specialists?: string
-    number_undergraduates?:string
-    project_name?:string
-    start_year?:string
-    status?:string
+  number_academic_masters?: string
+  number_phd?: string
+  number_specialists?: string
+  number_undergraduates?:string
+  project_name?:string
+  start_year?:string
+  status?:string
 
-    production?:Production[]
-    foment?:Forment[]
-    components?:Components[]
-  }
+  production?:Production[]
+  foment?:Forment[]
+  components?:Components[]
+}
 
-  interface Components {
-    title:string 
-    type:string 
-  }
+interface Components {
+  title:string 
+  type:string 
+}
 
-  interface Production {
-    citations:string 
-    lattes_id:string 
-    name:string
-  }
+interface Production {
+  citations:string 
+  lattes_id:string 
+  name:string
+}
 
-  interface Forment {
-    agency_code:string
-    agency_name:string
-    nature:string
-  }
-
-
+interface Forment {
+  agency_code:string
+  agency_name:string
+  nature:string
+}
 
 interface ModalStoreSecundary {
   type: ModalType | null;
@@ -114,8 +105,10 @@ export const useModalSecundary = create<ModalStoreSecundary>((set: any) => ({
   data: {},
   isOpen: false,
   onOpen: (type, newData = {}) => {
-    const updatedDataSecundary = { ...useModalSecundary.getState().data, ...newData };
-    set({ isOpen: true, type, data: updatedDataSecundary });
+    // Get primary modal state but don't modify it
+    const primaryModal = useModal.getState();
+    
+    set({ isOpen: true, type, data: newData });
   },
-  onClose: () => set({ isOpen: false, data: {} }),
+  onClose: () => set({ type: null, isOpen: false })
 }));

@@ -33,7 +33,6 @@ name?:string
    
     participation?: string
  
-
 }
 
 
@@ -41,8 +40,32 @@ interface ItemsSelecionados {
   term: string;
 }
 
+const decodeHtmlEntities = (text: string): string => {
+  const entities = {
+    '&quot;': '"',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&amp;': '&',
+    '&apos;': "'",
+    '&QUOT;': '"',
+    '&LT;': '<',
+    '&GT;': '>',
+    '&AMP;': '&'
+  };
+  return text.replace(/&(?:quot|lt|gt|amp|apos|QUOT|LT|GT|AMP);/g, entity => entities[entity.toLowerCase() as keyof typeof entities]);
+};
+
+const stripHtmlTags = (text: string): string => {
+  // Remove HTML tags but preserve their text content
+  const div = document.createElement('div');
+  div.innerHTML = text;
+  return div.textContent || div.innerText || '';
+};
+
 const normalizeText = (text: string): string => {
-  return text
+  // Remove HTML tags and normalize for comparison
+  const textWithoutTags = stripHtmlTags(text);
+  return textWithoutTags
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")  // Remove acentos
     .replace(/[|();]/g, '')           // Remove caracteres especiais
@@ -50,74 +73,38 @@ const normalizeText = (text: string): string => {
 };
 
 const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNode => {
-  if (!text || terms.length === 0) return text;
+  if (!text || terms.length === 0) {
+    // Just strip HTML and decode entities for display
+    return stripHtmlTags(decodeHtmlEntities(text));
+  }
 
-  // Cria uma lista com os termos normalizados
+  // First decode HTML entities and strip tags
+  const cleanText = stripHtmlTags(decodeHtmlEntities(text));
+
+  // Normalize terms for comparison
   const normalizedTerms = terms.map(term => normalizeText(term.term));
 
-  // Função para verificar se um trecho do texto contém algum dos termos
-  const containsTerm = (substring: string): boolean => {
-    const normalizedSubstring = normalizeText(substring);
-    return normalizedTerms.some(term => normalizedSubstring.includes(term));
-  };
-
-  // Divide o texto em palavras e processa cada uma
-  const parts = text.split(/(\s+)/); // Divide por espaços para preservar as palavras e espaços
+  // Split text into words while preserving spaces
+  const words = cleanText.split(/(\s+)/);
   const result: React.ReactNode[] = [];
 
-  let i = 0;
-  while (i < parts.length) {
-    const part = parts[i];
+  words.forEach((word, index) => {
+    const normalizedWord = normalizeText(word);
+    const shouldHighlight = normalizedTerms.some(term => normalizedWord.includes(term));
 
-    if (containsTerm(part)) {
-      const normalizedPart = normalizeText(part);
-      let j = 0;
-      let highlightStart = 0;
-
-      // Verifica a presença de cada termo na parte do texto
-      while (j < normalizedPart.length) {
-        let matchedTerm = false;
-
-        for (const term of normalizedTerms) {
-          if (normalizedPart.slice(j, j + term.length) === term) {
-            // Adiciona o texto não destacado antes do termo
-            if (j > highlightStart) {
-              result.push(part.slice(highlightStart, j));
-            }
-
-            // Adiciona o termo destacado
-            result.push(
-              <span key={`${i}-${j}`} className="text-blue-500 font-semibold">
-                {part.slice(j, j + term.length)}
-              </span>
-            );
-
-            j += term.length;
-            highlightStart = j;
-            matchedTerm = true;
-            break;
-          }
-        }
-
-        if (!matchedTerm) {
-          j++;
-        }
-      }
-
-      // Adiciona qualquer parte restante do texto
-      if (highlightStart < part.length) {
-        result.push(part.slice(highlightStart));
-      }
+    if (shouldHighlight) {
+      result.push(
+        <span key={index} className="text-blue-500 font-semibold">
+          {word}
+        </span>
+      );
     } else {
-      result.push(part);
+      result.push(word);
     }
-
-    i++;
-  }
+  });
 
   return result;
 };
-
 
 export function BookItemGeral(props: Publicacao) {
 const {itemsSelecionados} = useContext(UserContext)
@@ -175,11 +162,12 @@ const {itemsSelecionados} = useContext(UserContext)
                           {highlightedTitle}
                         </p>
                         )}
-
                             
+
                         </div>
                         <div>
                            
+
                         </div>
                     </div>
 
@@ -253,6 +241,7 @@ const {itemsSelecionados} = useContext(UserContext)
       </DropdownMenu>
    </div>
                        
+
                                          
                     </div>
                 </Alert>
