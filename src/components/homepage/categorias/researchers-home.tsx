@@ -328,7 +328,7 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
   }, [urlTermPesquisadores]);
 
   const items = Array.from({ length: 12 }, (_, index) => (
-    <Skeleton key={index} className="w-full rounded-md h-[170px]" />
+    <Skeleton key={index} className="w-full rounded-md h-[300px]" />
   ));
 
   const totalAmong = researcher.reduce((sum, researcher) => sum + researcher.among, 0);
@@ -455,10 +455,12 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
                       loading ? (
                         <ResponsiveMasonry
                           columnsCountBreakPoints={{
-                            350: 1,
-                            750: 2,
-                            900: 3,
-                            1200: 4
+                            350: 2,
+                            750: 3,
+                            900: 4,
+                            1200:  6,
+                            1500: 6,
+                            1700: 7
                           }}
                         >
                           <Masonry gutter="16px">

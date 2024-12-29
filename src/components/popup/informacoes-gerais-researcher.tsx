@@ -211,9 +211,6 @@ export function InformacoesGeraisResearcher(props:Research) {
                     
                    )}
 
-
-
-
 {props.rt.length != 0 && (
         <div  className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><Clock size={12} className="textwhite" />Regime de trabalho: {props.rt}</div>
                     
@@ -226,6 +223,14 @@ export function InformacoesGeraisResearcher(props:Research) {
                     
                    )}
    
+   <TooltipProvider>
+<Tooltip>
+       <TooltipTrigger className="outline-none"><div  className=" py-2 px-4 border border-neutral-200 bg-eng-blue text-white dark:bg-black dark:border-neutral-800  rounded-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice de Produção: {props.h_index}</div></TooltipTrigger>
+       <TooltipContent>
+         <p>Índice gerado na plataforma a partir da produção bibliográfica e técnica</p>
+       </TooltipContent>
+     </Tooltip>
+   </TooltipProvider>
    
                </div>
        

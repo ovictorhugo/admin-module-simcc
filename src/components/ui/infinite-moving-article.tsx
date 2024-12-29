@@ -2,14 +2,8 @@
 "use client";
 
 import { cn } from "../../lib"
-import React, { useContext, useEffect, useState } from "react";
-import dt from '../../assets/dt.png'
-import pq from '../../assets/pq.png'
-import { PuzzlePiece } from "phosphor-react";
-import { InfiniteMovingCards } from "./infinite-moving-cards";
-import { CardTitle } from "./card";
-import { Alert } from "./alert";
-import { GraduationCap, MapPin } from "lucide-react";
+import { useContext, useEffect, useRef, useState } from "react";
+
 import { useModal } from "../hooks/use-modal-store";
 import { UserContext } from "../../context/context";
 import { ArticleItem } from "../homepage/categorias/articles-home/article-item";
@@ -35,20 +29,39 @@ export const InfiniteMovingResearchers = ({
   className,
 }: {
   items: {
-    name: string,
-    area: string,
     id: string,
-    city: string,
-    graduation: string,
-    subsidy:Bolsistas[]
+    doi: string,
+    name_periodical: string,
+    qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "SQ",
+    title: string,
+    year: string,
+    color: string,
+    researcher: string,
+    lattes_id: string,
+    magazine: string,
+    lattes_10_id: string,
+    jif: string,
+    jcr_link: string
+    researcher_id: string
+    distinct: boolean
+    abstract: string,
+    article_institution: string,
+    authors: string
+    authors_institution: string
+    citations_count: string
+    issn: string
+    keywords: string
+    landing_page_url: string
+    language: string
+    pdf: string
   }[];
   direction?: "left" | "right";
   speed?: "fast" | "normal" | "slow";
   pauseOnHover?: boolean;
   className?: string;
 }) => {
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const scrollerRef = React.useRef<HTMLUListElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollerRef = useRef<HTMLUListElement>(null);
   const [start, setStart] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
@@ -61,7 +74,8 @@ export const InfiniteMovingResearchers = ({
 
   function addAnimation() {
     if (containerRef.current && scrollerRef.current) {
-      const scrollerContent = Array.from(scrollerRef.current.children);
+      const scrollerContent = Array.from(scrollerRef.current.children) as HTMLElement[];
+
 
       scrollerContent.forEach((item) => {
         const duplicatedItem = item.cloneNode(true);
@@ -122,7 +136,7 @@ export const InfiniteMovingResearchers = ({
             : ""
         )}
       >
-        {items.map((item, idx) => (
+        {items.map((props, idx) => (
           <li
             key={idx}
             onMouseEnter={() => setHoveredIndex(idx)}
@@ -133,7 +147,31 @@ export const InfiniteMovingResearchers = ({
             )}
           >
             <ArticleItem
-            
+              id={props.id}
+              doi={props.doi}
+              name_periodical={props.name_periodical}
+              qualis={props.qualis}
+              title={props.title.toUpperCase()}
+              year={props.year}
+              color={props.color}
+              researcher={props.researcher}
+              lattes_id={props.lattes_id}
+              magazine={props.magazine}
+              lattes_10_id={props.lattes_10_id}
+              jcr_link={props.jcr_link}
+              jif={props.jif}
+              researcher_id={props.researcher_id}
+              distinct={props.distinct}
+              abstract={props.abstract}
+              article_institution={props.article_institution}
+              authors={props.authors}
+              authors_institution={props.authors_institution}
+              citations_count={props.citations_count}
+              issn={props.issn}
+              keywords={props.keywords}
+              landing_page_url={props.landing_page_url}
+              language={props.language}
+              pdf={props.pdf}
             
             />
           </li>
