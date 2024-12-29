@@ -37,7 +37,7 @@ type Research = {
     software: string,
     brand: string,
     lattes_update: Date,
-   
+    ind_prod:string
     h_index:string,
     relevance_score:string,
     works_count:string,
@@ -757,6 +757,7 @@ function generateNameVariations(name: string): string[] {
                   
                       return(
                         <InformacoesGeraisResearcher
+                        ind_prod={user.ind_prod}
                         h_index={user.h_index}
                         relevance_score={user.relevance_score}
                         works_count={user.works_count}

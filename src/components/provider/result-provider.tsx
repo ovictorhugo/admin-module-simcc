@@ -8,6 +8,7 @@ import { useModalResult } from "../hooks/use-modal-result";
 import { PatentHome } from "../homepage/categorias/patent-home";
 import { BookHome } from "../homepage/categorias/book-home";
 import { SpeakerHome } from "../homepage/categorias/speaker-home";
+import { InstitutionsHome } from "../homepage/categorias/institutions-home";
 
 
 const ModalContent = () => {
@@ -24,6 +25,8 @@ const ModalContent = () => {
       return <BookHome/>
     case 'speaker-home':
       return <SpeakerHome/>
+    case 'institutions-home':
+      return <InstitutionsHome/>
   }
 
 }

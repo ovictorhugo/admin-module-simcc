@@ -6,7 +6,7 @@ import { ResultProvider } from "../provider/result-provider";
 import { UserContext } from "../../context/context";
 
 import { Button } from "../ui/button";
-import { ChevronDown, ChevronUp, Copyright, SlidersHorizontal, Ticket, Users } from "lucide-react";
+import { Building, Building2, ChevronDown, ChevronUp, Copyright, SlidersHorizontal, Ticket, Users } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
 import { useModal } from "../hooks/use-modal-store";
 import { File, Quotes } from "phosphor-react";
@@ -20,7 +20,7 @@ const useQuery = () => {
 export function ResultHome() {
   const { isOpen, type } = useModalHomepage();
   const { onOpen, type: typeResult } = useModalResult();
-  const { itemsSelecionados, searchType} = useContext(UserContext);
+  const { itemsSelecionados, searchType, simcc} = useContext(UserContext);
   const { onOpen: onOpenModal } = useModal();
   
   const [isOn, setIsOn] = useState(true);
@@ -110,6 +110,16 @@ export function ResultHome() {
                     </Button>
                     </div>
                     )}
+
+
+{!((simcc && researcher == 'false' && itemsSelecionados.length == 0) && itemsSelecionados.length == 0) && (
+                    <div className={`pb-2 border-b-2 transition-all ${typeResult == 'institutions-home' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`}>
+                    <Button variant={typeResult == 'institutions-home' ? ('ghost'):('ghost')}  className={`${typeResult}`} onClick={() => onOpen('institutions-home')}>
+                       <Building2 className="h-4 w-4" />
+                       Instituições
+                     </Button>
+                    </div>
+                   )}
 
                    
                   </div>

@@ -10,7 +10,7 @@ import bg_popup from '../assets/bg_welcome.png';
 import { useContext, useEffect, useState} from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { BarChartBig, Blocks, BookOpen, Bug, Building2, GraduationCap, Home, Info, InfoIcon, Link2, List, PanelLeftDashed, SearchCheck, Sparkles, UserPlus, X } from "lucide-react";
+import { BarChartBig, Blocks, BookOpen, Bug, Building2, Download, GraduationCap, Home, Info, InfoIcon, Link2, List, PanelLeftDashed, SearchCheck, Sparkles, UserPlus, X } from "lucide-react";
 
 
 import { Footer } from "../components/footer/footer";
@@ -125,10 +125,10 @@ const links = [
     link: "/resultados",
   },
   {
-    title: "MarIA",
+    title: "Pesquisar com IA",
     label: "",
     icon: Sparkles,
-    link: "/marIA",
+    link: "/resultados-ia",
   },
   {
     title: "Indicadores",
@@ -141,6 +141,12 @@ const links = [
     label: "",
     icon: List,
     link: "/dicionario",
+  },
+  {
+    title: "Listagens",
+    label: "",
+    icon: Download,
+    link: "/listagens",
   },
   {
     title: "Produções recentes",

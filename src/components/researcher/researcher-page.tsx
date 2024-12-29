@@ -79,6 +79,7 @@ type Research = {
   i10_index:string,
   scopus:string,
   openalex:string,
+  ind_prod:string
 
   subsidy:Bolsistas[]
   graduate_programs:GraduatePrograms[]
@@ -1030,7 +1031,7 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
                         subsidy={user.subsidy}
                         graduate_programs={user.graduate_programs}
                         departments={user.departments}
-  
+                          ind_prod={user.ind_prod}
                         cargo={user.cargo}
                         clas={user.clas}
                         classe={user.classe}

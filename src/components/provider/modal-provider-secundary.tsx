@@ -7,6 +7,7 @@ import { ArticlesModal } from "../modals/articles-modal";
 
 import { useModalSecundary } from "../hooks/use-modal-store-secundary";
 import { CookiesModal } from "../modals/cookies";
+import { EditArticle } from "../modals/edit-article";
 
 
 const ModalContentSecundary = () => {
@@ -17,6 +18,8 @@ const ModalContentSecundary = () => {
         return <ArticlesModal/>
         case 'cookies':
           return <CookiesModal/>
+        case 'edit-article':
+          return <EditArticle/>
     default:
       return null;
   }

@@ -7,7 +7,7 @@ import { Button } from "../ui/button"
 import { Link } from "react-router-dom"
 import { toast } from "sonner"
 
-import htmlParser from 'html-react-parser';
+import htmlParser from "html-react-parser";
 import useWindowSize from "./use-windows-size"
 
 

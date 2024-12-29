@@ -1,15 +1,13 @@
-import { CalendarBlank, DotsThree, LinkBreak, LinkSimple } from "phosphor-react";
+import { CalendarBlank, DotsThree, GearSix, LinkBreak, LinkSimple } from "phosphor-react";
 import { Alert } from "../../../ui/alert";
 import { useContext } from "react";
 import { UserContext } from "../../../../context/context";
 
 import { Button } from "../../../ui/button";
 import { Link } from "react-router-dom";
-import { useModal } from "../../../hooks/use-modal-store";
-import { Maximize2, Star } from "lucide-react";
-import { useModalSecundary } from "../../../hooks/use-modal-store-secundary";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../ui/tooltip";
 
+import { Maximize2, Pencil} from "lucide-react";
+import { useModalSecundary } from "../../../hooks/use-modal-store-secundary";
 
 type Articles = {
   id: string,
@@ -38,6 +36,8 @@ type Articles = {
   landing_page_url: string
   language: string
   pdf: string
+  has_image:boolean
+  relevance:boolean
 }
 
 interface ItemsSelecionados {
@@ -143,7 +143,37 @@ export function ArticleItem(props: Articles) {
             <div className="flex mb-1 gap-3 justify-between">
               <h3 className="font-semibold mb-4">{props.name_periodical}{props.magazine}</h3>
 
-              <div className="h-8 w-8">
+              <div className="flex items-start  gap-3">
+              {user?.lattes_id == props.lattes_id && (
+               <Button 
+               onClick={() =>
+                onOpen('edit-article', {
+                  id:props.id,
+                  doi: doi,
+                  qualis: props.qualis,
+                  title: props.title,
+                  year: props.year,
+                  jif: props.jif,
+                  lattes_10_id: props.lattes_10_id,
+                  researcher_id: props.researcher_id,
+                  magazine: props.name_periodical,
+                  abstract: props.abstract,
+                  article_institution: props.article_institution,
+                  authors: props.authors,
+                  authors_institution: props.authors_institution,
+                  citations_count: props.citations_count,
+                  issn: props.issn,
+                  keywords: props.keywords,
+                  landing_page_url: props.landing_page_url,
+                  language: props.language,
+                  pdf: props.pdf,
+                  researcher: props.researcher
+                })
+              }
+               variant={'outline'} className="h-8 w-8 text-gray-500 hidden group-hover:flex" size={'icon'}><Pencil size={16}/></Button>
+             
+              
+              )}
 
                 <Button
                   onClick={() =>
@@ -200,18 +230,7 @@ export function ArticleItem(props: Articles) {
 
           <div className="flex gap-2 items-center ml-auto">
 
-              {user?.lattes_id == props.lattes_id && (
-                <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                  <Button variant={'outline'} className="h-8 w-8 text-gray-500" size={'icon'}><Star size={16}/></Button></TooltipTrigger>
-                  <TooltipContent>
-                    <p>Adiconar como produção relevante</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
               
-              )}
           </div>
         </div>
       </Alert>

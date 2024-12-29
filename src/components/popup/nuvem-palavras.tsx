@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 
 
 type Grafico = {
@@ -27,7 +27,7 @@ export function NuvemPalavras(props:Grafico) {
     let urlPalavrasChaves = `${urlGeral}lists_word_researcher?researcher_id=${props.id}`
    
  
-    useMemo(() => {
+    useEffect(() => {
       const fetchData = async () => {
   
         try {
@@ -50,7 +50,7 @@ export function NuvemPalavras(props:Grafico) {
         }
       };
       fetchData();
-    }, [urlPalavrasChaves]);
+    }, []);
 
 
   const options2 = {

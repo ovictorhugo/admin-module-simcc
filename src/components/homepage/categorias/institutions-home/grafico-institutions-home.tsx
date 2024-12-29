@@ -1,84 +1,82 @@
-import { useContext, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert } from "../../../ui/alert";
+import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../../components/ui/chart";
 
-type Institutions = {
-    institutions: any[];
-}
+type Instituicoes = {
+  among: string;
+  id: string;
+  image: string;
+  institution: string;
+};
 
-import Highcharts from 'highcharts'
-import HighchartsReact from 'highcharts-react-official'
-import { UserContext } from "../../../../context/context";
+type InstitutionsProps = {
+  institutions: Instituicoes[];
+};
 
-export function GraficoInstitutionsHome(props: Institutions) {
-    // gráfico
-  const [chartOptions, setChartOptions] = useState({});
-  const {navbar} = useContext(UserContext)
+const chartConfig = {
+  institutions: {
+    label: "Instituições",
+    color: "#559FB8",
+  },
+};
 
-  useMemo(() => {
-    // ...
+export function GraficoInstitutionsHome(props: InstitutionsProps) {
+  const [chartData, setChartData] = useState<{ institution: string; among: number }[]>([]);
+
+  useEffect(() => {
     if (props.institutions) {
-      const categories = props.institutions.map((d) => d.institution);
-      const amongValues = props.institutions.map((d) => Number(d.among));
-      const sumAmongValues = amongValues.reduce((acc, cur) => acc + cur, 0);
-
-      setChartOptions({
-        chart: {
-          type: "column",
-          backgroundColor: 'transparent',
-          fontFamily: 'Ubuntu, sans-serif',
-          height: '300px',
-
-          display: 'flex',
-          position: 'relative'
-        },
-        title: {
-          text: "",
-        },
-        xAxis: {
-          categories,
-        },
-        yAxis: {
-          title: {
-            text: "Quantidade",
-          },
-        },
-        series: [
-          {
-            name: "Instituições",
-            data: amongValues,
-          },
-        ],
-        tooltip: {
-          pointFormat: "<b>{point.y}</b> ocorrências",
-        },
-        subtitle: {
-          text: `Total: ${sumAmongValues}`,
-        },
-        credits: {
-          enabled: false
-        },
-        plotOptions: {
-          column: {
-            color: "#173DFF",
-            dataLabels: {
-              enabled: true,
-              inside: true,
-              style: {
-                color: 'white', // cor do texto dentro da barra
-                fontSize: '18px', // tamanho da fonte
-                textOutline: '0px contrast', // cor da borda do texto
-                fontFamily: 'Ubuntu, sans-serif'
-              },
-            },
-          },
-        },
-      });
+      const data = props.institutions.map((item) => ({
+        institution: item.institution,
+        among: parseFloat(item.among), // Convertendo `among` de string para número
+      }));
+      setChartData(data);
     }
-  }, [props.institutions, navbar]);
+  }, [props.institutions]);
 
-    return(
-        <Alert className="pt-12">
-            <HighchartsReact highcharts={Highcharts} options={chartOptions} />
-        </Alert>
-    )
+  return (
+    <Alert className="pt-12">
+      <ChartContainer config={chartConfig} className="h-[300px] w-full">
+        <ResponsiveContainer>
+          <BarChart
+            data={chartData}
+            margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+          >
+            <XAxis
+              dataKey="institution"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+            />
+            <YAxis
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              label={{
+                value: "Quantidade",
+                angle: -90,
+                position: "insideLeft",
+              }}
+            />
+     
+
+            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <Bar
+              dataKey="among"
+              fill={chartConfig.institutions.color}
+              radius={[4, 4, 0, 0]}
+            >
+              <LabelList
+                dataKey="among"
+                position="top"
+                offset={10}
+                className="fill-foreground"
+                fontSize={12}
+              />
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </ChartContainer>
+    </Alert>
+  );
 }

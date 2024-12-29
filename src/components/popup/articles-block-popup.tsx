@@ -58,6 +58,8 @@ export function ArticleBlockPopUp(props:Articles) {
                     landing_page_url={props.landing_page_url}
                     language={props.language}
                     pdf={props.pdf}
+                    has_image={props.has_image}
+                    relevance={props.relevance}
             />
         );
         })}

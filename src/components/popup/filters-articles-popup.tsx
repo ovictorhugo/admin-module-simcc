@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
 import { Button } from "../../components/ui/button";
-import debounce from "lodash.debounce"; // Importing debounce
+import debounce from "lodash.debounce";
 
 interface Props {
   onFilterUpdate: (newResearcher: Filter[]) => void;
@@ -58,14 +58,7 @@ export function FilterArticlePopUp(props: Props) {
   };
 
   const [checkboxStates, setCheckboxStates] = useState<CheckboxStates>({});
-
-  const mountedRef = useRef(true); // Ref to track if component is mounted
-
-  useEffect(() => {
-    return () => {
-      mountedRef.current = false; // Mark as unmounted when component unmounts
-    };
-  }, []);
+  const [isFirstRender, setIsFirstRender] = useState(true); // State to track first render
 
   const handleCheckboxChangeInput = (itemId: number, isChecked: boolean) => {
     setCheckboxStates((prevStates) => ({ ...prevStates, [itemId]: isChecked }));
@@ -84,24 +77,25 @@ export function FilterArticlePopUp(props: Props) {
   };
 
   // Debounced update function
-
-  // Função para debounced update
   const updateResearcher = useCallback(
     debounce((newResearcher: Filter[]) => {
       props.onFilterUpdate(newResearcher);
-    }, 500), // 500ms debounce
-    []
+    }, 500),
+    [] // No dependencies, ensures stable reference
   );
 
-  // Atualizando filtros quando filterYear ou itensSelecionados mudarem
   useEffect(() => {
+    if (isFirstRender) {
+      setIsFirstRender(false);
+      return; // Skip update on first render
+    }
+
     const filtros = {
       year: filterYear,
       qualis: itensSelecionados,
     };
-    updateResearcher([filtros]); // Chamando a função de update
-  }, [filterYear, itensSelecionados, updateResearcher]);
-
+    updateResearcher([filtros]);
+  }, [filterYear, itensSelecionados]); // Runs only on updates
 
   return (
     <div className="mb-6 flex gap-6">
@@ -165,8 +159,6 @@ export function FilterArticlePopUp(props: Props) {
           <p className="text-sm font-bold">{filterYear}</p>
         </Alert>
       </div>
-
-  
     </div>
   );
 }

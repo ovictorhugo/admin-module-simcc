@@ -11,6 +11,7 @@ import { UserContext } from "../../../context/context";
 import { Alert } from "../../ui/alert";
 import { Input } from "../../ui/input";
 import { ArticlesResearcherPopUp } from "../../popup/articles-researcher";
+import { DashboardMinhasProducoes } from "./dashboard-mhas-producoes";
 
 type Research = {
   among: number,
@@ -135,6 +136,8 @@ export function MinhasProducoes() {
 
     return(
         <main className="h-full w-full flex flex-col">
+          <DashboardMinhasProducoes/>
+          
            <Tabs defaultValue="articles" value={value} className="">
              <div>
               <div className={`w-full ${isOn ? 'px-8' : 'px-4'} border-b border-b-neutral-200 dark:border-b-neutral-800`}>
@@ -174,8 +177,8 @@ export function MinhasProducoes() {
 
                       <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'producao-tecnica' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('producao-tecnica')}>
                       <Button variant={value == 'producao-tecnica' ? ('ghost'):('ghost')}  className="m-0" >
-                      <Stamp size={16} className="" />
-                      Produção técnica
+                      <Copyright size={16} className="" />
+                      Patentes
                       </Button>
                       </div>
 

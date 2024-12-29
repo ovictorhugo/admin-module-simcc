@@ -5,13 +5,20 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { HeaderResultTypeHome } from "../header-result-type-home";
 import { Button } from "../../../ui/button";
 
-import { Rows, SquaresFour, UserList } from "phosphor-react";
+import { MagnifyingGlass, Quotes, Rows, SquaresFour, Student, UserList } from "phosphor-react";
 
 import { ResearchersBloco } from "./researchers-bloco";
 import { TableReseracherhome } from "./table-reseracher-home";
 import { Link } from "react-router-dom";
-import { ArrowRight, Info } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronUp, Copyright, File, Files, FolderKanban, Info, Ticket, Users } from "lucide-react";
 import { InfiniteMovingResearchers } from "../../../ui/infinite-moving-researcher";
+import { Tabs, TabsContent, TabsList } from "../../../ui/tabs";
+import { Input } from "../../../ui/input";
+import { Alert } from "../../../ui/alert";
+import { ScrollArea, ScrollBar } from "../../../ui/scroll-area";
+import { ArticlesResearcherPopUp } from "../../../popup/articles-researcher";
+import { ResearchersHome } from "../researchers-home";
+import { ArticlesHome } from "../articles-home";
 type Research = {
     among: number,
     articles: number,
@@ -65,6 +72,7 @@ export function TodosPesquisadores() {
     
     const {urlGeral , version} = useContext(UserContext)
     
+    const [search, setSearch] = useState('')
         const [researcher, setResearcher] = useState<Research[]>([]);
 
         let urlTermPesquisadores = `${urlGeral}researcherName?name=`
@@ -95,6 +103,11 @@ export function TodosPesquisadores() {
               };
               fetchData();
             }, [urlTermPesquisadores]);
+
+
+            const [isOn, setIsOn] = useState(true);
+ 
+            const [value, setValue] = useState('pesquisadores')
 
     return(
         <main className=" w-full ">
@@ -139,7 +152,146 @@ export function TodosPesquisadores() {
         className="custom-class"
       />
 
-<TableReseracherhome researcher={researcher} />
+<main className="h-full w-full flex flex-col">
+           <Tabs defaultValue="articles" value={value} className="">
+             <div>
+              <div className={`w-full ${isOn ? 'px-8' : 'px-4'} border-b border-b-neutral-200 dark:border-b-neutral-800`}>
+                {isOn && (
+                  <div className="w-full pt-4  flex justify-between items-center">
+                    <Alert  className="h-14 mt-4 mb-2  p-2 flex items-center justify-between w-full ">
+           <div className="flex items-center gap-2 w-full flex-1">
+           <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
+           <Input  onChange={(e) => setSearch(e.target.value)} value={search}  type="text" className="border-0 w-full "/>
+               </div>
+
+               <div className="w-fit">
+      
+          
+           </div>
+               </Alert>
+                  </div>
+                )}
+                <div className={`flex pt-2 gap-8 justify-between  ${isOn ? '' : ''} `}>
+                  <div className="flex items-center gap-2">
+                  <div className=" grid grid-cols-1 ">
+                  <ScrollArea className="">
+                  <TabsList className="p-0 flex h-auto bg-transparent dark:bg-transparent">
+                 
+                  <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'pesquisadores' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('pesquisadores')}>
+                      <Button variant={value == 'pesquisadores' ? ('ghost'):('ghost')}  className="m-0" >
+                      <Users size={16} className="" />
+                      Pesquisadores
+                      </Button>
+                      </div>
+
+                      {version && (
+                          <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'tecnicos' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('tecnicos')}>
+                          <Button variant={value == 'tecnicos' ? ('ghost'):('ghost')}  className="m-0" >
+                          <Users size={16} className="" />
+                          Técnicos
+                          </Button>
+                          </div>
+                      )}
+
+                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'bolsistas' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('bolsistas')}>
+                      <Button variant={value == 'bolsistas' ? ('ghost'):('ghost')}  className="m-0" >
+                      <Copyright size={16} className="" />
+                      Bolsistas CNPq
+                      </Button>
+                      </div>
+
+
+                  <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'article' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('article')}>
+                      <Button variant={value == 'article' ? ('ghost'):('ghost')}  className="m-0" >
+                      <Quotes size={16} className="" />
+                      Artigos
+                      </Button>
+                      </div>
+
+                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'book' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('book')}>
+                      <Button variant={value == 'book' ? ('ghost'):('ghost')}  className="m-0" >
+                      <File size={16} className="" />
+                      Livros e capítulos
+                      </Button>
+                      </div>
+
+                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'producao-tecnica' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('producao-tecnica')}>
+                      <Button variant={value == 'producao-tecnica' ? ('ghost'):('ghost')}  className="m-0" >
+                      <Copyright size={16} className="" />
+                      Patentes
+                      </Button>
+                      </div>
+
+                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'relatorio-tecnico' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('relatorio-tecnico')}>
+                      <Button variant={value == 'relatorio-tecnico' ? ('ghost'):('ghost')}  className="m-0" >
+                      <Files size={16} className="" />
+                      Relatório técnico
+                      </Button>
+                      </div>
+
+                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'orientacoes' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('orientacoes')}>
+                      <Button variant={value == 'orientacoes' ? ('ghost'):('ghost')}  className="m-0" >
+                      <Student size={16} className="" />
+                      Orientações
+                      </Button>
+                      </div>
+
+                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'speaker' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('speaker')}>
+                      <Button variant={value == 'speaker' ? ('ghost'):('ghost')}  className="m-0" >
+                      <Ticket size={16} className="" />
+                      Participação em eventos
+                      </Button>
+                      </div>
+
+                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'research-project' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('research-project')}>
+                      <Button variant={value == 'research-project' ? ('ghost'):('ghost')}  className="m-0" >
+                      <FolderKanban size={16} className="" />
+                    Projetos de pesquisa
+                      </Button>
+                      </div>
+                  </TabsList>
+
+                  <ScrollBar orientation="horizontal"/>
+                  </ScrollArea>
+                  </div>
+       
+                   
+                  </div>
+                  <div className="flex flex-1 gap-3 justify-end">
+                  
+
+             
+                    <Button variant="ghost"  size="icon" onClick={() => setIsOn(!isOn)}>
+                      {isOn ? (
+                        <ChevronUp className="h-4 w-4" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            
+            </div>
+
+            <ScrollArea className="h-full">
+            <div className="px-8">
+            <TabsContent value="pesquisadores">
+  {researcher.slice(0, 1).map((user) => {
+                return(
+                 <ResearchersHome/>
+                  )
+                })}
+  </TabsContent>
+
+            <TabsContent value="article">
+            <ArticlesHome />
+  </TabsContent>
+              </div>
+           
+          </ScrollArea>
+          </Tabs>
+        </main>
         </main>
     )
 }

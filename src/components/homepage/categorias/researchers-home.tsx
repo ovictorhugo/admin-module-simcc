@@ -14,7 +14,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { useLocation} from "react-router-dom";
 import { Alert } from "../../ui/alert";
 import { CardContent,  CardHeader, CardTitle } from "../../ui/card";
-import { Hash, Sparkles, Trash, User } from "lucide-react";
+import { Hash,  MapIcon,  Sparkles, Trash, User } from "lucide-react";
 import bg_popup from '../../../assets/bg_popup.png';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../../ui/dialog";
 import { useModal } from "../../hooks/use-modal-store";
@@ -26,6 +26,20 @@ import { SymbolEEWhite } from "../../svg/SymbolEEWhite";
 import { SymbolEE } from "../../svg/SymbolEE";
 import { useTheme } from "next-themes";
 import { MariaHome } from "../maria-home";
+import MapaResearcher from "./researchers-home/mapa-researcher";
+
+//mapa
+import municipios from './researchers-home/municipios.json';
+
+type CityData = {
+  nome: string;
+  latitude: number;
+  longitude: number;
+  pesquisadores: number;
+  professores: string[];
+  lattes_10_id: string;
+};
+
 
 
 type Research = {
@@ -227,7 +241,7 @@ export function ResearchersHome() {
   const [researcher, setResearcher] = useState<Research[]>([]);
   const [originalResearcher, setOriginalResearcher] = useState<Research[]>([]);
   const [typeVisu, setTypeVisu] = useState('block');
-  const { itemsSelecionados,  urlGeral, searchType } = useContext(UserContext);
+  const { itemsSelecionados,  urlGeral, searchType, simcc } = useContext(UserContext);
   const { pesquisadoresSelecionados, idGraduateProgram } = useContext(UserContext);
 
   useEffect(() => {
@@ -309,6 +323,59 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
           setResearcher(data);
           setOriginalResearcher(data);
           setLoading(false)
+
+          //mapa
+// Contar a quantidade de pesquisadores por cidade
+const counts: { [city: string]: number } = {};
+const cityProfessors: { [city: string]: string[] } = {}; // Armazena os nomes dos professores por cidade
+const cityLattess1Ids: { [city: string]: string } = {};
+
+const normalizedData = data.map((research: any) => ({
+  ...research,
+  city: normalizeCityName(research.city),
+}));
+
+normalizedData.forEach((research: any) => {
+  const city = research.city;
+  const codigoUf = municipios.find(
+    (municipio: any) => normalizeCityName(municipio.nome) === city
+  )?.codigo_uf;
+
+  if (codigoUf === 29) {
+    counts[city] = (counts[city] || 0) + 1;
+
+    // Adiciona o nome do professor à lista da cidade
+    if (!cityProfessors[city]) {
+      cityProfessors[city] = [];
+    }
+    cityProfessors[city].push(research.name);
+
+    // Adiciona o lattess_1_id à lista da cidade
+    if (!cityLattess1Ids[city]) {
+      cityLattess1Ids[city] = research.lattes_10_id;
+    }
+  }
+});
+
+const updatedCityData: CityData[] = [];
+municipios.forEach((municipio: any) => {
+  const cityName = normalizeCityName(municipio.nome);
+  const pesquisadores = counts[cityName] || 0;
+
+  if (pesquisadores > 0 && municipio.codigo_uf === 29) {
+    updatedCityData.push({
+      nome: municipio.nome,
+      latitude: municipio.latitude,
+      longitude: municipio.longitude,
+      pesquisadores: pesquisadores,
+      professores: cityProfessors[cityName] || [], // Adiciona a lista de professores
+      lattes_10_id: cityLattess1Ids[cityName] || '',
+    });
+  }
+});
+
+setCityData(updatedCityData);
+
         } 
         if(originalResearcher.length == 0 && FinalOpenAlex == 'true') {
           console.log('oi')
@@ -335,9 +402,16 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
 
   const {theme} = useTheme()
 
+  //mapa
+    const [cityData, setCityData] = useState<CityData[]>([]);
+
+    const normalizeCityName = (cityName: string) => {
+      // Normaliza o nome da cidade (ex: "Ilhéus" -> "Ilheus")
+      return cityName.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    };
+
   return (
-    <>
-      {isModalOpen && (
+
         <div className="w-full flex gap-6 mb-8 justify-center">
           <div className="flex-1 flex flex-col">
            <div className="">
@@ -428,6 +502,32 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
                     )}
                   </AccordionContent>
                 </AccordionItem>
+              </Accordion>
+            )}
+
+            {(simcc && searchType != 'name') && (
+              <Accordion defaultValue="item-1"  type="single" collapsible >
+              <AccordionItem value="item-1" >
+              <div className="flex mb-2">
+              <HeaderResultTypeHome title="Pesquisadores no mapa" icon={<MapIcon size={24} className="text-gray-400" />}>
+              </HeaderResultTypeHome>
+
+              <AccordionTrigger>
+                 
+                 </AccordionTrigger>
+              </div>
+                  <AccordionContent >
+                  {loading ? (
+                    <Skeleton className="w-full rounded-md h-[300px]"/>
+                  ):(
+                  <div>
+                     <MapaResearcher
+                     cityData={cityData}
+                     />
+                  </div>
+                  )}
+                  </AccordionContent>
+              </AccordionItem>
               </Accordion>
             )}
 
@@ -546,8 +646,5 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
 
         </div>
 
-        
-      )}
-    </>
   );
 }

@@ -16,6 +16,10 @@ import { InstitutionsBlock } from "./institutions-home/institutions-block";
 import { Button } from "../../ui/button";
 import { useModalSidebar } from "../../hooks/use-modal-sidebar";
 import { TableReseracherInstitutionshome } from "./institutions-home/table-institutions-home";
+import { HeaderResult } from "../header-results";
+import { Alert } from "../../ui/alert";
+import { CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { Building2 } from "lucide-react";
 
 type Instituicoes = {
     among: string,
@@ -72,15 +76,37 @@ export function InstitutionsHome() {
       ));
 
     return(
-        <>
-        {isModalOpen && (
+        <div>
+        <HeaderResult/>
+
+        <div className="my-8">
+             <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Total de instituições
+                    </CardTitle>
+                    <Buildings className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{instituicoes.length}</div>
+                    <p className="text-xs text-muted-foreground">
+                      encontradas na busca
+                    </p>
+                  </CardContent>
+                  </Alert>
+             </div>
+
             <div className=" mb-[150px]  ">
                 <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <HeaderResultTypeHome title="Gráfico de quantidade por Instituição" icon={<ChartBar size={24} className="text-gray-400" />}>
-                        </HeaderResultTypeHome>
-                    </AccordionTrigger>
+                <div className="flex mb-2">
+                <HeaderResultTypeHome title="Gráfico de quantidade por instituição" icon={<ChartBar size={24} className="text-gray-400" />}>
+                </HeaderResultTypeHome>
+
+                <AccordionTrigger>
+                   
+                   </AccordionTrigger>
+                </div>
                     <AccordionContent >
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
@@ -97,18 +123,23 @@ export function InstitutionsHome() {
 
                 <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                    <AccordionTrigger>
-                    <HeaderResultTypeHome title="Universidades cadastradas" icon={<Buildings size={24} className="text-gray-400" />}>
-                    
-                    <Button onClick={() => setTypeVisu('rows')}  variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
-                            <Rows size={16} className=" whitespace-nowrap" />
-                        </Button>
+                <div className="flex mb-2">
+                <HeaderResultTypeHome title="Pesquisadores por detalhamento" icon={<Building2 size={24} className="text-gray-400" />}>
+                      <div className="flex gap-3 mr-3">
+                      <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                        <Rows size={16} className="whitespace-nowrap" />
+                      </Button>
+                      <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'}  size={'icon'}>
+                        <SquaresFour size={16} className="whitespace-nowrap" />
+                      </Button>
+                      </div>
+                    </HeaderResultTypeHome>
+                  <AccordionTrigger>
+                 
+                  </AccordionTrigger>
+                  </div>
 
-                        <Button  onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
-                            <SquaresFour size={16} className=" whitespace-nowrap" />
-                        </Button>
-                        </HeaderResultTypeHome>
-                    </AccordionTrigger>
+                   
                     <AccordionContent >
 
 {typeVisu == 'block' ? (
@@ -146,7 +177,7 @@ export function InstitutionsHome() {
                 </AccordionItem>
                 </Accordion>
             </div>
-        )}
-        </>
+     
+        </div>
     )
 }

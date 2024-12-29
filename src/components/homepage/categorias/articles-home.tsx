@@ -139,8 +139,7 @@ const urlTermPublicacoes = useMemo(() => {
          
 
     return(
-        <>
-        {isModalOpen && (
+   
             <div className="">
                 <HeaderResult/>
 <div className="my-8">
@@ -254,7 +253,6 @@ const urlTermPublicacoes = useMemo(() => {
                 </Accordion>
                        
             </div>
-        )}
-        </>
+  
     )
 }

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { useModal } from "./use-modal-store";
 
-export type ModalType = 'articles-modal' | 'cookies'
+export type ModalType = 'articles-modal' | 'cookies' | 'edit-article'
 
 interface ModalData {
   id?: string,
@@ -53,6 +53,9 @@ interface ModalData {
   acronym?:string
 
   id_dep?:string
+
+  relevance?:boolean
+  has_image?:boolean
 
   type_reset?:string
 

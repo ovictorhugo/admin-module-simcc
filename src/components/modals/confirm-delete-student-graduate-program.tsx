@@ -99,10 +99,10 @@ export function ConfirmDeleteStudentGraduateProgram() {
         <Dialog open={isModalOpen} onOpenChange={onClose}> 
         <DialogContent>
         <DialogHeader className="pt-8 px-6 flex flex-col items-center">
-        <DialogTitle className="text-2xl text-center font-medium max-w-[350px]">
+        <DialogTitle className="text-2xl  mb-2 font-medium max-w-[450px]">
         <strong className="bg-red-500 text-white hover:bg-red-600 transition duration-500 font-medium">Deletar</strong> discente {dataModal.nome} do programa
           </DialogTitle>
-          <DialogDescription className="text-center text-zinc-500">
+          <DialogDescription className=" text-zinc-500">
           Você tem certeza de que deseja prosseguir com a exclusão do pesquisador que está atualmente vinculado a este programa de pós-graduação?
           </DialogDescription>
             </DialogHeader>

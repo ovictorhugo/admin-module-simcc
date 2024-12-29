@@ -25,6 +25,8 @@ type Research = {
     classe:string
     rt:string
     situacao:string
+
+    ind_prod:string
   }
 
   interface Bolsistas {
@@ -225,7 +227,10 @@ export function InformacoesGeraisResearcher(props:Research) {
    
    <TooltipProvider>
 <Tooltip>
-       <TooltipTrigger className="outline-none"><div  className=" py-2 px-4 border border-neutral-200 bg-eng-blue text-white dark:bg-black dark:border-neutral-800  rounded-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice de Produção: {props.h_index}</div></TooltipTrigger>
+       <TooltipTrigger className="outline-none"><div className="flex gap-0">
+       <div  className=" py-2 px-4 border border-neutral-200 bg-eng-blue text-white dark:bg-eng-blue dark:border-neutral-800  rounded-l-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice de Produção: </div>
+       <div  className={`py-2 px-4 border border-neutral-200  text-white  dark:border-neutral-800  rounded-r-md text-xs flex gap-2 items-center ${props.ind_prod == '' ? (''):('')}`}>{props.ind_prod}</div>
+        </div></TooltipTrigger>
        <TooltipContent>
          <p>Índice gerado na plataforma a partir da produção bibliográfica e técnica</p>
        </TooltipContent>
