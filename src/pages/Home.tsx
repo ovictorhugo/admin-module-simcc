@@ -51,9 +51,9 @@ export function Home() {
     onOpen('departamentos')
 } else if(location.pathname == '/researcher') {
     onOpen('pesquisador')
-} else if(location.pathname == '/marIA') {
+} else if(location.pathname == '/resultados-ia') {
     onOpen('maria')
-} else if(location.pathname == '/docentes-tecnicos') {
+} else if(location.pathname == '/listagens') {
     onOpen('docentes-tecnicos')
 } else if(location.pathname == '/paines-dados-externos') {
     onOpen('paines-dados-externos')

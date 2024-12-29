@@ -6,10 +6,11 @@ import {
   } from "../../components/ui/sheet"
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
+import { useModalSecundary } from "../hooks/use-modal-store-secundary";
   
 
 export function CookiesModal() {
-    const { onClose, isOpen, type: typeModal } = useModal();
+    const { onClose, isOpen, type: typeModal } = useModalSecundary();
     const isModalOpen = isOpen && typeModal === "cookies";
 
     return(

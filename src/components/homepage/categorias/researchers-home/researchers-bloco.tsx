@@ -22,8 +22,8 @@ export function ResearchersBloco(props: Research) {
         750: 2,
         900: 3,
         1200:  3,
-        1500: 4,
-        1700: 5
+        1500: 6,
+        1700: 6
     }}
 >
 

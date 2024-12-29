@@ -10,7 +10,7 @@ import { toast } from "sonner"
 import { useContext,  useEffect,  useState } from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { Blocks,  Bug,  Building2, ChevronDown, ChevronUp, ClipboardEdit, FlaskConical, GraduationCap,  Info, LayoutDashboard,  Mail, PieChart,  Play,  SlidersHorizontal,  Terminal,   UserPlus,   Users, Weight } from "lucide-react";
+import { Blocks,  Bug,  Building2, ChevronDown, ChevronUp, ClipboardEdit, File, FlaskConical, GraduationCap,  Info, LayoutDashboard,  Mail, PieChart,  Play,  SlidersHorizontal,  Terminal,   UserPlus,   Users, Weight } from "lucide-react";
 
 import { useLocation } from "react-router-dom";
 import { Button } from "../components/ui/button";
@@ -159,6 +159,13 @@ export default function AdminLayout({
               },
               ]
             : []),
+
+            {
+              title: "Minhas produções",
+              label: ``,
+              icon: File,
+              link: "/dashboard/minhas-producoes",
+            },
 
             ...(has_editar_pesos_avaliacao
               ? [

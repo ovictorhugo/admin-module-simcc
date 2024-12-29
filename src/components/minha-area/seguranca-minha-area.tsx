@@ -29,6 +29,8 @@ export function SegurancaMinhaArea() {
             display_name:name
           }
         ]
+
+        console.log(data)
           if (name.length === 0) {
               toast("O nome não pode ser vazio", {
                   description: "Por favor, tente novamente",

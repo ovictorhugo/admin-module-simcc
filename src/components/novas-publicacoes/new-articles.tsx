@@ -10,7 +10,7 @@ import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { Alert } from "../ui/alert";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";
 import Autoplay from "embla-carousel-autoplay"
-import { ArticleItem } from "../homepage/components/article-item";
+
 
 import {
   Select,
@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "../../components/ui/select"
 import { Label } from "../ui/label";
+import { ArticleItem } from "../homepage/categorias/articles-home/article-item";
 
 
 type Magazine = {
@@ -35,7 +36,7 @@ type Publicacao = {
   id: string,
   doi: string,
   name_periodical: string,
-  qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "SQ" | "NP",
+  qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "SQ" ,
   title: string,
   year: string,
   color: string,

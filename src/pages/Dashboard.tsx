@@ -42,6 +42,8 @@ export function Dashboard() {
             onOpen('minha-area')
         } else if(location.pathname == '/dashboard/administrativo' || location.pathname == '/minhaufmg/dashboard/administrativo') {
             onOpen('general')
+        } else if(location.pathname == '/dashboard/minhas-producoes' || location.pathname == '/minhaufmg/dashboard/minhas-producoes') {
+            onOpen('minhas-producoes')
         }
     }, [location]);
   

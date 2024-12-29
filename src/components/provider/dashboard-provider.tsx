@@ -14,6 +14,7 @@ import { BaremasHome } from "../baremas/baremas-home";
 import { EnviarNotificacoes } from "../enviar-notificacoes/enviar-notificacoes";
 import { InfoDashboardPage } from "../dashboard/info-dashboard-page";
 import { HomeDashboard } from "../dashboard/home-dashboard";
+import { MinhasProducoes } from "../dashboard/minhas-producoes/minhas-producoes";
 
 
 const ModalContent = () => {
@@ -42,6 +43,8 @@ const ModalContent = () => {
         return <InfoDashboardPage/>
         case 'home-dashboard':
           return  <HomeDashboard/>
+        case 'minhas-producoes':
+          return <MinhasProducoes/>
     default:
       return null;
   }

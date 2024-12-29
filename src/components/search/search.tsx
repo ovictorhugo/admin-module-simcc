@@ -17,7 +17,7 @@ interface Message {
   sender: string;
 }
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useNavigation } from "react-router-dom";
 const API_KEY = import.meta.env.VITE_API_KEY
 
 const systemMessage = { 
@@ -109,7 +109,7 @@ function parseTerms(encoded: string): { term: string }[] {
 
     const { onOpen } = useModal();
 
-    const { searchType, setMode, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, mode,  setValoresSelecionadosExport, setMessagesMaria, itemsSelecionados , setItensSelecionados, setSugestoes, sugestoes, itemsSelecionadosPopUp} = useContext(UserContext)
+    const { searchType, setMode, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, mode,  setValoresSelecionadosExport, setMessagesMaria, itemsSelecionados , setItensSelecionados, setSugestoes, sugestoes, itemsSelecionadosPopUp, version} = useContext(UserContext)
 
   
     const [input, setInput] = useState("");
@@ -381,6 +381,14 @@ useEffect(() => {
   } 
 }, []);
 
+
+useEffect(() => {
+  if (maria) {
+    navigate("/resultados-ia");
+    setMaria(false)
+  } 
+}, [maria]);
+
     return  (
         <div className="bottom-0 mt-4 mb-2  w-full flex flex-col max-sm:flex  max-sm:flex-row">
         <div className={` max-sm:px-[5px] `}>
@@ -394,11 +402,10 @@ useEffect(() => {
                 <div className="flex gap-2 w-full items-center">
                 <div className="flex items-center gap-2">
                 <Switch
-                     checked={maria}
-                     onCheckedChange={(value) => setMaria(value)}
-
-                />
-                     <Label className="flex gap-2 items-center">MarIA<Chats size={16} className="" /></Label>
+      checked={maria}
+      onCheckedChange={(value) => setMaria(value)}
+    />
+                     <Label className="flex gap-2 items-center">{version ? ('GaIA'):('MarIA')}<Chats size={16} className="" /></Label>
                 </div>
 
                 {!maria  && (

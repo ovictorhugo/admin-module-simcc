@@ -2,16 +2,17 @@ import { useContext, useMemo, useRef, useState } from "react";
 import { Button } from "../../ui/button";
 import { UserContext } from "../../../context/context";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../../ui/carousel";
-import { ArticleItem } from "./article-item";
+
 import Autoplay from "embla-carousel-autoplay"
 import { ArrowSquareOut } from "phosphor-react";
 import { Link } from "react-router-dom";
+import { ArticleItem } from "../categorias/articles-home/article-item";
 
 type Publicacao = {
   id: string,
   doi: string,
   name_periodical: string,
-  qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "SQ" | "NP",
+  qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "SQ" ,
   title: string,
   year: string,
   color: string,
@@ -95,31 +96,31 @@ export function ArtigosRecentes() {
           <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3">
             <div className="p-1 h-full">
             <ArticleItem
-    id={props.id}
-    doi={props.doi}
-    name_periodical={props.name_periodical}
-    qualis={props.qualis}
-    title={props.title.toUpperCase()}
-    year={props.year}
-    color={props.color}
-    researcher={props.researcher}
-    lattes_id={props.lattes_id}
-    magazine={props.magazine}
-    lattes_10_id={props.lattes_10_id}
-    jcr_link={props.jcr_link}
-    jif={props.jif}
-    researcher_id={props.researcher_id}
-    distinct={props.distinct}
-    abstract={props.abstract}
-    article_institution={props.article_institution}
-    authors={props.authors}
-    authors_institution={props.authors_institution}
-    citations_count={props.citations_count} // Adicione aqui
-    issn={props.issn}                       // Adicione aqui
-    keywords={props.keywords}               // Adicione aqui
-    landing_page_url={props.landing_page_url} // Adicione aqui
-    language={props.language}               // Adicione aqui
-    pdf={props.pdf}                         // Adicione aqui
+     id={props.id}
+     doi={props.doi}
+     name_periodical={props.name_periodical}
+     qualis={props.qualis}
+     title={props.title.toUpperCase()}
+     year={props.year}
+     color={props.color}
+     researcher={props.researcher}
+     lattes_id={props.lattes_id}
+     magazine={props.magazine}
+     lattes_10_id={props.lattes_10_id}
+     jcr_link={props.jcr_link}
+     jif={props.jif}
+     researcher_id={props.researcher_id}
+     distinct={props.distinct}
+     abstract={props.abstract}
+     article_institution={props.article_institution}
+     authors={props.authors}
+     authors_institution={props.authors_institution}
+     citations_count={props.citations_count}
+     issn={props.issn}
+     keywords={props.keywords}
+     landing_page_url={props.landing_page_url}
+     language={props.language}
+     pdf={props.pdf}
 />
             </div>
           </CarouselItem>

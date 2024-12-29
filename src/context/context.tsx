@@ -113,6 +113,9 @@ interface UserContextType {
   version:boolean, 
   setVersion:React.Dispatch<React.SetStateAction<boolean>>;
 
+  simcc:boolean, 
+  setSimcc:React.Dispatch<React.SetStateAction<boolean>>;
+
       mode:string, 
       setMode:React.Dispatch<React.SetStateAction<string>>;
 
@@ -202,6 +205,9 @@ searchType:"",
 
   version:false, 
   setVersion:() => {},
+
+  simcc:false, 
+  setSimcc:() => {},
   
 
   defaultLayout: [],

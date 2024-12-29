@@ -6,8 +6,8 @@
     {"name": "Editar informações do usuários", "value": "editar_informacoes_usuarios", "area":"administrativo"},
     {"name": "Editar configurações da plataforma", "value": "editar_configuracoes_plataforma", "area":"administrativo"},
     {"name": "Atualizar Apache Hop", "value": "atualizar_apache_hop", "area":"administrativo"},
-    {"name": "Visualisar todos os departamentos", "value": "visualizar_todos_departamentos", "area":"departamentos"},
-    {"name": "Visualisar todos os programas", "value": "visualizar_todos_programas", "area":"programas"},
+    {"name": "Visualizar todos os departamentos", "value": "visualizar_todos_departamentos", "area":"departamentos"},
+    {"name": "Visualizar todos os programas", "value": "visualizar_todos_programas", "area":"programas"},
     {"name": "Editar informações do programa", "value": "editar_informacoes_programa", "area":"programas"},
     {"name": "Editar informações do departamento", "value": "editar_informacoes_departamento", "area":"departamentos"},
     {"name": "Editar docentes do programa", "value": "editar_docentes_programa", "area":"programas"},
@@ -15,10 +15,10 @@
     {"name": "Editar docentes do departamento", "value": "editar_docentes_departamento", "area":"departamentos"},
     {"name": "Editar técnicos do departamento", "value": "editar_tecnicos_departamento", "area":"departamentos"},
     {"name": "Editar pesos de avaliação", "value": "editar_pesos_avaliacao", "area":"administrativo"},
-    {"name": "Visualisar indicadores da instituição", "value": "visualizar_indicadores_instituicao", "area":"administrativo"},
-    {"name": "Visualisar grupos de pesquisa", "value": "visualizar_grupos_pesquisa", "area":"outros"},
-    {"name": "Visualisar INCT`s", "value": "visualizar_inct", "area":"inct"},
-    {"name": "Visualisar indicadores da pós-graduação", "value": "visualizar_indicadores_pos_graduacao", "area":"programas"},
+    {"name": "Visualizar indicadores da instituição", "value": "visualizar_indicadores_instituicao", "area":"administrativo"},
+    {"name": "Visualizar grupos de pesquisa", "value": "visualizar_grupos_pesquisa", "area":"outros"},
+    {"name": "Visualizar INCT`s", "value": "visualizar_inct", "area":"inct"},
+    {"name": "Visualizar indicadores da pós-graduação", "value": "visualizar_indicadores_pos_graduacao", "area":"programas"},
     {"name": "Adicionar programa", "value": "adicionar_programa", "area":"programas"},
     {"name": "Deletar programa", "value": "deletar_programa", "area":"programas"},
     {"name": "Adicionar departamento", "value": "adicionar_departamento", "area":"departamentos"},
@@ -28,6 +28,7 @@
     {"name": "Editar pesquisadores", "value": "editar_pesquisadores", "area":"pesquisadores"},
     {"name": "Visualizar pesquisadores", "value": "visualizar_pesquisadores", "area":"pesquisadores"},
     {"name": "Visualizar índices do pesquisador", "value": "visualizar_indices_pesquisador", "area":"pesquisadores"},
-    {"name": "Importar bolsistas CNPq", "value": "importar_bolsistas_cnpq", "area":"pesquisadores"}
+    {"name": "Importar bolsistas CNPq", "value": "importar_bolsistas_cnpq", "area":"pesquisadores"},
+    {"name": "Visualizar minhas produções", "value": "visualizar_minhas_producoes", "area":"geral"}
   ]
   

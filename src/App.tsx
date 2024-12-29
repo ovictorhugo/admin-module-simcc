@@ -87,7 +87,7 @@ function App() {
 
 
   const [version, setVersion] = useState(import.meta.env.VITE_VERSION == 'false' ? (false):(true))
-
+  const [simcc, setSimcc] = useState(import.meta.env.VITE_SIMCC == 'false' ? (false):(true))
   const [searchType, setSearchType] = useState('article');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [idGraduateProgram, setIdGraduateProgram] = useState('0');
@@ -170,6 +170,11 @@ useEffect(() => {
     (perm) => perm.permission === 'visualizar_indicadores_instituicao'
   );
 
+  const has_minhas_producoes = permission.some(
+    (perm) => perm.permission === 'visualizar_minhas_producoes'
+  );
+
+
 
  
 
@@ -205,7 +210,8 @@ useEffect(() => {
       defaultLayout, setDefaultLayout,
       version, setVersion,
       role, setRole,
-      permission , setPermission
+      permission , setPermission,
+      simcc, setSimcc
 
     }}
     >
@@ -223,13 +229,13 @@ useEffect(() => {
         <Route path='/producoes-recentes' element={<Home/>}/>
         <Route path='/departamentos' element={<Home/>}/>
         <Route path='/researcher' element={<Home/>}/>
-        <Route path='/marIA' element={<Home/>}/>
+        <Route path='/resultados-ia' element={<Home/>}/>
         <Route path='/paines-dados-externos' element={<Home/>}/>
 
         <Route path='/relatar-problema' element={<Home/>}/>
         <Route path='/pesquisadores-selecionados' element={<Home/>}/>
 
-        <Route path='/docentes-tecnicos' element={<Home/>}/>
+        <Route path='/listagens' element={<Home/>}/>
 
        
         <Route path='/termos-uso' element={<TermosUso/>}/>
@@ -330,6 +336,18 @@ useEffect(() => {
       />
     }
   />
+
+
+  <Route
+    path='/dashboard/minhas-producoes'
+    element={
+      <ProtectedRoute
+        element={<Dashboard />}
+        hasPermission={has_minhas_producoes}
+      />
+    }
+  />
+
 
 <Route
     path='/dashboard/grupos-pesquisa'

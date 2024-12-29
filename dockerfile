@@ -1,16 +1,18 @@
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json .
+COPY package*.json ./
 
-RUN npm install --force
+RUN npm install --legacy-peer-deps --force
 
 COPY . .
 
 RUN npm run build
 
-COPY --from=build /app/dist /usr/share/nginx/html
+FROM nginx:alpine
+
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80
 

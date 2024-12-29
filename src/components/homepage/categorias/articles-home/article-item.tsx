@@ -2,19 +2,14 @@ import { CalendarBlank, DotsThree, LinkBreak, LinkSimple } from "phosphor-react"
 import { Alert } from "../../../ui/alert";
 import { useContext } from "react";
 import { UserContext } from "../../../../context/context";
-import {
-  DropdownMenu,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "../../../ui/dropdown-menu";
+
 import { Button } from "../../../ui/button";
 import { Link } from "react-router-dom";
 import { useModal } from "../../../hooks/use-modal-store";
-import { Maximize2 } from "lucide-react";
+import { Maximize2, Star } from "lucide-react";
 import { useModalSecundary } from "../../../hooks/use-modal-store-secundary";
-import parse from 'html-react-parser';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../ui/tooltip";
+
 
 type Articles = {
   id: string,
@@ -116,7 +111,7 @@ const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNod
 };
 
 export function ArticleItem(props: Articles) {
-  const { urlGeral, itemsSelecionados } = useContext(UserContext);
+  const { urlGeral, itemsSelecionados, user } = useContext(UserContext);
 
   const qualisColor = {
     'A1': 'bg-[#006837]',
@@ -196,7 +191,7 @@ export function ArticleItem(props: Articles) {
             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
               <div className={`w-4 h-4 rounded-md ${qualisColor[props.qualis as keyof typeof qualisColor]}`}></div>Qualis {props.qualis}
             </div>
-            {props.jif != "None" && (
+            {(props.jif != "None" && props.jif != "") && (
               <Link to={props.jcr_link} target="_blank" className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
                 <LinkBreak size={16} />JCR {props.jif}
               </Link>
@@ -205,7 +200,18 @@ export function ArticleItem(props: Articles) {
 
           <div className="flex gap-2 items-center ml-auto">
 
-
+              {user?.lattes_id == props.lattes_id && (
+                <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                  <Button variant={'outline'} className="h-8 w-8 text-gray-500" size={'icon'}><Star size={16}/></Button></TooltipTrigger>
+                  <TooltipContent>
+                    <p>Adiconar como produção relevante</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
+              )}
           </div>
         </div>
       </Alert>

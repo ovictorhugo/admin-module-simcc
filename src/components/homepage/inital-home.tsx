@@ -734,7 +734,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
           <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
                    {version ? (
                      <div className="h-full gap-8 grid">
-                           <Link to={'/docentes-tecnicos'}>
+                           <Link to={'/listagens'}>
                      <Alert className="p-0 ">
                      <CardHeader className="flex p-10 flex-row items-center justify-between space-y-0 pb-2">
                      <div>
@@ -763,7 +763,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
                      </Alert>
                      </Link>
                      
-                     <Link to={'/docentes-tecnicos'}>
+                     <Link to={'/listagens'}>
                      <Alert className="p-0 ">
                      <CardHeader className="flex flex-row p-10 items-center justify-between space-y-0 pb-2">
                      <div>

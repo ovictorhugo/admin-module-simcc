@@ -11,6 +11,7 @@ import { ResearchersBloco } from "./researchers-bloco";
 import { TableReseracherhome } from "./table-reseracher-home";
 import { Link } from "react-router-dom";
 import { ArrowRight, Info } from "lucide-react";
+import { InfiniteMovingResearchers } from "../../../ui/infinite-moving-researcher";
 type Research = {
     among: number,
     articles: number,
@@ -96,19 +97,19 @@ export function TodosPesquisadores() {
             }, [urlTermPesquisadores]);
 
     return(
-        <main className="px-4 md:px-8 w-full ">
+        <main className=" w-full ">
 
 <div className="justify-center px-4 md:px-8 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
         <Link to={'/informacoes'}  className="inline-flex z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
         
           {version ? (
-              <h1 className="z-[2] text-center max-w-[650px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
-              Todos os{" "}
+              <h1 className="z-[2] text-center max-w-[800px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
+              Todas as {" "}
               <strong className="bg-[#82AAC0]  rounded-md px-3 pb-2 text-white font-medium">
                 {" "}
-                docentes e técnicos
+                listagens
               </strong>{" "}
-             da Escola de Engenharia
+              que a plataforma pode filtrar para você. 
             </h1>
           ):(
             <h1 className="z-[2] text-center max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
@@ -117,7 +118,7 @@ export function TodosPesquisadores() {
               {" "}
               docentes e técnicos
             </strong>{" "}
-           que fazem parte da Escola de Engenharia
+           do SENAI CIMATEC
           </h1>
           )}
             <p className="max-w-[750px] text-center text-lg font-light text-foreground"></p>
@@ -129,33 +130,16 @@ export function TodosPesquisadores() {
              
           </div>
 
-            <Accordion defaultValue="item-1" type="single" collapsible>
-                <AccordionItem value="item-1">
-                <div className="flex mb-2">
-                <HeaderResultTypeHome title="Pesquisadores por detalhamento" icon={<UserList size={24} className="text-gray-400" />}>
-                      <div className="flex gap-3 mr-3">
-                      <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
-                        <Rows size={16} className="whitespace-nowrap" />
-                      </Button>
-                      <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'}  size={'icon'}>
-                        <SquaresFour size={16} className="whitespace-nowrap" />
-                      </Button>
-                      </div>
-                    </HeaderResultTypeHome>
-                  <AccordionTrigger>
-                 
-                  </AccordionTrigger>
-                  </div>
 
-                  <AccordionContent>
-                   {typeVisu == 'block' ? (
-  <ResearchersBloco researcher={researcher} />
-                   ):(
-                    <TableReseracherhome researcher={researcher} />
-                   )}
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+          <InfiniteMovingResearchers
+        items={researcher} // Formata cada item como um objeto
+        direction="right"
+        speed='slow'
+        pauseOnHover={true}
+        className="custom-class"
+      />
+
+<TableReseracherhome researcher={researcher} />
         </main>
     )
 }
