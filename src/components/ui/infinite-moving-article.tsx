@@ -21,7 +21,7 @@ interface Bolsistas {
   }
 
 
-export const InfiniteMovingResearchers = ({
+export const InfiniteMovingArticle = ({
   items,
   direction = "left",
   speed = "slow",
@@ -54,6 +54,9 @@ export const InfiniteMovingResearchers = ({
     landing_page_url: string
     language: string
     pdf: string
+    has_image:boolean
+  relevance:boolean
+
   }[];
   direction?: "left" | "right";
   speed?: "fast" | "normal" | "slow";
@@ -146,7 +149,8 @@ export const InfiniteMovingResearchers = ({
              
             )}
           >
-            <ArticleItem
+          <div className=" w-[400px] relative">
+          <ArticleItem
               id={props.id}
               doi={props.doi}
               name_periodical={props.name_periodical}
@@ -172,8 +176,11 @@ export const InfiniteMovingResearchers = ({
               landing_page_url={props.landing_page_url}
               language={props.language}
               pdf={props.pdf}
+              has_image={props.has_image}
+                relevance={props.relevance}
             
             />
+          </div>
           </li>
         ))}
       </ul>

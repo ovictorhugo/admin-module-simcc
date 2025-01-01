@@ -1,4 +1,3 @@
-
 import {
     Dialog,
     DialogClose,
@@ -83,7 +82,6 @@ const terms = queryUrl.get('terms');
       }, [itemsSelecionados]);
 
 
-
     const [filteredItems, setFilteredItems] = useState<Csv[]>([]);
     /////////////////
 
@@ -138,7 +136,7 @@ const terms = queryUrl.get('terms');
       setInput('');
       setShowInput(false)
       setBigrama([])
-  
+
       // Determine the searchType based on the provided type
       let newSearchType = '';
       if (type === 'ARTICLE') {
@@ -157,7 +155,7 @@ const terms = queryUrl.get('terms');
         newSearchType = 'area';
       }
       const hasSameType = newSearchType === searchType;
-  
+
       setItensSelecionadosPopUp(prevItems => {
         if (hasSameType) {
           setSearchType(newSearchType)
@@ -243,10 +241,10 @@ console.log(termosformatados)
 
     const posGrad = location.pathname == '/pos-graduacao'
 
+
  
 
   const handlePesquisaFinal = () => {
-
 
 
     if (itemsSelecionadosPopUp.length == 0 && input.length == 0 ) {
@@ -306,49 +304,43 @@ console.log(termosformatados)
     onClose()
     
     } else if (itemsSelecionadosPopUp.length == 0 && input.length != 0) {
-      setItensSelecionadosPopUp([{term:`${input}`}])
+      const newItems = [{term: input}];
+      setItensSelecionadosPopUp(newItems);
       
-      TypeSearch = searchType
-      Terms = termosformatados
-     
+      TypeSearch = searchType;
+      Terms = formatTerms(newItems);
       
-      
-      
-
-        if(posGrad) {
-          queryUrl.set('type_search', searchType);
-      if(searchType == 'name') {
-        queryUrl.set('terms', formatTerms(itemsSelecionadosPopUp));
-      } else {
-        queryUrl.set('terms', `(${input.split(' ').join(';')})`);
-        setInput('')
-
-      }
-
-          navigate({
-            pathname: '/pos-graduacao',
-            search: queryUrl.toString(),
-          });
+      if(posGrad) {
+        queryUrl.set('type_search', searchType);
+        if(searchType == 'name') {
+          queryUrl.set('terms', formatTerms(newItems));
         } else {
-
-          queryUrl.set('type_search', searchType);
-          
-      if(searchType == 'name') {
-        queryUrl.set('terms', formatTerms(itemsSelecionadosPopUp));
-      } else {
-        queryUrl.set('terms', `(${input.split(' ').join(';')})`);
-        setInput('')
-
-      }
-          navigate({
-            pathname: '/resultados',
-            search: queryUrl.toString(),
-          });
+          queryUrl.set('terms', `(${input.split(' ').join(';')})`);
         }
+
+        navigate({
+          pathname: '/pos-graduacao',
+          search: queryUrl.toString(),
+        });
+      } else {
+        queryUrl.set('type_search', searchType);
+        
+        if(searchType == 'name') {
+          queryUrl.set('terms', formatTerms(newItems));
+        } else {
+          queryUrl.set('terms', `(${input.split(' ').join(';')})`);
+        }
+        
+        navigate({
+          pathname: '/resultados',
+          search: queryUrl.toString(),
+        });
+      }
     
-        onOpenResult('researchers-home')
-        setMode('')
-    onClose()
+      onOpenResult('researchers-home');
+      setMode('');
+      setInput('');
+      onClose();
     }
     
   }
@@ -475,6 +467,7 @@ const handleConnectorChange = (index: number, connector: string) => {
 };
 
    
+
     
 
     return  (
@@ -490,66 +483,70 @@ const handleConnectorChange = (index: number, connector: string) => {
         <div className='flex gap-2 items-center'>
         <SelectTypeSearch/>
 
-        {itemsSelecionadosPopUp.map((valor, index) => {
-          return(
-              <>
-              <div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs ${searchType == 'article' && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract' && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker' && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book' && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent' && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name' && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area' && ('bg-green-500 dark:bg-green-500')} ${searchType == '' && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} >
+        {itemsSelecionadosPopUp.map((valor, index) => (
+          <div key={index} className="flex gap-2 items-center">
+            <div className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs ${
+              searchType == 'article' ? 'bg-blue-500 dark:bg-blue-500' :
+              searchType == 'abstract' ? 'bg-yellow-500 dark:bg-yellow-500' :
+              searchType == 'speaker' ? 'bg-orange-500 dark:bg-orange-500' :
+              searchType == 'book' ? 'bg-pink-500 dark:bg-pink-500' :
+              searchType == 'patent' ? 'bg-cyan-500 dark:bg-cyan-500' :
+              searchType == 'name' ? 'bg-red-500 dark:bg-red-500' :
+              searchType == 'area' ? 'bg-green-500 dark:bg-green-500' :
+              'bg-blue-700 dark:bg-blue-700'
+            } text-white border-0`}>
               {valor.term.replace(/[|;]/g, '')}
-                  <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer"/>
-                  {/* Adicionando a escolha entre "e" ou "ou" */}
-                  
-              </div>
+              <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer"/>
+            </div>
 
-              {index < itemsSelecionadosPopUp.length - 1 && (
-  <button className="rounded-full cursor-pointer flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 transition-all text-xs outline-none" onClick={() => {
-    const connector = itemsSelecionadosPopUp[index].term.endsWith('|') ? ';' : '|'; // Alterna entre "|" e ";" conforme necessário
-    handleConnectorChange(index, connector);
-  }} >
-    {itemsSelecionadosPopUp[index].term.endsWith(';') ? "e" : "ou"}
-  </button>
-)}
+            {index < itemsSelecionadosPopUp.length - 1 && (
+              <button 
+                className="rounded-full cursor-pointer flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 transition-all text-xs outline-none" 
+                onClick={() => {
+                  const connector = itemsSelecionadosPopUp[index].term.endsWith('|') ? ';' : '|';
+                  handleConnectorChange(index, connector);
+                }}
+              >
+                {itemsSelecionadosPopUp[index].term.endsWith(';') ? "e" : "ou"}
+              </button>
+            )}
+          </div>
+        ))}
 
-              </>
-          );
-      })}
+        {(itemsSelecionadosPopUp.length >= 1 && !showInput) && (
+          <div 
+            className="rounded-full cursor-pointer flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 transition-all"
+            onClick={() => setShowInput(true)}
+          >
+            <Plus size={16} className="" />
+          </div>
+        )}
 
-                </div>
-
-                {(itemsSelecionadosPopUp.length >= 1 && !showInput) && (
-        <div 
-          className="rounded-full cursor-pointer flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 transition-all"
-          onClick={() => setShowInput(true)}
-        >
-          <Plus size={16} className="" /> 
         </div>
-      )}
 
-<div className="flex items-center">
- 
-{(showInput || itemsSelecionadosPopUp.length == 0) && (
-        <Input 
-          onChange={(e) => handleChangeInput(e.target.value)} 
-          type="text" 
-          value={input}
-          className="border-0  flex-1 p-0 w-auto inline-block"
-          onKeyDown={handleTabPress}
-        />
-      )}
+        {(showInput || itemsSelecionadosPopUp.length == 0) && (
+          <Input 
+            onChange={(e) => handleChangeInput(e.target.value)} 
+            type="text" 
+            value={input}
+            className="border-0  flex-1 p-0 w-auto inline-block"
+            onKeyDown={handleTabPress}
+          />
+        )}
 
-     {(showInput || itemsSelecionadosPopUp.length == 0) && (
-       <p>
-       {itemsBigrama.slice(0,1).map((item, index) => (
-           <div className="text-neutral-500 text-sm w-full" key={index} onClick={() => handleSuggestionClick(item.word)}>
-             {item.word}
-           </div>
-         ))}
-       </p>
-     )}
+        {(showInput || itemsSelecionadosPopUp.length == 0) && (
+          <p>
+            {itemsBigrama.slice(0,1).map((item, index) => (
+              <div className="text-neutral-500 text-sm w-full" key={index} onClick={() => handleSuggestionClick(item.word)}>
+                {item.word}
+              </div>
+            ))}
+          </p>
+        )}
 
-      {((showInput || itemsSelecionadosPopUp.length == 0) &&itemsBigrama.length != 0) && (
-    <div className=" text-xs text-neutral-500 whitespace-nowrap px-2 ml-3  border border-neutral-500 p-1 rounded-md">Tab ↹</div>
-  )}
-</div>
+        {(showInput || itemsSelecionadosPopUp.length == 0) && itemsBigrama.length != 0 && (
+          <div className=" text-xs text-neutral-500 whitespace-nowrap px-2 ml-3  border border-neutral-500 p-1 rounded-md">Tab ↹</div>
+        )}
         </div>
         </div>
 
@@ -582,7 +579,7 @@ const handleConnectorChange = (index: number, connector: string) => {
             <div key={index} onClick={() => handlePesquisa(props.term_normalize, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
                 {props.term}
             </div>
-        ))}
+        ))} 
             </div>
         </div>
     )}
@@ -595,7 +592,7 @@ const handleConnectorChange = (index: number, connector: string) => {
             <div key={index} onClick={() => handlePesquisa(props.term_normalize, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
                 {props.term}
             </div>
-        ))}
+        ))} 
             </div>
         </div>
     )}
@@ -608,7 +605,7 @@ const handleConnectorChange = (index: number, connector: string) => {
             <div key={index} onClick={() => handlePesquisa(props.term_normalize, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
                 {props.term}
             </div>
-        ))}
+        ))} 
             </div>
         </div>
     )}
@@ -621,7 +618,7 @@ const handleConnectorChange = (index: number, connector: string) => {
             <div key={index} onClick={() => handlePesquisa(props.term_normalize, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
                 {props.term}
             </div>
-        ))}
+        ))} 
             </div>
         </div>
     )}
@@ -634,7 +631,7 @@ const handleConnectorChange = (index: number, connector: string) => {
             <div key={index} onClick={() => handlePesquisa(props.term_normalize, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
                 {props.term}
             </div>
-        ))}
+        ))} 
             </div>
         </div>
     )}
@@ -647,7 +644,7 @@ const handleConnectorChange = (index: number, connector: string) => {
             <div key={index} onClick={() => handlePesquisa(props.term, props.type_)} className={`flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
                 {props.term} | {props.great_area}
             </div>
-        ))}
+        ))} 
             </div>
         </div>
     )}
@@ -660,7 +657,7 @@ const handleConnectorChange = (index: number, connector: string) => {
                   <div key={index} onClick={() => handlePesquisa(props.term, props.type_)} className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
                       {props.term}
                   </div>
-              ))}
+              ))} 
             
          
             </div>
@@ -675,7 +672,7 @@ const handleConnectorChange = (index: number, connector: string) => {
                <div key={index} onClick={() => handlePesquisaOpenAlex(props.term)} className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
                 <CloudArrowDown size={16} className="" />    {props.term}
                </div>
-           ))}
+           ))} 
          </div>
      </div>
      )}

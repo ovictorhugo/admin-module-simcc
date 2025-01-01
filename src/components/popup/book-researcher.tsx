@@ -8,6 +8,10 @@ import { useContext, useEffect, useMemo, useState } from "react";
     year: string,
     isbn: string,
     publishing_company: string
+    has_image:boolean
+    relevance:boolean
+    lattes_id:string
+    researcher:string
   }
 
   import {

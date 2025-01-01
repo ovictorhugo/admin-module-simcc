@@ -1,15 +1,28 @@
-import {  ChevronLeft, Hash,  Plus } from "lucide-react";
+import { Book, Briefcase, ChevronLeft, Code, Copyright, Hash, Maximize2, Minimize2, Plus, Users } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useMemo, useState } from "react";
-import {  LinkBreak, MagnifyingGlass } from "phosphor-react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { Books, LinkBreak, MagnifyingGlass, Quotes, StripeLogo } from "phosphor-react";
 import { Input } from "../ui/input";
 import { UserContext } from "../../context/context";
-import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Alert } from "../ui/alert";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";
-import Autoplay from "embla-carousel-autoplay"
+import Autoplay from "embla-carousel-autoplay";
+import screenfull from 'screenfull';
+
+interface Total {
+  article:string
+  book:string
+  book_chapter:string
+  brand:string 
+  patent:string 
+  researcher:string 
+  software:string 
+  work_in_event:string
+  subsidy:string
+}
 
 
 import {
@@ -21,6 +34,16 @@ import {
 } from "../../components/ui/select"
 import { Label } from "../ui/label";
 import { ArticleItem } from "../homepage/categorias/articles-home/article-item";
+import { InfiniteMovingArticle } from "../ui/infinite-moving-article";
+import { InfiniteMovingResearchers } from "../ui/infinite-moving-researcher";
+import { PopUpAnuncio } from "./pop-up-anuncio";
+import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
+import { LogoConectee } from "../svg/LogoConectee";
+import { LogoIaposWhite } from "../svg/LogoIaposWhite";
+import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
+import { LogoIapos } from "../svg/LogoIapos";
+import { useTheme } from "next-themes";
+import { InfiniteMovingProductions } from "../ui/infinite-moving-productions";
 
 
 type Magazine = {
@@ -36,7 +59,7 @@ type Publicacao = {
   id: string,
   doi: string,
   name_periodical: string,
-  qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "SQ" ,
+  qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "SQ",
   title: string,
   year: string,
   color: string,
@@ -59,6 +82,9 @@ type Publicacao = {
   landing_page_url:string 
   language:string 
   pdf:string
+  has_image:boolean
+  relevance:boolean
+
 }
 
 interface Departamentos {
@@ -72,6 +98,56 @@ interface Departamentos {
   img_data:string
   dep_sigla: string
 }
+
+
+type Research = {
+  among: number,
+  articles: number,
+  book: number,
+  book_chapters: number,
+  id: string,
+  name: string,
+  university: string,
+  lattes_id: string,
+  area: string,
+  lattes_10_id: string,
+  abstract: string,
+  city: string,
+  orcid: string,
+  image: string
+  graduation: string,
+  patent: string,
+  software: string,
+  brand: string,
+  lattes_update: Date,
+  h_index: string,
+  relevance_score: string,
+  works_count: string,
+  cited_by_count: string,
+  i10_index: string,
+  scopus: string,
+  openalex: string,
+  subsidy:Bolsistas[]
+  graduate_programs:GraduatePrograms[]
+}
+
+interface Bolsistas {
+aid_quantity:string
+call_title:string
+funding_program_name:string
+modality_code:string
+category_level_code:string
+institute_name:string
+modality_name:string
+scholarship_quantity:string
+}
+
+  interface  GraduatePrograms {
+    graduate_program_id:string
+    name:string
+  }
+
+  
 
 
 export function NewsArticles() {
@@ -155,7 +231,6 @@ const [gg, setGG] = useState('')
 
 const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
 
-
 const urlTermPublicacoes = urlGeral + `recently_updated?year=2024&university=&dep_id=${totalSelecionado != null ? (totalSelecionado?.dep_id):('')}`
 console.log(urlTermPublicacoes)
 useMemo(() => {
@@ -184,7 +259,32 @@ useMemo(() => {
       fetchData();
     }, [ urlTermPublicacoes]);
 
-    //const urlPatrimonioInsert = `${urlGeralAdm}departamentos`
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
+    useEffect(() => {
+      const handleFullscreenChange = () => {
+        if (screenfull.isEnabled) {
+          setIsFullscreen(screenfull.isFullscreen);
+        }
+      };
+
+      if (screenfull.isEnabled) {
+        screenfull.on('change', handleFullscreenChange);
+      }
+
+      return () => {
+        if (screenfull.isEnabled) {
+          screenfull.off('change', handleFullscreenChange);
+        }
+      };
+    }, []);
+
+    const handleFullscreen = () => {
+      if (containerRef.current && screenfull.isEnabled) {
+        screenfull.toggle(containerRef.current);
+      }
+    };
 
     const urlPatrimonioInsert = `${urlGeralAdm}departamentos`
 
@@ -220,45 +320,160 @@ useMemo(() => {
 
 console.log(totalSelecionado?.dep_nom || '')
 
+
+// pesquisadores
+
+const [researcher, setResearcher] = useState<Research[]>([]);
+
+  let urlTermPesquisadores = `${urlGeral}researcherName?name=`
+
+useMemo(() => {
+  const fetchData = async () => {
+      try {
+     
+        const response = await fetch(  urlTermPesquisadores, {
+          mode: "cors",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Max-Age": "3600",
+            "Content-Type": "text/plain",
+          },
+        });
+        const data = await response.json();
+        if (data) {
+          setResearcher(data);
+       
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [urlTermPesquisadores]);
+
+  const {theme} = useTheme()
+
+
+    //
+
+    const [totalProducao, setTotalProducao] = useState<Total[]>([]);
+
+    const urlTotalProgram = `${urlGeral}graduate_program_production?graduate_program_id=&year=1900`;
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(urlTotalProgram, {
+            mode: "cors",
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET",
+              "Access-Control-Allow-Headers": "Content-Type",
+              "Access-Control-Max-Age": "3600",
+              "Content-Type": "text/plain",
+            },
+          });
+          const data = await response.json();
+          if (data) {
+            setTotalProducao(data);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchData();
+    }, [urlTotalProgram]);
+
+
+    const producoes = [
+        {
+          name: "Artigos",
+          icon: Quotes, // Certifique-se de que Quotes é um componente ou valor válido
+          number: totalProducao.slice(0, 1)[0]?.article, // Corrigido para acessar o primeiro item e a propriedade `article`
+        },
+        {
+            name: "Livros",
+            icon: Book, // Certifique-se de que Quotes é um componente ou valor válido
+            number: totalProducao.slice(0, 1)[0]?.book, // Corrigido para acessar o primeiro item e a propriedade `article`
+          },
+          {
+            name: "Capítulos de livro",
+            icon: Books, // Certifique-se de que Quotes é um componente ou valor válido
+            number: totalProducao.slice(0, 1)[0]?.book_chapter, // Corrigido para acessar o primeiro item e a propriedade `article`
+          },
+          {
+            name: "Patentes",
+            icon: Copyright, // Certifique-se de que Quotes é um componente ou valor válido
+            number: totalProducao.slice(0, 1)[0]?.patent, // Corrigido para acessar o primeiro item e a propriedade `article`
+          },
+          {
+            name: "Marcas",
+            icon: StripeLogo, // Certifique-se de que Quotes é um componente ou valor válido
+            number: totalProducao.slice(0, 1)[0]?.brand, // Corrigido para acessar o primeiro item e a propriedade `article`
+          },
+          {
+            name: "Softwares",
+            icon: Code, // Certifique-se de que Quotes é um componente ou valor válido
+            number: totalProducao.slice(0, 1)[0]?.software, // Corrigido para acessar o primeiro item e a propriedade `article`
+          },
+          {
+            name: "Trabalhos em eventos",
+            icon: Briefcase, // Certifique-se de que Quotes é um componente ou valor válido
+            number: totalProducao.slice(0, 1)[0]?.work_in_event, // Corrigido para acessar o primeiro item e a propriedade `article`
+          },
+          {
+            name: "Bolsistas CNPq",
+            icon: Copyright, // Certifique-se de que Quotes é um componente ou valor válido
+            number: totalProducao.slice(0, 1)[0]?.subsidy, // Corrigido para acessar o primeiro item e a propriedade `article`
+          }
+      
+      ];
+
+
     return(
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+        <main ref={containerRef} className="  bg-neutral-50 dark:bg-neutral-900 w-full">
           <Tabs defaultValue={tab}  value={tab} className="h-full" >
-          <div className="w-full  gap-4">
+          <div className="w-full  gap-4 p-4 md:p-8">
             <div className="flex items-center gap-4">
           
-            <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
+            <Button onClick={handleVoltar } variant="outline" className="h-8 w-8" size={'icon'} >
                 <ChevronLeft className="h-4 w-4" />
-                <span className="sr-only">Voltar</span>
               </Button>
           
               <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-              {tab == 'all' ? ('Produções mais recentes'):('Todas as revistas')}
+              Produções recentes
               </h1>
              
 
                 
             
               <div className="hidden items-center gap-2 md:ml-auto md:flex">
-              <TabsList >
-                
-              <TabsTrigger onClick={() => setTab('all')} value="all" className="text-zinc-600 dark:text-zinc-200">Produções mais recentes</TabsTrigger>
-             
-                <TabsTrigger value="unread" onClick={() => setTab('unread')}  className="text-zinc-600 dark:text-zinc-200">Todas as revistas</TabsTrigger>
-               
-                </TabsList>
-               
+              <Button className="h-8 w-8" variant={'outline'} size={'icon'} >ds</Button>
+              <Button className="h-8 w-8"onClick={handleFullscreen} variant="outline" size={'icon'}>
+                {isFullscreen ? (
+                  <Minimize2 className="h-4 w-4" />
+                ) : (
+                  <Maximize2 className="h-4 w-4" />
+                )}
+              </Button>
           
               </div>
             </div>
 
             </div>
 
-            <TabsContent value="all" className="max-h-[calc(100vh-162px)] h-full ">
+            <TabsContent value="all" className="h-full ">
            
  <div className="flex  flex-col  h-full ">
- <div className="  mt-2">
+ <div className="  px-4 md:px-8 mb-4">
             
-
+ {theme == 'dark' ? (
+         <div className="h-6 mb-4">{version?(<LogoConecteeWhite/>):(<LogoIaposWhite/>)}</div>
+       ):(
+        <div className="h-6 mb-4">{version?(<LogoConectee/>):(<LogoIapos/>)}</div>
+       )}
                         <h1 className={`  ${totalSelecionado != null ? ('max-w-[800px]'):('max-w-[500px]')} text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3`}>
                           Todos os artigos mais{" "}
                             <strong className="bg-eng-blue rounded-md px-3 pb-2 text-white font-medium">
@@ -267,193 +482,68 @@ console.log(totalSelecionado?.dep_nom || '')
                             {totalSelecionado != null ? (totalSelecionado.dep_nom):('da instituição')}
                         </h1>
 
-                       <div>
-                      {version && (
-                          <div className="flex flex-col gap-2 mt-4 ">
-                               <Label>Departamento</Label>
-                               <Select defaultValue="Todos os departamentos" onValueChange={(value) => {
-                          const selectedDep = total.find((dep) => dep.dep_id === value);
-                          if (selectedDep) {
-                            setTotalSelecionado(selectedDep);
-                          }
-                        }}>
-                        <SelectTrigger className="max-w-[500px]">
-                          <SelectValue placeholder="Escolha o departamento" />
-                        </SelectTrigger>
-                        <SelectContent>
-                        <SelectItem onClick={() => {
-                          setGG('Todos os departamentos')
-                          setTotalSelecionado(null)
-                        }} value={'Todos os departamentos'}>
-                              Todos os departamentos
-                            </SelectItem>
-                          {total.map((dep) => (
-                            <SelectItem key={dep.dep_id} value={dep.dep_id} onClick={() => setGG('')}>
-                              {dep.dep_nom}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                       </div>
-                      )}
-                       </div>
-                        
                     </div>
 
-                    
-           <div className="flex flex-1  max-w-[calc(100vw-120px)]">
-           <Carousel className="w-full flex gap-3 items-center "
-            plugins={[
-              Autoplay({
-                delay: 2000,
-              }),
-            ]}
-           >
-                <CarouselPrevious />
-      <CarouselContent className="-ml-1 flex w-full flex-1">
-        {publicacoes.slice(0,10).map((props, index) => (
-          <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3">
-            <div className="p-1 h-full">
-            <ArticleItem
-    id={props.id}
-    doi={props.doi}
-    name_periodical={props.name_periodical}
-    qualis={props.qualis}
-    title={props.title.toUpperCase()}
-    year={props.year}
-    color={props.color}
-    researcher={props.researcher}
-    lattes_id={props.lattes_id}
-    magazine={props.magazine}
-    lattes_10_id={props.lattes_10_id}
-    jcr_link={props.jcr_link}
-    jif={props.jif}
-    researcher_id={props.researcher_id}
-    distinct={props.distinct}
-    abstract={props.abstract}
-    article_institution={props.article_institution}
-    authors={props.authors}
-    authors_institution={props.authors_institution}
-    citations_count={props.citations_count} // Adicione aqui
-    issn={props.issn}                       // Adicione aqui
-    keywords={props.keywords}               // Adicione aqui
-    landing_page_url={props.landing_page_url} // Adicione aqui
-    language={props.language}               // Adicione aqui
-    pdf={props.pdf}                         // Adicione aqui
-/>
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      
+
+                  <div className="flex flex-col gap-8">
+                  <div>
+
+                  <div className=" px-4 md:px-8 py-4">
+                 <HeaderResultTypeHome title="Artigos mais recentes" icon={<Quotes size={24} className="text-gray-400" />}>
+                 </HeaderResultTypeHome>
+                 </div>
+<InfiniteMovingProductions
+        items={producoes} // Formata cada item como um objeto
+        direction="right"
+        speed='normal'
+        pauseOnHover={false}
+        className="custom-class"
+      />
+
+</div>
+
+                  <div>
+                 <div className=" px-4 md:px-8 py-4">
+                 <HeaderResultTypeHome title="Pesquisadores" icon={<Users size={24} className="text-gray-400" />}>
+                 </HeaderResultTypeHome>
+                 </div>
+                   <InfiniteMovingResearchers
+        items={researcher} // Formata cada item como um objeto
+        direction="left"
+        speed='slow'
+        pauseOnHover={true}
+        className="custom-class"
+      />
+                   </div>
+
+<div>
+
+<div className="px-4 md:px-8 py-4">
+                 <HeaderResultTypeHome title="Artigos mais recentes" icon={<Quotes size={24} className="text-gray-400" />}>
+                 </HeaderResultTypeHome>
+                 </div>
+<InfiniteMovingArticle
+        items={publicacoes} // Formata cada item como um objeto
+        direction="right"
+        speed='slow'
+        pauseOnHover={true}
+        className="custom-class"
+      />
+
+</div>
+                  </div>
      
-      <CarouselNext />
-      
-    </Carousel>
-           </div>
  </div>
 
                   
             </TabsContent>
 
-            <TabsContent value="unread" className="pb-4 md:pb-8">
-            <div className="mt-4 ">
-         
-
-                        <h1 className="max-w-[600px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
-                           Pesquise{" "}
-                            <strong className="bg-eng-blue rounded-md px-3 pb-2 text-white font-medium">
-                            o nome ou ISSN
-                            </strong>{" "}
-                            da revista para ver as informações
-                        </h1>
-                        <p className="max-w-[500px] text-lg font-light text-foreground">
-                        Para ajudar a sua pesquisa, fornecemos uma lista extensa de revistas e suas classificações.
-                        </p>
-                        <div className="flex gap-3 mt-3">
-                            <div className="flex gap-3 items-center w-full max-w-[550px] rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:placeholder:text-neutral-400">
-                                <MagnifyingGlass size={16} className="whitespace-nowrap w-10" />
-
-                                <Input className="border-0 p-0 h-9 flex flex-1" value={pesquisaInput} onChange={(e) => setPesquisaInput(e.target.value)} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="mt-8">
-                    {pesquisaInput.length === 0 ? (
-   <h3 className="text-2xl font-medium mb-8 ">
-    Mostrando todas as revistas, digite para aparecer mais
-  </h3>
-) : /^\d+$/.test(pesquisaInput) ? (
-  <h3 className="text-2xl font-medium mb-8">
-    Mostrando a revista pelo ISSN #{pesquisaInput}
-  </h3>
-) : (
-  <h3 className="text-2xl font-medium mb-8">
-    Mostrando todas as revistas com "{pesquisaInput}" contido no título
-  </h3>
-)}
-
-
-                {magazine.length == 0 ? (
-                  <p>Nenhuma revista encontrada</p>
-                ):(
-                     <div>
-                       <ResponsiveMasonry
-                      columnsCountBreakPoints={{
-                          350: 1,
-                          750: 2,
-                          900: 3,
-                          1200: 3
-                      }}
-                  >
-                                   <Masonry gutter="16px">
-                                      {magazine.slice(0, count).map((props) => (
-                                        <div className="flex">
-                                         <div className={`h-full w-2 min-w-[8px] rounded-l-lg border border-r-0 border-neutral-200 dark:border-neutral-800 ${qualisColor[props.qualis as keyof typeof qualisColor]}` }></div>
-                                        
-                                         <Alert className="flex items-center rounded-l-none">
-                                          <div className="flex items-center flex-1">
-                                           
-      
-                                              <div >
-                                              <div className="flex items-center gap-2">
-                                                  <Hash size={16} className="text-gray-400" />
-                                                  <p className="text-[13px]  text-gray-500">ISSN {props.issn}</p>
-                                              </div>
-                                              <h4 className="text-base font-medium ">{props.magazine}</h4>
-                                             
-                                             <div className="mt-2 flex items-center gap-4">
-
-                                             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
-                                                <div className={`w-4 h-4 rounded-md ${qualisColor[props.qualis as keyof typeof qualisColor]}`}></div>Qualis {props.qualis}
-                                              </div>
-
-                                              {props.jif != "None" && (
-              <Link to={props.jcr_link} className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
-                <LinkBreak size={16} />JCR
-              </Link>
-            )}
-                                             </div>
-                                          </div>
-                                          </div>
-      
-                                         
-      
-                      </Alert>
-                                      </div>
-                                      ))}
-                                    </Masonry>
-                                    </ResponsiveMasonry>
-
-                                    {magazine.length >= count && (
-            <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
-        )}
-                     </div>
-                )}
-                    </div>
-            </TabsContent>
+           
           </Tabs>
+
+          {isFullscreen && (
+            <PopUpAnuncio/>
+          )}
         </main>
     )
 }

@@ -73,8 +73,7 @@ const ModalContent = () => {
         return <ConfirmDeleteResearcherDepartament/>
       case 'minha-area':
         return <MinhaArea/>
-      case 'project-modal':
-        return <ProjectModal/>
+ 
       case 'add-background':
         return <AddBackground/>
 

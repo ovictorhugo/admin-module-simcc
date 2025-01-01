@@ -1,5 +1,28 @@
-import { useContext, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useContext } from "react";
+import { UserContext } from "../../context/context";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+    
+  } from "../../components/ui/accordion"
+  import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
+import { Skeleton } from "../ui/skeleton";
 
+import { ChartBar, Quotes, SquaresFour, Rows, X, ArrowUDownLeft } from "phosphor-react";
+
+import { Button } from "../ui/button";
+
+import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
+import { GraficoArticleHome } from "../homepage/categorias/articles-home/grafico-articles-home";
+import { FilterArticlePopUp } from "./filters-articles-popup";
+import { ArticleBlockPopUp } from "./articles-block-popup";
+import { TableReseracherArticlesPopup } from "./columns/table-articles-popup";
+
+// Cache compartilhado para requisições
+const requestCache = new Map();
 
 type Publicacao = {
     id: string,
@@ -26,32 +49,10 @@ type Publicacao = {
     landing_page_url:string 
     language:string 
     pdf:string
-  }
+    has_image:boolean
+  relevance:boolean
 
-
-
-  import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-    
-  } from "../../components/ui/accordion"
-  import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
-import { Skeleton } from "../ui/skeleton";
-
-import { ChartBar, Quotes, SquaresFour, Rows, X, ArrowUDownLeft } from "phosphor-react";
-
-import { Button } from "../ui/button";
-
-import { UserContext } from "../../context/context";
-
-import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
-import { GraficoArticleHome } from "../homepage/categorias/articles-home/grafico-articles-home";
-import { FilterArticlePopUp } from "./filters-articles-popup";
-import { ArticleBlockPopUp } from "./articles-block-popup";
-import { TableReseracherArticlesPopup } from "./columns/table-articles-popup";
-
+}
 
 type Filter = {
   year: number[]
@@ -63,11 +64,8 @@ type Props = {
 }
 
 export function ArticlesResearcherPopUp(props:Props) {
-  
-
     const {urlGeral, setItensSelecionadosPopUp, itemsSelecionadosPopUp, searchType, itemsSelecionados} = useContext(UserContext)
   
-   
     const [loading, isLoading] = useState(false)
     const [distinct] = useState(false)
     const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
@@ -75,137 +73,142 @@ export function ArticlesResearcherPopUp(props:Props) {
 
     const [filters, setFilters] = useState<Filter[]>([]);
 
-    // Função para lidar com a atualização de researcherData
-    const handleResearcherUpdate = (newResearcherData: Filter[]) => {
-      setFilters(newResearcherData);
-    };
+    const url = useMemo(() => 
+        `${urlGeral}bibliographic_production_researcher?researcher_id=${props.name}&type=ARTICLE`,
+        [urlGeral, props.name]
+    );
 
-    const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
-    const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
-    console.log('qualis',qualisString)
+    const yearString = useMemo(() => 
+        filters.length > 0 ? filters[0].year.join(';') : '',
+        [filters]
+    );
 
-    function formatTerms(valores: { term: string }[]): string {
-      let result = '';
-      let tempTerms: string[] = [];
-    
-      valores.forEach(item => {
-        let term = item.term.trim();
-    
-        if (term.endsWith(';')) {
-          // Remove the final ';' and add the term to the temporary array
-          tempTerms.push(term.slice(0, -1));
-        } else if (term.endsWith('|')) {
-          // Remove the final '|' and add the term to the temporary array
-          tempTerms.push(term.slice(0, -1));
-    
-          // Add the temporary array to the result as a group and clear the array
-          if (tempTerms.length > 0) {
-            result += '(' + tempTerms.join(';') + ')' + '|';
-            tempTerms = [];
-          }
-        } else {
-          // Handle terms that don't end with ';' or '|'
-          if (tempTerms.length > 0) {
-            result += '(' + tempTerms.join(';') + ')' + '|';
-            tempTerms = [];
-          }
-          result += term + '|';
+    const qualisString = useMemo(() => 
+        filters.length > 0 ? filters[0].qualis.join(';') : '',
+        [filters]
+    );
+
+    const resultadoFormatado = useMemo(() => 
+        formatTerms(itemsSelecionadosPopUp),
+        [itemsSelecionadosPopUp]
+    );
+
+    const urlTermPublicacoes = useMemo(() => {
+        const baseUrl = `${urlGeral}bibliographic_production_researcher?researcher_id=${props.name}&type=ARTICLE&qualis=${qualisString}&year=${yearString}`;
+        return searchType === 'article' 
+            ? `${baseUrl}&terms=${resultadoFormatado}`
+            : baseUrl;
+    }, [props.name, searchType, qualisString, yearString, resultadoFormatado]);
+
+    const fetchData = useCallback(async () => {
+        const cacheKey = urlTermPublicacoes;
+        
+        // Verifica cache
+        if (requestCache.has(cacheKey)) {
+            setPublicacoes(requestCache.get(cacheKey));
+            return;
         }
-      });
-    
-      // Handle any remaining terms in the tempTerms array
-      if (tempTerms.length > 0) {
-        result += '(' + tempTerms.join(';') + ')';
-      } else {
-        // Remove the last '|' if it exists
-        if (result.endsWith('|')) {
-          result = result.slice(0, -1);
-        }
-      }
-    
-      return result;
-    }
-  
-  
-    const resultadoFormatado = formatTerms(itemsSelecionadosPopUp);
 
-    let urlTermPublicacoes = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.name}&type=ARTICLE&qualis=${qualisString}&year=${yearString}`;
-
-    if (searchType == 'article') {
-      urlTermPublicacoes = `${urlGeral}bibliographic_production_researcher?terms=${resultadoFormatado}&researcher_id=${props.name}&type=ARTICLE&qualis=${qualisString}&year=${yearString}`;
-    }
-
-    console.log(urlTermPublicacoes)
-
-    console.log('urlTermPublicacoes', urlTermPublicacoes)
-    useMemo(() => {
-        const fetchData = async () => {
-            try {
-              isLoading(true)
-              const response = await fetch( urlTermPublicacoes, {
+        isLoading(true);
+        try {
+            const response = await fetch(urlTermPublicacoes, {
                 mode: "cors",
                 headers: {
-                  "Access-Control-Allow-Origin": "*",
-                  "Access-Control-Allow-Methods": "GET",
-                  "Access-Control-Allow-Headers": "Content-Type",
-                  "Access-Control-Max-Age": "3600",
-                  "Content-Type": "text/plain",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET",
+                    "Access-Control-Allow-Headers": "Content-Type",
+                    "Access-Control-Max-Age": "3600",
+                    "Content-Type": "text/plain",
                 },
-              });
-              const data = await response.json();
-              if (data) {
+            });
+            const data = await response.json();
+            if (data) {
+                requestCache.set(cacheKey, data);
                 setPublicacoes(data);
-                isLoading(false)
-              }
-            } catch (err) {
-              console.log(err);
             }
-          };
-          fetchData();
-        }, [ urlTermPublicacoes]);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            isLoading(false);
+        }
+    }, [urlTermPublicacoes]);
 
-        const items = Array.from({ length: 12 }, (_, index) => (
+    useEffect(() => {
+        let mounted = true;
+        
+        if (mounted) {
+            fetchData();
+        }
+
+        return () => {
+            mounted = false;
+        };
+    }, [fetchData]);
+
+    const handleResearcherUpdate = useCallback((newResearcherData: Filter[]) => {
+        setFilters(newResearcherData);
+    }, []);
+
+    const handleConnectorChange = useCallback((index: number, connector: string) => {
+        setItensSelecionadosPopUp(prev => {
+            const updated = [...prev];
+            updated[index].term = updated[index].term.slice(0, -1) + connector;
+            return updated;
+        });
+    }, [setItensSelecionadosPopUp]);
+
+    const handleRemoveItem = useCallback((indexToRemove: number) => {
+        setItensSelecionadosPopUp(prev => 
+            prev.filter((_, index) => index !== indexToRemove)
+        );
+    }, [setItensSelecionadosPopUp]);
+
+    const items = useMemo(() => 
+        Array.from({ length: 12 }, (_, index) => (
             <Skeleton key={index} className="w-full rounded-md h-[170px]" />
-          ));
+        )),
+        []
+    );
 
-                    //conectores 
-const handleConnectorChange = (index: number, connector: string) => {
-  // Crie uma cópia do array de itens selecionados
-  const updatedItems = [...itemsSelecionadosPopUp];
-  // Substitua o último caractere pelo novo conector
-  updatedItems[index].term = updatedItems[index].term.slice(0, -1) + connector;
-  // Atualize o estado com os itens atualizados
-  setItensSelecionadosPopUp(updatedItems);
-};
+    const fetchArticles = useCallback(async () => {
+        isLoading(true);
+        try {
+            const response = await fetch(`${urlGeral}bibliographic_production_researcher?researcher_id=${props.name}&type=ARTICLE`);
+            const data = await response.json();
+            setPublicacoes(data);
+        } catch (error) {
+            console.error('Error fetching articles:', error);
+        } finally {
+            isLoading(false);
+        }
+    }, [urlGeral, props.name]);
 
-const handleRemoveItem = (indexToRemove: any) => {
-  setItensSelecionadosPopUp(prevItems => prevItems.filter((_, index) => index !== indexToRemove));
-}
-
-
-         
+    const handleRefresh = useCallback(() => {
+        fetchArticles();
+    }, [fetchArticles]);
 
     return(
         <>
-  
+
             <div className="">
 
                 <FilterArticlePopUp
                 onFilterUpdate={handleResearcherUpdate}/>
-              
-                        <Accordion  type="single" collapsible defaultValue="item-1">
+
+                <Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
                 <div className="flex mb-2">
                    <HeaderResultTypeHome title="Gráfico de quantidade total por Qualis" icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
                    <AccordionTrigger>
-                  
+
                     </AccordionTrigger>
                    </div>
                     <AccordionContent >
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
+
                       <GraficoArticleHome
                       articles={publicacoes}
                       />
@@ -218,6 +221,7 @@ const handleRemoveItem = (indexToRemove: any) => {
                 <AccordionItem value="item-1" >
                 <div className="flex mb-2">
                 <div className="flex gap-4 w-full justify-between items-center ">
+
 <div className="flex gap-4 items-center">
 <Quotes size={24} className="text-gray-400" />
 {searchType != 'article' || itemsSelecionadosPopUp.length == 0 ? (
@@ -275,6 +279,10 @@ em artigos
     <Button  onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost' }  size={'icon'}>
         <SquaresFour size={16} className=" whitespace-nowrap" />
     </Button>
+
+    <Button onClick={handleRefresh} variant="ghost" size={'icon'}>
+        <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
+    </Button>
 </div>
 
 </div>
@@ -284,6 +292,7 @@ em artigos
               </AccordionTrigger>
                 </div>
                   
+
                     <AccordionContent >
 
 {typeVisu == 'block' ? (
@@ -303,16 +312,19 @@ em artigos
                         </Masonry>
         </ResponsiveMasonry>
                       ):(
+
                         <ArticleBlockPopUp
                         articles={publicacoes}
                         distinct={distinct}
                         />
                       )
                     ):(
+
                       loading ? (
-                        
+
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
+
                         <TableReseracherArticlesPopup
                         articles={publicacoes}
                         />
@@ -321,9 +333,52 @@ em artigos
                     </AccordionContent>
                 </AccordionItem>
                 </Accordion>
-                       
+
             </div>
 
         </>
+
     )
+}
+
+function formatTerms(terms: any[]) {
+    let result = '';
+    let tempTerms: string[] = [];
+    
+    terms.forEach(item => {
+        let term = item.term.trim();
+    
+        if (term.endsWith(';')) {
+            // Remove the final ';' and add the term to the temporary array
+            tempTerms.push(term.slice(0, -1));
+        } else if (term.endsWith('|')) {
+            // Remove the final '|' and add the term to the temporary array
+            tempTerms.push(term.slice(0, -1));
+    
+            // Add the temporary array to the result as a group and clear the array
+            if (tempTerms.length > 0) {
+                result += '(' + tempTerms.join(';') + ')' + '|';
+                tempTerms = [];
+            }
+        } else {
+            // Handle terms that don't end with ';' or '|'
+            if (tempTerms.length > 0) {
+                result += '(' + tempTerms.join(';') + ')' + '|';
+                tempTerms = [];
+            }
+            result += term + '|';
+        }
+    });
+    
+    // Handle any remaining terms in the tempTerms array
+    if (tempTerms.length > 0) {
+        result += '(' + tempTerms.join(';') + ')';
+    } else {
+        // Remove the last '|' if it exists
+        if (result.endsWith('|')) {
+            result = result.slice(0, -1);
+        }
+    }
+    
+    return result;
 }

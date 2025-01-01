@@ -16,6 +16,10 @@ import { useContext, useMemo, useState } from "react";
   year: string,
   financing: string,
   project_name: string
+  has_image:boolean
+  relevance:boolean
+  lattes_id:string
+  researcher:string
   }
 
   import {

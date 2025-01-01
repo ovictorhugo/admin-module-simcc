@@ -1,12 +1,13 @@
 import { AppWindow, Ticket, IdentificationBadge, CalendarBlank,  Copyright, CurrencyCircleDollar,  LinkBreak, Paperclip, PenNib} from "phosphor-react";
 import {  useContext } from "react";
-
+import { toast } from "sonner";
 import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
 import { Link } from "react-router-dom";
-import { Maximize2, SquareArrowOutUpRight, SquareAsterisk } from "lucide-react";
+import { Image, Maximize2, Pencil, SquareArrowOutUpRight, SquareAsterisk, Star, Trash } from "lucide-react";
 import { Button } from "../ui/button";
 import { useModal } from "../hooks/use-modal-store";
+import { useModalSecundary } from "../hooks/use-modal-store-secundary";
 
 type Publicacao = {
   
@@ -31,7 +32,7 @@ type Publicacao = {
   event_name?: string
    
     participation?: string
- 
+ name?:string
     agency_code?: string
     agency_name?: string
     nature?: string
@@ -50,6 +51,9 @@ type Publicacao = {
     foment?:Forment[]
     components?:Components[]
 
+researcher?:string
+has_image?:boolean
+lattes_id?:string
 
 
     authors?: string;
@@ -172,8 +176,47 @@ const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecio
     const highlightedTitle = highlightText(props.title || '', itemsSelecionados);
     const highlightedTitleProject = highlightText(props.project_name || '', itemsSelecionados);
    
-    const {onOpen} = useModal()
-   
+    const {onOpen} = useModalSecundary()
+    const { urlGeral, user, permission } = useContext(UserContext);
+
+    const has_editar_producao = permission.some(
+      (perm) => perm.permission === 'editar_producao'
+    );
+
+
+    const handleFileDelete = async () => {
+      const urlDelete = `${urlGeral}image/${props.id}?type=ARTICLE`;
+  
+      try {
+        const response = await fetch(urlDelete, {
+          method: "DELETE",
+        });
+  
+        if (response.ok) {
+          toast("Imagem excluída com sucesso!", {
+            description: "A imagem foi removida do servidor.",
+            action: {
+              label: "Fechar",
+              onClick: () => console.log("Fechar"),
+            },
+          });
+  
+        } else {
+          throw new Error("Erro na resposta do servidor");
+        }
+      } catch (error) {
+        console.error("Erro ao excluir imagem:", error);
+        toast("Erro ao excluir imagem", {
+          description: "Não foi possível excluir o arquivo. Tente novamente.",
+          action: {
+            label: "Fechar",
+            onClick: () => console.log("Fechar"),
+          },
+        });
+      }
+    };
+  
+
     return (
         <div className="flex group  w-full" >
             
@@ -196,10 +239,54 @@ const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecio
                     </div>
                 
 
-                <Alert className="rounded-l-none flex flex-col justify-between">
-                    <div>
+                <Alert className="rounded-l-none flex flex-col justify-between p-0">
+
+                {props.has_image && (
+          <div 
+          onClick={() =>
+            onOpen('image-article', {
+              id:props.id,
+           
+              title: props.title,
+              year: props.year,
+             
+              researcher_id: props.researcher_id,
+            
+              authors: props.authors,
+            
+              language: props.language,
+            
+              researcher: props.researcher,
+              has_image:props.has_image,
+              relevance:props.relevance
+            })
+          }
+        className="bg-neutral-100 flex justify-between p-4 bg-center bg-cover bg-no-repeat dark:bg-neutral-800 h-[150px] rounded-tr-md cursor-pointer" style={{ backgroundImage: `url(${urlGeral}image/${props.id}) ` }}>
+
+<div>
+{(props.relevance && props.has_image) && (
+                <div className="relative -top-4 py-1 px-4 bg-yellow-600 w-fit rounded-b-md text-white"><Star size={12}/></div>
+            )}
+</div>
+
+
+<div className="flex gap-3">
+
+
+
+
+
+</div>
+        </div>
+        )}
+
+                    <div className="p-4 pb-0">
                         <div>
-                          {props.publishing_company != undefined && (
+                        {(props.relevance && !props.has_image) && (
+                <div className="relative -top-4 py-1 px-4 bg-yellow-600 w-fit rounded-b-md text-white"><Star size={12}/></div>
+            )}
+                        <div className="flex justify-between">
+                        {props.publishing_company != undefined && (
                              <h3 className="font-semibold mb-4 ">{props.publishing_company}</h3>
                           )}
 
@@ -211,44 +298,64 @@ const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecio
                              <h3 className="font-semibold mb-4 ">{props.project_name}</h3>
                           )}
 
-{props.type == 'research-project' && (
-                           <div className="flex justify-between gap-6">
-                              <h3 className="font-semibold mb-4 ">{props.agency_name}</h3>
 
-                              <div className="h-8 w-8">
-           
-                              <Button
- onClick={() =>
-  onOpen('project-modal', {
-    agency_code: props.agency_code,
-    agency_name: props.agency_name,
-    nature: props.nature,
-    description: props.description,
-    end_year: props.end_year,
-    id: props.id,
-    number_academic_masters: props.number_academic_masters,
-    number_phd: props.number_phd,
-    number_specialists: props.number_specialists,
-    number_undergraduates: props.number_undergraduates,
-    project_name: props.project_name,
-    start_year: props.start_year,
-    status: props.status,
-    researcher_id: props.researcher_id,
-    production: props.production,
-    foment: props.foment,
-    components: props.components,
-  })
+                        
+                            {(props.type == 'research-project') && (
+                                <h3 className="font-semibold mb-4 ">{props.agency_name}</h3>
+                            )}
+
+                        
+                              <div className="flex gap-3 min-w-20 ">
+
+{(user?.lattes_id == props.lattes_id || has_editar_producao) && (
+<Button 
+onClick={() =>
+onOpen('edit-article', {
+id:props.id,
+
+researcher: props.researcher,
+has_image:props.has_image,
+relevance:props.relevance
+})
 }
-  variant="outline"
-  size="icon"
-  className="ml-auto hidden group-hover:flex text-sm h-8 w-8 text-gray-500 dark:text-gray-300"
->
-  <Maximize2 size={16} />
-</Button>
+variant={'outline'} className="h-8 w-8 text-gray-500 dark:text-white hidden group-hover:flex" size={'icon'}><Pencil size={16}/></Button>
 
-                      </div>
-                           </div>
-                          )}
+)}
+
+{props.type == 'research-project' && (
+<Button
+onClick={() =>
+onOpen('project-modal', {
+agency_code: props.agency_code,
+agency_name: props.agency_name,
+nature: props.nature,
+description: props.description,
+end_year: props.end_year,
+id: props.id,
+number_academic_masters: props.number_academic_masters,
+number_phd: props.number_phd,
+number_specialists: props.number_specialists,
+number_undergraduates: props.number_undergraduates,
+project_name: props.project_name,
+start_year: props.start_year,
+status: props.status,
+researcher_id: props.researcher_id,
+production: props.production,
+foment: props.foment,
+components: props.components,
+})
+}
+variant="outline"
+size="icon"
+className="ml-auto hidden group-hover:flex text-sm h-8 w-8 text-gray-500 dark:text-gray-300"
+>
+<Maximize2 size={16} />
+</Button>
+)}
+
+
+</div>
+                        </div>
 
 {(props.type == 'work-event' || props.type == 'texto-revista')  && (
                            <div className="flex justify-between gap-6">
@@ -300,7 +407,7 @@ const highlightedTitleEvent = highlightText(props.event_name || '', itemsSelecio
                         </div>
                     </div>
 
-                    <div className="flex items-center flex-wrap mt-4 gap-4">
+                    <div className="flex items-center flex-wrap mt-4 gap-4 p-4 pt-0">
                         <div className="flex items-center gap-4">
                         <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><CalendarBlank size={12}/>{props.year}{props.type == 'research-project' && (`${props.start_year} - ${props.end_year == '' ? ('atual'):(props.end_year)}`)}{props.year_}</div>
                         

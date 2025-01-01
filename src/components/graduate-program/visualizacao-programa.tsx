@@ -18,14 +18,7 @@ import HC_wordcloud from 'highcharts/modules/wordcloud';
 import bg_popup from '../../assets/bg_home.png';
 import { BarChart, Bar, XAxis, LabelList, CartesianGrid,   } from 'recharts';
 
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent
-} from "../../components/ui/chart"
+
 import { GraficoArtigosPorQualis } from "../dashboard/graficos/grafico-qualis";
 import { DocentesPrograma } from "./docentes-programa";
 import { IndicatorsGraduate } from "./indicators-graduate";
@@ -42,6 +35,8 @@ import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
 import { LogoConectee } from "../svg/LogoConectee";
 import { GraduateProgram } from "./graduate-program";
 import { Badge } from "../ui/badge";
+import { HomepageProgram } from "./homepage-program";
+import { PainelAdminGraduate } from "./painel-admin-graduate";
 
 interface PalavrasChaves {
   term: string;
@@ -147,44 +142,7 @@ interface GraduateProgram {
 
   
   
-  const chartConfig = {
-    views: {
-      label: "Page Views",
-    },
-    producao_bibliografica: {
-      label: "Produção bibliográfica",
-      color: "hsl(var(--chart-1))",
-    },
-    producao_tecnica: {
-      label: "Produção técnica",
-      color: "hsl(var(--chart-2))",
-    },
-    count_article: {
-      label: "Artigos",
-      color: "hsl(var(--chart-2))",
-    },
-    count_book: {
-      label: "Livros",
-      color: "hsl(var(--chart-2))",
-    },
-    count_book_chapter: {
-      label: "Capítulos de livros",
-      color: "hsl(var(--chart-2))",
-    },
-    count_patent: {
-      label: "Patentes",
-      color: "hsl(var(--chart-2))",
-    },
-    count_brand: {
-      label: "Marcas",
-      color: "hsl(var(--chart-2))",
-    },
-    count_software: {
-      label: "Softwares",
-      color: "hsl(var(--chart-2))",
-    },
-  } satisfies ChartConfig
-  
+
 
 
 export function VisualizacaoPrograma() {
@@ -231,33 +189,7 @@ export function VisualizacaoPrograma() {
 
   console.log(graduatePrograms)
 
-  const [totalProducao, setTotalProducao] = useState<Total[]>([]);
 
-  const urlTotalProgram = `${urlGeral}graduate_program_production?graduate_program_id=${type_search}&year=1900`;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(urlTotalProgram, {
-          mode: "cors",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Max-Age": "3600",
-            "Content-Type": "text/plain",
-          },
-        });
-        const data = await response.json();
-        if (data) {
-          setTotalProducao(data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData();
-  }, [urlTotalProgram]);
 
   const [isOn, setIsOn] = useState(true);
 
@@ -265,76 +197,9 @@ export function VisualizacaoPrograma() {
 
   /////////////////////////
 
-  
-  const [dados, setDados] = useState<Research[]>([]);
-  const [year, setYear] = useState(new Date().getFullYear()-4);
-
-  const currentYear = new Date().getFullYear();
-  const years: number[] = [];
-  for (let i = currentYear; i > currentYear - 30; i--) {
-      years.push(i);
-  }
-
-
-  let urlDados = `${urlGeral}ResearcherData/DadosGerais?year=${year}&graduate_program_id=${type_search}`
-
-  useEffect(() => {
-    const fetchData = async () => {
-        try {
-     
-          const response = await fetch(urlDados, {
-            mode: "cors",
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Methods": "GET",
-              "Access-Control-Allow-Headers": "Content-Type",
-              "Access-Control-Max-Age": "3600",
-              "Content-Type": "text/plain",
-            },
-          });
-          const data = await response.json();
-          if (data) {
-            setDados(data);
-    
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      fetchData();
-    }, [urlDados]);
-
-   
-
-
-  const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>('producao_bibliografica')
-
-  const total = useMemo(
-    () => ({
-      producao_bibliografica: dados.reduce(
-        (acc, curr) => acc + curr.count_article + curr.count_book + curr.count_book_chapter,
-        0
-      ),
-      producao_tecnica: dados.reduce((acc, curr) => acc + curr.count_patent + curr.count_software + curr.count_brand, 0),
-    }),
-    [dados]
-  );
-  
-
   /////////
  
-  
-    const [visibleChart, setVisibleChart] = useState(0);
-    const chartKeys = ['count_article', 'count_patent', 'count_guidance_in_progress'];
-  
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setVisibleChart((prev) => (prev + 1) % chartKeys.length);
-      }, 5000);
-  
-      return () => clearInterval(interval);
-    }, [chartKeys.length]);
-  
+
 
     ///
     const qualisColor = {
@@ -343,85 +208,14 @@ export function VisualizacaoPrograma() {
     };
   
 
-    //palavars
-const [words, setWords] = useState<PalavrasChaves[]>([]);
-let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=${type_search}&researcher_id=`
-
-  useEffect(() => {
-    const fetchData = async () => {
- 
-      try {
-        const response = await fetch(urlPalavrasChaves, {
-          mode: 'cors',
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Max-Age': '3600',
-            'Content-Type': 'text/plain'
-          }
-        });
-        const data = await response.json();
-        if (data) {
-          setWords(data);
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
    
-      }
-    };
-    fetchData();
-  }, []);
-
-  const options = {
-    chart: {
-      backgroundColor: 'transparent',
-      height: '300px',
-      display: 'flex',
-      position: 'relative'
-    },
-    credits: {
-      enabled: false
-    },
-    exporting: {
-      enabled: false, // Remove a opção de menu para baixar o gráfico
-    },
-    series: [
-      {
-        type: 'wordcloud',
-        data: words.map((word) => ({
-          name: word.term,
-          weight: word.among,
-        })),
-
-        style: {
-          fontFamily: 'Ubuntu, sans-serif',
-        },
-      },
-    ],
-    title: {
-      text: '',
-    },
-    plotOptions: {
-      wordcloud: {
-        borderRadius: 3,
-        borderWidth: "1px",
-        borderColor: 'blue',
-        BackgroundColor: 'red',
-        colors: ['#9CBCCE', '#284B5D', '#709CB6'],
-
-      },
-    },
-  };
-
   
   const has_visualizar_indicadores_pos_graduacao = permission.some(
     (perm) => perm.permission === 'visualizar_indicadores_pos_graduacao'
   );
 
   const [tab, setTab] = useState('all')
-  const [tab2, setTab2] = useState('all')
+ 
 
   useEffect(() => {
     if(!has_visualizar_indicadores_pos_graduacao) {
@@ -437,111 +231,6 @@ const has_editar_informacoes_programa = permission.some(
 );
 
 const graduate_program_id = graduatePrograms && graduatePrograms[0] ? graduatePrograms[0].graduate_program_id : null;
-
-//pesos prod
-
-const [a1, seta1] = useState('');
-const [a2, seta2] = useState('');
-const [a3, seta3] = useState('');
-const [a4, seta4] = useState('');
-const [b1, setb1] = useState('');
-const [b2, setb2] = useState('');
-const [b3, setb3] = useState('');
-const [b4, setb4] = useState('');
-const [c, setc] = useState('');
-const [sq, setsq] = useState('');
-
-const [livro, setLivro] = useState('');
-const [capLivro, setCapLivro] = useState('');
-
-const [t1, setT1] = useState('');
-const [t2, setT2] = useState('');
-const [t3, setT3] = useState('');
-const [t4, setT4] = useState('');
-const [t5, setT5] = useState('');
-
-const [software, setSoftware] = useState('');
-const [patenteCondecida, setPatenteConcedida] = useState('');
-const [patenteNaoConcedida, setPatenteNaoConcedida] = useState('');
-const [relTec, setRelTec] = useState('');
-
-const [pesosProducao, setPesosProducao] = useState<PesosProducao>({
-    a1: a1,
-    a2: a2,
-    a3: a3,
-    a4: a4,
-    b1: b1,
-    b2: b2,
-    b3: b3,
-    b4: b4,
-    c: c,
-    sq: sq,
-    f1: t1,
-    f2: t2,
-    f3: t3,
-    f4: t4,
-    f5: t5,
-    livro: livro,
-    cap_livro: capLivro,
-    software: software,
-    patent_granted: patenteCondecida,
-    patent_not_granted: patenteNaoConcedida,
-    report: relTec,
-    book: livro,
-  book_chapter: capLivro
-  })
-
-
-  const urlGet = urlGeralAdm + `indprod/query?institution_id=083a16f0-cccf-47d2-a676-d10b8931f66b`;
-
-  console.log(urlGet)
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const response = await fetch(urlGet, {
-        mode: "cors",
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET",
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Max-Age": "3600",
-          "Content-Type": "text/plain",
-        },
-      });
-      const data = await response.json();
-      if (data.length != 0) {
-        const newData = data[0] // Assumindo que data é um array e tem apenas um elemento
-        seta1(newData.a1);
-        seta2(newData.a2);
-        seta3(newData.a3);
-        seta4(newData.a4);
-        setb1(newData.b1);
-        setb2(newData.b2);
-        setb3(newData.b3);
-        setb4(newData.b4);
-        setc(newData.c);
-        setsq(newData.sq);
-        setT1(newData.f1);
-        setT2(newData.f2);
-        setT3(newData.f3);
-        setT4(newData.f4);
-        setT5(newData.f5);
-        setLivro(newData.book);
-        setCapLivro(newData.book_chapter);
-        setSoftware(newData.software);
-        setPatenteConcedida(newData.patent_granted);
-        setPatenteNaoConcedida(newData.patent_not_granted);
-        setRelTec(newData.report);
-
-        setPesosProducao(newData)
-
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  fetchData();
-}, []);
 
 const { theme } = useTheme()
 
@@ -626,63 +315,11 @@ useEffect(() => {
                  <SheetTrigger>
    <Button onClick={() => setExpand(false)} className="h-8" size={'sm'}><LayoutDashboard size={16}/>Painel administrativo</Button>
    </SheetTrigger>
- 
+                
    <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 ${expand ? ('min-w-[80vw]'):('min-w-[50vw]')}`}>
-   <Tabs defaultValue={tab2} value={tab2} className="h-full" >
-   <DialogHeader className="h-[50px] justify-center px-4 border-b">
- 
-  <div className="flex items-center gap-3">
-  <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-          <Button className="h-8 w-8" onClick={() => setExpand(!expand)} variant={'outline'} size={'icon'}>{expand ? (<ArrowRightFromLine size={16}/>):(<ArrowLeftFromLine size={16}/>)}</Button>
-          </TooltipTrigger>
-          <TooltipContent> {expand ? ('Recolher'):('Expandir')}</TooltipContent>
-        </Tooltip>
-        </TooltipProvider>
- 
-       
-        <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-          <Button className="h-8 w-8" variant={'outline'}  onClick={() => setIsOpenSheet(false)} size={'icon'}><X size={16}/></Button>
-          </TooltipTrigger>
-          <TooltipContent> Fechar</TooltipContent>
-        </Tooltip>
-        </TooltipProvider>
-           <div className="flex items-center flex-1  w-full justify-between">
- 
-           <div className="flex items-center gap-3 ml-auto"> 
-           <TabsList >
-              <TabsTrigger value="all" onClick={() => setTab2('all')} className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
-                <TabsTrigger value="unread" onClick={() => setTab2('unread')} className="text-zinc-600 dark:text-zinc-200">Docentes</TabsTrigger>
-                <TabsTrigger value="movimentacao-bens" onClick={() => setTab2('movimentacao-bens')} className="text-zinc-600 dark:text-zinc-200">Discentes</TabsTrigger>
-                </TabsList>
-           
-            
-           </div>
-           </div>
-  </div>
-          
- 
-         
-         </DialogHeader>
-
-         <ScrollArea className="relative whitespace-nowrap h-[calc(100vh-50px)] ">
-         <TabsContent value="all" className="">
-             
-               </TabsContent>
-
-               <TabsContent value="unread" className="">
-               <DocentesGraduate graduate_program_id={graduate_program_id || ''}/>
-               </TabsContent>
-
-               <TabsContent value="movimentacao-bens" className="">
-               <DiscentesGraduate graduate_program_id={graduate_program_id || ''}/>
-               </TabsContent>
-         </ScrollArea>
- </Tabs>
-         </SheetContent>
+                <PainelAdminGraduate graduate_program_id={props.graduate_program_id}/>
+    </SheetContent>
+  
                  </Sheet>
                )}
           
@@ -696,21 +333,12 @@ useEffect(() => {
             <div className="md:p-8 p-4 py-0 md:py-0 mt-2">
                  
         
-        <h1 className=" max-w-[700px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
+        <div>
         {graduatePrograms.map((props) => (
-          <>{props.name}</>
+          <HomepageProgram program={props}/>
         ))}
-        </h1>
+        </div>
       
-        {graduatePrograms.map((props) => (
-                  <div className="flex flex-wrap gap-4 ">
-            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{props.type}</div>
-          <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><MapPinIcon size={12}/>{props.city}</div>
-          {props.rating != '' && (
-                        <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12}/>{props.rating}</div>
-                      )}
-            </div>
-              ))}
                   </div>
 
                   {itemsSelecionados.length > 0 ? (
@@ -821,332 +449,6 @@ useEffect(() => {
                          </div>
                       ))}
 
-                      <Alert className="grid gap-3 lg:grid-cols-4 grid-cols-2 mb-4 md:mb-8">
-                      <div>
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                               <div>
-                               <CardTitle className="text-sm font-medium">
-                                 Total de artigos
-                               </CardTitle>
-                           
-                               
-                               </div>
-           
-                               <Quotes className="h-4 w-4 text-muted-foreground" />
-                              
-                             </CardHeader>
-           
-                            <CardContent>
-                            <span className="text-lg font-bold leading-none sm:text-3xl">
-                            {totalProducao.map((props) => (<>{props.article}</>))}
-                           </span>
-                            </CardContent>
-                      </div>
-                      <div>
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                               <div>
-                               <CardTitle className="text-sm font-medium">
-                                 Total de livros
-                               </CardTitle>
-                              
-                               
-                               </div>
-           
-                               <Book className="h-4 w-4 text-muted-foreground" />
-                              
-                             </CardHeader>
-           
-                            <CardContent>
-                            <span className="text-lg font-bold leading-none sm:text-3xl">
-                            {totalProducao.map((props) => (<>{props.book}</>))}
-                           </span>
-                            </CardContent>
-                      </div>
-                       <div>
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                               <div>
-                               <CardTitle className="text-sm font-medium">
-                                 Total de capítulos
-                               </CardTitle>
-                             
-                               
-                               </div>
-　　 　 　
-                               <Books className="h-4 w-4 text-muted-foreground" />
-                              
-                             </CardHeader>
-　　 　 　
-
-                            <CardContent>
-                            <span className="text-lg font-bold leading-none sm:text-3xl">
-                            {totalProducao.map((props) => (<>{props.book_chapter}</>))}
-                           </span>
-                            </CardContent>
-                      </div>
-　　　 　
-                      <div>
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                               <div>
-                               <CardTitle className="text-sm font-medium">
-                                 Total de patentes
-                               </CardTitle>
-                              
-                               </div>
-　　 　 　
-
-                               <Copyright className="h-4 w-4 text-muted-foreground" />
-                              
-                             </CardHeader>
-　　 　 　
-
-                            <CardContent>
-                            <span className="text-lg font-bold leading-none sm:text-3xl">
-                            {totalProducao.map((props) => (<>{props.patent}</>))}
-                           </span>
-                            </CardContent>
-　　　 　
-                      </div>
-　　　 　
-　　　　　　　　　　
-
-　　　　　　　　　　
-
-                     </Alert>
-
-
-                     <div className="flex flex-col md:gap-8 gap-4">
-                  <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-                    <div className="h-full gap-8 grid">
-                    <Alert className="p-0 ">
-                    <CardHeader className="flex p-10 flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                    Índice de produção de artigos
-                    </CardTitle>
-                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
-                   
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                    <p>Fonte: Plataforma Lattes</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-
-                  <CardContent className="px-2 sm:p-6">
-                <GraficoIndiceProdBibli articles={dados} pesosProducao={pesosProducao} />
-                </CardContent>
-
-                    </Alert>
-
-                   
-                    </div>
-
-                 
-
-                    <Alert className="lg:col-span-2 h-[450px] p-0 ">
-                    <CardHeader className="flex p-0 flex-col items-stretch space-y-0 border-b dark:border-b-neutral-800  sm:flex-row">
-        <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-        <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                      Produção geral
-                    </CardTitle>
-                    <CardDescription>Dados desde o ano {year}</CardDescription>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                   <Select defaultValue={String(year)} value={String(year)} onValueChange={(value) => setYear(Number(value))}>
-                            <SelectTrigger className="w-[100px]">
-                                <SelectValue placeholder="" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {years.map((year) => (
-                                    <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Essas informações não representam a produção total da Escola desde a sua fundação, é um recorte a partir de {year}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   </div>
-                   
-                  </CardHeader>
-        </div>
-        <div className="flex">
-          {["producao_bibliografica", "producao_tecnica"].map((key) => {
-            const chart = key as keyof typeof chartConfig
-            return (
-              <button
-                key={chart}
-                data-active={activeChart === chart}
-                className={`relative flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 dark:border-l-neutral-800 sm:px-8 sm:py-6 ${activeChart === chart && ('bg-neutral-100 dark:bg-neutral-800')} ${activeChart ===  'producao_tecnica' && ('rounded-tr-md')}`}
-                onClick={() => setActiveChart(chart)}
-              >
-                <span className="text-xs text-muted-foreground">
-                {chartConfig[chart].label}
-                </span>
-                <span className="text-lg font-bold leading-none sm:text-3xl">
-                  {total[key as keyof typeof total].toLocaleString()}
-                </span>
-              </button>
-            )
-          })}
-        </div>
-      </CardHeader>
-
-      <CardContent className="px-2 sm:p-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[300px] w-full"
-        >
-  <BarChart accessibilityLayer data={dados} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
-  <CartesianGrid vertical={false}  horizontal={false}/>
-  <ChartLegend content={<ChartLegendContent />} />
-  
-  <XAxis
-              dataKey="year"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            
-            />
-
-<ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dashed" />}
-            />
-
-{activeChart == 'producao_bibliografica' && (
-  <>
-  <Bar dataKey="count_article" fill="#5F82ED" radius={4} >
-  <LabelList
-                position="top"
-                offset={12}
-                className="fill-foreground"
-                fontSize={12}
-              />
-
-
-  </Bar>
-<Bar dataKey="count_book" fill="#792F4C" radius={4} >
-<LabelList
-                position="top"
-                offset={12}
-                className="fill-foreground"
-                fontSize={12}
-              />
-</Bar>
-<Bar dataKey="count_book_chapter" fill="#DBAFD0" radius={4} >
-<LabelList
-                position="top"
-                offset={12}
-                className="fill-foreground"
-                fontSize={12}
-              />
-  </Bar></>
-)}
-
-{activeChart == 'producao_tecnica' && (
-  <>
-  <Bar dataKey="count_patent" fill="#66B4D0" radius={4} >
-  <LabelList
-                position="top"
-                offset={12}
-                className="fill-foreground"
-                fontSize={12}
-              />
-  </Bar>
-<Bar dataKey="count_brand" fill="#1B1464" radius={4} >
-<LabelList
-                position="top"
-                offset={12}
-                className="fill-foreground"
-                fontSize={12}
-              />
-</Bar>
-<Bar dataKey="count_software" fill="#096670" radius={4} >
-<LabelList
-                position="top"
-                offset={12}
-                className="fill-foreground"
-                fontSize={12}
-              />
-              </Bar></>
-)}
-
-  </BarChart>
-          </ChartContainer>
-        </CardContent>
-                    </Alert>
-                  </div>
-
-                  <div className="grid  gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-
-                    <Alert className="lg:col-span-2">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                    Artigos qualificados
-                    </CardTitle>
-                    <CardDescription>Avaliação Qualis Sucupira </CardDescription>
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Fonte: Plataforma Lattes e Sucupira Qualis</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-
-                  <CardContent className="flex py-0 flex-1  items-center justify-center">
-                      <GraficoArtigosPorQualis dados={dados}/>
-                  </CardContent>
-
-                  
-                    </Alert>
-
-                    <Alert className=" h-full ">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                    Nuvem de palavras
-                    </CardTitle>
-                    <CardDescription>Termos mais presentes nos artigos</CardDescription>
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Fonte: Plataforma Lattes</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-                  <div id="nuveeeem" className="flex w-full justify-center items-center">
-              <HighchartsReact highcharts={Highcharts} options={options}  className={'h-full'} />
-              </div>
-                    </Alert>
-                  </div>
-                  </div>
-                      
                       </div>
 
                   )}

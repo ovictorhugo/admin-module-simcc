@@ -106,7 +106,7 @@ import { RelatorioTecnicoResearcherPopUp } from "../popup/relatorio-tecnico-rese
 import { SpeakerResearcherPopUp } from "../popup/speaker-researcher";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { BookOpenText, Boxes, Briefcase, Copy, FolderKanban, MoreHorizontal, Plus } from "lucide-react";
+import { BookOpenText, Boxes, Briefcase, Copy, FolderKanban, LoaderCircle, MoreHorizontal, Plus } from "lucide-react";
 
 import QRCode from "react-qr-code";
 
@@ -160,19 +160,22 @@ setItensSelecionadosPopUp(itemsSelecionados)
     }, [itemsSelecionados]);
 
     const [open, setOpen] = useState(false);  
-    const [variations, setVariations] = useState<string[]>([]);
+    const variations = useMemo(() => {
+      if (!name) return [];
+      return generateNameVariations(name);
+    }, [name]);
 
-    useMemo(() => {
-     setOpen(false)
-     setItensSelecionadosPopUp(itemsSelecionados)
-     
-     if(name != undefined) {
-      setVariations( generateNameVariations(name))
-     }
-          }, [isOpen]);
+    useEffect(() => {
+      if (!isOpen) {
+        setOpen(false);
+      }
+      setItensSelecionadosPopUp(itemsSelecionados);
+    }, [isOpen, itemsSelecionados]);
 
-    useMemo(() => {
+    useEffect(() => {
         const fetchData = async () => {
+            if (!isOpen) return; // Evita requisição quando modal está fechado
+            
             try {
               isLoading(true)
               const response = await fetch(urlTermPesquisadores, {
@@ -185,87 +188,88 @@ setItensSelecionadosPopUp(itemsSelecionados)
                   "Content-Type": "text/plain",
                 },
               });
-              
+                
               const data = await response.json();
               if (data) {
                 setResearcher(data);
-                isLoading(false)
               } 
-              if (data.length == 0 && isOpen) {
-                onClose()
-                toast("Pesquisador(a) ainda não cerregado na base", {
+              if (data.length === 0 && isOpen) {
+                onClose();
+                toast("Pesquisador(a) ainda não carregado na base", {
                   description: "Tente novamente mais tarde",
                   action: {
                     label: "Fechar",
                     onClick: () => console.log("Undo"),
                   },
                 });
-              } 
-
-            } catch (err) {
-              console.log(err);
-            }
-          };
-          fetchData();
-        }, [urlTermPesquisadores]);
-
-        const [value, setValue] = useState('articles')
-
-       
-
-        useEffect(() => {
-          if(searchType == 'article' || searchType == 'name' || searchType == 'abstract' || searchType == 'area') {
-            setValue('article')
-          } else if(searchType == 'book') {
-            setValue('book')
-          } else if(searchType == 'patent') {
-            setValue('producao-tecnica')
-          } else if(searchType == 'patente') {
-            setValue('producao-tecnica')
-          } else if(searchType == 'speaker') {
-            setValue('speaker')
-          }
-        }, [isOpen]);
-
-        /////
-
-        //csv
-        const [jsonData, setJsonData] = useState<any[]>([]);
-
-        let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=${(researcher.map((props) => (props.id)))}&type=ARTICLE&qualis=&qualis=&year=1900`;
-
-
-        useEffect(() => {
-          const fetchData = async () => {
-       
-            try {
-              const response = await fetch(urlPublicacoesPorPesquisador, {
-                mode: 'cors',
-                headers: {
-                  'Access-Control-Allow-Origin': '*',
-                  'Access-Control-Allow-Methods': 'GET',
-                  'Access-Control-Allow-Headers': 'Content-Type',
-                  'Access-Control-Max-Age': '3600',
-                  'Content-Type': 'text/plain'
-                }
-              });
-              const data = await response.json();
-              if (data) {
-                setJsonData(data)
               }
             } catch (err) {
               console.log(err);
             } finally {
-       
+              isLoading(false);
             }
-          };
-          fetchData();
-        }, [urlPublicacoesPorPesquisador]);
+        };
+        fetchData();
+    }, [urlTermPesquisadores, isOpen]);
+
+    const [value, setValue] = useState('articles')
+
+    const currentTabValue = useMemo(() => {
+        if (searchType === 'article' || searchType === 'name' || searchType === 'abstract' || searchType === 'area') {
+            return 'article';
+        } else if (searchType === 'book') {
+            return 'book';
+        } else if (searchType === 'patent' || searchType === 'patente') {
+            return 'producao-tecnica';
+        } else if (searchType === 'speaker') {
+            return 'speaker';
+        }
+        return 'articles'; // valor padrão
+    }, [searchType]);
+
+    useEffect(() => {
+        if (!isOpen) return;
+        setValue(currentTabValue);
+    }, [isOpen, currentTabValue]);
+
+    /////
+
+    //csv
+    const [jsonData, setJsonData] = useState<any[]>([]);
+
+    let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=${(researcher.map((props) => (props.id)))}&type=ARTICLE&qualis=&qualis=&year=1900`;
+
+
+    useEffect(() => {
+      const fetchData = async () => {
+   
+        try {
+          const response = await fetch(urlPublicacoesPorPesquisador, {
+            mode: 'cors',
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET',
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Max-Age': '3600',
+              'Content-Type': 'text/plain'
+            }
+          });
+          const data = await response.json();
+          if (data) {
+            setJsonData(data)
+          }
+        } catch (err) {
+          console.log(err);
+        } finally {
+   
+        }
+      };
+      fetchData();
+    }, [urlPublicacoesPorPesquisador]);
 
   const hasBaremaAvaliacao = permission.some(
     (perm) => perm.permission === 'criar_barema_avaliacao'
   );
-
 
 const convertJsonToCsv = (json: any[]): string => {
   const items = json;
@@ -335,10 +339,10 @@ function generateNameVariations(name: string): string[] {
         <Drawer open={isModalOpen} onClose={onClose}    >
         <DrawerContent onInteractOutside={onClose} className={`max-h-[88%]`} >
           {researcher.length == 0 && (
-            <div className="flex justify-center items-center h-full">
+            <div className="flex justify-center items-center h-[80vh] ">
               <div className="w-full flex flex-col items-center justify-center h-full">
-                <p className="text-9xl text-[#719CB8] font-bold mb-16 animate-pulse">^_^</p>
-                <p className="font-medium text-lg max-w-[500px] text-center">Estamos pesquisando todas as informações do pesquisador no nosso banco de dados, aguarde.</p>
+                <div className="text-eng-blue mb-4 animate-pulse"><LoaderCircle size={108} className="animate-spin"/></div>
+                <p className="font-medium text-lg max-w-[500px] text-center">Estamos procurando todas as informações do(a) pesquisador(a) no nosso banco de dados, aguarde.</p>
                 </div>
             </div>
           )}
@@ -586,8 +590,7 @@ function generateNameVariations(name: string): string[] {
         {researcher.slice(0, 1).map(() => (
             <div className=" grid grid-cols-1 mb-6">
               <ScrollArea className="">
-  <TabsList className="mb-4 flex h-auto">
-
+  <TabsList className="mb-4 flex h-auto ?>">
     <TabsTrigger
       value="article"
       onClick={() => setValue('article')}
@@ -644,7 +647,6 @@ function generateNameVariations(name: string): string[] {
       <FolderKanban size={16} className="" />
       Projetos de pesquisa
     </TabsTrigger>
-
 
     <TabsTrigger
       value="texto-revista"

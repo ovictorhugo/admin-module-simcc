@@ -1,5 +1,5 @@
 
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { UserContext } from "../../context/context";
 import bg_graduate from '../../assets/bg_home.png'
 
@@ -116,6 +116,7 @@ import { useModalResult } from "../hooks/use-modal-result";
 import { Button } from "../ui/button";
 import { useModal } from "../hooks/use-modal-store";
 import { TodosPesquisadores } from "./categorias/researchers-home/todos-pesquisadores";
+import { HeroParallax } from "../ui/hero-parallax";
 
 
 interface Bolsistas {
@@ -528,9 +529,8 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
 
 
   return (
-    <>
-      {isModalOpen && (
-        <div className=" items-center w-full flex flex-col   ">
+  
+        <div className=" items-center  flex flex-col   ">
 
          
 
@@ -1056,21 +1056,27 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
 </CardContent>
                     </Alert>
                   </div>
-                  <ArtigosRecentes/>
 
-                  <Instrucoes/>
-                  <Newsletter/>
-
-              
-
-                
-                   <FooterHome/>
                 
           </div>
 
+       
+
+
+<div className=" w-full md:px-8 md:gap-8 gap-4 flex flex-col px-4">
+
+
+
+<Newsletter/>
+
+
+
+
+<FooterHome/>
+</div>
+
          
         </div>
-      )}
-    </>
+     
   );
 }

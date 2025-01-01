@@ -314,15 +314,26 @@ export function PesoProducoes() {
 
             </div>
 
-            <div className="flex gap-8">
+            <div className="flex gap-4 my-8">
 
-              <div className="bg-[#719CB8] rounded-md flex items-center justify-center w-10 h-10">1</div>
+              <div className="bg-eng-blue text-white rounded-md flex items-center justify-center w-10 h-10">1</div>
               <div>
                 <p className="text-lg font-medium">Primeiro passo</p>
                 <p className="text-gray-500">Selecione a área do programa de acordo com a classificação do CAPES</p>
               </div>
 
             </div>
+
+
+            <div className="flex gap-4 my-8">
+
+<div className="bg-eng-blue text-white rounded-md flex items-center justify-center w-10 h-10">2</div>
+<div>
+  <p className="text-lg font-medium">Segundo passo</p>
+  <p className="text-gray-500">Modifique os valores dos pesos de produção de acordo com a área</p>
+</div>
+
+</div>
 
             <div>
               
@@ -333,7 +344,7 @@ export function PesoProducoes() {
           
 
           <div className="w-full flex">
-                       <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] dark:bg-[#719CB8]whitespace-nowrap"></div>
+                       <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-eng-blue dark:bg-eng-blue whitespace-nowrap"></div>
 
                        <Alert  className="rounded-l-none ">
 
@@ -381,7 +392,7 @@ export function PesoProducoes() {
 
 
           <div className="w-full flex">
-                       <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] dark:bg-[#719CB8] whitespace-nowrap"></div>
+                       <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-eng-blue dark:bg-eng-blue whitespace-nowrap"></div>
 
                        <Alert  className="rounded-l-none ">
 
@@ -430,7 +441,7 @@ export function PesoProducoes() {
           
 
           <div className="w-full flex ">
-                       <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] dark:bg-[#719CB8] whitespace-nowrap"></div>
+                       <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-eng-blue dark:bg-eng-blue whitespace-nowrap"></div>
 
                        <Alert  className="rounded-l-none ">
 
@@ -562,6 +573,16 @@ export function PesoProducoes() {
 
                  
                        </div>
+
+                       <div className="flex gap-4 my-8">
+
+<div className="bg-eng-blue text-white rounded-md flex items-center justify-center w-10 h-10">3</div>
+<div>
+  <p className="text-lg font-medium">Terceiro passo</p>
+  <p className="text-gray-500">Selecione a área do programa de acordo com a classificação do CAPES</p>
+</div>
+
+</div>
 
 
         <Dialog open={isModalOpen} onOpenChange={onClose}> 

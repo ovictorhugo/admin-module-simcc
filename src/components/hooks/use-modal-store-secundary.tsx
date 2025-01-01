@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { useModal } from "./use-modal-store";
 
-export type ModalType = 'articles-modal' | 'cookies' | 'edit-article'
+export type ModalType = 'articles-modal' | 'cookies' | 'edit-article' | 'image-article' | 'project-modal'
 
 interface ModalData {
   id?: string,
@@ -76,6 +76,10 @@ interface ModalData {
   production?:Production[]
   foment?:Forment[]
   components?:Components[]
+  apiUrl?: string;
+  query?: string;
+  data?: any;
+  onUpdate?: () => void;
 }
 
 interface Components {
@@ -101,6 +105,7 @@ interface ModalStoreSecundary {
   onOpen: (type: ModalType, data?:ModalData) => void;
   onClose: () => void;
   data: ModalData;
+  onUpdate: (newData: Partial<ModalData>) => void;
 }
 
 export const useModalSecundary = create<ModalStoreSecundary>((set: any) => ({
@@ -113,5 +118,8 @@ export const useModalSecundary = create<ModalStoreSecundary>((set: any) => ({
     
     set({ isOpen: true, type, data: newData });
   },
-  onClose: () => set({ type: null, isOpen: false })
+  onClose: () => set({ type: null, isOpen: false }),
+  onUpdate: (newData) => set((state: ModalStoreSecundary) => ({ 
+    data: { ...state.data, ...newData } 
+  })),
 }));

@@ -1,4 +1,4 @@
-import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, FolderKanban, OctagonAlert, TrendingUp } from "lucide-react";
+import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, FolderKanban, OctagonAlert, Star, TrendingUp } from "lucide-react";
 import {  useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
 
@@ -24,7 +24,7 @@ import { useContext } from "react";
 import { UserContext } from "../../context/context";
 import QRCode from "react-qr-code";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import {  BracketsCurly, Buildings,  File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
+import {  BracketsCurly, Buildings,  File, FileCsv, Files, Quotes, Rows, ShareNetwork, SquaresFour, Stamp, Student, Ticket, X } from "phosphor-react";
 import { NuvemPalavras } from "../popup/nuvem-palavras";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { TotalViewResearcher } from "../popup/total-view-researcher";
@@ -49,6 +49,9 @@ import jsPDF from "jspdf";
 import { ResearcherIndicators } from "./researcher-indicators";
 import { AlertDescription, AlertTitle } from "../ui/alert";
 import { ResearchProject } from "../popup/research-project";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
+import { RelevanceProduction } from "../popup/relevance-production";
 
 type Research = {
   among: number,
@@ -491,6 +494,14 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
       (perm) => perm.permission === 'criar_barema_avaliacao'
     );
 
+
+    const [typeVisu, setTypeVisu] = useState('block');
+
+
+    const items = Array.from({ length: 12 }, (_, index) => (
+      <Skeleton key={index} className="w-full rounded-md h-[300px]" />
+    ));
+
     return(
         <html className="w-full">
        
@@ -876,6 +887,63 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
 
 </div></div>
             )}
+
+
+
+            <div>
+            <Accordion defaultValue="item-1" type="single" collapsible>
+              <AccordionItem value="item-1">
+              <div className="flex mb-2">
+              <HeaderResultTypeHome title="Produções relevantes" icon={<Star size={24} className="text-gray-400" />}>
+                <div className="flex gap-3 mr-3">
+                <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                  <Rows size={16} className="whitespace-nowrap" />
+                </Button>
+                <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'}  size={'icon'}>
+                  <SquaresFour size={16} className="whitespace-nowrap" />
+                </Button>
+                </div>
+              </HeaderResultTypeHome>
+              <AccordionTrigger>
+  
+              </AccordionTrigger>
+              </div>
+              <AccordionContent>
+                {typeVisu === 'block' ? (
+                  loading ? (
+                    <ResponsiveMasonry
+                      columnsCountBreakPoints={{
+                        350: 2,
+                        750: 3,
+                        900: 4,
+                        1200:  6,
+                        1500: 6,
+                        1700: 7
+                      }}
+                    >
+                      <Masonry gutter="16px">
+                        {items.map((item, index) => (
+                          <div key={index}>{item}</div>
+                        ))}
+                      </Masonry>
+                    </ResponsiveMasonry>
+                  ) : (
+                    researcher.slice(0, 1).map((user) => (
+                      <RelevanceProduction name={user.id}/>
+                ))
+
+                  )
+                ) : (
+                  loading ? (
+                    <Skeleton className="w-full rounded-md h-[400px]" />
+                  ) : (
+                  <div></div>
+                  )
+                )}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+            </div>
   
   <div className="flex gap-6 xl:flex-row flex-col-reverse">
   <div className="w-full flex-1">

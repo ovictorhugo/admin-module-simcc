@@ -3,7 +3,8 @@ import {  useState } from "react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { Button } from "../../../ui/button";
 import { Plus } from "phosphor-react";
-import { BookItemGeral } from "./book-item";
+import { BookItem } from "../../../popup/Livro";
+
 
 
 type Articles = {
@@ -36,7 +37,7 @@ export function BlockItemGeral(propsGeral:Articles) {
 {propsGeral.articles.slice(0, count).map((props: any) => {
 
         return (
-            <BookItemGeral
+            <BookItem
             id={props.id}
             title={props.title}
             year={props.year}

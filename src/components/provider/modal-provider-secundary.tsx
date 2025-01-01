@@ -8,6 +8,7 @@ import { ArticlesModal } from "../modals/articles-modal";
 import { useModalSecundary } from "../hooks/use-modal-store-secundary";
 import { CookiesModal } from "../modals/cookies";
 import { EditArticle } from "../modals/edit-article";
+import { ProjectModal } from "../modals/project-modal";
 
 
 const ModalContentSecundary = () => {
@@ -20,6 +21,8 @@ const ModalContentSecundary = () => {
           return <CookiesModal/>
         case 'edit-article':
           return <EditArticle/>
+        case 'project-modal':
+          return <ProjectModal/>
     default:
       return null;
   }

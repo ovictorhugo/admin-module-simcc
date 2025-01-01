@@ -26,6 +26,8 @@ import {
 } from "../components/ui/dialog"
 import { Link, useLocation } from "react-router-dom";
 import { useModalSecundary } from "../components/hooks/use-modal-store-secundary";
+import { SidebarInset, SidebarProvider } from "../components/ui/sidebar";
+import { AppSidebar } from "../components/app-sidebar";
 
 interface MailProps {
  
@@ -224,96 +226,29 @@ const links3 = [
     return (
     <div>
       
-        <TooltipProvider delayDuration={0}>
+      <SidebarProvider className="p-4 rounded-md">
 
-       
+      <AppSidebar />
 
-<ResizablePanelGroup
-
-        direction="horizontal"
-        onLayout={() => defaultLayout}
-        className="h-full  items-stretch"
-      >
-
-<ResizablePanel
-          defaultSize={defaultLayout[0]}
-          collapsedSize={navCollapsedSize}
-          collapsible={true}
-          minSize={15}
-          maxSize={20}
-          onCollapse={() => { // Função sem parâmetros
-            setIsCollapsed(true);
-          }}
-          onExpand={() => { // Função para expandir também sem parâmetros
-            setIsCollapsed(false);
-          }}
-          className={cn('flex flex-col justify-between', isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out ")}
-          >
-  
-  <div>
-  <div className={cn("flex h-[50px] gap-1 items-center justify-center border-b border-b-neutral-200 dark:border-b-neutral-800", isCollapsed ? 'h-[50px]': 'px-2')}>
-  <AccountSwitcher isCollapsed={isCollapsed}  />
-
-  {!isCollapsed && (
-                <Button 
-                  onClick={() => {
-                    setIsCollapsed(true)
-                  }} 
-                  variant="ghost" 
-                  size="icon"
-                >
-                  <PanelLeftDashed className="h-4 w-4" />
-                  <span className="sr-only">Recolher Menu</span>
-                </Button>
-              )}
-            </div>
-  
-          
-          <NavigationSidebar
-            isCollapsed={isCollapsed}
-            links={links}
-          />
-
-          <div className="w-full h-[0.5px] bg-neutral-200 dark:bg-neutral-800"></div>
-  
-
-          <NavigationSidebar
-            isCollapsed={isCollapsed}
-            links={links2}
-          />
-</div>
-
-<div className="flex flex-col ">
-          <NavigationSidebar
-            isCollapsed={isCollapsed}
-            links={links3}
-          />
-
-          </div>
-          
-          </ResizablePanel>
-
-          <ResizableHandle withHandle />
-
-          <ResizablePanel defaultSize={defaultLayout[1]} minSize={30} className="h-screen">
-            <main className="flex-1  flex flex-col h-full">
+          <SidebarInset>
+            <main className="">
             {/* Assuming Header is another component */}
             <Header />
             
-            <div className="h-full overflow-y-auto overflow-x-hidden flex flex-1">
+            <div className="">
             {children}
             </div>
 
           <Footer/>
           </main>
 
-          </ResizablePanel>
+          </SidebarInset>
 
         
 
         <Toaster/>
-        </ResizablePanelGroup>
-      </TooltipProvider >
+  
+      </SidebarProvider >
 
 
       <Dialog open={isModalOpen} >

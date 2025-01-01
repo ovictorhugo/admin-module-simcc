@@ -26,12 +26,16 @@ interface Props {
 }
 
 export default function MapaResearcher(props:Props) {
-  const [cityData, setCityData] = useState(props.cityData);
+  const [cityData, setCityData] = useState<CityData[]>(props.cityData || []);
   const [selectedCity, setSelectedCity] = useState<CityData | null>(null);
   const mapRef = useRef(null);
 
+  if (!import.meta.env.VITE_PUBLIC_MAPBOX_TOKEN) {
+    return <div>Mapbox token não encontrado</div>;
+  }
+
   return (
-    <div onClick={() => setSelectedCity(null)} className="h-[500px] rounded-2xl mb-8">
+    <div className="relative h-[350px] w-full rounded-md mb-8" onClick={() => setSelectedCity(null)}>
       <Map
         ref={mapRef}
         initialViewState={{
@@ -39,11 +43,16 @@ export default function MapaResearcher(props:Props) {
           longitude: defaultCenter.longitude,
           zoom: defaultZoom,
         }}
+        style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}
         mapStyle="mapbox://styles/mapbox/streets-v11"
-        mapboxAccessToken={process.env.VITE_PUBLIC_MAPBOX_TOKEN}
-        className="w-full h-full rounded-2xl">
-
-        {cityData.map((city) => (
+        mapboxAccessToken={import.meta.env.VITE_PUBLIC_MAPBOX_TOKEN}
+        reuseMaps={true}
+        attributionControl={true}
+        cursor="pointer"
+      
+        interactive={true}
+        renderWorldCopies={false}>
+        {Array.isArray(cityData) && cityData.map((city) => (
           <Marker
             key={city.nome}
             latitude={city.latitude}

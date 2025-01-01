@@ -67,6 +67,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { Unauthorized } from './components/errors/Unauthorized';
 import { Error404 } from './components/errors/404';
 import { TermosUso } from './pages/TermosUso';
+import { AboutPage } from './pages/About';
 
 
 
@@ -239,7 +240,7 @@ useEffect(() => {
 
        
         <Route path='/termos-uso' element={<TermosUso/>}/>
-          
+        <Route path='/sobre' element={<AboutPage/>}/>
         <Route
         path='/ufmg/'
         element={loggedIn == false ? <Authentication/> :  <Navigate to='/' />}

@@ -221,12 +221,12 @@ export function DocentesPrograma() {
                 <div className="mb-4 md:mb-8 w-full">
   <ResponsiveMasonry
              columnsCountBreakPoints={{
-                 350: 1,
-                 750: 2,
-                 900: 3,
-                 1200:  3,
-                 1500: 4,
-                 1700: 5
+              350: 2,
+              750: 3,
+              900: 4,
+              1200:  6,
+              1500: 6,
+              1700: 7
              }}
          >
          
@@ -244,12 +244,12 @@ export function DocentesPrograma() {
                            <div className="mb-4 md:mb-8">
        <ResponsiveMasonry
     columnsCountBreakPoints={{
-        350: 1,
-        750: 2,
-        900: 3,
-        1200:  3,
-        1500: 4,
-        1700: 5
+      350: 2,
+      750: 3,
+      900: 4,
+      1200:  6,
+      1500: 6,
+      1700: 7
     }}
 >
 

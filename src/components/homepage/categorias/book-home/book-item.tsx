@@ -32,7 +32,9 @@ name?:string
   event_name?: string
    
     participation?: string
- 
+    researcher?:string
+    has_image?:boolean
+    relevance?:boolean
 }
 
 
@@ -132,7 +134,7 @@ const {itemsSelecionados} = useContext(UserContext)
                     </div>
                 
 
-                <Alert className="rounded-l-none flex flex-col justify-between">
+                <Alert className="rounded-l-none flex flex-col justify-between p-0">
                     <div>
                         <div>
                           {props.publishing_company != undefined && (
