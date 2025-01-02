@@ -226,16 +226,16 @@ const links3 = [
     return (
     <div>
       
-      <SidebarProvider className="p-4 rounded-md">
+      <SidebarProvider className="  bg-sidebar   ">
 
       <AppSidebar />
 
-          <SidebarInset>
-            <main className="">
+          <SidebarInset className="bg-sidebar ">
+          <main className="flex-1  flex flex-col h-full ">
             {/* Assuming Header is another component */}
             <Header />
             
-            <div className="">
+            <div className="h-full ">
             {children}
             </div>
 

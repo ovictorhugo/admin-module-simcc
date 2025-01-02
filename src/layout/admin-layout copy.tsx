@@ -16,8 +16,6 @@ import { useLocation } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { ApacheViewDashboard } from "../components/dashboard/apache-view-dashboard";
 import { useModal } from "../components/hooks/use-modal-store";
-import { SidebarInset, SidebarProvider } from "../components/ui/sidebar";
-import { AppSidebarAdmin } from "../components/app-sidebar-admin";
 
 interface MailProps {
  
@@ -324,18 +322,65 @@ const links3 = [
     return (
     <div>
       
-      <SidebarProvider className="  bg-sidebar   ">
+        <TooltipProvider delayDuration={0}>
 
-<AppSidebarAdmin />
+        <ResizablePanelGroup
 
+        direction="horizontal"
+        onLayout={() => defaultLayout}
+        className="h-full  items-stretch"
+      >
+
+<ResizablePanel
+          defaultSize={defaultLayout[0]}
+          collapsedSize={navCollapsedSize}
+          collapsible={true}
+          minSize={15}
+          maxSize={20}
+          onCollapse={() => { // Função sem parâmetros
+            setIsCollapsed(true);
+          }}
+          onExpand={() => { // Função para expandir também sem parâmetros
+            setIsCollapsed(false);
+          }}
+          className={cn('flex flex-col justify-between', isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out ")}
+        >
+
+<div>
+<div className={cn("flex h-[50px] items-center justify-center border-b border-b-neutral-200 dark:border-b-neutral-800", isCollapsed ? 'h-[50px]': 'px-2')}>
+<AccountSwitcher isCollapsed={isCollapsed}  />
+          </div>
+
+          <NavigationSidebar
+            isCollapsed={isCollapsed}
+            links={links2}
+          />
+
+          <div className="w-full h-[0.5px] bg-neutral-200 dark:bg-neutral-800"></div>
   
 
-<SidebarInset className="bg-sidebar ">
-<main className="flex-1  flex flex-col h-full ">
+          <NavigationSidebar isCollapsed={isCollapsed} links={links} />
+</div>
+
+<div className="flex flex-col ">
+          <NavigationSidebar
+            isCollapsed={isCollapsed}
+            links={links3}
+          />
+
+       
+          </div>
+          
+          </ResizablePanel>
+
+          <ResizableHandle withHandle />
+
+          <ResizablePanel defaultSize={defaultLayout[1]} minSize={30} className="h-screen">
+            <main className="flex-1  flex flex-col h-full">
             {/* Assuming Header is another component */}
             <Header />
             
-            <div className="h-full ">
+            <div className="h-full overflow-y-auto flex flex-1">
             {children}
             </div>
               {(location.pathname == '/dashboard/administrativo' && has_atualizar_apache_hop) && (
@@ -367,13 +412,13 @@ const links3 = [
           
           </main>
 
-          </SidebarInset>
+          </ResizablePanel>
 
         
 
         <Toaster/>
-   
-      </SidebarProvider  >
+        </ResizablePanelGroup>
+      </TooltipProvider >
     </div>
     );
   };

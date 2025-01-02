@@ -42,7 +42,7 @@ import { AccountSwitcher } from "./navigation/user-list"
 import { DotsThree } from "phosphor-react"
 // This is sample data.
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebarAdmin({ ...props }: React.ComponentProps<typeof Sidebar>) {
  const {urlGeral, user, version} = useContext(UserContext)
  
   const data = {

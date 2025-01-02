@@ -66,7 +66,8 @@ export function Header() {
 const {onOpen} = useModal()
 
     return(
-      <header className={`h-[50px]  z-[3] flex justify-between border-b border-neutral-200 dark:border-neutral-800 px-4   items-center sticky top-0 `}>
+      <div className={'sticky top-0 z-[9] p-8 pb-0'}>
+        <header className={`h-[56px] bg-white  px-4  flex justify-between border  dark:bg-black rounded-lg border-neutral-200 dark:border-neutral-800    items-center  `}>
       <div className="  flex items-center h-12 gap-4">
       <div className="flex gap-3 items-center h-full justify-center ">
           {version ? (
@@ -198,23 +199,7 @@ const {onOpen} = useModal()
 </DropdownMenu>
 )}
     
-{loggedIn && (
-  
-  <TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger asChild>
-    <Button  onClick={() => onOpen('minha-area')}  variant={'ghost'} className="px-2" >
-    <CaretLeft size={16}/>
-    <Avatar className="cursor-pointer rounded-md  h-6 w-6">
-      <AvatarImage  className={'rounded-md h-6 w-6'} src={`${user?.photo_url}`} />
-      <AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
-  </Avatar>
-      </Button>
-    </TooltipTrigger>
-    <TooltipContent> Minha área</TooltipContent>
-  </Tooltip>
-  </TooltipProvider>
-)}
+
 
    
 
@@ -224,6 +209,7 @@ const {onOpen} = useModal()
             </div>
 
         </header>
+      </div>
     )
 }
 
