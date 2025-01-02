@@ -20,6 +20,7 @@ import { GraficoArticleHome } from "../homepage/categorias/articles-home/grafico
 import { FilterArticlePopUp } from "./filters-articles-popup";
 import { ArticleBlockPopUp } from "./articles-block-popup";
 import { TableReseracherArticlesPopup } from "./columns/table-articles-popup";
+import { useModalSecundary } from "../hooks/use-modal-store-secundary";
 
 // Cache compartilhado para requisições
 const requestCache = new Map();
@@ -65,6 +66,7 @@ type Props = {
 
 export function ArticlesResearcherPopUp(props:Props) {
     const {urlGeral, setItensSelecionadosPopUp, itemsSelecionadosPopUp, searchType, itemsSelecionados} = useContext(UserContext)
+    const { isOpen, type: typeModal, data: modalData } = useModalSecundary();
   
     const [loading, isLoading] = useState(false)
     const [distinct] = useState(false)
@@ -98,17 +100,9 @@ export function ArticlesResearcherPopUp(props:Props) {
         return searchType === 'article' 
             ? `${baseUrl}&terms=${resultadoFormatado}`
             : baseUrl;
-    }, [props.name, searchType, qualisString, yearString, resultadoFormatado]);
+    }, [urlGeral, props.name, searchType, qualisString, yearString, resultadoFormatado]);
 
     const fetchData = useCallback(async () => {
-        const cacheKey = urlTermPublicacoes;
-        
-        // Verifica cache
-        if (requestCache.has(cacheKey)) {
-            setPublicacoes(requestCache.get(cacheKey));
-            return;
-        }
-
         isLoading(true);
         try {
             const response = await fetch(urlTermPublicacoes, {
@@ -123,7 +117,6 @@ export function ArticlesResearcherPopUp(props:Props) {
             });
             const data = await response.json();
             if (data) {
-                requestCache.set(cacheKey, data);
                 setPublicacoes(data);
             }
         } catch (err) {
@@ -132,6 +125,18 @@ export function ArticlesResearcherPopUp(props:Props) {
             isLoading(false);
         }
     }, [urlTermPublicacoes]);
+
+    useEffect(() => {
+        if (!isOpen && typeModal === "edit-article" && modalData?.id) {
+            setPublicacoes(prevPublicacoes => 
+                prevPublicacoes.map(pub => 
+                    pub.id === modalData.id 
+                        ? { ...pub, relevance: modalData.relevance, has_image: modalData.has_image }
+                        : pub
+                )
+            );
+        }
+    }, [isOpen, typeModal, modalData]);
 
     useEffect(() => {
         let mounted = true;
@@ -170,22 +175,9 @@ export function ArticlesResearcherPopUp(props:Props) {
         []
     );
 
-    const fetchArticles = useCallback(async () => {
-        isLoading(true);
-        try {
-            const response = await fetch(`${urlGeral}bibliographic_production_researcher?researcher_id=${props.name}&type=ARTICLE`);
-            const data = await response.json();
-            setPublicacoes(data);
-        } catch (error) {
-            console.error('Error fetching articles:', error);
-        } finally {
-            isLoading(false);
-        }
-    }, [urlGeral, props.name]);
-
     const handleRefresh = useCallback(() => {
-        fetchArticles();
-    }, [fetchArticles]);
+        fetchData();
+    }, [fetchData]);
 
     return(
         <>
@@ -316,6 +308,7 @@ em artigos
                         <ArticleBlockPopUp
                         articles={publicacoes}
                         distinct={distinct}
+                        onRefresh={handleRefresh}
                         />
                       )
                     ):(

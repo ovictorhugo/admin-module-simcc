@@ -1,21 +1,29 @@
-import {  useState } from "react";
+import { useEffect, useState } from "react";
 
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { Button } from "../ui/button";
 import { Plus } from "phosphor-react";
 
 import { ArticleItem } from "../homepage/categorias/articles-home/article-item";
+import { useModalSecundary } from "../hooks/use-modal-store-secundary";
 
 type Articles = {
     articles: any[];
     distinct: boolean
+    onRefresh?: () => void;
 }
 
 export function ArticleBlockPopUp(props:Articles) {
    
     const [count, setCount] = useState(12)
+    const { isOpen, type: typeModal, onClose } = useModalSecundary();
 
- 
+    useEffect(() => {
+        // When the edit modal closes, trigger a refresh if provided
+        if (!isOpen && typeModal === "edit-article" && props.onRefresh) {
+          props.onRefresh();
+        }
+      }, [isOpen, typeModal, props.onRefresh]);
 
     return(
        <div>
@@ -33,6 +41,7 @@ export function ArticleBlockPopUp(props:Articles) {
 
         return (
             <ArticleItem
+            key={props.id}
             id={props.id}
                     doi={props.doi}
                     name_periodical={props.name_periodical}

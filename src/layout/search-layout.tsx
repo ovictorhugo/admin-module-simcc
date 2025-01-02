@@ -231,7 +231,7 @@ const links3 = [
       <AppSidebar />
 
           <SidebarInset className="bg-sidebar ">
-          <main className="flex-1  flex flex-col h-full ">
+          <main className="h-full flex flex-col flex-1 ">
             {/* Assuming Header is another component */}
             <Header />
             

@@ -929,7 +929,9 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
                     </ResponsiveMasonry>
                   ) : (
                     researcher.slice(0, 1).map((user) => (
-                      <RelevanceProduction name={user.id}/>
+                    <div className="grid grid-cols-1">
+                        <RelevanceProduction name={user.id}/>
+                    </div>
                 ))
 
                   )
