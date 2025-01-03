@@ -43,7 +43,7 @@ import { DotsThree } from "phosphor-react"
 // This is sample data.
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
- const {urlGeral, user, version} = useContext(UserContext)
+ const {urlGeral, user, version, loggedIn} = useContext(UserContext)
  
   const data = {
     user: {
@@ -164,17 +164,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
   
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar  collapsible='icon' className="border-0" {...props}>
       <SidebarHeader>
         <AccountSwitcher/>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent >
       <NavProjects projects={data.projects} />
         <NavMain items={data.navMain} />
       
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {loggedIn && (
+          <NavUser user={data.user} />
+        )}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

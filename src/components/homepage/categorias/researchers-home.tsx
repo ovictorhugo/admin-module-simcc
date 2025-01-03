@@ -594,7 +594,7 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
     };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="grid grid-cols-1">
       <div className="w-full flex gap-6 mb-8 justify-center">
         <div className="flex-1 flex flex-col">
           <div className="">

@@ -85,7 +85,7 @@ export function PatentHome() {
 
 
     return(
-        <div className=" ">
+        <div className="grid grid-cols-1 ">
           <HeaderResult/>
              <div className="my-8">
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >

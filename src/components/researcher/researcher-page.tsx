@@ -503,7 +503,7 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
     ));
 
     return(
-        <html className="w-full">
+        <html className="w-full grid grid-cols-1">
        
        
           <main className="flex flex-1 flex-col  p-4 md:p-8 ">

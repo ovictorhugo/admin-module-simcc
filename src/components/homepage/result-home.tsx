@@ -57,11 +57,10 @@ export function ResultHome() {
     }, [ typeResult]);
 
   return (
-    <>
-      {isModalOpen && (
-        <div className="h-full w-full flex flex-col">
+  
+        <div className="h-full w-full grid grid-cols-1">
           {(itemsSelecionados.length > 0 || (researcher == 'false'))  && (
-            <div>
+            <div className="top-0 sticky z-[3] bg-neutral-50 dark:bg-neutral-900">
               <div className={`w-full ${isOn ? 'px-8' : 'px-4'} border-b border-b-neutral-200 dark:border-b-neutral-800`}>
                 {isOn && (
                   <div className="w-full pt-4  flex justify-between items-center">
@@ -145,13 +144,13 @@ export function ResultHome() {
           )}
            
 
-          <ScrollArea className="h-full">
+          <div className="relative">
             {(itemsSelecionados.length > 0 || (researcher == 'false')) ? (
               <div className="px-8">
                 <ResultProvider />
               </div>
             ) : (
-              <div className="h-[calc(100vh-90px)] flex flex-col md:p-8 p-4 md:pt-4">
+              <div className="h-[calc(100vh-130px)] flex flex-col md:p-8 p-4 md:pt-4">
               <Search/>
 
               <div className="w-full flex flex-col items-center justify-center h-full">
@@ -163,9 +162,8 @@ export function ResultHome() {
              </div>
             )}
            
-          </ScrollArea>
+          </div>
         </div>
-      )}
-    </>
+     
   );
 }

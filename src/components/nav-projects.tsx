@@ -22,7 +22,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "./ui/sidebar"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 export function NavProjects({
   projects,
@@ -35,13 +35,15 @@ export function NavProjects({
 }) {
   const { isMobile } = useSidebar()
 
+  const location = useLocation()
+
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <SidebarGroup className="">
       <SidebarGroupLabel>Páginas</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
+            <SidebarMenuButton asChild className={`${item.url == location.pathname && ('bg-eng-blue hover:bg-eng-dark-blue hover:text-white transition-all text-white')}`}>
               <Link to={item.url}>
                 <item.icon />
                 <span>{item.name}</span>

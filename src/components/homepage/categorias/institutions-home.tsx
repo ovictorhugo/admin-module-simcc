@@ -76,7 +76,7 @@ export function InstitutionsHome() {
       ));
 
     return(
-        <div>
+        <div className="grid grid-cols-1">
         <HeaderResult/>
 
         <div className="my-8">

@@ -47,6 +47,7 @@ import { LogoIaposWhite } from "../svg/LogoIaposWhite";
 import { CaretLeft, Funnel, MagnifyingGlass } from "phosphor-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
+import { ModeToggle } from "../mode-toggle";
 
 export function Header() {
   const {loggedIn, role,  setItensSelecionados, version, searchType , maria, user, permission} = useContext(UserContext)
@@ -66,8 +67,8 @@ export function Header() {
 const {onOpen} = useModal()
 
     return(
-      <div className={'top-0 z-[9] p-2 '}>
-        <header className={`h-[48px] border rounded-lg px-4  flex justify-between   dark:bg-black     items-center  `}>
+      <div className={'top-0  absolut w-full '}>
+        <header className={`h-[40px] mb-2  px-4  flex justify-between   dark:bg-black     items-center  `}>
       <div className="  flex items-center h-12 gap-4">
       <div className="flex gap-3 items-center h-full justify-center ">
           {version ? (
@@ -100,7 +101,7 @@ const {onOpen} = useModal()
             </div>
 
 
-            <div className="flex gap-1 items-center justify-center">
+            <div className="flex gap-2 items-center justify-center">
 
             {isVisible && (
         <div onClick={() => onOpen('search')} className="flex  h-8 border border-neutral-200 dark:border-neutral-800 px-1 bg-white dark:bg-neutral-950 rounded-md items-center">
@@ -116,7 +117,7 @@ const {onOpen} = useModal()
 
 {!loggedIn && (
   <Link to={'/signIn'}>
-  <Button variant="ghost" size="sm" >
+  <Button variant='ghost' size="sm" className="h-8 px-2" >
                   <LogIn className="h-4 w-4" />
                   Fazer login
                 </Button></Link>
@@ -125,7 +126,7 @@ const {onOpen} = useModal()
 
 {!loggedIn && (
  <Link to={'/signUp'}>
- <Button  size="sm" >
+ <Button  size="sm"  className="h-8 px-2">
                  <UserPlus className="h-4 w-4" />
                  Criar conta
                </Button></Link>
@@ -134,34 +135,14 @@ const {onOpen} = useModal()
 
            {(loggedIn && permission.length > 0) && (
   <Link to={'/dashboard'}>
-  <Button variant="ghost" size="sm" className="h-10" >
+  <Button variant='outline' size="sm"  className="h-8 px-2" >
                   <LayoutDashboard className="h-4 w-4" />
                   Console
                 </Button></Link>
 )}
 
-             <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-
-      <Button variant="ghost" size="icon" >
-          <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Menu de ações rápidas</span>
-      </Button>
-      </DropdownMenuTrigger>
-
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem className="flex items-center gap-3" onClick={() => setTheme("light")}>
-        <Sun className="h-4 w-4" /> Modo Claro
-        </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-3" onClick={() => setTheme("dark")}>
-        <Moon className="h-4 w-4" />   Modo Escuro
-        </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-3" onClick={() => setTheme("system")}>
-        <Laptop className="h-4 w-4" />  Padrão do sistema
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+           
+      <ModeToggle/>
     
 {version && (
   

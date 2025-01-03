@@ -118,7 +118,7 @@ export function BookHome() {
 
 
     return(
-        <div className=" ">
+        <div className=" grid grid-cols-1">
           <HeaderResult/>
              <div className="my-8 grid gap-8 md:grid-cols-2">
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >

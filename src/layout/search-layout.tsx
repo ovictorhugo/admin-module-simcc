@@ -10,7 +10,12 @@ import bg_popup from '../assets/bg_welcome.png';
 import React, { useContext, useEffect, useState} from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { BarChartBig, Blocks, BookOpen, Bug, Building2, Download, GraduationCap, Home, Info, InfoIcon, Link2, List, PanelLeftDashed, SearchCheck, Sparkles, UserPlus, X } from "lucide-react";
+import { BarChartBig, Blocks, BookOpen, Bug, Building2, Download, GraduationCap, Home, Info, InfoIcon, LayoutDashboard, Link2, List, LogIn, PanelLeftDashed, SearchCheck, Sparkles, UserPlus, X } from "lucide-react";
+import logo_4 from '../assets/logo_4.png';
+import logo_4_white from '../assets/logo_4_white.png';
+
+import logo_5 from '../assets/logo_cimatec.png';
+import logo_5_white from '../assets/logo_cimatec_white.png';
 
 
 import { Footer } from "../components/footer/footer";
@@ -24,12 +29,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../components/ui/dialog"
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useModalSecundary } from "../components/hooks/use-modal-store-secundary";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
 import { Separator } from "../components/ui/separator";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "../components/ui/breadcrumb";
+import { ModeToggle } from "../components/mode-toggle";
+import { LogoConecteeWhite } from "../components/svg/LogoConecteeWhite";
+import { LogoConectee } from "../components/svg/LogoConectee";
+import { LogoIapos } from "../components/svg/LogoIapos";
+import { LogoIaposWhite } from "../components/svg/LogoIaposWhite";
+import { Badge } from "../components/ui/badge";
+import { useTheme } from "next-themes";
 
 interface MailProps {
  
@@ -46,7 +58,7 @@ export default function SearchLayout({
   children
 }: MailProps) {
   
-  const {isCollapsed, setIsCollapsed, version, permission, pesquisadoresSelecionados} = useContext(UserContext)
+  const {isCollapsed, loggedIn,setIsCollapsed, version, permission, pesquisadoresSelecionados, setItensSelecionados} = useContext(UserContext)
   
  
   const {onOpen, isOpen, type: typeModal } = useModal()
@@ -225,6 +237,15 @@ const links3 = [
   },
 ]
 
+const navigate = useNavigate()
+
+const handleClick = () => {
+  navigate('/')
+  setItensSelecionados([])
+}
+
+const { theme, setTheme } = useTheme()
+
 const router = useLocation();
   const pathSegments = router.pathname.split('/').filter(Boolean); // Divide a URL em segmentos e remove a primeira parte vazia
 
@@ -233,8 +254,9 @@ const router = useLocation();
 
     return (
     <div>
+     
       
-      <SidebarProvider className="  bg-sidebar   ">
+      <SidebarProvider className="    " defaultOpen={false} >
 
       <AppSidebar />
 
@@ -243,31 +265,47 @@ const router = useLocation();
             {/* Assuming Header is another component */}
          
 
-            <div className="flex p-8 pt-8 pb-0 items-center gap-2">
-      <SidebarTrigger className="-ml-1" />
+           <div className="flex p-8 pt-8 pb-0 items-center justify-between">
+           <div className="flex  pb-0 items-center gap-2">
+      <SidebarTrigger className="" />
       <Separator orientation="vertical" className="mr-2 h-4" />
+      
+
       <Breadcrumb>
-        <BreadcrumbList>
-          {breadcrumbItems.map((segment, index) => (
-            <React.Fragment key={index}>
-              <BreadcrumbItem className="hidden md:block capitalize">
-                {/* Se for o último item, não criamos um link, é apenas texto */}
-                {index === breadcrumbItems.length - 1 ? (
-                  <span>{segment}</span>
-                ) : (
-                  <BreadcrumbLink href={`/${pathSegments.slice(0, index + 1).join('/')}`} className="capitalize">
-                    {segment}
-                  </BreadcrumbLink>
-                )}
-              </BreadcrumbItem>
-              {index < breadcrumbItems.length - 1 && (
-                <BreadcrumbSeparator className="hidden md:block" />
-              )}
-            </React.Fragment>
-          ))}
-        </BreadcrumbList>
-      </Breadcrumb>
+  <BreadcrumbList>
+    {breadcrumbItems.map((segment, index) => {
+      const isLastItem = index === breadcrumbItems.length - 1;
+
+      // Construir o caminho parcial para cada segmento
+      const href = index === 0 
+        ? '/' // O primeiro item sempre vai para a página inicial
+        : `/${pathSegments.slice(0, index + 1).join('/')}`;
+
+      return (
+        <React.Fragment key={index}>
+          <BreadcrumbItem className="hidden md:block capitalize">
+            {/* Se for o último item, não criamos um link, é apenas texto */}
+            {isLastItem ? (
+              <span>{segment}</span>
+            ) : (
+              <BreadcrumbLink href={href} className="capitalize">
+                {segment}
+              </BreadcrumbLink>
+            )}
+          </BreadcrumbItem>
+          {!isLastItem && <BreadcrumbSeparator className="hidden md:block" />}
+        </React.Fragment>
+      );
+    })}
+  </BreadcrumbList>
+</Breadcrumb>
     </div>
+
+    <div className="flex items-center gap-2">
+   
+
+    </div>
+           </div>
             
             <div className="h-full ">
             {children}

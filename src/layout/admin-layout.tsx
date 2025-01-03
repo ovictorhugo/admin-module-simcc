@@ -18,6 +18,7 @@ import { ApacheViewDashboard } from "../components/dashboard/apache-view-dashboa
 import { useModal } from "../components/hooks/use-modal-store";
 import { SidebarInset, SidebarProvider } from "../components/ui/sidebar";
 import { AppSidebarAdmin } from "../components/app-sidebar-admin";
+import { SidebarRight } from "../components/sidebar-right";
 
 interface MailProps {
  
@@ -324,16 +325,16 @@ const links3 = [
     return (
     <div>
       
-      <SidebarProvider className="  bg-sidebar   ">
+      <SidebarProvider className="   ">
 
 <AppSidebarAdmin />
 
   
 
-<SidebarInset className="bg-sidebar ">
-<main className="flex-1  flex flex-col h-full ">
+<SidebarInset className="">
+<main className="h-full flex flex-col flex-1 ">
             {/* Assuming Header is another component */}
-            <Header />
+         
             
             <div className="h-full ">
             {children}
@@ -369,7 +370,7 @@ const links3 = [
 
           </SidebarInset>
 
-        
+      
 
         <Toaster/>
    
