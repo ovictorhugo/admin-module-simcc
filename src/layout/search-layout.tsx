@@ -7,7 +7,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../compone
 import { cn } from "../lib"
 import bg_popup from '../assets/bg_welcome.png';
 
-import { useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState} from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
 import { BarChartBig, Blocks, BookOpen, Bug, Building2, Download, GraduationCap, Home, Info, InfoIcon, Link2, List, PanelLeftDashed, SearchCheck, Sparkles, UserPlus, X } from "lucide-react";
@@ -24,10 +24,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../components/ui/dialog"
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useModalSecundary } from "../components/hooks/use-modal-store-secundary";
-import { SidebarInset, SidebarProvider } from "../components/ui/sidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
+import { Separator } from "../components/ui/separator";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "../components/ui/breadcrumb";
 
 interface MailProps {
  
@@ -223,6 +225,12 @@ const links3 = [
   },
 ]
 
+const router = useLocation();
+  const pathSegments = router.pathname.split('/').filter(Boolean); // Divide a URL em segmentos e remove a primeira parte vazia
+
+   // Se a URL estiver vazia, mostramos "Página Inicial"
+   const breadcrumbItems = pathSegments.length === 0 ? ['Página inicial'] : ['Página inicial', ...pathSegments];
+
     return (
     <div>
       
@@ -230,16 +238,42 @@ const links3 = [
 
       <AppSidebar />
 
-          <SidebarInset className="bg-sidebar ">
+          <SidebarInset className=" ">
           <main className="h-full flex flex-col flex-1 ">
             {/* Assuming Header is another component */}
-            <Header />
+         
+
+            <div className="flex p-8 pt-8 pb-0 items-center gap-2">
+      <SidebarTrigger className="-ml-1" />
+      <Separator orientation="vertical" className="mr-2 h-4" />
+      <Breadcrumb>
+        <BreadcrumbList>
+          {breadcrumbItems.map((segment, index) => (
+            <React.Fragment key={index}>
+              <BreadcrumbItem className="hidden md:block capitalize">
+                {/* Se for o último item, não criamos um link, é apenas texto */}
+                {index === breadcrumbItems.length - 1 ? (
+                  <span>{segment}</span>
+                ) : (
+                  <BreadcrumbLink href={`/${pathSegments.slice(0, index + 1).join('/')}`} className="capitalize">
+                    {segment}
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+              {index < breadcrumbItems.length - 1 && (
+                <BreadcrumbSeparator className="hidden md:block" />
+              )}
+            </React.Fragment>
+          ))}
+        </BreadcrumbList>
+      </Breadcrumb>
+    </div>
             
             <div className="h-full ">
             {children}
             </div>
 
-          <Footer/>
+         
           </main>
 
           </SidebarInset>

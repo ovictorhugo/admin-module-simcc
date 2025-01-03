@@ -66,8 +66,8 @@ export function Header() {
 const {onOpen} = useModal()
 
     return(
-      <div className={'sticky top-0 z-[9] p-8 pb-0'}>
-        <header className={`h-[56px] bg-white  px-4  flex justify-between border  dark:bg-black rounded-lg border-neutral-200 dark:border-neutral-800    items-center  `}>
+      <div className={'top-0 z-[9] p-2 '}>
+        <header className={`h-[48px] border rounded-lg px-4  flex justify-between   dark:bg-black     items-center  `}>
       <div className="  flex items-center h-12 gap-4">
       <div className="flex gap-3 items-center h-full justify-center ">
           {version ? (
