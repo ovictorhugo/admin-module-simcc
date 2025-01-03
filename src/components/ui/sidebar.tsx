@@ -321,7 +321,7 @@ const SidebarInset = React.forwardRef<
     ref={ref}
     className={cn(
       "relative w-full flex flex-col bg-white border md:m-2 md:peer-data-[state=collapsed]:ml-2 md:ml-0 md:rounded-xl overflow-y-auto",
-      "h-[calc(100vh-16px)]", // Ajuste a altura para considerar a margem
+      "md:h-[calc(100vh-16px)]", // Ajuste a altura para considerar a margem
       className
     )}
     {...props}
