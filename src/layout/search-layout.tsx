@@ -256,7 +256,7 @@ const router = useLocation();
     <div>
      
       
-      <SidebarProvider className="    " defaultOpen={false} >
+      <SidebarProvider className="    " defaultOpen={true} open={isCollapsed} onOpenChange={() => setIsCollapsed((prev) => !prev)} >
 
       <AppSidebar />
 

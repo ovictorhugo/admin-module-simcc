@@ -17,7 +17,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "./ui/sidebar"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 export function NavMain({
   items,
@@ -34,6 +34,8 @@ export function NavMain({
     }[]
   }[]
 }) {
+
+  const location = useLocation()
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Plataforma</SidebarGroupLabel>
@@ -57,9 +59,9 @@ export function NavMain({
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
+                      <SidebarMenuSubButton asChild className={`${subItem.url == location.pathname && ('bg-eng-blue hover:bg-eng-dark-blue hover:text-white transition-all text-white')}`}>
                         <Link to={subItem.url}>
-                          <span className="flex items-center gap-1"> {subItem.icon && <subItem.icon className="h-4" />} {subItem.title}</span>
+                          <span className="flex z-[99] items-center gap-1"> {subItem.icon && <subItem.icon className="h-4" />} {subItem.title}</span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>

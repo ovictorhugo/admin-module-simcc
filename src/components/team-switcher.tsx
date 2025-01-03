@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ChevronsUpDown, Plus } from "lucide-react"
+import { ChevronsUpDown, GalleryVerticalEnd, Plus } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -16,32 +16,56 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "./ui/sidebar"
+import { toast } from "sonner";
 import { useTheme } from "next-themes"
 import { UserContext } from "../context/context"
+import { SymbolEEWhite } from "./svg/SymbolEEWhite"
+import { Button } from "./ui/button";
 
 export function TeamSwitcher({
   teams,
 }: {
   teams: {
     name: string
-    logo: React.ElementType
+    id: string
     plan: string
   }[]
 }) {
   const { isMobile } = useSidebar()
   const [activeTeam, setActiveTeam] = React.useState(teams[0])
 
-    const {user,  setPermission, urlGeralAdm, setRole, role, loggedIn} = React.useContext(UserContext)
+    const {user,   setPermission, urlGeralAdm, setRole, role, loggedIn} = React.useContext(UserContext)
     const { theme } = useTheme()
   
   
   
+    React.useEffect(() => {
+      // Obtém o role do localStorage
+      const storedRole = localStorage.getItem("role");
+      if (storedRole) {
+        const parsedRole = JSON.parse(storedRole);
+        const initialTeam = teams.find((team) => team.name === parsedRole);
+        if (initialTeam) {
+          setRole(initialTeam.name);
+        }
+      }
+    }, [teams]); // Executa novamente se a lista de teams mudar
   
   
   
-  const fetchDataPerm = async (role_id:string) => {
-    let urlPermission = urlGeralAdm + `s/permission?role_id=${role_id}`
+  const fetchDataPerm = async (role_id:any) => {
+    let urlPermission = urlGeralAdm + `s/permission?role_id=${role_id.id}`
        console.log(urlPermission)
+
+       if (role_id.id == '') {
+        setPermission([])
+        setRole('')
+        localStorage.removeItem('role');
+        localStorage.removeItem('permission');
+     
+       }
+
+   else {
     try {
       const response = await fetch(urlPermission , {
         mode: "cors",
@@ -55,13 +79,22 @@ export function TeamSwitcher({
       });
       const data = await response.json();
       if (data) {
+        console.log(data)
         setPermission(data)
+        setActiveTeam(role_id)
         localStorage.setItem('permission', JSON.stringify(data));
-     
+        toast("Você alternou as permissões", {
+          description: `Acessando como ${role_id.name}`,
+          action: {
+            label: "Fechar",
+            onClick: () => console.log("Fechar"),
+          },
+        });
       }
     } catch (err) {
       console.log(err);
     }
+   }
   };
   
 
@@ -74,14 +107,18 @@ export function TeamSwitcher({
               size="lg"
               className=" data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-eng-blue text-sidebar-primary-foreground">
-                <activeTeam.logo className="size-4" />
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-eng-dark-blue text-sidebar-primary-foreground">
+                <div className="h-4">
+                  <SymbolEEWhite />
+                </div>
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
-                  {activeTeam.name}
+                  {teams.find((team) => team.name === role)?.name || "Selecionar"}
                 </span>
-                <span className="truncate text-xs">{activeTeam.plan}</span>
+                <span className="truncate text-xs">
+                  {teams.find((team) => team.name === role)?.plan || ""}
+                </span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -95,26 +132,27 @@ export function TeamSwitcher({
             <DropdownMenuLabel className="text-xs text-slate-500 dark:text-slate-400">
               Cargos
             </DropdownMenuLabel>
-            {teams.map((team, index) => (
+            {teams.map((team) => (
               <DropdownMenuItem
                 key={team.name}
                 onClick={() => {
-                  setActiveTeam(team)
-                  fetchDataPerm(team.name)
+                  fetchDataPerm(team);
+                  localStorage.setItem("role", JSON.stringify(team.name));
+                  setRole(team.name);
                 }}
-                className="gap-2 p-2"
+                className={`gap-2 p-2 ${
+                  role === team.name ? "bg-neutral-50 dark:bg-neutral-700" : ""
+                }`}
               >
-                <div className="flex size-6 items-center justify-center rounded-sm border">
-                  <team.logo className="size-4 shrink-0" />
-                </div>
+                <Button className="w-6 h-6" variant={'outline'} size={'icon'}>
+                <GalleryVerticalEnd className="size-4 shrink-0" />
+                </Button>
                 {team.name}
-                <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
               </DropdownMenuItem>
             ))}
-          
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

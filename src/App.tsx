@@ -103,7 +103,7 @@ function App() {
   const [messagesMaria, setMessagesMaria] = useState<any[]>([]);
 const [idDocumentBarema, setIdDocumentBarema] = useState('')
 
-const [isCollapsed, setIsCollapsed] = useState(false)
+const [isCollapsed, setIsCollapsed] = useState(true)
 const [navCollapsedSize, setNavCollapsedSize] = useState(0)
 const [defaultLayout, setDefaultLayout] = useState([0,440,655])
 const [mode, setMode] = useState('')

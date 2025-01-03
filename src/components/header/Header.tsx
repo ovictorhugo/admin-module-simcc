@@ -86,7 +86,7 @@ const {onOpen} = useModal()
             <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_5_white):(logo_5)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
           )}
 
-{role != '' && (<Badge className="  " variant={'outline'} >{role}</Badge>)}
+{(role != '' && role != 'Visitante') && (<Badge className="  " variant={'outline'} >{role}</Badge>)}
             
             </div>
 
@@ -148,7 +148,7 @@ const {onOpen} = useModal()
   
   <DropdownMenu>
   <DropdownMenuTrigger asChild>
-  <Button variant="ghost" size="icon" >
+  <Button variant='outline' size="icon" className="h-8 w-8" >
             <Grip className="h-4 w-4" />
             <span className="sr-only">Menu de ações rápidas</span>
           </Button>

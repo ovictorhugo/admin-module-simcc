@@ -325,7 +325,7 @@ const links3 = [
     return (
     <div>
       
-      <SidebarProvider className="   ">
+    <SidebarProvider className="    " defaultOpen={true} open={isCollapsed} onOpenChange={() => setIsCollapsed((prev) => !prev)} >
 
 <AppSidebarAdmin />
 
