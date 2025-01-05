@@ -170,12 +170,12 @@ export function TimeLineResearcher(props:Research) {
 
     console.log(filteredDados)
     return(
-        <div className="w-full">
+        <div className="w-full" >
           <div className="">
          
                 <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-268px)] p-8 pt-0 ">
                
-                <div className=" flex flex-col  justify-center">
+                <div className=" flex flex-col  justify-center" id="content-to-pdf">
                 <div className={`flex gap-2   rounded-md `}>
                 <div className="flex items-center gap-3 h-fit">
                           <p className={`text-sm min-w-[63.5px] w-[63.5px]  font-medium h-8 items-center flex p-4   `}></p>

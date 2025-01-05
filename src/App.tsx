@@ -103,10 +103,23 @@ function App() {
   const [messagesMaria, setMessagesMaria] = useState<any[]>([]);
 const [idDocumentBarema, setIdDocumentBarema] = useState('')
 
-const [isCollapsed, setIsCollapsed] = useState(true)
+const storedIsCollapsed = localStorage.getItem("isCollapsed");
+const [isCollapsed, setIsCollapsed] = useState(
+  storedIsCollapsed ? JSON.parse(storedIsCollapsed) : true
+);
+
 const [navCollapsedSize, setNavCollapsedSize] = useState(0)
 const [defaultLayout, setDefaultLayout] = useState([0,440,655])
 const [mode, setMode] = useState('')
+
+useEffect(() => {
+  // Salva o estado de isCollapsed no localStorage sempre que ele mudar
+  localStorage.setItem("isCollapsed", JSON.stringify(isCollapsed));
+}, [isCollapsed]);
+
+const toggleCollapse = () => {
+  setIsCollapsed((prev) => !prev);
+};
 
 useEffect(() => {
  if(searchType == "") {

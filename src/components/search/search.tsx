@@ -18,6 +18,7 @@ interface Message {
 }
 
 import { useLocation, useNavigate, useNavigation } from "react-router-dom";
+import { Trash } from "lucide-react";
 const API_KEY = import.meta.env.VITE_API_KEY
 
 const systemMessage = { 
@@ -449,7 +450,19 @@ useEffect(() => {
                 
             </div>
 
-            <div className="w-fit">
+            <div className="w-fit flex gap-2">
+            {itemsSelecionados.length > 0 && (
+            <Button size={'icon'} variant={'ghost'} onClick={() => {
+              setItensSelecionados([])
+
+              if(posGrad) {
+                history('/pos-graduacao')
+              } else (
+                history('/resultados')
+              )
+             
+            }}><Trash size={16}/></Button>
+        )}
             <Button onClick={() => handlePesquisa()} variant="outline" className={`${searchType == 'article'  && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract'  && ('bg-yellow-500 dark:bg-yellow-500')} ${maria && ('bg-[#82AAC0]   dark:bg-[#82AAC0]  ')} ${searchType == 'speaker'  && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book'  && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent'  && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name'  && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area'  && ('bg-green-500 dark:bg-green-500')} ${searchType == ''  && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} size={'icon'}>
        <Funnel size={16} className="" /> 
        

@@ -328,10 +328,13 @@ const SidebarInset = React.forwardRef<
 >
   <Header />
   <div
-    className="flex-grow w-full border bg-neutral-50 md:h-[calc(100vh - 40px)] dark:bg-neutral-900 dark:border-neutral-800 md:rounded-xl overflow-y-auto"
+    className="flex-grow relative h-full w-full border bg-neutral-50 md:h-[calc(100vh - 40px)] dark:bg-neutral-900 dark:border-neutral-800 md:rounded-xl overflow-y-auto"
      // Substitua "40px" pela altura real do Header
-    {...props}
-  />
+   
+  >
+
+    <div className="w-full h-full relative grid grid-cols-1 flex-grow " {...props}/>
+    </div>
 </main>
   )
 })

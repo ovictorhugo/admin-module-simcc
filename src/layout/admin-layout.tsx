@@ -367,10 +367,10 @@ const links3 = [
               )}
           
           </main>
-
+          <SidebarRight/>
           </SidebarInset>
-
-      
+         
+ 
 
         <Toaster/>
    

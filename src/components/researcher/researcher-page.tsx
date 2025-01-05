@@ -1,9 +1,9 @@
-import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, FolderKanban, OctagonAlert, Star, TrendingUp } from "lucide-react";
+import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, Download, FolderKanban, OctagonAlert, Star, TrendingUp } from "lucide-react";
 import {  useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
 
 import html2canvas from 'html2canvas';
-
+import html2pdf from 'html2pdf.js';
   import {
 
     DrawerFooter,
@@ -88,7 +88,7 @@ type Research = {
   graduate_programs:GraduatePrograms[]
   departments:Departments[]
   research_groups:ResearchGroups[]
-
+  relevance_itens:number
   cargo:string
   clas:string
   classe:string
@@ -440,10 +440,10 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
     
       return (
         <>
-          <button onClick={handleDownload} disabled={!isReady}>
+          <Button onClick={handleDownload} disabled={!isReady}>
             Baixar PDF do Componente
-          </button>
-          <div id={`timeline-researcher-${user.id}`}>
+          </Button>
+          <div className="hidden" id={`timeline-researcher-${user.id}`}>
             <TimeLineResearcher
               among={user.among}
               articles={user.articles}
@@ -501,6 +501,34 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
     const items = Array.from({ length: 12 }, (_, index) => (
       <Skeleton key={index} className="w-full rounded-md h-[300px]" />
     ));
+
+    const handleDownload = () => {
+      const element = document.getElementById('content-to-pdf');
+      if (element) {
+        const options = {
+          filename: 'linha_tempo.pdf',
+          html2canvas: { 
+            scale: 2, // Melhora a qualidade da renderização do PDF
+            useCORS: true, // Para permitir que imagens externas sejam carregadas
+            logging: true // Ativa o log para depuração
+          },
+          jsPDF: { 
+            unit: 'mm', 
+            format: 'a4', // Define o tamanho da página
+            orientation: 'portrait' // Orientação retrato
+          },
+          pagebreak: { 
+            mode: ['avoid-all', 'css', 'legacy'] // Configuração para evitar cortes abruptos
+          }
+        };
+    
+        html2pdf()
+          .from(element)
+          .set(options)
+          .save();
+      }
+    };
+    
 
     return(
         <html className="w-full grid grid-cols-1">
@@ -570,6 +598,7 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
   <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 ${expand ? ('min-w-[80vw]'):('min-w-[50vw]')}`}>
   <DialogHeader className="h-[50px] justify-center px-4 border-b">
 
+ <div className="flex items-center gap-3 justify-between">
  <div className="flex items-center gap-3">
  <TooltipProvider>
        <Tooltip>
@@ -589,14 +618,15 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
          <TooltipContent> Fechar</TooltipContent>
        </Tooltip>
        </TooltipProvider>
-          <div className="flex items-center flex-1  w-full justify-between">
+ </div>
+          <div className="flex justify-end">
 
 
-          <div className="flex items-center gap-3 ml-auto"> 
+          <div className="flex items-center justify-end gap-3 ml-auto"> 
         
-          {researcher.slice(0, 1).map((user) => (
-            <DownloadButton user={user}/>
-      ))}
+         <Button onClick={handleDownload} className="ml-auto relative h-8 px-2">
+          <Download size={16} /> Baixar linha do tempo
+         </Button>
            
           </div>
           </div>
@@ -626,7 +656,7 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
       
   {researcher.slice(0, 1).map((user) => {
                 return(
-                  <div >
+                  <div  >
                     <TimeLineResearcher
                   among={user.among}
                     articles={user.articles}
@@ -832,8 +862,8 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
             </div>
         </div>
       ):(
-        <div className="   " >
-        <DrawerHeader className="p-0 ">
+        <div className="grid grid-cols-1   " >
+        <DrawerHeader className="p-0 grid grid-cols-1  ">
             {researcher.slice(0, 1).map((user) => {
                 return(
                    <div className="w-fit">
@@ -888,68 +918,77 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
 </div></div>
             )}
 
+{researcher.slice(0, 1).map((props) => {
+  if (props.relevance_itens !== 0 ) {
+    return (
+      <div>
+      <Accordion defaultValue="item-1" type="single" collapsible>
+        <AccordionItem value="item-1">
+        <div className="flex mb-2">
+        <HeaderResultTypeHome title="Produções relevantes" icon={<Star size={24} className="text-gray-400" />}>
+          <div className="flex gap-3 mr-3">
+          <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
+            <Rows size={16} className="whitespace-nowrap" />
+          </Button>
+          <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'}  size={'icon'}>
+            <SquaresFour size={16} className="whitespace-nowrap" />
+          </Button>
+          </div>
+        </HeaderResultTypeHome>
+        <AccordionTrigger>
 
-
-            <div>
-            <Accordion defaultValue="item-1" type="single" collapsible>
-              <AccordionItem value="item-1">
-              <div className="flex mb-2">
-              <HeaderResultTypeHome title="Produções relevantes" icon={<Star size={24} className="text-gray-400" />}>
-                <div className="flex gap-3 mr-3">
-                <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
-                  <Rows size={16} className="whitespace-nowrap" />
-                </Button>
-                <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'}  size={'icon'}>
-                  <SquaresFour size={16} className="whitespace-nowrap" />
-                </Button>
-                </div>
-              </HeaderResultTypeHome>
-              <AccordionTrigger>
-  
-              </AccordionTrigger>
+        </AccordionTrigger>
+        </div>
+        <AccordionContent>
+          {typeVisu === 'block' ? (
+            loading ? (
+              <ResponsiveMasonry
+                columnsCountBreakPoints={{
+                  350: 2,
+                  750: 3,
+                  900: 4,
+                  1200:  6,
+                  1500: 6,
+                  1700: 7
+                }}
+              >
+                <Masonry gutter="16px">
+                  {items.map((item, index) => (
+                    <div key={index}>{item}</div>
+                  ))}
+                </Masonry>
+              </ResponsiveMasonry>
+            ) : (
+              researcher.slice(0, 1).map((user) => (
+              <div className="grid grid-cols-1">
+                  <RelevanceProduction name={user.id}/>
               </div>
-              <AccordionContent>
-                {typeVisu === 'block' ? (
-                  loading ? (
-                    <ResponsiveMasonry
-                      columnsCountBreakPoints={{
-                        350: 2,
-                        750: 3,
-                        900: 4,
-                        1200:  6,
-                        1500: 6,
-                        1700: 7
-                      }}
-                    >
-                      <Masonry gutter="16px">
-                        {items.map((item, index) => (
-                          <div key={index}>{item}</div>
-                        ))}
-                      </Masonry>
-                    </ResponsiveMasonry>
-                  ) : (
-                    researcher.slice(0, 1).map((user) => (
-                    <div className="grid grid-cols-1">
-                        <RelevanceProduction name={user.id}/>
-                    </div>
-                ))
+          ))
 
-                  )
-                ) : (
-                  loading ? (
-                    <Skeleton className="w-full rounded-md h-[400px]" />
-                  ) : (
-                  <div></div>
-                  )
-                )}
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-            </div>
+            )
+          ) : (
+            loading ? (
+              <Skeleton className="w-full rounded-md h-[400px]" />
+            ) : (
+            <div></div>
+            )
+          )}
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+      </div>
+    );
+  }
+
+  // Retorna null caso a condição não seja atendida
+  return null;
+})}
+
+           
   
   <div className="flex gap-6 xl:flex-row flex-col-reverse">
-  <div className="w-full flex-1">
-        <Tabs defaultValue="articles" value={value} className="">
+  <div className="w-full flex-1 flex">
+        <Tabs defaultValue="articles" value={value} className="flex-1 flex flex-col ">
         {researcher.slice(0, 1).map(() => (
               <div className=" grid grid-cols-1 mb-6">
                 <ScrollArea className="">
@@ -1075,7 +1114,7 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
   </Tabs>
         </div>
   
-        <div className="xl:w-[350px]  w-full grid grid-cols-1"> 
+        <div className="xl:w-[350px] min-w-[350px]  w-full grid grid-cols-1"> 
           <ResponsiveMasonry
       columnsCountBreakPoints={{
           350: 1,

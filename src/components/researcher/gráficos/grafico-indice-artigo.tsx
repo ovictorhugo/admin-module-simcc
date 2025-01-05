@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Alert } from "../../ui/alert";
 import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
@@ -46,6 +45,7 @@ type PesosProducao = {
   livro: string;
   cap_livro: string;
   software: string;
+  
 };
 
 type Articles = {
@@ -93,8 +93,19 @@ export function GraficoIndiceArticle(props: Articles) {
       const counts: { [year: string]: { [qualis: string]: number } } = {};
 
       props.articles.forEach((publicacao) => {
-        const year = publicacao.year.toString();
-        const { A1, A2, A3, A4, B1, B2, B3, B4, C, SQ } = publicacao;
+        const year = publicacao.year?.toString() || "Unknown";
+        const {
+          A1 = 0,
+          A2 = 0,
+          A3 = 0,
+          A4 = 0,
+          B1 = 0,
+          B2 = 0,
+          B3 = 0,
+          B4 = 0,
+          C = 0,
+          SQ = 0,
+        } = publicacao;
         const qualisData = { A1, A2, A3, A4, B1, B2, B3, B4, C, SQ };
 
         if (!counts[year]) {
@@ -104,10 +115,8 @@ export function GraficoIndiceArticle(props: Articles) {
         Object.keys(qualisData).forEach((qualisKey) => {
           const weight = pesosNumericos[qualisKey];
           if (!isNaN(weight) && weight > 0) {
-            const value = qualisData[qualisKey as keyof typeof qualisData];
-            if (value !== 0) {
-              counts[year][qualisKey] = (counts[year][qualisKey] || 0) + (value * weight);
-            }
+            const value = qualisData[qualisKey as keyof typeof qualisData] || 0;
+            counts[year][qualisKey] = (counts[year][qualisKey] || 0) + value * weight;
           }
         });
       });
@@ -121,52 +130,48 @@ export function GraficoIndiceArticle(props: Articles) {
         };
       });
 
-      // Sort data by year
       data.sort((a, b) => a.year.localeCompare(b.year));
       setChartData(data);
     }
   }, [props.articles, props.pesosProducao]);
 
-  // Generate bars based on available qualis
   const availableQualis = Object.keys(chartConfig);
 
   return (
     <ChartContainer config={chartConfig} className="h-[260px] w-full">
-      <ResponsiveContainer>
-        <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
-          <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
-          <YAxis tickLine={false} tickMargin={10} axisLine={false} />
-          <CartesianGrid vertical={false} horizontal={false} />
-          <ChartLegend content={<ChartLegendContent />} />
-          <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-          {availableQualis.map((key) => (
-            chartData.some((d) => typeof d[key] === 'number' && typeof d[key] === 'number' && d[key] > 0) && (
-              <Bar
-                key={key}
+  <ResponsiveContainer>
+    <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
+      <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
+      <YAxis tickLine={false} tickMargin={10} axisLine={false} />
+      <CartesianGrid vertical={false} horizontal={false} />
+      <ChartLegend content={<ChartLegendContent />} />
+      <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+      {availableQualis.map((key, index) => {
+        // Renderiza apenas barras com valores > 0 no conjunto de dados
+        const hasData = chartData.some((d) => typeof d[key] === "number" && d[key] > 0);
+
+        if (!hasData) return null;
+
+        return (
+          <Bar key={key} dataKey={key} fill={chartConfig[key].color} stackId="a" radius={4}>
+            {index === availableQualis.length - 1 && (
+              // Adiciona LabelList apenas à última barra da pilha
+              <LabelList
                 dataKey={key}
-                fill={chartConfig[key].color}
-                stackId="a"
-                radius={4}
-              >
-                <LabelList
-                  position="top"
-                  formatter={(value, entry, index) => {
-                    // Only show label for the topmost non-zero value in each stack
-                    const dataPoint = chartData[index];
-                    const isTopBar = Object.keys(chartConfig)
-                      .slice(Object.keys(chartConfig).indexOf(key) + 1)
-                      .every((k) => !dataPoint[k]);
-                    return isTopBar && value ? value.toFixed(2) : "";
-                  }}
-                  offset={12}
-                  className="fill-foreground"
-                  fontSize={12}
-                />
-              </Bar>
-            )
-          ))}
-        </BarChart>
-      </ResponsiveContainer>
-    </ChartContainer>
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+                formatter={(value) => (value ? value.toFixed(2) : "")}
+              />
+            )}
+          </Bar>
+        );
+      })}
+    </BarChart>
+  </ResponsiveContainer>
+</ChartContainer>
+
+  
   );
 }

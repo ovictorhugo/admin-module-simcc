@@ -18,6 +18,28 @@ export function ArticleBlockPopUp(props:Articles) {
     const [count, setCount] = useState(12)
     const { isOpen, type: typeModal, onClose } = useModalSecundary();
 
+    const [columns, setColumns] = useState<number>(3); // Definindo o valor inicial de colunas
+
+    useEffect(() => {
+      const handleResize = () => {
+        const width = window.innerWidth;
+        let newColumns = 1; // Valor padrão
+        if (width >= 1700) newColumns = 4;
+        else if (width >= 1200) newColumns = 3;
+        else if (width >= 900) newColumns = 2;
+        else if (width >= 750) newColumns = 1;
+        else if (width >= 350) newColumns = 1;
+  
+        setColumns(newColumns);
+      };
+  
+      handleResize(); // Iniciar com a largura da janela
+      window.addEventListener("resize", handleResize); // Atualizar ao redimensionar
+  
+      return () => window.removeEventListener("resize", handleResize); // Limpeza ao desmontar
+    }, []);
+
+    
     useEffect(() => {
         // When the edit modal closes, trigger a refresh if provided
         if (!isOpen && typeModal === "edit-article" && props.onRefresh) {
@@ -36,7 +58,7 @@ export function ArticleBlockPopUp(props:Articles) {
         1700:4
     }}
 >
-                 <Masonry gutter="16px">
+                 <Masonry gutter="16px" columnsCount={columns}>
 {props.articles.slice(0, count).map((props: any) => {
 
         return (

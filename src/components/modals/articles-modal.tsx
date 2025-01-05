@@ -250,8 +250,8 @@ const toggleExpand = () => {
                       {((data.jif != "None" && data.jif != "") || data.citations_count != '' || data.issn != '' || data.doi != '') && (<h4 className="font-medium text-xl mb-4">Informações gerais</h4>)}
 
                       <div className="flex gap-3 flex-wrap">
-                      {data?.jcr_link && (
-                                <Link target="_blank" to={data.jcr_link} className=" border-neutral-200 border dark:border-neutral-800 py-2 px-4  rounded-md text-xs  flex gap-2 items-center">
+                      {data?.jif && (
+                                <Link target="_blank" to={data.jcr_link || ''} className=" border-neutral-200 border dark:border-neutral-800 py-2 px-4  rounded-md text-xs  flex gap-2 items-center">
                                 <LinkBreak size={16} /> JCR {data.jif}
                                 </Link>
                                 )}

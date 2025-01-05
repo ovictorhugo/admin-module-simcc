@@ -1,9 +1,6 @@
 import Map, { Marker, Popup } from 'react-map-gl';
-
 import 'mapbox-gl/dist/mapbox-gl.css';
-
-import { useState, useRef } from 'react';
-
+import { useState, useRef, useEffect } from 'react';
 
 const defaultCenter = {
   latitude: -14.235, // Centro aproximado do Brasil
@@ -11,7 +8,6 @@ const defaultCenter = {
 };
 const defaultZoom = 4;
 
-// Tipagem para os dados das cidades
 type CityData = {
   nome: string;
   latitude: number;
@@ -22,17 +18,21 @@ type CityData = {
 };
 
 interface Props {
-    cityData:CityData[]
+  cityData: CityData[];
 }
 
-export default function MapaResearcher(props:Props) {
-  const [cityData, setCityData] = useState<CityData[]>(props.cityData || []);
+export default function MapaResearcher(props: Props) {
   const [selectedCity, setSelectedCity] = useState<CityData | null>(null);
   const mapRef = useRef(null);
 
   if (!import.meta.env.VITE_PUBLIC_MAPBOX_TOKEN) {
     return <div>Mapbox token não encontrado</div>;
   }
+
+  useEffect(() => {
+    console.log(selectedCity)
+  }, [selectedCity]);
+  
 
   return (
     <div className="relative h-[350px] w-full rounded-md mb-8" onClick={() => setSelectedCity(null)}>
@@ -43,46 +43,68 @@ export default function MapaResearcher(props:Props) {
           longitude: defaultCenter.longitude,
           zoom: defaultZoom,
         }}
-        style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}
+        style={{  top: 0, bottom: 0, left: 0, right: 0 }}
         mapStyle="mapbox://styles/mapbox/streets-v11"
         mapboxAccessToken={import.meta.env.VITE_PUBLIC_MAPBOX_TOKEN}
         reuseMaps={true}
         attributionControl={true}
-        cursor="pointer"
-      
-        interactive={true}
+    
+        interactive={false}
         renderWorldCopies={false}>
-        {Array.isArray(cityData) && cityData.map((city) => (
-          <Marker
-            key={city.nome}
-            latitude={city.latitude}
-            longitude={city.longitude}
-            onClick={(e) => {
-              e.originalEvent.stopPropagation(); // Evitar conflitos no clique
-              setSelectedCity(city);
-            }}
-          >
-            <div className="relative flex justify-center items-center w-8 h-8 bg-blue-500 text-white rounded-full">
-              {city.pesquisadores}
-            </div>
-          </Marker>
-        ))}
+        {props.cityData.map((city) => {
+          const markerSize = Math.max(20, Math.log2(city.pesquisadores + 1) * 6); // Tamanho proporcional
 
-        {selectedCity && (
+          return (
+            <Marker
+              key={city.nome}
+              latitude={city.latitude}
+              longitude={city.longitude}
+              style={{
+                zIndex: selectedCity?.nome === city.nome ? 10 : 5, // Destaca o marcador ativo
+                cursor: 'pointer',
+              }}
+              onClick={(e) => {
+                e.originalEvent.stopPropagation(); // Evitar conflitos no clique
+                setSelectedCity(city);
+              
+              }}
+            >
+              <div
+                className="flex justify-center items-center bg-eng-blue/70 border-4 border-eng-blue text-white rounded-full"
+                style={{
+                  width: `${markerSize}px`,
+                  height: `${markerSize}px`,
+                  lineHeight: `${markerSize}px`,
+                  fontSize: `${markerSize / 4}px`,
+                }}
+                onClick={(e) => {
+               
+                  setSelectedCity(city);
+                 
+                }}
+              >
+                {city.pesquisadores}
+              </div>
+            </Marker>
+          );
+        })}
+
+        {selectedCity?.longitude != 0 && (
           <Popup
-            latitude={selectedCity.latitude}
-            longitude={selectedCity.longitude}
+            latitude={selectedCity?.latitude || 0}
+            longitude={selectedCity?.longitude || 0} 
             onClose={() => setSelectedCity(null)}
             closeButton={true}
             closeOnClick={false}
-            className="rounded-lg shadow-lg bg-white">
+            className="rounded-lg bg-white"
+          >
             <div className="p-4">
-              <h3 className="text-lg font-semibold mb-2">{selectedCity.nome}</h3>
+              <h3 className="text-lg font-semibold mb-2">{selectedCity?.nome}</h3>
               <div className="text-sm text-gray-600 mb-4">
-                Pesquisadores: {selectedCity.pesquisadores}
+                Pesquisadores: {selectedCity?.pesquisadores}
               </div>
               <div className="text-sm max-h-32 overflow-y-auto">
-                {selectedCity.professores.map((professor, index) => (
+                {selectedCity?.professores.map((professor, index) => (
                   <div key={index} className="p-2 border-b border-gray-200">
                     {professor}
                   </div>

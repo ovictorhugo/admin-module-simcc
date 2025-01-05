@@ -117,6 +117,7 @@ import { Button } from "../ui/button";
 import { useModal } from "../hooks/use-modal-store";
 import { TodosPesquisadores } from "./categorias/researchers-home/todos-pesquisadores";
 import { HeroParallax } from "../ui/hero-parallax";
+import { BannerHome } from "./components/banner";
 
 
 interface Bolsistas {
@@ -1065,7 +1066,7 @@ let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&r
 
 <div className=" w-full md:px-8 md:gap-8 gap-4 flex flex-col px-4">
 
-
+<BannerHome/>
 
 <Newsletter/>
 

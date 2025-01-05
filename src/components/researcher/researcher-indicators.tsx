@@ -11,6 +11,7 @@ import { GraficoIndiceBooksAndChapters } from "./gráficos/grafico-indice-livros
 import { PuzzlePiece } from "phosphor-react";
 import { GraficoIndiceProdTec } from "./gráficos/grafico-indice-tecnica";
 import { Skeleton } from "../ui/skeleton";
+import { TabelaQualisQuantidadeResarcher } from "./gráficos/tabela-qualis-quantidade-researcher";
 
 type Dados = {
     count_article:number
@@ -275,7 +276,7 @@ useEffect(() => {
    
    const [loading, isLoading] = useState(false)
    const [dados, setDados] = useState<Dados[]>([]);
-
+   console.log(urlDados)
    useEffect(() => {
     const fetchData = async () => {
         try {
@@ -430,12 +431,17 @@ console.log(urlDados)
             {loading? (
                <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
                 <Skeleton className="h-[400px] rounded-md lg:col-span-3"></Skeleton>
+                <Skeleton className="h-[500px] rounded-md lg:col-span-3"></Skeleton>
                 <Skeleton className="h-[400px] rounded-md "></Skeleton>
                 <Skeleton className="h-[400px] rounded-md lg:col-span-2"></Skeleton>
                </div>
             ): (
-              <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
-              <Alert className=" h-[400px] lg:col-span-3 ">
+             <div>
+
+              <div>
+                <h2 className="text-2xl font-medium mb-8">Artigos qualificados</h2>
+                <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
+                <Alert className=" h-[400px] lg:col-span-3 ">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <div>
                       <CardTitle className="text-sm font-medium">
@@ -460,11 +466,95 @@ console.log(urlDados)
                     </CardContent>
                       </Alert>
 
-              <Alert className=" h-[400px] ">
+                      <Alert className=" h-[400px] ">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <div>
                       <CardTitle className="text-sm font-medium">
-                      índice de produção técnica
+                      Quantidade de citações por ano
+                      </CardTitle>
+                      <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                      </div>
+
+                      <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                      <TooltipContent>
+                        <p>Fonte: Plataforma Lattes</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                     
+
+                    </CardHeader>
+                    <CardContent>
+                    <CardContent className="mt-4 p-0">
+                     
+                    </CardContent>
+                    </CardContent>
+                      </Alert>
+
+                      <Alert className=" h-full lg:col-span-2 ">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <div>
+                      <CardTitle className="text-sm font-medium">
+                     Quantidade de artigos por ano
+                      </CardTitle>
+                      <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                      </div>
+
+                      <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                      <TooltipContent>
+                        <p>Fonte: Plataforma Lattes</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                     
+
+                    </CardHeader>
+                    <CardContent className="mt-4">
+                     
+                    </CardContent>
+                      </Alert>
+
+                      <Alert className="  lg:col-span-3 ">
+
+<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+<div>
+<CardTitle className="text-sm font-medium">
+Tabela de quantidade de citações e atigos com qualis por ano
+</CardTitle>
+<CardDescription>Soma total do pesquisador</CardDescription>
+</div>
+
+<TooltipProvider>
+<Tooltip>
+<TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+<TooltipContent>
+  <p>Fonte: Plataforma Lattes</p>
+</TooltipContent>
+</Tooltip>
+</TooltipProvider>
+
+
+</CardHeader>
+<CardContent className="mt-4">
+  <TabelaQualisQuantidadeResarcher graduate_program_id={props.id} year={yearString}/>
+</CardContent>
+</Alert>
+
+                </div>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-medium my-8 ">Livros e capítulos de livros</h2>
+                <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
+                <Alert className=" h-[400px] ">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <div>
+                      <CardTitle className="text-sm font-medium">
+                      Índice de produção técnica
                       </CardTitle>
                       <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
                       </div>
@@ -491,7 +581,39 @@ console.log(urlDados)
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <div>
                       <CardTitle className="text-sm font-medium">
-                      índice de livros e capítulos
+                      Índice de livros e capítulos
+                      </CardTitle>
+                      <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                      </div>
+
+                      <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                      <TooltipContent>
+                        <p>Fonte: Plataforma Lattes</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                     
+
+                    </CardHeader>
+                    <CardContent className="mt-4">
+                    
+                    </CardContent>
+                      </Alert>
+                  </div>
+
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-medium my-8 ">Produção técnica</h2>
+                <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
+
+                      <Alert className=" h-full lg:col-span-2 ">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <div>
+                      <CardTitle className="text-sm font-medium">
+                      Índice de livros e capítulos
                       </CardTitle>
                       <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
                       </div>
@@ -512,9 +634,167 @@ console.log(urlDados)
                     </CardContent>
                       </Alert>
 
+                      <Alert className=" h-[400px] ">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <div>
+                      <CardTitle className="text-sm font-medium">
+                      Índice de produção técnica
+                      </CardTitle>
+                      <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                      </div>
+
+                      <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                      <TooltipContent>
+                        <p>Fonte: Plataforma Lattes</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                     
+
+                    </CardHeader>
+                    <CardContent>
+                    <CardContent className="mt-4 p-0">
+                     
+                    </CardContent>
+                    </CardContent>
+                      </Alert>
+                  </div>
+
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-medium my-8 ">Orientações</h2>
+                <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
+
+                      <Alert className=" h-full lg:col-span-3 ">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <div>
+                      <CardTitle className="text-sm font-medium">
+                      Índice de livros e capítulos
+                      </CardTitle>
+                      <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                      </div>
+
+                      <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                      <TooltipContent>
+                        <p>Fonte: Plataforma Lattes</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                     
+
+                    </CardHeader>
+                    <CardContent className="mt-4">
+                     
+                    </CardContent>
+                      </Alert>
+
+                   
+                  </div>
+
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-medium my-8 ">Outros gráficos</h2>
+                <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
+
+                      <Alert className=" h-full  ">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <div>
+                      <CardTitle className="text-sm font-medium">
+                      Índice de livros e capítulos
+                      </CardTitle>
+                      <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                      </div>
+
+                      <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                      <TooltipContent>
+                        <p>Fonte: Plataforma Lattes</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                     
+
+                    </CardHeader>
+                    <CardContent className="mt-4">
+                     
+                    </CardContent>
+                      </Alert>
+
+                      <Alert className=" h-full  ">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <div>
+                      <CardTitle className="text-sm font-medium">
+                      Índice de livros e capítulos
+                      </CardTitle>
+                      <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                      </div>
+
+                      <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                      <TooltipContent>
+                        <p>Fonte: Plataforma Lattes</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                     
+
+                    </CardHeader>
+                    <CardContent className="mt-4">
+                     
+                    </CardContent>
+                      </Alert>
+
+                      <Alert className=" h-full  ">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <div>
+                      <CardTitle className="text-sm font-medium">
+                      Índice de livros e capítulos
+                      </CardTitle>
+                      <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                      </div>
+
+                      <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                      <TooltipContent>
+                        <p>Fonte: Plataforma Lattes</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                     
+
+                    </CardHeader>
+                    <CardContent className="mt-4">
+                     
+                    </CardContent>
+                      </Alert>
+
+                   
+                  </div>
+
+              </div>
+
+              
+
+
+               <div >
+             
+                      
+
+
+
                      
 
               </div>
+             </div>
             )}
         </div>
     )

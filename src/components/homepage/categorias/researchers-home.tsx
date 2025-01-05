@@ -418,7 +418,7 @@ export function ResearchersHome() {
   const [cityData, setCityData] = useState<CityData[]>([]);
   const [typeVisu, setTypeVisu] = useState('block');
   const { itemsSelecionados,  urlGeral, searchType, simcc } = useContext(UserContext);
-  const { pesquisadoresSelecionados, idGraduateProgram } = useContext(UserContext);
+  const { version, pesquisadoresSelecionados, idGraduateProgram } = useContext(UserContext);
 
   useEffect(() => {
     localStorage.setItem('pesquisadoresSelecionados', JSON.stringify(pesquisadoresSelecionados));
@@ -477,52 +477,7 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
           setOriginalResearcher(data);
           setLoading(false);
 
-          // Process city data
-          const counts = {};
-          const cityProfessors = {};
-          const cityLattess1Ids = {};
-
-          const normalizedData = data.map((research) => ({
-            ...research,
-            city: normalizeCityName(research.city),
-          }));
-
-          normalizedData.forEach((research) => {
-            const city = research.city;
-            const codigoUf = municipios.find(
-              (municipio) => normalizeCityName(municipio.nome) === city
-            )?.codigo_uf;
-
-            if (codigoUf === 29) {
-              counts[city] = (counts[city] || 0) + 1;
-              if (!cityProfessors[city]) {
-                cityProfessors[city] = [];
-              }
-              cityProfessors[city].push(research.name);
-              if (!cityLattess1Ids[city]) {
-                cityLattess1Ids[city] = research.lattes_10_id;
-              }
-            }
-          });
-
-          const updatedCityData: CityData[] = [];
-          municipios.forEach((municipio) => {
-            const cityName = normalizeCityName(municipio.nome);
-            const pesquisadores = counts[cityName] || 0;
-
-            if (pesquisadores > 0 && municipio.codigo_uf === 29) {
-              updatedCityData.push({
-                nome: municipio.nome,
-                latitude: municipio.latitude,
-                longitude: municipio.longitude,
-                pesquisadores: pesquisadores,
-                professores: cityProfessors[cityName] || [],
-                lattes_10_id: cityLattess1Ids[cityName] || '',
-              });
-            }
-          });
-
-          setCityData(updatedCityData);
+         
         }
 
         // Check OpenAlex data only if no researchers found and OpenAlex is enabled
@@ -554,29 +509,44 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
     const processCityData = () => {
       const cityMap = new Map<string, CityData>();
       
-      researcher.forEach(r => {
+      // Cria um mapa para associar o nome normalizado da cidade aos dados do município
+      const municipioMap = new Map(
+        municipios.map((m) => [normalizeCityName(m.nome), m])
+      );
+  
+      researcher.forEach((r) => {
         if (r.city) {
-          if (!cityMap.has(r.city)) {
-            cityMap.set(r.city, {
+          const normalizedCity = normalizeCityName(r.city);
+          const municipio = municipioMap.get(normalizedCity);
+  
+          if (!municipio) {
+            console.warn(`Município não encontrado para a cidade: ${r.city}`);
+            return;
+          }
+  
+          if (!cityMap.has(normalizedCity)) {
+            cityMap.set(normalizedCity, {
               nome: r.city,
-              latitude: 0, // You'll need to add actual coordinates
-              longitude: 0, // You'll need to add actual coordinates
+              latitude: municipio.latitude,
+              longitude: municipio.longitude,
               pesquisadores: 1,
               professores: [r.name],
-              lattes_10_id: r.lattes_10_id
+              lattes_10_id: r.lattes_10_id,
             });
           } else {
-            const city = cityMap.get(r.city)!;
+            const city = cityMap.get(normalizedCity)!;
             city.pesquisadores += 1;
             city.professores.push(r.name);
           }
         }
       });
-      
+  
       setCityData(Array.from(cityMap.values()));
     };
-
+  
     processCityData();
+
+    console.log('cidades',cityData)
   }, [researcher]);
 
   const items = Array.from({ length: 12 }, (_, index) => (
@@ -588,10 +558,13 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
   const {theme} = useTheme()
 
   //mapa
-    const normalizeCityName = (cityName: string) => {
-      // Normaliza o nome da cidade (ex: "Ilhéus" -> "Ilheus")
-      return cityName.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    };
+  const normalizeCityName = (cityName: string) => {
+    return cityName
+        .normalize("NFD") // Remove acentos
+        .replace(/[\u0300-\u036f]/g, "") // Remove diacríticos
+        .toLowerCase(); // Converte para minúsculas
+};
+
 
   return (
     <div className="grid grid-cols-1">

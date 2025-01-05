@@ -1,4 +1,4 @@
-import { CalendarBlank, DotsThree, GearSix, LinkBreak, LinkSimple } from "phosphor-react";
+import { CalendarBlank, DotsThree, GearSix, LinkBreak, LinkSimple, Quotes } from "phosphor-react";
 import { Alert } from "../../../ui/alert";
 import { useContext } from "react";
 import { UserContext } from "../../../../context/context";
@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Button } from "../../../ui/button";
 import { Link } from "react-router-dom";
 import dt from '../../../../assets/destaque.png'
-import { Image, Maximize2, Pencil, Star, Trash} from "lucide-react";
+import { Image, Maximize2, Pencil, Quote, Star, Trash} from "lucide-react";
 import { useModalSecundary } from "../../../hooks/use-modal-store-secundary";
 import { Badge } from "../../../ui/badge";
 
@@ -328,6 +328,12 @@ export function ArticleItem(props: Articles) {
               <Link to={props.jcr_link} target="_blank" className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
                 <LinkBreak size={16} />JCR {props.jif}
               </Link>
+            )}
+
+{(props.citations_count != "") && (
+              <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
+                <Quotes size={16} />Citações {props.citations_count}
+              </div>
             )}
           </div>
 

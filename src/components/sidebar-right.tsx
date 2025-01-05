@@ -43,7 +43,7 @@ export function SidebarRight({
   return (
     <Sidebar
       collapsible='none'
-      className="sticky hidden w-[350px] lg:flex top-0 h-svh "
+      className="sticky hidden w-[48px] lg:flex top-0 h-svh "
       {...props}
     >
         <SidebarHeader className="h-16  border-sidebar-border">
@@ -51,7 +51,7 @@ export function SidebarRight({
       </SidebarHeader>
     
       <SidebarContent>
-      <DatePicker />
+     
    
       </SidebarContent>
       <SidebarFooter>
@@ -59,7 +59,7 @@ export function SidebarRight({
           <SidebarMenuItem>
             <SidebarMenuButton>
               <Plus />
-              <span>New Calendar</span>
+             
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

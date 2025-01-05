@@ -60,7 +60,7 @@ export function ResultHome() {
   
         <div className="h-full w-full grid grid-cols-1">
           {(itemsSelecionados.length > 0 || (researcher == 'false'))  && (
-            <div className="top-0 sticky z-[3] bg-neutral-50 dark:bg-neutral-900">
+            <div className="top-[68px]  sticky z-[2] supports-[backdrop-filter]:dark:bg-neutral-900/60 supports-[backdrop-filter]:bg-neutral-50/60 backdrop-blur">
               <div className={`w-full ${isOn ? 'px-8' : 'px-4'} border-b border-b-neutral-200 dark:border-b-neutral-800`}>
                 {isOn && (
                   <div className="w-full pt-4  flex justify-between items-center">
