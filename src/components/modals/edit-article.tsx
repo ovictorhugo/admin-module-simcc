@@ -151,7 +151,6 @@ export const EditArticle: React.FC = () => {
 
         setFileInfo(null); // Clear local file state
 
-
         onUpdate({ ...data, has_image: false });
         setShouldRefresh(true);
       } else {

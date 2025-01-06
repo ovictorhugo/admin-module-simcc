@@ -18,14 +18,11 @@ import {
   Home,
   Info,
   LayoutDashboard,
-  Link2,
-  List,
+
   Mail,
   Map,
   Pencil,
-  PieChart,
-  SearchCheck,
-  Settings2,
+
   SlidersHorizontal,
   Sparkles,
   SquareTerminal,

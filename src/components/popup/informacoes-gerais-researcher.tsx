@@ -177,7 +177,7 @@ export function InformacoesGeraisResearcher(props:Research) {
           
 
                <div className="flex gap-3 mb-6 items-center flex-wrap">
-               {props.h_index.length != 0 && (
+               {props.h_index?.length != 0 && (
                      <TooltipProvider>
      <Tooltip>
        <TooltipTrigger className="outline-none"><div  className=" py-2 px-4 border border-neutral-200 bg-white dark:bg-black dark:border-neutral-800  rounded-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice H: {props.h_index}</div></TooltipTrigger>
@@ -189,7 +189,7 @@ export function InformacoesGeraisResearcher(props:Research) {
    
                    )}
    
-   {props.cited_by_count.length != 0 && (
+   {props.cited_by_count?.length != 0 && (
          <TooltipProvider>
          <Tooltip>
            <TooltipTrigger className="outline-none"> <div  className=" border-neutral-200 border dark:border-neutral-800 bg-white dark:bg-black py-2 px-4  rounded-md text-xs  flex gap-2 items-center"><Quotes size={12} className="textwhite" /> Citações: {props.cited_by_count}</div></TooltipTrigger>
@@ -201,7 +201,7 @@ export function InformacoesGeraisResearcher(props:Research) {
                     
                    )}
    
-   {props.i10_index.length != 0 && (
+   {props.i10_index?.length != 0 && (
          <TooltipProvider>
          <Tooltip>
            <TooltipTrigger className="outline-none"> <div  className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><ChartLine size={12} className="textwhite" />índice i10: {props.i10_index}</div></TooltipTrigger>
@@ -213,14 +213,14 @@ export function InformacoesGeraisResearcher(props:Research) {
                     
                    )}
 
-{props.rt.length != 0 && (
+{props.rt?.length != 0 && (
         <div  className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><Clock size={12} className="textwhite" />Regime de trabalho: {props.rt}</div>
                     
                    )}
 
 
 
-{props.cargo.length != 0 && (
+{props.cargo?.length != 0 && (
         <div  className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><ChalkboardSimple size={12} className="textwhite" />{props.cargo}</div>
                     
                    )}
@@ -341,7 +341,7 @@ export function InformacoesGeraisResearcher(props:Research) {
       )}
 
 
-{props.research_groups.length != 0 && (
+{props.research_groups?.length != 0 && (
   <div>
     <div className="my-6 flex items-center justify-between">
     <div className="font-medium text-2xl ">
