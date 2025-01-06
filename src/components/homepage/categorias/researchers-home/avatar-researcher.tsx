@@ -7,6 +7,7 @@ import { User } from "phosphor-react";
 interface Props {
     raw_affiliation_string:string
     display_name:string
+    
 }
 
 export function AvatarResearcher(props:Props) {

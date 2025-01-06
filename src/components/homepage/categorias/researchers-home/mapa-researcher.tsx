@@ -49,7 +49,7 @@ export default function MapaResearcher(props: Props) {
         reuseMaps={true}
         attributionControl={true}
     
-        interactive={false}
+        interactive={true}
         renderWorldCopies={false}>
         {props.cityData.map((city) => {
           const markerSize = Math.max(20, Math.log2(city.pesquisadores + 1) * 6); // Tamanho proporcional
@@ -70,7 +70,7 @@ export default function MapaResearcher(props: Props) {
               }}
             >
               <div
-                className="flex justify-center items-center bg-eng-blue/70 border-4 border-eng-blue text-white rounded-full"
+                className="flex z-[-1] justify-center items-center bg-eng-blue/70 border-4 border-eng-blue text-white rounded-full"
                 style={{
                   width: `${markerSize}px`,
                   height: `${markerSize}px`,

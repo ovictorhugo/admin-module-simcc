@@ -372,7 +372,7 @@ const links3 = [
          
  
 
-        <Toaster/>
+        <Toaster />
    
       </SidebarProvider  >
     </div>
