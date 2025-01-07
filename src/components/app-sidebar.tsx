@@ -23,6 +23,7 @@ import {
   Sparkles,
   SquareTerminal,
   UserPlus,
+  Wrench,
 } from "lucide-react"
 
 import { NavMain } from "./nav-main"
@@ -39,7 +40,7 @@ import {
 import { UserContext } from "../context/context"
 import { useContext} from "react";
 import { AccountSwitcher } from "./navigation/user-list"
-import { DotsThree } from "phosphor-react"
+import { ChartLine, DotsThree } from "phosphor-react"
 // This is sample data.
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -54,9 +55,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
    
     navMain: [
       {
-        title: "Playground",
+        title: "Ferramentas",
         url: "/",
-        icon: SquareTerminal,
+        icon: Wrench,
         isActive: true,
         items: [
           {
@@ -127,10 +128,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: "/pesquisadores-selecionados",
             icon: UserPlus
           },
+          
           {
             title: "Relatar problema",
             url: "/relatar-problema",
             icon: Bug
+          },
+
+          {
+            title: "Índice do pesquisador",
+            url: "/indice-pesquisador",
+            icon: ChartLine
           },
           {
             title: "Informações",

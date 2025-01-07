@@ -45,7 +45,7 @@ type Research = {
     i10_index:string,
     scopus:string,
     openalex:string,
- 
+    classification:string
     subsidy:Bolsistas[]
     graduate_programs:GraduatePrograms[]
     departments:Departments[]
@@ -759,7 +759,7 @@ function generateNameVariations(name: string): string[] {
                   
                       return(
                         <InformacoesGeraisResearcher
-                        ind_prod={user.ind_prod}
+                        classification={user.classification}
                         h_index={user.h_index}
                         relevance_score={user.relevance_score}
                         works_count={user.works_count}

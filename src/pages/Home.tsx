@@ -57,6 +57,8 @@ export function Home() {
     onOpen('docentes-tecnicos')
 } else if(location.pathname == '/paines-dados-externos') {
     onOpen('paines-dados-externos')
+} else if(location.pathname == '/indice-pesquisador') {
+    onOpen('indice-pesquisador')
 } 
     }, [location]);
   

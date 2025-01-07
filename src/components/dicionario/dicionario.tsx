@@ -133,7 +133,7 @@ export function Dicionario() {
     return (
         <>
             {isModalOpen && (
-                <main className="flex  flex-1 flex-col gap-4 p-4  md:p-8">
+                <main className="flex  flex-1 flex-col gap-8 p-4  md:p-8">
                      <div className="w-full  gap-4">
             <div className="flex items-center gap-4">
           

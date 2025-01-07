@@ -26,7 +26,7 @@ type Research = {
     rt:string
     situacao:string
 
-    ind_prod:string
+    classification:string
   }
 
   interface Bolsistas {
@@ -73,9 +73,12 @@ import {
 import {  Clock, GraduationCap, Info, Mail, Phone, Shapes, SquareUser } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { Link } from "react-router-dom";
+import { useModal } from "../hooks/use-modal-store";
   
 
 export function InformacoesGeraisResearcher(props:Research) {
+
+
   const qualisColor: { [key: string]: string } = {
     "ASTRONOMIA": "bg-red-200",
     "FÍSICA": "bg-blue-200",
@@ -169,7 +172,22 @@ export function InformacoesGeraisResearcher(props:Research) {
 
       .toUpperCase(); // Converte para maiúsculas
   };
+
+  const classificationColors = {
+    "A+": "bg-green-500",
+    A: "bg-green-400",
+    "B+": "bg-yellow-400",
+    B: "bg-yellow-300",
+    "C+": "bg-orange-400",
+    C: "bg-orange-300",
+    "D+": "bg-red-400",
+    D: "bg-red-300",
+    "E+": "bg-gray-400",
+    E: "bg-gray-300",
+  };
   
+  const {onClose} = useModal()
+
     return (
         <div className="h-fit">
           
@@ -227,12 +245,19 @@ export function InformacoesGeraisResearcher(props:Research) {
    
    <TooltipProvider>
 <Tooltip>
-       <TooltipTrigger className="outline-none"><div className="flex gap-0">
-       <div  className=" py-2 px-4 border border-neutral-200 bg-eng-blue text-white dark:bg-eng-blue dark:border-neutral-800  rounded-l-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice de Produção: </div>
-       <div  className={`py-2 px-4 border border-neutral-200  text-white  dark:border-neutral-800  rounded-r-md text-xs flex gap-2 items-center ${props.ind_prod == '' ? (''):('')}`}>{props.ind_prod}</div>
-        </div></TooltipTrigger>
+       <TooltipTrigger className="outline-none">
+        <Link target="_blank" to={`/indice-pesquisador`} onClick={() => onclose()} className="flex gap-0">
+       <div  className=" py-2 px-4 border border-neutral-200 bg-eng-blue text-white dark:bg-eng-blue dark:border-neutral-800  rounded-l-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice do pesquisador: </div>
+       <div
+  className={`py-2 px-4 border border-neutral-200 border-l-0 text-white dark:border-neutral-800 rounded-r-md text-xs flex gap-2 items-center ${
+    classificationColors[props.classification] || "bg-neutral-200"
+  }`}
+>
+  {props.classification}</div>
+        </Link>
+        </TooltipTrigger>
        <TooltipContent>
-         <p>Índice gerado na plataforma a partir da produção bibliográfica e técnica</p>
+         <p>Saiba mais</p>
        </TooltipContent>
      </Tooltip>
    </TooltipProvider>
