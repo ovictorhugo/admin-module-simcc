@@ -11,10 +11,15 @@ import { Link } from 'react-router-dom';
 import { Copy, Copyright, File, Info } from 'lucide-react';
 import { Badge } from '../ui/badge';
 
+import { useMediaQuery } from 'react-responsive';
+
 
 export function FooterHome() {
 
     const { version } = useContext(UserContext)
+
+    const movel = useMediaQuery({ maxWidth: 560 })
+
     return (
         <div className='relative w-full'>
             <div className=' mb-8 relative w-full'>
@@ -27,7 +32,7 @@ export function FooterHome() {
 
                     {version ? (
                         <div className='flex justify-between'>
-                            <div className='flex gap-6'>
+                            <div className={`flex ${movel && "absolute bottom-20 left-8"} gap-6`}>
                                 <img src={img_2} className="h-8" alt="Logo" />
                                 <img src={img_1} className="h-8" alt="Logo" />
                             </div>

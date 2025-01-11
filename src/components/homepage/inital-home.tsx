@@ -484,8 +484,6 @@ export function InitialHome() {
 
   }
 
-
-  /////////
   const [bolsistas, setBolsistas] = useState<Bolsistas[]>([]);
 
   let urlBolsistas = urlGeral + `foment`
@@ -533,12 +531,8 @@ export function InitialHome() {
 
   return (
 
-    <div className=" items-center  flex flex-col   ">
-
-
-
-
-      <div className="bg-cover  bg-no-repeat bg-center w-full" >
+    <div className=" items-center flex flex-col ">
+      <div className="bg-cover bg-no-repeat bg-center w-full">
         <div className="h-[0vh] z-[-1] opacity-45">
           <ChartContainer config={chartConfig} className="h-[55vh] w-full">
             <LineChart data={dados}>
@@ -601,9 +595,6 @@ export function InitialHome() {
               );
             }).find((chart) => chart !== null) || <div />}
           </ChartContainer>
-
-
-
         </div>
 
         <div className="justify-center px-4 md:px-8 w-full mx-auto flex max-w-[1200px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
@@ -626,16 +617,16 @@ export function InitialHome() {
           </div>
 
           <div className="flex flex-wrap gap-3 z-[3] w-full lg:w-[60vw]">
-            {words.slice(0, 10).map((word, index) => (
+            {words.slice(0, movel ? 5 : 10).map((word, index) => (
               <div
                 key={index}
-                className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`}
+                className={`flex gap-2 ${movel && "mx-auto"} capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`}
                 onClick={() => {
                   handlePesquisaChange(word.term)
                   onOpenResult('researchers-home')
                 }}
               >
-                {word.term}
+                <span className={movel ? "text-[0.6rem]" : "text-md"}>{word.term}</span>
               </div>
             ))}
           </div>
@@ -817,7 +808,7 @@ export function InitialHome() {
 
 
           <Alert className="lg:col-span-2 h-[450px] p-0 ">
-            <CardHeader className="flex p-0 flex-col items-stretch space-y-0 border-b dark:border-b-neutral-800  sm:flex-row">
+            <CardHeader className="flex flex-wrap p-0 flex-col items-stretch space-y-0 border-b dark:border-b-neutral-800  sm:flex-row">
               <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
                 <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
                   <div>
@@ -882,7 +873,7 @@ export function InitialHome() {
               </div>
             </CardHeader>
 
-            <CardContent className="px-2 sm:p-6">
+            <CardContent className="px-2 sm:p-6 pb-4">
               <ChartContainer
                 config={chartConfig}
                 className="aspect-auto h-[300px] w-full"
@@ -968,7 +959,7 @@ export function InitialHome() {
           </Alert>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+        <div className={`flex ${movel ? "flex-col" : "flex-row"} gap-4 mt-5`}>
 
           <Alert className="lg:col-span-2">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
