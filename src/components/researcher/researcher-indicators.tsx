@@ -3,7 +3,7 @@ import { UserContext } from "../../context/context";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
-import { GraduationCap, Info, MapPin, OctagonAlert } from "lucide-react";
+import { GraduationCap, Info, MapPin, OctagonAlert, User } from "lucide-react";
 
 import { FilterYearIndicators } from "./filter-year-indicators";
 import { GraficoIndiceArticle } from "./gráficos/grafico-indice-artigo";
@@ -12,6 +12,7 @@ import { PuzzlePiece } from "phosphor-react";
 import { GraficoIndiceProdTec } from "./gráficos/grafico-indice-tecnica";
 import { Skeleton } from "../ui/skeleton";
 import { TabelaQualisQuantidadeResarcher } from "./gráficos/tabela-qualis-quantidade-researcher";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 type Dados = {
     count_article:number
@@ -305,10 +306,14 @@ useEffect(() => {
 console.log(urlDados)
     return(
         <div>
- <div className="mt-6 mb-16">
-               
-        
-               <h1 className=" max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
+ <div className="mt-8 mb-8 flex items-center gap-8">
+ 
+ <Avatar className="cursor-pointer rounded-md  h-28 w-28">
+      <AvatarImage  className={'rounded-md h-28 w-28'} src={`${urlGeral}ResearcherData/Image?name=${props.name}`} />
+      <AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
+  </Avatar>
+              <div>
+              <h1 className=" max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
               Índices de produção de {props.name}</h1>
                <div className="flex flex-wrap flex-1 items-center gap-3 mt-2">
                                 {props.area != '' && (
@@ -332,6 +337,7 @@ console.log(urlDados)
 
 
                                 </div>
+              </div>
        
                          </div>
 

@@ -6,7 +6,7 @@ import { ResultProvider } from "../provider/result-provider";
 import { UserContext } from "../../context/context";
 
 import { Button } from "../ui/button";
-import { Building, Building2, ChevronDown, ChevronUp, Copyright, SlidersHorizontal, Ticket, Users } from "lucide-react";
+import { Building, Building2, ChevronDown, ChevronUp, Copyright, Download, SlidersHorizontal, Ticket, Users } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
 import { useModal } from "../hooks/use-modal-store";
 import { File, Quotes } from "phosphor-react";
@@ -20,7 +20,7 @@ const useQuery = () => {
 export function ResultHome() {
   const { isOpen, type } = useModalHomepage();
   const { onOpen, type: typeResult } = useModalResult();
-  const { itemsSelecionados, searchType, simcc} = useContext(UserContext);
+  const { itemsSelecionados, searchType, simcc, urlGeral, valoresSelecionadosExport} = useContext(UserContext);
   const { onOpen: onOpenModal } = useModal();
   
   const [isOn, setIsOn] = useState(true);
@@ -55,6 +55,78 @@ export function ResultHome() {
       onOpen('researchers-home')
     }
     }, [ typeResult]);
+
+    //csv
+    const [jsonData, setJsonData] = useState<any[]>([]);
+
+
+    let urlPublicacoesPorPesquisador = ''
+   if (typeResult == 'articles-home') {
+    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=&type=ARTICLE&qualis=&qualis=&year=1900`;
+   } else if (typeResult == 'researchers-home') {
+    urlPublicacoesPorPesquisador = `${urlGeral}patent_production_researcher?researcher_id=&year=1900&term=${valoresSelecionadosExport}&distinct=0`
+   } else if (typeResult == 'speaker-home') {
+    urlPublicacoesPorPesquisador = `${urlGeral}pevent_researcher?researcher_id=&year=1900&term=${valoresSelecionadosExport}&nature=`
+   } else if (typeResult == 'institutions-home') {
+    urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}&university=&type=ARTICLE`
+   }
+
+
+    useEffect(() => {
+      const fetchData = async () => {
+   
+        try {
+          const response = await fetch(urlPublicacoesPorPesquisador, {
+            mode: 'cors',
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET',
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Max-Age': '3600',
+              'Content-Type': 'text/plain'
+            }
+          });
+          const data = await response.json();
+          if (data) {
+            setJsonData(data)
+          }
+        } catch (err) {
+          console.log(err);
+        } finally {
+   
+        }
+      };
+      fetchData();
+    }, [urlPublicacoesPorPesquisador]);
+
+
+    const convertJsonToCsv = (json: any[]): string => {
+      const items = json;
+      const replacer = (_: string, value: any) => (value === null ? '' : value); // Handle null values
+      const header = Object.keys(items[0]);
+      const csv = [
+        '\uFEFF' + header.join(';'), // Add BOM and CSV header
+        ...items.map((item) =>
+          header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+        ) // CSV data
+      ].join('\r\n');
+    
+      return csv;
+    };
+
+    const handleDownloadJson = async () => {
+      try {
+        const csvData = convertJsonToCsv(jsonData);
+        const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = `dados.csv`;
+        link.href = url;
+        link.click();
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
   return (
   
@@ -123,6 +195,12 @@ export function ResultHome() {
                    
                   </div>
                   <div>
+
+                  <Button onClick={() => handleDownloadJson()} variant="ghost"  className="">
+                     <Download size={16} className="" />
+                     Baixar resultado
+                   </Button>
+
                    {typeResult == 'researchers-home' && (
                      <Button onClick={() => onOpenModal('filters')} variant="ghost"  className="">
                      <SlidersHorizontal size={16} className="" />

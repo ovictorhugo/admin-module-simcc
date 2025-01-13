@@ -7,6 +7,7 @@ import {
   Bot,
   Bug,
   Building2,
+  CalendarSearch,
   Command,
   Download,
   Frame,
@@ -80,6 +81,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Produções recentes",
             url: "/producoes-recentes",
             icon: BookOpen
+          },
+          {
+            title: "Provimento de cargo",
+            url: "/provimento-cargo",
+            icon: CalendarSearch
           },
 
           {

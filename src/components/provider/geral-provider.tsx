@@ -18,6 +18,7 @@ import { Maria } from "../maria/maria";
 import { TodosPesquisadores } from "../homepage/categorias/researchers-home/todos-pesquisadores";
 import { PaineisDadosExternos } from "../homepage/paines-dados-externos";
 import { IndicePesquisador } from "../indice-pesquisador/indice-pesquisador";
+import { ProvimentoCargo } from "../provimento-cargo/provimento-cargo";
 
 const ModalContent = () => {
   const { type } = useModalHomepage();
@@ -51,6 +52,8 @@ const ModalContent = () => {
       return <PaineisDadosExternos/>
     case 'indice-pesquisador':
       return <IndicePesquisador/>
+    case 'provimento-cargo':
+      return <ProvimentoCargo/>
   }
 }
 

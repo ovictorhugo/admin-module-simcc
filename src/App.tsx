@@ -248,6 +248,7 @@ useEffect(() => {
         <Route path='/indice-pesquisador' element={<Home/>}/>
         <Route path='/relatar-problema' element={<Home/>}/>
         <Route path='/pesquisadores-selecionados' element={<Home/>}/>
+        <Route path='/provimento-cargo' element={<Home/>}/>
 
         <Route path='/listagens' element={<Home/>}/>
 

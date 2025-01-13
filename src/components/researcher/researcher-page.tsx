@@ -53,7 +53,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { RelevanceProduction } from "../popup/relevance-production";
 
-type Research = {
+export interface Research {
   among: number,
   articles: number,
   book: number,
@@ -548,6 +548,9 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
              <TabsList>
                   <TabsTrigger value="all" onClick={() => setTab('all')}>Visão geral</TabsTrigger>
                   <TabsTrigger disabled={!has_visualizar_indices_pesquisador} value="indicators" onClick={() => setTab('indicators')}>Indicadores de produção</TabsTrigger>
+                {(researcher.length > 0 && (user?.display_name == researcher[0].name)) && (
+                    <TabsTrigger  value="indicators" onClick={() => setTab('provimento')}>Provimento de cargo</TabsTrigger>
+                )}
                 </TabsList>
               
 

@@ -59,6 +59,8 @@ export function Home() {
     onOpen('paines-dados-externos')
 } else if(location.pathname == '/indice-pesquisador') {
     onOpen('indice-pesquisador')
+} else if(location.pathname == '/provimento-cargo') {
+    onOpen('provimento-cargo')
 } 
     }, [location]);
   
