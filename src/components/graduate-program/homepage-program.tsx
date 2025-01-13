@@ -683,10 +683,10 @@ export function HomepageProgram(props: Props) {
       </div>
 
 
-      <div className="mt-8">
-        <Alert className="bg-eng-blue dark:bg-eng-blue">
+      <div className="">
+        <Alert className="bg-eng-blue dark:bg-eng-blue mb-4">
           <CardHeader>
-            <div className="flex mb-1 gap-3 justify-between">
+            <div className="flex  gap-3 justify-between">
               <h3 className="font-semibold text-2xl text-white">
                 Índices de produção
               </h3>
@@ -697,13 +697,14 @@ export function HomepageProgram(props: Props) {
           </CardHeader>
         </Alert>
 
-
         <div className="lg:col-span-2">
-
           <div>
-
             <div className=" pb-4">
-              <HeaderResultTypeHome title="Artigos mais recentes" icon={<Quotes size={24} className="text-gray-400" />}>
+              <HeaderResultTypeHome
+                title="Artigos mais recentes"
+                icon={<Quotes size={24} className="text-gray-400" />}
+              >
+
               </HeaderResultTypeHome>
             </div>
             <InfiniteMovingProductions
@@ -732,22 +733,13 @@ export function HomepageProgram(props: Props) {
               className="custom-class"
             />
           </div>
-
-
         </div>
       </div>
 
-
-
-
-
       <div className="flex flex-col mt-8 md:gap-8 gap-4">
-        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+        <div className="flex flex-wrap gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
 
-
-
-
-          <Alert className="lg:col-span-2 h-[450px] p-0 ">
+          <Alert className="lg:col-span-2 h-[450px] p-0">
             <CardHeader className="flex p-0 flex-col items-stretch space-y-0 border-b dark:border-b-neutral-800  sm:flex-row">
               <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
                 <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
@@ -773,8 +765,8 @@ export function HomepageProgram(props: Props) {
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                        <TooltipContent>
-                          <p>Essas informações não representam a produção total da Escola desde a sua fundação, é um recorte a partir de {year}</p>
+                        <TooltipContent className="mr-3">
+                          <p>Essas informações não representam a produção<br /> total da Escola desde a sua fundação, é<br />um recorte a partir de {year}</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -890,7 +882,7 @@ export function HomepageProgram(props: Props) {
           </Alert>
 
 
-          <div className="h-full gap-8 grid">
+          <div className="h-full gap-8 w-full">
             <Alert className="p-0 ">
               <CardHeader className="flex p-10 flex-row items-center justify-between space-y-0 pb-2">
                 <div>
