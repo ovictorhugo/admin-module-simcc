@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
+import { useMediaQuery } from "react-responsive";
 import { Alert } from "../ui/alert";
 import { CalendarBlank, CheckSquare } from "phosphor-react";
 import { Slider } from "../ui/slider";
@@ -97,8 +98,10 @@ export function FilterArticlePopUp(props: Props) {
     updateResearcher([filtros]);
   }, [filterYear, itensSelecionados]); // Runs only on updates
 
+  const movel = useMediaQuery({ maxWidth: 560 });
+
   return (
-    <div className="mb-6 flex gap-6">
+    <div className={`mb-6 flex gap-6 ${movel ? "flex-col" : "flex-row"}`}>
       <div className="flex flex-col">
         <div className="flex items-center gap-3 mb-4">
           <CheckSquare size={24} className="text-gray-400" />

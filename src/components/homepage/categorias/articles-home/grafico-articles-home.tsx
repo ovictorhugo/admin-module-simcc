@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import { Alert } from "../../../ui/alert";
 import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../../components/ui/chart";
@@ -56,7 +57,7 @@ const chartConfig = {
 export function GraficoArticleHome(props: Articles) {
   type Qualis = "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "SQ" | "NP";
 
-  const [chartData, setChartData] = useState<{ year: number; [qualis: string]: number }[]>([]);
+  const [chartData, setChartData] = useState<{ year: number;[qualis: string]: number }[]>([]);
 
   useEffect(() => {
     if (props.articles) {
@@ -100,6 +101,8 @@ export function GraficoArticleHome(props: Articles) {
     return colors[qualis] || '#000000';
   }
 
+  const movel = useMediaQuery({ maxWidth: 560 })
+
   return (
     <Alert className="pt-12">
       <ChartContainer config={chartConfig} className="h-[250px] w-full">
@@ -108,7 +111,7 @@ export function GraficoArticleHome(props: Articles) {
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
 
             <CartesianGrid vertical={false} horizontal={false} />
-            <ChartLegend content={<ChartLegendContent />} />
+            <ChartLegend className={`flex flex-wrap ${movel && "text-[0.5rem]"}`} content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
             {Object.keys(chartConfig).map((key, index) => {
               if (key !== "views") {

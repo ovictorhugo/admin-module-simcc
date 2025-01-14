@@ -2,80 +2,74 @@ import { ChalkboardSimple, ChartLine, Quotes } from "phosphor-react";
 import dt from '../../assets/dt.png'
 import pq from '../../assets/pq.png'
 
+import { useMediaQuery } from "react-responsive"
+
 type Research = {
+  orcid: string
+  h_index: string,
+  relevance_score: string,
+  works_count: string,
+  cited_by_count: string,
+  i10_index: string,
+  scopus: string,
+  openalex: string,
+  subsidy: Bolsistas[]
+  graduate_programs: GraduatePrograms[]
+  departments: Departments[]
+  research_groups: ResearchGroups[]
+  cargo: string
+  clas: string
+  classe: string
+  rt: string
+  situacao: string
+  ind_prod: string
+}
 
-    orcid:string
-  
+interface Bolsistas {
+  aid_quantity: string
+  call_title: string
+  funding_program_name: string
+  modality_code: string
+  category_level_code: string
+  institute_name: string
+  modality_name: string
+  scholarship_quantity: string
+}
 
-    h_index:string,
-    relevance_score:string,
-    works_count:string,
-    cited_by_count:string,
-    i10_index:string,
-    scopus:string,
-    openalex:string,
+interface GraduatePrograms {
+  graduate_program_id: string
+  name: string
+}
 
-    subsidy:Bolsistas[]
-    graduate_programs:GraduatePrograms[]
-    departments:Departments[]
-    research_groups:ResearchGroups[]
+interface Departments {
+  dep_des: string
+  dep_email: string
+  dep_nom: string
+  dep_id: string
+  dep_sigla: string
+  dep_site: string
+  dep_tel: string
+  img_data: string
+}
 
-    cargo:string
-    clas:string
-    classe:string
-    rt:string
-    situacao:string
-
-    ind_prod:string
-  }
-
-  interface Bolsistas {
-    aid_quantity:string
-    call_title:string
-    funding_program_name:string
-    modality_code:string
-    category_level_code:string
-    institute_name:string
-    modality_name:string
-    scholarship_quantity:string
-    }
-
-    interface  GraduatePrograms {
-      graduate_program_id:string
-      name:string
-    }
-
-    interface Departments {
-      dep_des:string
-      dep_email:string
-      dep_nom:string
-      dep_id:string
-      dep_sigla:string
-      dep_site:string
-      dep_tel:string
-      img_data:string
-    }
-
-    interface ResearchGroups {
-      area:string
-      group_id:string
-      name:string
-    }
-
-
+interface ResearchGroups {
+  area: string
+  group_id: string
+  name: string
+}
 
 import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-  } from "../../components/ui/tooltip"
-import {  Clock, GraduationCap, Info, Mail, Phone, Shapes, SquareUser } from "lucide-react";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../../components/ui/tooltip"
+import { Clock, GraduationCap, Info, Mail, Phone, Shapes, SquareUser } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { Link } from "react-router-dom";
-  
 
-export function InformacoesGeraisResearcher(props:Research) {
+
+export function InformacoesGeraisResearcher(props: Research) {
   const qualisColor: { [key: string]: string } = {
     "ASTRONOMIA": "bg-red-200",
     "FÍSICA": "bg-blue-200",
@@ -169,151 +163,140 @@ export function InformacoesGeraisResearcher(props:Research) {
 
       .toUpperCase(); // Converte para maiúsculas
   };
-  
-    return (
-        <div className="h-fit">
-          
-              <div className=" font-medium text-2xl mb-6 pr-12">Informações gerais</div>
-          
 
-               <div className="flex gap-3 mb-6 items-center flex-wrap">
-               {props.h_index?.length != 0 && (
-                     <TooltipProvider>
-     <Tooltip>
-       <TooltipTrigger className="outline-none"><div  className=" py-2 px-4 border border-neutral-200 bg-white dark:bg-black dark:border-neutral-800  rounded-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice H: {props.h_index}</div></TooltipTrigger>
-       <TooltipContent>
-         <p>Dados do OpenAlex</p>
-       </TooltipContent>
-     </Tooltip>
-   </TooltipProvider>
-   
-                   )}
-   
-   {props.cited_by_count?.length != 0 && (
-         <TooltipProvider>
-         <Tooltip>
-           <TooltipTrigger className="outline-none"> <div  className=" border-neutral-200 border dark:border-neutral-800 bg-white dark:bg-black py-2 px-4  rounded-md text-xs  flex gap-2 items-center"><Quotes size={12} className="textwhite" /> Citações: {props.cited_by_count}</div></TooltipTrigger>
-           <TooltipContent>
-             <p>Dados do OpenAlex</p>
-           </TooltipContent>
-         </Tooltip>
-       </TooltipProvider>
-                    
-                   )}
-   
-   {props.i10_index?.length != 0 && (
-         <TooltipProvider>
-         <Tooltip>
-           <TooltipTrigger className="outline-none"> <div  className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><ChartLine size={12} className="textwhite" />índice i10: {props.i10_index}</div></TooltipTrigger>
-           <TooltipContent>
-             <p>Dados do OpenAlex</p>
-           </TooltipContent>
-         </Tooltip>
-       </TooltipProvider>
-                    
-                   )}
+  const movel = useMediaQuery({ maxWidth: 560 });
 
-{props.rt?.length != 0 && (
-        <div  className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><Clock size={12} className="textwhite" />Regime de trabalho: {props.rt}</div>
-                    
-                   )}
+  return (
+    <div className="h-fit">
 
+      <div className=" font-medium text-2xl mb-6 pr-12">Informações gerais</div>
 
+      <div className="flex gap-3 mb-6 items-center flex-wrap text-left">
+        {props.h_index?.length != 0 && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger className="outline-none"><div className=" py-2 px-4 border border-neutral-200 bg-white dark:bg-black dark:border-neutral-800  rounded-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice H: {props.h_index}</div></TooltipTrigger>
+              <TooltipContent>
+                <p>Dados do OpenAlex</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-{props.cargo?.length != 0 && (
-        <div  className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><ChalkboardSimple size={12} className="textwhite" />{props.cargo}</div>
-                    
-                   )}
-   
-   <TooltipProvider>
-<Tooltip>
-       <TooltipTrigger className="outline-none"><div className="flex gap-0">
-       <div  className=" py-2 px-4 border border-neutral-200 bg-eng-blue text-white dark:bg-eng-blue dark:border-neutral-800  rounded-l-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice de Produção: </div>
-       <div  className={`py-2 px-4 border border-neutral-200  text-white  dark:border-neutral-800  rounded-r-md text-xs flex gap-2 items-center ${props.ind_prod == '' ? (''):('')}`}>{props.ind_prod}</div>
-        </div></TooltipTrigger>
-       <TooltipContent>
-         <p>Índice gerado na plataforma a partir da produção bibliográfica e técnica</p>
-       </TooltipContent>
-     </Tooltip>
-   </TooltipProvider>
-   
-               </div>
-       
+        )}
 
-          {props.departments && props.departments.length != 0 && (
+        {props.cited_by_count?.length != 0 && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger className="outline-none"> <div className=" border-neutral-200 border dark:border-neutral-800 bg-white dark:bg-black py-2 px-4  rounded-md text-xs  flex gap-2 items-center"><Quotes size={12} className="textwhite" /> Citações: {props.cited_by_count}</div></TooltipTrigger>
+              <TooltipContent>
+                <p>Dados do OpenAlex</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-          props.departments.slice(0,1).map((item) => (
-            <div>
-            <div className="font-medium text-2xl mb-6 pr-12">
-          Departamento
-          </div>
-           <Link  to={`/departamentos?dep_id=${item.dep_id}`}
-                target="_blank">
-           <div className="flex mb-6 w-full relative">
-            
-            <div className={`w-2 min-w-[8px] min-h-[125px] relative bg-[#719CB8]  flex flex-1  rounded-l-lg border border-r-0 border-neutral-200 dark:border-neutral-800 ` }></div>
+        )}
 
-            <Alert className="flex justify-center  rounded-l-none gap-6 ">
-              <div className="flex flex-col flex-1 justify-center  h-full">
-           
-              <p className="mb-2 font-medium">{item.dep_sigla} - {item.dep_nom}</p>
+        {props.i10_index?.length != 0 && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger className="outline-none"> <div className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><ChartLine size={12} className="textwhite" />índice i10: {props.i10_index}</div></TooltipTrigger>
+              <TooltipContent>
+                <p>Dados do OpenAlex</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-              <div className="line-clamp-2 flex-wrap text-xs text-muted-foreground flex gap-4">
+        )}
 
-            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Mail size={12}/>{item.dep_email}</div>
-            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Phone size={12}/>{item.dep_tel}</div>
+        {props.rt?.length != 0 && (
+          <div className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><Clock size={12} className="textwhite" />Regime de trabalho: {props.rt}</div>
+
+        )}
+
+        {props.cargo?.length != 0 && (
+          <div className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><ChalkboardSimple size={12} className="textwhite" />{props.cargo}</div>
+
+        )}
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger className="outline-none"><div className="flex gap-0">
+              <div className=" py-2 px-4 border border-neutral-200 bg-eng-blue text-white dark:bg-eng-blue dark:border-neutral-800  rounded-l-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice de Produção: </div>
+              <div className={`py-2 px-4 border border-neutral-200  text-white  dark:border-neutral-800  rounded-r-md text-xs flex gap-2 items-center ${props.ind_prod == '' ? ('') : ('')}`}>{props.ind_prod}</div>
+            </div></TooltipTrigger>
+            <TooltipContent>
+              <p>Índice gerado na plataforma a partir da produção bibliográfica e técnica</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+
+      {props.departments && props.departments.length != 0 && (
+
+        props.departments.slice(0, 1).map((item) => (
+          <div>
+            <div className="font-medium text-2xl mb-6 pr-12 text-left">
+              Departamento
             </div>
-              </div>
+            <Link to={`/departamentos?dep_id=${item.dep_id}`}
+              target="_blank">
+              <div className="flex mb-6 w-full relative">
 
-              
-          </Alert>
-          </div></Link>
+                <div className={`w-2 min-w-[8px] min-h-[125px] relative bg-[#719CB8]  flex flex-1  rounded-l-lg border border-r-0 border-neutral-200 dark:border-neutral-800`}></div>
+
+                <Alert className="flex justify-center  rounded-l-none gap-6 ">
+                  <div className="flex flex-col flex-1 justify-center  h-full">
+
+                    <p className="mb-2 font-medium text-left">{item.dep_sigla} - {item.dep_nom}</p>
+
+                    <div className="line-clamp-2 flex-wrap text-xs text-muted-foreground flex gap-4">
+
+                      <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Mail size={12} />{item.dep_email}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Phone size={12} />{item.dep_tel}</div>
+                    </div>
+                  </div>
+                </Alert>
+              </div></Link>
           </div>
-          ))
+        ))
+      )}
 
-          )}
+      {props.subsidy.length != 0 && (
 
-          
-
-           {props.subsidy.length != 0 && (
-
-            props.subsidy.slice(0,1).map((item) => (
-              <div>
-              <div className="font-medium text-2xl mb-6 pr-12">
-            Bolsa CNPq
+        props.subsidy.slice(0, 1).map((item) => (
+          <div>
+            <div className="font-medium text-2xl mb-6 pr-12 text-left">
+              Bolsa CNPq
             </div>
-              <div className="flex relative flex-1">
-              
-              <div className={`w-2 min-w-[8px] min-h-[125px] flex flex-1 relative rounded-l-lg ${item.modality_code == 'DT'? ('bg-[#183EFF]'):('bg-[#00D000]')} border border-r-0 border-neutral-200 dark:border-neutral-800 ` }></div>
-            
+            <div className="flex relative flex-1 text-left">
+
+              <div className={`w-2 min-w-[8px] min-h-[125px] flex flex-1 relative rounded-l-lg ${item.modality_code == 'DT' ? ('bg-[#183EFF]') : ('bg-[#00D000]')} border border-r-0 border-neutral-200 dark:border-neutral-800 `}></div>
+
               <Alert className="flex justify-center  rounded-l-none gap-8 ">
                 <div className="flex flex-col flex-1 justify-center h-full">
-                <p className="mb-2 font-medium">{item.modality_name} - Nível {item.category_level_code}</p>
+                  <p className="mb-2 font-medium">{item.modality_name} - Nível {item.category_level_code}</p>
 
-<div className="text-xs text-gray-500 flex items-center gap-2">
-  {item.call_title}
-</div>
+                  <div className="text-xs text-gray-500 flex items-center gap-2">
+                    {item.call_title}
+                  </div>
                 </div>
 
-                {props.subsidy.slice(0,1).map((item) => (
-                  <img src={item.modality_code == 'PQ' ? (pq):(dt)} className="w-8 relative -top-4 h-[52px]" alt="" />
-             ))}
-            </Alert>
+                {props.subsidy.slice(0, 1).map((item) => (
+                  <img src={item.modality_code == 'PQ' ? (pq) : (dt)} className="w-8 relative -top-4 h-[52px]" alt="" />
+                ))}
+              </Alert>
             </div>
-            </div>
-            ))
-           
-           )}
+          </div>
+        ))
+      )}
 
-      
-
-            {props.graduate_programs.length !== 0 && (
+      {props.graduate_programs.length !== 0 && (
         <div >
-          <div className="font-medium text-2xl my-6 ">
+          <div className="font-medium text-2xl my-6 text-left">
             Programas de pós-graduação
           </div>
 
-          <div className="flex gap-3 items-center flex-wrap">
+          <div className="flex gap-3 items-center flex-wrap text-left">
             {props.graduate_programs.map((item) => (
               <Link
                 key={item.graduate_program_id}
@@ -321,72 +304,65 @@ export function InformacoesGeraisResearcher(props:Research) {
                 target="_blank"
                 className="w-full"
               >
-                 <Alert className="flex justify-center gap-6 ">
-          <div className="flex flex-col flex-1 justify-center h-full">
-          <div className="text-xs text-gray-500 mb-2 flex items-center gap-2 justify-between">
-          PROGRAMA DE PÓS-GRADUAÇÃO
-      <GraduationCap size={14}/>
-      </div>
-          <p className="font-medium">{item.name}</p>
+                <Alert className="flex justify-center gap-6 ">
+                  <div className="flex flex-col flex-1 justify-center h-full">
+                    <div className="text-xs text-gray-500 mb-2 flex items-center gap-2 justify-between">
+                      PROGRAMA DE PÓS-GRADUAÇÃO
+                      <GraduationCap size={14} />
+                    </div>
+                    <p className="font-medium">{item.name}</p>
+                  </div>
+                </Alert>
 
-
-          </div>          
-      </Alert>
-                
               </Link>
-              
+
             ))}
           </div>
         </div>
       )}
 
 
-{props.research_groups?.length != 0 && (
-  <div>
-    <div className="my-6 flex items-center justify-between">
-    <div className="font-medium text-2xl ">
-Grupos de pequisa
-</div>
+      {props.research_groups?.length != 0 && (
+        <div>
+          <div className="my-6 flex items-center justify-between">
+            <div className="font-medium text-2xl ">
+              Grupos de pequisa
+            </div>
 
-<TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Líder ou vice-líder de grupos cadastrados no DGP CNPq</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-    </div>
-
-      <div className="flex flex-col gap-6">
-      {props.research_groups.map((item) => (
-        <Link to={`/grupos-pesquisa?group_id=${item.group_id}`} target="_blank" className="w-full">
-        
-        <div className="flex ">
-        
-        <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border  border-neutral-200 border-r-0 ${qualisColor[normalizeArea(item.area || '')]} min-h-full relative`}></div>
-
-        <Alert className="flex justify-center  rounded-l-none gap-6 ">
-          <div className="flex flex-col flex-1 justify-center h-full">
-          <div className="text-xs text-gray-500 mb-2 flex items-center gap-2 justify-between">
-      {item.area}
-
-      <Shapes size={14}/>
-      </div>
-          <p className="font-medium">{item.name}</p>
-
-
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                <TooltipContent>
+                  <p>Líder ou vice-líder de grupos cadastrados no DGP CNPq</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
 
-          
-      </Alert>
-      </div>
-      </Link>
-      ))}
-      </div>
-  </div>
+          <div className="flex flex-col gap-6">
+            {props.research_groups.map((item) => (
+              <Link to={`/grupos-pesquisa?group_id=${item.group_id}`} target="_blank" className="w-full">
 
-)}
+                <div className="flex ">
+
+                  <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border  border-neutral-200 border-r-0 ${qualisColor[normalizeArea(item.area || '')]} min-h-full relative`}></div>
+
+                  <Alert className="flex justify-center  rounded-l-none gap-6 ">
+                    <div className="flex flex-col flex-1 justify-center h-full">
+                      <div className="text-xs text-gray-500 mb-2 flex items-center gap-2 justify-between">
+                        {item.area}
+
+                        <Shapes size={14} />
+                      </div>
+                      <p className="font-medium">{item.name}</p>
+                    </div>
+                  </Alert>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
-    )
+      )}
+    </div>
+  )
 }

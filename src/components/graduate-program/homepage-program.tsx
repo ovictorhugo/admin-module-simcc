@@ -736,10 +736,9 @@ export function HomepageProgram(props: Props) {
         </div>
       </div>
 
-      <div className="flex flex-col mt-8 md:gap-8 gap-4">
+      <div className="flex flex-col mt-8 md:gap-8 gap-4 mb-6">
         <div className="flex flex-wrap gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-
-          <Alert className="lg:col-span-2 h-[450px] p-0">
+          <Alert className={`lg:col-span-2 h-[450px] p-0 ${movel && "mb-6"}`}>
             <CardHeader className="flex p-0 flex-col items-stretch space-y-0 border-b dark:border-b-neutral-800  sm:flex-row">
               <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
                 <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
@@ -914,11 +913,8 @@ export function HomepageProgram(props: Props) {
           </div>
         </div>
 
-        <div className="grid  gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-
-
-
-          <Alert className=" h-full ">
+        <div className="flex flex-wrap gap-4">
+          <Alert className="h-full flex-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
                 <CardTitle className="text-sm font-medium">
@@ -943,7 +939,7 @@ export function HomepageProgram(props: Props) {
           </Alert>
 
 
-          <Alert className="lg:col-span-2">
+          <Alert className="flex-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
                 <CardTitle className="text-sm font-medium">
@@ -963,15 +959,12 @@ export function HomepageProgram(props: Props) {
 
             </CardHeader>
 
-            <CardContent className="flex py-0 flex-1  items-center justify-center">
+            <CardContent className="flex py-0 flex-1 items-center justify-center">
               <GraficoArtigosPorQualis dados={dados} />
             </CardContent>
-
-
           </Alert>
         </div>
       </div>
-
 
       <AdminGraficoGraduateProgram graduate_program_id={props.program.graduate_program_id} />
     </main>

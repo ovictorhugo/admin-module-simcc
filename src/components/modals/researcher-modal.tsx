@@ -16,6 +16,8 @@ import { InformationResearcher } from "../popup/information-researcher";
 import { useContext } from "react";
 import { UserContext } from "../../context/context";
 
+import { useMediaQuery } from 'react-responsive'
+
 
 type Research = {
   among: number,
@@ -237,7 +239,7 @@ export function ResearcherModal() {
   //csv
   const [jsonData, setJsonData] = useState<any[]>([]);
 
-  let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=${(researcher.map((props) => (props.id)))}&type=ARTICLE&qualis=&qualis=&year=1900`;
+  const urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=${(researcher.map((props) => (props.id)))}&type=ARTICLE&qualis=&qualis=&year=1900`;
 
 
   useEffect(() => {
@@ -299,8 +301,6 @@ export function ResearcherModal() {
     }
   };
 
-
-
   const currentUrl = window.location.origin
 
   function generateNameVariations(name: string): string[] {
@@ -330,16 +330,14 @@ export function ResearcherModal() {
     return variations;
   }
 
-
-
-
+  const movel = useMediaQuery({ maxWidth: 800 });
 
   return (
     <>
       <Drawer open={isModalOpen} onClose={onClose}>
-        <DrawerContent onInteractOutside={onClose} className={`max-h-[88%]`} >
+        <DrawerContent onInteractOutside={onClose} className={`max-h-[88%] mx-auto w-screen`}>
           {researcher.length == 0 && (
-            <div className="flex justify-center items-center h-[80vh] ">
+            <div className="flex justify-center items-center h-[80vh]">
               <div className="w-full flex flex-col items-center justify-center h-full">
                 <div className="text-eng-blue mb-4 animate-pulse"><LoaderCircle size={108} className="animate-spin" /></div>
                 <p className="font-medium text-lg max-w-[500px] text-center">Estamos procurando todas as informações do(a) pesquisador(a) no nosso banco de dados, aguarde.</p>
@@ -349,8 +347,8 @@ export function ResearcherModal() {
 
           {researcher.slice(0, 1).map((user) => {
             return (
-              <div className="w-full flex justify-center ">
-                <div className="bg-cover bg-center bg-no-repeat h-28 w-28  rounded-2xl mb-3 border-4 border-white dark:border-neutral-950  absolute top-[-55px]   " style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${user.id}) ` }}></div>
+              <div className="w-full flex justify-center">
+                <div className="bg-cover bg-center bg-no-repeat h-28 w-28  rounded-2xl mb-3 border-4 border-white dark:border-neutral-950  absolute top-[-55px]" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${user.id}) ` }}></div>
               </div>
             )
           })}
@@ -375,11 +373,20 @@ export function ResearcherModal() {
 
             return (
               <div className="px-16 pt-6 pb-2">
-                <div className="flex  justify-between items-center w-full">
+                <div
+                  className={`flex justify-between items-center w-full`}>
+                  <div
+                    className={`
+                      border dark:border-neutral-800 w-fit absolute
+                      top-1 left-1 text-gray-400 rounded-md
+                      ${movel ? "m-1 p-1 px-2" : "m-2 p-2"}
+                      text-xs font-bold flex gap-1 items-center 
+                      ${isOutdated6 ? ('text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none') : ('')}
+                    `}
+                  >
+                    <span className={`${movel && "text-[0.4rem]"}`}>Atualização do Lattes: {String(props.lattes_update)}</span></div>
 
-                  <div className={`border dark:border-neutral-800 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none') : ('')}`}>Atualização do Lattes: {String(props.lattes_update)}</div>
-
-                  <div className="flex gap-3">
+                  <div className={`flex ${movel ? "gap-1" : "gap-2"} absolute top-1 right-1 m-2`}>
 
                     {hasBaremaAvaliacao && (
                       <TooltipProvider>
@@ -432,7 +439,9 @@ export function ResearcherModal() {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Link to={urlShare} target="_blank">
-                            <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
+                            <Button
+                              variant={'default'}
+                              className={`h-8 w-8 p-0 text-white dark:text-white`} >
                               <span className="sr-only">Open menu</span>
                               <ArrowSquareOut size={8} className="h-4 w-4" />
                             </Button></Link>
@@ -500,85 +509,78 @@ export function ResearcherModal() {
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="flex justify-center py-4">
-
                           <QRCode size={200} className={'bg-transparent'} value={urlShare} />
-
                         </DropdownMenuItem>
-
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
 
                 </div>
 
-                <div className="flex items-center flex-col  relative">
-                  <h4 className="text-3xl font-medium px-8 text-center mb-2">{props.name}</h4>
+                <div className="flex items-center flex-col relative mt-4">
+                  <h4 className={`${movel ? "text-xl" : "text-3xl"} mt-4 font-medium px-8 text-center mb-2`}>{props.name}</h4>
                   <div className="flex text-gray-500 items-center gap-2 mb-2">
                     {props.image == "None" ? (
                       <Buildings size={16} className="" />
                     ) : (
                       <img src={props.image} alt="" className="h-6" />
                     )}
-                    <p className="text-md  ">{props.university}</p>
+                    <p className="text-md text-center">{props.university}</p>
                   </div>
                 </div>
               </div>
             )
           })}
 
-          <div className="overflow-y-auto elementBarra ">
+          <div className="overflow-y-auto elementBarra w-full">
+            <div className="px-8">
+              <DrawerHeader className="block w-full">
+                <div>
+                  {researcher.slice(0, 1).map((user) => {
+                    return (
+                      <div className="flex w-full mx-auto">
+                        <InformationResearcher
+                          among={user.among}
+                          articles={user.articles}
+                          book={user.book}
+                          book_chapters={user.book_chapters}
+                          id={user.id}
+                          name={user.name}
+                          university={user.university}
+                          lattes_id={user.lattes_id}
+                          area={user.area}
+                          abstract={user.abstract}
+                          lattes_10_id={user.lattes_10_id}
+                          city={user.city}
+                          orcid={user.orcid}
+                          image={user.image}
+                          graduation={user.graduation}
+                          patent={user.patent}
+                          software={user.software}
+                          brand={user.brand}
+                          lattes_update={user.lattes_update}
+                          onResearcherUpdate={handleResearcherUpdate}
+                          h_index={user.h_index}
+                          relevance_score={user.relevance_score}
+                          works_count={user.works_count}
+                          cited_by_count={user.cited_by_count}
+                          i10_index={user.i10_index}
+                          scopus={user.scopus}
+                          openalex={user.openalex}
+                          openAPI={open}
+                        />
+                      </div>
+                    )
+                  })}
+                </div>
 
-            <div className=" px-16  " >
-              <DrawerHeader className="p-0 ">
-                {researcher.slice(0, 1).map((user) => {
-                  return (
-                    <div>
-
-                      <InformationResearcher
-                        among={user.among}
-                        articles={user.articles}
-                        book={user.book}
-                        book_chapters={user.book_chapters}
-                        id={user.id}
-                        name={user.name}
-                        university={user.university}
-                        lattes_id={user.lattes_id}
-                        area={user.area}
-                        abstract={user.abstract}
-                        lattes_10_id={user.lattes_10_id}
-                        city={user.city}
-                        orcid={user.orcid}
-                        image={user.image}
-                        graduation={user.graduation}
-                        patent={user.patent}
-                        software={user.software}
-                        brand={user.brand}
-                        lattes_update={user.lattes_update}
-                        onResearcherUpdate={handleResearcherUpdate}
-
-                        h_index={user.h_index}
-                        relevance_score={user.relevance_score}
-                        works_count={user.works_count}
-                        cited_by_count={user.cited_by_count}
-                        i10_index={user.i10_index}
-                        scopus={user.scopus}
-                        openalex={user.openalex}
-
-
-                        openAPI={open}
-                      />
-
-                    </div>
-                  )
-                })}
-
-                <div className="flex gap-6 xl:flex-row flex-col-reverse">
-                  <div className="w-full flex-1">
-                    <Tabs defaultValue="articles" value={value} className="">
+                <div className="flex gap-6 xl:flex-row flex-col-reverse relative">
+                  <div className={`flex ${!movel && "w-[75%]"} flex-wrap`}>
+                    <Tabs defaultValue="articles" value={value} className="w-full">
                       {researcher.slice(0, 1).map(() => (
-                        <div className=" grid grid-cols-1 mb-6">
-                          <ScrollArea className="">
-                            <TabsList className="mb-4 flex h-auto ?>">
+                        <div className="w-full mb-6">
+                          <ScrollArea className="w-full">
+                            <TabsList className="mb-4 flex h-auto w-full">
                               <TabsTrigger
                                 value="article"
                                 onClick={() => setValue('article')}
@@ -655,7 +657,6 @@ export function ResearcherModal() {
                               </TabsTrigger>
 
                             </TabsList>
-
                             <ScrollBar orientation="horizontal" />
                           </ScrollArea>
                         </div>
@@ -733,7 +734,7 @@ export function ResearcherModal() {
                     </Tabs>
                   </div>
 
-                  <div className="xl:w-[350px]  w-full grid grid-cols-1">
+                  <div className="xl:w-[350px] w-full">
                     <ResponsiveMasonry
                       columnsCountBreakPoints={{
                         350: 1,
@@ -814,10 +815,6 @@ export function ResearcherModal() {
                   </div>
                 </div>
               </DrawerHeader>
-
-              <DrawerFooter>
-
-              </DrawerFooter>
             </div>
           </div>
 
