@@ -297,6 +297,16 @@ useEffect(() => {
     element={<Dashboard />}
   />
 
+<Route
+    path='/dashboard/parametros-pesquisa'
+    element={<Dashboard />}
+  />
+
+<Route
+    path='/dashboard/sessao-pessoal'
+    element={<Dashboard />}
+  />
+
 <Route path='/dashboard/relatar-problema' element={<Dashboard />}/>
 <Route path='/dashboard/pesquisadores-selecionados' element={<Dashboard />}/>
 

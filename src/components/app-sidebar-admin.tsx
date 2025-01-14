@@ -9,6 +9,7 @@ import {
   Building2,
   ClipboardEdit,
   Command,
+  Contact,
   Download,
   File,
   FlaskConical,
@@ -23,12 +24,16 @@ import {
   Map,
   Pencil,
 
+  PieChart,
+
   SlidersHorizontal,
   Sparkles,
   SquareTerminal,
+  TextSearch,
   UserPlus,
   Users,
   Weight,
+  Wrench,
 } from "lucide-react"
 
 import { NavMain } from "./nav-main"
@@ -108,6 +113,38 @@ const data = {
    
     navMain: [
       {
+        title: "Administrativo",
+        url: "/",
+        icon: DotsThree,
+        isActive: true,
+        items: [
+          {
+            title: "Sessão de pessoal",
+            url: "/dashboard/sessao-pessoal",
+            icon: Contact
+          },
+
+          {
+            title: "Parâmetros",
+            url: "/dashboard/parametros-pesquisa",
+            icon: TextSearch
+          },
+
+          ...(has_editar_pesos_avaliacao
+            ? [
+              {
+                title: "Pesos de avaliação",
+ 
+                icon: Weight,
+                url: "/dashboard/pesos-avaliacao",
+              },
+              ]
+            : []),
+          
+        ],
+      },
+
+      {
         title: "Editar informações",
         url: "/",
         icon: Pencil,
@@ -159,21 +196,12 @@ const data = {
         ],
       },
       {
-        title: "A",
+        title: "Ferramentas",
         url: "/",
-        icon: SquareTerminal,
+        icon: Wrench,
         isActive: true,
         items: [
-          ...(has_editar_pesos_avaliacao
-            ? [
-              {
-                title: "Pesos de avaliação",
- 
-                icon: Weight,
-                url: "/dashboard/pesos-avaliacao",
-              },
-              ]
-            : []),
+         
             ...(hasBaremaAvaliacao
               ? [
                   {
@@ -237,6 +265,16 @@ const data = {
       },
     ]
     : []),
+
+    ...(has_visualizar_indicadores_instituicao
+      ? [
+        {
+          name: "Indicadores",
+          icon: PieChart,
+          url: "/dashboard/indicadores",
+        },
+        ]
+      : []),
       
     ],
   }

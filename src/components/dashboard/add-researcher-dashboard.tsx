@@ -201,7 +201,7 @@ export function AddResearcherDashboard() {
 {isModalOpen && (
   <main className="flex flex-1 flex-col p-4 md:p-8">
 
-<div className="w-full mb-2  gap-4">
+<div className="w-full mb-4  gap-4">
             <div className="flex items-center gap-4 mb-4">
           
             <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">

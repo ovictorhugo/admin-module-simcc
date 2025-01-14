@@ -281,7 +281,7 @@ const {onOpen} = useModal()
       
       <main className="flex flex-1 flex-col gap-4  md:gap-8 ">
              <Tabs defaultValue={tab} value={tab} className="h-full" >
-            <div className="w-full  gap-4">
+            <div className="w-full mb-8  gap-4">
             <div className="flex items-center gap-4 p-4 md:p-8 pb-0 md:pb-0">
           
             <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">

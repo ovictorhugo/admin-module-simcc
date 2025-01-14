@@ -40,10 +40,14 @@ export function Dashboard() {
             onOpen('informacoes')
         } else if (location.pathname == '/dashboard/minha-area' || location.pathname == '/minhaufmg/dashboard/minha-area') {
             onOpen('minha-area')
-        } else if(location.pathname == '/dashboard/administrativo' || location.pathname == '/minhaufmg/dashboard/administrativo') {
+        } else if(location.pathname == '/dashboard/administrativo' || location.pathname == '/minhaufmg/dashboard/minha-area') {
             onOpen('general')
         } else if(location.pathname == '/dashboard/minhas-producoes' || location.pathname == '/minhaufmg/dashboard/minhas-producoes') {
             onOpen('minhas-producoes')
+        } else if(location.pathname == '/dashboard/parametros-pesquisa' || location.pathname == '/minhaufmg/dashboard/parametros-pesquisa') {
+            onOpen('parametros-pesquisa')
+        } else if(location.pathname == '/dashboard/sessao-pessoal' || location.pathname == '/minhaufmg/dashboard/sessao-pessoal') {
+            onOpen('sessao-pessoal')
         }
     }, [location]);
   

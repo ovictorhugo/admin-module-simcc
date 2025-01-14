@@ -15,6 +15,8 @@ import { EnviarNotificacoes } from "../enviar-notificacoes/enviar-notificacoes";
 import { InfoDashboardPage } from "../dashboard/info-dashboard-page";
 import { HomeDashboard } from "../dashboard/home-dashboard";
 import { MinhasProducoes } from "../dashboard/minhas-producoes/minhas-producoes";
+import { ParametrosPesquisa } from "../dashboard/parametros-pesquisa/parametros-pesquisa";
+import { SessaoPessoal } from "../dashboard/sessao-pessoal/sessao-pessoal";
 
 
 const ModalContent = () => {
@@ -45,6 +47,10 @@ const ModalContent = () => {
           return  <HomeDashboard/>
         case 'minhas-producoes':
           return <MinhasProducoes/>
+        case 'parametros-pesquisa':
+          return <ParametrosPesquisa/>
+        case 'sessao-pessoal':
+          return <SessaoPessoal/>
     default:
       return null;
   }
