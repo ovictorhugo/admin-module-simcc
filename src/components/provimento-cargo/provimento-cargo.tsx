@@ -8,6 +8,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "../../context/context";
 import { toast } from "sonner"
 import { InfoPavimentoCargo } from "./info-provimento-cargo";
+import { Skeleton } from "../ui/skeleton";
 
 interface Post {
     nome: string,
@@ -24,7 +25,7 @@ interface Post {
 
 export function ProvimentoCargo() {
     const history = useNavigate();
-
+const [loading, setLoading] = useState(false)
     const {urlGeral} = useContext(UserContext)
 
     const handleVoltar = () => {
@@ -56,6 +57,7 @@ export function ProvimentoCargo() {
     let urlPatrimonio = `${urlGeral}ufmg/researcher?cpf=${cpf}&name=${search}`;
     console.log(urlPatrimonio)
 const fetchData = async () => {
+  setLoading(true)
   try {
    
     const response = await fetch( urlPatrimonio, {
@@ -74,7 +76,7 @@ const fetchData = async () => {
       setSearch('')
       setCpf('')
 
-     
+      setLoading(false)
    
     } else {
       toast("Erro: Nenhuma infomração encontrada", {
@@ -84,6 +86,8 @@ const fetchData = async () => {
           onClick: () => console.log("Fechar"),
         },
       });
+
+      setLoading(false)
     }
   } catch (err) {
     console.log(err);
@@ -144,10 +148,20 @@ const onClickBuscaPatrimonio = () => {
            </div>
 
 
-          {info.length > 0 && (
-             <div className="px-8">
-             <InfoPavimentoCargo name={info[0]?.nome || ''}dados={info}/>
+          
+
+          {loading ? (
+            <div>
+                <Skeleton className="w-full rounded-md h-[300px]">
+
+                </Skeleton>
             </div>
+          ):(
+info.length > 0 && (
+  <div className="px-8">
+  <InfoPavimentoCargo name={info[0]?.nome || ''}dados={info}/>
+ </div>
+)
           )}
         </main>
     )

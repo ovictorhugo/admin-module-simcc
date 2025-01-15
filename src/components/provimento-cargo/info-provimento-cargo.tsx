@@ -1,4 +1,4 @@
-import { GraduationCap, MapPin, User } from "lucide-react"
+import { GraduationCap, Info, MapPin, Timer, User } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { CalendarBlank, PuzzlePiece } from "phosphor-react"
 import { useContext, useMemo, useState } from "react"
@@ -7,10 +7,27 @@ import { Research } from "../researcher/researcher-page"
 import { toast } from "sonner"
 import { Alert } from "../ui/alert"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
+import { TempoGrafico } from "./grafico-tempo"
 interface Props {
     name:string
-    dados:any[]
+    dados:Dados[]
 }
+
+interface Dados {
+  nome: string,
+  cpf: string,
+  classe: number,
+  nivel: number,
+  inicio: string,
+  fim: string,
+  tempo_nivel: number,
+  tempo_acumulado: number,
+  arquivo: string
+  fimCorreto?: string | null;
+}
+
 export function InfoPavimentoCargo(props:Props) {
     const { urlGeral, user, itemsSelecionados, setSearchType, setValoresSelecionadosExport,  setItensSelecionadosPopUp, searchType, valoresSelecionadosExport, setPesquisadoresSelecionados, pesquisadoresSelecionados, setItensSelecionados, permission } = useContext(UserContext);
 
@@ -65,6 +82,52 @@ export function InfoPavimentoCargo(props:Props) {
             "8": {1: 730}, 
             }
 
+
+             // Ordena os dados por classe e nível
+             const sortedData = props.dados.sort((a, b) => {
+              if (a.classe !== b.classe) return a.classe - b.classe;
+              return a.nivel - b.nivel;
+            });
+          
+            const lastItem = sortedData[sortedData.length - 1];
+            const futureProgressions: Dados[] = [];
+            let currentClasse = lastItem.classe;
+            let currentNivel = lastItem.nivel;
+            let currentDate = new Date(lastItem.fim);
+          
+            // Gerar progressões futuras sem duplicação
+            while (intersticio_tabela[currentClasse]?.[currentNivel]) {
+              currentNivel += 1;
+          
+              if (!intersticio_tabela[currentClasse]?.[currentNivel]) {
+                currentClasse += 1;
+                currentNivel = 1;
+              }
+          
+              const tempoEsperado = intersticio_tabela[currentClasse]?.[currentNivel];
+              if (!tempoEsperado) break;
+          
+              const newInicio = new Date(currentDate.getTime() + 1 * 24 * 60 * 60 * 1000);
+              const newFim = new Date(newInicio.getTime() + tempoEsperado * 24 * 60 * 60 * 1000);
+          
+              futureProgressions.push({
+                nome: lastItem.nome,
+                cpf: lastItem.cpf,
+                classe: currentClasse,
+                nivel: currentNivel,
+                inicio: newInicio.toISOString(),
+                fim: newFim.toISOString(),
+                tempo_nivel: tempoEsperado,
+                tempo_acumulado: 0,
+                arquivo: "",
+              });
+          
+              currentDate = newFim;
+            }
+          
+            // Combina os dados atuais com progressões futuras
+            const combinedData = [...sortedData, ...futureProgressions];
+            
 return(
     <main className="flex gap-8 flex-col">
     
@@ -113,114 +176,187 @@ return(
 
         <h2 className="text-2xl font-medium ">Índices</h2>
 
+        <Alert className="">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div>
+                    <CardTitle className="text-sm font-medium">
+                    Projeção estimada de salário
+                    </CardTitle>
+                    <CardDescription>Bolsas PQ e DT </CardDescription>
+                    </div>
+
+                    <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Fonte: Conectee</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                   
+                  </CardHeader>
+
+
+                  <CardContent className="py-0 flex-1 items-center justify-center">
+                       
+                          </CardContent>
+                    </Alert>
         <h2 className="text-2xl font-medium ">Progressores e acelerações</h2>
-
         <ResponsiveMasonry
-    columnsCountBreakPoints={{
-        350: 1,
-        750: 2,
-        900: 3,
-        1200: 4
-    }}
+  columnsCountBreakPoints={{
+    350: 1,
+    750: 2,
+    900: 3,
+    1200: 4,
+  }}
 >
-                 <Masonry gutter="16px">
-                {props.dados
-  .sort((a, b) => {
-    // Ordena em ordem crescente pela classe
-    if (a.classe !== b.classe) {
-      return a.classe - b.classe; // Crescente
+  <Masonry gutter="16px">
+  {combinedData.map((item, index) => {
+  const inicioDate = new Date(item.inicio);
+  const fimDate =
+    index === sortedData.length - 1 && !item.fim
+      ? new Date(
+          inicioDate.getTime() +
+            (intersticio_tabela[item.classe]?.[item.nivel] ?? 0) * 24 * 60 * 60 * 1000
+        )
+      : new Date(item.fim);
+
+  // Verifica se o item anterior tem tempo acumulado > 0
+  const hasPriorValidItem = combinedData.some(
+    (prevItem, prevIndex) =>
+      prevIndex < index &&
+      prevItem.tempo_acumulado > 0 &&
+      prevItem.tempo_nivel != null
+  );
+
+  // Variáveis para armazenar o inicio e fim corretos
+  let inicioCorreto: string | null = null;
+  let fimCorreto: string | null = null;
+
+  // Calcula o início e o fim corretos apenas a partir do primeiro item com tempo acumulado > 0
+  if (hasPriorValidItem || (item.tempo_acumulado > 0 && item.tempo_nivel != null)) {
+    if (hasPriorValidItem) {
+      inicioCorreto =
+        index === 0
+          ? new Date(inicioDate.getTime() + 1 * 24 * 60 * 60 * 1000).toISOString() // Início correto do primeiro item
+          : new Date(
+              new Date(combinedData[index - 1]?.fimCorreto).getTime() + 1 * 24 * 60 * 60 * 1000
+            ).toISOString(); // Início correto a partir do fim do item anterior
+    } else {
+      inicioCorreto =
+        index === 0
+          ? new Date(inicioDate.getTime() + 1 * 24 * 60 * 60 * 1000).toISOString() // Início correto do primeiro item
+          : new Date(
+              new Date(combinedData[index - 1]?.fim).getTime() + 1 * 24 * 60 * 60 * 1000
+            ).toISOString(); // Início correto a partir do fim do item anterior
     }
-    // Ordena em ordem crescente pelo nível, dentro da mesma classe
-    return a.nivel - b.nivel; // Crescente
-  }).map((item) => {
-       // Recupera o tempo de progressão esperado baseado na classe e nível
-       const tempoEsperado = intersticio_tabela[item.classe]?.[item.nivel] ?? 0;
 
-       // Converte as datas de início e fim para Date
-       const inicioDate = new Date(item.inicio);
-       const fimDate = new Date(item.fim);
-   
-       // Se tempo_acumulado > 0 e tempo_nivel não é null, ajusta as datas
-       let inicioCorreto = inicioDate;
-       let fimCorreto = new Date(inicioDate.getTime() + tempoEsperado * 24 * 60 * 60 * 1000); // Calcula o fim correto baseado no tempo esperado
-   
-       if (item.tempo_acumulado > 0 && item.tempo_nivel != null) {
-         // Ajusta a data final com base na diferença entre o tempo real e o tempo esperado
-         const diferenca = item.tempo_acumulado - tempoEsperado;
-         fimCorreto = new Date(fimCorreto.getTime() + diferenca * 24 * 60 * 60 * 1000); // Ajusta o tempo de acordo com a diferença
-       }
-                    return(
-                        <div className="flex w-full group">
-                        <div className={`h-full w-2 ${item.tempo_nivel == null && ('bg-blue-600')} ${(item.tempo_acumulado > 0 && item.tempo_nivel != null ) && ('bg-orange-600')} ${(item.tempo_acumulado <= 0 && item.tempo_nivel != null ) && ('bg-green-600')}  rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 `}></div>
-                           <Alert className={`rounded-l-none flex flex-col justify-between p-0 `}>
-                           <div className="p-4 pb-0">
-                               <h3 className="font-semibold mb-1 flex flex-1">
-                                {(item.classe == 4 && item.nivel == 1) && ('Auxiliar (G/E) (M)')}
+    fimCorreto =
+      inicioCorreto &&
+      new Date(
+        new Date(inicioCorreto).getTime() +
+          (intersticio_tabela[item.classe]?.[item.nivel] ?? 0) * 24 * 60 * 60 * 1000
+      ).toISOString(); // Fim correto a partir do início calculado
 
-                                {(item.classe == 4 && item.nivel == 2) && ('Auxiliar Adjunto (D)')}
-                                {item.classe == 5 && ('Assitente')}
-                                {item.classe == 6 && ('Adjunto')}
-                                {item.classe == 7 && ('Associado')}
-                                {item.classe == 8 && ('Titular')}
-                                </h3>
-                                <div className="flex flex-wrap items-center  gap-4">
-                                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
- Classe: {item.classe}
-</div>
+    // Atribuindo fimCorreto diretamente ao item dentro do combinedData
+    item.fimCorreto = fimCorreto; // Atualizando a propriedade fimCorreto diretamente no item
+  }
 
-<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
- Nível: {item.nivel}
-</div>
-                                </div>
-                               </div>
-
-                               <div className="flex flex-wrap items-center mt-4 p-4 gap-3">
-                               <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
-  <CalendarBlank size={12} />
-  Início: {new Date(item.inicio).toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })}
-</div>
-
-<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
-  <CalendarBlank size={12} />
-  Fim: {new Date(item.fim).toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })}
-</div>
-
-<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
-  <CalendarBlank size={12} />
-  Tempo no cargo: {item.tempo_nivel} dias
-</div>
-
-
-{(item.tempo_acumulado > 0 && item.tempo_nivel != null ) && (
+      return (
+        <div className="flex w-full group" key={index}>
+          <div
+            className={`h-full w-2 ${
+              index > sortedData.length - 1
+                ? "bg-blue-600"
+                : item.tempo_nivel == null
+                ? "bg-blue-200"
+                : item.tempo_acumulado > 0 && item.tempo_nivel != null
+                ? "bg-orange-600"
+                : "bg-green-600"
+            } rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0`}
+          ></div>
+          <Alert className="rounded-l-none flex flex-col justify-between p-0 alert">
+            <div className="p-4 pb-0">
+              <h3 className="font-semibold mb-1 flex flex-1">
+                {item.classe == 4 && item.nivel == 1 && "Auxiliar (G/E) (M)"}
+                {item.classe == 4 && item.nivel == 2 && "Auxiliar Adjunto (D)"}
+                {item.classe == 5 && "Assistente"}
+                {item.classe == 6 && "Adjunto"}
+                {item.classe == 7 && "Associado"}
+                {item.classe == 8 && "Titular"}
+              </h3>
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
+                  Classe: {item.classe}
+                </div>
+                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
+                  Nível: {item.nivel}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center mt-4 p-4 gap-3">
+              
+            {props.dados.some(dado => dado.classe === item.classe && dado.nivel === item.nivel) && (
+  <>
     <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
-    <CalendarBlank size={12} />
-    Início correto: {inicioCorreto.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-  </div>
-)}
+      <CalendarBlank size={12} />
+      Início: {inicioDate.toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })}
+    </div>
 
-{(item.tempo_acumulado > 0 && item.tempo_nivel != null ) && (
     <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
-    <CalendarBlank size={12} />
-    Fim correto: {fimCorreto.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-  </div>
-)}
+      <CalendarBlank size={12} />
+      Fim: {fimDate.toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })}
+    </div>
 
-           
-                               </div>
-                           </Alert>
-                        </div>
-                    )
-                })}
-                    </Masonry>
-                    </ResponsiveMasonry>
+    {item.tempo_nivel != null && (
+      <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
+      <Timer size={12} />
+      Tempo no cargo: {item.tempo_nivel} dias
+    </div>
+    )}
+  </>
+)}
+              {(inicioCorreto || fimCorreto) && (
+                <>
+                  {inicioCorreto && (
+                    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
+                      <CalendarBlank size={12} />
+                      Início correto: {new Date(inicioCorreto).toLocaleDateString("pt-BR", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })}
+                    </div>
+                  )}
+                  {fimCorreto && (
+                    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
+                      <CalendarBlank size={12} />
+                      Fim correto: {new Date(fimCorreto).toLocaleDateString("pt-BR", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </Alert>
+        </div>
+      );
+    })}
+  </Masonry>
+</ResponsiveMasonry>
+
+
         
     </main>
 )

@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Button } from "../../ui/button";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Plus } from "lucide-react";
 import { useState } from "react";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
+import { Alert } from "../../ui/alert";
 
 export function ParametrosPesquisa() {
      const history = useNavigate();
@@ -48,8 +50,19 @@ export function ParametrosPesquisa() {
 
        </div>
 
-       <TabsContent value="all" className=" ">
-
+       <TabsContent value="all" className="px-8">
+       <Alert className="p-0">
+       <CardHeader>
+                    <CardTitle>Gerenciamento de Parâmetros</CardTitle>
+                    <CardDescription>
+                    Veja e edite os filtros de pesquisas habilitados na plataforma
+                    </CardDescription>
+                  </CardHeader>
+               
+               <CardContent className="flex mt-6 flex-col gap-4">
+                <Button className="w-fit"><Plus size={16}/> Adicionar parâmetro</Button>
+               </CardContent>
+             </Alert>
        </TabsContent>
         </Tabs>
    </main>
