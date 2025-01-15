@@ -10,7 +10,7 @@ import { toast } from "sonner"
 
 import htmlParser from "html-react-parser";
 import useWindowSize from "./use-windows-size"
-import { ScrollArea } from "../ui/scroll-area"
+import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 
 
 interface Props {
@@ -145,14 +145,14 @@ export function InformationResearcher(props: Props) {
   return (
     <div className="flex flex-col w-screen">
       <div className="flex items-center flex-col relative">
-        <ScrollArea>
-          <div className={`mb-4 flex gap-3 overflow-x-scroll items-center flex-wrap  ${movel ? " flex-col justify-start h-12 text-[0.65rem]" : "justify-center"}`}>
+        <ScrollArea className="w-full mb-6">
+          <div className={`mb-4 flex gap-3 items-center flex-wrap  ${movel ? " flex-col justify-start h-7 text-[0.65rem]" : "justify-center"}`}>
             {props.area != '' && (
               props.area.split(';').map((value, index) => (
                 <li
                   key={index}
                   className={`py-2 whitespace-nowrap px-4 rounded-md font-bold flex gap-2 text-white items-center ${value.includes('CIENCIAS AGRARIAS') ? 'bg-red-400' : value.includes('CIENCIAS EXATAS E DA TERRA') ? 'bg-green-400' : value.includes('CIENCIAS DA SAUDE') ? 'bg-[#20BDBE]' : value.includes('CIENCIAS HUMANAS') ? 'bg-[#F5831F]' : value.includes('CIENCIAS BIOLOGICAS') ? 'bg-[#EB008B]' : value.includes('ENGENHARIAS') ? 'bg-[#FCB712]' : value.includes('CIENCIAS SOCIAIS APLICADAS') ? 'bg-[#009245]' : value.includes('LINGUISTICA LETRAS E ARTES') ? 'bg-[#A67C52]' : value.includes('OUTROS') ? 'bg-[#1B1464]' : 'bg-[#000]'}
-                                    `}
+                                      `}
                 >
                   <PuzzlePiece size={12} className="text-white" /> {value.trim()}
                 </li>
@@ -185,6 +185,7 @@ export function InformationResearcher(props: Props) {
             <a href={`https://lattes.cnpq.br/${props.lattes_id}`} target="blank_" className="bg-blue-900 py-2 px-4 text-white rounded-md font-bold flex gap-2 items-center"><LinkSimple size={12} className="textwhite" /> Currículo Lattes</a>
             <a href={`https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(props.name)}`} rel="noopener noreferrer" target="blank_" className="bg-blue-500 py-2 px-4 text-white rounded-md font-bold flex gap-2 items-center"><LinkedinLogo size={12} className="textwhite" />Pesquisar no LinkedIn</a>
           </div>
+          <ScrollBar orientation="horizontal" />
         </ScrollArea>
 
         {props.openAPI && (

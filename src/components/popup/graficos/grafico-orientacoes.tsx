@@ -3,8 +3,10 @@ import { Alert } from "../../ui/alert";
 import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
+import { useMediaQuery } from "react-responsive";
+
 // Function to normalize strings by removing accents and converting to lowercase
-const normalizeString = (str: string) => 
+const normalizeString = (str: string) =>
   str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
 type Livro = {
@@ -77,6 +79,8 @@ export function GraficoOrientacoes(props: { livros: Livro[] }) {
     }
   }, [props.livros]);
 
+  const movel = useMediaQuery({ maxWidth: 560 });
+
   return (
     <Alert className="pt-12">
       <ChartContainer config={normalizedChartConfig} className="h-[250px] w-full">
@@ -84,18 +88,19 @@ export function GraficoOrientacoes(props: { livros: Livro[] }) {
           <BarChart data={chartData} margin={{ top: 20, right: 20, left: 20, bottom: 0 }}>
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
             <CartesianGrid vertical={false} horizontal={false} />
-            <ChartLegend content={<ChartLegendContent />} />
+            <ChartLegend className="flex flex-wrap h-10 my-2 pb-2 px-2 bg-slate-200 rounded-md overflow-y-scroll" content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
             {Object.keys(normalizedChartConfig).map((nature, index) => (
               <Bar key={nature} dataKey={nature} stackId="a" fill={normalizedChartConfig[nature].color} radius={4}>
                 {index === Object.keys(normalizedChartConfig).length - 1 && (
-                    <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
-                  )}
+                  <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+                )}
               </Bar>
             ))}
           </BarChart>
         </ResponsiveContainer>
       </ChartContainer>
+      <p className={` ${movel ? "text-[0.55rem]" : "ml-5"}`}>Role dentro da caixa cinza acima para ver todos os tipos</p>
     </Alert>
   );
 }

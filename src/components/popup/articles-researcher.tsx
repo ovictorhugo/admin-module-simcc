@@ -217,13 +217,23 @@ export function ArticlesResearcherPopUp(props: Props) {
                                     {searchType != 'article' || itemsSelecionadosPopUp.length == 0 ? (
                                         <p className="text-sm font-bold">Todos os artigos</p>
                                     ) : (
-                                        <div className="text-sm font-bold flex items-center gap-2">
-                                            <span className="">{publicacoes.length} </span> ocorrências de
+                                        <div className={` font-bold flex items-center gap-2 ${movel ? "text-[0.4rem]" : "text-sm"}`}>
+                                            <span className={`flex flex-col`}>{publicacoes.length} </span> ocorrências de
                                             <div className='flex gap-2 items-center'>
                                                 {itemsSelecionadosPopUp.map((valor, index) => {
                                                     return (
                                                         <>
-                                                            <div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs bg-blue-500 dark:bg-blue-500 text-white border-0 `} >
+                                                            <div
+                                                                key={index}
+                                                                className={`
+                                                                    flex gap-2 items-center
+                                                                    ${movel ? "h-8 text-[0.4rem] p-2" : "h-10 p-2"}
+                                                                    capitalize
+                                                                    rounded-md text-xs
+                                                                    bg-blue-500 dark:bg-blue-500
+                                                                    text-white border-0
+                                                                `}
+                                                            >
                                                                 {valor.term.replace(/[|;]/g, '')}
                                                                 <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer" />
                                                                 {/* Adicionando a escolha entre "e" ou "ou" */}
@@ -249,30 +259,34 @@ export function ArticlesResearcherPopUp(props: Props) {
                                     )}
                                 </div>
 
-                                <div className="flex gap-3 mr-3  items-center h-full">
+                                {
+                                    !movel &&
+                                    <div className="flex gap-3 mr-3  items-center h-full">
 
-                                    {(itemsSelecionadosPopUp != itemsSelecionados && searchType == 'article') && (
-                                        <div className="flex gap-3  items-center">
-                                            <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)} variant="ghost" size={'icon'}>
-                                                <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
-                                            </Button>
+                                        {(itemsSelecionadosPopUp != itemsSelecionados && searchType == 'article') && (
+                                            <div className="flex gap-3  items-center">
+                                                <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)} variant="ghost" size={'icon'}>
+                                                    <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
+                                                </Button>
 
-                                            <div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
-                                        </div>
-                                    )}
+                                                <div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
+                                            </div>
+                                        )}
 
-                                    <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
-                                        <Rows size={16} className=" whitespace-nowrap" />
-                                    </Button>
+                                        <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                                            <Rows size={16} className=" whitespace-nowrap" />
+                                        </Button>
 
-                                    <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
-                                        <SquaresFour size={16} className=" whitespace-nowrap" />
-                                    </Button>
+                                        <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
+                                            <SquaresFour size={16} className=" whitespace-nowrap" />
+                                        </Button>
 
-                                    <Button onClick={handleRefresh} variant="ghost" size={'icon'}>
-                                        <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
-                                    </Button>
-                                </div>
+                                        <Button onClick={handleRefresh} variant="ghost" size={'icon'}>
+                                            <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
+                                        </Button>
+                                    </div>
+                                }
+
                             </div>
                         </div>
 
