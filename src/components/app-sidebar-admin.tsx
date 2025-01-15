@@ -119,8 +119,8 @@ const data = {
         isActive: true,
         items: [
           {
-            title: "Sessão de pessoal",
-            url: "/dashboard/sessao-pessoal",
+            title: "Seção de pessoal",
+            url: "/dashboard/secao-pessoal",
             icon: Contact
           },
 

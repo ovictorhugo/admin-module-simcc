@@ -1,10 +1,5 @@
 import { Toaster } from "sonner";
-import { Header } from "../components/header/Header";
-import { NavigationSidebar } from "../components/navigation/navigation-sidebar";
 
-import { TooltipProvider } from "../components/ui/tooltip"
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../components/ui/resizable"
-import { cn } from "../lib"
 import { toast } from "sonner"
 
 import { useContext,  useEffect,  useState } from "react";
@@ -40,185 +35,15 @@ export default function AdminLayout({
   
 
   //permissoes
-  const hasBaremaAvaliacao = permission.some(
-    (perm) => perm.permission === 'criar_barema_avaliacao'
-  );
 
-  const hasNotificacoes = permission.some(
-    (perm) => perm.permission === 'enviar_notificacoes'
-  );
-
-  const has_visualizar_pesquisadores = permission.some(
-    (perm) => perm.permission === 'visualizar_pesquisadores'
-  );
-
-  const has_visualizar_todos_departamentos = permission.some(
-    (perm) => perm.permission === 'visualizar_todos_departamentos'
-  );
-
-  const has_visualizar_modulo_administrativo = permission.some(
-    (perm) => perm.permission === 'visualizar_modulo_administrativo'
-  );
-
-  const has_visualizar_gerencia_modulo_administrativo = permission.some(
-    (perm) => perm.permission === 'visualizar_gerencia_modulo_administrativo'
-  );
-
-  const has_visualizar_todos_programas = permission.some(
-    (perm) => perm.permission === 'visualizar_todos_programas'
-  );
-
-  const has_visualizar_grupos_pesquisa = permission.some(
-    (perm) => perm.permission === 'visualizar_grupos_pesquisa'
-  );
-
-  const has_visualizar_inct = permission.some(
-    (perm) => perm.permission === 'visualizar_inct'
-  );
-
-  const has_editar_pesos_avaliacao = permission.some(
-    (perm) => perm.permission === 'editar_pesos_avaliacao'
-  );
-
-  const has_visualizar_indicadores_instituicao = permission.some(
-    (perm) => perm.permission === 'visualizar_indicadores_instituicao'
-  );
 
   const has_atualizar_apache_hop = permission.some(
     (perm) => perm.permission === 'atualizar_apache_hop'
   );
 
-  const links2 = [
-    {
-      title: "Dashboard",
-      label: "",
-      icon: LayoutDashboard,
-      link: "/dashboard",
-    },
+ 
 
-    ...(has_visualizar_gerencia_modulo_administrativo
-      ? [
-          {
-            title: "Administrativo",
-            label: "",
-            icon: SlidersHorizontal,
-            link: "/dashboard/administrativo",
-          },
-        ]
-      : []),
-
-      ...(has_visualizar_todos_departamentos
-        ? [
-          {
-            title: "Departamentos",
-            label: "",
-            icon: Building2,
-            link: "/dashboard/departamentos",
-          },
-          ]
-        : []),
-
-    ...(has_visualizar_pesquisadores
-      ? [
-          {
-            title: "Pesquisadores",
-            label: "",
-            icon: Users,
-            link: "/dashboard/pesquisadores",
-          },
-        ]
-      : []),
-
-
-      ...(has_visualizar_todos_programas
-        ? [
-          {
-            title: "Programas",
-            label: "",
-            icon: GraduationCap,
-            link: "/dashboard/programas",
-          },
-          ]
-        : []),
-
-        ...(has_visualizar_grupos_pesquisa
-          ? [
-            {
-              title: "Grupos de pesquisa",
-              label: "",
-              icon: Blocks,
-              link: "/dashboard/grupos-pesquisa",
-            },
-            ]
-          : []),
-
-          ...(has_visualizar_inct
-            ? [
-              {
-                title: "INCT's",
-                label: "",
-                icon: FlaskConical,
-                link: "/dashboard/inct",
-              },
-              ]
-            : []),
-
-            {
-              title: "Minhas produções",
-              label: ``,
-              icon: File,
-              link: "/dashboard/minhas-producoes",
-            },
-
-            ...(has_editar_pesos_avaliacao
-              ? [
-                {
-                  title: "Pesos de avaliação",
-                  label: "",
-                  icon: Weight,
-                  link: "/dashboard/pesos-avaliacao",
-                },
-                ]
-              : []),
-
-        
-              ...(has_visualizar_indicadores_instituicao
-                ? [
-                  {
-                    title: "Indicadores",
-                    label: "",
-                    icon: PieChart,
-                    link: "/dashboard/indicadores",
-                  },
-                  ]
-                : []),
-
-  ]
-
-  const links = [
-    ...(hasBaremaAvaliacao
-      ? [
-          {
-            title: "Baremas",
-            label: `${pesquisadoresSelecionados.length == 0 ? (''):(pesquisadoresSelecionados.length)}`,
-            icon: ClipboardEdit,
-            link: "/dashboard/baremas",
-          },
-        ]
-      : []),
-
-      ...(hasNotificacoes
-        ? [
-           {
-                title: "Enviar notificações",
-                label: "",
-                icon: Mail,
-                link: "/dashboard/enviar-notificacoes",
-              },
-          ]
-        : []),
-
-  ];
+ 
 
   const location = useLocation()
   const [isOpenConsole, setIsOpenConsole] = useState(false)
@@ -296,32 +121,7 @@ useEffect(() => {
 };
 
 
-const links3 = [
-  ...(hasBaremaAvaliacao
-    ? [
-        {
-          title: "Pesquisadores selecionados",
-          label: `${pesquisadoresSelecionados.length == 0 ? (''):(pesquisadoresSelecionados.length)}`,
-          icon: UserPlus,
-          link: "/dashboard/pesquisadores-selecionados",
-        },
-      ]
-    : []),
 
-  {
-    title: "Relatar problema",
-    label: "",
-    icon: Bug,
-    link: "/dashboard/relatar-problema",
-  },
-  {
-    title: "Informações",
-    label: "",
-    icon: Info,
-    link: "/dashboard/informacoes",
-  },
-]
-  
     return (
     <div>
       
@@ -331,7 +131,7 @@ const links3 = [
 
   
 
-<SidebarInset className="">
+<SidebarInset className="" props2={<SidebarRight />}>
 <main className="h-full flex flex-col flex-1 ">
             {/* Assuming Header is another component */}
          
@@ -339,38 +139,13 @@ const links3 = [
             <div className="h-full ">
             {children}
             </div>
-              {(location.pathname == '/dashboard/administrativo' && has_atualizar_apache_hop) && (
-                 <div className="bottom-0 flex flex-col w-full ">
-                 <div className=" relative">
-                   <div className="h-[50px] w-full border-t dark:border-neutral-800  px-4 bg-neutral-50 dark:bg-neutral-900 flex items-center justify-between ">
-                       <div className="flex items-center gap-3 font-medium text-sm">
-                         <Terminal size={16}/> Terminal Apache Hop
-                       </div>
              
-
-                       <div className="flex items-center gap-3 font-medium text-sm">
-                       
-
-                         <Button size={'sm'} onClick={() => handleSubmit()}  className="h-8"><Play size={16}/>Atualizar dados</Button>
-                         <Button size={'icon'} variant={'outline'} onClick={() => setIsOpenConsole(!isOpenConsole)} className="h-8 w-8">{isOpenConsole ? (<ChevronDown size={16}/>):(<ChevronUp size={16}/>)}</Button>
-                       </div>
-                   </div>
-             
-
-                   {isOpenConsole && (
-                     <div>
-             <ApacheViewDashboard/>
-                     </div>
-                   )}
-               </div>
-               </div>
-              )}
           
           </main>
         
           </SidebarInset>
          
-          <SidebarRight/>
+         
 
         <Toaster />
    

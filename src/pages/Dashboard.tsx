@@ -46,7 +46,7 @@ export function Dashboard() {
             onOpen('minhas-producoes')
         } else if(location.pathname == '/dashboard/parametros-pesquisa' || location.pathname == '/minhaufmg/dashboard/parametros-pesquisa') {
             onOpen('parametros-pesquisa')
-        } else if(location.pathname == '/dashboard/sessao-pessoal' || location.pathname == '/minhaufmg/dashboard/sessao-pessoal') {
+        } else if(location.pathname == '/dashboard/secao-pessoal' || location.pathname == '/minhaufmg/dashboard/sessao-pessoal') {
             onOpen('sessao-pessoal')
         }
     }, [location]);

@@ -43,16 +43,14 @@ export function SidebarRight({
   return (
     <Sidebar
       collapsible='none'
-      className="sticky hidden w-[48px] lg:flex top-0 h-svh "
+      className=" hidden w-[300px] bg-transparent lg:flex  "
       {...props}
     >
-        <SidebarHeader className="h-16  border-sidebar-border">
-        
-      </SidebarHeader>
+     
     
       <SidebarContent>
      
-   
+      <DatePicker />
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>

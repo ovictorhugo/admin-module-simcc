@@ -303,7 +303,7 @@ useEffect(() => {
   />
 
 <Route
-    path='/dashboard/sessao-pessoal'
+    path='/dashboard/secao-pessoal'
     element={<Dashboard />}
   />
 

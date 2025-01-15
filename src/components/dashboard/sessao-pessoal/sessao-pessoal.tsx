@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Button } from "../../ui/button";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Plus } from "lucide-react";
 import { useState } from "react";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
+import { Alert } from "../../ui/alert";
 
 export function SessaoPessoal() {
        const history = useNavigate();
@@ -14,7 +16,16 @@ export function SessaoPessoal() {
         
         const [tab, setTab] = useState('all')
         
-        
+        //images
+const [images, setImages] = useState<string[]>([]);
+
+const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const files = event.target.files;
+  if (files) {
+    const newImages = Array.from(files).map(file => URL.createObjectURL(file));
+    setImages(prevImages => [...prevImages, ...newImages]);
+  }
+};
     
     return(
         <main className="flex flex-1 flex-col gap-4  md:gap-8 ">
@@ -28,7 +39,7 @@ export function SessaoPessoal() {
               </Button>
           
               <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                Módulo administrativo
+                Seção de pessoal
               </h1>
              
 
@@ -49,7 +60,44 @@ export function SessaoPessoal() {
 
             </div>
 
-            <TabsContent value="all" className=" ">
+            <TabsContent value="all" className="px-8 flex flex-col gap-8 ">
+            <Alert className="p-0">
+                <CardHeader>
+                    <CardTitle>Gerenciamento de documentos</CardTitle>
+                    <CardDescription>
+                      Adicione os documentos para atualizar o banco de dados
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button>
+                    <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  id="upload"
+                  multiple={true}
+                />
+                <label htmlFor="upload" className="cursor-pointer w-full h-full gap-2 flex items-center justify-center">
+                <Plus size={16}/>
+                  Adicionar documentos
+                </label>
+                    </Button>
+
+                  </CardContent>
+                </Alert>
+
+
+                {images.length > 0 && (
+                  <Alert>
+                      {images.map((props) => (
+                        <div>
+                         
+                        </div>
+                      ))}
+                  </Alert>
+                )}
+
 
             </TabsContent>
              </Tabs>

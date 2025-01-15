@@ -315,30 +315,35 @@ SidebarRail.displayName = "SidebarRail"
 
 const SidebarInset = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<"main">
->(({ className, ...props }, ref) => {
+  React.ComponentProps<"main"> & { props2?: React.ReactNode }
+>(({ className, props2, ...props }, ref) => {
   return (
-    <main
-  ref={ref}
-  className={cn(
-    "relative w-full md:p-2 md:peer-data-[state=expanded]:pl-2 md:pl-0",
-    "md:h-screen dark:bg-black bg-neutral-100 flex flex-col", // Adiciona flex para o layout
-    className
-  )}
->
-  <Header />
-  <div
-    className="flex-grow relative h-full w-full border bg-neutral-50 md:h-[calc(100vh - 40px)] dark:bg-neutral-900 dark:border-neutral-800 md:rounded-xl overflow-y-auto"
-     // Substitua "40px" pela altura real do Header
-   
-  >
-
-    <div className="w-full h-full relative grid grid-cols-1 flex-grow " {...props}/>
+    <div className="w-full flex">
+      <main
+        ref={ref}
+        className={cn(
+          "relative w-full md:p-2 md:peer-data-[state=expanded]:pl-2 md:pl-0",
+          "md:h-screen dark:bg-black bg-neutral-100 flex flex-col",
+          className
+        )}
+      >
+        <Header />
+        <div className="flex-grow flex relative h-full w-full  md:h-[calc(100vh - 40px)] -xl overflow-y-auto">
+        <div
+          className="flex-grow relative h-full w-full border bg-neutral-50 md:h-[calc(100vh - 40px)] dark:bg-neutral-900 dark:border-neutral-800 md:rounded-xl overflow-y-auto"
+        >
+          <div className="w-full h-full relative grid grid-cols-1 flex-grow" {...props} />
+          
+        </div>
+        {props2 && <div>{props2}</div>}
+        </div>
+      </main>
+    
     </div>
-</main>
-  )
-})
-SidebarInset.displayName = "SidebarInset"
+  );
+});
+
+SidebarInset.displayName = "SidebarInset";
 
 const SidebarInput = React.forwardRef<
   React.ElementRef<typeof Input>,
