@@ -15,63 +15,63 @@ export function IndicePesquisador() {
             {
               level: "A+",
               phdYears: "≥ 10",
-              academicProduction: "≥ 2 A1",
+              academicProduction: "A + L + CL ≥ 5 (mínimo 2 A1)",
               pgExperience: "≥ 4 Doutorados",
               combinedRule: "≥ 1 A1 + ≥ 1 patente",
             },
             {
               level: "A",
               phdYears: "≥ 10",
-              academicProduction: "≥ 1 A1",
+              academicProduction: "A + L + CL ≥ 5 (mínimo 1 A1)",
               pgExperience: "≥ 2 Doutorados",
               combinedRule: "≥ 1 patente",
             },
             {
               level: "B+",
               phdYears: "≥ 8",
-              academicProduction: "≥ 2 A*",
+              academicProduction: "A + L + CL ≥ 4 (Mínimo 2 AA)",
               pgExperience: "≥ 2 Mestrados ou ≥ 1 Doutorado",
               combinedRule: "≥ 1 A* + (≥ 1 patente ou ≥ 3 softwares)",
             },
             {
               level: "B",
               phdYears: "≥ 8",
-              academicProduction: "≥ 2 A*",
+              academicProduction: "A + L + CL ≥ 4 (Mínimo 1 AA)",
               pgExperience: "≥ 2 Mestrados ou ≥ 1 Doutorado",
               combinedRule: "≥ 1 patente ou ≥ 3 softwares",
             },
             {
               level: "C+",
               phdYears: "≥ 6",
-              academicProduction: "≥ 2 A*",
+              academicProduction: "A + L + CL ≥ 3 (Mínimo 2 AA)",
               pgExperience: "≥ 1 Mestrado ou 1 Doutorado",
               combinedRule: "≥ 1 A* + (≥ 1 patente ou ≥ 3 softwares)",
             },
             {
               level: "C",
               phdYears: "≥ 6",
-              academicProduction: "≥ 1 A*",
+              academicProduction: "A + L + CL ≥ 3 (Mínimo 1 AA)",
               pgExperience: "≥ 1 Mestrado ou ≥ 1 Doutorado",
               combinedRule: "≥ 1 patente ou ≥ 3 softwares",
             },
             {
               level: "D+",
               phdYears: "≥ 3",
-              academicProduction: "≥ 1 A*",
+              academicProduction: "A + L + CL ≥ 2 (Mínimo 1 AA)",
               pgExperience: "-",
               combinedRule: "≥ 1 patente ou ≥ 3 softwares",
             },
             {
               level: "D",
               phdYears: "≥ 3",
-              academicProduction: "≥ 1 B**",
+              academicProduction: "A + L + CL ≥ 2 (Mínimo 1 AA)",
               pgExperience: "-",
               combinedRule: "≥ 1 patente ou ≥ 3 softwares",
             },
             {
               level: "E+",
               phdYears: "< 3",
-              academicProduction: "≥ 1 B**",
+              academicProduction: "A + L + CL ≥ 1",
               pgExperience: "-",
               combinedRule: "≥ 1 A* ou ≥ 1 patente ou ≥ 3 softwares",
             },
@@ -171,7 +171,13 @@ classificationColors[researcher.level] || "bg-neutral-200"
   <TableFooter>
     <TableRow>
       <TableCell colSpan={5} className="text-center">
-        *Estrato Qualis A1, A2, A3 ou A4. **Estrato Qualis B1, B2, B3 ou B4.
+      (A - Artigo)
+(AB – Qualquer artigo qualis B)
+(AA – Qualquer artigo qualis A )
+(A1 – Artigo qualis A1)
+(L – Livro )
+(CL – Capítulo Livro)
+
       </TableCell>
     </TableRow>
   </TableFooter>

@@ -538,10 +538,10 @@ function generateNameVariations(name: string): string[] {
                   )
                 })}
                 
-       <div className="overflow-y-auto elementBarra ">
+       <div className="overflow-y-auto text-left grid grid-cols-1 w-full ">
       
         <div className=" px-16  " >
-        <DrawerHeader className="p-0 ">
+        <DrawerHeader className="p- text-left ">
             {researcher.slice(0, 1).map((user) => {
                 return(
                    <div>

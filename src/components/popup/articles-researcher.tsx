@@ -264,6 +264,7 @@ em artigos
 </div>
 )}
 
+<div className='hidden md:flex gap-3 items-center '>
 <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu == 'block' ? 'ghost' : 'outline' } size={'icon'}>
         <Rows size={16} className=" whitespace-nowrap" />
     </Button>
@@ -271,6 +272,7 @@ em artigos
     <Button  onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost' }  size={'icon'}>
         <SquaresFour size={16} className=" whitespace-nowrap" />
     </Button>
+</div>
 
     <Button onClick={handleRefresh} variant="ghost" size={'icon'}>
         <ArrowUDownLeft size={16} className=" whitespace-nowrap" />

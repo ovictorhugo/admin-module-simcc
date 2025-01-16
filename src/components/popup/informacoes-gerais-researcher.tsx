@@ -189,7 +189,7 @@ export function InformacoesGeraisResearcher(props:Research) {
   const {onClose} = useModal()
 
     return (
-        <div className="h-fit">
+        <div className="h-fit text-left">
           
               <div className=" font-medium text-2xl mb-6 pr-12">Informações gerais</div>
           
@@ -269,7 +269,7 @@ export function InformacoesGeraisResearcher(props:Research) {
 
           props.departments.slice(0,1).map((item) => (
             <div>
-            <div className="font-medium text-2xl mb-6 pr-12">
+            <div className="font-medium text-left text-2xl mb-6 pr-12">
           Departamento
           </div>
            <Link  to={`/departamentos?dep_id=${item.dep_id}`}
@@ -304,7 +304,7 @@ export function InformacoesGeraisResearcher(props:Research) {
 
             props.subsidy.slice(0,1).map((item) => (
               <div>
-              <div className="font-medium text-2xl mb-6 pr-12">
+              <div className="font-medium text-left text-2xl mb-6 pr-12">
             Bolsa CNPq
             </div>
               <div className="flex relative flex-1">
