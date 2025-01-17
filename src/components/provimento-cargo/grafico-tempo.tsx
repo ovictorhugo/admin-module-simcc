@@ -59,44 +59,7 @@ const chartData = props.combinedData.map((item, index) => {
         <CardDescription>Evolução do tempo acumulado dos docentes</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer>
-          <LineChart
-            width={500}
-            height={300}
-            data={chartData}
-            margin={{
-              top: 5,
-              right: 5,
-              left: 5,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey="inicio"
-              tickFormatter={(value) => new Date(value).toLocaleDateString()}
-              axisLine={false}
-              tickLine={false}
-              tickMargin={8}
-            />
-            <YAxis />
-            <Tooltip content={<ChartTooltipContent />} />
-            <Line
-              dataKey="tempo_acumulado"
-              type="monotone"
-              stroke="hsl(var(--chart-1))"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              dataKey="tempo_nivel"
-              type="monotone"
-              stroke="hsl(var(--chart-2))"
-              strokeWidth={2}
-              dot={false}
-            />
-          </LineChart>
-        </ChartContainer>
+        
       </CardContent>
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">

@@ -12,7 +12,7 @@ type Publicacao = {
   id: string,
   doi: string,
   name_periodical: string,
-  qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "SQ" ,
+  qualis: "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "None" | "SQ",
   title: string,
   year: string,
   color: string,
@@ -25,16 +25,18 @@ type Publicacao = {
   researcher_id: string
   distinct: boolean
 
-  abstract:string,
-  article_institution:string,
-  authors:string
-  authors_institution:string
-  citations_count:string 
-  issn:string 
-  keywords:string 
-  landing_page_url:string 
-  language:string 
-  pdf:string
+  abstract: string,
+  article_institution: string,
+  authors: string
+  authors_institution: string
+  citations_count: string
+  issn: string
+  keywords: string
+  landing_page_url: string
+  language: string
+  pdf: string
+  has_image:boolean
+  relevance:boolean
 }
 
 export function ArtigosRecentes() {
@@ -121,6 +123,8 @@ export function ArtigosRecentes() {
      landing_page_url={props.landing_page_url}
      language={props.language}
      pdf={props.pdf}
+     has_image={props.has_image}
+  relevance={props.relevance}
 />
             </div>
           </CarouselItem>

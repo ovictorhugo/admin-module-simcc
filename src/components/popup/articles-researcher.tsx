@@ -126,17 +126,7 @@ export function ArticlesResearcherPopUp(props:Props) {
         }
     }, [urlTermPublicacoes]);
 
-    useEffect(() => {
-        if (!isOpen && typeModal === "edit-article" && modalData?.id) {
-            setPublicacoes(prevPublicacoes => 
-                prevPublicacoes.map(pub => 
-                    pub.id === modalData.id 
-                        ? { ...pub, relevance: modalData.relevance, has_image: modalData.has_image }
-                        : pub
-                )
-            );
-        }
-    }, [isOpen, typeModal, modalData]);
+  
 
     useEffect(() => {
         let mounted = true;

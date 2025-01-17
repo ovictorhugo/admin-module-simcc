@@ -236,13 +236,15 @@ return(
   // Calcula o início e o fim corretos apenas a partir do primeiro item com tempo acumulado > 0
   if (hasPriorValidItem || (item.tempo_acumulado > 0 && item.tempo_nivel != null)) {
     if (hasPriorValidItem) {
-      inicioCorreto =
-        index === 0
-          ? new Date(inicioDate.getTime() + 1 * 24 * 60 * 60 * 1000).toISOString() // Início correto do primeiro item
-          : new Date(
-              new Date(combinedData[index - 1]?.fimCorreto).getTime() + 1 * 24 * 60 * 60 * 1000
-            ).toISOString(); // Início correto a partir do fim do item anterior
-    } else {
+      const fimAnterior = combinedData[index - 1]?.fimCorreto;
+      if (fimAnterior) {
+          inicioCorreto = index === 0
+              ? new Date(inicioDate.getTime() + 1 * 24 * 60 * 60 * 1000).toISOString() // Início correto do primeiro item
+              : new Date(new Date(fimAnterior).getTime() + 1 * 24 * 60 * 60 * 1000).toISOString(); // Início correto a partir do fim do item anterior
+      } else {
+          console.warn("fimCorreto é inválido ou indefinido para o item anterior.");
+      }
+  } else {
       inicioCorreto =
         index === 0
           ? new Date(inicioDate.getTime() + 1 * 24 * 60 * 60 * 1000).toISOString() // Início correto do primeiro item

@@ -246,7 +246,7 @@ export function InformacoesGeraisResearcher(props:Research) {
    <TooltipProvider>
 <Tooltip>
        <TooltipTrigger className="outline-none">
-        <Link target="_blank" to={`/indice-pesquisador`} onClick={() => onclose()} className="flex gap-0">
+        <Link target="_blank" to={`/indice-pesquisador`} onClick={() => onClose()} className="flex gap-0">
        <div  className=" py-2 px-4 border border-neutral-200 bg-eng-blue text-white dark:bg-eng-blue dark:border-neutral-800  rounded-l-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice do pesquisador: </div>
        <div
   className={`py-2 px-4 border border-neutral-200 border-l-0 text-white dark:border-neutral-800 rounded-r-md text-xs flex gap-2 items-center ${
