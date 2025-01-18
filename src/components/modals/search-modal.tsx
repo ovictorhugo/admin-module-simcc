@@ -304,10 +304,10 @@ console.log(termosformatados)
         onOpenResult('researchers-home')
     onClose()
     
-    } else if (itemsSelecionadosPopUp.length == 0 && input.length != 0) {
+    } else if (itemsSelecionadosPopUp.length == 0 && input.length > 0) {
       const newItems = [{term: input}];
       setItensSelecionadosPopUp(newItems);
-      
+      setItensSelecionados(newItems);
       TypeSearch = searchType;
       Terms = formatTerms(newItems);
       
