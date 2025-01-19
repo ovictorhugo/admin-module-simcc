@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
+import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Label } from "recharts";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../ui/chart";
 
 type Dados = {
   count_article: number;
@@ -30,36 +30,13 @@ type Dados = {
   SQ: number;
 };
 
-type PesosProducao = {
-  a1: string;
-  a2: string;
-  a3: string;
-  a4: string;
-  b1: string;
-  b2: string;
-  b3: string;
-  b4: string;
-  c: string;
-  sq: string;
-
-  livro: string;
-  cap_livro: string;
-  software: string;
-
-};
-
-type Articles = {
-  articles: Dados[];
-  pesosProducao: PesosProducao;
-};
-
 type ChartDataItem = {
   year: string;
   total: number;
   [qualis: string]: string | number;
 };
 
-const chartConfig = {
+const chartConfig: ChartConfig = {
   A1: { label: "Qualis A1", color: "#006837" },
   A2: { label: "Qualis A2", color: "#8FC53E" },
   A3: { label: "Qualis A3", color: "#ACC483" },
@@ -70,26 +47,13 @@ const chartConfig = {
   B4: { label: "Qualis B4", color: "#F4A992" },
   C: { label: "Qualis C", color: "#EC1C22" },
   SQ: { label: "Sem qualis", color: "#560B11" },
-} satisfies ChartConfig;
+};
 
-export function GraficoIndiceArticle(props: Articles) {
+export function GraficoQtdArtigoAno(props: { articles: Dados[] }) {
   const [chartData, setChartData] = useState<ChartDataItem[]>([]);
 
   useEffect(() => {
-    if (props.articles && props.pesosProducao) {
-      const pesosNumericos: { [key: string]: number } = {
-        A1: parseFloat(props.pesosProducao.a1) || 0,
-        A2: parseFloat(props.pesosProducao.a2) || 0,
-        A3: parseFloat(props.pesosProducao.a3) || 0,
-        A4: parseFloat(props.pesosProducao.a4) || 0,
-        B1: parseFloat(props.pesosProducao.b1) || 0,
-        B2: parseFloat(props.pesosProducao.b2) || 0,
-        B3: parseFloat(props.pesosProducao.b3) || 0,
-        B4: parseFloat(props.pesosProducao.b4) || 0,
-        C: parseFloat(props.pesosProducao.c) || 0,
-        SQ: parseFloat(props.pesosProducao.sq) || 0,
-      };
-
+    if (props.articles) {
       const counts: { [year: string]: { [qualis: string]: number } } = {};
 
       props.articles.forEach((publicacao) => {
@@ -106,34 +70,29 @@ export function GraficoIndiceArticle(props: Articles) {
           C = 0,
           SQ = 0,
         } = publicacao;
+
         const qualisData = { A1, A2, A3, A4, B1, B2, B3, B4, C, SQ };
 
         if (!counts[year]) {
           counts[year] = {};
         }
 
-        Object.keys(qualisData).forEach((qualisKey) => {
-          const weight = pesosNumericos[qualisKey];
-          if (!isNaN(weight) && weight > 0) {
-            const value = qualisData[qualisKey as keyof typeof qualisData] || 0;
-            counts[year][qualisKey] = (counts[year][qualisKey] || 0) + value * weight;
-          }
+        Object.entries(qualisData).forEach(([key, value]) => {
+          counts[year][key] = (counts[year][key] || 0) + value;
         });
       });
 
-      const data: ChartDataItem[] = Object.entries(counts).map(([year, qualisCounts]) => {
-        const total = Object.entries(qualisCounts).reduce((acc, [_, val]) => acc + val, 0);
-        return {
-          year,
-          ...qualisCounts,
-          total: total || 0,
-        };
-      });
+      const data = Object.entries(counts).map(([year, qualisCounts]) => ({
+        year,
+        total: Object.values(qualisCounts).reduce((a, b) => a + b, 0),
+        ...qualisCounts,
+      }));
 
       data.sort((a, b) => a.year.localeCompare(b.year));
+
       setChartData(data);
     }
-  }, [props.articles, props.pesosProducao]);
+  }, [props.articles]);
 
   const availableQualis = Object.keys(chartConfig);
 
@@ -146,31 +105,27 @@ export function GraficoIndiceArticle(props: Articles) {
           <CartesianGrid vertical={false} horizontal={false} />
           <ChartLegend content={<ChartLegendContent />} />
           <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-          {availableQualis.map((key, index) => {
-            // Renderiza apenas barras com valores > 0 no conjunto de dados
+          {availableQualis.map((key) => {
             const hasData = chartData.some((d) => typeof d[key] === "number" && d[key] > 0);
 
             if (!hasData) return null;
 
             return (
-              <Bar key={key} dataKey={key} fill={chartConfig[key].color} stackId="a" radius={4}>
-                {index === availableQualis.length - 1 && (
-                  // Adiciona LabelList apenas à última barra da pilha
-                  <LabelList
-                    dataKey={key}
-                    position="top"
-                    offset={12}
-                    className="fill-foreground"
-                    fontSize={12}
-                    formatter={(value) => (value ? value.toFixed(2) : "")}
-                  />
-                )}
-              </Bar>
+              <Bar key={key} dataKey={key} fill={chartConfig[key].color} stackId="a" radius={[4, 4, 0, 0]} />
             );
           })}
+          {/* Adicionando os totais acima das colunas */}
+          <Bar dataKey="total" fill="transparent" stackId="a">
+            <LabelList
+              dataKey="total"
+              position="top"
+              className="fill-foreground"
+              fontSize={12}
+              formatter={(value) => (value ? value.toFixed(0) : "")}
+            />
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </ChartContainer>
-
   );
 }

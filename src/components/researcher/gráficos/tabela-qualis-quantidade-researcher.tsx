@@ -115,6 +115,7 @@ export function TabelaQualisQuantidadeResarcher(props: Props) {
 
   return (
     <div className="space-y-4">
+
       <DataTable
         columns={columns}
         data={dados} // Dados ordenados em ordem decrescente por ano
