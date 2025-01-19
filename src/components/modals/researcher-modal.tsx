@@ -375,6 +375,31 @@ export function ResearcherModal() {
 
 
 
+<<<<<<< HEAD
+=======
+       <div className="flex items-center flex-col  relative">
+       <h4 className="text-3xl font-medium px-8 text-center mb-2">{props.name}</h4>
+          <div className="flex text-gray-500 items-center gap-2 mb-2">
+              {props.image == "None" ? (
+                <Buildings size={16} className="" />
+              ) : (
+                <img src={props.image} alt="" className="h-6" />
+              )}
+              <p className="text-md  ">{props.university}</p>
+            </div>
+       </div>
+                 </div>
+                  )
+                })}
+                
+       <div className="overflow-y-auto text-left grid grid-cols-1 w-full ">
+      
+        <div className=" px-16  " >
+        <DrawerHeader className="p- text-left ">
+            {researcher.slice(0, 1).map((user) => {
+                return(
+                   <div>
+>>>>>>> 4781712bff4513456119ee3801ed612de2949614
 
             return (
               <div className="px-16 pt-6 pb-2">

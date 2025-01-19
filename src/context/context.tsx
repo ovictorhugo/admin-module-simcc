@@ -110,6 +110,9 @@ interface UserContextType {
   isCollapsed:boolean, 
   setIsCollapsed:React.Dispatch<React.SetStateAction<boolean>>;
 
+  isCollapsedRight:boolean, 
+  setIsCollapsedRight:React.Dispatch<React.SetStateAction<boolean>>;
+
   version:boolean, 
   setVersion:React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -202,6 +205,9 @@ searchType:"",
 
   isCollapsed:false, 
   setIsCollapsed:() => {},
+
+  isCollapsedRight:false, 
+  setIsCollapsedRight:() => {},
 
   version:false, 
   setVersion:() => {},

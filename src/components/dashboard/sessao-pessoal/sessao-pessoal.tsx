@@ -68,8 +68,8 @@ const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
                       Adicione os documentos para atualizar o banco de dados
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <Button>
+                  <CardContent className="flex mt-6 flex-col gap-4">
+                    <Button className="w-fit">
                     <input
                   type="file"
                   accept=".pdf"

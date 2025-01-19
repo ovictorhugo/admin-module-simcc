@@ -189,7 +189,7 @@ export function InformacoesGeraisResearcher(props:Research) {
   const {onClose} = useModal()
 
     return (
-        <div className="h-fit">
+        <div className="h-fit text-left">
           
               <div className=" font-medium text-2xl mb-6 pr-12">Informações gerais</div>
           
@@ -246,7 +246,7 @@ export function InformacoesGeraisResearcher(props:Research) {
    <TooltipProvider>
 <Tooltip>
        <TooltipTrigger className="outline-none">
-        <Link target="_blank" to={`/indice-pesquisador`} onClick={() => onclose()} className="flex gap-0">
+        <Link target="_blank" to={`/indice-pesquisador`} onClick={() => onClose()} className="flex gap-0">
        <div  className=" py-2 px-4 border border-neutral-200 bg-eng-blue text-white dark:bg-eng-blue dark:border-neutral-800  rounded-l-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice do pesquisador: </div>
        <div
   className={`py-2 px-4 border border-neutral-200 border-l-0 text-white dark:border-neutral-800 rounded-r-md text-xs flex gap-2 items-center ${
@@ -269,7 +269,7 @@ export function InformacoesGeraisResearcher(props:Research) {
 
           props.departments.slice(0,1).map((item) => (
             <div>
-            <div className="font-medium text-2xl mb-6 pr-12">
+            <div className="font-medium text-left text-2xl mb-6 pr-12">
           Departamento
           </div>
            <Link  to={`/departamentos?dep_id=${item.dep_id}`}
@@ -304,7 +304,7 @@ export function InformacoesGeraisResearcher(props:Research) {
 
             props.subsidy.slice(0,1).map((item) => (
               <div>
-              <div className="font-medium text-2xl mb-6 pr-12">
+              <div className="font-medium text-left text-2xl mb-6 pr-12">
             Bolsa CNPq
             </div>
               <div className="flex relative flex-1">

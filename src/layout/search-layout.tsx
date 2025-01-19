@@ -10,7 +10,7 @@ import bg_popup from '../assets/bg_welcome.png';
 import React, { useContext, useEffect, useState} from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { BarChartBig, Blocks, BookOpen, Bug, Building2, Download, GraduationCap, Home, Info, InfoIcon, LayoutDashboard, Link2, List, LogIn, PanelLeftDashed, SearchCheck, Sparkles, UserPlus, X } from "lucide-react";
+import { BarChartBig, Blocks, BookOpen, Bug, Building2, Check, Download, GraduationCap, Home, Info, InfoIcon, LayoutDashboard, Link2, List, LogIn, PanelLeftDashed, SearchCheck, Sparkles, UserPlus, X } from "lucide-react";
 import logo_4 from '../assets/logo_4.png';
 import logo_4_white from '../assets/logo_4_white.png';
 
@@ -324,7 +324,7 @@ const router = useLocation();
 
 
       <Dialog open={isModalOpen} >
-            <DialogContent className="p-0 ">
+            <DialogContent className="p-0  ">
               <div className="h-[300px] w-full bg-cover bg-no-repeat bg-center"  style={{ backgroundImage: `url(${bg_popup})` }}></div>
                 <DialogHeader className="p-6">
                     <DialogTitle className="text-2xl font-medium">Apresentamos a plataforma {version ? ('Conectee'):('Iapós')}</DialogTitle>
@@ -335,8 +335,9 @@ const router = useLocation();
                  <div></div>
 
                    <div className="flex gap-3">
-                   <Link to={'/informacoes'}> <Button variant={'ghost'}><InfoIcon size={16}/> Informações</Button></Link>
-                   <Button onClick={handleClose}><X size={16}/>Continuar</Button>
+                   <Link to={'/termos-uso'}> <Button variant={'ghost'}><InfoIcon size={16}/> Termos de uso</Button></Link>
+                 
+                   <Button onClick={handleClose}><Check size={16}/>Aceitar todos os cookies</Button>
                    </div>
                    </div>
                 </DialogHeader>

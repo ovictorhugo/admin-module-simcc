@@ -1,27 +1,28 @@
 
 
 
-import { useModalSidebar } from "../hooks/use-modal-sidebar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../..//components/ui/tabs"
+import { useModalSidebar } from "../../hooks/use-modal-sidebar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs"
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../context/context";
+import { UserContext } from "../../../context/context";
 
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import {  ChevronLeft,  Copy, GraduationCap,  Plus,  Trash,  User, UserCog } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { Alert } from "../ui/alert";
-import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Alert } from "../../ui/alert";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
 
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 import { toast } from "sonner"
 import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs, query, where } from 'firebase/firestore';
 
-import { CargosFuncoes } from "./components/cargos-funcoes";
-import { GraficoAnaliseUsuarios } from "./graficos/grafico-analise-usuarios";
-import { Label } from "../ui/label";
+import { CargosFuncoes } from "../components/cargos-funcoes";
+import { GraficoAnaliseUsuarios } from "../graficos/grafico-analise-usuarios";
+import { Label } from "../../ui/label";
 import { ArrowElbowDownRight, ChartBar, MagnifyingGlass, Student } from "phosphor-react";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import { useModal } from "../hooks/use-modal-store";
+import { ScrollArea, ScrollBar } from "../../ui/scroll-area";
+import { useModal } from "../../hooks/use-modal-store";
+import { Instituicoes } from "./instituicoes";
 
 
 
@@ -302,8 +303,8 @@ const {onOpen} = useModal()
               <TabsTrigger value="all" onClick={() => setTab('all')} className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
 
               <TabsTrigger value="cargos" disabled={!has_editar_cargos_permissoes && !has_editar_cargos_usuarios && !has_editar_informacoes_usuarios} onClick={() => setTab('cargos')} className="text-zinc-600 dark:text-zinc-200">Cargos e permissões</TabsTrigger>
+                <TabsTrigger value="inst" disabled={!has_editar_configuracoes_plataforma} onClick={() => setTab('inst')}  className="text-zinc-600 dark:text-zinc-200">Instituições</TabsTrigger>
                 <TabsTrigger value="unread" disabled={!has_editar_configuracoes_plataforma} onClick={() => setTab('unread')}  className="text-zinc-600 dark:text-zinc-200">Configurações</TabsTrigger>
-               
                 </TabsList>
                
           
@@ -312,6 +313,10 @@ const {onOpen} = useModal()
             </div>
 
             </div>
+
+            <TabsContent value="inst" className=" ">
+              <Instituicoes/>
+            </TabsContent>
 
             <TabsContent value="all" className=" ">
               <div className="p-4 md:p-8 pt-0 md:pt-0 h-auto flex flex-col gap-4 md:gap-8">

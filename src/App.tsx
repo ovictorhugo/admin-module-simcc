@@ -108,6 +108,11 @@ const [isCollapsed, setIsCollapsed] = useState(
   storedIsCollapsed ? JSON.parse(storedIsCollapsed) : true
 );
 
+const storedIsCollapsedRight = localStorage.getItem("isCollapsedRight");
+const [isCollapsedRight, setIsCollapsedRight] = useState(
+  storedIsCollapsedRight ? JSON.parse(storedIsCollapsedRight) : true
+);
+
 const [navCollapsedSize, setNavCollapsedSize] = useState(0)
 const [defaultLayout, setDefaultLayout] = useState([0,440,655])
 const [mode, setMode] = useState('')
@@ -116,6 +121,11 @@ useEffect(() => {
   // Salva o estado de isCollapsed no localStorage sempre que ele mudar
   localStorage.setItem("isCollapsed", JSON.stringify(isCollapsed));
 }, [isCollapsed]);
+
+useEffect(() => {
+  // Salva o estado de isCollapsed no localStorage sempre que ele mudar
+  localStorage.setItem("isCollapsedRight", JSON.stringify(isCollapsedRight));
+}, [isCollapsedRight]);
 
 const toggleCollapse = () => {
   setIsCollapsed((prev) => !prev);
@@ -225,7 +235,8 @@ useEffect(() => {
       version, setVersion,
       role, setRole,
       permission , setPermission,
-      simcc, setSimcc
+      simcc, setSimcc,
+      isCollapsedRight, setIsCollapsedRight
 
     }}
     >

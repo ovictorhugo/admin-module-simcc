@@ -308,7 +308,7 @@ export function ArticleItem(props: Articles) {
             <div>
         
 
-            <div>
+            <div className="text-left">
               
               {highlightedTitleEvent}
             </div>

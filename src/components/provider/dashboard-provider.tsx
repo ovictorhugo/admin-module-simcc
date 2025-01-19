@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { GeralViewDashboard } from "../dashboard/geral-view-dashboard";
+import { GeralViewDashboard } from "../dashboard/geral-view-dashboard/geral-view-dashboard";
 
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { PosGraducaoView } from "../dashboard/pos-graduacao-view-dashboard";

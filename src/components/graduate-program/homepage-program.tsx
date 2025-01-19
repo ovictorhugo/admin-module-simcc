@@ -648,7 +648,7 @@ useEffect(() => {
     return(
         <main className="h-full w-full flex flex-col ">
         <div className="flex justify-between items-center py-12">
-               <div className="flex  gap-6">
+               <div className="flex items-center gap-6">
                <Avatar className="cursor-pointer rounded-lg  h-24 w-24">
   <AvatarImage  className={'rounded-md h-24 w-24'} src={``} />
   <AvatarFallback className="flex items-center justify-center"></AvatarFallback>

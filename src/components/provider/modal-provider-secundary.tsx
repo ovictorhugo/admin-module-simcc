@@ -17,8 +17,6 @@ const ModalContentSecundary = () => {
   switch (type) {
       case 'articles-modal':
         return <ArticlesModal/>
-        case 'cookies':
-          return <CookiesModal/>
         case 'edit-article':
           return <EditArticle/>
         case 'project-modal':
