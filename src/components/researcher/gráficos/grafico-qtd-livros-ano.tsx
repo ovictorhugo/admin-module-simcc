@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Alert } from "../../ui/alert";
 import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../ui/chart";
 
 type Dados = {
   count_article: number;
@@ -60,7 +60,6 @@ type PesosProducao = {
 
 type BooksAndChaptersProps = {
   articles: Dados[];
-  pesosProducao: PesosProducao;
 };
 
 const chartConfig = {
@@ -68,25 +67,17 @@ const chartConfig = {
   cap_livro: { label: "Capítulo de livro", color: "#DBAFD0" },
 } satisfies ChartConfig;
 
-export function GraficoIndiceBooksAndChapters(props: BooksAndChaptersProps) {
+export function GraficoQtdLivrosCapitulos(props: BooksAndChaptersProps) {
   const [chartData, setChartData] = useState<{ year: string; livro: number; cap_livro: number }[]>([]);
-  console.log(props.pesosProducao)
   useEffect(() => {
-    if (props.articles && props.pesosProducao) {
-      const pesos: PesosProducao = props.pesosProducao;
-
-      // Convert weights to numbers, handle the format of the string values
-      const pesosNumericos = {
-        livro: isNaN(parseFloat(pesos.book)) ? 0 : parseFloat(pesos.book),
-        cap_livro: isNaN(parseFloat(pesos.book_chapter)) ? 0 : parseFloat(pesos.book_chapter),
-      };
+    if (props.articles) {
 
       // Compute weighted sums
       const counts: { [year: string]: { livro: number; cap_livro: number } } = {};
 
       props.articles.forEach((publicacao) => {
         const year = publicacao.year.toString();
-        const { count_book, count_book_chapter } = publicacao;
+        const { count_book, count_book_chapter } = publicacao; // Desestruturação
 
         // Only include years where count_book or count_book_chapter are greater than 0
         if (count_book > 0 || count_book_chapter > 0) {
@@ -94,9 +85,9 @@ export function GraficoIndiceBooksAndChapters(props: BooksAndChaptersProps) {
             counts[year] = { livro: 0, cap_livro: 0 };
           }
 
-          // Update weighted values
-          counts[year].livro += count_book * pesosNumericos.livro;
-          counts[year].cap_livro += count_book_chapter * pesosNumericos.cap_livro;
+          // Incrementar os valores de livro e cap_livro
+          counts[year].cap_livro += count_book_chapter;
+          counts[year].livro += count_book;
         }
       });
 
@@ -108,9 +99,8 @@ export function GraficoIndiceBooksAndChapters(props: BooksAndChaptersProps) {
       }));
 
       setChartData(data);
-
     }
-  }, [props.articles, props.pesosProducao]);
+  }, [props.articles]);
 
   return (
 
@@ -126,15 +116,16 @@ export function GraficoIndiceBooksAndChapters(props: BooksAndChaptersProps) {
             <LabelList
 
               position="top"
-              formatter={(value) => (value ? value.toFixed(2) : '0')}
+              formatter={(value) => (value ? value : '0')}
               fontSize={12}
               className="fill-foreground"
             />
           </Bar>
           <Bar dataKey="cap_livro" radius={4} fill={chartConfig['cap_livro'].color} stackId="a">
             <LabelList
+
               position="top"
-              formatter={(value) => (value ? value.toFixed(2) : '0')}
+              formatter={(value) => (value ? value : '0')}
               fontSize={12}
               className="fill-foreground"
             />

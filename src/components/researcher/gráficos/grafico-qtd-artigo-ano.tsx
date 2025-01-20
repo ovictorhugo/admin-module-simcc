@@ -3,19 +3,19 @@ import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, Respons
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../ui/chart";
 
 type Dados = {
-  count_article: number;
-  count_book: number;
-  count_book_chapter: number;
-  count_guidance: number;
-  count_patent: number;
-  count_report: number;
-  count_software: number;
-  count_guidance_complete: number;
-  count_guidance_in_progress: number;
-  count_patent_granted: number;
-  count_patent_not_granted: number;
-  count_brand: number;
-  graduantion: string;
+  count_article?: number;
+  count_book?: number;
+  count_book_chapter?: number;
+  count_guidance?: number;
+  count_patent?: number;
+  count_report?: number;
+  count_software?: number;
+  count_guidance_complete?: number;
+  count_guidance_in_gress?: number;
+  count_patent_granted?: number;
+  count_patent_not_granted?: number;
+  count_brand?: number;
+  graduantion?: string;
   year: number;
 
   A1: number;
@@ -118,7 +118,7 @@ export function GraficoQtdArtigoAno(props: { articles: Dados[] }) {
           <Bar dataKey="total" fill="transparent" stackId="a">
             <LabelList
               dataKey="total"
-              position="top"
+              position="centerBottom"
               className="fill-foreground"
               fontSize={12}
               formatter={(value) => (value ? value.toFixed(0) : "")}
