@@ -360,8 +360,6 @@ export function InitialHome() {
     fetchData();
   }, [urlDados]);
 
-
-
   const { isOpen, type } = useModalHomepage();
 
 
@@ -723,15 +721,15 @@ export function InitialHome() {
           className="
             grid
 
-            md:flex md:flex-wrap md:gap-2
+            md:flex md:flex-wrap md:gap-8
             
-            lg:grid lg:grid-cols-3 lg:gap-1
+            lg:grid lg:grid-cols-3 lg:gap-8
           "
         >
           {version ? (
             <div
               className="
-                h-full gap-1 flex flex-col
+                h-full gap-8 flex flex-col
 
                 md:flex-row md:w-full md:justify-between
 
@@ -872,7 +870,7 @@ export function InitialHome() {
             </Alert>
           )}
 
-          <Alert className="lg:col-span-2 h-[450px] p-0 ">
+          <Alert className="lg:col-span-2 h-[450px] p-0">
             <CardHeader className="flex p-0 flex-col items-stretch space-y-0 border-b dark:border-b-neutral-800  sm:flex-row">
               <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
                 <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
