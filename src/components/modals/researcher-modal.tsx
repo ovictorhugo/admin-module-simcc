@@ -377,17 +377,25 @@ export function ResearcherModal() {
 
 
             return (
-              <div className="px-16 pt-6 pb-2">
+              <div
+                className="
+                  px-4
+
+                  md:px-16 md:pb-2 md:pt-6
+
+                  lg:px16 
+                "
+              >
                 <div className="flex  justify-between items-center w-full">
 
-                  <div className={`border dark:border-neutral-800 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none') : ('')}`}>Atualização do Lattes: {String(props.lattes_update)}</div>
-
+                  <div
+                    className={`
+                    border dark:border-neutral-800 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none') : ('')}
+                  `}
+                  >
+                    Atualização do Lattes: {String(props.lattes_update)}</div>
 
                   <div className="flex gap-3">
-
-
-
-
                     {hasBaremaAvaliacao && (
                       <TooltipProvider>
                         <Tooltip>

@@ -1,42 +1,25 @@
-
-
 import { ColumnDef } from "@tanstack/react-table"
-
-
 import { CalendarBlank } from "phosphor-react"
 
+type RelatorioTecnico = {
 
-
-
-
-type Orientacoes = {
-
-  id: string,
-  nature: string,
-  oriented: string,
-  status: string,
+  id?: string,
   title: string,
-  type: string,
-  year: string
+  description: string,
+  year: string,
+  institution: string
 }
 
 
-export const columns: ColumnDef<Orientacoes>[] = [
+export const columnsRelatorioTecnico: ColumnDef<RelatorioTecnico>[] = [
 
   {
     accessorKey: "title",
     header: "Título",
   },
-
   {
-    accessorKey: "oriented",
-    header: "Orientação",
-  },
-
-
-  {
-    accessorKey: "nature",
-    header: "Tipo",
+    accessorKey: "description",
+    header: "Descrição",
     cell: ({ row }) => {
       return <div className="flex items-center gap-4"> {(row.getValue("nature") != undefined) && (
         row.getValue("nature")
@@ -52,4 +35,9 @@ export const columns: ColumnDef<Orientacoes>[] = [
       return <div className="flex gap-1 items-center"><CalendarBlank size={12} /> {row.getValue("year")}</div>
     }
   },
+  {
+    accessorKey: "financing",
+    header: "Instituição",
+  },
+
 ]

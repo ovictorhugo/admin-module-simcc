@@ -44,11 +44,7 @@ export function ProgramItem(props: GraduateProgram) {
   const queryUrl = useQuery();
   const navigate = useNavigate();
 
-
-
-
   // Calcula a diferença em dias entre a data atual e a data do item
-
 
   const handlePesquisaFinal = () => {
     queryUrl.set('graduate_program_id', props.graduate_program_id);

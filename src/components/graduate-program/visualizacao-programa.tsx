@@ -280,7 +280,9 @@ export function VisualizacaoPrograma() {
                     <div
                       className="
                         flex flex-col gap-2
+
                         md:flex-col
+
                         lg:flex-row
                       "
                     >

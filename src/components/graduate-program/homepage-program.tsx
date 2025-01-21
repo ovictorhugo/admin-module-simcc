@@ -648,7 +648,7 @@ export function HomepageProgram(props: Props) {
   return (
     <main className="h-full w-full flex flex-col">
       <div className="flex justify-between items-center py-12">
-        <div className="flex items-center gap-6">
+        <div className="flex flex-col items-start md:flex-row gap-6 -mt-4">
           <Avatar className="cursor-pointer rounded-lg  h-24 w-24">
             <AvatarImage className={'rounded-md h-24 w-24'} src={``} />
             <AvatarFallback className="flex items-center justify-center"></AvatarFallback>
@@ -665,7 +665,7 @@ export function HomepageProgram(props: Props) {
               </div>
             </p>
 
-            <h1 className="text-3xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+            <h1 className="text-2xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
               {props.program.name}
             </h1>
           </div>
