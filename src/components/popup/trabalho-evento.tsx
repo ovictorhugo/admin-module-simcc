@@ -140,8 +140,7 @@ export function WorkEvent(props: Props) {
                 <p className="text-sm font-bold">Todos os trabalhos em eventos</p>
               </div>
 
-              <div className="flex gap-3 mr-3  items-center h-full">
-
+              <div className="flex gap-3 mr-3 items-center h-full">
                 <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
                   <Rows size={16} className=" whitespace-nowrap" />
                 </Button>
@@ -158,8 +157,7 @@ export function WorkEvent(props: Props) {
 
             </AccordionTrigger>
           </div>
-          <AccordionContent >
-
+          <AccordionContent>
             {typeVisu == 'block' ? (
               loading ? (
                 <ResponsiveMasonry

@@ -130,16 +130,25 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
 
         <Accordion defaultValue="item-1" type="single" collapsible >
           <AccordionItem value="item-1" >
-            <AccordionTrigger>
-              <div className="flex gap-4 w-full justify-between items-center ">
-                <div className="flex gap-4 items-center">
-                  <Book size={24} className="text-gray-400" />
-                  <p className="text-sm font-bold">Todos os relatórios técnicos</p>
-                </div>
+            <div className="flex gap-4 w-full justify-between items-center ">
+              <div className="flex gap-4 items-center">
+                <Book size={24} className="text-gray-400" />
+                <p className="text-sm font-bold">Todos os relatórios técnicos</p>
+              </div>
 
-                <div className="flex gap-3  items-center h-full">
+              <div className="flex gap-3 items-center h-full">
+
+                <Button onClick={() => setTypeVisu('rows')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+                  <Rows size={16} className=" whitespace-nowrap" />
+                </Button>
+
+                <Button onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
+                  <SquaresFour size={16} className=" whitespace-nowrap" />
+                </Button>
+
+                <AccordionTrigger>
                   {itemsSelecionadosPopUp != itemsSelecionados && (
-                    <div className="flex gap-3  items-center">
+                    <div className="flex gap-3 items-center order-3">
                       <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
                         <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
                       </Button>
@@ -147,19 +156,10 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
                       <div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
                     </div>
                   )}
-
-                  <Button onClick={() => setTypeVisu('rows')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
-                    <Rows size={16} className=" whitespace-nowrap" />
-                  </Button>
-
-                  <Button onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
-                    <SquaresFour size={16} className=" whitespace-nowrap" />
-                  </Button>
-                </div>
-
+                </AccordionTrigger>
               </div>
+            </div>
 
-            </AccordionTrigger>
             <AccordionContent >
 
               {typeVisu == 'block' ? (
@@ -202,7 +202,7 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-      </div>
+      </div >
     </>
   )
 }

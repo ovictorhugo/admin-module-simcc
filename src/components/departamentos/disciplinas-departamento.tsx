@@ -1,6 +1,6 @@
-import {  Clock,  Hash,  Plus, Presentation} from "lucide-react";
+import { Clock, Hash, Plus, Presentation } from "lucide-react";
 import { Button } from "../ui/button";
-import {  CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
 import { DisplayDisciplina } from "./display-disciplina";
 import { useContext, useEffect, useState } from "react";
@@ -107,50 +107,50 @@ export function DisciplinasDepartamentoPage(props: Props) {
         })
         : [];
 
-        
+
 
     // Função para combinar itens
-const combineItems = (items: Disciplinas[]) => {
-    const combinedItems: Record<string, Disciplinas> = {};
+    const combineItems = (items: Disciplinas[]) => {
+        const combinedItems: Record<string, Disciplinas> = {};
 
-    items.forEach(item => {
-        // Crie a chave baseada apenas em researcher_name e schedule
-        const key = `${item.schedule}-${item.researcher_name.join(',')}`;
+        items.forEach(item => {
+            // Crie a chave baseada apenas em researcher_name e schedule
+            const key = `${item.schedule}-${item.researcher_name.join(',')}`;
 
-        if (!combinedItems[key]) {
-            // Inicialize o item combinado com valores padrão
-            combinedItems[key] = {
-                ...item,
-                researcher_id: [],
-                researcher_name: [],
-                workload: [],
-                academic_activity_ch: 0,
-                available_slots: 0,
-                occupied_slots: '0',
-                percent_occupied_slots: 0,
-                demanding_courses: '',
-                turmas_juntas: '' // Inicialize o novo campo
-            };
-        }
+            if (!combinedItems[key]) {
+                // Inicialize o item combinado com valores padrão
+                combinedItems[key] = {
+                    ...item,
+                    researcher_id: [],
+                    researcher_name: [],
+                    workload: [],
+                    academic_activity_ch: 0,
+                    available_slots: 0,
+                    occupied_slots: '0',
+                    percent_occupied_slots: 0,
+                    demanding_courses: '',
+                    turmas_juntas: '' // Inicialize o novo campo
+                };
+            }
 
-        // Combine as informações
-        combinedItems[key].researcher_id.push(...item.researcher_id);
-        combinedItems[key].researcher_name.push(...item.researcher_name);
-        combinedItems[key].workload.push(...item.workload);
-        combinedItems[key].academic_activity_ch = item.academic_activity_ch;
-        combinedItems[key].available_slots += Number(item.available_slots);
-        combinedItems[key].occupied_slots = String(Number(combinedItems[key].occupied_slots) + Number(item.occupied_slots));
-        combinedItems[key].percent_occupied_slots = (Number(combinedItems[key].occupied_slots) / combinedItems[key].available_slots) * 100;
-        combinedItems[key].demanding_courses = `${combinedItems[key].demanding_courses},${item.demanding_courses}`
-        combinedItems[key].turmas_juntas = combinedItems[key].turmas_juntas ? `true` : ''// Atualiza o campo turmas_juntas
-    });
+            // Combine as informações
+            combinedItems[key].researcher_id.push(...item.researcher_id);
+            combinedItems[key].researcher_name.push(...item.researcher_name);
+            combinedItems[key].workload.push(...item.workload);
+            combinedItems[key].academic_activity_ch = item.academic_activity_ch;
+            combinedItems[key].available_slots += Number(item.available_slots);
+            combinedItems[key].occupied_slots = String(Number(combinedItems[key].occupied_slots) + Number(item.occupied_slots));
+            combinedItems[key].percent_occupied_slots = (Number(combinedItems[key].occupied_slots) / combinedItems[key].available_slots) * 100;
+            combinedItems[key].demanding_courses = `${combinedItems[key].demanding_courses},${item.demanding_courses}`
+            combinedItems[key].turmas_juntas = combinedItems[key].turmas_juntas ? `true` : ''// Atualiza o campo turmas_juntas
+        });
 
-    console.log(combinedItems)
+        console.log(combinedItems)
 
-    return Object.values(combinedItems);
+        return Object.values(combinedItems);
 
-    
-};
+
+    };
 
 
     const combinedFilteredTotal = combineItems(filteredTotal);
@@ -162,47 +162,47 @@ const combineItems = (items: Disciplinas[]) => {
     const uniqueCursos = [...new Set(data.flatMap(d => d.demanding_courses.split(',').map(discipline => discipline.trim())).filter(name => name.length !== 0))];
     const uniqueProfessors = [...new Set(filteredTotal.flatMap(d => d.researcher_name).filter(name => name.length !== 0))];
 
-    
+
     console.log(combinedFilteredTotal)
     return (
         <main className="grid flex-1 items-start gap-4  md:gap-8 lg:grid-cols-3 xl:grid-cols-3 px-4 md:px-8 pb-4 md:pb-8">
             <div className={`grid auto-rows-max items-start gap-4 md:gap-8 ${dataSelecionado ? ('lg:col-span-2') : ('lg:col-span-3')}`}>
 
-            <div className="grid gap-4 mt-8 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-            <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-2"  style={{ backgroundImage: `url(${bg_popup})` }}>
-       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-         <CardTitle className="text-sm font-medium">
-           Total de disicplinas
-         </CardTitle>
-         <Presentation className="h-4 w-4 text-muted-foreground" />
-       </CardHeader>
-       <CardContent>
-         <div className="text-2xl font-bold">{combinedFilteredTotalLenght.length}</div>
-        <div className="flex items-center gap-3">
-        <p className="text-xs text-muted-foreground">
-           do departamento
-         </p>
+                <div className="grid gap-4 mt-8 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+                    <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-2" style={{ backgroundImage: `url(${bg_popup})` }}>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">
+                                Total de disicplinas
+                            </CardTitle>
+                            <Presentation className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{combinedFilteredTotalLenght.length}</div>
+                            <div className="flex items-center gap-3">
+                                <p className="text-xs text-muted-foreground">
+                                    do departamento
+                                </p>
 
-         
-        </div>
-       </CardContent>
-       </Alert>
 
-            <Alert className={`p-0 bg-cover bg-no-repeat bg-center`}  >
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total de carga horária
-                    </CardTitle>
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold"></div>
-                    <p className="text-xs text-muted-foreground">
-                      do departamento
-                    </p>
-                  </CardContent>
-                  </Alert>
-            </div>
+                            </div>
+                        </CardContent>
+                    </Alert>
+
+                    <Alert className={`p-0 bg-cover bg-no-repeat bg-center`}  >
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">
+                                Total de carga horária
+                            </CardTitle>
+                            <Clock className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold"></div>
+                            <p className="text-xs text-muted-foreground">
+                                do departamento
+                            </p>
+                        </CardContent>
+                    </Alert>
+                </div>
 
                 <div className="flex gap-3 items-center w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:placeholder:text-neutral-400">
                     <MagnifyingGlass size={16} className="whitespace-nowrap w-10" />
@@ -212,43 +212,43 @@ const combineItems = (items: Disciplinas[]) => {
                         onChange={(e) => setPesquisaInput(e.target.value)}
                     />
 
-<div className="flex items-center gap-3">
-<Select value={selectedDiscipline} onValueChange={setSelectedDiscipline}>
-                        <SelectTrigger className="">
-                            <SelectValue placeholder="Selecione o curso demandante" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            
-                            {uniqueCursos.map((discipline) => (
-                                <SelectItem key={discipline} value={discipline}>{discipline}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                    <div className="flex items-center gap-3">
+                        <Select value={selectedDiscipline} onValueChange={setSelectedDiscipline}>
+                            <SelectTrigger className="">
+                                <SelectValue placeholder="Selecione o curso demandante" />
+                            </SelectTrigger>
+                            <SelectContent>
 
-<Select value={selectedDiscipline2} onValueChange={setSelectedDiscipline2}>
-                        <SelectTrigger className="">
-                            <SelectValue placeholder="Selecione a disciplina" />
-                        </SelectTrigger>
-                        <SelectContent>
-                           
-                            {uniqueDisciplines.map((discipline) => (
-                                <SelectItem key={discipline} value={discipline}>{discipline}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                                {uniqueCursos.map((discipline) => (
+                                    <SelectItem key={discipline} value={discipline}>{discipline}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
 
-<Select value={selectedProfessor} onValueChange={setSelectedProfessor}>
-                        <SelectTrigger className="">
-                            <SelectValue placeholder="Selecione o professor" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          
-                            {uniqueProfessors.map((professor) => (
-                                <SelectItem key={professor} value={professor}>{professor}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-</div>
+                        <Select value={selectedDiscipline2} onValueChange={setSelectedDiscipline2}>
+                            <SelectTrigger className="">
+                                <SelectValue placeholder="Selecione a disciplina" />
+                            </SelectTrigger>
+                            <SelectContent>
+
+                                {uniqueDisciplines.map((discipline) => (
+                                    <SelectItem key={discipline} value={discipline}>{discipline}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+
+                        <Select value={selectedProfessor} onValueChange={setSelectedProfessor}>
+                            <SelectTrigger className="">
+                                <SelectValue placeholder="Selecione o professor" />
+                            </SelectTrigger>
+                            <SelectContent>
+
+                                {uniqueProfessors.map((professor) => (
+                                    <SelectItem key={professor} value={professor}>{professor}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
 
                 </div>
 
@@ -262,24 +262,23 @@ const combineItems = (items: Disciplinas[]) => {
                 >
                     <Masonry gutter="16px">
                         {combinedFilteredTotal.slice(0, count).map((props, index) => {
-                              const uniqueResearchers = [
+                            const uniqueResearchers = [
                                 ...new Map(props.researcher_name.map((item) => [item, item])).values(),
-                              ];
-  
-                              
+                            ];
+
+
                             return (
                                 <div onClick={() => setDataSelecionado(props)} className="flex  w-full cursor-pointer" key={index}>
                                     <div
-                                        className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${
-                                            (props.occupied_slots === "" || props.occupied_slots === "0") ? "bg-red-500" : "bg-green-500"
-                                        }`}
+                                        className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${(props.occupied_slots === "" || props.occupied_slots === "0") ? "bg-red-500" : "bg-green-500"
+                                            }`}
                                     >
                                     </div>
 
                                     <Alert
-                  className="p-0 group rounded-l-none h-auto"
-                >
-<CardHeader className="flex p-4 flex-row items-start bg-neutral-100 dark:bg-neutral-800 rounded-tr-md">
+                                        className="p-0 group rounded-l-none h-auto"
+                                    >
+                                        <CardHeader className="flex p-4 flex-row items-start bg-neutral-100 dark:bg-neutral-800 rounded-tr-md">
                                             <div className="grid gap-0.5">
                                                 <CardTitle className="group flex items-center w-fit gap-2 text-base">
                                                     <div className="w-fit">{props.academic_activity_name}</div>
@@ -316,11 +315,11 @@ const combineItems = (items: Disciplinas[]) => {
                                                 {uniqueResearchers.filter(item => item.trim() !== "").map((item, index) => (
                                                     <div key={index} className={`flex items-center ${props.researcher_id[index] && ('cursor-pointer')} cursor-pointer justify-between`}>
                                                         <dt className="flex items-center gap-2 text-muted-foreground">
-                                                           
 
-                                                           <div className="w-6 h-6">
-                                                           <img src={`${urlGeral}ResearcherData/Image?name=${item}`} alt="" className="w-full h-full object-cover rounded-md " />
-                                                           </div>
+
+                                                            <div className="w-6 h-6">
+                                                                <img src={`${urlGeral}ResearcherData/Image?name=${item}`} alt="" className="w-full h-full object-cover rounded-md " />
+                                                            </div>
                                                         </dt>
 
                                                     </div>

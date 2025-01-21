@@ -9,9 +9,7 @@ type ProjetoPesquisa = {
   type: string
 }
 
-
 export const columnsProjetoPesquisa: ColumnDef<ProjetoPesquisa>[] = [
-
   {
     accessorKey: "project_name",
     header: "Título",
@@ -38,5 +36,4 @@ export const columnsProjetoPesquisa: ColumnDef<ProjetoPesquisa>[] = [
     accessorKey: "status",
     header: "Status",
   },
-
 ]

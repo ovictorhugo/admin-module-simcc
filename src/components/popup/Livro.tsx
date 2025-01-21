@@ -1,4 +1,4 @@
-import { AppWindow, Ticket, IdentificationBadge, CalendarBlank, Copyright, CurrencyCircleDollar, LinkBreak, Paperclip, PenNib } from "phosphor-react";
+import { AppWindow, Ticket, IdentificationBadge, CalendarBlank, Copyright, CurrencyCircleDollar, LinkBreak, Paperclip, PenNib, Globe, Check, CheckCircle } from "phosphor-react";
 import { useContext } from "react";
 import { toast } from "sonner";
 import { UserContext } from "../../context/context";
@@ -216,25 +216,36 @@ export function BookItem(props: Publicacao) {
     }
   };
 
-
   return (
-    <div className="flex group  w-full" >
+    <div className="flex group w-full" >
 
       <div
-        className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0  ${props.type == 'relatorio-tecnico' && ('bg-[#662D91]')}  ${props.type == 'livro' && ('bg-pink-800')} ${props.type == 'software' && ('bg-[#096670]')} ${props.type == 'marca' && ('bg-[#1B1464]')}  ${(props.nature == 'Iniciação Científica') && ('bg-[#8BFBD3]')}
-                      ${(props.nature == 'Iniciacao Cientifica') && ('bg-[#8BFBD3]')} 
-                      ${(props.nature == 'Dissertação De Mestrado') && ('bg-[#67A896]')} 
-                       ${(props.nature == 'Tese De Doutorado') && ('bg-[#425450]')} 
-                       ${(props.nature == 'Trabalho de Conclusao de Curso Graduacao') && ('bg-[#77D2B6]')} 
-                         ${(props.nature == 'Trabalho De Conclusão De Curso De Graduação') && ('bg-[#77D2B6]')} 
-                        ${(props.nature == 'Orientacao-De-Outra-Natureza') && ('bg-[#577E74]')}
-                        ${(props.nature == 'Monografia de Conclusao de Curso Aperfeicoamento e Especializacao') && ('bg-[#2F7F7C]')}
-                        ${(props.nature == 'Supervisão De Pós-Doutorado') && ('bg-[#46724B]')}
-                      ${(props.type == 'patente') && ('bg-[#66B4D0]')} ${props.type == 'capLivro' && ('bg-pink-300')} ${(props.nature == "Congresso") && ('bg-[#FF5800]')} ${(props.nature == "Oficina") && ('bg-[#FCEE21]')} ${(props.nature == "Simpósio") && ('bg-[#D53A2C]')} ${(props.nature == "Encontro") && ('bg-[#E9A700]')}  ${(props.nature == "Outra") && ('bg-[#7F400B]')} ${(props.nature == "Seminário") && ('bg-[#FFBD7B]')}
-                      ${(props.type == 'research-project') && ('bg-[#bae6fd]')}
-                       ${(props.type == 'work-event') && ('bg-[#DE2834]')}
-                       ${(props.type == 'texto-revista') && ('bg-[#E9A700]')}
-                      `}
+        className={`
+          h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0
+          ${props.type == 'relatorio-tecnico' && ('bg-[#662D91]')} 
+          ${props.type == 'livro' && ('bg-pink-800')}
+          ${props.type == 'software' && ('bg-[#096670]')} 
+          ${props.type == 'marca' && ('bg-[#1B1464]')}  
+          ${(props.nature == 'Iniciação Científica') && ('bg-[#8BFBD3]')}
+          ${(props.nature == 'Iniciacao Cientifica') && ('bg-[#8BFBD3]')} 
+          ${(props.nature == 'Dissertação De Mestrado') && ('bg-[#67A896]')} 
+          ${(props.nature == 'Tese De Doutorado') && ('bg-[#425450]')} 
+          ${(props.nature == 'Trabalho de Conclusao de Curso Graduacao') && ('bg-[#77D2B6]')} 
+          ${(props.nature == 'Trabalho De Conclusão De Curso De Graduação') && ('bg-[#77D2B6]')} 
+          ${(props.nature == 'Orientacao-De-Outra-Natureza') && ('bg-[#577E74]')}
+          ${(props.nature == 'Monografia de Conclusao de Curso Aperfeicoamento e Especializacao') && ('bg-[#2F7F7C]')}
+          ${(props.nature == 'Supervisão De Pós-Doutorado') && ('bg-[#46724B]')}
+          ${(props.type == 'patente') && ('bg-[#66B4D0]')} 
+          ${props.type == 'capLivro' && ('bg-pink-300')} 
+          ${(props.nature == "Congresso") && ('bg-[#FF5800]')} 
+          ${(props.nature == "Oficina") && ('bg-[#FCEE21]')} 
+          ${(props.nature == "Simpósio") && ('bg-[#D53A2C]')} 
+          ${(props.nature == "Encontro") && ('bg-[#E9A700]')}  
+          ${(props.nature == "Outra") && ('bg-[#7F400B]')} ${(props.nature == "Seminário") && ('bg-[#FFBD7B]')}
+          ${(props.type == 'research-project') && ('bg-[#bae6fd]')}
+          ${(props.type == 'work-event') && ('bg-[#DE2834]')}
+          ${(props.type == 'texto-revista') && ('bg-[#E9A700]')}
+        `}
       >
       </div>
 
@@ -268,11 +279,6 @@ export function BookItem(props: Publicacao) {
                 <div className="relative -top-4 py-1 px-4 bg-yellow-600 w-fit rounded-b-md text-white"><Star size={12} /></div>
               )}
             </div>
-
-
-            <div className="flex gap-3">
-
-            </div>
           </div>
         )}
 
@@ -294,14 +300,11 @@ export function BookItem(props: Publicacao) {
                 <h3 className="font-semibold mb-4 ">{props.project_name}</h3>
               )}
 
-
-
               {(props.type == 'research-project') && (
                 <h3 className="font-semibold mb-4 ">{props.agency_name}</h3>
               )}
 
-
-              <div className="flex gap-3 min-w-20 ">
+              <div className="flex gap-3 min-w-20">
 
                 {(user?.lattes_id == props.lattes_id || has_editar_producao) && (
                   <Button
@@ -315,7 +318,6 @@ export function BookItem(props: Publicacao) {
                       })
                     }
                     variant={'outline'} className="h-8 w-8 text-gray-500 dark:text-white hidden group-hover:flex" size={'icon'}><Pencil size={16} /></Button>
-
                 )}
 
                 {props.type == 'research-project' && (
@@ -348,7 +350,6 @@ export function BookItem(props: Publicacao) {
                     <Maximize2 size={16} />
                   </Button>
                 )}
-
 
               </div>
             </div>
@@ -384,8 +385,6 @@ export function BookItem(props: Publicacao) {
               <h3 className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal "> {highlightedTitle}</h3>
             )}
 
-
-
             {props.type == 'participacao-evento' && (
               <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">{highlightedTitleEvent}</p>
             )}
@@ -395,10 +394,7 @@ export function BookItem(props: Publicacao) {
                 {highlightedTitle}
               </p>
             )}
-
-
           </div>
-
         </div>
 
         <div className="flex items-center flex-wrap mt-4 gap-4 p-4 pt-0">
@@ -416,11 +412,11 @@ export function BookItem(props: Publicacao) {
           )}
 
           {(props.type == 'work-event' || props.type == 'texto-revista') && (
-            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><AppWindow size={12} />{props.nature?.split('_').join(' ')}</div>
+            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><CheckCircle size={12} />{props.nature?.split('_').join(' ')}</div>
           )}
 
           {(props.type == 'work-event' || props.type == 'texto-revista') && (
-            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><AppWindow size={12} />{props.language}</div>
+            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Globe size={12} />{props.language}</div>
           )}
 
           {props.type == 'software' && (
@@ -458,7 +454,6 @@ export function BookItem(props: Publicacao) {
           {props.type == 'orientacoes' && (
             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-2 items-center">
               <div className={`w-4 h-4 rounded-md ${(props.status == "Em andamento") ? "bg-yellow-500" : 'bg-green-500'}`}></div>
-
               {props.status == "Em andamento" ? "Em andamento" : 'Concluída'}</div>
           )}
 
