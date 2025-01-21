@@ -217,16 +217,6 @@ export function SpeakerResearcherPopUp(props: Props) {
                 </div>
 
                 <div className="flex gap-3 mr-3  items-center h-full">
-                  {(itemsSelecionadosPopUp != itemsSelecionados && searchType == 'speaker') && (
-                    <div className="flex gap-3  items-center">
-                      <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)} variant="ghost" size={'icon'}>
-                        <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
-                      </Button>
-
-                      <div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
-                    </div>
-                  )}
-
                   <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
                     <Rows size={16} className=" whitespace-nowrap" />
                   </Button>
@@ -234,6 +224,17 @@ export function SpeakerResearcherPopUp(props: Props) {
                   <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
                     <SquaresFour size={16} className=" whitespace-nowrap" />
                   </Button>
+
+                  <AccordionTrigger>
+                    {(itemsSelecionadosPopUp != itemsSelecionados && searchType == 'speaker') && (
+                      <div className="flex gap-3  items-center">
+                        <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)} variant="ghost" size={'icon'}>
+                          <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
+                        </Button>
+                        <div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
+                      </div>
+                    )}
+                  </AccordionTrigger>
                 </div>
               </div>
             </div>
