@@ -752,7 +752,7 @@ export function InitialHome() {
                   className="
                     p-0
 
-                    md:w-full 
+                    md:w-full
 
                     lg:h-full
                   "

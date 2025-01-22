@@ -15,6 +15,9 @@ import { TabelaQualisQuantidadeResarcher } from "./gráficos/tabela-qualis-quant
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { GraficoQtdArtigoAno } from "./gráficos/grafico-qtd-artigo-ano";
 import { GraficoQtdLivrosCapitulos } from "./gráficos/grafico-qtd-livros-ano";
+import { GraficoQtdCitacoesAno } from "./gráficos/grafico-qtd-citacoes-ano";
+import { GraficoQtdOrientacoes } from "./gráficos/grafico-qtd-orientacoes";
+import { GraficoQtdProducaoTecnica } from "./gráficos/grafico-qtd-producao-tecnica";
 
 type Dados = {
   count_article: number
@@ -159,8 +162,6 @@ export function ResearcherIndicators(props: Research) {
   // Função para lidar com a atualização de researcherData
   const handleResearcherUpdate = (newResearcherData: Filter[]) => {
     setFilters(newResearcherData);
-
-
   };
 
   const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
@@ -220,7 +221,6 @@ export function ResearcherIndicators(props: Research) {
 
   const urlGet = urlGeralAdm + `indprod/query?institution_id=083a16f0-cccf-47d2-a676-d10b8931f66b`;
 
-  console.log(urlGet)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -275,7 +275,7 @@ export function ResearcherIndicators(props: Research) {
 
   const [loading, isLoading] = useState(false)
   const [dados, setDados] = useState<Dados[]>([]);
-  console.log(urlDados)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -291,6 +291,8 @@ export function ResearcherIndicators(props: Research) {
           },
         });
         const data = await response.json();
+
+        console.log("DADOS GERAIS: ", data)
         if (data) {
           setDados(data);
           isLoading(false)
@@ -301,7 +303,7 @@ export function ResearcherIndicators(props: Research) {
     };
     fetchData();
   }, [urlDados]);
-  console.log(urlDados)
+
   return (
     <div>
       <div className="mt-8 mb-8 flex items-center gap-8">
@@ -423,7 +425,6 @@ export function ResearcherIndicators(props: Research) {
               <div className="h-4 w-4 bg-[#CE3830] rounded-md"></div> Patente não concedida - {patenteNaoConcedida.toUpperCase()}
             </div>
 
-
           </div>
         </div>
       </Alert>
@@ -439,7 +440,6 @@ export function ResearcherIndicators(props: Research) {
         </div>
       ) : (
         <div>
-
           <div>
             <h2 className="text-2xl font-medium mb-8">Artigos qualificados</h2>
             <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
@@ -473,7 +473,7 @@ export function ResearcherIndicators(props: Research) {
                     <CardTitle className="text-sm font-medium">
                       Quantidade de citações por ano
                     </CardTitle>
-                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                    <CardDescription>Análise de citações por ano</CardDescription>
                   </div>
 
                   <TooltipProvider>
@@ -485,11 +485,10 @@ export function ResearcherIndicators(props: Research) {
                     </Tooltip>
                   </TooltipProvider>
 
-
                 </CardHeader>
                 <CardContent>
                   <CardContent className="mt-4 p-0">
-
+                    <GraficoQtdCitacoesAno id={props.id} />
                   </CardContent>
                 </CardContent>
               </Alert>
@@ -583,6 +582,7 @@ export function ResearcherIndicators(props: Research) {
                     <CardTitle className="text-sm font-medium mb-5">
                       Quantidade de livros e capítulos de livro por ano
                     </CardTitle>
+                    <CardDescription>Análise de produção por ano do pesquisador</CardDescription>
 
                   </div>
 
@@ -607,7 +607,7 @@ export function ResearcherIndicators(props: Research) {
 
           <div>
             <h2 className="text-2xl font-medium my-8 ">Produção técnica</h2>
-            <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
+            <div className="grid lg:grid-cols-2 gap-4 md:gap-8">
 
               <Alert className=" h-[400px] ">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -636,15 +636,13 @@ export function ResearcherIndicators(props: Research) {
                 </CardContent>
               </Alert>
 
-
-
               <Alert className=" h-[400px] ">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <div>
                     <CardTitle className="text-sm font-medium">
-                      Índice de produção técnica
+                      Quantidade de produções técnicas
                     </CardTitle>
-                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                    <CardDescription>Análise da quantidade de prod. técnicas</CardDescription>
                   </div>
 
                   <TooltipProvider>
@@ -660,7 +658,7 @@ export function ResearcherIndicators(props: Research) {
                 </CardHeader>
                 <CardContent>
                   <CardContent className="mt-4 p-0">
-
+                    <GraficoQtdProducaoTecnica producoes_tecnicas={dados} />
                   </CardContent>
                 </CardContent>
               </Alert>
@@ -675,9 +673,9 @@ export function ResearcherIndicators(props: Research) {
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <div>
                     <CardTitle className="text-sm font-medium">
-                      Índice de livros e capítulos
+                      Quantidade de orientações de IC, Mestrado e Doutorado por ano
                     </CardTitle>
-                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                    <CardDescription>Finalizados e em andamento</CardDescription>
                   </div>
 
                   <TooltipProvider>
@@ -690,7 +688,7 @@ export function ResearcherIndicators(props: Research) {
                   </TooltipProvider>
                 </CardHeader>
                 <CardContent className="mt-4">
-
+                  <GraficoQtdOrientacoes id_pesquisador={props.id} />
                 </CardContent>
               </Alert>
             </div>

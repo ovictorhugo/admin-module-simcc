@@ -59,8 +59,6 @@ export function GraficoIndiceProdTec(props: ProdTecProps) {
     t5: parseFloat(props.pesosProducao.f5),
   };
 
-  console.log(pesosMap)
-
   function getPesoValue(peso: string | undefined): number {
     if (!peso) {
       return 0; // Retorne 0 ou outro valor padrão se o peso estiver indefinido
