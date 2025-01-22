@@ -499,9 +499,7 @@ export function ResearcherIndicators(props: Research) {
                     <CardTitle className="text-sm font-medium">
                       Quantidade de artigos por ano
                     </CardTitle>
-
                     <CardDescription>Análise de produção por ano do pesquisador</CardDescription>
-
                   </div>
 
                   <TooltipProvider>
@@ -653,7 +651,6 @@ export function ResearcherIndicators(props: Research) {
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
-
 
                 </CardHeader>
                 <CardContent>

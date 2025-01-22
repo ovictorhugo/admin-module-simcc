@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
 type Dados = {
@@ -45,7 +45,6 @@ type PesosProducao = {
   livro: string;
   cap_livro: string;
   software: string;
-
 };
 
 type Articles = {
@@ -122,16 +121,11 @@ export function GraficoIndiceArticle(props: Articles) {
       });
 
       const data: ChartDataItem[] = Object.entries(counts).map(([year, qualisCounts]) => {
-        const total = Object.entries(qualisCounts).reduce((acc, [_, val]) => acc + val, 0);
-        return {
-          year,
-          ...qualisCounts,
-          total: total || 0,
-        };
+        const total = Object.values(qualisCounts).reduce((sum, val) => sum + val, 0);
+        return { year, ...qualisCounts, total };
       });
 
-      data.sort((a, b) => a.year.localeCompare(b.year));
-      setChartData(data);
+      setChartData(data.sort((a, b) => a.year.localeCompare(b.year)));
     }
   }, [props.articles, props.pesosProducao]);
 
@@ -146,31 +140,24 @@ export function GraficoIndiceArticle(props: Articles) {
           <CartesianGrid vertical={false} horizontal={false} />
           <ChartLegend content={<ChartLegendContent />} />
           <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-          {availableQualis.map((key, index) => {
-            // Renderiza apenas barras com valores > 0 no conjunto de dados
-            const hasData = chartData.some((d) => typeof d[key] === "number" && d[key] > 0);
 
-            if (!hasData) return null;
-
-            return (
-              <Bar key={key} dataKey={key} fill={chartConfig[key].color} stackId="a" radius={4}>
-                {index === availableQualis.length - 1 && (
-                  // Adiciona LabelList apenas à última barra da pilha
-                  <LabelList
-                    dataKey={key}
-                    position="top"
-                    offset={12}
-                    className="fill-foreground"
-                    fontSize={12}
-                    formatter={(value) => (value ? value.toFixed(2) : "")}
-                  />
-                )}
-              </Bar>
-            );
-          })}
+          {/* Renderiza as barras empilhadas */}
+          {availableQualis.map((key) => (
+            <Bar key={key} dataKey={key} fill={chartConfig[key].color} stackId="a" radius={4}>
+              {/* Renderizar SOMENTE a soma total de cada barra no topo, uma única vez */}
+              <LabelList
+                dataKey="total"
+                position="top"
+                fontSize={12}
+                formatter={(value) => {
+                  const isLastBar = key === availableQualis[availableQualis.length - 1];
+                  return isLastBar && value > 0 ? value.toFixed(2) : "";
+                }}
+              />
+            </Bar>
+          ))}
         </BarChart>
       </ResponsiveContainer>
     </ChartContainer>
-
   );
 }

@@ -10,7 +10,7 @@ import {
   LabelList,
 } from "recharts";
 import { UserContext } from "../../../context/context";
-import { ChartContainer } from "../../ui/chart";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../../ui/chart";
 
 type Dados = {
   id: string;
@@ -69,14 +69,6 @@ export function GraficoQtdCitacoesAno(props: Dados) {
       // Mapeia e soma as citações por ano
       const countsMap: { [year: string]: number } = {};
 
-      //props.artigos.forEach((publicacao) => {
-      //  const year = publicacao.year ? publicacao.year.toString() : "Unknown"; // Ano da publicação
-      //  const citations = publicacao.citations || 0; // Número de citações (default: 0)
-      //
-      //  // Acumula as citações no mapa
-      //  countsMap[year] = (countsMap[year] || 0) + citations;
-      //});
-
       // Transforma o mapa em um array e ordena por ano
       const data = Object.entries(countsMap)
         .map(([year, citations]) => ({ year, citations }))
@@ -91,10 +83,10 @@ export function GraficoQtdCitacoesAno(props: Dados) {
       <ResponsiveContainer>
         <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
           <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
-          <YAxis tickLine={false} tickMargin={10} axisLine={false} />
-          <CartesianGrid vertical={false} strokeDasharray="3 3" />
+          <YAxis tickLine={false} tickMargin={10} axisLine={false} tickFormatter={(tick) => (tick % 1 === 0 ? tick : "")} />
+          <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
           <Tooltip cursor={false} />
-          <Bar dataKey="citations" fill={chartConfig.Citacao.color} radius={[4, 4, 0, 0]} barSize={40}>
+          <Bar dataKey="citations" fill={chartConfig.Citacao.color} radius={[2, 2, 2, 2]} barSize={40}>
             <LabelList
               dataKey="citations"
               position="top"

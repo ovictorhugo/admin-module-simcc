@@ -103,7 +103,7 @@ export function GraficoQtdArtigoAno(props: { articles: Dados[] }) {
           <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
           <YAxis tickLine={false} tickMargin={10} axisLine={false} />
           <CartesianGrid vertical={false} horizontal={false} />
-          <ChartLegend content={<ChartLegendContent />} />
+          <ChartLegend className="flex flex-wrap" content={<ChartLegendContent />} />
           <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
           {availableQualis.map((key) => {
             const hasData = chartData.some((d) => typeof d[key] === "number" && d[key] > 0);
@@ -111,19 +111,19 @@ export function GraficoQtdArtigoAno(props: { articles: Dados[] }) {
             if (!hasData) return null;
 
             return (
-              <Bar key={key} dataKey={key} fill={chartConfig[key].color} stackId="a" radius={[4, 4, 0, 0]} />
+              <Bar key={key} dataKey={key} fill={chartConfig[key].color} stackId="a" radius={[2, 2, 2, 2]} >
+
+                {/* Colocando o total acima de todas as barras empilhadas */}
+                <LabelList
+                  dataKey="total"
+                  position="top" // Posicionando o total no topo de todas as barras empilhadas
+                  className="fill-foreground"
+                  fontSize={12}
+                  formatter={(value) => (value ? value.toFixed(0) : "")}
+                />
+              </Bar>
             );
           })}
-          {/* Adicionando os totais acima das colunas */}
-          <Bar dataKey="total" fill="transparent" stackId="a">
-            <LabelList
-              dataKey="total"
-              position="centerBottom"
-              className="fill-foreground"
-              fontSize={12}
-              formatter={(value) => (value ? value.toFixed(0) : "")}
-            />
-          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </ChartContainer>
