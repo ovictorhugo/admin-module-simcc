@@ -126,8 +126,6 @@ export function ArticlesResearcherPopUp(props: Props) {
         }
     }, [urlTermPublicacoes]);
 
-
-
     useEffect(() => {
         let mounted = true;
 
