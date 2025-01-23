@@ -13,6 +13,7 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 
 
 interface Props {
+  atualizacao_lattes?: string,
   among: number,
   articles: number,
   book: number,
@@ -138,57 +139,77 @@ export function InformationResearcher(props: Props) {
   return (
     <div className="flex flex-col">
       <div className="flex items-center flex-col relative">
-        <ScrollArea>
-          <div
-            className="
-              mb-4 overflow-x-auto w-max flex flex-nowrap gap-3 items-center justify-center
+        <div className="grid grid-cols-1">
+          <ScrollArea>
+            <div
+              className="
+              mb-4  w-max flex flex-nowrap gap-3 items-center justify-center
 
               md:flex-wrap md:w-full
             "
-          >
-            {props.area != '' && (
-              props.area.split(';').map((value, index) => (
-                <li
-                  key={index}
-                  className={`
+            >
+              {props.area != '' && (
+                props.area.split(';').map((value, index) => (
+                  <li
+                    key={index}
+                    className={`
                     py-2 whitespace-nowrap px-4 rounded-md text-xs font-bold flex gap-2 text-white items-center
                     ${value.includes('CIENCIAS AGRARIAS') ? 'bg-red-400' : value.includes('CIENCIAS EXATAS E DA TERRA') ? 'bg-green-400' : value.includes('CIENCIAS DA SAUDE') ? 'bg-[#20BDBE]' : value.includes('CIENCIAS HUMANAS') ? 'bg-[#F5831F]' : value.includes('CIENCIAS BIOLOGICAS') ? 'bg-[#EB008B]' : value.includes('ENGENHARIAS') ? 'bg-[#FCB712]' : value.includes('CIENCIAS SOCIAIS APLICADAS') ? 'bg-[#009245]' : value.includes('LINGUISTICA LETRAS E ARTES') ? 'bg-[#A67C52]' : value.includes('OUTROS') ? 'bg-[#1B1464]' : 'bg-[#000]'}
                   `}
-                >
-                  <PuzzlePiece size={12} className="text-white" /> {value.trim()}
-                </li>
-              ))
-            )}
-            {props.graduation != '' && (
-              <div className={`bg-blue-700 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center`}><GraduationCap size={12} className="textwhite" /> {props.graduation}</div>
-            )}
-            {props.city != "None" && (
-              <div className="bg-blue-700 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><MapPin size={12} className="textwhite" /> {props.city}</div>
-            )}
-            {(props.orcid != '0' && props.orcid != '') && (
-              <Link to={`https://orcid.org/${props.orcid}`} target="_blank" className="bg-[#A6CE39] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
-                <IdentificationBadge size={12} className="" />
-                Orcid: {props.orcid ? props.orcid.replace(/[^\d-]/g, '') : props.orcid}
-              </Link>
-            )}
-            {props.scopus != '' && (
-              <Link to={props.scopus} target="_blank" className="bg-[#FF8200] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
-                <IdentificationBadge size={12} className="" />
-                Scopus
-              </Link>
-            )}
-            {version && (
-              <Link to={`https://somos.ufmg.br/professor/${formatString(props.name)}`} target="_blank" className="bg-[#F3A01E] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
-                <IdentificationBadge size={12} className="" />
-                Somos UFMG
-              </Link>
-            )}
-            <a href={`https://lattes.cnpq.br/${props.lattes_id}`} target="blank_" className="bg-blue-900 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><LinkSimple size={12} className="textwhite" /> Currículo Lattes</a>
-            <a href={`https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(props.name)}`} rel="noopener noreferrer" target="blank_" className="bg-blue-500 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><LinkedinLogo size={12} className="textwhite" />Pesquisar no LinkedIn</a>
-          </div>
+                  >
+                    <PuzzlePiece size={12} className="text-white" /> {value.trim()}
+                  </li>
+                ))
+              )}
+              {props.graduation != '' && (
+                <div className={`bg-blue-700 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center`}><GraduationCap size={12} className="textwhite" /> {props.graduation}</div>
+              )}
+              {props.city != "None" && (
+                <div className="bg-blue-700 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><MapPin size={12} className="textwhite" /> {props.city}</div>
+              )}
+              {(props.orcid != '0' && props.orcid != '') && (
+                <Link to={`https://orcid.org/${props.orcid}`} target="_blank" className="bg-[#A6CE39] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
+                  <IdentificationBadge size={12} className="" />
+                  Orcid: {props.orcid ? props.orcid.replace(/[^\d-]/g, '') : props.orcid}
+                </Link>
+              )}
+              {props.scopus != '' && (
+                <Link to={props.scopus} target="_blank" className="bg-[#FF8200] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
+                  <IdentificationBadge size={12} className="" />
+                  Scopus
+                </Link>
+              )}
+              {version && (
+                <Link to={`https://somos.ufmg.br/professor/${formatString(props.name)}`} target="_blank" className="bg-[#F3A01E] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
+                  <IdentificationBadge size={12} className="" />
+                  Somos UFMG
+                </Link>
+              )}
+              <a href={`https://lattes.cnpq.br/${props.lattes_id}`} target="blank_" className="bg-blue-900 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><LinkSimple size={12} className="textwhite" /> Currículo Lattes</a>
+              <a href={`https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(props.name)}`} rel="noopener noreferrer" target="blank_" className="bg-blue-500 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><LinkedinLogo size={12} className="textwhite" />Pesquisar no LinkedIn</a>
+            </div>
 
+            {props.openAPI && (
+              <div className="w-full bg-slate-100 dark:bg-neutral-800 px-4 py-2 rounded-md text-xs mb-4 flex gap-3 items-center justify-between">
+                <div className="flex items-center gap-3"><BracketsCurly className="h-4 w-4" />{urlApi}</div>
+                <Button onClick={() => {
+                  navigator.clipboard.writeText(urlApi)
+                  toast("Operação realizada", {
+                    description: "URL copiada para área de transferência",
+                    action: {
+                      label: "Fechar",
+                      onClick: () => console.log("Undo"),
+                    },
+                  })
+                }} variant="ghost" className="h-8 w-8 p-0">
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
 
-        </ScrollArea>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </div>
 
         {props.openAPI && (
           <div className="w-full bg-slate-100 dark:bg-neutral-800 px-4 py-2 rounded-md text-xs mb-4 flex gap-3 items-center justify-between">
@@ -213,7 +234,6 @@ export function InformationResearcher(props: Props) {
           <p className="text-gray-400 text-sm text-justify ">{highlightedAbstract}</p>
         </div>
 
-
         {props.abstract.length > charLimit && (
           <div className="flex gap-4 items-center mt-4">
             <Button
@@ -229,8 +249,6 @@ export function InformationResearcher(props: Props) {
             </Button>
           </div>
         )}
-
-        <div className="h-[0.5px] my-6 w-full bg-neutral-200 dark:bg-neutral-800"></div>
 
       </div>
     </div>

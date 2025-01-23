@@ -330,10 +330,6 @@ export function ResearcherModal() {
     return variations;
   }
 
-
-
-
-
   return (
     <>
       <Drawer open={isModalOpen} onClose={onClose}    >
@@ -387,18 +383,20 @@ export function ResearcherModal() {
 
                   <div
                     className={`
-                      text-[0.5rem] p-2
+                      hidden text-[0.5rem] py-2 px-4 border dark:border-neutral-800 w-fit
+                      text-gray-400 rounded-md  font-bold gap-1 items-center
 
-                      md:text-xs md:py-2 md:px-4
+                      md:text-xs md:py-2 md:px-4 
 
-                      border dark:border-neutral-800 w-fit  text-gray-400 rounded-md  font-bold flex gap-1 items-center
+                      lg:flex
+
                       ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none') : ('')}
                   `}
                   >
                     Atualização do Lattes: {String(props.lattes_update)}
                   </div>
 
-                  <div className="flex gap-3">
+                  <div className="hidden lg:flex gap-3">
                     {hasBaremaAvaliacao && (
                       <TooltipProvider>
                         <Tooltip>
@@ -530,7 +528,9 @@ export function ResearcherModal() {
 
                 <div
                   className="
-                    flex items-center flex-col relative mt-3
+                    flex items-center flex-col relative mt-14
+
+                    md:mt-3
                   "
                 >
                   <h4 className="text-3xl font-medium px-8 text-center mb-2">{props.name}</h4>
@@ -562,6 +562,7 @@ export function ResearcherModal() {
                   return (
                     <div>
                       <InformationResearcher
+                        atualizacao_lattes={user.lattes_update.toString()}
                         among={user.among}
                         articles={user.articles}
                         book={user.book}
@@ -756,7 +757,7 @@ export function ResearcherModal() {
                     </Tabs>
                   </div>
 
-                  <div className="xl:w-[350px]  w-full grid grid-cols-1">
+                  <div className="xl:w-[350px] w-full grid grid-cols-1">
                     <ResponsiveMasonry
                       columnsCountBreakPoints={{
                         350: 1,
@@ -770,6 +771,7 @@ export function ResearcherModal() {
 
                           return (
                             <InformacoesGeraisResearcher
+                              data_atualizacao_lattes={user.lattes_update.toString()}
                               classification={user.classification}
                               h_index={user.h_index}
                               relevance_score={user.relevance_score}
