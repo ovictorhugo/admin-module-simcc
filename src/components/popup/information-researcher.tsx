@@ -189,24 +189,6 @@ export function InformationResearcher(props: Props) {
               <a href={`https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(props.name)}`} rel="noopener noreferrer" target="blank_" className="bg-blue-500 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><LinkedinLogo size={12} className="textwhite" />Pesquisar no LinkedIn</a>
             </div>
 
-            {props.openAPI && (
-              <div className="w-full bg-slate-100 dark:bg-neutral-800 px-4 py-2 rounded-md text-xs mb-4 flex gap-3 items-center justify-between">
-                <div className="flex items-center gap-3"><BracketsCurly className="h-4 w-4" />{urlApi}</div>
-                <Button onClick={() => {
-                  navigator.clipboard.writeText(urlApi)
-                  toast("Operação realizada", {
-                    description: "URL copiada para área de transferência",
-                    action: {
-                      label: "Fechar",
-                      onClick: () => console.log("Undo"),
-                    },
-                  })
-                }} variant="ghost" className="h-8 w-8 p-0">
-                  <Copy className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
-
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </div>
