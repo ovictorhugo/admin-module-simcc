@@ -4,7 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, Respons
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
 // Function to normalize strings by removing accents and converting to lowercase
-const normalizeString = (str: string) => 
+const normalizeString = (str: string) =>
   str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
 type Livro = {
@@ -79,18 +79,28 @@ export function GraficoOrientacoes(props: { livros: Livro[] }) {
 
   return (
     <Alert className="pt-12">
-      <ChartContainer config={normalizedChartConfig} className="h-[250px] w-full">
+      <ChartContainer config={normalizedChartConfig} className="w-full h-[250px]">
         <ResponsiveContainer>
           <BarChart data={chartData} margin={{ top: 20, right: 20, left: 20, bottom: 0 }}>
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
             <CartesianGrid vertical={false} horizontal={false} />
-            <ChartLegend content={<ChartLegendContent />} />
+            <ChartLegend
+              className="
+                flex flex-nowrap whitespace-nowrap mt-2 p-4 rounded-md
+                gap-1 w-full text-[0.6rem]
+                overflow-x-auto overflow-y-hidden
+                
+                md:text-[0.7rem] md:gap-2
+
+                
+              "
+              content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
             {Object.keys(normalizedChartConfig).map((nature, index) => (
               <Bar key={nature} dataKey={nature} stackId="a" fill={normalizedChartConfig[nature].color} radius={4}>
                 {index === Object.keys(normalizedChartConfig).length - 1 && (
-                    <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
-                  )}
+                  <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+                )}
               </Bar>
             ))}
           </BarChart>

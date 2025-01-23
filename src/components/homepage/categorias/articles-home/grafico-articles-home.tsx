@@ -56,7 +56,7 @@ const chartConfig = {
 export function GraficoArticleHome(props: Articles) {
   type Qualis = "A1" | "A2" | "A3" | "A4" | "B1" | "B2" | "B3" | "B4" | "B5" | "C" | "SQ" | "NP";
 
-  const [chartData, setChartData] = useState<{ year: number; [qualis: string]: number }[]>([]);
+  const [chartData, setChartData] = useState<{ year: number;[qualis: string]: number }[]>([]);
 
   useEffect(() => {
     if (props.articles) {
@@ -108,7 +108,7 @@ export function GraficoArticleHome(props: Articles) {
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
 
             <CartesianGrid vertical={false} horizontal={false} />
-            <ChartLegend content={<ChartLegendContent />} />
+            <ChartLegend className="flex flex-wrap text-[0.6rem] md:text-[0.8rem]" content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
             {Object.keys(chartConfig).map((key, index) => {
               if (key !== "views") {

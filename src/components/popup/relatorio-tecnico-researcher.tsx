@@ -48,8 +48,6 @@ type Props = {
 export function RelatorioTecnicoResearcherPopUp(props: Props) {
 
   const { urlGeral, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados } = useContext(UserContext)
-
-
   const [loading, isLoading] = useState(false)
 
   const [distinct] = useState(false)
@@ -61,14 +59,11 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
   // Função para lidar com a atualização de researcherData
   const handleResearcherUpdate = (newResearcherData: Filter[]) => {
     setFilters(newResearcherData);
-
-
   };
 
   const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
   const urlTermPublicacoes = `${urlGeral}researcher_report?researcher_id=${props.name}&year=${yearString}`;
-
 
   useMemo(() => {
     const fetchData = async () => {
@@ -96,15 +91,12 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
     fetchData();
   }, [urlTermPublicacoes]);
 
-
-
   const items = Array.from({ length: 12 }, (_, index) => (
     <Skeleton key={index} className="w-full rounded-md h-[170px]" />
   ));
 
   return (
     <>
-
       <div className="mb-[150px]">
 
         <FilterYearPopUp
@@ -112,7 +104,7 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
 
         <Accordion type="single" collapsible defaultValue="item-1" >
           <AccordionItem value="item-1" >
-            <AccordionTrigger>
+            <AccordionTrigger className="text-left">
               <HeaderResultTypeHome title="Gráfico de orientações em andamento e concluídas " icon={<ChartBar size={24} className="text-gray-400" />}>
               </HeaderResultTypeHome>
             </AccordionTrigger>
@@ -129,22 +121,23 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
         </Accordion>
 
         <Accordion defaultValue="item-1" type="single" collapsible >
-          <AccordionItem value="item-1" >
+          <AccordionItem value="item-1" className="" >
             <div className="flex gap-4 w-full justify-between items-center ">
-              <div className="flex gap-4 items-center">
+              <div className="flex gap-4 items-center text-left">
                 <Book size={24} className="text-gray-400" />
                 <p className="text-sm font-bold">Todos os relatórios técnicos</p>
               </div>
 
               <div className="flex gap-3 items-center h-full">
 
-                <Button onClick={() => setTypeVisu('rows')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
-                  <Rows size={16} className=" whitespace-nowrap" />
-                </Button>
-
-                <Button onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
-                  <SquaresFour size={16} className=" whitespace-nowrap" />
-                </Button>
+                <div className="hidden md:flex">
+                  <Button onClick={() => setTypeVisu('rows')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+                    <Rows size={16} className=" whitespace-nowrap" />
+                  </Button>
+                  <Button onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
+                    <SquaresFour size={16} className=" whitespace-nowrap" />
+                  </Button>
+                </div>
 
                 <AccordionTrigger>
                   {itemsSelecionadosPopUp != itemsSelecionados && (

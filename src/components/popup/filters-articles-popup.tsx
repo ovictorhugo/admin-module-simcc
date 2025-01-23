@@ -98,7 +98,13 @@ export function FilterArticlePopUp(props: Props) {
   }, [filterYear, itensSelecionados]); // Runs only on updates
 
   return (
-    <div className="mb-6 flex gap-6">
+    <div
+      className="
+        flex flex-col gap-6 mb-6
+
+        md:flex-row
+      "
+    >
       <div className="flex flex-col">
         <div className="flex items-center gap-3 mb-4">
           <CheckSquare size={24} className="text-gray-400" />

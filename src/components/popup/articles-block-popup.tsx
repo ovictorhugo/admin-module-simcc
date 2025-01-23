@@ -58,7 +58,7 @@ export function ArticleBlockPopUp(props: Articles) {
           1700: 4
         }}
       >
-        <Masonry gutter="16px" columnsCount={columns}>
+        <Masonry gutter="16px" className="" columnsCount={columns}>
           {props.articles.slice(0, count).map((props: any) => {
 
             return (

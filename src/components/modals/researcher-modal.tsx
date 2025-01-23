@@ -551,7 +551,6 @@ export function ResearcherModal() {
             <div
               className="
                 px-7 w-full
-
                 md:px-10
 
                 lg:px-16
@@ -597,10 +596,10 @@ export function ResearcherModal() {
                 })}
 
                 <div className="flex gap-6 xl:flex-row flex-col-reverse">
-                  <div className="w-full flex-1">
-                    <Tabs defaultValue="articles" value={value} className="">
+                  <div className="flex w-full flex-1">
+                    <Tabs defaultValue="articles" value={value} className="w-[99%]">
                       {researcher.slice(0, 1).map(() => (
-                        <div className=" grid grid-cols-1 mb-6">
+                        <div className=" grid grid-cols-1 mb-6 w-full]">
                           <ScrollArea className="">
                             <TabsList className="mb-4 flex h-auto ?>">
                               <TabsTrigger
@@ -824,7 +823,7 @@ export function ResearcherModal() {
                         {researcher.slice(0, 1).map(() => {
                           return (
                             <div>
-                              <div className="mb-6 font-medium text-2xl">Nomes de citação</div>
+                              <div className=" text-left mb-6 font-medium text-2xl">Nomes de citação</div>
                               <div className="flex flex-wrap gap-1">
                                 {variations.map((variation, index) => (
                                   <p className="text-xs " key={index}>{variation} /</p>
@@ -839,9 +838,6 @@ export function ResearcherModal() {
                   </div>
                 </div>
               </DrawerHeader>
-
-
-
 
               <DrawerFooter>
 

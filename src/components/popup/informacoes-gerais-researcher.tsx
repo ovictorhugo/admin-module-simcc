@@ -270,7 +270,7 @@ export function InformacoesGeraisResearcher(props: Research) {
 
         <div
           className={`
-            text-[0.5rem] py-2 px-4 border dark:border-neutral-800 w-fit
+            py-2 px-4 border dark:border-neutral-800 w-fit
           text-gray-400 rounded-md  font-bold gap-1 items-center
 
             md:text-xs md:py-2 md:px-4 

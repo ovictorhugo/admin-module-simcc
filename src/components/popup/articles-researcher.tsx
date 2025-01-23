@@ -169,7 +169,6 @@ export function ArticlesResearcherPopUp(props: Props) {
 
     return (
         <>
-
             <div className="">
                 <FilterArticlePopUp
                     onFilterUpdate={handleResearcherUpdate} />
@@ -199,7 +198,7 @@ export function ArticlesResearcherPopUp(props: Props) {
                 <Accordion defaultValue="item-1" type="single" collapsible >
                     <AccordionItem value="item-1" >
                         <div className="flex mb-2">
-                            <div className="flex gap-4 w-full justify-between items-center ">
+                            <div className="flex gap-4 w-full justify-between items-center">
 
                                 <div className="flex gap-4 items-center">
                                     <Quotes size={24} className="text-gray-400" />
@@ -213,7 +212,7 @@ export function ArticlesResearcherPopUp(props: Props) {
                                                 {itemsSelecionadosPopUp.map((valor, index) => {
                                                     return (
                                                         <>
-                                                            <div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs bg-blue-500 dark:bg-blue-500 text-white border-0 `} >
+                                                            <div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs text-white border-0 `} >
                                                                 {valor.term.replace(/[|;]/g, '')}
                                                                 <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer" />
                                                                 {/* Adicionando a escolha entre "e" ou "ou" */}
@@ -239,7 +238,7 @@ export function ArticlesResearcherPopUp(props: Props) {
                                     )}
                                 </div>
 
-                                <div className="flex gap-3 mr-3  items-center h-full">
+                                <div className="flex gap-3 mr-3 items-center h-full">
 
                                     {(itemsSelecionadosPopUp != itemsSelecionados && searchType == 'article') && (
                                         <div className="flex gap-3  items-center">

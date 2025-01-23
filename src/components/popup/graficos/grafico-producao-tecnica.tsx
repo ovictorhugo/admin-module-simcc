@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Alert } from "../../ui/alert";
-import { BarChart, Bar, XAxis, LabelList, CartesianGrid,  ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis, LabelList, CartesianGrid, ResponsiveContainer, Cell } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
 type Livros = {
@@ -34,7 +34,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GraficoProducaoTecnica({ software, publicacoes, marca }: { software: Livros[], publicacoes: Patente[], marca: Livros[] }) {
-  const [chartData, setChartData] = useState<{ year: number; [key: string]: number }[]>([]);
+  const [chartData, setChartData] = useState<{ year: number;[key: string]: number }[]>([]);
 
   useEffect(() => {
     const counts: { [year: string]: { [key: string]: number } } = {};
@@ -78,7 +78,7 @@ export function GraficoProducaoTecnica({ software, publicacoes, marca }: { softw
         <ResponsiveContainer>
           <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
-            
+
             <CartesianGrid vertical={false} horizontal={false} />
             <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
@@ -90,9 +90,9 @@ export function GraficoProducaoTecnica({ software, publicacoes, marca }: { softw
                 stackId="a"
                 radius={4}
               >
-               {index === Object.keys(chartConfig).length - 1 && (
-    <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
-  )}
+                {index === Object.keys(chartConfig).length - 1 && (
+                  <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+                )}
                 {chartData.map((entry, index) =>
                   entry[key] > 0 ? <Cell key={`cell-${index}`} fill={chartConfig[key].color} /> : null
                 )}

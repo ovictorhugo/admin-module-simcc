@@ -63,16 +63,13 @@ export function OrientacoesResearcherPopUp(props: Props) {
   // Função para lidar com a atualização de researcherData
   const handleResearcherUpdate = (newResearcherData: Filter[]) => {
     setFilters(newResearcherData);
-
-
   };
-
 
   const [type, setType] = useState('')
 
   const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
-  let urlTermPublicacoes = `${urlGeral}guidance_researcher?researcher_id=${props.name}&year=${yearString}`;
+  const urlTermPublicacoes = `${urlGeral}guidance_researcher?researcher_id=${props.name}&year=${yearString}`;
 
   console.log(urlTermPublicacoes)
   useMemo(() => {
@@ -107,8 +104,6 @@ export function OrientacoesResearcherPopUp(props: Props) {
     <Skeleton key={index} className="w-full rounded-md h-[170px]" />
   ));
 
-
-
   //conectores 
   const [filteredPublicacoes, setFilteredPublicacoes] = useState<Livros[]>([]);
 
@@ -130,7 +125,6 @@ export function OrientacoesResearcherPopUp(props: Props) {
 
   return (
     <>
-
       <div className="mb-[150px]">
 
         <div className="flex gap-6 w-full">
@@ -165,7 +159,7 @@ export function OrientacoesResearcherPopUp(props: Props) {
         </div>
 
         <Accordion type="single" collapsible defaultValue="item-1">
-          <AccordionItem value="item-1" >
+          <AccordionItem value="item-1" className="text-left" >
             <div className="flex mb-2">
               <HeaderResultTypeHome title="Gráfico de orientações em andamento e concluídas " icon={<ChartBar size={24} className="text-gray-400" />}>
               </HeaderResultTypeHome>
@@ -178,7 +172,6 @@ export function OrientacoesResearcherPopUp(props: Props) {
                 <Skeleton className="w-full rounded-md h-[300px]" />
               ) : (
                 <GraficoOrientacoes
-
                   livros={filteredPublicacoes} // Passa um array com um único item para o componente
                 />
 

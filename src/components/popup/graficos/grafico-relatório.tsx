@@ -44,10 +44,8 @@ export function GraficoRelatorio({ publicacoes }: { publicacoes: Livro[] }) {
     <Alert className="pt-12">
       <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <ResponsiveContainer>
-          <BarChart data={chartData}  margin={{ top: 20,  right: -10, left: -10, bottom: 0 }}>
-          <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
-
-          
+          <BarChart data={chartData} margin={{ top: 20, right: -10, left: -10, bottom: 0 }}>
+            <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
             <CartesianGrid horizontal={false} />
             <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />

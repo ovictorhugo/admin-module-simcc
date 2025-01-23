@@ -15,10 +15,10 @@ export function TotalViewResearcher(props: Props) {
     return (
 
         <div>
-            <div className=" font-medium text-2xl mb-6 pr-12">Total de produção científica e técnica</div>
+            <div className="text-left font-medium text-2xl mb-6 pr-12">Total de produção científica e técnica</div>
             <div
                 className="
-                    gap-6 grid grid-cols-2
+                    gap-6 grid grid-cols-2 text-left
                     
                     md:grid-cols-3
                     

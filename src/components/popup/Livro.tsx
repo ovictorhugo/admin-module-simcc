@@ -250,7 +250,7 @@ export function BookItem(props: Publicacao) {
       </div>
 
 
-      <Alert className="rounded-l-none flex flex-col justify-between p-0">
+      <Alert className="rounded-l-none flex flex-col justify-between p-0 text-left">
 
         {props.has_image && (
           <div

@@ -65,7 +65,7 @@ export function GraficoLivros({ capLivros, publicacoes }: { capLivros: Livro[], 
         <ResponsiveContainer>
           <BarChart data={filteredChartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
-           
+
             <CartesianGrid vertical={false} horizontal={false} />
             <ChartLegend content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
@@ -80,8 +80,8 @@ export function GraficoLivros({ capLivros, publicacoes }: { capLivros: Livro[], 
                     radius={4}
                   >
                     {index === Object.keys(chartConfig).length - 1 && (
-                    <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
-                  )}
+                      <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+                    )}
                   </Bar>
                 );
               }
