@@ -27,7 +27,7 @@ type Publicacao = {
 
   oriented?: string,
 
-
+  researcher_name?:string
 
   event_name?: string
 
@@ -69,14 +69,15 @@ type Publicacao = {
 }
 
 interface Components {
-  title: string
-  type: string
-}
-
-interface Production {
   citations: string
   lattes_id: string
   name: string
+}
+
+interface Production {
+
+  title: string
+  type: string
 }
 
 interface Forment {
@@ -306,7 +307,7 @@ export function BookItem(props: Publicacao) {
 
               <div className="flex gap-3 min-w-20">
 
-                {(user?.lattes_id == props.lattes_id || has_editar_producao) && (
+                {((user?.lattes_id == props.lattes_id || has_editar_producao) && (props.type == 'article' || props.type == 'patente' || props.type == 'livro' || props.type == 'capLivro')) && (
                   <Button
                     onClick={() =>
                       onOpen('edit-article', {
@@ -341,6 +342,7 @@ export function BookItem(props: Publicacao) {
                         production: props.production,
                         foment: props.foment,
                         components: props.components,
+                        researcher_name:props.researcher_name
                       })
                     }
                     variant="outline"
@@ -433,6 +435,10 @@ export function BookItem(props: Publicacao) {
 
           {props.type == 'patente' && (
             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Copyright size={12} />Patente</div>
+          )}
+
+{props.type == 'research-project' && (
+             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><div className={`h-4 w-4 rounded-md ${props.status == 'EM_ANDAMENTO' ? ('bg-yellow-500'):('bg-green-500')}`}></div>{props.status?.split('_').join(' ')}</div>
           )}
 
           {props.type == 'orientacoes' && (

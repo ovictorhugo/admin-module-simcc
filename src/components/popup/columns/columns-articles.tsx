@@ -87,7 +87,6 @@ export const columns: ColumnDef<Articles>[] = [
       return <div className="flex gap-1 items-center" ><div className={`w-4 h-4 rounded-md  ${qualisColor[row.getValue("qualis") as keyof typeof qualisColor]}`}></div>  {row.getValue("qualis")}</div>
     },
   },
-
       {
         accessorKey: "qualis",
         header: "Qualis",

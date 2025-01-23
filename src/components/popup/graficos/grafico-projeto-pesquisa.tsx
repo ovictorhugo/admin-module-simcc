@@ -24,14 +24,15 @@ type Livro = {
 }
 
 interface Components {
-  title:string 
-  type:string 
-}
-
-interface Production {
+ 
   citations:string 
   lattes_id:string 
   name:string
+}
+
+interface Production {
+  title:string 
+  type:string 
 }
 
 interface Forment {

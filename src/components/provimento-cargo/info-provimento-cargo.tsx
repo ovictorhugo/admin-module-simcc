@@ -263,12 +263,12 @@ return(
         return(
             <div className="my-8 flex items-center gap-8">
  
-            <Avatar className="cursor-pointer rounded-md  h-28 w-28">
+            <Avatar className="cursor-pointer rounded-2xl  h-28 w-28">
                  <AvatarImage  className={'rounded-md h-28 w-28'} src={`${urlGeral}ResearcherData/Image?name=${props.name}`} />
                  <AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
              </Avatar>
                          <div>
-                         <h1 className=" max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
+                         <h1 className=" max-w-[500px] text-2xl font-medium leading-tight tracking-tighter md:text-3xl lg:leading-[1.1]  md:block mb-3 ">
                          Provimento de cargo de {props.name}</h1>
                           <div className="flex flex-wrap flex-1 items-center gap-3 mt-2">
                                            {props.area != '' && (
