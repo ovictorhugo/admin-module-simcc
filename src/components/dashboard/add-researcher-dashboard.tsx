@@ -15,6 +15,7 @@ import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { useNavigate } from "react-router-dom";
 import { DataTable } from "./data-table";
 import { CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Helmet } from "react-helmet";
 
 
 export function AddResearcherDashboard() {
@@ -195,9 +196,15 @@ export function AddResearcherDashboard() {
   }
 
   const [onOpenAdd, setIsOpenAdd] = useState(false)
-
+  const {version} = useContext(UserContext)
     return  (
 <>
+
+<Helmet>
+          <title>Pesquisadores | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
+          <meta name="description" content={`Pesquisadores | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
 {isModalOpen && (
   <main className="flex flex-1 flex-col p-4 md:p-8">
 

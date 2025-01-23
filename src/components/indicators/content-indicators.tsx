@@ -4,6 +4,7 @@ import { ChevronLeft, SquareArrowOutUpRight } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useContext, useState } from "react";
 import { UserContext } from "../../context/context";
+import { Helmet } from "react-helmet";
 
 export function ContentIndicators() {
     const history = useNavigate();
@@ -24,6 +25,11 @@ export function ContentIndicators() {
   const url2 = 'https://app.powerbi.com/view?r=eyJrIjoiZTg2MTFiN2ItMjJjNS00Y2EzLWJjNTgtNzE3Yzg2YWZhNDM2IiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
     return (
         <main className="flex flex-1 flex-col gap-4  p-4 md:p-8 ">
+                   <Helmet>
+          <title>Indicadores | {version ? ('Conectee'):('Iapós')}</title>
+          <meta name="description" content={`Indicadores | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
                  <div className="w-full  gap-4">
             <div className="flex items-center gap-4">
           

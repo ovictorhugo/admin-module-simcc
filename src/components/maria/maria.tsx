@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Alert } from "../ui/alert";
 import { useModal } from "../hooks/use-modal-store";
+import { Helmet } from "react-helmet";
 
 
 interface Query {
@@ -188,9 +189,14 @@ export function Maria() {
 };
 
 const {onOpen} = useModal()
-
+const {version} = useContext(UserContext)
     return(
         <main className="w-full p-4 md:p-8 pb-2 md:pb-2 backgroundMaria">
+            <Helmet>
+          <title>Pesquisa com IA | {version ? ('Conectee'):('Iapós')}</title>
+          <meta name="description" content={`Pesquisa com IA | {version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
              <main className="grid h-full flex-1 gap-4 md:gap-8 overflow-auto   ">
            
 

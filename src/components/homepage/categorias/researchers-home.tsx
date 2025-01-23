@@ -593,7 +593,7 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
                     <div className="flex gap-2">
                       {itemsSelecionados.map((valor, index) => {
                         return (
-                          <div key={index}>
+                          <div key={index} className="flex gap-2">
                             <div className={`flex gap-2 items-center w-fit p-2 px-3 capitalize rounded-md text-xs ${searchType == 'article' && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract' && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker' && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book' && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent' && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name' && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area' && ('bg-green-500 dark:bg-green-500')} ${searchType == '' && ('bg-blue-700 dark:bg-blue-700')} text-white border-0`}>
                               {valor.term.replace(/[|;]/g, '')}
                             </div>

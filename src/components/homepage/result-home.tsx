@@ -12,6 +12,7 @@ import { useModal } from "../hooks/use-modal-store";
 import { File, Quotes } from "phosphor-react";
 import { Search } from "../search/search";
 import { useLocation} from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -128,9 +129,26 @@ export function ResultHome() {
       }
     };
 
+    const {version} = useContext(UserContext)
   return (
   
         <div className="h-full w-full grid grid-cols-1">
+           <Helmet>
+           <title>
+  {itemsSelecionados.length === 0
+    ? 'Resultados :'
+    : itemsSelecionados
+        .map((item, index) => {
+          const term = item.term.replace(/[|;]/g, ''); // Remove o conector para obter apenas o termo
+          const connector = item.term.endsWith('|') ? 'ou' : 'e'; // Determina o conector
+          return index < itemsSelecionados.length - 1 ? `${term} ${connector}` : term; // Adiciona o conector apenas se não for o último
+        })
+        .join(' ')} | {version ? ('Conectee'):('Iapós')}
+</title>
+          <meta name="description" content={`Pesquisa | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
+
           {(itemsSelecionados.length > 0 || (researcher == 'false'))  && (
             <div className="top-[68px]  sticky z-[2] supports-[backdrop-filter]:dark:bg-neutral-900/60 supports-[backdrop-filter]:bg-neutral-50/60 backdrop-blur">
               <div className={`w-full ${isOn ? 'px-8' : 'px-4'} border-b border-b-neutral-200 dark:border-b-neutral-800`}>
@@ -228,11 +246,11 @@ export function ResultHome() {
                 <ResultProvider />
               </div>
             ) : (
-              <div className="h-[calc(100vh-130px)] flex flex-col md:p-8 p-4 md:pt-4">
+              <div className="h-[calc(100vh-134px)] flex flex-col md:p-8 p-4 md:pt-4">
               <Search/>
 
               <div className="w-full flex flex-col items-center justify-center h-full">
-                <p className="text-9xl text-[#719CB8] font-bold mb-16 animate-pulse">^_^</p>
+                <p className="text-9xl text-eng-blue font-bold mb-16 animate-pulse">^_^</p>
                 <p className="font-medium text-lg">
                   Experimente pesquisar um tema e veja o que a plataforma pode filtrar para você.
                 </p>

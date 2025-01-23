@@ -163,6 +163,7 @@ import { GraficoTecnicosRt } from "./graficos/grafico-tecnicos-rt";
 import { GraficoTecnicosGenero } from "./graficos/grafico-tecnicos-genero";
 import { GraficoProgressaoTecnicos } from "./graficos/grafico-progressao-tecnicos";
 import { GraficoTecnicosCargo } from "./graficos/grafico-tecnico-cargo";
+import { Helmet } from "react-helmet";
 
 
 const chartConfig = {
@@ -594,8 +595,15 @@ return csv;
 
 
  const url = 'https://app.powerbi.com/view?r=eyJrIjoiNTBjNmQ3NWQtODNmZC00MWZkLThjNWEtZjU5YmE2ZDkwMjVkIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
-    return(
+ const {version} = useContext(UserContext)
+
+ return(
         <>
+         <Helmet>
+          <title>Indicadores da instituição | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
+          <meta name="description" content={`Indicadores da instituição | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
         {isModalOpen && (
               <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
                 <Tabs defaultValue={'all'} className="h-full" >

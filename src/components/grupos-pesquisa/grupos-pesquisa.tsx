@@ -12,6 +12,7 @@ import { Input } from "../ui/input";
 import { VisualizacaoGrupo } from "./visualizacao-grupo-pesquisa";
 
 import bg_popup from '../../assets/bg_home.png'
+import { Helmet } from "react-helmet";
 interface Patrimonio {
     area: string,
     institution: string,
@@ -197,12 +198,17 @@ export function GruposPesquisaPage() {
               });
           }
         
-
+          const {version} = useContext(UserContext)
+          
     return(
      <>
      {programSelecionado.length == 0 ? (
            <main className="flex flex-1 flex-col gap-4 md:gap-8  ">
-
+             <Helmet>
+          <title>Grupos de pesquisa | {version ? ('Conectee'):('Iapós')}</title>
+          <meta name="description" content={`Grupos de pesquisa | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
            <div className="bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${bg_popup})` }}>
            <div className="justify-center md:px-8 px-4 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
        <Link to={'/informacoes'}  className="inline-flex z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>

@@ -11,11 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../../../components/ui/dropdown-menu"
-import { ArrowUpDown, Copy, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, Copy, MoreHorizontal, X } from "lucide-react"
 import { ArrowSquareOut, Buildings, MapPin, Plus, ShareNetwork} from "phosphor-react"
 import { GraduationCap} from "lucide-react"
 import { useContext } from "react"
 import { UserContext } from "../../../../context/context"
+import { useModal } from "../../../hooks/use-modal-store"
 //import { UserContext } from "../../../../context/context"
 
 
@@ -114,15 +115,45 @@ export const columns: ColumnDef<Research>[] = [
       const payment = row.original
       const {searchType, valoresSelecionadosExport, urlGeral} = useContext(UserContext)
       const urlShare = `${urlGeral}researcher/${row.id}/${searchType}/${valoresSelecionadosExport}`
- 
+      const {onOpen} = useModal()
+      const {pesquisadoresSelecionados, setPesquisadoresSelecionados} = useContext(UserContext)
       return (
         <div className="flex gap-3">
-          <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
-             
-              <Plus size={8} className="h-4 w-4" />
-            </Button>
+           <Button 
+             onClick={() => {
+                // Verifica se o pesquisador já está selecionado pelo nome
+                if (pesquisadoresSelecionados.some(pesquisador => pesquisador.name === row.original.name)) {
+                  // Remove o pesquisador selecionado com o nome correspondente
+                  setPesquisadoresSelecionados(prev => prev.filter(pesquisador => pesquisador.name !== row.original.name));
+                } else {
+                  // Adiciona o novo pesquisador selecionado
+                  setPesquisadoresSelecionados(prev => [
+                    ...prev,
+                    {
+                      id: row.original.id,
+                      name: row.original.name,
+                      university: row.original.university,
+                      lattes_id: row.original.lattes_id,
+                      city: row.original.city,
+                      area: row.original.area,
+                      graduation:row.original.graduation,
+                    }
+                  ]);
+                }
+              }}
+            
+            size={'icon'} className={` flex transition-all h-8 w-8  ${
+                pesquisadoresSelecionados.some(pesquisador => pesquisador.name === row.original.name) && 'bg-red-500 hover:bg-red-600 text-white'
+              }`}>
 
-            <Button variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
+{pesquisadoresSelecionados.some(pesquisador => pesquisador.name === row.original.name) ? (
+              <X size={16} className="" />
+            ) : (
+              <Plus size={16} className="" />
+            )}
+              </Button>
+
+            <Button onClick={() => onOpen('researcher-modal', {name:row.original.name})} variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
              
             <ArrowSquareOut size={8} className="h-4 w-4" />
             </Button>

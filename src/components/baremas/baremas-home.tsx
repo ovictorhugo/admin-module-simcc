@@ -152,6 +152,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { ProcurarBaremas } from "./procurar-barema-public";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
+import { Helmet } from "react-helmet";
 
 
 export function BaremasHome() {
@@ -809,8 +810,16 @@ export function BaremasHome() {
 
     const [tab, setTab] = useState('all')
 
+    const {version} = useContext(UserContext)
+     
+
     return (
         <>
+         <Helmet>
+          <title>Baremas | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
+          <meta name="description" content={`Baremas | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
             {isModalOpen && (
                 <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 min-h-[calc(100vh-56px)]">
                     <Tabs defaultValue={tab} value={tab} className="h-full" >

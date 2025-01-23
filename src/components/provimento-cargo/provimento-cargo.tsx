@@ -9,6 +9,7 @@ import { UserContext } from "../../context/context";
 import { toast } from "sonner"
 import { InfoPavimentoCargo } from "./info-provimento-cargo";
 import { Skeleton } from "../ui/skeleton";
+import { Helmet } from "react-helmet";
 
 interface Post {
     nome: string,
@@ -110,6 +111,11 @@ const onClickBuscaPatrimonio = () => {
     console.log(info)
     return(
         <main className="flex flex-1 flex-col gap-4 md:gap-8  ">
+           <Helmet>
+          <title>Provimento de cargo | Conectee</title>
+          <meta name="description" content={`Provimento de cargo | Conectee`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
            <div className="bg-cover bg-center bg-no-repeat" >
            <div className="justify-center md:px-8 px-4 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
        <Link to={'/informacoes'}  className="inline-flex z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>

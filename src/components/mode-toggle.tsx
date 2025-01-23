@@ -10,12 +10,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { UserContext } from "../context/context"
 
 export function ModeToggle() {
   const { setTheme, theme } = useTheme()
   const {navbar} = useContext(UserContext)
+
+  
 
   return (
     <DropdownMenu>

@@ -1,5 +1,5 @@
 // src/components/EnviarNotificacoes.jsx
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ChevronLeft, Send, SquareArrowOutUpRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,8 @@ import img_3 from '../../assets/bg_home.png';
 import img_4 from '../../assets/logo_email_3.png';
 import { render } from '@react-email/render';
 import { NotificationEmail } from './notificacao';
+import { Helmet } from 'react-helmet';
+import { UserContext } from '../../context/context';
 
 export function EnviarNotificacoes() {
   const navigate = useNavigate();
@@ -67,8 +69,15 @@ export function EnviarNotificacoes() {
     }
   };
 
+  const {version} = useContext(UserContext)
+
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:p-8">
+       <Helmet>
+          <title>Enviar notificações | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
+          <meta name="description" content={`Enviar notificações | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
       <div className="w-full gap-4">
         <div className="flex items-center gap-4">
           <Button onClick={handleVoltar} variant="outline" size="icon" className="h-7 w-7">

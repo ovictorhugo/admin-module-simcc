@@ -1,6 +1,7 @@
 import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, Download, FolderKanban, OctagonAlert, Star, TrendingUp } from "lucide-react";
 import {  useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
+import { Helmet } from "react-helmet";
 
 import html2canvas from 'html2canvas';
 import html2pdf from 'html2pdf.js';
@@ -440,6 +441,7 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
     
       return (
         <>
+      
           <Button onClick={handleDownload} disabled={!isReady}>
             Baixar PDF do Componente
           </Button>
@@ -529,10 +531,14 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
       }
     };
     
-
+    const {version} = useContext(UserContext)
     return(
         <html className="w-full grid grid-cols-1">
-       
+          <Helmet>
+          <title>{researcher_name} | {version ? ('Conectee'):('Iapós')}</title>
+          <meta name="description" content={`${researcher_name} | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
        
           <main className="flex flex-1 flex-col  p-4 md:p-8 ">
           <Tabs defaultValue={tab} value={tab} className="h-full" >
@@ -1052,6 +1058,16 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
       >
         <FolderKanban size={16} className="" />
         Projetos de pesquisa
+      </TabsTrigger>
+
+
+      <TabsTrigger
+        value="cargos"
+        onClick={() => setValue('cargos')}
+        className="flex gap-2 items-center"
+      >
+        <Student size={16} className="" />
+        Cargos e funções
       </TabsTrigger>
    
   </TabsList>

@@ -118,6 +118,7 @@ import { useModal } from "../hooks/use-modal-store";
 import { TodosPesquisadores } from "./categorias/researchers-home/todos-pesquisadores";
 import { HeroParallax } from "../ui/hero-parallax";
 import { BannerHome } from "./components/banner";
+import { Helmet } from "react-helmet";
 
 
 interface Bolsistas {
@@ -526,11 +527,14 @@ export function InitialHome() {
   const { onOpen } = useModal()
 
 
-
   return (
 
     <div className=" items-center  flex flex-col   ">
-
+   <Helmet>
+          <title>Página Inicial | {version ? ('Conectee'):('Iapós')}</title>
+          <meta name="description" content={`Página Inicial | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
 
 
 

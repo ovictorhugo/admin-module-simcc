@@ -14,6 +14,7 @@ import { TableReseracherhome } from "../homepage/categorias/researchers-home/tab
 import { Alert } from "../ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useModal } from "../hooks/use-modal-store";
+import { Helmet } from "react-helmet";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -354,6 +355,14 @@ console.log(urlLinhasPequisa)
 
     return(
         <main className="flex flex-1 flex-col gap-4 md:gap-8 ">
+           <Helmet>
+  <title>{graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : 'Conectee | Escola de Engenharia UFMG'}</title>
+  <meta
+    name="description"
+    content={graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : 'Conectee | Escola de Engenharia UFMG'}
+  />
+  <meta name="robots" content="index, follow" />
+</Helmet>
 <div className="w-full  gap-4 md:p-8 p-4 pb-0 md:pb-0">
             <div className="flex items-center gap-4">
           

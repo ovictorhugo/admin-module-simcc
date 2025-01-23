@@ -387,7 +387,7 @@ export function SignInContent() {
 
     return (
         <div className="w-full h-screen flex">
-            <div className="w-1/2 h-full p-16 md:flex justify-between flex-col hidden bg-cover bg-center bg-no-repeat bg-[#719CB8]" style={{ backgroundImage: `url(${img1})` }}>
+            <div className="w-1/2 h-full p-16 md:flex justify-between flex-col hidden bg-cover bg-center bg-no-repeat bg-eng-blue" style={{ backgroundImage: `url(${img1})` }}>
                 {version ? (
                     <Link to={'/'} className="w-fit">
                         <div className="h-[28px]"><LogoConecteeWhite /></div></Link>

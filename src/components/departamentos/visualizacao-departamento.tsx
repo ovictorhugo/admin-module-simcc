@@ -26,6 +26,7 @@ import {
   ChartLegend,
   ChartLegendContent
 } from "../../components/ui/chart"
+import { Helmet } from "react-helmet";
 
 
 const useQuery = () => {
@@ -366,6 +367,14 @@ export function VisualizacaoDepartamento() {
 
     return(
         <main className="flex flex-1 flex-col gap-4 md:gap-8 ">
+          <Helmet>
+  <title>{departamento[0]?.dep_nom ? `${departamento[0]?.dep_nom} | Conectee` : 'Conectee | Escola de Engenharia UFMG'}</title>
+  <meta
+    name="description"
+    content={departamento[0]?.dep_nom ? `${departamento[0]?.dep_nom} | Conectee` : 'Conectee | Escola de Engenharia UFMG'}
+  />
+  <meta name="robots" content="index, follow" />
+</Helmet>
     <Tabs defaultValue={'all'} className="h-full" >
     <div className="w-full  gap-4 md:p-8 p-4 pb-0 md:pb-0">
             <div className="flex items-center gap-4">

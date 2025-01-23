@@ -19,6 +19,7 @@ import { ScrollArea, ScrollBar } from "../../../ui/scroll-area";
 import { ArticlesResearcherPopUp } from "../../../popup/articles-researcher";
 import { ResearchersHome } from "../researchers-home";
 import { ArticlesHome } from "../articles-home";
+import { Helmet } from "react-helmet";
 type Research = {
     among: number,
     articles: number,
@@ -111,7 +112,11 @@ export function TodosPesquisadores() {
 
     return(
         <main className=" w-full grid grid-cols-1 ">
-
+ <Helmet>
+          <title>Listagens | {version ? ('Conectee'):('Iapós')}</title>
+          <meta name="description" content={`Listagens | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
 <div className="justify-center px-4 md:px-8 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
         <Link to={'/informacoes'}  className="inline-flex z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12}/></Link>
         

@@ -14,6 +14,7 @@ import { Tabs, TabsContent } from "../ui/tabs";
 import { ItensListDepartamento } from "./components/itens-list-departamento";
 import { useModal } from "../hooks/use-modal-store";
 import { DisplayItemDepartamento } from "./components/display-item-departamento";
+import { Helmet } from "react-helmet";
 
 
 interface Departamentos {
@@ -62,8 +63,15 @@ export function Departamentos() {
     setTotal(newResearcherData);
   };
 
+  const {version} = useContext(UserContext)
+
     return(
       <TooltipProvider delayDuration={0}>
+         <Helmet>
+          <title>Departamentos | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
+          <meta name="description" content={`Departamentos | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
       <ResizablePanelGroup
   direction="horizontal"
   onLayout={() => defaultLayout}

@@ -19,6 +19,7 @@ interface Post {
 
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { useModalResult } from "../hooks/use-modal-result";
+import { Helmet } from "react-helmet";
 
 export function Dicionario() {
     const {  isOpen, type: typeModal } = useModalHomepage();
@@ -130,8 +131,17 @@ export function Dicionario() {
           console.error(error);
         }
       };
+
+      const {version} = useContext(UserContext)
+      
     return (
         <>
+
+<Helmet>
+          <title>Dicionário | {version ? ('Conectee'):('Iapós')}</title>
+          <meta name="description" content={`Dicionário | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
             {isModalOpen && (
                 <main className="flex  flex-1 flex-col gap-8 p-4  md:p-8">
                      <div className="w-full  gap-4">

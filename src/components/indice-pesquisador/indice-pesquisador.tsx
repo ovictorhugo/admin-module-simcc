@@ -3,6 +3,9 @@ import { Button } from "../ui/button";
 import { ChevronLeft } from "lucide-react";
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "../ui/table";
 import { Alert } from "../ui/alert";
+import { Helmet } from "react-helmet";
+import { useContext } from "react";
+import { UserContext } from "../../context/context";
 
 export function IndicePesquisador() {
       const history = useNavigate();
@@ -96,9 +99,17 @@ export function IndicePesquisador() {
             "E+": "bg-gray-400",
             E: "bg-gray-300",
           };
+          const {version} = useContext(UserContext)
 
     return(
         <main className="flex  flex-1 flex-col gap-8 p-4  md:p-8">
+           
+           <Helmet>
+          <title>Índice do pesquisador | {version ? ('Conectee'):('Iapós')}</title>
+          <meta name="description" content={`Índice do pesquisador | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
+
  <div className="w-full  gap-4">
             <div className="flex items-center gap-4">
           

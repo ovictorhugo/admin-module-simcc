@@ -15,6 +15,7 @@ import { Input } from "../ui/input";
 import { ArrowRight, Info } from "lucide-react";
 
 import bg_graduate from '../../assets/bg_graduate.png'
+import { Helmet } from "react-helmet";
 
 interface GraduateProgram {
   area: string;
@@ -101,9 +102,17 @@ export function GraduateProgram() {
     return searchString.includes(normalizedSearch);
   }) : [];
 
+  const {version} = useContext(UserContext)
+  
   return (
     <>
-      {isModalOpen && (
+
+<Helmet>
+          <title>Pós-graduações | {version ? ('Conectee'):('Iapós')}</title>
+          <meta name="description" content={`Pós-graduações | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
+      
         <>
           {programSelecionado.length == 0 ? (
             <main className="  gap-4 md:gap-8 flex flex-col  p-4 md:p-8 pt-0 md:pt-0 w-full">
@@ -171,7 +180,7 @@ export function GraduateProgram() {
             <VisualizacaoPrograma />
           )}
         </>
-      )}
+     
     </>
   )
 }

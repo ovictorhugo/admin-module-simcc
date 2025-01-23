@@ -23,6 +23,7 @@ import { ArrowElbowDownRight, ChartBar, MagnifyingGlass, Student } from "phospho
 import { ScrollArea, ScrollBar } from "../../ui/scroll-area";
 import { useModal } from "../../hooks/use-modal-store";
 import { Instituicoes } from "./instituicoes";
+import { Helmet } from "react-helmet";
 
 
 
@@ -277,9 +278,15 @@ useEffect(() => {
 
 const {onOpen} = useModal()
 
+const {version} = useContext(UserContext)
+
     return  (
        <div className="w-full relative">
-      
+       <Helmet>
+          <title>Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
+          <meta name="description" content={`Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
       <main className="flex flex-1 flex-col gap-4  md:gap-8 ">
              <Tabs defaultValue={tab} value={tab} className="h-full" >
             <div className="w-full mb-8  gap-4">

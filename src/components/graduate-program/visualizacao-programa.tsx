@@ -37,6 +37,7 @@ import { GraduateProgram } from "./graduate-program";
 import { Badge } from "../ui/badge";
 import { HomepageProgram } from "./homepage-program";
 import { PainelAdminGraduate } from "./painel-admin-graduate";
+import { Helmet } from "react-helmet";
 
 interface PalavrasChaves {
   term: string;
@@ -234,6 +235,14 @@ export function VisualizacaoPrograma() {
 
   return (
     <>
+      <Helmet>
+  <title>{graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : 'Conectee | Escola de Engenharia UFMG'}</title>
+  <meta
+    name="description"
+    content={graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : 'Conectee | Escola de Engenharia UFMG'}
+  />
+  <meta name="robots" content="index, follow" />
+</Helmet>
       {graduatePrograms.slice(0, 1).map((props) => (
         props.visible === 'false' ? (
           <div style={{ backgroundImage: `url(${bg_popup})` }} className="h-screen bg-cover bg-no-repeat bg-center w-full flex flex-col items-center justify-center bg-neutral-50 dark:bg-neutral-900">

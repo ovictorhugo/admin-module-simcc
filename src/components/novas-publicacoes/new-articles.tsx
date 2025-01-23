@@ -44,6 +44,7 @@ import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
 import { LogoIapos } from "../svg/LogoIapos";
 import { useTheme } from "next-themes";
 import { InfiniteMovingProductions } from "../ui/infinite-moving-productions";
+import { Helmet } from "react-helmet";
 
 
 type Magazine = {
@@ -434,6 +435,12 @@ useMemo(() => {
 
     return(
         <main ref={containerRef} className="  bg-neutral-50 dark:bg-neutral-900 w-full">
+            <Helmet>
+          <title>Produções recentes | {version ? ('Conectee'):('Iapós')}</title>
+          <meta name="description" content={`Produções recentes | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
+
           <Tabs defaultValue={tab}  value={tab} className="h-full" >
           <div className="w-full  gap-4 p-4 md:p-8">
             <div className="flex items-center gap-4">

@@ -4,6 +4,7 @@ import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
 import { Blocks, Building2, ClipboardEdit, FlaskConical, GraduationCap, Mail, PieChart, SlidersHorizontal, Users, Weight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 export function HomeDashboard() {
 
@@ -51,8 +52,15 @@ export function HomeDashboard() {
     (perm) => perm.permission === 'visualizar_gerencia_modulo_administrativo'
   );
 
+  const {version} = useContext(UserContext)
+
     return(
         <main className="w-full md:p-8 p-4">
+           <Helmet>
+          <title>Dashboard | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
+          <meta name="description" content={`Dashboard | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
             <div className=" bg-eng-blue rounded-md w-full h-[40vh]  text-white p-8 flex flex-col justify-between">
                    <div>
                    <Badge className="mb-4 text-eng-blue" variant={'secondary'} >{role}</Badge>
@@ -71,7 +79,7 @@ export function HomeDashboard() {
 
             <h3 className="text-2xl font-medium my-4 md:my-8 ">Acesso rápido na plataforma</h3>
 
-            <div className="grid lg:grid-cols-5 gap-4 md:grid-cols-3 grid-cols-2 2xl:grid-cols-6">
+            <div className="grid lg:grid-cols-4 gap-4 md:grid-cols-3 grid-cols-2 2xl:grid-cols-6">
                {has_visualizar_gerencia_modulo_administrativo && (
                  <Link to={'/dashboard/administrativo'}>
                  <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">

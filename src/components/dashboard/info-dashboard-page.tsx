@@ -3,6 +3,9 @@ import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "../ui/alert";
+import { Helmet } from "react-helmet";
+import { useContext } from "react";
+import { UserContext } from "../../context/context";
 
 export function InfoDashboardPage() {
     const history = useNavigate();
@@ -28,9 +31,14 @@ export function InfoDashboardPage() {
         doc:'importar-pesquisadores.xls'
       }
     ]
-
+    const {version} = useContext(UserContext)
     return(
         <main className="flex flex-1 flex-col gap-4 md:gap-8 md:p-8 p-4">
+            <Helmet>
+          <title>Informações | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
+          <meta name="description" content={`Informações | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
             <Tabs defaultValue={'all'} className="h-full" >
             <div className="w-full mb-8  gap-4  pb-0 md:pb-0">
             <div className="flex items-center gap-4">

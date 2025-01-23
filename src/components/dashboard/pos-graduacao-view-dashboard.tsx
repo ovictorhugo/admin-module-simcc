@@ -38,6 +38,7 @@ import { DisplayItem } from "./components/display-item";
 import { ItensList } from "./components/itens-list-vitrine";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
   
 
 
@@ -72,9 +73,14 @@ const isModalOpen = isOpen && type === "graduate-program";
       history(-1);
     }
 
-
+    const {version} = useContext(UserContext)
     return(
       <>
+       <Helmet>
+          <title>Pós-graduações | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
+          <meta name="description" content={`Pós-graduações | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
        {isModalOpen && (
           <TooltipProvider delayDuration={0}>
               <ResizablePanelGroup

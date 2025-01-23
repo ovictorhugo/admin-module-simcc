@@ -310,7 +310,7 @@ try {
 
     return(
         <div className="w-full h-screen flex">
-           <div className="w-1/2 h-full p-16 md:flex justify-between flex-col hidden bg-cover bg-center bg-no-repeat bg-[#274B5E]" >
+           <div className="w-1/2 h-full p-16 md:flex justify-between flex-col hidden bg-cover bg-center bg-no-repeat bg-eng-dark-blue" >
            {version ? (
             <Link to={'/'} className="w-fit">
            <div className="h-[28px]"><LogoConecteeWhite/></div></Link>

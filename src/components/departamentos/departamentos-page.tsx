@@ -10,6 +10,7 @@ import { cn } from "../../lib"
 import { Button } from "../ui/button";
 import bg_graduate from '../../assets/bg_graduate.png'
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { Helmet } from "react-helmet";
 interface Departamentos {
     dep_id:string
     org_cod: string
@@ -105,12 +106,16 @@ export function DepartamentPage() {
           });
       }
     
-
+      const {version} = useContext(UserContext) 
     return(
         <>
         {departamentoSelecionado.length == 0 ? (
              <div className="w-full">
-
+ <Helmet>
+          <title>Departamentos | {version ? ('Conectee'):('Iapós')}</title>
+          <meta name="description" content={`Departamentos | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
               <main className="  gap-4 md:gap-8 flex flex-col  p-4 md:p-8 pt-0 md:pt-0 w-full">
 
               <div className="bg-cover bg-bottom bg-no-repeat" style={{ backgroundImage: `url(${bg_graduate})` }}>

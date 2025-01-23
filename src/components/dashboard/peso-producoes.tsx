@@ -20,6 +20,7 @@ import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { ChevronLeft, Info } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Badge } from "../ui/badge";
+import { Helmet } from "react-helmet";
 
 
 
@@ -278,10 +279,15 @@ export function PesoProducoes() {
         history(-1);
       }
   
-
+      const {version} = useContext(UserContext)
       
     return(
       <>
+       <Helmet>
+          <title>Pesos de produção | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
+          <meta name="description" content={`Pesos de produção | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
      {isModalOpenDashboard && (
          <main className="flex flex-1 flex-col p-4 md:p-8">
            <div className="w-full  gap-4">
