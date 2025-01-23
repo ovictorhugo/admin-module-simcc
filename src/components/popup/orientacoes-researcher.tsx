@@ -127,7 +127,7 @@ export function OrientacoesResearcherPopUp(props: Props) {
     <>
       <div className="mb-[150px]">
 
-        <div className="flex gap-6 w-full">
+        <div className="flex flex-col md:flex-row gap-6 w-full">
           <div className="flex flex-col">
             <div className="flex items-center gap-3 mb-4 w-full ">
               <CheckSquare size={24} className="text-gray-400" />
@@ -200,13 +200,14 @@ export function OrientacoesResearcherPopUp(props: Props) {
                     </div>
                   )}
 
-                  <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
-                    <Rows size={16} className=" whitespace-nowrap" />
-                  </Button>
-
-                  <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
-                    <SquaresFour size={16} className=" whitespace-nowrap" />
-                  </Button>
+                  <div className="hidden md:block">
+                    <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                      <Rows size={16} className=" whitespace-nowrap" />
+                    </Button>
+                    <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
+                      <SquaresFour size={16} className=" whitespace-nowrap" />
+                    </Button>
+                  </div>
                 </div>
 
               </div>

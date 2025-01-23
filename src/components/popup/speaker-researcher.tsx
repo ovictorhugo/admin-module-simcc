@@ -159,7 +159,7 @@ export function SpeakerResearcherPopUp(props: Props) {
           onFilterUpdate={handleResearcherUpdate} />
 
         <Accordion type="single" collapsible defaultValue="item-1">
-          <AccordionItem value="item-1" >
+          <AccordionItem value="item-1" className="text-left">
             <div className="flex mb-2">
               <HeaderResultTypeHome title="Gráfico de quantidade total de participações em eventos" icon={<ChartBar size={24} className="text-gray-400" />}>
               </HeaderResultTypeHome>
@@ -179,7 +179,7 @@ export function SpeakerResearcherPopUp(props: Props) {
           <AccordionItem value="item-1" >
             <div className="flex mb-2">
               <div className="flex gap-4 w-full justify-between items-center ">
-                <div className="flex gap-4 items-center">
+                <div className="flex gap-4 items-center text-left">
                   <Ticket size={24} className="text-gray-400" />
                   {searchType != 'speaker' || itemsSelecionadosPopUp.length == 0 ? (
                     <p className="text-sm font-bold">Todas as participações em eventos</p>
@@ -217,13 +217,14 @@ export function SpeakerResearcherPopUp(props: Props) {
                 </div>
 
                 <div className="flex gap-3 mr-3  items-center h-full">
-                  <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
-                    <Rows size={16} className=" whitespace-nowrap" />
-                  </Button>
-
-                  <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
-                    <SquaresFour size={16} className=" whitespace-nowrap" />
-                  </Button>
+                  <div className="hidden md:block">
+                    <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                      <Rows size={16} className=" whitespace-nowrap" />
+                    </Button>
+                    <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
+                      <SquaresFour size={16} className=" whitespace-nowrap" />
+                    </Button>
+                  </div>
 
                   <AccordionTrigger>
                     {(itemsSelecionadosPopUp != itemsSelecionados && searchType == 'speaker') && (

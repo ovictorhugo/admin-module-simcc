@@ -103,7 +103,7 @@ export function TextoRevista(props: Props) {
         onFilterUpdate={handleResearcherUpdate} />
 
       <Accordion type="single" collapsible defaultValue="item-1" >
-        <AccordionItem value="item-1" >
+        <AccordionItem value="item-1" className="text-left" >
           <div className="flex mb-2">
             <HeaderResultTypeHome title="Gráfico de quantidade total de textos em revistas" icon={<ChartBar size={24} className="text-gray-400" />}>
             </HeaderResultTypeHome>
@@ -128,19 +128,20 @@ export function TextoRevista(props: Props) {
         <AccordionItem value="item-1" >
           <div className="flex mb-2">
             <div className="flex gap-4 w-full justify-between items-center ">
-              <div className="flex gap-4 items-center">
+              <div className="flex gap-4 items-center text-left">
                 <BookOpenText size={24} className="text-gray-400" />
                 <p className="text-sm font-bold">Todos os textos em revista</p>
               </div>
 
               <div className="flex gap-3 mr-3  items-center h-full">
-                <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
-                  <Rows size={16} className=" whitespace-nowrap" />
-                </Button>
-
-                <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
-                  <SquaresFour size={16} className=" whitespace-nowrap" />
-                </Button>
+                <div className="hidden md:block">
+                  <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                    <Rows size={16} className=" whitespace-nowrap" />
+                  </Button>
+                  <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
+                    <SquaresFour size={16} className=" whitespace-nowrap" />
+                  </Button>
+                </div>
 
                 <AccordionTrigger>
                   {(itemsSelecionadosPopUp != itemsSelecionados) && (

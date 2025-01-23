@@ -55,7 +55,7 @@ interface Components {
 }
 
 interface Production {
- 
+
   title: string
   type: string
 }
@@ -87,7 +87,7 @@ export function ResearchProject(props: Props) {
   const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
   const urlTermPublicacoes = `${urlGeral}researcher_research_project?researcher_id=${props.name}&term=&year=${yearString}`;
-console.log(urlTermPublicacoes)
+  console.log(urlTermPublicacoes)
   useMemo(() => {
     const fetchData = async () => {
       try {
@@ -129,7 +129,7 @@ console.log(urlTermPublicacoes)
 
 
       <Accordion type="single" collapsible defaultValue="item-1" >
-        <AccordionItem value="item-1" >
+        <AccordionItem value="item-1" className="text-left" >
           <div className="flex mb-2">
             <HeaderResultTypeHome title="Gráfico de quantidade total de projetos de pesquisa" icon={<ChartBar size={24} className="text-gray-400" />}>
             </HeaderResultTypeHome>
@@ -150,20 +150,21 @@ console.log(urlTermPublicacoes)
       <Accordion defaultValue="item-1" type="single" collapsible >
         <AccordionItem value="item-1" >
           <div className="flex mb-2">
-            <div className="flex gap-4 w-full justify-between items-center ">
+            <div className="flex gap-4 w-full justify-between items-center text-left">
               <div className="flex gap-4 items-center">
                 <FolderKanban size={24} className="text-gray-400" />
                 <p className="text-sm font-bold">Todos os projetos de pesquisa</p>
               </div>
 
               <div className="flex gap-3 mr-3  items-center h-full">
-                <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
-                  <Rows size={16} className=" whitespace-nowrap" />
-                </Button>
-
-                <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
-                  <SquaresFour size={16} className=" whitespace-nowrap" />
-                </Button>
+                <div className="hidden md:block">
+                  <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                    <Rows size={16} className=" whitespace-nowrap" />
+                  </Button>
+                  <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
+                    <SquaresFour size={16} className=" whitespace-nowrap" />
+                  </Button>
+                </div>
 
                 <AccordionTrigger>
                   {itemsSelecionadosPopUp != itemsSelecionados && (
