@@ -1,4 +1,4 @@
-import { ArrowLeftFromLine, ArrowRightFromLine, Boxes, ChevronLeft, Download, FolderKanban, OctagonAlert, Star, TrendingUp } from "lucide-react";
+import { ArrowLeftFromLine, ArrowRightFromLine, BookOpenText, Boxes, Briefcase, ChevronLeft, Download, FolderKanban, OctagonAlert, Star, TrendingUp, Waypoints } from "lucide-react";
 import {  useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
 import { Helmet } from "react-helmet";
@@ -53,6 +53,9 @@ import { ResearchProject } from "../popup/research-project";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { RelevanceProduction } from "../popup/relevance-production";
+import { TextoRevista } from "../popup/texto-revista";
+import { WorkEvent } from "../popup/trabalho-evento";
+import { CargosFuncoes } from "../popup/cargos-funcoes";
 
 export interface Research {
   among: number,
@@ -1060,13 +1063,31 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
         Projetos de pesquisa
       </TabsTrigger>
 
+      <TabsTrigger
+                                value="texto-revista"
+                                onClick={() => setValue('texto-revista')}
+                                className="flex gap-2 items-center"
+                              >
+                                <BookOpenText size={16} className="" />
+                                Textos em revista
+                              </TabsTrigger>
+
+                              <TabsTrigger
+                                value="trabalho-evento"
+                                onClick={() => setValue('trabalho-evento')}
+                                className="flex gap-2 items-center"
+                              >
+                                <Briefcase size={16} className="" />
+                                Trabalhos em evento
+                              </TabsTrigger>
+
 
       <TabsTrigger
         value="cargos"
         onClick={() => setValue('cargos')}
         className="flex gap-2 items-center"
       >
-        <Student size={16} className="" />
+        <Waypoints size={16} className="" />
         Cargos e funções
       </TabsTrigger>
    
@@ -1130,6 +1151,32 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
                     )
                   })}
     </TabsContent>
+
+
+    <TabsContent value="texto-revista">
+                        {researcher.slice(0, 1).map((user) => {
+                          return (
+                            <TextoRevista name={String(user.id)} />
+                          )
+                        })}
+                      </TabsContent>
+
+                      <TabsContent value="trabalho-evento">
+                        {researcher.slice(0, 1).map((user) => {
+                          return (
+                            <WorkEvent name={String(user.id)} />
+                          )
+                        })}
+                      </TabsContent>
+
+
+                      <TabsContent value="cargos">
+                        {researcher.slice(0, 1).map((user) => {
+                          return (
+                            <CargosFuncoes name={String(user.id)} />
+                          )
+                        })}
+                      </TabsContent>
   </Tabs>
         </div>
   

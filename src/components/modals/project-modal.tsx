@@ -1,4 +1,4 @@
-import { SquareAsterisk, User, X } from "lucide-react";
+import { SquareArrowOutUpRight, SquareAsterisk, User, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { DialogHeader } from "../ui/dialog";
 import { Sheet, SheetContent } from "../ui/sheet";
@@ -192,13 +192,24 @@ export function ProjectModal() {
                                     <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><CalendarBlank size={12} />{data.start_year} - {data.end_year == '' ? ('atual') : (data.end_year)}</div>
                                     <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><SquareAsterisk size={12} />{data.nature}</div>
 
-                                    <Link to={`/researcher?researcher_name=${data.researcher}&search_type=&terms=`} target="_blank" className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-2 items-center"><Avatar className="cursor-pointer rounded-md  h-6 w-6">
-                                        <AvatarImage className={'rounded-md h-6 w-6'} src={`${urlGeral}ResearcherData/Image?name=${data.researcher}`} />
-                                        <AvatarFallback className="flex items-center justify-center"><User size={16} /></AvatarFallback>
-                                    </Avatar>Encontrado no Lattes de {data.researcher}</Link>
+                                    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><div className={`h-4 w-4 rounded-md ${data.status == 'EM_ANDAMENTO' ? ('bg-yellow-500'):('bg-green-500')}`}></div>{data.status?.split('_').join(' ')}</div>
                                 </div>
                             </div>
                         </div>
+
+                        <div className="my-6 border-b dark:border-b-neutral-800"></div>
+
+<div className="flex justify-between items-center">
+<div className="text-sm w-fit text-gray-500 dark:text-gray-300 font-normal flex gap-2 items-center"><Avatar className="cursor-pointer rounded-md  h-16 w-16">
+<AvatarImage  className={'rounded-md h-16 w-16'} src={`${urlGeral}ResearcherData/Image?name=${data.researcher_name}`} />
+<AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
+</Avatar>
+<div>
+<p>Encontrado no Lattes de </p>
+<p className="text-black dark:text-white font-medium text-lg">{data.researcher_name}</p></div></div>
+
+<Link to={`/researcher?researcher_name=${data.researcher}&search_type=&terms=`} target="_blank" ><Button size={'icon'}><SquareArrowOutUpRight size={16}/></Button></Link>
+</div>
 
                         {data.description != '' && (
                             <div>
@@ -209,16 +220,14 @@ export function ProjectModal() {
                             </div>
                         )}
 
-                        {(data.components && data.components.length > 0) && (
+                        {(data.production && data.production.length > 0) && (
                             <div>
                                 <div className="my-6 border-b dark:border-b-neutral-800"></div>
                                 <h4 className="font-medium text-xl mb-4">Produções</h4>
 
                                 <div className="flex flex-col gap-3">
-                                    {data.components
-                                        ?.filter((item, index, self) =>
-                                            index === self.findIndex((t) => t.title === item.title) // Filtra elementos únicos por 'name'
-                                        )
+                                    {data.production
+                                        
                                         .map((props, index) => (
                                             <div className="flex">
                                                 <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border min-h-[120px] border-neutral-200 border-r-0 ${getQualisColor(props.type || '')} min-h-full relative`}></div>
@@ -265,14 +274,14 @@ export function ProjectModal() {
                             </div>
                         )}
 
-                        {data.production?.length != 0 && (
+                        {(data.components && data.components.length > 0) && (
                             <div>
 
                                 <div className="my-6 border-b dark:border-b-neutral-800"></div>
                                 <h4 className="font-medium text-xl mb-4">Componentes</h4>
 
                                 <div className="flex flex-wrap gap-3">
-                                    {data.production
+                                    {data.components
                                         ?.filter((item, index, self) =>
                                             index === self.findIndex((t) => t.name === item.name) // Filtra elementos únicos por 'name'
                                         )

@@ -52,6 +52,7 @@ interface ModalData {
   qtd_permanente?:string
   acronym?:string
 
+  researcher_name?:string
   id_dep?:string
 
   relevance?:boolean
@@ -83,14 +84,15 @@ interface ModalData {
 }
 
 interface Components {
-  title:string 
-  type:string 
-}
-
-interface Production {
   citations:string 
   lattes_id:string 
   name:string
+}
+
+interface Production {
+
+  title:string
+  type:string
 }
 
 interface Forment {

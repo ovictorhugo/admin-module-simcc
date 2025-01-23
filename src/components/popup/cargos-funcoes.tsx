@@ -15,9 +15,9 @@ import { ArrowUDownLeft, ChartBar, Rows, SquaresFour } from "phosphor-react"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { BookBlockPopUp } from "./book-block-popup"
 import { Button } from "../ui/button"
-import { FolderKanban } from "lucide-react"
-import { GraficoProjetoPesquisa } from "./graficos/grafico-projeto-pesquisa"
-import { TableReseracherProject } from "./columns/table-projetos-pesquisa"
+import { Briefcase } from "lucide-react"
+import { GraficoTrabalhoEvento } from "./graficos/grafico-trabalho-evento"
+import { TableTrabalhoEventos } from "./columns/table-trabalho-eventos"
 
 type Filter = {
   year: number[]
@@ -29,45 +29,20 @@ type Props = {
 }
 
 type Livros = {
-  agency_code: string
-  agency_name: string
-  nature: string
-  description: string
-  end_year: string
-  id: string
-  number_academic_masters: string
-  number_phd: string
-  number_specialists: string
-  number_undergraduates: string
-  project_name: string
-  start_year: string
-  status: string
-  researcher_id: string
-  production: Production[]
-  foment: Forment[]
-  components: Components[]
-}
-
-interface Components {
-  citations: string
-  lattes_id: string
-  name: string
-}
-
-interface Production {
- 
-  title: string
-  type: string
-}
-
-interface Forment {
-  agency_code: string
-  agency_name: string
-  nature: string
-}
+  authors: string;
+  homepage: string;
+  language: string;
+  means_divulgation: string;
+  nature: string;
+  relevance: boolean;
+  scientific_divulgation: boolean;
+  title: string;
+  title_en: string;
+  year_: string;
+};
 
 
-export function ResearchProject(props: Props) {
+export function CargosFuncoes(props: Props) {
 
   const { urlGeral, searchType, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados } = useContext(UserContext)
   const [loading, isLoading] = useState(false)
@@ -84,10 +59,13 @@ export function ResearchProject(props: Props) {
 
   };
 
+
   const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
-  const urlTermPublicacoes = `${urlGeral}researcher_research_project?researcher_id=${props.name}&term=&year=${yearString}`;
-console.log(urlTermPublicacoes)
+  let urlTermPublicacoes = `${urlGeral}researcher_production/events?researcher_id=${props.name}&year=${yearString}`;
+
+  console.log(urlTermPublicacoes)
+
   useMemo(() => {
     const fetchData = async () => {
       try {
@@ -119,7 +97,11 @@ console.log(urlTermPublicacoes)
     <Skeleton key={index} className="w-full rounded-md h-[170px]" />
   ));
 
+
   const [distinct] = useState(false)
+  //conectores 
+
+
 
   return (
     <div className="">
@@ -131,16 +113,18 @@ console.log(urlTermPublicacoes)
       <Accordion type="single" collapsible defaultValue="item-1" >
         <AccordionItem value="item-1" >
           <div className="flex mb-2">
-            <HeaderResultTypeHome title="Gráfico de quantidade total de projetos de pesquisa" icon={<ChartBar size={24} className="text-gray-400" />}>
+            <HeaderResultTypeHome title="Gráfico de quantidade total de trabalhos em eventos" icon={<ChartBar size={24} className="text-gray-400" />}>
             </HeaderResultTypeHome>
+
+            <AccordionTrigger>
+
+            </AccordionTrigger>
           </div>
           <AccordionContent >
             {loading ? (
               <Skeleton className="w-full rounded-md h-[300px]" />
             ) : (
-              <GraficoProjetoPesquisa
-                publicacoes={publicacoes}
-              />
+              <GraficoTrabalhoEvento publicacoes={publicacoes} />
             )}
           </AccordionContent>
         </AccordionItem>
@@ -152,11 +136,11 @@ console.log(urlTermPublicacoes)
           <div className="flex mb-2">
             <div className="flex gap-4 w-full justify-between items-center ">
               <div className="flex gap-4 items-center">
-                <FolderKanban size={24} className="text-gray-400" />
-                <p className="text-sm font-bold">Todos os projetos de pesquisa</p>
+                <Briefcase size={24} className="text-gray-400" />
+                <p className="text-sm font-bold">Todos os trabalhos em eventos</p>
               </div>
 
-              <div className="flex gap-3 mr-3  items-center h-full">
+              <div className="flex gap-3 mr-3 items-center h-full">
                 <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
                   <Rows size={16} className=" whitespace-nowrap" />
                 </Button>
@@ -164,25 +148,16 @@ console.log(urlTermPublicacoes)
                 <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
                   <SquaresFour size={16} className=" whitespace-nowrap" />
                 </Button>
-
-                <AccordionTrigger>
-                  {itemsSelecionadosPopUp != itemsSelecionados && (
-                    <div className="flex gap-3 items-center order-3">
-                      <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
-                        <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
-                      </Button>
-
-                      <div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
-                    </div>
-                  )}
-                </AccordionTrigger>
               </div>
 
             </div>
 
-          </div>
-          <AccordionContent >
+            <AccordionTrigger>
 
+
+            </AccordionTrigger>
+          </div>
+          <AccordionContent>
             {typeVisu == 'block' ? (
               loading ? (
                 <ResponsiveMasonry
@@ -206,7 +181,7 @@ console.log(urlTermPublicacoes)
                   <BookBlockPopUp
                     articles={publicacoes}
                     distinct={distinct}
-                    type={'research-project'}
+                    type={'work-event'}
                   />
                 )
               )
@@ -215,7 +190,7 @@ console.log(urlTermPublicacoes)
 
                 <Skeleton className="w-full rounded-md h-[400px]" />
               ) : (
-                <TableReseracherProject projetos={publicacoes} />
+                <TableTrabalhoEventos trabalho_evento={publicacoes} />
               )
             )}
           </AccordionContent>

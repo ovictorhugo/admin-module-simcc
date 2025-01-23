@@ -106,7 +106,7 @@ import { RelatorioTecnicoResearcherPopUp } from "../popup/relatorio-tecnico-rese
 import { SpeakerResearcherPopUp } from "../popup/speaker-researcher";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { BookOpenText, Boxes, Briefcase, Copy, FolderKanban, LoaderCircle, MoreHorizontal, Plus } from "lucide-react";
+import { BookOpenText, Boxes, Briefcase, Copy, FolderKanban, LoaderCircle, MoreHorizontal, Plus, Waypoints } from "lucide-react";
 
 import QRCode from "react-qr-code";
 
@@ -128,6 +128,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { ResearchProject } from "../popup/research-project";
 import { WorkEvent } from "../popup/trabalho-evento";
 import { TextoRevista } from "../popup/texto-revista";
+import { CargosFuncoes } from "../popup/cargos-funcoes";
 
 export function ResearcherModal() {
 
@@ -677,6 +678,16 @@ export function ResearcherModal() {
                                 Trabalhos em evento
                               </TabsTrigger>
 
+                              
+      <TabsTrigger
+        value="cargos"
+        onClick={() => setValue('cargos')}
+        className="flex gap-2 items-center"
+      >
+        <Waypoints size={16} className="" />
+        Cargos e funções
+      </TabsTrigger>
+
                             </TabsList>
 
                             <ScrollBar orientation="horizontal" />
@@ -750,6 +761,14 @@ export function ResearcherModal() {
                         {researcher.slice(0, 1).map((user) => {
                           return (
                             <WorkEvent name={String(user.id)} />
+                          )
+                        })}
+                      </TabsContent>
+
+                      <TabsContent value="cargos">
+                        {researcher.slice(0, 1).map((user) => {
+                          return (
+                            <CargosFuncoes name={String(user.id)} />
                           )
                         })}
                       </TabsContent>

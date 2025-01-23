@@ -136,8 +136,8 @@ export function ResultHome() {
            <Helmet>
            <title>
   {itemsSelecionados.length === 0
-    ? 'Resultados :'
-    : itemsSelecionados
+    ? 'Pesquisa'
+    : 'Pesquisa: ' + itemsSelecionados
         .map((item, index) => {
           const term = item.term.replace(/[|;]/g, ''); // Remove o conector para obter apenas o termo
           const connector = item.term.endsWith('|') ? 'ou' : 'e'; // Determina o conector

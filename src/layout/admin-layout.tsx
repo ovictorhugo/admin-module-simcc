@@ -165,7 +165,7 @@ const router = useLocation();
             {isLastItem ? (
               <span>{segment}</span>
             ) : (
-              <BreadcrumbLink href={href} className="capitalize">
+              <BreadcrumbLink to={href} className="capitalize">
                 {segment}
               </BreadcrumbLink>
             )}
