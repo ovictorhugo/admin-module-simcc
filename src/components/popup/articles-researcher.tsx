@@ -6,9 +6,9 @@ import {
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
-    
-  } from "../../components/ui/accordion"
-  import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
+
+} from "../../components/ui/accordion"
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { Skeleton } from "../ui/skeleton";
 
 import { ChartBar, Quotes, SquaresFour, Rows, X, ArrowUDownLeft } from "phosphor-react";
@@ -40,34 +40,34 @@ type Publicacao = {
     jcr_link: string,
     jif: string
     researcher_id: string
-    abstract:string,
-    article_institution:string,
-    authors:string
-    authors_institution:string
-    citations_count:string 
-    issn:string 
-    keywords:string 
-    landing_page_url:string 
-    language:string 
-    pdf:string
-    has_image:boolean
-  relevance:boolean
+    abstract: string,
+    article_institution: string,
+    authors: string
+    authors_institution: string
+    citations_count: string
+    issn: string
+    keywords: string
+    landing_page_url: string
+    language: string
+    pdf: string
+    has_image: boolean
+    relevance: boolean
 
 }
 
 type Filter = {
-  year: number[]
-  qualis: string[]
+    year: number[]
+    qualis: string[]
 }
 
 type Props = {
-  name:string
+    name: string
 }
 
-export function ArticlesResearcherPopUp(props:Props) {
-    const {urlGeral, setItensSelecionadosPopUp, itemsSelecionadosPopUp, searchType, itemsSelecionados} = useContext(UserContext)
+export function ArticlesResearcherPopUp(props: Props) {
+    const { urlGeral, setItensSelecionadosPopUp, itemsSelecionadosPopUp, searchType, itemsSelecionados } = useContext(UserContext)
     const { isOpen, type: typeModal, data: modalData } = useModalSecundary();
-  
+
     const [loading, isLoading] = useState(false)
     const [distinct] = useState(false)
     const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
@@ -75,29 +75,29 @@ export function ArticlesResearcherPopUp(props:Props) {
 
     const [filters, setFilters] = useState<Filter[]>([]);
 
-    const url = useMemo(() => 
+    const url = useMemo(() =>
         `${urlGeral}bibliographic_production_researcher?researcher_id=${props.name}&type=ARTICLE`,
         [urlGeral, props.name]
     );
 
-    const yearString = useMemo(() => 
+    const yearString = useMemo(() =>
         filters.length > 0 ? filters[0].year.join(';') : '',
         [filters]
     );
 
-    const qualisString = useMemo(() => 
+    const qualisString = useMemo(() =>
         filters.length > 0 ? filters[0].qualis.join(';') : '',
         [filters]
     );
 
-    const resultadoFormatado = useMemo(() => 
+    const resultadoFormatado = useMemo(() =>
         formatTerms(itemsSelecionadosPopUp),
         [itemsSelecionadosPopUp]
     );
 
     const urlTermPublicacoes = useMemo(() => {
         const baseUrl = `${urlGeral}bibliographic_production_researcher?researcher_id=${props.name}&type=ARTICLE&qualis=${qualisString}&year=${yearString}`;
-        return searchType === 'article' 
+        return searchType === 'article'
             ? `${baseUrl}&terms=${resultadoFormatado}`
             : baseUrl;
     }, [urlGeral, props.name, searchType, qualisString, yearString, resultadoFormatado]);
@@ -126,11 +126,11 @@ export function ArticlesResearcherPopUp(props:Props) {
         }
     }, [urlTermPublicacoes]);
 
-  
+
 
     useEffect(() => {
         let mounted = true;
-        
+
         if (mounted) {
             fetchData();
         }
@@ -153,12 +153,12 @@ export function ArticlesResearcherPopUp(props:Props) {
     }, [setItensSelecionadosPopUp]);
 
     const handleRemoveItem = useCallback((indexToRemove: number) => {
-        setItensSelecionadosPopUp(prev => 
+        setItensSelecionadosPopUp(prev =>
             prev.filter((_, index) => index !== indexToRemove)
         );
     }, [setItensSelecionadosPopUp]);
 
-    const items = useMemo(() => 
+    const items = useMemo(() =>
         Array.from({ length: 12 }, (_, index) => (
             <Skeleton key={index} className="w-full rounded-md h-[170px]" />
         )),
@@ -169,177 +169,171 @@ export function ArticlesResearcherPopUp(props:Props) {
         fetchData();
     }, [fetchData]);
 
-    return(
+    return (
         <>
 
             <div className="">
-
                 <FilterArticlePopUp
-                onFilterUpdate={handleResearcherUpdate}/>
+                    onFilterUpdate={handleResearcherUpdate} />
 
-                <Accordion  type="single" collapsible defaultValue="item-1">
-                <AccordionItem value="item-1" >
-                <div className="flex mb-2">
-                   <HeaderResultTypeHome title="Gráfico de quantidade total por Qualis" icon={<ChartBar size={24} className="text-gray-400" />}>
-                        </HeaderResultTypeHome>
-                   <AccordionTrigger>
+                <Accordion type="single" collapsible defaultValue="item-1">
+                    <AccordionItem value="item-1" >
+                        <div className="flex mb-2">
+                            <HeaderResultTypeHome title="Gráfico de quantidade total por Qualis" icon={<ChartBar size={24} className="text-gray-400" />}>
+                            </HeaderResultTypeHome>
+                            <AccordionTrigger>
 
-                    </AccordionTrigger>
-                   </div>
-                    <AccordionContent >
-                    {loading ? (
-                      <Skeleton className="w-full rounded-md h-[300px]"/>
-                    ):(
+                            </AccordionTrigger>
+                        </div>
+                        <AccordionContent >
+                            {loading ? (
+                                <Skeleton className="w-full rounded-md h-[300px]" />
+                            ) : (
 
-                      <GraficoArticleHome
-                      articles={publicacoes}
-                      />
-                    )}
-                    </AccordionContent>
-                </AccordionItem>
+                                <GraficoArticleHome
+                                    articles={publicacoes}
+                                />
+                            )}
+                        </AccordionContent>
+                    </AccordionItem>
                 </Accordion>
 
-                <Accordion defaultValue="item-1"  type="single" collapsible >
-                <AccordionItem value="item-1" >
-                <div className="flex mb-2">
-                <div className="flex gap-4 w-full justify-between items-center ">
+                <Accordion defaultValue="item-1" type="single" collapsible >
+                    <AccordionItem value="item-1" >
+                        <div className="flex mb-2">
+                            <div className="flex gap-4 w-full justify-between items-center ">
 
-<div className="flex gap-4 items-center">
-<Quotes size={24} className="text-gray-400" />
-{searchType != 'article' || itemsSelecionadosPopUp.length == 0 ? (
-<p className="text-sm font-bold">Todos os artigos</p>
-):(
-<div className="text-sm font-bold flex items-center gap-2">
-<span className="">{publicacoes.length} </span> ocorrências de
+                                <div className="flex gap-4 items-center">
+                                    <Quotes size={24} className="text-gray-400" />
+                                    {searchType != 'article' || itemsSelecionadosPopUp.length == 0 ? (
+                                        <p className="text-sm font-bold">Todos os artigos</p>
+                                    ) : (
+                                        <div className="text-sm font-bold flex items-center gap-2">
+                                            <span className="">{publicacoes.length} </span> ocorrências de
 
-<div className='flex gap-2 items-center'>
-{itemsSelecionadosPopUp.map((valor, index) => {
-return(
-<>
-<div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs bg-blue-500 dark:bg-blue-500 text-white border-0 `} >
-{valor.term.replace(/[|;]/g, '')}
-<X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer"/>
-{/* Adicionando a escolha entre "e" ou "ou" */}
+                                            <div className='flex gap-2 items-center'>
+                                                {itemsSelecionadosPopUp.map((valor, index) => {
+                                                    return (
+                                                        <>
+                                                            <div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs bg-blue-500 dark:bg-blue-500 text-white border-0 `} >
+                                                                {valor.term.replace(/[|;]/g, '')}
+                                                                <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer" />
+                                                                {/* Adicionando a escolha entre "e" ou "ou" */}
 
-</div>
+                                                            </div>
 
-{index < itemsSelecionadosPopUp.length - 1 && (
-<button className="rounded-full cursor-pointer flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 transition-all text-xs outline-none" onClick={() => {
-const connector = itemsSelecionadosPopUp[index].term.endsWith('|') ? ';' : '|'; // Alterna entre "|" e ";" conforme necessário
-handleConnectorChange(index, connector);
-}} >
-{itemsSelecionadosPopUp[index].term.endsWith(';') ? "e" : "ou"}
-</button>
-)}
+                                                            {index < itemsSelecionadosPopUp.length - 1 && (
+                                                                <button className="rounded-full cursor-pointer flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 transition-all text-xs outline-none" onClick={() => {
+                                                                    const connector = itemsSelecionadosPopUp[index].term.endsWith('|') ? ';' : '|'; // Alterna entre "|" e ";" conforme necessário
+                                                                    handleConnectorChange(index, connector);
+                                                                }} >
+                                                                    {itemsSelecionadosPopUp[index].term.endsWith(';') ? "e" : "ou"}
+                                                                </button>
+                                                            )}
 
-</>
-);
-})}
+                                                        </>
+                                                    );
+                                                })}
 
-em artigos
-</div>
-</div>
-)}
-</div>
+                                                em artigos
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
 
-<div className="flex gap-3 mr-3  items-center h-full">
+                                <div className="flex gap-3 mr-3  items-center h-full">
 
-{(itemsSelecionadosPopUp != itemsSelecionados && searchType == 'article') && (
-<div className="flex gap-3  items-center">
-<Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)}  variant="ghost"  size={'icon'}>
-        <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
-    </Button>
+                                    {(itemsSelecionadosPopUp != itemsSelecionados && searchType == 'article') && (
+                                        <div className="flex gap-3  items-center">
+                                            <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)} variant="ghost" size={'icon'}>
+                                                <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
+                                            </Button>
 
-<div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
-</div>
-)}
+                                            <div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
+                                        </div>
+                                    )}
 
-<div className='hidden md:flex gap-3 items-center '>
-<Button onClick={() => setTypeVisu('rows')}  variant={typeVisu == 'block' ? 'ghost' : 'outline' } size={'icon'}>
-        <Rows size={16} className=" whitespace-nowrap" />
-    </Button>
+                                    <div className='hidden md:flex gap-3 items-center '>
+                                        <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                                            <Rows size={16} className=" whitespace-nowrap" />
+                                        </Button>
 
-    <Button  onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost' }  size={'icon'}>
-        <SquaresFour size={16} className=" whitespace-nowrap" />
-    </Button>
-</div>
+                                        <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
+                                            <SquaresFour size={16} className=" whitespace-nowrap" />
+                                        </Button>
+                                    </div>
 
-    <Button onClick={handleRefresh} variant="ghost" size={'icon'}>
-        <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
-    </Button>
-</div>
+                                    <Button onClick={handleRefresh} variant="ghost" size={'icon'}>
+                                        <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
+                                    </Button>
+                                </div>
+                            </div>
 
-</div>
+                            <AccordionTrigger>
 
-                <AccordionTrigger>
+                            </AccordionTrigger>
+                        </div>
 
-              </AccordionTrigger>
-                </div>
-                  
+                        <AccordionContent >
 
-                    <AccordionContent >
+                            {typeVisu == 'block' ? (
+                                loading ? (
+                                    <ResponsiveMasonry
+                                        columnsCountBreakPoints={{
+                                            350: 1,
+                                            750: 1,
+                                            900: 2,
+                                            1200: 3
+                                        }}
+                                    >
+                                        <Masonry gutter="16px">
+                                            {items.map((item, index) => (
+                                                <div key={index}>{item}</div>
+                                            ))}
+                                        </Masonry>
+                                    </ResponsiveMasonry>
+                                ) : (
 
-{typeVisu == 'block' ? (
-                    loading ? (
-                        <ResponsiveMasonry
-                        columnsCountBreakPoints={{
-                            350: 1,
-                            750: 1,
-                            900: 2,
-                            1200: 3
-                        }}
-                    >
-                                     <Masonry gutter="16px">
-                        {items.map((item, index) => (
-                                <div key={index}>{item}</div>
-                              ))}
-                        </Masonry>
-        </ResponsiveMasonry>
-                      ):(
+                                    <ArticleBlockPopUp
+                                        articles={publicacoes}
+                                        distinct={distinct}
+                                        onRefresh={handleRefresh}
+                                    />
+                                )
+                            ) : (
 
-                        <ArticleBlockPopUp
-                        articles={publicacoes}
-                        distinct={distinct}
-                        onRefresh={handleRefresh}
-                        />
-                      )
-                    ):(
+                                loading ? (
 
-                      loading ? (
+                                    <Skeleton className="w-full rounded-md h-[400px]" />
+                                ) : (
 
-                        <Skeleton className="w-full rounded-md h-[400px]"/>
-                      ):(
-
-                        <TableReseracherArticlesPopup
-                        articles={publicacoes}
-                        />
-                      )
-                    )}
-                    </AccordionContent>
-                </AccordionItem>
+                                    <TableReseracherArticlesPopup
+                                        articles={publicacoes}
+                                    />
+                                )
+                            )}
+                        </AccordionContent>
+                    </AccordionItem>
                 </Accordion>
-
             </div>
-
         </>
-
     )
 }
 
 function formatTerms(terms: any[]) {
     let result = '';
     let tempTerms: string[] = [];
-    
+
     terms.forEach(item => {
-        let term = item.term.trim();
-    
+        const term = item.term.trim();
+
         if (term.endsWith(';')) {
             // Remove the final ';' and add the term to the temporary array
             tempTerms.push(term.slice(0, -1));
         } else if (term.endsWith('|')) {
             // Remove the final '|' and add the term to the temporary array
             tempTerms.push(term.slice(0, -1));
-    
+
             // Add the temporary array to the result as a group and clear the array
             if (tempTerms.length > 0) {
                 result += '(' + tempTerms.join(';') + ')' + '|';
@@ -354,7 +348,7 @@ function formatTerms(terms: any[]) {
             result += term + '|';
         }
     });
-    
+
     // Handle any remaining terms in the tempTerms array
     if (tempTerms.length > 0) {
         result += '(' + tempTerms.join(';') + ')';
@@ -364,6 +358,6 @@ function formatTerms(terms: any[]) {
             result = result.slice(0, -1);
         }
     }
-    
+
     return result;
 }

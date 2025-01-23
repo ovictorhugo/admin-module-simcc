@@ -373,27 +373,30 @@ export function ResearcherModal() {
             const isOutdated = monthDifference > 3;
             const isOutdated6 = monthDifference > 6;
 
-
-
-
             return (
               <div
                 className="
-                  px-4
+                  px-2
 
-                  md:px-16 md:pb-2 md:pt-6
+                  md:px-10 md:pb-2 md:pt-6
 
                   lg:px16 
                 "
               >
-                <div className="flex  justify-between items-center w-full">
+                <div className="flex justify-between items-center w-full">
 
                   <div
                     className={`
-                    border dark:border-neutral-800 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none') : ('')}
+                      text-[0.5rem] p-2
+
+                      md:text-xs md:py-2 md:px-4
+
+                      border dark:border-neutral-800 w-fit  text-gray-400 rounded-md  font-bold flex gap-1 items-center
+                      ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none') : ('')}
                   `}
                   >
-                    Atualização do Lattes: {String(props.lattes_update)}</div>
+                    Atualização do Lattes: {String(props.lattes_update)}
+                  </div>
 
                   <div className="flex gap-3">
                     {hasBaremaAvaliacao && (
@@ -423,8 +426,10 @@ export function ResearcherModal() {
                                   ]);
                                 }
                               }}
-                              className={`h-8 w-8 p-0 text-white dark:text-white ${pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) && 'bg-red-500 hover:bg-red-600 text-white'
-                                }`}
+                              className={`
+                                h-8 w-8 p-0 text-white dark:text-white 
+                                ${pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) && 'bg-red-500 hover:bg-red-600 text-white'}
+                              `}
                             >
                               {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
                                 <X size={16} className="" />
@@ -515,22 +520,19 @@ export function ResearcherModal() {
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="flex justify-center py-4">
-
                           <QRCode size={200} className={'bg-transparent'} value={urlShare} />
-
-
                         </DropdownMenuItem>
 
                       </DropdownMenuContent>
                     </DropdownMenu>
-
-
-
                   </div>
-
                 </div>
 
-                <div className="flex items-center flex-col  relative">
+                <div
+                  className="
+                    flex items-center flex-col relative mt-3
+                  "
+                >
                   <h4 className="text-3xl font-medium px-8 text-center mb-2">{props.name}</h4>
                   <div className="flex text-gray-500 items-center gap-2 mb-2">
                     {props.image == "None" ? (
@@ -545,14 +547,20 @@ export function ResearcherModal() {
             )
           })}
 
-          <div className="overflow-y-auto elementBarra ">
+          <div className="overflow-y-auto elementBarra">
+            <div
+              className="
+                px-7 w-full
 
-            <div className=" px-16  " >
-              <DrawerHeader className="p-0 ">
+                md:px-10
+
+                lg:px-16
+              "
+            >
+              <DrawerHeader className="p-0 flex flex-col">
                 {researcher.slice(0, 1).map((user) => {
                   return (
                     <div>
-
                       <InformationResearcher
                         among={user.among}
                         articles={user.articles}
@@ -574,7 +582,6 @@ export function ResearcherModal() {
                         brand={user.brand}
                         lattes_update={user.lattes_update}
                         onResearcherUpdate={handleResearcherUpdate}
-
                         h_index={user.h_index}
                         relevance_score={user.relevance_score}
                         works_count={user.works_count}
@@ -582,11 +589,8 @@ export function ResearcherModal() {
                         i10_index={user.i10_index}
                         scopus={user.scopus}
                         openalex={user.openalex}
-
-
                         openAPI={open}
                       />
-
                     </div>
                   )
                 })}

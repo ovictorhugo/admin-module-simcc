@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Button } from "../../../ui/button";
 import { Link } from "react-router-dom";
 import dt from '../../../../assets/destaque.png'
-import { Image, Maximize2, Pencil, Quote, Star, Trash} from "lucide-react";
+import { Image, Maximize2, Pencil, Quote, Star, Trash } from "lucide-react";
 import { useModalSecundary } from "../../../hooks/use-modal-store-secundary";
 import { Badge } from "../../../ui/badge";
 
@@ -37,8 +37,8 @@ type Articles = {
   landing_page_url: string
   language: string
   pdf: string
-  has_image:boolean
-  relevance:boolean
+  has_image: boolean
+  relevance: boolean
 }
 
 interface ItemsSelecionados {
@@ -176,103 +176,92 @@ export function ArticleItem(props: Articles) {
   return (
     <div className="flex w-full group">
       <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 ${qualisColor[props.qualis as keyof typeof qualisColor]}`}></div>
-      <Alert className={`rounded-l-none flex flex-col justify-between p-0 `}>
+      <Alert className={`rounded-l-none flex flex-col justify-between p-0`}>
         {props.has_image && (
-          <div 
-          onClick={() =>
-            onOpen('image-article', {
-              id:props.id,
-              doi: doi,
-              qualis: props.qualis,
-              title: props.title,
-              year: props.year,
-              jif: props.jif,
-              lattes_10_id: props.lattes_10_id,
-              researcher_id: props.researcher_id,
-              magazine: props.name_periodical,
-              abstract: props.abstract,
-              article_institution: props.article_institution,
-              authors: props.authors,
-              authors_institution: props.authors_institution,
-              citations_count: props.citations_count,
-              issn: props.issn,
-              keywords: props.keywords,
-              landing_page_url: props.landing_page_url,
-              language: props.language,
-              pdf: props.pdf,
-              researcher: props.researcher,
-              has_image:props.has_image,
-              relevance:props.relevance
-            })
-          }
-        className="bg-neutral-100 flex justify-between p-4 bg-center bg-cover bg-no-repeat dark:bg-neutral-800 h-[150px] rounded-tr-md cursor-pointer" style={{ backgroundImage: `url(${urlGeral}image/${props.id}) ` }}>
+          <div
+            onClick={() =>
+              onOpen('image-article', {
+                id: props.id,
+                doi: doi,
+                qualis: props.qualis,
+                title: props.title,
+                year: props.year,
+                jif: props.jif,
+                lattes_10_id: props.lattes_10_id,
+                researcher_id: props.researcher_id,
+                magazine: props.name_periodical,
+                abstract: props.abstract,
+                article_institution: props.article_institution,
+                authors: props.authors,
+                authors_institution: props.authors_institution,
+                citations_count: props.citations_count,
+                issn: props.issn,
+                keywords: props.keywords,
+                landing_page_url: props.landing_page_url,
+                language: props.language,
+                pdf: props.pdf,
+                researcher: props.researcher,
+                has_image: props.has_image,
+                relevance: props.relevance
+              })
+            }
+            className="bg-neutral-100 flex justify-between p-4 bg-center bg-cover bg-no-repeat dark:bg-neutral-800 h-[150px] rounded-tr-md cursor-pointer" style={{ backgroundImage: `url(${urlGeral}image/${props.id}) ` }}>
 
-<div>
-{(props.relevance && props.has_image) && (
-                <div className="relative -top-4 py-1 px-4 bg-yellow-600 w-fit rounded-b-md text-white"><Star size={12}/></div>
-            )}
-</div>
-
-
-<div className="flex gap-3">
-
-
-
-
-
-</div>
-        </div>
+            <div>
+              {(props.relevance && props.has_image) && (
+                <div className="relative -top-4 py-1 px-4 bg-yellow-600 w-fit rounded-b-md text-white"><Star size={12} /></div>
+              )}
+            </div>
+          </div>
         )}
         <div className="p-4 pb-0">
           <div>
             <div className="flex mb-1 gap-3 justify-between">
-             <div>
-            {(props.relevance && !props.has_image) && (
-                <div className="relative -top-4 py-1 px-4 bg-yellow-600 w-fit rounded-b-md text-white"><Star size={12}/></div>
-            )}
+              <div>
+                {(props.relevance && !props.has_image) && (
+                  <div className="relative -top-4 py-1 px-4 bg-yellow-600 w-fit rounded-b-md text-white"><Star size={12} /></div>
+                )}
 
-             <h3 className="font-semibold mb-4 flex flex-1">{props.name_periodical}{props.magazine}</h3>
-             </div>
+                <h3 className="font-semibold mb-4 flex flex-1">{props.name_periodical}{props.magazine}</h3>
+              </div>
 
               <div className="flex items-start justify-end min-w-20   gap-3">
-              {(user?.lattes_id == props.lattes_id || has_editar_producao) && (
-               <Button 
-               onClick={() =>
-                onOpen('edit-article', {
-                  id:props.id,
-                  doi: doi,
-                  qualis: props.qualis,
-                  title: props.title,
-                  year: props.year,
-                  jif: props.jif,
-                  lattes_10_id: props.lattes_10_id,
-                  researcher_id: props.researcher_id,
-                  magazine: props.name_periodical,
-                  abstract: props.abstract,
-                  article_institution: props.article_institution,
-                  authors: props.authors,
-                  authors_institution: props.authors_institution,
-                  citations_count: props.citations_count,
-                  issn: props.issn,
-                  keywords: props.keywords,
-                  landing_page_url: props.landing_page_url,
-                  language: props.language,
-                  pdf: props.pdf,
-                  researcher: props.researcher,
-                  has_image:props.has_image,
-              relevance:props.relevance
-                })
-              }
-               variant={'outline'} className="h-8 w-8 text-gray-500 dark:text-white hidden group-hover:flex" size={'icon'}><Pencil size={16}/></Button>
-             
-              
-              )}
+                {(user?.lattes_id == props.lattes_id || has_editar_producao) && (
+                  <Button
+                    onClick={() =>
+                      onOpen('edit-article', {
+                        id: props.id,
+                        doi: doi,
+                        qualis: props.qualis,
+                        title: props.title,
+                        year: props.year,
+                        jif: props.jif,
+                        lattes_10_id: props.lattes_10_id,
+                        researcher_id: props.researcher_id,
+                        magazine: props.name_periodical,
+                        abstract: props.abstract,
+                        article_institution: props.article_institution,
+                        authors: props.authors,
+                        authors_institution: props.authors_institution,
+                        citations_count: props.citations_count,
+                        issn: props.issn,
+                        keywords: props.keywords,
+                        landing_page_url: props.landing_page_url,
+                        language: props.language,
+                        pdf: props.pdf,
+                        researcher: props.researcher,
+                        has_image: props.has_image,
+                        relevance: props.relevance
+                      })
+                    }
+                    variant={'outline'} className="h-8 w-8 text-gray-500 dark:text-white hidden group-hover:flex" size={'icon'}><Pencil size={16} /></Button>
+                )}
 
                 <Button
                   onClick={() =>
                     onOpen('articles-modal', {
                       doi: doi,
-                      id:props.id,
+                      id: props.id,
                       qualis: props.qualis,
                       title: props.title,
                       year: props.year,
@@ -291,8 +280,8 @@ export function ArticleItem(props: Articles) {
                       language: props.language,
                       pdf: props.pdf,
                       researcher: props.researcher,
-                      has_image:props.has_image,
-              relevance:props.relevance
+                      has_image: props.has_image,
+                      relevance: props.relevance
                     })
                   }
                   variant="outline"
@@ -301,17 +290,12 @@ export function ArticleItem(props: Articles) {
                 >
                   <Maximize2 size={16} />
                 </Button>
-
-                
               </div>
             </div>
             <div>
-        
-
-            <div className="text-left">
-              
-              {highlightedTitleEvent}
-            </div>
+              <div className="text-left">
+                {highlightedTitleEvent}
+              </div>
             </div>
           </div>
           <div></div>
@@ -330,16 +314,11 @@ export function ArticleItem(props: Articles) {
               </Link>
             )}
 
-{(props.citations_count != "") && (
+            {(props.citations_count != "") && (
               <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
                 <Quotes size={16} />Citações {props.citations_count}
               </div>
             )}
-          </div>
-
-          <div className="flex gap-2 items-center ml-auto">
-
-              
           </div>
         </div>
       </Alert>
