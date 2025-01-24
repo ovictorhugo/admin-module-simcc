@@ -25,7 +25,7 @@ import { useContext } from "react";
 import { UserContext } from "../../context/context";
 import QRCode from "react-qr-code";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import {  BracketsCurly, Buildings,  File, FileCsv, Files, Quotes, Rows, ShareNetwork, SquaresFour, Stamp, Student, Ticket, X } from "phosphor-react";
+import {  BracketsCurly, Buildings,  CalendarBlank,  File, FileCsv, Files, Quotes, Rows, ShareNetwork, SquaresFour, Stamp, Student, Ticket, X } from "phosphor-react";
 import { NuvemPalavras } from "../popup/nuvem-palavras";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { TotalViewResearcher } from "../popup/total-view-researcher";
@@ -597,7 +597,7 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
               <div className="hidden items-center gap-2  md:flex">
               
                
-              <div className={`border dark:border-neutral-800 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none' ): ('')}`}>Atualização do Lattes: {String(props.lattes_update)}</div>
+              <div className={`border dark:border-neutral-800 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none' ): ('')}`}> <CalendarBlank size={16}/> Atualização do Lattes: {String(props.lattes_update)}</div>
 
               <div className="flex gap-3 items-center">
 

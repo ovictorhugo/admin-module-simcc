@@ -212,7 +212,7 @@ export function ArticlesResearcherPopUp(props: Props) {
                                                 {itemsSelecionadosPopUp.map((valor, index) => {
                                                     return (
                                                         <>
-                                                            <div key={index} className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs text-white border-0 `} >
+                                                            <div key={index} className={`flex bg-blue-500 gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs text-white border-0 `} >
                                                                 {valor.term.replace(/[|;]/g, '')}
                                                                 <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer" />
                                                                 {/* Adicionando a escolha entre "e" ou "ou" */}

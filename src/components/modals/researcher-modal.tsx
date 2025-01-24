@@ -93,7 +93,7 @@ interface ResearchGroups {
 
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import { ArrowSquareOut, BracketsCurly, Buildings, CaretDown, File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
+import { ArrowSquareOut, BracketsCurly, Buildings, CalendarBlank, CaretDown, File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
 import { NuvemPalavras } from "../popup/nuvem-palavras";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { TotalViewResearcher } from "../popup/total-view-researcher";
@@ -394,7 +394,7 @@ export function ResearcherModal() {
                       ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none') : ('')}
                   `}
                   >
-                    Atualização do Lattes: {String(props.lattes_update)}
+                  <CalendarBlank size={16}/>  Atualização do Lattes: {String(props.lattes_update)}
                   </div>
 
                   <div className="hidden lg:flex gap-3">

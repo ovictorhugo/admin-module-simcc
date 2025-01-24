@@ -365,7 +365,7 @@ export function BookItem(props: Publicacao) {
                 <div className="h-8 w-8">
 
                   {(props.homepage != '' && props.homepage != null) && (
-                    <Link to={props.homepage} target="_blank">
+                    <Link to={props.homepage.split(/[\[\]]/).join('') || ''} target="_blank">
                       <Button
                         variant="outline"
                         size="icon"

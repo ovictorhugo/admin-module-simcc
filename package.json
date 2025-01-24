@@ -72,6 +72,7 @@
     "js-cookie": "^3.0.5",
     "jspdf": "^2.5.1",
     "katex": "^0.16.18",
+    "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.354.0",
     "mapbox-gl": "^3.9.1",

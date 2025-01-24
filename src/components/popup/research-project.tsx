@@ -46,6 +46,7 @@ type Livros = {
   production: Production[]
   foment: Forment[]
   components: Components[]
+  researcher_name:string
 }
 
 interface Components {

@@ -1,4 +1,4 @@
-import { ChalkboardSimple, ChartLine, Quotes } from "phosphor-react";
+import { CalendarBlank, ChalkboardSimple, ChartLine, Quotes } from "phosphor-react";
 import dt from '../../assets/dt.png'
 import pq from '../../assets/pq.png'
 
@@ -270,17 +270,14 @@ export function InformacoesGeraisResearcher(props: Research) {
 
         <div
           className={`
-            py-2 px-4 border dark:border-neutral-800 w-fit
-          text-gray-400 rounded-md  font-bold gap-1 items-center
-
-            md:text-xs md:py-2 md:px-4 
+           py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center
 
             lg:hidden
 
           ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none') : ('')}
         `}
         >
-          Atualização do Lattes: {String(props.data_atualizacao_lattes)}
+         <CalendarBlank size={12}/> Atualização do Lattes: {String(props.data_atualizacao_lattes)}
         </div>
 
       </div>

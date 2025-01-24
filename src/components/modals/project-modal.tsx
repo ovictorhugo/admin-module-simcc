@@ -208,7 +208,7 @@ export function ProjectModal() {
 <p>Encontrado no Lattes de </p>
 <p className="text-black dark:text-white font-medium text-lg">{data.researcher_name}</p></div></div>
 
-<Link to={`/researcher?researcher_name=${data.researcher}&search_type=&terms=`} target="_blank" ><Button size={'icon'}><SquareArrowOutUpRight size={16}/></Button></Link>
+<Link to={`/researcher?researcher_name=${data.researcher_name}&search_type=&terms=`} target="_blank" ><Button size={'icon'}><SquareArrowOutUpRight size={16}/></Button></Link>
 </div>
 
                         {data.description != '' && (

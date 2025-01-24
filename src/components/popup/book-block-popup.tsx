@@ -64,7 +64,7 @@ export function BookBlockPopUp(propsGeral: Articles) {
 
                                 relevance={props.relevance}
                                 scientific_divulgation={props.scientific_divulgation}
-
+                                researcher_name={props.researcher_name}
                                 title_en={props.title_en}
                                 year_={props.year_}
                                 has_image={props.has_image}

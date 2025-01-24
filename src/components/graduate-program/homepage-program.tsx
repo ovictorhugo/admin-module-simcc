@@ -1,4 +1,4 @@
-import { Book, Briefcase, Copyright, Info, MapPinIcon, SquareArrowOutUpRight, Star, Users } from "lucide-react";
+import { Book, Briefcase, Copyright, GraduationCap, Info, MapPinIcon, SquareArrowOutUpRight, Star, Users } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -651,7 +651,7 @@ export function HomepageProgram(props: Props) {
         <div className="flex flex-col items-start md:flex-row gap-6 -mt-4">
           <Avatar className="cursor-pointer rounded-lg  h-24 w-24">
             <AvatarImage className={'rounded-md h-24 w-24'} src={``} />
-            <AvatarFallback className="flex items-center justify-center"></AvatarFallback>
+            <AvatarFallback className="flex items-center justify-center"><GraduationCap size={24}/></AvatarFallback>
           </Avatar>
 
           <div>

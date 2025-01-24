@@ -59,7 +59,7 @@ const isModalOpen = isOpen && type === "graduate-program";
 
       const [tab, setTab] = useState('all')
       const [search, setSearch] = useState('')
-    
+    const [menu, setMenu] = useState(true)
       const [total, setTotal] = useState<PosGraduationsProps | null>(null);
 
       // Função para lidar com a atualização de researcherData
@@ -82,26 +82,31 @@ const isModalOpen = isOpen && type === "graduate-program";
           <meta name="robots" content="index, follow" />
         </Helmet>
 
-        <div className="flex items-center p-8">
+      
+
+        <div className="grid relative grid-cols-5 h-full">
+          <div className={`grid col-span-2 h-fit sticky top-[68px] p-8 ${menu ? ('grid'):('hidden')}`}>
+
+        
+          <Tabs defaultValue={tab} value={tab}>
+          
+          <div className={`flex items-center justify-between  `}>
           <div className="flex items-center gap-4">
           
           <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
               <ChevronLeft className="h-4 w-4" />
               <span className="sr-only">Voltar</span>
             </Button>
-            <h1 className="text-lg font-bold">Pós-graduação</h1>
+            <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">Pós-graduação</h1>
           </div>
            
-           
-          </div>
-
-        <div className="grid grid-cols-5">
-          <div className=" grid col-span-2">
-          <Tabs defaultValue={tab} value={tab}>
+          <Button onClick={() => setMenu(!menu) } variant="outline" size="icon" className="h-7 w-7">
+              <ChevronLeft className="h-4 w-4" />
           
+            </Button>
+          </div>
 
-
-          <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="bg-background/95 pt-8 pb-8 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="flex items-center gap-3">
             <Button onClick={() => onOpen('add-graduate-program')}  size="sm" className="ml-auto gap-1">
               <Plus className="h-4 w-4" />
@@ -129,9 +134,10 @@ const isModalOpen = isOpen && type === "graduate-program";
         </Tabs>
           </div>
 
-          <div className="col-span-3">
+          <div className={`p-8  ${menu ? ('col-span-3 pl-0'):('col-span-5')}`}>
           {total ? (
-      <DisplayItem
+      <div className="h-full  ">
+        <DisplayItem
       graduate_program_id={total.graduate_program_id}
       code={total.code}
       name={total.name}
@@ -151,11 +157,15 @@ const isModalOpen = isOpen && type === "graduate-program";
       qtd_permanente={total.qtd_permanente}
       site={total.site}
       acronym={total.acronym}
+      menu_state={menu}
       />
+      </div>
     ):(
-      <div className="w-full h-full flex flex-col items-center justify-center">
+      <div className="h-full  ">
+        <div className="w-full dark:border-neutral-800 rounded-lg border h-full flex flex-col items-center justify-center">
        <p className="text-9xl  text-[#719CB8]  font-bold mb-16 animate-pulse">=]</p>
         <p className="font-medium text-lg">Nenhum programa selecionado</p>
+      </div>
       </div>
     )}
           </div>

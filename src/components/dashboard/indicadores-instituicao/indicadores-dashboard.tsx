@@ -1,12 +1,12 @@
-import { ArrowRight, Book, ChevronLeft, Copyright, Download, File, GraduationCap, Info, Link2, User, UserCog } from "lucide-react";
-import { useModalDashboard } from "../hooks/use-modal-dashboard";
-import { Button } from "../ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { ArrowRight, Book, Building, ChevronLeft, Copyright, Download, File, GraduationCap, Hash, Info, Link2, User, UserCog } from "lucide-react";
+import { useModalDashboard } from "../../hooks/use-modal-dashboard";
+import { Button } from "../../ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
-import { Alert } from "../ui/alert";
-import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Alert } from "../../ui/alert";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
 import { useContext, useEffect, useMemo, useState } from "react";
-import { UserContext } from "../../context/context";
+import { UserContext } from "../../../context/context";
 import { Books, ChartBar, Code, FileCsv, FileXls, Quotes, StripeLogo, Student, Warning } from "phosphor-react";
 
 
@@ -27,7 +27,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../../components/ui/tooltip"
+} from "../../../components/ui/tooltip"
 
 
 interface TotalPatrimonios {
@@ -52,7 +52,7 @@ name:string
 researcher_id:string
 scholarship_quantity:string
 }
-import { ChartContainer, ChartTooltip, ChartConfig, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../components/ui/chart";
+import { ChartContainer, ChartTooltip, ChartConfig, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
 interface Docentes {
   matric: string;
@@ -126,7 +126,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "../../components/ui/alert-dialog"
+} from "../../../components/ui/alert-dialog"
 
 
 interface VisaoPrograma {
@@ -146,24 +146,25 @@ interface YearSemester {
   semester:string
 }
 
-  import bg_popup from '../../assets/bg_popup.png';
-import { useModal } from "../hooks/use-modal-store";
-import { GraficoBolsistaProdutividade } from "./graficos/grafico-bolsista-produtividade";
-import { GraficoBolsistaTecnologico } from "./graficos/grafico-bolsista-tecnologico";
-import { GraficoDocentesRt } from "./graficos/grafico-docente-rt";
-import { GraficoDocentesClasse } from "./graficos/grafico-docentes-classe";
-import { GraficoArtigosPorQualis } from "./graficos/grafico-qualis";
-import { GraficoDocentesGenero } from "./graficos/grafico-genero";
-import { GraficoProgressaoDocentes } from "./graficos/grafico-progressao-docentes";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { ScrollArea } from "../ui/scroll-area";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+  import bg_popup from '../../../assets/bg_popup.png';
+import { useModal } from "../../hooks/use-modal-store";
+import { GraficoBolsistaProdutividade } from "../graficos/grafico-bolsista-produtividade";
+import { GraficoBolsistaTecnologico } from "../graficos/grafico-bolsista-tecnologico";
+import { GraficoDocentesRt } from "../graficos/grafico-docente-rt";
+import { GraficoDocentesClasse } from "../graficos/grafico-docentes-classe";
+import { GraficoArtigosPorQualis } from "../graficos/grafico-qualis";
+import { GraficoDocentesGenero } from "../graficos/grafico-genero";
+import { GraficoProgressaoDocentes } from "../graficos/grafico-progressao-docentes";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
+import { ScrollArea } from "../../ui/scroll-area";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table";
 
-import { GraficoTecnicosRt } from "./graficos/grafico-tecnicos-rt";
-import { GraficoTecnicosGenero } from "./graficos/grafico-tecnicos-genero";
-import { GraficoProgressaoTecnicos } from "./graficos/grafico-progressao-tecnicos";
-import { GraficoTecnicosCargo } from "./graficos/grafico-tecnico-cargo";
+import { GraficoTecnicosRt } from "../graficos/grafico-tecnicos-rt";
+import { GraficoTecnicosGenero } from "../graficos/grafico-tecnicos-genero";
+import { GraficoProgressaoTecnicos } from "../graficos/grafico-progressao-tecnicos";
+import { GraficoTecnicosCargo } from "../graficos/grafico-tecnico-cargo";
 import { Helmet } from "react-helmet";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 
 
 const chartConfig = {
@@ -616,7 +617,7 @@ return csv;
               </Button>
           
               <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                Indicadores
+                Indicadores da Instituição
               </h1>
              
 
@@ -628,7 +629,7 @@ return csv;
               <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
              
                 <TabsTrigger value="unread" className="text-zinc-600 dark:text-zinc-200">Docentes</TabsTrigger>
-                <TabsTrigger value="tec" className="text-zinc-600 dark:text-zinc-200">Técnicos</TabsTrigger>
+              {version && (  <TabsTrigger value="tec" className="text-zinc-600 dark:text-zinc-200">Técnicos</TabsTrigger>)}
               
                 </TabsList>
                
@@ -640,7 +641,25 @@ return csv;
             </div>
 
             <TabsContent value="all" className="h-auto flex flex-col gap-4 md:gap-8  mt-2">
-           
+            <div className="flex flex-col items-center md:flex-row gap-6 -mt-4">
+          <Avatar className="cursor-pointer rounded-lg  h-24 w-24">
+            <AvatarImage className={'rounded-md h-24 w-24'} src={``} />
+            <AvatarFallback className="flex items-center justify-center"><Building size={24}/></AvatarFallback>
+          </Avatar>
+
+          <div>
+            <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
+              <div className="flex flex-wrap gap-4 ">
+              <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><Hash size={12} />{user?.institution_id}</div>
+                
+              </div>
+            </p>
+
+            <h1 className="text-2xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+            nome da 
+            </h1>
+          </div>
+        </div>
            
                     <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
                     <Alert className="p-0">
@@ -658,35 +677,39 @@ return csv;
                   </CardContent>
                   </Alert>
 
-                  <Alert className="p-0">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total de Técnicos
-                    </CardTitle>
-                    <UserCog className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{total.map((props) => props.count_t)}</div>
-                    <p className="text-xs text-muted-foreground">
-                      registrados
-                    </p>
-                  </CardContent>
-                  </Alert>
+                 {version && (
+                   <Alert className="p-0">
+                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                     <CardTitle className="text-sm font-medium">
+                       Total de Técnicos
+                     </CardTitle>
+                     <UserCog className="h-4 w-4 text-muted-foreground" />
+                   </CardHeader>
+                   <CardContent>
+                     <div className="text-2xl font-bold">{total.map((props) => props.count_t)}</div>
+                     <p className="text-xs text-muted-foreground">
+                       registrados
+                     </p>
+                   </CardContent>
+                   </Alert>
+                 )}
 
-                  <Alert className="p-0">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total de discentes
-                    </CardTitle>
-                    <Student className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{total.map((props) => props.count_gps)}</div>
-                    <p className="text-xs text-muted-foreground">
-                      cadastrados
-                    </p>
-                  </CardContent>
-                  </Alert>
+                 {version && (
+                   <Alert className="p-0">
+                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                     <CardTitle className="text-sm font-medium">
+                       Total de discentes
+                     </CardTitle>
+                     <Student className="h-4 w-4 text-muted-foreground" />
+                   </CardHeader>
+                   <CardContent>
+                     <div className="text-2xl font-bold">{total.map((props) => props.count_gps)}</div>
+                     <p className="text-xs text-muted-foreground">
+                       cadastrados
+                     </p>
+                   </CardContent>
+                   </Alert>
+                 )}
 
                   <Alert className="p-0">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

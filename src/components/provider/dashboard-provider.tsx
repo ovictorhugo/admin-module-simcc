@@ -9,7 +9,7 @@ import { Departamentos } from "../dashboard/departamentos";
 import { AddResearcherDashboard } from "../dashboard/add-researcher-dashboard";
 import { PesoProducoes } from "../dashboard/peso-producoes";
 import { GrupoPesquisaView } from "../dashboard/grupo-pesquisa";
-import { IndicadoresDashboard } from "../dashboard/indicadores-dashboard";
+import { IndicadoresDashboard } from "../dashboard/indicadores-instituicao/indicadores-dashboard";
 import { BaremasHome } from "../baremas/baremas-home";
 import { EnviarNotificacoes } from "../enviar-notificacoes/enviar-notificacoes";
 import { InfoDashboardPage } from "../dashboard/info-dashboard-page";

@@ -13,20 +13,26 @@ type Articles = {
 
 
 export function ArticleBlock(props:Articles) {
-    const {navbar} = useContext(UserContext)
+    const {navbar, isCollapsed} = useContext(UserContext)
     const [count, setCount] = useState(12)
 
     const {isOpen} = useModalSidebar()
 
-    return(
-       <div>
-         <ResponsiveMasonry
-    columnsCountBreakPoints={{
+    const breakpoints = {
         350: 1,
         750: 2,
         900: 3,
-        1200: navbar || isOpen ? 3 : 4
-    }}
+        1200: isCollapsed !== undefined ? (!isCollapsed ? 3 : 4) : 3,
+        1700: 5
+      };
+
+    return(
+       <div>
+         <ResponsiveMasonry
+   columnsCountBreakPoints={breakpoints}
+
+    
+
 >
                  <Masonry gutter="16px">
 {props.articles.slice(0, count).map((props: any) => {

@@ -24,6 +24,7 @@ import { DiscentesGraduate } from "./discentes-graduate";
 
 interface Patrimonio {
   graduate_program_id: string
+  menu_state:boolean
   code: string
   name: string
   area: string
@@ -145,10 +146,20 @@ export function DisplayItem(props:Patrimonio) {
 
 
     return(
-      <Tabs defaultValue={tab} value={tab} className="h-full" >
+      <Tabs defaultValue={tab} value={tab} className="h-full border rounded-lg dark:border-neutral-800" >
         <div className="flex flex-col">
-      <div className="flex items-center p-2 px-4 justify-between">
+      <div className="flex items-center p-2 justify-between">
         <div className="flex items-center gap-2">
+       {!props.menu_state && (
+         <Tooltip>
+         <TooltipTrigger asChild>
+           <Button variant="ghost" size="icon"  onClick={() =>handleVisibleProgram(props.graduate_program_id)} >
+           
+           </Button>
+         </TooltipTrigger>
+         <TooltipContent>Mostrar menu</TooltipContent>
+       </Tooltip>
+       )}
 
         <Tooltip>
             <TooltipTrigger asChild>
@@ -303,13 +314,13 @@ export function DisplayItem(props:Patrimonio) {
         </TabsContent>
 
         <TabsContent value="unread" className="mt-0">
-      <div className="overflow-y-auto h-[calc(100vh-115px)] elementBarra">
+      <div className="overflow-y-auto ">
       <DocentesGraduate graduate_program_id={props.graduate_program_id}/>
       </div>
         </TabsContent>
 
         <TabsContent value="movimentacao-bens" className="mt-0">
-      <div className="overflow-y-auto h-[calc(100vh-115px)] elementBarra">
+      <div className="overflow-y-auto ">
         <DiscentesGraduate graduate_program_id={props.graduate_program_id}/>
       </div>
         </TabsContent>

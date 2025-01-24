@@ -68,6 +68,7 @@ import { Unauthorized } from './components/errors/Unauthorized';
 import { Error404 } from './components/errors/404';
 import { TermosUso } from './pages/TermosUso';
 import { AboutPage } from './pages/About';
+import useWindowResize from './components/use-windows-resize';
 
 
 
@@ -150,7 +151,10 @@ useEffect(() => {
 
   console.log(user)
 
-  
+  useWindowResize(() => {
+    console.log("A janela foi redimensionada!");
+    // Atualize o layout aqui se necessário
+  });
 
 
   /////PERMISSÃO

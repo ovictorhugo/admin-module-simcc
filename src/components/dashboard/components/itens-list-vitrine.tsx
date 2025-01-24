@@ -123,9 +123,9 @@ export function ItensList(props:Props) {
       
 
   return (
-    <ScrollArea className="h-[calc(100vh-180px)]">
+    <ScrollArea className="h-full">
       {isLoading ? (
-        <div className="flex flex-col gap-2 p-4 pt-0">
+        <div className="flex flex-col gap-2 ">
         <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
         <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
         <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
@@ -136,7 +136,7 @@ export function ItensList(props:Props) {
         <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
         </div>
       ):(
-        <div className="flex flex-col gap-2 p-4 pt-0">
+        <div className="flex flex-col gap-2 ">
         {filteredTotal.slice(0, count).map((item) => {
              const currentDate = new Date();
              const itemDate = new Date(item.created_at);

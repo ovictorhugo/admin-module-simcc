@@ -215,6 +215,11 @@ export function ResultHome() {
                   <div>
 
                   <Button onClick={() => handleDownloadJson()} variant="ghost"  className="">
+                     <File size={16} className="" />
+                     Dicionário de dados
+                   </Button>
+
+                  <Button onClick={() => handleDownloadJson()} variant="ghost"  className="">
                      <Download size={16} className="" />
                      Baixar resultado
                    </Button>
