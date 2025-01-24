@@ -297,7 +297,8 @@ return(
                                     </div>
         )})}
 
-        <Alert >
+       <fieldset className="grid gap-6 rounded-lg  p-4 bg-white dark:border-neutral-800 border border-neutral-200 dark:bg-neutral-950 bg-cover  bg-center bg-no-repeat">
+     <legend className="-ml-1 px-1 text-sm font-medium">Informações</legend>
       <div className="flex gap-4 items-center">
       <div className="flex flex-col gap-2 mt-4 w-full">
                 <Label>Conclusão do mestrado</Label>
@@ -312,7 +313,7 @@ return(
             </div>
       </div>
 
-        </Alert>
+        </fieldset>
 
         <h2 className="text-2xl font-medium ">Índices</h2>
 

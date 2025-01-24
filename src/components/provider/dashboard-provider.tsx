@@ -7,7 +7,7 @@ import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { PosGraducaoView } from "../dashboard/pos-graduacao/pos-graduacao-view-dashboard";
 import { Departamentos } from "../dashboard/departamentos";
 import { AddResearcherDashboard } from "../dashboard/add-researcher-dashboard";
-import { PesoProducoes } from "../dashboard/peso-producoes";
+import { PesoProducoes } from "../dashboard/pesos-avaliacao/peso-producoes";
 import { GrupoPesquisaView } from "../dashboard/grupo-pesquisa";
 import { IndicadoresDashboard } from "../dashboard/indicadores-instituicao/indicadores-dashboard";
 import { BaremasHome } from "../baremas/baremas-home";

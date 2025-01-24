@@ -81,9 +81,9 @@ const {onOpen} = useModal()
 
            
             {version ? (
-              <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
+              <Link to={"https://www.eng.ufmg.br/portal/"} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_4_white):(logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
           ):(
-            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_5_white):(logo_5)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
+            <Link to={"https://www.senaicimatec.com.br/"} target="_blank" className=" whitespace-nowrap "><img src={(theme ==  'dark' ) ? (logo_5_white):(logo_5)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
           )}
 
 {(role != '' && role != 'Visitante') && (<Badge className="  " variant={'outline'} >{role}</Badge>)}

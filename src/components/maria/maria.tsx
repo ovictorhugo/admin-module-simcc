@@ -191,25 +191,27 @@ export function Maria() {
 const {onOpen} = useModal()
 const {version} = useContext(UserContext)
     return(
-        <main className="w-full p-4 md:p-8 pb-2 md:pb-2 backgroundMaria">
+        <main className="w-full  h-full p-4 md:p-8 pb-2 md:pb-2 ">
             <Helmet>
           <title>Pesquisa com IA | {version ? ('Conectee'):('Iapós')}</title>
-          <meta name="description" content={`Pesquisa com IA | {version ? ('Conectee'):('Iapós')}`} />
+          <meta name="description" content={`Pesquisa com IA | ${version ? ('Conectee'):('Iapós')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
-             <main className="grid h-full flex-1 gap-4 md:gap-8 overflow-auto   ">
+             <main className="grid h-full md:px-8 lg:px-32 xl:px-60 flex-1 gap-4 md:gap-8 overflow-auto   ">
            
 
             <div className="relative  flex h-full min-h-[50vh] flex-col rounded-xl bg-muted/50  ">
             
         {message.length == 0 ? (
- <div className="h-full">
+ <div className="h-full ">
 <div className="flex flex-col flex-1 h-full gap-3 justify-center">
           <div className="h-full flex items-center">
              <div>
              <div className="flex gap-3">
                 <div className="h-12">{theme == 'dark '? (<SymbolEEWhite/>):(<SymbolEE/>)}</div>
-              <h2 className="font-bold text-5xl text-neutral-400 dark:text-neutral-300"><strong className="bg-gradient-to-r from-eng-blue  to-[#1B1464] text-transparent bg-clip-text">Olá,</strong> <br/>como posso ajudar?</h2>
+              <h2 className="font-semibold text-5xl text-neutral-400 dark:text-neutral-300">
+                <div className="bg-gradient-to-r from-eng-blue  to-[#1B1464] text-transparent bg-clip-text text-medium">Olá,</div>
+                como posso ajudar?</h2>
              
 
               </div>
@@ -339,7 +341,7 @@ const {version} = useContext(UserContext)
             </Button>
               </div>
             </div>
-            <p className="flex justify-center text-xs w-full mt-2 text-gray-500">A MarIA pode apresentar informações imprecisas, inclusive sobre pessoas. Por isso, cheque as respostas</p>
+            <p className="flex justify-center text-xs w-full mt-2 text-gray-500">A {version ? ('GaIA'):('MarIA')} pode apresentar informações imprecisas, inclusive sobre pessoas. Por isso, cheque as respostas</p>
             </div>
             </div>
             </main>

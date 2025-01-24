@@ -1,25 +1,27 @@
 import { ArrowCounterClockwise, ArrowUUpLeft, Book, Check, Quotes, Stamp } from "phosphor-react";
-import { Alert } from "../ui/alert";
+import { Alert } from "../../ui/alert";
 import { useContext, useEffect, useState } from "react";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Button } from "../ui/button";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
+import { Button } from "../../ui/button";
 import { toast } from "sonner"
-import { DialogFooter, DialogHeader, Dialog, DialogContent, DialogDescription, DialogTitle } from "../ui/dialog";
+import { DialogFooter, DialogHeader, Dialog, DialogContent, DialogDescription, DialogTitle } from "../../ui/dialog";
 
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "../../components/ui/select"
-import { UserContext } from "../../context/context";
-import { useModal } from "../hooks/use-modal-store";
-import { useModalDashboard } from "../hooks/use-modal-dashboard";
+} from "../../../components/ui/select"
+import { UserContext } from "../../../context/context";
+import { useModal } from "../../hooks/use-modal-store";
+import { useModalDashboard } from "../../hooks/use-modal-dashboard";
 import { ChevronLeft, Info } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { Badge } from "../ui/badge";
+import { Badge } from "../../ui/badge";
 import { Helmet } from "react-helmet";
 
 
@@ -30,38 +32,44 @@ export function PesoProducoes() {
   const {urlGeralAdm, user} = useContext(UserContext)
 
 
-  const [a1, seta1] = useState('');
-  const [a2, seta2] = useState('');
-  const [a3, seta3] = useState('');
-  const [a4, seta4] = useState('');
-  const [b1, setb1] = useState('');
-  const [b2, setb2] = useState('');
-  const [b3, setb3] = useState('');
-  const [b4, setb4] = useState('');
-  const [c, setc] = useState('');
-  const [sq, setsq] = useState('');
-  
-  const [livro, setLivro] = useState('');
-  const [capLivro, setCapLivro] = useState('');
-  
-  const [t1, setT1] = useState('');
-  const [t2, setT2] = useState('');
-  const [t3, setT3] = useState('');
-  const [t4, setT4] = useState('');
-  const [t5, setT5] = useState('');
-  
-  const [software, setSoftware] = useState('');
-  const [patenteCondecida, setPatenteConcedida] = useState('');
-  const [patenteNaoConcedida, setPatenteNaoConcedida] = useState('');
-  const [relTec, setRelTec] = useState('');
-  
-  const urlGet = urlGeralAdm + `indprod/query?institution_id=${user?.institution_id}`;
+// Artigos em periódicos (Ciências Exatas, Biológicas, Humanas, etc.)
+const [a1, seta1] = useState('');  // Qualis A1 - Melhor classificação
+const [a2, seta2] = useState('');  // Qualis A2
+const [a3, seta3] = useState('');  // Qualis A3
+const [a4, seta4] = useState('');  // Qualis A4
+const [b1, setb1] = useState('');  // Qualis B1
+const [b2, setb2] = useState('');  // Qualis B2
+const [b3, setb3] = useState('');  // Qualis B3
+const [b4, setb4] = useState('');  // Qualis B4
+const [c, setc] = useState('');    // Qualis C (menor classificação)
+const [sq, setsq] = useState('');  // Sem Qualis (não avaliado)
+
+// Livros e capítulos (Ciências Humanas, Sociais Aplicadas, Letras e Artes)
+const [livro, setLivro] = useState('');        // Livro completo publicado
+const [capLivro, setCapLivro] = useState('');  // Capítulo de livro publicado
+
+// Trabalhos técnicos e produtos tecnológicos (Engenharias, Ciências Exatas, Multidisciplinar)
+const [t1, setT1] = useState('');  // Trabalho técnico categoria T1 (maior impacto)
+const [t2, setT2] = useState('');  // Trabalho técnico categoria T2
+const [t3, setT3] = useState('');  // Trabalho técnico categoria T3
+const [t4, setT4] = useState('');  // Trabalho técnico categoria T4
+const [t5, setT5] = useState('');  // Trabalho técnico categoria T5 (menor impacto)
+
+// Produção tecnológica (Engenharias, Ciências Exatas e da Terra, Multidisciplinar)
+const [software, setSoftware] = useState('');                          // Desenvolvimento de software
+const [patenteConcedida, setPatenteConcedida] = useState('');           // Patente concedida
+const [patenteNaoConcedida, setPatenteNaoConcedida] = useState('');     // Patente não concedida (em processo)
+const [relTec, setRelTec] = useState('');                              // Relatórios técnicos e pareceres
+
+  const [area, setArea] = useState('')
+
+  const urlGet = urlGeralAdm + `indprod/query?institution_id=${user?.institution_id}&type_:${area}`;
   console.log(urlGet)
 
   const { onOpen, onClose, isOpen, type: typeModal } = useModal();
   const isModalOpen = isOpen && typeModal === 'reset-peso-producoes'
   const [typeReset, setTypeReset] = useState('');
- 
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,7 +116,7 @@ export function PesoProducoes() {
       }
     };
     fetchData();
-  }, []);
+  }, [area]);
 
 
     const qualis = [
@@ -215,9 +223,11 @@ export function PesoProducoes() {
             BOOK_CHAPTER: capLivro,
 
             SOFTWARE: software,
-            PATENT_GRANTED: patenteCondecida,
+            PATENT_GRANTED: patenteConcedida,
             PATENT_NOT_GRANTED: patenteNaoConcedida,
-            REPORT: relTec
+            REPORT: relTec,
+
+            type_:area
           }
       ]
 
@@ -252,7 +262,7 @@ export function PesoProducoes() {
               } else {
                 console.error('Erro ao enviar dados para o servidor.');
                 toast("Tente novamente!", {
-                    description: "Tente novamente",
+                    description: "Algo deu errado",
                     action: {
                       label: "Fechar",
                       onClick: () => console.log("Undo"),
@@ -281,6 +291,52 @@ export function PesoProducoes() {
   
       const {version} = useContext(UserContext)
       
+    //////////
+    const handleAreaChange = (value) => {
+      setArea(value);
+
+    const valoresPorArea = {
+      ciencia_alimentos: { 
+        a1: '10', a2: '8', a3: '6', a4: '5', b1: '4', b2: '3', b3: '2', b4: '1', c: '0.5', sq: '0', 
+        livro: '5', capLivro: '3', 
+        t1: '4', t2: '3.5', t3: '3', t4: '2.5', t5: '2', 
+        software: '7', patenteConcedida: '9', patenteNaoConcedida: '5', relTec: '4' 
+      },
+      ciencias_agrarias1: { 
+        a1: '9', a2: '7', a3: '5', a4: '4', b1: '3', b2: '2', b3: '1', b4: '0.5', c: '0.2', sq: '0', 
+        livro: '4', capLivro: '2', 
+        t1: '3', t2: '2.5', t3: '2', t4: '1.5', t5: '1', 
+        software: '6', patenteConcedida: '8', patenteNaoConcedida: '4', relTec: '3' 
+      },
+      medicina_veterinaria: { 
+        a1: '11', a2: '9', a3: '7', a4: '6', b1: '5', b2: '4', b3: '3', b4: '2', c: '1', sq: '0', 
+        livro: '6', capLivro: '4', 
+        t1: '5', t2: '4', t3: '3.5', t4: '3', t5: '2.5', 
+        software: '8', patenteConcedida: '10', patenteNaoConcedida: '6', relTec: '5' 
+      },
+      engenharias1: { 
+        a1: '15', a2: '12', a3: '9', a4: '7', b1: '6', b2: '5', b3: '4', b4: '3', c: '2', sq: '0', 
+        livro: '6', capLivro: '5', 
+        t1: '8', t2: '7', t3: '6', t4: '5', t5: '4', 
+        software: '10', patenteConcedida: '12', patenteNaoConcedida: '8', relTec: '6' 
+      },
+      enfermagem: { 
+        a1: '13', a2: '11', a3: '9', a4: '8', b1: '6', b2: '5', b3: '3', b4: '2', c: '1.5', sq: '0', 
+        livro: '7', capLivro: '5', 
+        t1: '6', t2: '5.5', t3: '5', t4: '4', t5: '3.5', 
+        software: '9', patenteConcedida: '11', patenteNaoConcedida: '7', relTec: '5' 
+      }
+      // Continue adicionando as demais áreas com seus respectivos valores
+    };
+
+    const valores = valoresPorArea[value] || {};
+    seta1(valores.a1 || '');
+    seta2(valores.a2 || '');
+    setLivro(valores.livro || '');
+    setT1(valores.t1 || '');
+    setSoftware(valores.software || '');
+  };
+
     return(
       <>
        <Helmet>
@@ -329,6 +385,87 @@ export function PesoProducoes() {
               </div>
 
             </div>
+            <Select value={area} onValueChange={(value) => setArea(value)}>
+  <SelectTrigger id="area" className="items-start [&_[data-description]]:hidden">
+    <SelectValue placeholder="Selecione a área de pós-graduação" className={'whitespace-nowrap'} />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel>Ciências Agrárias</SelectLabel>
+      
+      {/* Ciências Agrárias */}
+      <SelectItem value="ciencia_alimentos">Ciência de Alimentos</SelectItem>
+      <SelectItem value="ciencias_agrarias1">Ciências Agrárias I</SelectItem>
+      <SelectItem value="medicina_veterinaria">Medicina Veterinária</SelectItem>
+      <SelectItem value="zootecnia_pesqueiros">Zootecnia / Recursos Pesqueiros</SelectItem>
+      <SelectLabel>Ciências Biológicas</SelectLabel>
+      {/* Ciências Biológicas */}
+      <SelectItem value="biodiversidade">Biodiversidade</SelectItem>
+      <SelectItem value="ciencias_biologicas1">Ciências Biológicas I</SelectItem>
+      <SelectItem value="ciencias_biologicas2">Ciências Biológicas II</SelectItem>
+      <SelectItem value="ciencias_biologicas3">Ciências Biológicas III</SelectItem>
+
+      {/* Ciências da Saúde */}
+      <SelectLabel>Ciências da Saúde</SelectLabel>
+      <SelectItem value="educacao_fisica">Educação Física, Fisioterapia e Terapia Ocupacional</SelectItem>
+      <SelectItem value="enfermagem">Enfermagem</SelectItem>
+      <SelectItem value="farmacia">Farmácia</SelectItem>
+      <SelectItem value="medicina1">Medicina I</SelectItem>
+      <SelectItem value="medicina2">Medicina II</SelectItem>
+      <SelectItem value="medicina3">Medicina III</SelectItem>
+      <SelectItem value="nutricao">Nutrição</SelectItem>
+      <SelectItem value="odontologia">Odontologia</SelectItem>
+      <SelectItem value="saude_coletiva">Saúde Coletiva</SelectItem>
+     
+      <SelectLabel>Ciências Humanas</SelectLabel>
+      {/* Ciências Humanas */}
+      <SelectItem value="antropologia">Antropologia / Arqueologia</SelectItem>
+      <SelectItem value="ciencia_politica">Ciência Política e Relações Internacionais</SelectItem>
+      <SelectItem value="educacao">Educação</SelectItem>
+      <SelectItem value="filosofia">Filosofia</SelectItem>
+      <SelectItem value="geografia">Geografia</SelectItem>
+      <SelectItem value="historia">História</SelectItem>
+      <SelectItem value="psicologia">Psicologia</SelectItem>
+      <SelectItem value="sociologia">Sociologia</SelectItem>
+      
+      <SelectLabel>Ciências Sociais Aplicadas</SelectLabel>
+      {/* Ciências Sociais Aplicadas */}
+      <SelectItem value="administracao">Administração e Turismo</SelectItem>
+      <SelectItem value="arquitetura">Arquitetura e Urbanismo</SelectItem>
+      <SelectItem value="direito">Direito</SelectItem>
+      <SelectItem value="economia">Economia</SelectItem>
+      <SelectItem value="servico_social">Serviço Social</SelectItem>
+
+      <SelectLabel>Linguística, Letras e Artes</SelectLabel>
+      {/* Linguística, Letras e Artes */}
+      <SelectItem value="artes">Artes</SelectItem>
+      <SelectItem value="linguistica">Linguística e Literatura</SelectItem>
+
+      {/* Ciências Exatas e da Terra */}
+      <SelectLabel>Ciências Exatas e da Terra</SelectLabel>
+      <SelectItem value="astronomia">Astronomia / Física</SelectItem>
+      <SelectItem value="computacao">Computação</SelectItem>
+      <SelectItem value="geociencias">Geociências</SelectItem>
+      <SelectItem value="matematica">Matemática / Estatística</SelectItem>
+      <SelectItem value="quimica">Química</SelectItem>
+
+      {/* Engenharias */}
+      <SelectLabel>Engenharias</SelectLabel>
+      <SelectItem value="engenharias1">Engenharias I</SelectItem>
+      <SelectItem value="engenharias2">Engenharias II</SelectItem>
+      <SelectItem value="engenharias3">Engenharias III</SelectItem>
+      <SelectItem value="engenharias4">Engenharias IV</SelectItem>
+
+      {/* Multidisciplinar */}
+      <SelectLabel>Multidisciplinar</SelectLabel>
+      <SelectItem value="biotecnologia">Biotecnologia</SelectItem>
+      <SelectItem value="ciencias_ambientais">Ciências Ambientais</SelectItem>
+      <SelectItem value="ensino">Ensino</SelectItem>
+      <SelectItem value="interdisciplinar">Interdisciplinar</SelectItem>
+      <SelectItem value="materiais">Materiais</SelectItem>
+    </SelectGroup>
+  </SelectContent>
+</Select>
 
 
             <div className="flex gap-4 my-8">
@@ -497,7 +634,7 @@ export function PesoProducoes() {
        <Label className="whitespace-nowrap min-w-[150px]">Patente concedida</Label>
        </div>
             
-               <Select defaultValue={patenteCondecida} value={patenteCondecida} onValueChange={(value) => setPatenteConcedida(value)}>
+               <Select defaultValue={patenteConcedida} value={patenteConcedida} onValueChange={(value) => setPatenteConcedida(value)}>
            <SelectTrigger className="w-full whitespace-nowrap">
                <SelectValue placeholder="Escolha o tipo" />
            </SelectTrigger>
@@ -580,15 +717,6 @@ export function PesoProducoes() {
                  
                        </div>
 
-                       <div className="flex gap-4 my-8">
-
-<div className="bg-eng-blue text-white rounded-md flex items-center justify-center w-10 h-10">3</div>
-<div>
-  <p className="text-lg font-medium">Terceiro passo</p>
-  <p className="text-gray-500">Selecione a área do programa de acordo com a classificação do CAPES</p>
-</div>
-
-</div>
 
 
         <Dialog open={isModalOpen} onOpenChange={onClose}> 

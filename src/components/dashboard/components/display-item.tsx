@@ -146,8 +146,8 @@ export function DisplayItem(props:Patrimonio) {
 
 
     return(
-      <Tabs defaultValue={tab} value={tab} className="h-full border rounded-lg dark:border-neutral-800" >
-        <div className="flex flex-col">
+<Tabs  defaultValue={tab} value={tab}>
+      <div className="flex border dark:border-neutral-800 flex-col sticky top-[68px] z-[3] rounded-lg bg-white dark:bg-black">
       <div className="flex items-center p-2 justify-between">
         <div className="flex items-center gap-2">
        {!props.menu_state && (
@@ -241,9 +241,11 @@ export function DisplayItem(props:Patrimonio) {
           </Tooltip>
         </div>
         </div>
-        <div className="w-full border-b border-neutral-200 dark:border-neutral-800 "></div>
+     
 
         </div>
+      <div className="h-full mt-8 border   rounded-lg  relative dark:border-neutral-800" >
+        
 
         <TabsContent value="all" className="mt-0">
         
@@ -313,7 +315,7 @@ export function DisplayItem(props:Patrimonio) {
             
         </TabsContent>
 
-        <TabsContent value="unread" className="mt-0">
+        <TabsContent value="unread" className="mt-0 pb-6">
       <div className="overflow-y-auto ">
       <DocentesGraduate graduate_program_id={props.graduate_program_id}/>
       </div>
@@ -324,6 +326,8 @@ export function DisplayItem(props:Patrimonio) {
         <DiscentesGraduate graduate_program_id={props.graduate_program_id}/>
       </div>
         </TabsContent>
+       
+        </div>
         </Tabs>
     )
 }

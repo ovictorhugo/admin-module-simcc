@@ -212,7 +212,7 @@ export function InformationResearcher(props: Props) {
         )}
 
 
-        <div className={isVisible || (props.abstract.length < 500) ? "h-auto transition-all" : "h-[60px] overflow-hidden transition-all"}>
+        <div className={isVisible || (props.abstract.length < 500) ? "h-auto transition-all" : "h-[60px] overflow-hidden transition-all mb-4"}>
           <p className="text-gray-400 text-sm text-justify ">{highlightedAbstract}</p>
         </div>
 
