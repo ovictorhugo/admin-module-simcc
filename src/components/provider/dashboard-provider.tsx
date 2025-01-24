@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { GeralViewDashboard } from "../dashboard/geral-view-dashboard/geral-view-dashboard";
 
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
-import { PosGraducaoView } from "../dashboard/pos-graduacao-view-dashboard";
+import { PosGraducaoView } from "../dashboard/pos-graduacao/pos-graduacao-view-dashboard";
 import { Departamentos } from "../dashboard/departamentos";
 import { AddResearcherDashboard } from "../dashboard/add-researcher-dashboard";
 import { PesoProducoes } from "../dashboard/peso-producoes";

@@ -1,7 +1,7 @@
 import { useContext,  useState } from "react";
-import { useModal } from "../hooks/use-modal-store"
+import { useModal } from "../../hooks/use-modal-store"
 
-import { UserContext } from "../../context/context";
+import { UserContext } from "../../../context/context";
 
 import {ChevronLeft,  Plus, Search } from "lucide-react";
 
@@ -29,14 +29,14 @@ import {ChevronLeft,  Plus, Search } from "lucide-react";
   }
 
 
-import { useModalDashboard } from "../hooks/use-modal-dashboard";
-import { TooltipProvider } from "../ui/tooltip";
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../ui/resizable";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Input } from "../ui/input";
-import { DisplayItem } from "./components/display-item";
-import { ItensList } from "./components/itens-list-vitrine";
-import { Button } from "../ui/button";
+import { useModalDashboard } from "../../hooks/use-modal-dashboard";
+import { TooltipProvider } from "../../ui/tooltip";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../../ui/resizable";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
+import { Input } from "../../ui/input";
+import { DisplayItem } from "../components/display-item";
+import { ItensList } from "../components/itens-list-vitrine";
+import { Button } from "../../ui/button";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
   
@@ -81,16 +81,8 @@ const isModalOpen = isOpen && type === "graduate-program";
           <meta name="description" content={`Pós-graduações | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
-       {isModalOpen && (
-          <TooltipProvider delayDuration={0}>
-              <ResizablePanelGroup
-          direction="horizontal"
-          onLayout={() => defaultLayout}
-          className="h-full  items-stretch"
-          >
-               <ResizablePanel defaultSize={40} minSize={40}>
-               <Tabs defaultValue={tab} value={tab}>
-          <div className="flex items-center px-4 py-2">
+
+        <div className="flex items-center p-8">
           <div className="flex items-center gap-4">
           
           <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
@@ -100,14 +92,14 @@ const isModalOpen = isOpen && type === "graduate-program";
             <h1 className="text-lg font-bold">Pós-graduação</h1>
           </div>
            
-
-            <TabsList className="ml-auto">
-              <TabsTrigger onClick={() => setTab('all')} value="all" className="text-zinc-600 dark:text-zinc-200">Pós-graduação</TabsTrigger>
-              <TabsTrigger  onClick={() => setTab('unread')} value="unread" className="text-zinc-600 dark:text-zinc-200">Graduação</TabsTrigger>
-            </TabsList>
            
           </div>
-         <div className="w-full border-b border-neutral-200 dark:border-neutral-800 "></div>
+
+        <div className="grid grid-cols-5">
+          <div className=" grid col-span-2">
+          <Tabs defaultValue={tab} value={tab}>
+          
+
 
           <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="flex items-center gap-3">
@@ -135,12 +127,10 @@ const isModalOpen = isOpen && type === "graduate-program";
          
           </TabsContent>
         </Tabs>
-               </ResizablePanel>
-               <ResizableHandle withHandle />
+          </div>
 
-               <ResizablePanel defaultSize={defaultLayout[2]} minSize={50}>
-     
-               {total ? (
+          <div className="col-span-3">
+          {total ? (
       <DisplayItem
       graduate_program_id={total.graduate_program_id}
       code={total.code}
@@ -168,12 +158,10 @@ const isModalOpen = isOpen && type === "graduate-program";
         <p className="font-medium text-lg">Nenhum programa selecionado</p>
       </div>
     )}
-      
-      </ResizablePanel>
+          </div>
 
-</ResizablePanelGroup>
-          </TooltipProvider>
-      )}
+        </div>
+       
        </>
    
         
