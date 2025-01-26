@@ -1064,6 +1064,7 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
         Projetos de pesquisa
       </TabsTrigger>
 
+
       <TabsTrigger
                                 value="texto-revista"
                                 onClick={() => setValue('texto-revista')}
@@ -1084,11 +1085,13 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
 
 
 
+
       <TabsTrigger
         value="cargos"
         onClick={() => setValue('cargos')}
         className="flex gap-2 items-center"
       >
+
 
         <Waypoints size={16} className="" />
 

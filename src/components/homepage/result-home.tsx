@@ -137,8 +137,10 @@ export function ResultHome() {
            <title>
   {itemsSelecionados.length === 0
 
+
     ? 'Pesquisa'
     : 'Pesquisa: ' + itemsSelecionados
+
 
         .map((item, index) => {
           const term = item.term.replace(/[|;]/g, ''); // Remove o conector para obter apenas o termo

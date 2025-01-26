@@ -192,6 +192,7 @@ const {onOpen} = useModal()
 const {version} = useContext(UserContext)
     return(
 
+
         <main className="w-full  h-full p-4 md:p-8 pb-2 md:pb-2 ">
             <Helmet>
           <title>Pesquisa com IA | {version ? ('Conectee'):('Iapós')}</title>
@@ -199,6 +200,7 @@ const {version} = useContext(UserContext)
           <meta name="robots" content="index, follow" />
         </Helmet>
              <main className="grid h-full md:px-8 lg:px-32 xl:px-60 flex-1 gap-4 md:gap-8 overflow-auto   ">
+
 
             <div className="relative  flex h-full min-h-[50vh] flex-col rounded-xl bg-muted/50  ">
             

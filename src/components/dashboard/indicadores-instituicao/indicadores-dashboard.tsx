@@ -146,7 +146,7 @@ interface YearSemester {
   semester:string
 }
 
-  import bg_popup from '../../../assets/bg_popup.png';
+ import bg_popup from '../../../assets/bg_popup.png';
 import { useModal } from "../../hooks/use-modal-store";
 import { GraficoBolsistaProdutividade } from "../graficos/grafico-bolsista-produtividade";
 import { GraficoBolsistaTecnologico } from "../graficos/grafico-bolsista-tecnologico";

@@ -151,6 +151,7 @@ export const columns: ColumnDef<Articles>[] = [
                 >
                   <Maximize2 size={16} />
                 </Button>
+
         </div>
       )
     },

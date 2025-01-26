@@ -92,7 +92,7 @@ const isModalOpen = isOpen && type === "graduate-program";
           
           <div className={`flex items-center justify-between  `}>
         <div className="flex items-center gap-4">
-          
+     
           <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
               <ChevronLeft className="h-4 w-4" />
               <span className="sr-only">Voltar</span>
