@@ -23,7 +23,7 @@ import {
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { Skeleton } from "../ui/skeleton";
 
-import { ChartBar, SquaresFour, Rows, Book, ArrowUDownLeft } from "phosphor-react";
+import { ChartBar, SquaresFour, Rows, Book, ArrowUDownLeft, Student } from "phosphor-react";
 
 import { Button } from "../ui/button";
 import { UserContext } from "../../context/context";
@@ -185,7 +185,7 @@ export function OrientacoesResearcherPopUp(props: Props) {
             <div className="flex mb-2">
               <div className="flex gap-4 w-full justify-between items-center ">
                 <div className="flex gap-4 items-center">
-                  <Book size={24} className="text-gray-400" />
+                  <Student size={24} className="text-gray-400" />
                   <p className="text-sm font-bold">Todas as orientações</p>
                 </div>
 

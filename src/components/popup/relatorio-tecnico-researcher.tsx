@@ -22,7 +22,7 @@ import {
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { Skeleton } from "../ui/skeleton";
 
-import { ChartBar, SquaresFour, Rows, Book, ArrowUDownLeft } from "phosphor-react";
+import { ChartBar, SquaresFour, Rows, Book, ArrowUDownLeft, Files } from "phosphor-react";
 
 import { Button } from "../ui/button";
 import { UserContext } from "../../context/context";
@@ -104,10 +104,16 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
 
         <Accordion type="single" collapsible defaultValue="item-1" >
           <AccordionItem value="item-1" >
-            <AccordionTrigger className="text-left">
-              <HeaderResultTypeHome title="Gráfico de orientações em andamento e concluídas " icon={<ChartBar size={24} className="text-gray-400" />}>
-              </HeaderResultTypeHome>
-            </AccordionTrigger>
+       
+          <div className="flex mb-2">
+             <HeaderResultTypeHome title="Gráfico de orientações em andamento e concluídas " icon={<ChartBar size={24} className="text-gray-400" />}>
+             </HeaderResultTypeHome>
+
+             <AccordionTrigger>
+
+</AccordionTrigger>
+             </div>
+       
             <AccordionContent >
               {loading ? (
                 <Skeleton className="w-full rounded-md h-[300px]" />
@@ -122,9 +128,9 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
 
         <Accordion defaultValue="item-1" type="single" collapsible >
           <AccordionItem value="item-1" className="" >
-            <div className="flex gap-4 w-full justify-between items-center ">
+            <div className="flex gap-4 w-full mb-2 justify-between items-center ">
               <div className="flex gap-4 items-center text-left">
-                <Book size={24} className="text-gray-400" />
+                <Files size={24} className="text-gray-400" />
                 <p className="text-sm font-bold">Todos os relatórios técnicos</p>
               </div>
 
