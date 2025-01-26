@@ -200,7 +200,7 @@ export function OrientacoesResearcherPopUp(props: Props) {
                     </div>
                   )}
 
-                  <div className="hidden md:block">
+                  <div className="hidden gap-3 md:flex">
                     <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
                       <Rows size={16} className=" whitespace-nowrap" />
                     </Button>

@@ -87,29 +87,7 @@ export const columns: ColumnDef<Articles>[] = [
       return <div className="flex gap-1 items-center" ><div className={`w-4 h-4 rounded-md  ${qualisColor[row.getValue("qualis") as keyof typeof qualisColor]}`}></div>  {row.getValue("qualis")}</div>
     },
   },
-      {
-        accessorKey: "qualis",
-        header: "Qualis",
-        cell: ({ row }) => {
-      
-          let qualisColor = {
-            'A1': 'bg-[#006837]',
-            'A2': 'bg-[#8FC53E]',
-            'A3': 'bg-[#ACC483]',
-            'A4': 'bg-[#BDC4B1]',
-            'B1': 'bg-[#F15A24]',
-            'B2': 'bg-[#F5831F]',
-            'B3': 'bg-[#F4AD78]',
-            'B4': 'bg-[#F4A992]',
-            'B5': 'bg-[#F2D3BB]',
-            'C': 'bg-[#EC1C22]',
-            'None': 'bg-[#560B11]',
-            'SQ': 'bg-[#560B11]'
-        }
-          
-          return <div className="flex gap-1 items-center" ><div className={`w-4 h-4 rounded-md  ${qualisColor[row.getValue("qualis") as keyof typeof qualisColor]}`}></div>  {row.getValue("qualis")}</div>
-        },
-      },
+    
       {
         accessorKey: "jcr_link",
         header: "JCR",
@@ -120,6 +98,15 @@ export const columns: ColumnDef<Articles>[] = [
               <a href={row.getValue("jcr_link")} target="_blank" rel="noopener noreferrer" className="border-[1px] cursor-pointer border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center  whitespace-nowrap"><LinkBreak size={16} className="text-gray-400" />JCR {jif}</a>
             )}
           </div>
+        }
+      },
+
+      {
+        accessorKey: "citations_count",
+        header: "Citações",
+        cell: ({ row }) => {
+          const jif = row.original.jif;
+          return <div className="flex gap-1 items-center" > {row.getValue("citations_count")}</div>
         }
       },
 

@@ -7,6 +7,7 @@ type ProjetoPesquisa = {
   title: string,
   year: string,
   meio: string
+  means_divulgation:string
 }
 
 
@@ -17,11 +18,11 @@ export const columnsTrabalhoEvento: ColumnDef<ProjetoPesquisa>[] = [
     header: "Título",
   },
   {
-    accessorKey: "type",
+    accessorKey: "means_divulgation",
     header: "Divulgação",
     cell: ({ row }) => {
-      return <div className="flex items-center gap-4"> {(row.getValue("nature") != undefined) && (
-        row.getValue("nature")
+      return <div className="flex items-center gap-4"> {(row.getValue("means_divulgation") != undefined) && (
+        row.original.means_divulgation.split('_').join(' ')
       )}
       </div>
     }

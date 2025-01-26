@@ -130,11 +130,11 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
 
               <div className="flex gap-3 items-center h-full">
 
-                <div className="hidden md:flex">
-                  <Button onClick={() => setTypeVisu('rows')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
+                <div className="hidden gap-3 md:flex">
+                  <Button onClick={() => setTypeVisu('rows')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800 border')}`} size={'icon'}>
                     <Rows size={16} className=" whitespace-nowrap" />
                   </Button>
-                  <Button onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800')} `} size={'icon'}>
+                  <Button onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800 border')} `} size={'icon'}>
                     <SquaresFour size={16} className=" whitespace-nowrap" />
                   </Button>
                 </div>

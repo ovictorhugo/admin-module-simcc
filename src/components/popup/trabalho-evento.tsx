@@ -141,7 +141,7 @@ export function WorkEvent(props: Props) {
               </div>
 
               <div className="flex gap-3 mr-3 items-center h-full">
-                <div className="hidden md:block">
+                <div className="hidden md:flex gap-3">
                   <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
                     <Rows size={16} className=" whitespace-nowrap" />
                   </Button>

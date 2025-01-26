@@ -307,7 +307,7 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
                     </div>
                   )}
 
-                  <div className="hidden md:flex">
+                  <div className="hidden gap-3 md:flex">
                     <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
                       <Rows size={16} className="hidden whitespace-nowrap md:flex" />
                     </Button>
