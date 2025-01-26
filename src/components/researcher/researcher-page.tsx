@@ -56,6 +56,7 @@ import { RelevanceProduction } from "../popup/relevance-production";
 import { TextoRevista } from "../popup/texto-revista";
 import { WorkEvent } from "../popup/trabalho-evento";
 import { CargosFuncoes } from "../popup/cargos-funcoes";
+import { Coautores } from "../popup/coautores";
 
 export interface Research {
   among: number,
@@ -1238,6 +1239,15 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
                       return(
                         <NuvemPalavras
                         id={user.id}
+                        />
+                      )
+            })}
+
+{researcher.slice(0, 1).map((user) => {
+                      return(
+                        <Coautores
+                        id={user.id}
+                        name={user.name}
                         />
                       )
             })}

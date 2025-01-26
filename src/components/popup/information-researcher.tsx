@@ -217,11 +217,11 @@ export function InformationResearcher(props: Props) {
         </div>
 
         {props.abstract.length > charLimit && (
-          <div className="flex gap-4 items-center mt-4">
+          <div className="flex gap-4 items-center mt-2">
             <Button
               variant='ghost'
               size={'icon'}
-              className={`${!isVisible && 'animate-bounce'} h-8 w-8`}
+              className={`mb-2 ${!isVisible && 'animate-bounce'} h-8 w-8`}
               onClick={() => setIsVisible(!isVisible)}
             >
               <CaretDown

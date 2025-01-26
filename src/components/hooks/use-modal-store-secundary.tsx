@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { useModal } from "./use-modal-store";
 
-export type ModalType = 'articles-modal' | 'cookies' | 'edit-article' | 'image-article' | 'project-modal'
+export type ModalType = 'articles-modal' | 'cookies' | 'edit-article' | 'image-article' | 'project-modal' | 'coautores'
 
 interface ModalData {
   id?: string,

@@ -129,6 +129,7 @@ import { ResearchProject } from "../popup/research-project";
 import { WorkEvent } from "../popup/trabalho-evento";
 import { TextoRevista } from "../popup/texto-revista";
 import { CargosFuncoes } from "../popup/cargos-funcoes";
+import { Coautores } from "../popup/coautores";
 
 export function ResearcherModal() {
 
@@ -837,6 +838,15 @@ export function ResearcherModal() {
                             />
                           )
                         })}
+
+                        {researcher.slice(0, 1).map((user) => {
+                                              return(
+                                                <Coautores
+                                                id={user.id}
+                                                name={user.name}
+                                                />
+                                              )
+                                    })}
 
 
                         {researcher.slice(0, 1).map(() => {

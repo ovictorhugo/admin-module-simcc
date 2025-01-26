@@ -9,6 +9,7 @@ import { useModalSecundary } from "../hooks/use-modal-store-secundary";
 import { CookiesModal } from "../modals/cookies";
 import { EditArticle } from "../modals/edit-article";
 import { ProjectModal } from "../modals/project-modal";
+import { CoautoresModal } from "../modals/coautores-modal";
 
 
 const ModalContentSecundary = () => {
@@ -21,6 +22,8 @@ const ModalContentSecundary = () => {
           return <EditArticle/>
         case 'project-modal':
           return <ProjectModal/>
+          case 'coautores':
+            return <CoautoresModal/>
     default:
       return null;
   }

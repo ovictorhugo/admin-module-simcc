@@ -657,7 +657,7 @@ export function InitialHome() {
 
             <CardContent>
               <span className="text-lg font-bold leading-none sm:text-3xl">
-                {VisaoPrograma.map((props) => (<>{props.article}</>))}
+                { VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.article}</>)):0}
               </span>
             </CardContent>
           </Link>
@@ -675,7 +675,7 @@ export function InitialHome() {
 
             <CardContent>
               <span className="text-lg font-bold leading-none sm:text-3xl">
-                {VisaoPrograma.map((props) => (<>{props.book}</>))}
+                {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.book}</>)): 0}
               </span>
             </CardContent>
           </Link>
@@ -693,7 +693,7 @@ export function InitialHome() {
 
             <CardContent>
               <span className="text-lg font-bold leading-none sm:text-3xl">
-                {VisaoPrograma.map((props) => (<>{props.book_chapter}</>))}
+                {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.book_chapter}</>)):0}
               </span>
             </CardContent>
           </Link>
@@ -713,7 +713,7 @@ export function InitialHome() {
 
             <CardContent>
               <span className="text-lg font-bold leading-none sm:text-3xl">
-                {VisaoPrograma.map((props) => (<>{props.patent}</>))}
+                {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.patent}</>)):0}
               </span>
             </CardContent>
 
