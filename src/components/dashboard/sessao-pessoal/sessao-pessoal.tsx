@@ -1,17 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Button } from "../../ui/button";
+
 import { ChevronLeft, Disc, File, Plus, Weight } from "lucide-react";
+
 import { useContext, useState } from "react";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
 import { Alert } from "../../ui/alert";
 import { UserContext } from "../../../context/context";
 import { Helmet } from "react-helmet";
+
 import { Worker, Viewer } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import { HeaderResult } from "../../homepage/header-results";
 import { HeaderResultTypeHome } from "../../homepage/categorias/header-result-type-home";
 import { FilePdf } from "phosphor-react";
+
 
 export function SessaoPessoal() {
        const history = useNavigate();
@@ -38,6 +42,7 @@ export function SessaoPessoal() {
             setImages((prevFiles) => [...prevFiles, ...newFiles]);
           }
         };
+
 const {version} = useContext(UserContext)
     
     return(

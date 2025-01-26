@@ -158,7 +158,6 @@ import { GraficoProgressaoDocentes } from "../graficos/grafico-progressao-docent
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
 import { ScrollArea } from "../../ui/scroll-area";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table";
-
 import { GraficoTecnicosRt } from "../graficos/grafico-tecnicos-rt";
 import { GraficoTecnicosGenero } from "../graficos/grafico-tecnicos-genero";
 import { GraficoProgressaoTecnicos } from "../graficos/grafico-progressao-tecnicos";
