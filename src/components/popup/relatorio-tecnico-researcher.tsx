@@ -129,7 +129,7 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
               </div>
 
               <div className="flex gap-3 items-center h-full">
-
+              
                 <div className="hidden gap-3 md:flex">
                   <Button onClick={() => setTypeVisu('rows')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800 border')}`} size={'icon'}>
                     <Rows size={16} className=" whitespace-nowrap" />
@@ -140,15 +140,7 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
                 </div>
 
                 <AccordionTrigger>
-                  {itemsSelecionadosPopUp != itemsSelecionados && (
-                    <div className="flex gap-3 items-center order-3">
-                      <Button onClick={() => setItensSelecionadosPopUp(itemsSelecionados)} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800')}`} size={'icon'}>
-                        <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
-                      </Button>
-
-                      <div className="w-[0.5px] h-6 dark:bg-neutral-800 bg-neutral-200"></div>
-                    </div>
-                  )}
+                
                 </AccordionTrigger>
               </div>
             </div>

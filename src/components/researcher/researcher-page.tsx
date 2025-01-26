@@ -1,4 +1,4 @@
-import { ArrowLeftFromLine, ArrowRightFromLine, BookOpenText, Boxes, Briefcase, ChevronLeft, Download, FolderKanban, OctagonAlert, Star, TrendingUp, Waypoints } from "lucide-react";
+import { ArrowLeftFromLine, ArrowRightFromLine, BookOpenText, Boxes, Briefcase, Check, ChevronLeft, Download, FolderKanban, Minus, OctagonAlert, Star, TrendingUp, Waypoints } from "lucide-react";
 import {  useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
 import { Helmet } from "react-helmet";
@@ -64,6 +64,7 @@ export interface Research {
   book: number,
   book_chapters: number,
   id: string,
+  status:boolean
   name: string,
   university: string,
   lattes_id: string,
@@ -599,6 +600,25 @@ const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
               
                
               <div className={`border dark:border-neutral-800 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-1 items-center ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none' ): ('')}`}> <CalendarBlank size={16}/> Atualização do Lattes: {String(props.lattes_update)}</div>
+
+
+              {researcher.slice(0, 1).map((user) => {
+                  return (
+                  <div
+                    className={`
+                      hidden text-[0.5rem] py-2 px-4 border dark:border-neutral-800 w-fit
+                       rounded-md  font-bold gap-1 items-center
+
+                      md:text-xs md:py-2 md:px-4 
+
+                      lg:flex
+                      text-white border-none
+                      ${user.status ? ('bg-green-500 ') : ('bg-red-500')}
+                  `}
+                  >
+                  {user.status ? (<Check size={16}/>):(<Minus size={16}/>)} {user.status ? ('Ativo'):('Inativo')}
+                  </div>
+                  )})}
 
               <div className="flex gap-3 items-center">
 

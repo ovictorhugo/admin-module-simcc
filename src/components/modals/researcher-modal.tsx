@@ -50,7 +50,7 @@ type Research = {
   graduate_programs: GraduatePrograms[]
   departments: Departments[]
   research_groups: ResearchGroups[]
-
+  status:boolean
   cargo: string
   clas: string
   classe: string
@@ -106,7 +106,7 @@ import { RelatorioTecnicoResearcherPopUp } from "../popup/relatorio-tecnico-rese
 import { SpeakerResearcherPopUp } from "../popup/speaker-researcher";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { BookOpenText, Boxes, Briefcase, Copy, FolderKanban, LoaderCircle, MoreHorizontal, Plus, Waypoints } from "lucide-react";
+import { BookOpenText, Boxes, Briefcase, Check, Copy, FolderKanban, LoaderCircle, Minus, MoreHorizontal, Plus, Waypoints } from "lucide-react";
 
 import QRCode from "react-qr-code";
 
@@ -383,7 +383,8 @@ export function ResearcherModal() {
               >
                 <div className="flex justify-between items-center w-full">
 
-                  <div
+                 <div className="flex gap-3 items-center">
+                 <div
                     className={`
                       hidden text-[0.5rem] py-2 px-4 border dark:border-neutral-800 w-fit
                       text-gray-400 rounded-md  font-bold gap-1 items-center
@@ -397,6 +398,24 @@ export function ResearcherModal() {
                   >
                   <CalendarBlank size={16}/>  Atualização do Lattes: {String(props.lattes_update)}
                   </div>
+                  {researcher.slice(0, 1).map((user) => {
+                  return (
+                  <div
+                    className={`
+                      hidden text-[0.5rem] py-2 px-4 border dark:border-neutral-800 w-fit
+                       rounded-md  font-bold gap-1 items-center
+
+                      md:text-xs md:py-2 md:px-4 
+
+                      lg:flex
+                      text-white border-none
+                      ${user.status ? ('bg-green-500 ') : ('bg-red-500')}
+                  `}
+                  >
+                  {user.status ? (<Check size={16}/>):(<Minus size={16}/>)} {user.status ? ('Ativo'):('Inativo')}
+                  </div>
+                  )})}
+                 </div>
 
                   <div className="hidden lg:flex gap-3">
                     {hasBaremaAvaliacao && (

@@ -260,9 +260,7 @@ export function ArticlesResearcherPopUp(props: Props) {
                                         </Button>
                                     </div>
 
-                                    <Button onClick={handleRefresh} variant="ghost" size={'icon'}>
-                                        <ArrowUDownLeft size={16} className=" whitespace-nowrap" />
-                                    </Button>
+                                
                                 </div>
                             </div>
 

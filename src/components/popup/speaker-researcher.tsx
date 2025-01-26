@@ -155,15 +155,19 @@ export function SpeakerResearcherPopUp(props: Props) {
 
       <div className="">
 
-        <FilterYearPopUp
+     <div className="mb-6">
+     <FilterYearPopUp
           onFilterUpdate={handleResearcherUpdate} />
+     </div>
 
         <Accordion type="single" collapsible defaultValue="item-1">
           <AccordionItem value="item-1" className="text-left">
             <div className="flex mb-2">
               <HeaderResultTypeHome title="Gráfico de quantidade total de participações em eventos" icon={<ChartBar size={24} className="text-gray-400" />}>
               </HeaderResultTypeHome>
+              <AccordionTrigger>
 
+</AccordionTrigger>
             </div>
             <AccordionContent >
               {loading ? (
