@@ -640,7 +640,7 @@ export function InitialHome() {
         </div>
       </div>
 
-      <div className=" w-full md:px-8 md:gap-8 gap-4 flex flex-col px-4">
+      <div className=" w-full md:px-8 gap-8 flex flex-col px-4">
 
         <Alert className="grid gap-3 lg:grid-cols-4 grid-cols-2">
           <Link onClick={() => onOpenResult('articles-home')} to={'/resultados?type_search=article&terms=&researcher=false'}>
@@ -723,11 +723,11 @@ export function InitialHome() {
 
         <div
           className="
-            grid
+            grid gap-8
 
-            md:flex md:flex-wrap md:gap-8
+            md:flex md:flex-wrap
             
-            lg:grid lg:grid-cols-3 lg:gap-8
+            lg:grid lg:grid-cols-3
           "
         >
           {version ? (
@@ -873,8 +873,8 @@ export function InitialHome() {
           )}
 
           <Alert className="lg:col-span-2 h-fit p-0">
-            <CardHeader className="flex p-0 flex-col flex-wrap items-stretch space-y-0 border-b dark:border-b-neutral-800 sm:flex-row">
-              <div className="w-full flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+            <CardHeader className="flex p-0 flex-col md:flex-wra lg:flex-nowrap items-stretch space-y-0 border-b dark:border-b-neutral-800 sm:flex-row">
+              <div className="w-full flex flex-col justify-center gap-1 px-6 py-5 sm:py-6">
                 <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
                   <div>
                     <CardTitle className="text-sm font-medium">
@@ -1017,9 +1017,9 @@ export function InitialHome() {
 
         <div
           className="
-            flex flex-wrap gap-4 mt-7
+            flex flex-wrap gap-8 mt-7
             
-            md:grid-cols-2 md:gap-8 md:mt-auto
+            md:grid-cols-2 md:mt-auto
 
             lg:grid lg:grid-cols-3
           "
@@ -1120,9 +1120,9 @@ export function InitialHome() {
 
       <div
         className=" 
-          w-full 
+          w-full gap-8
           flex flex-wrap
-          md:px-8 md:gap-8 gap-4 flex-col px-4
+          md:px-8 flex-col px-4
         "
       >
 

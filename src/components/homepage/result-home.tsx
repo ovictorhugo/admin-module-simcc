@@ -213,8 +213,8 @@ export function ResultHome() {
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
 
-              <div>
-                <div className="hidden md:flex">
+              <div className="hidden md:flex md:flex-nowrap">
+                <div className="md:flex md:flex-nowrap">
                   <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
                     <File size={16} className="" />
                     Dicionário de dados

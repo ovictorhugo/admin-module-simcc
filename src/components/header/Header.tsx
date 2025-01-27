@@ -69,7 +69,7 @@ export function Header() {
   return (
     <div className={'top-0 w-full'}>
       <header className={`h-[40px] mb-2 px-4 flex justify-between dark:bg-black items-center w-full`}>
-        <div className="  flex items-center h-12 gap-4">
+        <div className="flex items-center h-12 gap-4">
           <div className="hidden md:flex md:gap-3 md:items-center md:h-full md:justify-center">
             {version ? (
               <Link to={"/"} className="h-[18px]  " onClick={() => handleClick()} >{(theme == 'dark') ? (<LogoConecteeWhite />) : (<LogoConectee />)}</Link>
@@ -77,19 +77,19 @@ export function Header() {
               <Link to={"/"} className="h-[18px]  " onClick={() => handleClick()} >{(theme == 'dark') ? (<LogoIaposWhite />) : (<LogoIapos />)}</Link>
             )}
 
-            <div className="h-4 w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>
-
-            {version ? (
-              <Link to={"https://www.eng.ufmg.br/portal/"} target="_blank" className=" whitespace-nowrap "><img src={(theme == 'dark') ? (logo_4_white) : (logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
-            ) : (
-              <Link to={"https://www.senaicimatec.com.br/"} target="_blank" className=" whitespace-nowrap "><img src={(theme == 'dark') ? (logo_5_white) : (logo_5)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
-            )}
+            <div className="min-w-max">
+              {version ? (
+                <Link to={"https://www.eng.ufmg.br/portal/"} target="_blank" className="whitespace-nowrap "><img src={(theme == 'dark') ? (logo_4_white) : (logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
+              ) : (
+                <Link to={"https://www.senaicimatec.com.br/"} target="_blank" className="whitespace-nowrap "><img src={(theme == 'dark') ? (logo_5_white) : (logo_5)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
+              )}
+            </div>
 
             {(role != '' && role != 'Visitante') && (<Badge className="  " variant={'outline'} >{role}</Badge>)}
           </div>
         </div>
 
-        <div className="w-full flex gap-2 items-center justify-between">
+        <div className="w-full flex items-center justify-between md:justify-end gap-1">
           {isVisible && (
             <div onClick={() => onOpen('search')} className="flex  h-8 border border-neutral-200 dark:border-neutral-800 px-1 bg-white dark:bg-neutral-950 rounded-md items-center">
               <MagnifyingGlass size={16} className="w-8" />
@@ -119,45 +119,49 @@ export function Header() {
             )}
           </div>
 
-          {(loggedIn && permission.length > 0) && (
-            <Link to={'/dashboard'}>
-              <Button variant='outline' size="sm" className="h-8 px-2" >
-                <LayoutDashboard className="h-4 w-4" />
-                Console
-              </Button></Link>
-          )}
+          <div className="flex gap-2">
+            <div>
+              {(loggedIn && permission.length > 0) && (
+                <Link to={'/dashboard'}>
+                  <Button variant='outline' size="sm" className="h-8 px-2" >
+                    <LayoutDashboard className="h-4 w-4" />
+                    Console
+                  </Button></Link>
+              )}
+            </div>
 
-          <div className="flex items-center gap-2">
-            <ModeToggle />
-            {version && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant='outline' size="icon" className="h-8 w-8" >
-                    <Grip className="h-4 w-4" />
-                    <span className="sr-only">Menu de ações rápidas</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" >
-                  <div className="grid gap-3 grid-cols-3">
-                    <Link to={'https://vitrinepatrimonio.eng.ufmg.br/'} target="_blank">
-                      <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
-                        <div className="h-8 mb-4">{(theme == 'dark') ? (<SymbolVPWhite />) : (<SymbolVP />)}</div>
-                        <div className="flex  text-xs font-medium max-w-[70px] truncate  text-center"> Vitrine Patrimônio</div>
-                      </DropdownMenuItem></Link>
-                    <Link to={'https://conectee.eng.ufmg.br/'} target="_blank">
-                      <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
-                        <div className="h-8 mb-4">{(theme == 'dark') ? (<SymbolEEWhite />) : (<SymbolEE />)}</div>
-                        <div className="flex  text-xs font-medium max-w-[70px]  truncate text-center"> Conectee</div>
-                      </DropdownMenuItem></Link>
-                    <Link to={'/'}>
-                      <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
-                        <div className="h-8 mb-4"></div>
-                        <div className="flex  text-xs font-medium max-w-[70px]  truncate text-center"> CEGRADEE</div>
-                      </DropdownMenuItem></Link>
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+            <div className="flex items-center gap-2">
+              <ModeToggle />
+              {version && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant='outline' size="icon" className="h-8 w-8" >
+                      <Grip className="h-4 w-4" />
+                      <span className="sr-only">Menu de ações rápidas</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" >
+                    <div className="grid gap-3 grid-cols-3">
+                      <Link to={'https://vitrinepatrimonio.eng.ufmg.br/'} target="_blank">
+                        <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
+                          <div className="h-8 mb-4">{(theme == 'dark') ? (<SymbolVPWhite />) : (<SymbolVP />)}</div>
+                          <div className="flex  text-xs font-medium max-w-[70px] truncate  text-center"> Vitrine Patrimônio</div>
+                        </DropdownMenuItem></Link>
+                      <Link to={'https://conectee.eng.ufmg.br/'} target="_blank">
+                        <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
+                          <div className="h-8 mb-4">{(theme == 'dark') ? (<SymbolEEWhite />) : (<SymbolEE />)}</div>
+                          <div className="flex  text-xs font-medium max-w-[70px]  truncate text-center"> Conectee</div>
+                        </DropdownMenuItem></Link>
+                      <Link to={'/'}>
+                        <DropdownMenuItem className="flex flex-col justify-center px-2 py-4 cursor-pointer">
+                          <div className="h-8 mb-4"></div>
+                          <div className="flex  text-xs font-medium max-w-[70px]  truncate text-center"> CEGRADEE</div>
+                        </DropdownMenuItem></Link>
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
           </div>
         </div>
       </header>
