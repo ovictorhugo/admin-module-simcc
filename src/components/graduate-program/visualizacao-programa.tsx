@@ -232,14 +232,15 @@ export function VisualizacaoPrograma() {
     setProvider(providerName);
   }, []);
 
+  const {version} = useContext(UserContext)
 
   return (
     <>
       <Helmet>
-  <title>{graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : 'Conectee | Escola de Engenharia UFMG'}</title>
+  <title>{graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | ${version ? 'Conectee': 'Iapós'}` : `${version ? 'Conectee': 'Iapós'} | ${version ? 'Escola de Engenharia UFMG': 'SENAI CIMATEC'}`}</title>
   <meta
     name="description"
-    content={graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : 'Conectee | Escola de Engenharia UFMG'}
+    content={graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : `${version ? 'Conectee': 'Iapós'} | ${version ? 'Escola de Engenharia UFMG': 'SENAI CIMATEC'}`}
   />
   <meta name="robots" content="index, follow" />
 </Helmet>
@@ -298,18 +299,7 @@ export function VisualizacaoPrograma() {
                       <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
                         Pós-graduação
                       </h1>
-                      <Badge
-                        variant={'outline'}
-                        className="
-                          w-[300px] flex flew-wrap truncate
-                          md:max-w-[500px] md:flex-nowrap
-                          lg:max-w-[500px] lg:flex-nowrap
-                        "
-                      >
-                        {graduatePrograms.map((props) => (
-                          <>{props.name}</>
-                        ))}
-                      </Badge>
+                     
                     </div>
                   </div>
 

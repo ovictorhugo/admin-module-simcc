@@ -352,14 +352,15 @@ console.log(urlLinhasPequisa)
   
     const [count, setCount] = useState(12)
     const {onOpen} = useModal()
-
+    const {version} = useContext(UserContext)
+    
     return(
         <main className="flex flex-1 flex-col gap-4 md:gap-8 ">
            <Helmet>
-  <title>{graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : 'Conectee | Escola de Engenharia UFMG'}</title>
+  <title>{graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | ${version ? 'Conectee': 'Iapós'}` : `${version ? 'Conectee': 'Iapós'} | ${version ? 'Escola de Engenharia UFMG': 'SENAI CIMATEC'}`}</title>
   <meta
     name="description"
-    content={graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : 'Conectee | Escola de Engenharia UFMG'}
+    content={graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : `${version ? 'Conectee': 'Iapós'} | ${version ? 'Escola de Engenharia UFMG': 'SENAI CIMATEC'}`}
   />
   <meta name="robots" content="index, follow" />
 </Helmet>

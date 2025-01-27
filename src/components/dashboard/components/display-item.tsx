@@ -1,4 +1,4 @@
-import {  AreaChart,    Globe,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, Star, User,  Users } from "lucide-react";
+import {  AreaChart,    Globe,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, SquareMenu, Star, User,  Users } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
@@ -21,6 +21,7 @@ import { columnsStudent } from "../../componentsModal/columns-student-program";
 
 import { DocentesGraduate } from "./docentes-graduate";
 import { DiscentesGraduate } from "./discentes-graduate";
+import { Helmet } from "react-helmet";
 
 interface Patrimonio {
   graduate_program_id: string
@@ -43,6 +44,7 @@ interface Patrimonio {
   qtd_permanente:string
   site:string 
   acronym:string 
+  onMenuState:(newResearcher: boolean) => void;
   }
 
   export interface PesquisadorProps {
@@ -144,17 +146,26 @@ export function DisplayItem(props:Patrimonio) {
 
 
 
-
+    const {version} = useContext(UserContext)
     return(
 <Tabs  defaultValue={tab} value={tab}>
+<Helmet>
+  <title>{props.name ? `${props.name} | ${version ? 'Conectee': 'Iapós'}` : `${version ? 'Conectee': 'Iapós'} | ${version ? 'Escola de Engenharia UFMG': 'SENAI CIMATEC'}`}</title>
+  <meta
+    name="description"
+    content={props.name ? `${props.name} | ${version ? 'Conectee': 'Iapós'}` : `${version ? 'Conectee': 'Iapós'} | ${version ? 'Escola de Engenharia UFMG': 'SENAI CIMATEC'}`}
+  />
+  <meta name="robots" content="index, follow" />
+</Helmet>
+
       <div className="flex border dark:border-neutral-800 flex-col sticky top-[68px] z-[3] rounded-lg bg-white dark:bg-black">
       <div className="flex items-center p-2 justify-between">
         <div className="flex items-center gap-2">
        {!props.menu_state && (
          <Tooltip>
          <TooltipTrigger asChild>
-           <Button variant="ghost" size="icon"  onClick={() =>handleVisibleProgram(props.graduate_program_id)} >
-           
+           <Button variant="ghost" size="icon"  onClick={() => props.onMenuState(!props.menu_state)} >
+           <SquareMenu size={16}/>
            </Button>
          </TooltipTrigger>
          <TooltipContent>Mostrar menu</TooltipContent>

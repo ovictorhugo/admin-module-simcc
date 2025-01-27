@@ -1,9 +1,9 @@
-import { useContext,  useState } from "react";
+import { useContext,  useEffect,  useState } from "react";
 import { useModal } from "../../hooks/use-modal-store"
 
 import { UserContext } from "../../../context/context";
 
-import {ChevronLeft,  Plus, Search } from "lucide-react";
+import {ChevronLeft,  Plus, Search, SquareMenu } from "lucide-react";
 
 
   interface PosGraduationsProps {
@@ -37,9 +37,12 @@ import { Input } from "../../ui/input";
 import { DisplayItem } from "../components/display-item";
 import { ItensList } from "../components/itens-list-vitrine";
 import { Button } from "../../ui/button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
   
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+}
 
 
 export function PosGraducaoView() {
@@ -54,17 +57,23 @@ const isModalOpen = isOpen && type === "graduate-program";
   
     const { onOpen } = useModal();
 
-
-
+    const queryUrl = useQuery();
+    const type_search = queryUrl.get('graduate_program_id');
+let programSelecionado = type_search || ''
 
       const [tab, setTab] = useState('all')
       const [search, setSearch] = useState('')
     const [menu, setMenu] = useState(true)
+    
       const [total, setTotal] = useState<PosGraduationsProps | null>(null);
-
+      const [programas, setProgramas] = useState<PosGraduationsProps[]>([]);
       // Função para lidar com a atualização de researcherData
       const handleResearcherUpdate = (newResearcherData: PosGraduationsProps) => {
           setTotal(newResearcherData);
+        };
+
+        const handleOnMenuState= (newResearcherData: boolean) => {
+          setMenu(newResearcherData);
         };
 
         const history = useNavigate();
@@ -73,7 +82,44 @@ const isModalOpen = isOpen && type === "graduate-program";
       history(-1);
     }
 
+ let urlPatrimonioInsert = `${urlGeralAdm}GraduateProgramRest/Query?institution_id=${user?.institution_id}`
+  
+ useEffect(() => {
+ const fetchData = async () => {
+
+      try {
+          
+        const response = await fetch(urlPatrimonioInsert , {
+          mode: "cors",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Max-Age": "3600",
+            "Content-Type": "text/plain",
+          },
+        });
+        const data = await response.json();
+        if (data) if (data) {
+          setProgramas(data);
+    
+          // Verifica se o programSelecionado não está vazio
+          if (programSelecionado !== '') {
+            const selectedProgram = data.find(
+              (program: PosGraduationsProps) => program.graduate_program_id === programSelecionado
+            );
+            setTotal(selectedProgram || null); // Define o total ou null se não encontrar
+          }
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [programSelecionado]);
     const {version} = useContext(UserContext)
+    
     return(
       <>
        <Helmet>
@@ -99,11 +145,13 @@ const isModalOpen = isOpen && type === "graduate-program";
             </Button>
             <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">Pós-graduação</h1>
           </div>
-           
-          <Button onClick={() => setMenu(!menu) } variant="outline" size="icon" className="h-7 w-7">
-              <ChevronLeft className="h-4 w-4" />
-          
-            </Button>
+         {total && (
+            
+            <Button onClick={() => setMenu(!menu) } variant="outline" size="icon" className="h-7 w-7">
+            <SquareMenu className="h-4 w-4" />
+        
+          </Button>
+         )}
           </div>
 
           <div className="bg-background/95 pt-8 pb-8 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -158,6 +206,7 @@ const isModalOpen = isOpen && type === "graduate-program";
       site={total.site}
       acronym={total.acronym}
       menu_state={menu}
+      onMenuState={handleOnMenuState}
       />
       </div>
     ):(

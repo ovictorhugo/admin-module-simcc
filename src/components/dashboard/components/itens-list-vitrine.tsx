@@ -40,9 +40,20 @@ interface Patrimonio {
 import { Button } from "../../ui/button"
 import { Skeleton } from "../../ui/skeleton"
 import { useModal } from "../../hooks/use-modal-store"
+import { useLocation, useNavigate } from "react-router-dom"
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+}
+
 
 export function ItensList(props:Props) {
     const [total, setTotal] = useState<Patrimonio[]>([]);
+
+    const queryUrl = useQuery();
+    const navigate = useNavigate();
+ const type_search = queryUrl.get('graduate_program_id');
+
+    
     const [selectedResearcher, setSelectedResearcher] = useState<Patrimonio | null>(null);
     // Atualize essa função para chamar a propriedade `onResearcherUpdate`
     const updateResearcher = (newResearcher: Patrimonio) => {
@@ -50,6 +61,13 @@ export function ItensList(props:Props) {
           props.onResearcherUpdate(newResearcher);
           setSelectedResearcher(newResearcher);
         }
+
+
+        queryUrl.set('graduate_program_id', newResearcher.graduate_program_id);
+        navigate({
+          pathname: '/dashboard/programas',
+          search: queryUrl.toString(),
+        });
 
         
       };
@@ -150,7 +168,7 @@ export function ItensList(props:Props) {
             <button
        
             className={cn(
-              `flex ${item.graduate_program_id === selectedResearcher?.graduate_program_id ? 'bg-neutral-100 dark:bg-neutral-700': 'bg-white dark:bg-neutral-800' } flex-col rounded-lg w-full rounded-l-none  dark:border-neutral-700 items-start gap-2  border p-3 text-left text-sm transition-all hover:bg-accent`,
+              `flex ${item.graduate_program_id ===( selectedResearcher?.graduate_program_id || type_search )? 'bg-neutral-100 dark:bg-neutral-700': 'bg-white dark:bg-neutral-800' } flex-col rounded-lg w-full rounded-l-none  dark:border-neutral-700 items-start gap-2  border p-3 text-left text-sm transition-all hover:bg-accent`,
             
             )}
            

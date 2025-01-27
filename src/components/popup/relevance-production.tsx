@@ -229,12 +229,16 @@ export function RelevanceProduction(props:Props) {
 
     return(
         <div className="w-full">
-             <Carousel className="">
+             <Carousel className="flex items-center justify-center">
+             <div className="flex justify-between absolute z-[3] w-full">
+     <CarouselPrevious />
+     <CarouselNext />
+     </div>
       <CarouselContent className="-ml-1">
       {publicacoes
   .filter((props) => props.relevance === true)
   .map((props, index) => (
-    <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3">
+    <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/4">
        <ArticleItem
             id={props.id}
                     doi={props.doi}
@@ -287,8 +291,7 @@ export function RelevanceProduction(props:Props) {
   ))}
 
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+    
     </Carousel>
         </div>
     )

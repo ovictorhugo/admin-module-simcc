@@ -1239,7 +1239,7 @@ A plataforma gerencia publicações extraídas do currículo Lattes, associando 
                         classe={user.classe}
                         rt={user.rt}
                         situacao={user.situacao}
-  
+                        data_atualizacao_lattes={String(user.lattes_update)}
                         research_groups={user.research_groups}
                         
                         />

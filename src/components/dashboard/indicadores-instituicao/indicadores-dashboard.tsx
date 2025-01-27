@@ -38,6 +38,7 @@ interface TotalPatrimonios {
   count_d:string 
   count_gps:string 
   count_t:string
+  name:string
   }
 
   interface Bolsistas {
@@ -649,13 +650,13 @@ return csv;
           <div>
             <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
               <div className="flex flex-wrap gap-4 ">
-              <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><Hash size={12} />{user?.institution_id}</div>
+              <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><Hash size={12} />{total.map((props) => props.institution_id)}</div>
                 
               </div>
             </p>
 
             <h1 className="text-2xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
-            nome da 
+            {total.map((props) => props.name)}
             </h1>
           </div>
         </div>
