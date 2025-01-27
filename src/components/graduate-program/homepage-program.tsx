@@ -651,7 +651,7 @@ export function HomepageProgram(props: Props) {
         <div className="flex flex-col items-start md:flex-row gap-6 -mt-4">
           <Avatar className="cursor-pointer rounded-lg  h-24 w-24">
             <AvatarImage className={'rounded-md h-24 w-24'} src={``} />
-            <AvatarFallback className="flex items-center justify-center"><GraduationCap size={24}/></AvatarFallback>
+            <AvatarFallback className="flex items-center justify-center"><GraduationCap size={24} /></AvatarFallback>
           </Avatar>
 
           <div>
@@ -684,7 +684,7 @@ export function HomepageProgram(props: Props) {
           </CardHeader>
         </Alert>
 
-        <div className="lg:col-span-2 mt-5">
+        <div className="lg:col-span-2 mt-5 bg-red">
           <div>
             <div className=" pb-4">
               <HeaderResultTypeHome title="Artigos mais recentes" icon={<Quotes size={24} className="text-gray-400" />}>

@@ -22,31 +22,31 @@ export function HeaderResult() {
   const searchFilesByTermPrefix = async (prefix: string) => {
     try {
       const search = searchType?.toUpperCase() || 'ARTICLE';
-  
+
       const filesRef = collection(db, 'termos_busca');
       const q = query(
         filesRef,
         where('term_normalize', '>=', prefix),
         where('term_normalize', '<=', prefix + '\uf8ff')
       );
-  
+
       const querySnapshot = await getDocs(q);
       if (querySnapshot.empty) {
         console.warn('No matching documents.');
         return [];
       }
-  
+
       const files = querySnapshot.docs.map((doc) => doc.data() as Csv);
-  
+
       const mappedFiles = files.filter((file) => file.type_ === search);
-  
+
       return mappedFiles;
     } catch (error) {
       console.error('Erro ao buscar arquivos:', error);
       return [];
     }
   };
-  
+
   const normalizeInput = (value: string): string => {
     value = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     value = value.toLowerCase();
@@ -56,89 +56,83 @@ export function HeaderResult() {
   };
 
   const [type, setType] = useState('')
-  
+
   useEffect(() => {
     switch (searchType) {
-        case 'article':
-          return  setType('ARTICLE')
-        case 'abstract':
-          return setType('ABSTRACT')
-        case 'patent':
-          return setType('PATENT')
-        case 'book':
-          return setType('BOOK') 
-        case 'speaker':
-          return setType('SPEAKER')
-        case 'area':
-          return setType('AREA')
-        case 'name':
-          return setType('NAME')
-       
+      case 'article':
+        return setType('ARTICLE')
+      case 'abstract':
+        return setType('ABSTRACT')
+      case 'patent':
+        return setType('PATENT')
+      case 'book':
+        return setType('BOOK')
+      case 'speaker':
+        return setType('SPEAKER')
+      case 'area':
+        return setType('AREA')
+      case 'name':
+        return setType('NAME')
+
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchFilteredItems = async () => {
+      setFilteredItems([])
+      let allResults: Csv[] = [];
+
+      for (const item of itemsSelecionados) {
+        const normalizedValue = normalizeInput(item.term);
+        const prefix = normalizedValue.slice(0, 3);
+        console.log(prefix)
+        const results = await searchFilesByTermPrefix(prefix);
+        allResults = [...allResults, ...results.slice(0, 6)];
       }
-    }, []);  
-    
-    useEffect(() => {
-        const fetchFilteredItems = async () => {
-            setFilteredItems([])
-          let allResults: Csv[] = [];
-      
-          for (const item of itemsSelecionados) {
-            const normalizedValue = normalizeInput(item.term);
-            const prefix = normalizedValue.slice(0, 3);
-                console.log(prefix)
-            const results = await searchFilesByTermPrefix(prefix);
-            allResults = [...allResults, ...results.slice(0, 6)];
-          }
-      
-          // Filtra os itens selecionados
-          const filtered = allResults
-            .filter((result) => !itemsSelecionados.some((item) => normalizeInput(item.term) === result.term_normalize))
-             // Limitar a 5 resultados
-      
-          setFilteredItems(filtered);
-        };
-      
-        fetchFilteredItems();
-      }, [itemsSelecionados, searchType]);
-    
 
+      // Filtra os itens selecionados
+      const filtered = allResults
+        .filter((result) => !itemsSelecionados.some((item) => normalizeInput(item.term) === result.term_normalize))
+      // Limitar a 5 resultados
 
-console.log('f',filteredItems)
+      setFilteredItems(filtered);
+    };
 
-console.log(searchType)
+    fetchFilteredItems();
+  }, [itemsSelecionados, searchType]);
 
   return (
     <div>
-    {filteredItems.length > 0 && (
-      <div className='grid grid-cols-1 mt-8'>
-        <ScrollArea>
-          <div className="flex items-center justify-between">
-            <div className="flex gap-3 items-center">
-              <div>
-                <div className="flex gap-3 items-center">
-                  <p className="text-sm font-medium">Sugestões:</p>
-                  {filteredItems.map((props, index) => (
-                    <div
-                      key={index}
-                      onClick={() => {
-                        // Adiciona o item selecionado à lista existente
-                        setItensSelecionados( [
-                          { term: props.term },
-                        ]);
-                      }}
-                      className="flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs"
-                    >
-                      {props.term}
-                    </div>
-                  ))}
+      {filteredItems.length > 0 && (
+        <div className='grid grid-cols-1 mt-8'>
+          <ScrollArea>
+            <div className="flex items-center justify-between">
+              <div className="flex gap-3 items-center">
+                <div>
+                  <div className="flex gap-3 items-center">
+                    <p className="text-sm font-medium">Sugestões:</p>
+                    {filteredItems.map((props, index) => (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          // Adiciona o item selecionado à lista existente
+                          setItensSelecionados([
+                            { term: props.term },
+                          ]);
+                        }}
+                        className="flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs"
+                      >
+                        {props.term}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <ScrollBar className='pb-4' orientation='horizontal'/>
-        </ScrollArea>
-      </div>
-    )}
-  </div>
+            <ScrollBar className='pb-4' orientation='horizontal' />
+          </ScrollArea>
+        </div>
+      )}
+    </div>
   );
 }

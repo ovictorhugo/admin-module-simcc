@@ -11,10 +11,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { Skeleton } from "../../ui/skeleton";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
-import { useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Alert } from "../../ui/alert";
-import { CardContent,  CardHeader, CardTitle } from "../../ui/card";
-import { Hash,  MapIcon,  Sparkles, Trash, User, X } from "lucide-react";
+import { CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { Hash, MapIcon, Sparkles, Trash, User, X } from "lucide-react";
 import bg_popup from '../../../assets/bg_popup.png';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../../ui/dialog";
 import { useModal } from "../../hooks/use-modal-store";
@@ -70,48 +70,48 @@ type Research = {
   i10_index: string,
   scopus: string,
   openalex: string,
-  subsidy:Bolsistas[]
-  graduate_programs:GraduatePrograms[]
+  subsidy: Bolsistas[]
+  graduate_programs: GraduatePrograms[]
 }
 
 interface Bolsistas {
-  aid_quantity:string
-  call_title:string
-  funding_program_name:string
-  modality_code:string
-  category_level_code:string
-  institute_name:string
-  modality_name:string
-  scholarship_quantity:string
-  }
+  aid_quantity: string
+  call_title: string
+  funding_program_name: string
+  modality_code: string
+  category_level_code: string
+  institute_name: string
+  modality_name: string
+  scholarship_quantity: string
+}
 
-  interface  GraduatePrograms {
-    graduate_program_id:string
-    name:string
-  }
+interface GraduatePrograms {
+  graduate_program_id: string
+  name: string
+}
 
-  
+
 
 interface ResearchOpenAlex {
-  display_name:string
+  display_name: string
   id: string
-  orcid:string
-  works_count:string
-  works_api_url:string
-  relevance_score:string
-  cited_by_count:string
-  summary_stats:SummaryStats
-  ids:Ids
+  orcid: string
+  works_count: string
+  works_api_url: string
+  relevance_score: string
+  cited_by_count: string
+  summary_stats: SummaryStats
+  ids: Ids
 }
 
 interface SummaryStats {
 
-  h_index:string
-  i10_index:string
+  h_index: string
+  i10_index: string
 }
 
 interface Ids {
-  scopus:string
+  scopus: string
 }
 
 const useQuery = () => {
@@ -134,7 +134,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   const [selectedSubsidies, setSelectedSubsidies] = useState<string[]>([]);
   const [filteredCount, setFilteredCount] = useState<number>(0);
 
-  const {simcc} = useContext(UserContext)
+  const { simcc } = useContext(UserContext)
   useEffect(() => {
     // Calculate filtered results count
     let filtered = [...researcher];
@@ -218,14 +218,14 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   const uniqueUniversities = Array.from(new Set(researcher.map((res) => res.university))).filter(Boolean);
   const uniqueSubsidies = Array.from(
     new Set(
-      researcher.flatMap((res) => 
+      researcher.flatMap((res) =>
         Array.isArray(res.subsidy) ? res.subsidy.map((sub) => sub.modality_name) : []
       )
     )
   ).filter(Boolean);
 
   useEffect(() => {
-    if(researcher.length == 0) {
+    if (researcher.length == 0) {
       setSelectedAreas([]);
       setSelectedGraduations([]);
       setSelectedCities([]);
@@ -236,174 +236,174 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
 
   return (
     <Sheet open={isModalOpen} onOpenChange={onClose}>
-       <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[60vw]`}>
-      <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-gray-600">
- 
- <div className="flex items-center gap-3">
+      <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[60vw]`}>
+        <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-gray-600">
+
+          <div className="flex items-center gap-3">
 
 
 
- <TooltipProvider>
-<Tooltip>
-  <TooltipTrigger asChild>
-  <Button className="h-8 w-8" variant={'outline'}  onClick={() => {
-    onClose()
-  }} size={'icon'}><X size={16}/></Button>
-  </TooltipTrigger>
-  <TooltipContent> Fechar</TooltipContent>
-</Tooltip>
-</TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button className="h-8 w-8" variant={'outline'} onClick={() => {
+                    onClose()
+                  }} size={'icon'}><X size={16} /></Button>
+                </TooltipTrigger>
+                <TooltipContent> Fechar</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
 
 
- </div>
-  
- </DialogHeader>
-
- <div className="relative flex">
-
- <div className="p-8 pr-0">
- <div className="h-full w-[270px] rounded-md bg-eng-blue p-8"></div>
- 
- </div>
-         <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
-         <div>
-                      <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
-                      Pesquisadores
-                        </p>
-
-                        <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] mb-8 md:block">
-                        Filtros de pesquisa
-                        </h1>
-                      </div>
-
-
-
-                      <div className="space-y-6">
-          {/* Área de especialidade */}
-          <div>
-            <div className="pb-2">
-              <Label>Área de especialidade</Label>
-            </div>
-            <ToggleGroup
-              type="multiple"
-              variant={'outline'}
-              value={selectedAreas}
-              onValueChange={handleAreaToggle}
-              className="aspect-auto flex flex-wrap items-start justify-start gap-2"
-            >
-              {uniqueAreas.map((area) => (
-                <ToggleGroupItem key={area} value={area} className="px-3 py-2">
-                  {area}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
           </div>
 
-          {/* Titulação */}
-          <div>
-            <div className="pb-2">
-              <Label>Titulação</Label>
-            </div>
-            <ToggleGroup
-              type="multiple"
-              variant={'outline'}
-              value={selectedGraduations}
-              onValueChange={handleGraduationToggle}
-              className="aspect-auto flex flex-wrap items-start justify-start gap-2"
-            >
-              {uniqueGraduations.map((graduation) => (
-                <ToggleGroupItem key={graduation} value={graduation} className="px-3 py-2">
-                  {graduation}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
-          </div>
+        </DialogHeader>
 
-          {/* Cidade */}
-        {simcc && (
+        <div className="relative flex">
+
+          <div className="p-8 pr-0">
+            <div className="h-full w-[270px] rounded-md bg-eng-blue p-8"></div>
+
+          </div>
+          <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
             <div>
-            <div className="pb-2">
-              <Label>Cidade</Label>
-            </div>
-            <ToggleGroup
-              type="multiple"
-              variant={'outline'}
-              value={selectedCities}
-              onValueChange={handleCityToggle}
-              className="aspect-auto flex flex-wrap items-start justify-start gap-2"
-            >
-              {uniqueCities.map((city) => (
-                <ToggleGroupItem key={city} value={city} className="px-3 py-2">
-                  {city}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
-          </div>
-        )}
+              <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
+                Pesquisadores
+              </p>
 
-          {/* Universidade */}
-         {simcc && (
-           <div>
-           <div className="pb-2">
-             <Label>Universidade</Label>
-           </div>
-           <ToggleGroup
-             type="multiple"
-             variant={'outline'}
-             value={selectedUniversities}
-             onValueChange={handleUniversityToggle}
-             className="aspect-auto flex flex-wrap items-start justify-start gap-2"
-           >
-             {uniqueUniversities.map((university) => (
-               <ToggleGroupItem key={university} value={university} className="px-3 py-2">
-                 {university}
-               </ToggleGroupItem>
-             ))}
-           </ToggleGroup>
-         </div>
-         )}
-
-          {/* Tipo de Subsídio */}
-          <div>
-            <div className="pb-2">
-              <Label>Tipo de Subsídio</Label>
+              <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] mb-8 md:block">
+                Filtros de pesquisa
+              </h1>
             </div>
-            <ToggleGroup
-              type="multiple"
-              variant={'outline'}
-              value={selectedSubsidies}
-              onValueChange={handleSubsidyToggle}
-              className="aspect-auto flex flex-wrap items-start justify-start gap-2"
-            >
-              {uniqueSubsidies.map((subsidy) => (
-                <ToggleGroupItem key={subsidy} value={subsidy} className="px-3 py-2">
-                  {subsidy === 'pq' ? 'Produtividade em Pesquisa' : subsidy === 'dt' ? 'Desenvolvimento Tecnológico' : subsidy}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
-          </div>
+
+
+
+            <div className="space-y-6">
+              {/* Área de especialidade */}
+              <div>
+                <div className="pb-2">
+                  <Label>Área de especialidade</Label>
+                </div>
+                <ToggleGroup
+                  type="multiple"
+                  variant={'outline'}
+                  value={selectedAreas}
+                  onValueChange={handleAreaToggle}
+                  className="aspect-auto flex flex-wrap items-start justify-start gap-2"
+                >
+                  {uniqueAreas.map((area) => (
+                    <ToggleGroupItem key={area} value={area} className="px-3 py-2">
+                      {area}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </div>
+
+              {/* Titulação */}
+              <div>
+                <div className="pb-2">
+                  <Label>Titulação</Label>
+                </div>
+                <ToggleGroup
+                  type="multiple"
+                  variant={'outline'}
+                  value={selectedGraduations}
+                  onValueChange={handleGraduationToggle}
+                  className="aspect-auto flex flex-wrap items-start justify-start gap-2"
+                >
+                  {uniqueGraduations.map((graduation) => (
+                    <ToggleGroupItem key={graduation} value={graduation} className="px-3 py-2">
+                      {graduation}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </div>
+
+              {/* Cidade */}
+              {simcc && (
+                <div>
+                  <div className="pb-2">
+                    <Label>Cidade</Label>
+                  </div>
+                  <ToggleGroup
+                    type="multiple"
+                    variant={'outline'}
+                    value={selectedCities}
+                    onValueChange={handleCityToggle}
+                    className="aspect-auto flex flex-wrap items-start justify-start gap-2"
+                  >
+                    {uniqueCities.map((city) => (
+                      <ToggleGroupItem key={city} value={city} className="px-3 py-2">
+                        {city}
+                      </ToggleGroupItem>
+                    ))}
+                  </ToggleGroup>
+                </div>
+              )}
+
+              {/* Universidade */}
+              {simcc && (
+                <div>
+                  <div className="pb-2">
+                    <Label>Universidade</Label>
+                  </div>
+                  <ToggleGroup
+                    type="multiple"
+                    variant={'outline'}
+                    value={selectedUniversities}
+                    onValueChange={handleUniversityToggle}
+                    className="aspect-auto flex flex-wrap items-start justify-start gap-2"
+                  >
+                    {uniqueUniversities.map((university) => (
+                      <ToggleGroupItem key={university} value={university} className="px-3 py-2">
+                        {university}
+                      </ToggleGroupItem>
+                    ))}
+                  </ToggleGroup>
+                </div>
+              )}
+
+              {/* Tipo de Subsídio */}
+              <div>
+                <div className="pb-2">
+                  <Label>Tipo de Subsídio</Label>
+                </div>
+                <ToggleGroup
+                  type="multiple"
+                  variant={'outline'}
+                  value={selectedSubsidies}
+                  onValueChange={handleSubsidyToggle}
+                  className="aspect-auto flex flex-wrap items-start justify-start gap-2"
+                >
+                  {uniqueSubsidies.map((subsidy) => (
+                    <ToggleGroupItem key={subsidy} value={subsidy} className="px-3 py-2">
+                      {subsidy === 'pq' ? 'Produtividade em Pesquisa' : subsidy === 'dt' ? 'Desenvolvimento Tecnológico' : subsidy}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </div>
+            </div>
+
+            <DialogFooter className="py-4">
+              <Button variant="ghost" onClick={clearFilters} className="gap-2">
+                <Trash size={16} />
+                Limpar Filtros
+              </Button>
+
+              <Button onClick={applyFilters} className="gap-2">
+                <FadersHorizontal size={16} />
+                Mostrar {filteredCount} resultados
+              </Button>
+            </DialogFooter>
+          </ScrollArea>
         </div>
 
-        <DialogFooter className="py-4">
-          <Button variant="ghost" onClick={clearFilters} className="gap-2">
-            <Trash size={16} />
-            Limpar Filtros
-          </Button>
 
-          <Button onClick={applyFilters} className="gap-2">
-            <FadersHorizontal size={16} />
-            Mostrar {filteredCount} resultados
-          </Button>
-        </DialogFooter>
-         </ScrollArea>
-  </div>
-        
-   
 
-       
 
-     
+
+
       </SheetContent>
     </Sheet>
   );
@@ -417,7 +417,7 @@ export function ResearchersHome() {
   const [originalResearcher, setOriginalResearcher] = useState<Research[]>([]);
   const [cityData, setCityData] = useState<CityData[]>([]);
   const [typeVisu, setTypeVisu] = useState('block');
-  const { itemsSelecionados,  urlGeral, searchType, simcc } = useContext(UserContext);
+  const { itemsSelecionados, urlGeral, searchType, simcc } = useContext(UserContext);
   const { version, pesquisadoresSelecionados, idGraduateProgram } = useContext(UserContext);
 
   useEffect(() => {
@@ -438,24 +438,24 @@ export function ResearchersHome() {
   if (searchType === 'name') {
     urlTermPesquisadores = `${urlGeral}researcherName?name=${terms?.replace(/[;|()]/g, '')}`;
   } else if (searchType === 'article') {
-    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ARTICLE&graduate_program_id=${idGraduateProgram == '0' ? (''):(idGraduateProgram)}`;
+    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ARTICLE&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}`;
   } else if (searchType === 'book') {
-    urlTermPesquisadores = `${urlGeral}researcherBook?term=${terms}&university=&type=BOOK&graduate_program_id=${idGraduateProgram == '0' ? (''):(idGraduateProgram)}`; //
+    urlTermPesquisadores = `${urlGeral}researcherBook?term=${terms}&university=&type=BOOK&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}`; //
   } else if (searchType === 'area') {
-    urlTermPesquisadores = `${urlGeral}researcherArea_specialty?area_specialty=${terms}&university=&graduate_program_id=${idGraduateProgram == '0' ? (''):(idGraduateProgram)}`;
+    urlTermPesquisadores = `${urlGeral}researcherArea_specialty?area_specialty=${terms}&university=&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}`;
   } else if (searchType === 'speaker') {
-    urlTermPesquisadores = `${urlGeral}researcherParticipationEvent?term=${terms}&university=&graduate_program_id=${idGraduateProgram == '0' ? (''):(idGraduateProgram)}`; //
+    urlTermPesquisadores = `${urlGeral}researcherParticipationEvent?term=${terms}&university=&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}`; //
   } else if (searchType === 'patent') {
-    urlTermPesquisadores = `${urlGeral}researcherPatent?term=${terms}&graduate_program_id=${idGraduateProgram == '0' ? (''):(idGraduateProgram)}&university=`;
+    urlTermPesquisadores = `${urlGeral}researcherPatent?term=${terms}&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&university=`;
   } else if (searchType === 'abstract') {
-    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ABSTRACT&graduate_program_id=${idGraduateProgram == '0' ? (''):(idGraduateProgram)}`;
+    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ABSTRACT&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}`;
   }
 
   console.log(urlTermPesquisadores);
 
-  const urlOpenAlex =`https://api.openalex.org/authors?filter=display_name.search:${terms?.replace(/[()|;]/g, "")}`;
-  const [researcherOpenAlex , setResearcherOpenAlex] = useState<ResearchOpenAlex[]>([])
-const [isOpenAlex, setIsOpenAlex] = useState(false)
+  const urlOpenAlex = `https://api.openalex.org/authors?filter=display_name.search:${terms?.replace(/[()|;]/g, "")}`;
+  const [researcherOpenAlex, setResearcherOpenAlex] = useState<ResearchOpenAlex[]>([])
+  const [isOpenAlex, setIsOpenAlex] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -477,7 +477,7 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
           setOriginalResearcher(data);
           setLoading(false);
 
-         
+
         }
 
         // Check OpenAlex data only if no researchers found and OpenAlex is enabled
@@ -508,22 +508,22 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
   useEffect(() => {
     const processCityData = () => {
       const cityMap = new Map<string, CityData>();
-      
+
       // Cria um mapa para associar o nome normalizado da cidade aos dados do município
       const municipioMap = new Map(
         municipios.map((m) => [normalizeCityName(m.nome), m])
       );
-  
+
       researcher.forEach((r) => {
         if (r.city) {
           const normalizedCity = normalizeCityName(r.city);
           const municipio = municipioMap.get(normalizedCity);
-  
+
           if (!municipio) {
             console.warn(`Município não encontrado para a cidade: ${r.city}`);
             return;
           }
-  
+
           if (!cityMap.has(normalizedCity)) {
             cityMap.set(normalizedCity, {
               nome: r.city,
@@ -540,108 +540,103 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
           }
         }
       });
-  
+
       setCityData(Array.from(cityMap.values()));
     };
-  
+
     processCityData();
 
-    console.log('cidades',cityData)
+    console.log('cidades', cityData)
   }, [researcher]);
 
   const items = Array.from({ length: 12 }, (_, index) => (
     <Skeleton key={index} className="w-full rounded-md h-[300px]" />
   ));
-
   const totalAmong = researcher.reduce((sum, researcher) => sum + researcher.among, 0);
 
-  const {theme} = useTheme()
+  const { theme } = useTheme()
 
   //mapa
   const normalizeCityName = (cityName: string) => {
     return cityName
-        .normalize("NFD") // Remove acentos
-        .replace(/[\u0300-\u036f]/g, "") // Remove diacríticos
-        .toLowerCase(); // Converte para minúsculas
-};
-
+      .normalize("NFD") // Remove acentos
+      .replace(/[\u0300-\u036f]/g, "") // Remove diacríticos
+      .toLowerCase(); // Converte para minúsculas
+  };
 
   return (
-    <div className="grid grid-cols-1">
+    <div className="w-full">
       <div className="w-full flex gap-6 mb-8 justify-center">
         <div className="flex-1 flex flex-col">
-          <div className="">
-            <HeaderResult/>
+          <div className="w-full">
+            <HeaderResult />
           </div>
-          {(!isOpenAlex && FinalOpenAlex != 'true' ) && (
+          {(!isOpenAlex && FinalOpenAlex != 'true') && (
             <div className="grid gap-4 md:mt-8 mt-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
               {(searchType != 'abstract' && searchType != 'name' && searchType != 'area') && (
-                <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3"  style={{ backgroundImage: `url(${bg_popup})` }}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Total de ocorrências
-                  </CardTitle>
-                  <Hash className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{totalAmong}</div>
-                  <div className="flex items-center gap-3">
-                    <p className="text-xs text-muted-foreground">
-                      pela pesquisa
-                    </p>
-        
-                    <div className="flex gap-2">
-                      {itemsSelecionados.map((valor, index) => {
-                        return (
-                          <div key={index} className="flex gap-2">
-                            <div className={`flex gap-2 items-center w-fit p-2 px-3 capitalize rounded-md text-xs ${searchType == 'article' && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract' && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker' && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book' && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent' && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name' && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area' && ('bg-green-500 dark:bg-green-500')} ${searchType == '' && ('bg-blue-700 dark:bg-blue-700')} text-white border-0`}>
-                              {valor.term.replace(/[|;]/g, '')}
-                            </div>
-                            {index < itemsSelecionados.length - 1 && (
-                              <div className="rounded-full flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100 dark:bg-neutral-800 transition-all text-xs outline-none">
-                                {itemsSelecionados[index].term.endsWith(';') ? "e" : "ou"}
+                <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3" style={{ backgroundImage: `url(${bg_popup})` }}>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Total de ocorrências
+                    </CardTitle>
+                    <Hash className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{totalAmong}</div>
+                    <div className="flex items-center gap-3">
+                      <p className="text-xs text-muted-foreground">
+                        pela pesquisa
+                      </p>
+
+                      <div className="flex gap-2">
+                        {itemsSelecionados.map((valor, index) => {
+                          return (
+                            <div key={index} className="flex gap-2">
+                              <div className={`flex gap-2 items-center w-fit p-2 px-3 capitalize rounded-md text-xs ${searchType == 'article' && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract' && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker' && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book' && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent' && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name' && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area' && ('bg-green-500 dark:bg-green-500')} ${searchType == '' && ('bg-blue-700 dark:bg-blue-700')} text-white border-0`}>
+                                {valor.term.replace(/[|;]/g, '')}
                               </div>
-                            )}
-                          </div>
-                        );
-                      })}
+                              {index < itemsSelecionados.length - 1 && (
+                                <div className="rounded-full flex items-center justify-center whitespace-nowrap h-8 w-8 bg-neutral-100 dark:bg-neutral-800 transition-all text-xs outline-none">
+                                  {itemsSelecionados[index].term.endsWith(';') ? "e" : "ou"}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
+                  </CardContent>
                 </Alert>
               )}
-  
-                          <Alert className={`p-0 bg-cover bg-no-repeat bg-center ${(searchType == 'abstract' || searchType == 'name' || searchType == 'area') && ('col-span-4')}`}  >
-                          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">
-                              Total de pesquisadores
-                            </CardTitle>
-                            <User className="h-4 w-4 text-muted-foreground" />
-                          </CardHeader>
-                          <CardContent>
-                            <div className="text-2xl font-bold">{researcher.length}</div>
-                            <p className="text-xs text-muted-foreground">
-                              encontrados na busca
-                            </p>
-                          </CardContent>
-                          </Alert>
-  
-                     
-  
-            </div>
-          )} 
 
-          <MariaHome/>
+              <Alert className={`p-0 bg-cover bg-no-repeat bg-center ${(searchType == 'abstract' || searchType == 'name' || searchType == 'area') && ('col-span-4')}`}  >
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Total de pesquisadores
+                  </CardTitle>
+                  <User className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{researcher.length}</div>
+                  <p className="text-xs text-muted-foreground">
+                    encontrados na busca
+                  </p>
+                </CardContent>
+              </Alert>
+            </div>
+          )}
+
+          <MariaHome />
 
           {searchType !== 'abstract' && searchType !== 'name' && searchType !== 'area' && (
-            <Accordion defaultValue="item-1" type="single" collapsible>
+            <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex md:mb-2">
               <AccordionItem value="item-1">
-              <div className="flex mb-2">
-              <HeaderResultTypeHome title="Pesquisadores mais relevantes por ordem de ocorrências" icon={<ListNumbers size={24} className="text-gray-400" />}>
+                <div className="flex mb-2">
+                  <HeaderResultTypeHome title="Pesquisadores mais relevantes por ordem de ocorrências" icon={<ListNumbers size={24} className="text-gray-400" />}>
                   </HeaderResultTypeHome>
-                <AccordionTrigger>
-  
-                </AccordionTrigger>
+                  <AccordionTrigger>
+
+                  </AccordionTrigger>
                 </div>
                 <AccordionContent>
                   {loading ? (
@@ -652,148 +647,148 @@ const [isOpenAlex, setIsOpenAlex] = useState(false)
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-          )} 
+          )}
 
           {(simcc && searchType != 'name') && (
-            <Accordion defaultValue="item-1"  type="single" collapsible >
-            <AccordionItem value="item-1" >
-            <div className="flex mb-2">
-            <HeaderResultTypeHome title="Pesquisadores no mapa" icon={<MapIcon size={24} className="text-gray-400" />}>
-            </HeaderResultTypeHome>
+            <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex md:mb-2">
+              <AccordionItem value="item-1" className="w-full">
+                <div className="flex mb-2">
+                  <HeaderResultTypeHome title="Pesquisadores no mapa" icon={<MapIcon size={24} className="text-gray-400" />}>
+                  </HeaderResultTypeHome>
 
-            <AccordionTrigger>
-  
-            </AccordionTrigger>
-            </div>
-                <AccordionContent >
-                {loading ? (
-                  <Skeleton className="w-full rounded-md h-[300px]"/>
-                ):( 
-                <div>
-                   <MapaResearcher
-                   cityData={cityData}
-                   />
+                  <AccordionTrigger>
+
+                  </AccordionTrigger>
                 </div>
-                )}
+                <AccordionContent>
+                  {loading ? (
+                    <Skeleton className="rounded-md h-[300px]" />
+                  ) : (
+                    <div>
+                      <MapaResearcher
+                        cityData={cityData}
+                      />
+                    </div>
+                  )}
                 </AccordionContent>
-            </AccordionItem>
+              </AccordionItem>
             </Accordion>
-          )} 
+          )}
 
-          {(!isOpenAlex && FinalOpenAlex != 'true' )&& (
+          {(!isOpenAlex && FinalOpenAlex != 'true') && (
             <div>
-            <Accordion defaultValue="item-1" type="single" collapsible>
-              <AccordionItem value="item-1">
-              <div className="flex mb-2">
-              <HeaderResultTypeHome title="Pesquisadores por detalhamento" icon={<UserList size={24} className="text-gray-400" />}>
-                <div className="flex gap-3 mr-3">
-                <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
-                  <Rows size={16} className="whitespace-nowrap" />
-                </Button>
-                <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'}  size={'icon'}>
-                  <SquaresFour size={16} className="whitespace-nowrap" />
-                </Button>
-                </div>
-              </HeaderResultTypeHome>
-              <AccordionTrigger>
-  
-              </AccordionTrigger>
-              </div>
-              <AccordionContent>
-                {typeVisu === 'block' ? (
-                  loading ? (
-                    <ResponsiveMasonry
-                      columnsCountBreakPoints={{
-                        350: 2,
-                        750: 3,
-                        900: 4,
-                        1200:  6,
-                        1500: 6,
-                        1700: 7
-                      }}
-                    >
-                      <Masonry gutter="16px">
-                        {items.map((item, index) => (
-                          <div key={index}>{item}</div>
-                        ))}
-                      </Masonry>
-                    </ResponsiveMasonry>
-                  ) : (
-                    <ResearchersBloco researcher={researcher} />
-                  )
-                ) : (
-                  loading ? (
-                    <Skeleton className="w-full rounded-md h-[400px]" />
-                  ) : (
-                    <TableReseracherhome researcher={researcher} />
-                  )
-                )}
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-          </div>
-          )} 
+              <Accordion defaultValue="item-1" type="single" collapsible>
+                <AccordionItem value="item-1">
+                  <div className="flex mb-2">
+                    <HeaderResultTypeHome title="Pesquisadores por detalhamento" icon={<UserList size={24} className="text-gray-400" />}>
+                      <div className="flex gap-3 mr-3">
+                        <Button onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                          <Rows size={16} className="whitespace-nowrap" />
+                        </Button>
+                        <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'} size={'icon'}>
+                          <SquaresFour size={16} className="whitespace-nowrap" />
+                        </Button>
+                      </div>
+                    </HeaderResultTypeHome>
+                    <AccordionTrigger>
+
+                    </AccordionTrigger>
+                  </div>
+                  <AccordionContent>
+                    {typeVisu === 'block' ? (
+                      loading ? (
+                        <ResponsiveMasonry
+                          columnsCountBreakPoints={{
+                            350: 2,
+                            750: 3,
+                            900: 4,
+                            1200: 6,
+                            1500: 6,
+                            1700: 7
+                          }}
+                        >
+                          <Masonry gutter="16px">
+                            {items.map((item, index) => (
+                              <div key={index}>{item}</div>
+                            ))}
+                          </Masonry>
+                        </ResponsiveMasonry>
+                      ) : (
+                        <ResearchersBloco researcher={researcher} />
+                      )
+                    ) : (
+                      loading ? (
+                        <Skeleton className="w-full rounded-md h-[400px]" />
+                      ) : (
+                        <TableReseracherhome researcher={researcher} />
+                      )
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          )}
 
           {(isOpenAlex && FinalOpenAlex === 'true') && (
             <div>
               <Accordion defaultValue="item-1" type="single" collapsible>
-              <AccordionItem value="item-1">
-              <div className="flex mb-2">
-              <HeaderResultTypeHome title="Pesquisador encontrado no OpenAlex" icon={<UserList size={24} className="text-gray-400" />}>
-                <div className="flex gap-3 mr-3">
-                <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
-                  <Rows size={16} className="whitespace-nowrap" />
-                </Button>
-                <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'}  size={'icon'}>
-                  <SquaresFour size={16} className="whitespace-nowrap" />
-                </Button>
-                </div>
-              </HeaderResultTypeHome>
-              <AccordionTrigger>
-  
-              </AccordionTrigger>
-              </div>
-              <AccordionContent>
-                {typeVisu === 'block' ? (
-                  loading ? (
-                    <ResponsiveMasonry
-                      columnsCountBreakPoints={{
-                        350: 1,
-                        750: 2,
-                        900: 3,
-                        1200: 4
-                      }}
-                    >
-                      <Masonry gutter="16px">
-                        {items.map((item, index) => (
-                          <div key={index}>{item}</div>
-                        ))}
-                      </Masonry>
-                    </ResponsiveMasonry>
-                  ) : (
-                    <ResearchersBloco researcher={researcher} />
-                  )
-                ) : (
-                  loading ? (
-                    <Skeleton className="w-full rounded-md h-[400px]" />
-                  ) : (
-                    <TableReseracherhome researcher={researcher} />
-                  )
-                )}
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+                <AccordionItem value="item-1">
+                  <div className="flex mb-2">
+                    <HeaderResultTypeHome title="Pesquisador encontrado no OpenAlex" icon={<UserList size={24} className="text-gray-400" />}>
+                      <div className="flex gap-3 mr-3">
+                        <Button onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                          <Rows size={16} className="whitespace-nowrap" />
+                        </Button>
+                        <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'} size={'icon'}>
+                          <SquaresFour size={16} className="whitespace-nowrap" />
+                        </Button>
+                      </div>
+                    </HeaderResultTypeHome>
+                    <AccordionTrigger>
+
+                    </AccordionTrigger>
+                  </div>
+                  <AccordionContent>
+                    {typeVisu === 'block' ? (
+                      loading ? (
+                        <ResponsiveMasonry
+                          columnsCountBreakPoints={{
+                            350: 1,
+                            750: 2,
+                            900: 3,
+                            1200: 4
+                          }}
+                        >
+                          <Masonry gutter="16px">
+                            {items.map((item, index) => (
+                              <div key={index}>{item}</div>
+                            ))}
+                          </Masonry>
+                        </ResponsiveMasonry>
+                      ) : (
+                        <ResearchersBloco researcher={researcher} />
+                      )
+                    ) : (
+                      loading ? (
+                        <Skeleton className="w-full rounded-md h-[400px]" />
+                      ) : (
+                        <TableReseracherhome researcher={researcher} />
+                      )
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
-          )} 
-        </div> 
+          )}
+        </div>
 
 
-        <FiltersModal 
-          researcher={originalResearcher} 
-          setResearcher={setResearcher} 
-        /> 
+        <FiltersModal
+          researcher={originalResearcher}
+          setResearcher={setResearcher}
+        />
 
-      </div> 
+      </div>
     </div>
   );
 } 

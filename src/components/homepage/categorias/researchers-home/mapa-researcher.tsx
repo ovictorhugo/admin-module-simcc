@@ -32,10 +32,10 @@ export default function MapaResearcher(props: Props) {
   useEffect(() => {
     console.log(selectedCity)
   }, [selectedCity]);
-  
+
 
   return (
-    <div className="relative h-[350px] w-full rounded-md mb-8" onClick={() => setSelectedCity(null)}>
+    <div className="h-[350px] w-full rounded-md mb-8" onClick={() => setSelectedCity(null)}>
       <Map
         ref={mapRef}
         initialViewState={{
@@ -43,12 +43,12 @@ export default function MapaResearcher(props: Props) {
           longitude: defaultCenter.longitude,
           zoom: defaultZoom,
         }}
-        style={{  top: 0, bottom: 0, left: 0, right: 0 }}
+        style={{ top: 0, bottom: 0, left: 0, right: 0, width: '100%' }}
         mapStyle="mapbox://styles/mapbox/streets-v11"
         mapboxAccessToken={import.meta.env.VITE_PUBLIC_MAPBOX_TOKEN}
         reuseMaps={true}
         attributionControl={true}
-    
+
         interactive={true}
         renderWorldCopies={false}>
         {props.cityData.map((city) => {
@@ -66,11 +66,11 @@ export default function MapaResearcher(props: Props) {
               onClick={(e) => {
                 e.originalEvent.stopPropagation(); // Evitar conflitos no clique
                 setSelectedCity(city);
-              
+
               }}
             >
               <div
-                className="flex z-[-1] justify-center items-center bg-eng-blue/70 border-4 border-eng-blue text-white rounded-full"
+                className="flex  z-[-1] justify-center items-center bg-eng-blue/70 border-4 border-eng-blue text-white rounded-full"
                 style={{
                   width: `${markerSize}px`,
                   height: `${markerSize}px`,
@@ -78,9 +78,9 @@ export default function MapaResearcher(props: Props) {
                   fontSize: `${markerSize / 4}px`,
                 }}
                 onClick={(e) => {
-               
+
                   setSelectedCity(city);
-                 
+
                 }}
               >
                 {city.pesquisadores}
@@ -92,7 +92,7 @@ export default function MapaResearcher(props: Props) {
         {selectedCity?.longitude != 0 && (
           <Popup
             latitude={selectedCity?.latitude || 0}
-            longitude={selectedCity?.longitude || 0} 
+            longitude={selectedCity?.longitude || 0}
             onClose={() => setSelectedCity(null)}
             closeButton={true}
             closeOnClick={false}

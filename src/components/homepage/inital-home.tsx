@@ -530,11 +530,11 @@ export function InitialHome() {
   return (
 
     <div className=" items-center  flex flex-col   ">
-   <Helmet>
-          <title>Página Inicial | {version ? ('Conectee'):('Iapós')}</title>
-          <meta name="description" content={`Página Inicial | ${version ? ('Conectee'):('Iapós')}`} />
-          <meta name="robots" content="index, follow" />
-        </Helmet>
+      <Helmet>
+        <title>Página Inicial | {version ? ('Conectee') : ('Iapós')}</title>
+        <meta name="description" content={`Página Inicial | ${version ? ('Conectee') : ('Iapós')}`} />
+        <meta name="robots" content="index, follow" />
+      </Helmet>
 
 
 
@@ -657,7 +657,7 @@ export function InitialHome() {
 
             <CardContent>
               <span className="text-lg font-bold leading-none sm:text-3xl">
-                { VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.article}</>)):0}
+                {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.article}</>)) : 0}
               </span>
             </CardContent>
           </Link>
@@ -675,7 +675,7 @@ export function InitialHome() {
 
             <CardContent>
               <span className="text-lg font-bold leading-none sm:text-3xl">
-                {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.book}</>)): 0}
+                {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.book}</>)) : 0}
               </span>
             </CardContent>
           </Link>
@@ -693,7 +693,7 @@ export function InitialHome() {
 
             <CardContent>
               <span className="text-lg font-bold leading-none sm:text-3xl">
-                {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.book_chapter}</>)):0}
+                {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.book_chapter}</>)) : 0}
               </span>
             </CardContent>
           </Link>
@@ -713,7 +713,7 @@ export function InitialHome() {
 
             <CardContent>
               <span className="text-lg font-bold leading-none sm:text-3xl">
-                {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.patent}</>)):0}
+                {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.patent}</>)) : 0}
               </span>
             </CardContent>
 
@@ -874,9 +874,9 @@ export function InitialHome() {
             </Alert>
           )}
 
-          <Alert className="lg:col-span-2 h-[450px] p-0">
-            <CardHeader className="flex p-0 flex-col items-stretch space-y-0 border-b dark:border-b-neutral-800  sm:flex-row">
-              <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+          <Alert className="lg:col-span-2 h-fit p-0">
+            <CardHeader className="flex p-0 flex-col flex-wrap items-stretch space-y-0 border-b dark:border-b-neutral-800 sm:flex-row">
+              <div className="w-full flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
                 <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
                   <div>
                     <CardTitle className="text-sm font-medium">
@@ -909,7 +909,8 @@ export function InitialHome() {
 
                 </CardHeader>
               </div>
-              <div className="flex">
+
+              <div className="flex w-full">
                 {["producao_bibliografica", "producao_tecnica"].map((key) => {
                   const chart = key as keyof typeof chartConfig
                   return (
