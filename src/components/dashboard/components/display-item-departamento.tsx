@@ -1,4 +1,4 @@
-import {  AreaChart,  ChevronsUpDown, Globe, Hash, Mail, PencilLine, Phone, Plus, SquareArrowOutUpRight,User } from "lucide-react";
+import {  AreaChart,  ChevronsUpDown, Globe, Hash, Mail, PencilLine, Phone, Plus, SquareArrowOutUpRight,SquareMenu,User } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
@@ -38,6 +38,8 @@ interface Patrimonio {
   dep_tel: string
   img_data:string
   dep_sigla: string
+   onMenuState:(newResearcher: boolean) => void;
+   menu_state:boolean
   }
 
   export interface PesquisadorProps {
@@ -305,11 +307,20 @@ const handleSubmit = async () => {
 
     return(
       <Tabs defaultValue={tab} value={tab} className="h-full" >
-        <div className="flex flex-col">
-      <div className="flex items-center p-2 px-4 justify-between">
+        <div className="flex border dark:border-neutral-800 flex-col sticky top-[68px] z-[3] rounded-lg bg-white dark:bg-black">
+      <div className="flex items-center p-2  justify-between">
         <div className="flex items-center gap-2">
 
-     
+        {!props.menu_state && (
+         <Tooltip>
+         <TooltipTrigger asChild>
+           <Button variant="ghost" size="icon"  onClick={() => props.onMenuState(!props.menu_state)} >
+           <SquareMenu size={16}/>
+           </Button>
+         </TooltipTrigger>
+         <TooltipContent>Mostrar menu</TooltipContent>
+       </Tooltip>
+       )}
 
           <Tooltip>
             <TooltipTrigger asChild>
@@ -377,7 +388,7 @@ const handleSubmit = async () => {
           </Tooltip>
         </div>
         </div>
-        <div className="w-full border-b border-neutral-200 dark:border-neutral-800 "></div>
+        
 
         <div >
 
@@ -385,7 +396,8 @@ const handleSubmit = async () => {
         </div>
         </div>
 
-        <TabsContent value="all" className="mt-0">
+        <div className="h-ful mt-8 border sticky top-[156px]   rounded-lg   dark:border-neutral-800" >
+       <TabsContent value="all" className="mt-0">
           <div className="md:p-8 p-4 ">
           <h1 className=" max-w-[700px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
           {props.dep_sigla} - {props.dep_nom}
@@ -444,7 +456,7 @@ const handleSubmit = async () => {
         </TabsContent>
 
         <TabsContent value="unread" className="mt-0">
-        <div className=" overflow-y-auto h-[calc(100vh-115px)] elementBarra ">
+        <div className="  ">
           <DocentesDepartamentoDisplay  graduate_program_id={props.dep_id}/>
         </div>
        
@@ -459,6 +471,7 @@ const handleSubmit = async () => {
                  <PainelDisciplinas dep_id={props.dep_id}/>
      
         </TabsContent>
+       </div>
         </Tabs>
     )
 }

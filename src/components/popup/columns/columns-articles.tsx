@@ -94,7 +94,7 @@ export const columns: ColumnDef<Articles>[] = [
         cell: ({ row }) => {
           const jif = row.original.jif;
           return <div>
-            {(row.getValue("jcr_link") != "None" && row.getValue("jcr_link") != "") && (
+            {(jif != "None" && jif.length != 0) && (
               <a href={row.getValue("jcr_link")} target="_blank" rel="noopener noreferrer" className="border-[1px] cursor-pointer border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center  whitespace-nowrap"><LinkBreak size={16} className="text-gray-400" />JCR {jif}</a>
             )}
           </div>

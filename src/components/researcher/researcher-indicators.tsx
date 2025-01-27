@@ -275,7 +275,7 @@ export function ResearcherIndicators(props: Research) {
 
   const [loading, isLoading] = useState(false)
   const [dados, setDados] = useState<Dados[]>([]);
-
+  console.log(urlDados)
   useEffect(() => {
     const fetchData = async () => {
       try {

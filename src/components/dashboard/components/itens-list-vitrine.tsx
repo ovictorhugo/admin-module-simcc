@@ -34,6 +34,7 @@ interface Patrimonio {
     onResearcherUpdate: (newResearcher: Patrimonio) => void;
     url:string
     search:string
+    menu:boolean
   }
 
   import {  differenceInDays } from 'date-fns';
@@ -142,79 +143,126 @@ export function ItensList(props:Props) {
 
   return (
     <ScrollArea className="h-full">
-      {isLoading ? (
-        <div className="flex flex-col gap-2 ">
-        <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-        <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-        <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-        <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-        <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-
-        <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-        <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-        </div>
-      ):(
-        <div className="flex flex-col gap-2 ">
-        {filteredTotal.slice(0, count).map((item) => {
-             const currentDate = new Date();
-             const itemDate = new Date(item.created_at);
-           
-             // Calcula a diferença em dias entre a data atual e a data do item
-             const daysDifference = differenceInDays(currentDate, itemDate);
-          return(
-<div className="flex" onClick={() => updateResearcher(item)}>
-            {item.type != undefined && ( <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border min-h-[120px]  border-neutral-200 border-r-0 ${qualisColor[item.type as keyof typeof qualisColor]} min-h-full relative `}></div>)}
+      {!props.menu ? (
+        isLoading ? (
+          <div className="flex flex-col gap-2 ">
+          <Skeleton className="  w-14 h-14 rounded-md"></Skeleton>
+          <Skeleton className=" w-14 h-14 rounded-md"></Skeleton>
+          <Skeleton className=" w-14 h-14 rounded-md"></Skeleton>
+          <Skeleton className=" w-14 h-14 rounded-md"></Skeleton>
+          <Skeleton className=" w-14 h-14 rounded-md"></Skeleton>
   
-            <button
-       
-            className={cn(
-              `flex ${item.graduate_program_id ===( selectedResearcher?.graduate_program_id || type_search )? 'bg-neutral-100 dark:bg-neutral-700': 'bg-white dark:bg-neutral-800' } flex-col rounded-lg w-full rounded-l-none  dark:border-neutral-700 items-start gap-2  border p-3 text-left text-sm transition-all hover:bg-accent`,
-            
-            )}
-           
-          >
-            <div className="flex w-full flex-col gap-1">
-           <div className="flex justify-between items-center">
-           <div className="text-xs font-medium mb-2 flex items-center gap-2">{item.code != '' ? (item.code):('Sem código')}
-           {daysDifference <= 5 && (
-        <span className="flex h-2 w-2 rounded-full bg-blue-600" />
-      )}</div>
-           <GraduationCapIcon size={16}/>
-           </div>
-              <div className="flex items-center">
-                
-                <div className="flex items-center gap-2">
-                    
-                  <div className="font-semibold text-lg">{item.name}</div>
-                  
-                 
-                </div>
-                <div
-                  
-                >
-                  
-                </div>
-              </div>
-              
-            </div>
-            <div className="line-clamp-2 text-xs text-muted-foreground flex gap-4">
-            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{item.type}</div>
-            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><MapPinIcon size={12}/>{item.city}</div>
-            {item.rating != '' && (
-                          <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12}/>{item.rating}</div>
-                        )}
-
-            </div>
-           
-          </button>
+          <Skeleton className=" w-14 h-14 rounded-md"></Skeleton>
+          <Skeleton className=" w-14 h-14 rounded-md"></Skeleton>
           </div>
-          )
-            })}
+        ):(
+          <div className="flex flex-col gap-2 ">
+          {filteredTotal.slice(0, count).map((item) => {
+               const currentDate = new Date();
+               const itemDate = new Date(item.created_at);
+             
+               // Calcula a diferença em dias entre a data atual e a data do item
+               const daysDifference = differenceInDays(currentDate, itemDate);
+            return(
+  <div className="flex" onClick={() => updateResearcher(item)}>
+           
+    
+              <button
+         
+              className={cn(
+                `flex ${item.graduate_program_id ===( selectedResearcher?.graduate_program_id || type_search )? 'bg-neutral-100 dark:bg-neutral-700': 'bg-white dark:bg-neutral-800' } flex-col rounded-lg w-14 h-14 hover:rounded-2xl  dark:border-neutral-700 items-start gap-2  border p-3 text-left text-sm transition-all hover:bg-accent`,
+              
+              )}
+             
+            >
+              
+             
+            </button>
+            </div>
+            )
+              })}
+  
+      {filteredTotal.length > count && (
+              <Button variant={'outline'} onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button>
+          )}
+        </div>
+        )
+      ): (
 
-    {filteredTotal.length > count && (
-            <Button variant={'outline'} onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button>
-        )}
+isLoading ? (
+  <div className="flex flex-col gap-2 ">
+  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+
+  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+  </div>
+):(
+  <div className="flex flex-col gap-2 ">
+  {filteredTotal.slice(0, count).map((item) => {
+       const currentDate = new Date();
+       const itemDate = new Date(item.created_at);
+     
+       // Calcula a diferença em dias entre a data atual e a data do item
+       const daysDifference = differenceInDays(currentDate, itemDate);
+    return(
+<div className="flex" onClick={() => updateResearcher(item)}>
+      {item.type != undefined && ( <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border min-h-[120px]  border-neutral-200 border-r-0 ${qualisColor[item.type as keyof typeof qualisColor]} min-h-full relative `}></div>)}
+
+      <button
+ 
+      className={cn(
+        `flex ${item.graduate_program_id ===( selectedResearcher?.graduate_program_id || type_search )? 'bg-neutral-100 dark:bg-neutral-700': 'bg-white dark:bg-neutral-800' } flex-col rounded-lg w-full rounded-l-none  dark:border-neutral-700 items-start gap-2  border p-3 text-left text-sm transition-all hover:bg-accent`,
+      
+      )}
+     
+    >
+      <div className="flex w-full flex-col gap-1">
+     <div className="flex justify-between items-center">
+     <div className="text-xs font-medium mb-2 flex items-center gap-2">{item.code != '' ? (item.code):('Sem código')}
+     {daysDifference <= 5 && (
+  <span className="flex h-2 w-2 rounded-full bg-blue-600" />
+)}</div>
+     <GraduationCapIcon size={16}/>
+     </div>
+        <div className="flex items-center">
+          
+          <div className="flex items-center gap-2">
+              
+            <div className="font-semibold text-lg">{item.name}</div>
+            
+           
+          </div>
+          <div
+            
+          >
+            
+          </div>
+        </div>
+        
       </div>
+      <div className="line-clamp-2 text-xs text-muted-foreground flex gap-4">
+      <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{item.type}</div>
+      <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><MapPinIcon size={12}/>{item.city}</div>
+      {item.rating != '' && (
+                    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12}/>{item.rating}</div>
+                  )}
+
+      </div>
+     
+    </button>
+    </div>
+    )
+      })}
+
+{filteredTotal.length > count && (
+      <Button variant={'outline'} onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button>
+  )}
+</div>
+)
       )}
     </ScrollArea>
   )

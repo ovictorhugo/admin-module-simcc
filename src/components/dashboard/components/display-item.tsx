@@ -255,7 +255,7 @@ export function DisplayItem(props:Patrimonio) {
      
 
         </div>
-      <div className="h-full mt-8 border   rounded-lg  relative dark:border-neutral-800" >
+      <div className="h-full mt-8 border sticky top-[156px]   rounded-lg   dark:border-neutral-800" >
         
 
         <TabsContent value="all" className="mt-0">

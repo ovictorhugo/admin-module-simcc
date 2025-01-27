@@ -5,7 +5,7 @@ import { GeralViewDashboard } from "../dashboard/geral-view-dashboard/geral-view
 
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { PosGraducaoView } from "../dashboard/pos-graduacao/pos-graduacao-view-dashboard";
-import { Departamentos } from "../dashboard/departamentos";
+import { Departamentos } from "../dashboard/departamentos/departamentos";
 import { AddResearcherDashboard } from "../dashboard/add-researcher-dashboard";
 import { PesoProducoes } from "../dashboard/pesos-avaliacao/peso-producoes";
 import { GrupoPesquisaView } from "../dashboard/grupo-pesquisa";

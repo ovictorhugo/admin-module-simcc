@@ -33,6 +33,7 @@ export interface Dados {
   tempo_acumulado: number,
   arquivo: string
   fimCorreto?: string | null;
+  inicioCorreto?: string | null;
 }
 
 export function InfoPavimentoCargo(props:Props) {
@@ -208,8 +209,8 @@ export function InfoPavimentoCargo(props:Props) {
                 prevItem.tempo_nivel != null
             );
           
-            let inicioCorreto = null;
-            let fimCorreto = null;
+            let inicioCorreto = '';
+            let fimCorreto = '';
           
             if (hasPriorValidItem || (item.tempo_acumulado > 0 && item.tempo_nivel != null)) {
               inicioCorreto = new Date(

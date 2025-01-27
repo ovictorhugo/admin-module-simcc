@@ -130,22 +130,24 @@ let programSelecionado = type_search || ''
 
       
 
-        <div className="grid relative grid-cols-5 h-full">
-          <div className={`grid col-span-2 h-fit sticky top-[68px] p-8 ${menu ? ('grid'):('hidden')}`}>
+        <div className={`relative grid-cols-5 h-full  ${menu ? ('grid '):('flex')}`}>
+   <div className={`col-span-2 h-fit sticky top-[68px] p-8 ${menu ? ('grid '):('pr-0')}`}>       
 
         
           <Tabs defaultValue={tab} value={tab}>
           
           <div className={`flex items-center justify-between  `}>
-        <div className="flex items-center gap-4">
+       {menu && (
+         <div className="flex items-center gap-4">
      
-          <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
-              <ChevronLeft className="h-4 w-4" />
-              <span className="sr-only">Voltar</span>
-            </Button>
-            <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">Pós-graduação</h1>
-          </div>
-         {total && (
+         <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
+             <ChevronLeft className="h-4 w-4" />
+             <span className="sr-only">Voltar</span>
+           </Button>
+           <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">Pós-graduação</h1>
+         </div>
+       )}
+         {(menu && total) && (
             
             <Button onClick={() => setMenu(!menu) } variant="outline" size="icon" className="h-7 w-7">
             <SquareMenu className="h-4 w-4" />
@@ -154,26 +156,30 @@ let programSelecionado = type_search || ''
          )}
           </div>
 
-          <div className="bg-background/95 pt-8 pb-8 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="flex items-center gap-3">
-            <Button onClick={() => onOpen('add-graduate-program')}  size="sm" className="ml-auto gap-1">
-              <Plus className="h-4 w-4" />
-                  Adicionar programa
-                  
-               
-              </Button>
+         {menu && (
+           <div className="bg-background/95 pt-8 pb-8 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+           <div className="flex items-center gap-3">
+           <Button onClick={() => onOpen('add-graduate-program')}  size="sm" className="ml-auto gap-1">
+             <Plus className="h-4 w-4" />
+                 Adicionar 
+                 
+              
+             </Button>
 
-              <div className="relative w-full bg-white h-10 flex gap-2 items-center border pl-4 border-neutral-200 dark:border-neutral-800 rounded-md dark:bg-neutral-950">
-                <Search size={16} />
-                <Input placeholder="Filtrar pelo nome do programa..." className="border-none h-8" value={search}  onChange={(e) => setSearch(e.target.value)}/>
-              </div>
-            </div>
-          </div>
+             <div className="relative w-full bg-white h-10 flex gap-2 items-center border pl-4 border-neutral-200 dark:border-neutral-800 rounded-md dark:bg-neutral-950">
+               <Search size={16} />
+               <Input placeholder="Filtrar pelo nome do programa..." className="border-none h-8" value={search}  onChange={(e) => setSearch(e.target.value)}/>
+             </div>
+           </div>
+         </div>
+         )}
+
           <TabsContent value="all" className="m-0">
            <ItensList
            onResearcherUpdate={handleResearcherUpdate}
            url={`${urlGeralAdm}GraduateProgramRest/Query?institution_id=${user?.institution_id}`}
            search={search}
+           menu={menu}
            />
           </TabsContent>
           <TabsContent value="unread" className="m-0">
@@ -182,9 +188,9 @@ let programSelecionado = type_search || ''
         </Tabs>
           </div>
 
-          <div className={`p-8  ${menu ? ('col-span-3 pl-0'):('col-span-5')}`}>
+          <div className={`p-8  ${menu ? ('col-span-3 pl-0'):('flex-1 flex w-full')}`}>
           {total ? (
-      <div className="h-full  ">
+      <div className="h-full w-full  ">
         <DisplayItem
       graduate_program_id={total.graduate_program_id}
       code={total.code}
@@ -210,7 +216,7 @@ let programSelecionado = type_search || ''
       />
       </div>
     ):(
-      <div className="h-full  ">
+      <div className="h-full sticky top-[100px]   max-h-[calc(100vh-198px)]">
         <div className="w-full dark:border-neutral-800 rounded-lg border h-full flex flex-col items-center justify-center">
        <p className="text-9xl  text-[#719CB8]  font-bold mb-16 animate-pulse">=]</p>
         <p className="font-medium text-lg">Nenhum programa selecionado</p>
