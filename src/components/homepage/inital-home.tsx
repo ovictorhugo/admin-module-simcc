@@ -680,7 +680,7 @@ export function InitialHome() {
             </CardContent>
           </Link>
           <Link onClick={() => onOpenResult('book-home')} to={'/resultados?type_search=book&terms=&researcher=false'}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <div>
                 <CardTitle className="text-sm font-medium">
                   Total de capítulos
@@ -699,7 +699,7 @@ export function InitialHome() {
           </Link>
 
           <Link onClick={() => onOpenResult('patent-home')} to={'/resultados?type_search=patent&terms=&researcher=false'}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <div>
                 <CardTitle className="text-sm font-medium">
                   Total de patentes
@@ -735,7 +735,7 @@ export function InitialHome() {
               className="
                 h-full gap-8 flex flex-col
 
-                md:flex-row md:w-full md:justify-between
+                md:w-full md:justify-between
 
                 lg:flex-col
               "
@@ -743,10 +743,8 @@ export function InitialHome() {
               <Link
                 className="
                   w-full
-                  
-                  sm:w-full
 
-                  md:w-full
+                  md:flex
 
                   lg:h-1/2
                 "
@@ -763,7 +761,7 @@ export function InitialHome() {
                 >
                   <CardHeader
                     className="
-                      flex p-10 flex-row items-center justify-between space-y-0 pb-2
+                      flex p-10 flex-row items-center justify-between space-y-0
 
                       md:h-28
                     "
@@ -817,7 +815,7 @@ export function InitialHome() {
                 >
                   <CardHeader
                     className="
-                      flex flex-row p-10 items-center justify-between space-y-0 pb-2
+                      flex flex-row p-10 items-center justify-between space-y-0
 
                       md:h-28
                     "
@@ -910,7 +908,7 @@ export function InitialHome() {
                 </CardHeader>
               </div>
 
-              <div className="flex w-full">
+              <div className="flex w-full border-t dark:border-t-neutral-800">
                 {["producao_bibliografica", "producao_tecnica"].map((key) => {
                   const chart = key as keyof typeof chartConfig
                   return (
