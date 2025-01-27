@@ -11,6 +11,8 @@ import {
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 import {Copy, Eye, Trash} from "phosphor-react"
 import { useModal } from "../hooks/use-modal-store"
+import { useState } from "react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
 
 export interface PesquisadorProps {
@@ -19,6 +21,7 @@ export interface PesquisadorProps {
     researcher_id: string
     institution_id: string
     last_update:string
+    status:string
   }
 
 
@@ -53,12 +56,24 @@ export const columns: ColumnDef<PesquisadorProps>[] = [
       const name = row.original.name;
 
       const { onOpen } = useModal();
+      const [status, setStatus] = useState(row.original.status)
   
       return (
         <div className="flex gap-3">
+
+<Select value={status} onValueChange={setStatus}>
+  <SelectTrigger className="w-[100px] ml-auto">
+    <SelectValue placeholder="" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="ativo">Ativo</SelectItem>
+    <SelectItem value="inativo">Inativo</SelectItem>
+
+  </SelectContent>
+</Select>
          
 
-        <Button  onClick={() => onOpen('confirm-delete-researcher', {id_delete:id_pesquisador, name:name})} variant={'destructive'} className="h-8 w-8 p-0 text-white ml-auto dark:text-white">
+        <Button  onClick={() => onOpen('confirm-delete-researcher', {id_delete:id_pesquisador, name:name})} variant={'destructive'} className="h-8 w-8 p-0 text-white  dark:text-white">
              
         <Trash size={8} className="h-4 w-4" />
       </Button>

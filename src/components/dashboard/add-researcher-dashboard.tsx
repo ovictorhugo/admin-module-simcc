@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { DataTable } from "./data-table";
 import { CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Helmet } from "react-helmet";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 
 export function AddResearcherDashboard() {
@@ -40,6 +41,7 @@ export function AddResearcherDashboard() {
   
     const isModalOpen = isOpen && type === 'researcher';
     const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
+    const [status, setStatus] = useState('ativo')
 
     const handleSubmitPesquisador = async () => {
 
@@ -52,6 +54,7 @@ export function AddResearcherDashboard() {
                 name: nomePesquisador,
                 lattes_id: lattesID,
                 institution_id: user?.institution_id,
+                status:status
               }
           ]
 
@@ -232,7 +235,7 @@ export function AddResearcherDashboard() {
 
             </div>
 
-     <div className="gap-4 md:gap-8 flex flex-col md:pb-8 pb-4">
+     <div className="gap-4 md:gap-8 flex flex-col ">
     {has_editar_pesquisadores ? (
        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
        <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3"  style={{ backgroundImage: `url(${bg_popup})` }}>
@@ -287,7 +290,7 @@ export function AddResearcherDashboard() {
          Adicionar pesquisador à instituição
        </legend>
 
-       <div className="flex gap-6 items-end">
+       <div className="flex gap-3 items-end">
            <div className="flex flex-col space-y-1.5 w-full flex-1">
            <Label htmlFor="name">Nome completo</Label>
            <Input value={nomePesquisador} onChange={(e) => setNomePesquisador(e.target.value)} type="text"  />
@@ -296,6 +299,20 @@ export function AddResearcherDashboard() {
            <div className="flex flex-col space-y-1.5 w-full flex-1">
            <Label htmlFor="name">Lattes Id</Label>
            <Input value={lattesID} onChange={(e) => setLattesID(e.target.value)} type="text" />
+           </div>
+
+           <div className="flex flex-col max-w-[250px] space-y-1.5 w-full flex-1">
+           <Label htmlFor="name">Situação</Label>
+           <Select value={status} onValueChange={setStatus}>
+  <SelectTrigger className="">
+    <SelectValue placeholder="" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="ativo">Ativo</SelectItem>
+    <SelectItem value="inativo">Inativo</SelectItem>
+
+  </SelectContent>
+</Select>
            </div>
 
            <Button onClick={() => handleSubmitPesquisador()} className="text-white dark:text-white"><Plus size={16} className="" /> Adicionar</Button>

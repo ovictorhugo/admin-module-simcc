@@ -94,7 +94,7 @@ export function EnviarNotificacoes() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-4 md:gap-8 h-full">
+      <div className="grid mt-4 grid-cols-3 gap-4 md:gap-8 h-full">
         <div className="flex flex-col gap-8">
           <fieldset className="grid gap-6 rounded-lg p-4 bg-white dark:border-neutral-800 border border-neutral-200 dark:bg-neutral-950 bg-cover bg-center bg-no-repeat">
             <legend className="-ml-1 px-1 text-sm font-medium">Informações</legend>
@@ -150,20 +150,22 @@ export function EnviarNotificacoes() {
         <div className="flex lg:col-span-2 rounded-md border dark:border-neutral-800">
           <ScrollArea className="w-full">
             <div id="layout_email" className="w-full bg-neutral-50">
-              <div className="bg-cover z-[0] bg-center bg-no-repeat h-64  rounded-t-md bg-[#415F71] w-full" style={{ backgroundImage: `url(${img_3})` }}></div>
+              <div className="bg-cover z-[0] bg-center bg-no-repeat h-64  rounded-t-md bg-eng-dark-blue w-full" style={{ backgroundImage: `url(${img_3})` }}></div>
               <div className="max-w-[650px] mx-auto py-8 z-[2] relative -top-56">
-                <div className="bg-[#719CB8] p-8 w-full rounded-t-md">
+                <div className="bg-eng-blue p-8 w-full rounded-t-md">
                   <img src={img_1} className="h-16" alt="Logo" />
                 </div>
                 <div className="border bg-white border-neutral-200 rounded-b-md p-8">
                   <h1 className="font-medium text-3xl">{titulo.length !== 0 ? titulo : 'Insira o título'}</h1>
                   <p className="text-gray-500">{subTitulo.length !== 0 ? subTitulo : 'Insira o subtítulo'}</p>
                   <p className="py-12 flex relative text-gray-500">{texto.length !== 0 ? texto : 'Insira o corpo da mensagem'}</p>
-                  <a href={link} target="_blank" rel="noopener noreferrer">
+                  {link.length > 0 && (
+                    <a href={link} target="_blank" rel="noopener noreferrer">
                     <Button>
                       <SquareArrowOutUpRight size={16} /> Ir à página
                     </Button>
                   </a>
+                  )}
                 </div>
                 <div className="pt-4">
                   <p className="text-gray-500 text-xs flex gap-1">

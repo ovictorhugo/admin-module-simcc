@@ -3,6 +3,9 @@ import { LinksPaineis } from "./components/links-paineis";
 import { useContext } from "react";
 import { UserContext } from "../../context/context";
 import { Helmet } from "react-helmet";
+import { Button } from "../ui/button";
+import { ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function PaineisDadosExternos() {
 
@@ -91,6 +94,12 @@ export function PaineisDadosExternos() {
                                         },
     ]
 
+       const history = useNavigate();
+    
+          const handleVoltar = () => {
+            history(-1);
+          }
+
     return(
         <main className="flex flex-1 flex-col relative  p-4 md:p-8 ">
  <Helmet>
@@ -98,13 +107,33 @@ export function PaineisDadosExternos() {
           <meta name="description" content={`Painéis de dados externos | ${version ? ('Conectee'):('Iapós')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
+
+        <div className="w-full  gap-4 mb-8">
+            <div className="flex items-center gap-4">
+          
+            <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
+                <ChevronLeft className="h-4 w-4" />
+                <span className="sr-only">Voltar</span>
+              </Button>
+          
+              <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+              Painéis de dados externos
+              </h1>
+             
+
+                
+            
+            </div>
+
+            </div>
+
            <div className="relative ">
            <div className="w-full rounded-lg absolute bg-eng-blue h-[270px]"></div>
            </div>
 
 
             <div className="md:p-16 p-4 z-[1]">
-                <p className="flex-1 mb-8 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0 text-white">Painéis de dados externos</p>
+                <p className="flex-1 mb-8 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0 text-white">Principais links</p>
 
                 <div className="relative">
                 <ResponsiveMasonry

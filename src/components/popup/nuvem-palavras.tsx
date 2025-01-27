@@ -15,6 +15,7 @@ import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
 import HC_wordcloud from 'highcharts/modules/wordcloud';
 import { Weight } from "lucide-react";
+import { Skeleton } from "../ui/skeleton";
 
 HC_wordcloud(Highcharts);
 
@@ -70,11 +71,14 @@ export function NuvemPalavras(props: Grafico) {
     },
   }), [words]);
 
+  const [isLoading, setIsloading] = useState(false)
+
   useEffect(() => {
     let isMounted = true;
     const fetchData = async () => {
 
       try {
+        setIsloading(true)
         const response = await fetch(urlPalavrasChaves, {
           mode: 'cors',
           headers: {
@@ -88,9 +92,11 @@ export function NuvemPalavras(props: Grafico) {
         const data = await response.json();
         if (data && isMounted) {
           setWords(data);
+          setIsloading(false)
         }
       } catch (err) {
         console.log(err);
+        setIsloading(false)
       }
     };
     fetchData();
@@ -103,7 +109,11 @@ export function NuvemPalavras(props: Grafico) {
     <div>
       <div className="text-left mb-6 font-medium text-2xl">Palavras-chaves mais recorrentes</div>
       <Alert>
-        <HighchartsReact highcharts={Highcharts} options={options2} />
+       {isLoading ? (
+        <Skeleton className="h-[300px] rounded-md"/>
+       ):(
+         <HighchartsReact highcharts={Highcharts} options={options2} />
+       )}
       </Alert>
     </div>
   )
