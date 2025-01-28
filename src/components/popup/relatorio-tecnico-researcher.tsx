@@ -104,16 +104,16 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
 
         <Accordion type="single" collapsible defaultValue="item-1" >
           <AccordionItem value="item-1" >
-       
-          <div className="flex mb-2">
-             <HeaderResultTypeHome title="Gráfico de orientações em andamento e concluídas " icon={<ChartBar size={24} className="text-gray-400" />}>
-             </HeaderResultTypeHome>
 
-             <AccordionTrigger>
+            <div className="flex mb-2 text-left">
+              <HeaderResultTypeHome title="Gráfico de orientações em andamento e concluídas " icon={<ChartBar size={24} className="text-gray-400" />}>
+              </HeaderResultTypeHome>
 
-</AccordionTrigger>
-             </div>
-       
+              <AccordionTrigger>
+
+              </AccordionTrigger>
+            </div>
+
             <AccordionContent >
               {loading ? (
                 <Skeleton className="w-full rounded-md h-[300px]" />
@@ -135,7 +135,7 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
               </div>
 
               <div className="flex gap-3 items-center h-full">
-              
+
                 <div className="hidden gap-3 md:flex">
                   <Button onClick={() => setTypeVisu('rows')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800 border')}`} size={'icon'}>
                     <Rows size={16} className=" whitespace-nowrap" />
@@ -146,7 +146,7 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
                 </div>
 
                 <AccordionTrigger>
-                
+
                 </AccordionTrigger>
               </div>
             </div>
