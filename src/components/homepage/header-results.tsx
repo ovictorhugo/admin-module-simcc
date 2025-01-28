@@ -104,7 +104,7 @@ export function HeaderResult() {
   return (
     <div>
       {filteredItems.length > 0 && (
-        <div className='grid grid-cols-1 mt-8'>
+        <div className='grid grid-cols-1 mt-8 md:mt-3'>
           <ScrollArea>
             <div className="flex items-center justify-between">
               <div className="flex gap-3 items-center">
@@ -129,7 +129,7 @@ export function HeaderResult() {
                 </div>
               </div>
             </div>
-            <ScrollBar className='pb-4' orientation='horizontal' />
+            <ScrollBar className='pb-4 md:pb-0 md:hidden' orientation='horizontal' />
           </ScrollArea>
         </div>
       )}

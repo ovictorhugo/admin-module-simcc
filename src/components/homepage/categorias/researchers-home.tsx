@@ -681,7 +681,7 @@ export function ResearchersHome() {
                 <AccordionItem value="item-1">
                   <div className="flex mb-2">
                     <HeaderResultTypeHome title="Pesquisadores por detalhamento" icon={<UserList size={24} className="text-gray-400" />}>
-                      <div className="flex gap-3 mr-3">
+                      <div className="hidden md:flex gap-3 mr-3">
                         <Button onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
                           <Rows size={16} className="whitespace-nowrap" />
                         </Button>

@@ -127,7 +127,7 @@ export function GraficoIndiceProdBibli(props: Articles) {
   }, [props.articles, props.pesosProducao]);
 
   return (
-    <ChartContainer config={chartConfig} className="">
+    <ChartContainer config={chartConfig} className="mr-4 lg:mt-16">
       <ResponsiveContainer>
         <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
           <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />

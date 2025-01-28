@@ -26,7 +26,7 @@ import { Button } from "../ui/button";
 import { UserContext } from "../../context/context";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 
-import { TableReseracherArticleshome } from "../homepage/categorias/articles-home/table-articles";
+import { TableParticipacoesEventos } from "../homepage/categorias/articles-home/table-partificacoes-eventos";
 
 import { BookBlockPopUp } from "./book-block-popup";
 import { FilterYearPopUp } from "./filters-year-popup";
@@ -155,10 +155,10 @@ export function SpeakerResearcherPopUp(props: Props) {
 
       <div className="">
 
-     <div className="mb-6">
-     <FilterYearPopUp
-          onFilterUpdate={handleResearcherUpdate} />
-     </div>
+        <div className="mb-6">
+          <FilterYearPopUp
+            onFilterUpdate={handleResearcherUpdate} />
+        </div>
 
         <Accordion type="single" collapsible defaultValue="item-1">
           <AccordionItem value="item-1" className="text-left">
@@ -167,7 +167,7 @@ export function SpeakerResearcherPopUp(props: Props) {
               </HeaderResultTypeHome>
               <AccordionTrigger>
 
-</AccordionTrigger>
+              </AccordionTrigger>
             </div>
             <AccordionContent >
               {loading ? (
@@ -277,8 +277,8 @@ export function SpeakerResearcherPopUp(props: Props) {
 
                     <Skeleton className="w-full rounded-md h-[400px]" />
                   ) : (
-                    <TableReseracherArticleshome
-                      articles={publicacoes}
+                    <TableParticipacoesEventos
+                      p={publicacoes}
                     />
                   )
                 )}

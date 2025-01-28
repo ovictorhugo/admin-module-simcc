@@ -160,7 +160,7 @@ export function ResultHome() {
             )}
             <div className={`flex w-full flex-wrap pt-2 justify-between ${isOn ? '' : ''} `}>
               <ScrollArea>
-                <div className="w-full flex overflow-x-scroll items-center gap-2 pb-4">
+                <div className="w-full flex overflow-x-scroll md:overflow-x-auto items-center gap-2 pb-4">
                   {!((researcher == 'false' && itemsSelecionados.length == 0) && itemsSelecionados.length == 0) && (
                     <div className={`pb-2 border-b-2 transition-all ${typeResult == 'researchers-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
                       <Button variant={typeResult == 'researchers-home' ? ('ghost') : ('ghost')} className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>

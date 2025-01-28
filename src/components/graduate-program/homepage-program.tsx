@@ -720,11 +720,19 @@ export function HomepageProgram(props: Props) {
       </div>
 
       <div className="flex flex-col mt-8 md:gap-8 gap-4">
-        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-          <Alert className="lg:col-span-2 h-[450px] p-0 ">
-            <CardHeader className="flex p-0 flex-col items-stretch space-y-0 border-b dark:border-b-neutral-800  sm:flex-row">
+        <div
+          className="
+            flex w-full flex-wrap gap-8
+
+            md:flex-col
+            
+            lg:grid lg:grid-cols-3
+          "
+        >
+          <Alert className="lg:col-span-2 h-full p-0 w-full">
+            <CardHeader className="flex p-0 flex-col items-stretch space-y-0 border-b dark:border-b-neutral-800 sm:flex-row">
               <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-                <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
+                <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0">
                   <div>
                     <CardTitle className="text-sm font-medium">
                       Produção geral
@@ -863,8 +871,8 @@ export function HomepageProgram(props: Props) {
             </CardContent>
           </Alert>
 
-          <div className="h-full gap-8 grid">
-            <Alert className="p-0 ">
+          <div className="flex h-full gap-8 w-full">
+            <Alert className="p-0 w-full">
               <CardHeader className="flex p-10 flex-row items-center justify-between space-y-0 pb-2">
                 <div>
                   <CardTitle className="text-sm font-medium">
@@ -885,7 +893,7 @@ export function HomepageProgram(props: Props) {
 
               </CardHeader>
 
-              <CardContent className="px-2 sm:p-6">
+              <CardContent className="p-2 sm:p-6 h-full">
                 <GraficoIndiceProdBibli articles={dados} pesosProducao={pesosProducao} />
               </CardContent>
 
@@ -893,9 +901,15 @@ export function HomepageProgram(props: Props) {
           </div>
         </div>
 
-        <div className="grid  gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+        <div
+          className="
+            flex flex-wrap gap-8
 
-          <Alert className=" h-full ">
+            lg:grid lg:grid-cols-3
+          "
+        >
+
+          <Alert className="h-full min-w-[40%]">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
                 <CardTitle className="text-sm font-medium">
