@@ -183,7 +183,7 @@ export function ArticlesHome() {
         </AccordionItem>
       </Accordion>
 
-      <Accordion defaultValue="item-1" type="single" collapsible >
+      <Accordion defaultValue="item-1" type="single" collapsible>
         <AccordionItem value="item-1" >
           <div className="flex mb-2">
             <HeaderResultTypeHome title="Artigos" icon={<Quotes size={24} className="text-gray-400" />}>
@@ -199,13 +199,14 @@ export function ArticlesHome() {
                 Distintos
               </div>
 
-              <Button onClick={() => setTypeVisu('rows')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800 border')}`} size={'icon'}>
-                <Rows size={16} className=" whitespace-nowrap" />
-              </Button>
-
-              <Button onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800 border')} `} size={'icon'}>
-                <SquaresFour size={16} className=" whitespace-nowrap" />
-              </Button>
+              <div className="hidden md:block">
+                <Button onClick={() => setTypeVisu('rows')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800 border')}`} size={'icon'}>
+                  <Rows size={16} className=" whitespace-nowrap" />
+                </Button>
+                <Button onClick={() => setTypeVisu('block')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'block' && ('bg-white dark:bg-neutral-800 border')} `} size={'icon'}>
+                  <SquaresFour size={16} className=" whitespace-nowrap" />
+                </Button>
+              </div>
             </HeaderResultTypeHome>
             <AccordionTrigger>
 

@@ -206,13 +206,21 @@ export function ArticlesResearcherPopUp(props: Props) {
                                         <p className="text-sm font-bold">Todos os artigos</p>
                                     ) : (
                                         <div className="text-sm font-bold flex items-center gap-2">
-                                            <span className="">{publicacoes.length} </span> ocorrências de
+                                            <span
+                                                className="
+                                                    text-[0.6rem] md:text-[0.8rem]
+                                                "
+                                            >
+                                                {publicacoes.length}
+                                            </span>
+
+                                            <span className="text-[0.6rem] md:text-[0.8rem]">ocorrências de</span>
 
                                             <div className='flex gap-2 items-center'>
                                                 {itemsSelecionadosPopUp.map((valor, index) => {
                                                     return (
                                                         <>
-                                                            <div key={index} className={`flex bg-blue-500 gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs text-white border-0 `} >
+                                                            <div key={index} className={`flex bg-blue-500 gap-2 items-center h-10 py-2 px-4 capitalize rounded-md text-xs text-white border-0 `} >
                                                                 {valor.term.replace(/[|;]/g, '')}
                                                                 <X size={12} onClick={() => handleRemoveItem(index)} className="cursor-pointer" />
                                                                 {/* Adicionando a escolha entre "e" ou "ou" */}
@@ -232,7 +240,7 @@ export function ArticlesResearcherPopUp(props: Props) {
                                                     );
                                                 })}
 
-                                                em artigos
+                                                <span className="text-[0.6rem] md:text-[0.8rem]">em artigos</span>
                                             </div>
                                         </div>
                                     )}
@@ -260,7 +268,7 @@ export function ArticlesResearcherPopUp(props: Props) {
                                         </Button>
                                     </div>
 
-                                
+
                                 </div>
                             </div>
 
