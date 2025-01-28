@@ -6,13 +6,14 @@ import { ResultProvider } from "../provider/result-provider";
 import { UserContext } from "../../context/context";
 
 import { Button } from "../ui/button";
-import { Building, Building2, ChevronDown, ChevronUp, Copyright, Download, SlidersHorizontal, Ticket, Users } from "lucide-react";
+import { Building, Building2, ChevronDown, ChevronUp, Copyright, Download, MoreHorizontal, SlidersHorizontal, Ticket, Users } from "lucide-react";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useModal } from "../hooks/use-modal-store";
-import { File, Quotes } from "phosphor-react";
+import { DotsThreeOutline, DotsThreeVertical, File, Plus, Quotes } from "phosphor-react";
 import { Search } from "../search/search";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -160,7 +161,7 @@ export function ResultHome() {
             )}
             <div className={`flex w-full flex-wrap pt-2 justify-between ${isOn ? '' : ''} `}>
               <ScrollArea>
-                <div className="w-full flex overflow-x-scroll md:overflow-x-auto items-center gap-2 pb-4">
+                <div className="w-full flex overflow-x-scroll md:overflow-x-auto items-center gap-2 pb-4 md:pb-0">
                   {!((researcher == 'false' && itemsSelecionados.length == 0) && itemsSelecionados.length == 0) && (
                     <div className={`pb-2 border-b-2 transition-all ${typeResult == 'researchers-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
                       <Button variant={typeResult == 'researchers-home' ? ('ghost') : ('ghost')} className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
@@ -213,8 +214,8 @@ export function ResultHome() {
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
 
-              <div className="hidden md:flex md:flex-nowrap">
-                <div className="md:flex md:flex-nowrap">
+              <div className="hidden lg:flex md:flex-nowrap gap-2">
+                <div className="md:flex md:flex-nowrap gap-2">
                   <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
                     <File size={16} className="" />
                     Dicionário de dados
@@ -225,12 +226,14 @@ export function ResultHome() {
                   </Button>
                 </div>
 
-                {typeResult == 'researchers-home' && (
-                  <Button onClick={() => onOpenModal('filters')} variant="ghost" className="">
-                    <SlidersHorizontal size={16} className="" />
-                    Filtros
-                  </Button>
-                )}
+                <div>
+                  {typeResult == 'researchers-home' && (
+                    <Button onClick={() => onOpenModal('filters')} variant="ghost" className="">
+                      <SlidersHorizontal size={16} className="" />
+                      Filtros
+                    </Button>
+                  )}
+                </div>
                 <Button variant="ghost" size="icon" onClick={() => setIsOn(!isOn)}>
                   {isOn ? (
                     <ChevronUp className="h-4 w-4" />
@@ -238,6 +241,44 @@ export function ResultHome() {
                     <ChevronDown className="h-4 w-4" />
                   )}
                 </Button>
+              </div>
+
+              <div className="md:block lg:hidden">
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Button variant="ghost" className="h-8 w-8 p-0 hidden md:block">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>Mais opções</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
+                        <File size={16} className="" />
+                        Dicionário de dados
+                      </Button>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem>
+                      <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
+                        <Download size={16} className="" />
+                        Baixar resultado
+                      </Button>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem>
+                      <div>
+                        {typeResult == 'researchers-home' && (
+                          <Button onClick={() => onOpenModal('filters')} variant="ghost" className="">
+                            <SlidersHorizontal size={16} className="" />
+                            Filtros
+                          </Button>
+                        )}
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </div>

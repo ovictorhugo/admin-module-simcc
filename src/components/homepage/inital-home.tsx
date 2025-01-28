@@ -873,7 +873,7 @@ export function InitialHome() {
           )}
 
           <Alert className="lg:col-span-2 h-fit p-0">
-            <CardHeader className="flex p-0 flex-col md:flex-wra lg:flex-nowrap items-stretch space-y-0 border-b dark:border-b-neutral-800 sm:flex-row">
+            <CardHeader className="flex p-0 flex-col md:flex-wrap lg:flex-nowrap items-stretch space-y-0 border-b dark:border-b-neutral-800 sm:flex-row">
               <div className="w-full flex flex-col justify-center gap-1 px-6 py-5 sm:py-6">
                 <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
                   <div>
@@ -908,7 +908,7 @@ export function InitialHome() {
                 </CardHeader>
               </div>
 
-              <div className="flex w-full border-t dark:border-t-neutral-800">
+              <div className="flex w-full border-t dark:border-t-neutral-800 lg:border-none">
                 {["producao_bibliografica", "producao_tecnica"].map((key) => {
                   const chart = key as keyof typeof chartConfig
                   return (

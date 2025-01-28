@@ -50,7 +50,7 @@ type Research = {
   graduate_programs: GraduatePrograms[]
   departments: Departments[]
   research_groups: ResearchGroups[]
-  status:boolean
+  status: boolean
   cargo: string
   clas: string
   classe: string
@@ -383,9 +383,9 @@ export function ResearcherModal() {
               >
                 <div className="flex justify-between items-center w-full">
 
-                 <div className="flex gap-3 items-center">
-                 <div
-                    className={`
+                  <div className="flex gap-3 items-center">
+                    <div
+                      className={`
                       hidden text-[0.5rem] py-2 px-4 border dark:border-neutral-800 w-fit
                       text-gray-400 rounded-md  font-bold gap-1 items-center
 
@@ -395,13 +395,13 @@ export function ResearcherModal() {
 
                       ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none') : ('')}
                   `}
-                  >
-                  <CalendarBlank size={16}/>  Atualização do Lattes: {String(props.lattes_update)}
-                  </div>
-                  {researcher.slice(0, 1).map((user) => {
-                  return (
-                  <div
-                    className={`
+                    >
+                      <CalendarBlank size={16} />  Atualização do Lattes: {String(props.lattes_update)}
+                    </div>
+                    {researcher.slice(0, 1).map((user) => {
+                      return (
+                        <div
+                          className={`
                       hidden text-[0.5rem] py-2 px-4 border dark:border-neutral-800 w-fit
                        rounded-md  font-bold gap-1 items-center
 
@@ -411,11 +411,12 @@ export function ResearcherModal() {
                       text-white border-none
                       ${user.status ? ('bg-green-500 ') : ('bg-red-500')}
                   `}
-                  >
-                  {user.status ? (<Check size={16}/>):(<Minus size={16}/>)} {user.status ? ('Ativo'):('Inativo')}
+                        >
+                          {user.status ? (<Check size={16} />) : (<Minus size={16} />)} {user.status ? ('Ativo') : ('Inativo')}
+                        </div>
+                      )
+                    })}
                   </div>
-                  )})}
-                 </div>
 
                   <div className="hidden lg:flex gap-3">
                     {hasBaremaAvaliacao && (
@@ -698,15 +699,14 @@ export function ResearcherModal() {
                                 Trabalhos em evento
                               </TabsTrigger>
 
-                              
-      <TabsTrigger
-        value="cargos"
-        onClick={() => setValue('cargos')}
-        className="flex gap-2 items-center"
-      >
-        <Waypoints size={16} className="" />
-        Cargos e funções
-      </TabsTrigger>
+                              <TabsTrigger
+                                value="cargos"
+                                onClick={() => setValue('cargos')}
+                                className="flex gap-2 items-center"
+                              >
+                                <Waypoints size={16} className="" />
+                                Cargos e funções
+                              </TabsTrigger>
 
                             </TabsList>
 
@@ -859,13 +859,13 @@ export function ResearcherModal() {
                         })}
 
                         {researcher.slice(0, 1).map((user) => {
-                                              return(
-                                                <Coautores
-                                                id={user.id}
-                                                name={user.name}
-                                                />
-                                              )
-                                    })}
+                          return (
+                            <Coautores
+                              id={user.id}
+                              name={user.name}
+                            />
+                          )
+                        })}
 
 
                         {researcher.slice(0, 1).map(() => {

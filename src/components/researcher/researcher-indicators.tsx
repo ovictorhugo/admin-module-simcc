@@ -693,15 +693,14 @@ export function ResearcherIndicators(props: Research) {
 
           <div>
             <h2 className="text-2xl font-medium my-8 ">Outros gráficos</h2>
-            <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
-
+            <div className="grid lg:grid-cols-1 gap-4 md:gap-8  bg-red-600">
               <Alert className=" h-full  ">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <div>
                     <CardTitle className="text-sm font-medium">
-                      Índice de livros e capítulos
+                      Quantidade total de todas produções
                     </CardTitle>
-                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
+                    <CardDescription>Soma individual de todas as produções individuais do pesquisador</CardDescription>
                   </div>
 
                   <TooltipProvider>
@@ -719,58 +718,6 @@ export function ResearcherIndicators(props: Research) {
 
                 </CardContent>
               </Alert>
-
-              <Alert className=" h-full  ">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <div>
-                    <CardTitle className="text-sm font-medium">
-                      Índice de livros e capítulos
-                    </CardTitle>
-                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
-                  </div>
-
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                      <TooltipContent>
-                        <p>Fonte: Plataforma Lattes</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-
-
-                </CardHeader>
-                <CardContent className="mt-4">
-
-                </CardContent>
-              </Alert>
-
-              <Alert className=" h-full  ">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <div>
-                    <CardTitle className="text-sm font-medium">
-                      Índice de livros e capítulos
-                    </CardTitle>
-                    <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
-                  </div>
-
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                      <TooltipContent>
-                        <p>Fonte: Plataforma Lattes</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-
-
-                </CardHeader>
-                <CardContent className="mt-4">
-
-                </CardContent>
-              </Alert>
-
-
             </div>
 
           </div>

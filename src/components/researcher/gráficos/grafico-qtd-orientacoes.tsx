@@ -14,7 +14,7 @@ type Orientacao = {
   g_completed: number,
 };
 
-type IdPesquisador = {
+type PesquisadorID = {
   id_pesquisador: string;
 };
 
@@ -24,7 +24,7 @@ const chartConfig = {
   tese_doutorado: { label: "Tese de doutorado", color: "#425450" },
 } satisfies ChartConfig;
 
-export function GraficoQtdOrientacoes(props: IdPesquisador) {
+export function GraficoQtdOrientacoes(props: PesquisadorID) {
   const [chartData, setChartData] = useState<{ year: string; software: number; patente_concedida: number; patente_nao_concedida: number; rel_tec: number }[]>([]);
 
   const { urlGeral } = useContext(UserContext);
@@ -43,6 +43,7 @@ export function GraficoQtdOrientacoes(props: IdPesquisador) {
           }
         });
 
+
         if (!resposta.ok) {
           throw new Error("Erro na resposta do servidor");
         }
@@ -52,6 +53,7 @@ export function GraficoQtdOrientacoes(props: IdPesquisador) {
         setChartData(dadosProntos);
       }
 
+      console.info("URL: ", urlGeral + `researcher/${props.id_pesquisador}/guidance_metrics`);
       dados(props.id_pesquisador);
     } catch (err) {
       console.log("ERRO AO CARREGAR OS DADOS", err);

@@ -262,9 +262,8 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
 
         <div className="relative flex">
 
-          <div className="p-8 pr-0">
-            <div className="h-full w-[270px] rounded-md bg-eng-blue p-8"></div>
-
+          <div className="hidden lg:block p-8 pr-0">
+            <div className=" h-full w-[270px] rounded-md bg-eng-blue p-8"></div>
           </div>
           <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
             <div>
@@ -638,7 +637,7 @@ export function ResearchersHome() {
 
                   </AccordionTrigger>
                 </div>
-                <AccordionContent>
+                <AccordionContent className="w-full">
                   {loading ? (
                     <Skeleton className="w-full rounded-md h-[300px]" />
                   ) : (

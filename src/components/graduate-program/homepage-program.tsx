@@ -730,7 +730,7 @@ export function HomepageProgram(props: Props) {
           "
         >
           <Alert className="lg:col-span-2 h-full p-0 w-full">
-            <CardHeader className="flex p-0 flex-col items-stretch space-y-0 border-b dark:border-b-neutral-800 sm:flex-row">
+            <CardHeader className="flex p-0 flex-col md:flex-wrap items-stretch space-y-0 border-b dark:border-b-neutral-800 sm:flex-row">
               <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
                 <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0">
                   <div>
