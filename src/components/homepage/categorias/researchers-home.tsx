@@ -628,9 +628,9 @@ export function ResearchersHome() {
           <MariaHome />
 
           {searchType !== 'abstract' && searchType !== 'name' && searchType !== 'area' && (
-            <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex md:mb-2">
-              <AccordionItem value="item-1">
-                <div className="flex mb-2">
+            <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex md:mb-2 w-full">
+              <AccordionItem value="item-1" className="w-full">
+                <div className="flex mb-2 w-full">
                   <HeaderResultTypeHome title="Pesquisadores mais relevantes por ordem de ocorrências" icon={<ListNumbers size={24} className="text-gray-400" />}>
                   </HeaderResultTypeHome>
                   <AccordionTrigger>
