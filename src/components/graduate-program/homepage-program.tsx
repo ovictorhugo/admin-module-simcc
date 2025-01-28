@@ -672,7 +672,7 @@ export function HomepageProgram(props: Props) {
         </div>
       </div>
 
-      <div className="lg:grid-cols-3 gap-8">
+      <div className="flex flex-col md:grid md:grid-cols-1 lg:grid-cols-3 gap-8">
         <Alert className="bg-eng-blue dark:bg-eng-blue">
           <CardHeader>
             <div className="flex mb-1 gap-3 justify-between">
