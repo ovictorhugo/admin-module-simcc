@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 
 import { UserContext } from "../../context/context";
 
-import { Buildings, CalendarBlank, DownloadSimple, EyeClosed, File, Globe, LinkBreak, Quotes } from "phosphor-react";
+import { Buildings, CalendarBlank, DownloadSimple, EyeClosed, File, Globe, LinkBreak, Quotes, Sparkle } from "phosphor-react";
 import { Link } from "react-router-dom";
 
 import { ScrollArea } from "../ui/scroll-area";
@@ -93,7 +93,7 @@ const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNod
 
 export function ArticlesModal() {
 
-  const { urlGeral, itemsSelecionados } = useContext(UserContext)
+  const { urlGeral, itemsSelecionados, version } = useContext(UserContext)
 
   const { onClose, isOpen, type: typeModal, data } = useModalSecundary();
   const isModalOpen = isOpen && typeModal === "articles-modal";
@@ -308,13 +308,21 @@ export function ArticlesModal() {
               </div>
             )}
 
-            {data.abstract != '' && (
+           
               <div>
                 <div className="my-6 border-b dark:border-b-neutral-800"></div>
                 <h4 className="font-medium text-xl mb-4">Resumo</h4>
-                <p className="text-sm text-gray-500 flex flex-wrap text-justify">{data.abstract}</p>
+               {data.abstract != '' ? (
+                 <p className="text-sm text-gray-500 flex flex-wrap text-justify">{data.abstract}</p>
+               ):(
+                <div>
+                  <Button variant={'outline'} className="w-full border-eng-blue text-eng-blue hover:text-eng-dark-blue hover:border-eng-dark-blue"><Sparkle size={16}/>Gerar resumo com a {version ? 'Gaia': 'MarIA'}</Button>
+
+                  <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-6">d</p>
+                </div>
+               )}
               </div>
-            )}
+       
 
             {data.authors != '' && (
               <div>

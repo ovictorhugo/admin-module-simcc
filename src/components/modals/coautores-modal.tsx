@@ -1,14 +1,77 @@
-import { X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { DialogHeader } from "../ui/dialog";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { Sheet, SheetContent } from "../ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { useModalSecundary } from "../hooks/use-modal-store-secundary";
+import { useContext, useEffect, useRef, useState } from "react";
+import { UserContext } from "../../context/context";
+import { Alert } from "../ui/alert";
+
+interface Coautor {
+  id:string
+name:string
+among:number
+type:string
+}
+
 
 export function CoautoresModal() {
      const { onClose, isOpen, type: typeModal, data } = useModalSecundary();
     const isModalOpen = (isOpen && typeModal === "coautores") 
+
+     const [count, setCount] = useState(20)
+         const [researcher, setResearcher] = useState<Coautor[]>([]);
+         const [, isLoading] = useState(false)
+         const { urlGeral} = useContext(UserContext);
+         let urlTermPesquisadores = urlGeral + `researcher/co-authorship/${data.id}`;
+       console.log(urlTermPesquisadores)
+    
+         useEffect(() => {
+          const fetchData = async () => {
+    
+            try {
+              isLoading(true)
+              const response = await fetch(urlTermPesquisadores, {
+                mode: "cors",
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": "GET",
+                  "Access-Control-Allow-Headers": "Content-Type",
+                  "Access-Control-Max-Age": "3600",
+                  "Content-Type": "text/plain",
+                },
+              });
+      
+              const data = await response.json();
+              if (data) {
+                setResearcher(data);
+             
+              }
+            
+            } catch (err) {
+              console.log(err);
+            } finally {
+              isLoading(false);
+            }
+          };
+          fetchData();
+        }, [urlTermPesquisadores]);
+    
+        const containerRef = useRef<HTMLDivElement>(null);
+        const [maxFontSize, setMaxFontSize] = useState(100);
+      
+        useEffect(() => {
+          if (containerRef.current) {
+            const containerHeight = containerRef.current.clientHeight;
+            setMaxFontSize(containerHeight * 0.2); // Define um tamanho máximo baseado na altura da div pai
+          }
+        }, [researcher]);
+      
+        const minFontSize = maxFontSize * 0.6;
+        // Ordena os pesquisadores em ordem decrescente pelo valor de among
+      const sortedResearchers = [...researcher].sort((a, b) => b.among - a.among);
 
     return(
         <Sheet open={isModalOpen} onOpenChange={onClose}>
@@ -59,7 +122,7 @@ export function CoautoresModal() {
 
             <div className="flex flex-wrap gap-4">
         <div className="flex gap-1 items-center">
-            <div className="w-4 h-4 rounded-md bg-yellow-400"></div>
+            <div className="w-4 h-4 rounded-md bg-yellow-500"></div>
             <p className="text-sm text-gray-500">Mesma instituição</p>
         </div>
 
@@ -72,6 +135,57 @@ export function CoautoresModal() {
             <div className="w-4 h-4 rounded-md bg-red-400"></div>
             <p className="text-sm text-gray-500">Não identificado</p>
         </div>
+      </div>
+
+      <div>
+      <div className="gap-2 mt-8 flex-wrap flex w-full items-start ">
+  {sortedResearchers.slice(0, count).map((item) => {
+     const maxFontSize = 250;
+     const minFontSize = 70;
+
+     const distinctAmongValues = [...new Set(sortedResearchers.map((item: any) => item.among))];
+     const distinctAmongCount = distinctAmongValues.length;
+     const fontSize =
+         maxFontSize -
+         ((maxFontSize - minFontSize) / (distinctAmongCount - 1)) *
+         distinctAmongValues.indexOf(item.among);
+
+    return (
+      <li key={item.id} className="list-none">
+        <div className="">
+          <Alert
+            className={`flex items-start justify-start text-left w-fit gap-4 font-semibold text-white  p-2 truncate 
+              ${
+                (item.type === 'internal' && 'bg-yellow-500') ||
+                (item.type === 'abstract' && 'bg-orange-400') ||
+                (item.type === 'speaker' && 'bg-red-400') || ''
+              }
+            `}
+            style={{
+              fontSize: `${fontSize}%`,
+              maxWidth: '100%',
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              textAlign: 'center'
+            }}
+          >
+            {item.name} {item.among}
+          </Alert>
+        </div>
+      </li>
+    );
+  })}
+</div>
+
+
+
+      {sortedResearchers.length > count && (
+        <div className="w-full mt-8 items-center flex justify-center">
+        <Button onClick={() => setCount(count + 5)} variant={'outline'} size={'sm'}>
+          <Plus size={16}/>  Mostrar mais
+        </Button>
+      </div>
+      )}  
       </div>
             </ScrollArea>
                               </SheetContent>
