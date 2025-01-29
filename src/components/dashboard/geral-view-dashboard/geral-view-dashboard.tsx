@@ -416,9 +416,9 @@ export function GeralViewDashboard() {
                       <div className="flex flex-col gap-3">
                         {background.map((props) => {
                           return (
-                            <Alert className="flex justify-between group  p-2">
+                            <Alert className="flex justify-between group border-0 p-0 h-10 items-center">
                               <div className="flex items-center gap-3">
-                                <div className="w-6 h-6 rounded-md whitespace-nowrap bg-cover bg-center bg-no-repeat " style={{ backgroundImage: `url(${props.imgURL})` }} />
+                                <div className="w-8 h-8 rounded-md whitespace-nowrap bg-cover bg-center bg-no-repeat " style={{ backgroundImage: `url(${props.imgURL})` }} />
                                 <p className="max-w-[150px] truncate text-sm text-gray-500">{props.titulo}</p>
                               </div>
 

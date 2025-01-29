@@ -23,6 +23,7 @@ import { getFirestore,  collection, addDoc } from 'firebase/firestore';
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useDropzone } from "react-dropzone";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 export function AddBackground() {
     const { onClose, isOpen, type: typeModal, data } = useModal();
@@ -218,9 +219,10 @@ export function AddBackground() {
             </div>
             </div>
 
-            <div className="flex flex-col gap-3 w-full">
-            <div className="grid items-center gap-1.5">
-                    <Label>Nome de identificação do fundo*</Label>
+            <div className="flex flex-col gap-6 w-full">
+            <div className="flex gap-3 items-center w-full">
+            <div className="grid items-center gap-1.5 w-full">
+                    <Label>Nome da campanha*</Label>
                     <Input
                       type="text"
                       name="dep_nom"
@@ -228,10 +230,31 @@ export function AddBackground() {
                       onChange={(e) => setTitulo(e.target.value)}
                     />
                   </div>
+
+                  <div className="grid w-full items-center gap-1.5">
+                    <Label>Departamento*</Label>
+                    <Select>
+  <SelectTrigger className="">
+    <SelectValue placeholder="" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="est">Engenharia de Estruturas</SelectItem>
+    <SelectItem value="ehr">Engenharia Hidráulica e Recursos Hídricos</SelectItem>
+    <SelectItem value="emc">Engenharia de Materiais e Construção</SelectItem>
+    <SelectItem value="etg">Engenharia de Transportes e Geotecnia</SelectItem>
+    <SelectItem value="em">Engenharia Mecânica</SelectItem>
+    <SelectItem value="ene">Engenharia Elétrica</SelectItem>
+    <SelectItem value="enq">Engenharia Química</SelectItem>
+    <SelectItem value="enp">Engenharia de Produção</SelectItem>
+    <SelectItem value="emm">Engenharia Metalúrgica e de Materiais</SelectItem>
+ 
+    <SelectItem value="den">Engenharia Nuclear</SelectItem>
+  </SelectContent>
+</Select>
+</div>
             </div>
 
-            
-            <div {...getRootProps()} className="border-dashed mb-3 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-4">
+<div {...getRootProps()} className="border-dashed mb-3 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 ">
                         <input {...getInputProps()} />
                         <div className="p-4  border rounded-md">
                             <Image size={24} className=" whitespace-nowrap" />
@@ -253,6 +276,10 @@ export function AddBackground() {
                             </div>
                         )}
                     </div>
+            </div>
+
+            
+         
 
             <Button onClick={handleSubmit} className="mt-3 ml-auto flex ">
             {uploadProgress ? (<LoaderCircle size={16} className="an animate-spin" />):(<Plus size={16} className="" />)}  {uploadProgress ? ('Adicionando background'):('Adicionar background')}  

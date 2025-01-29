@@ -8,8 +8,8 @@ export function CloudWordResearcherHome(props: Research) {
     return (
         <div className="gap-2 flex-wrap flex w-full items-end">
             {props.researcher.slice(0, 10).map((item: any) => {
-                const maxFontSize = 200;
-                const minFontSize = 120;
+                const maxFontSize = 250;
+                const minFontSize = 100;
 
                 const distinctAmongValues = [...new Set(props.researcher.map((item: any) => item.among))];
                 const distinctAmongCount = distinctAmongValues.length;
