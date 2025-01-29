@@ -241,7 +241,7 @@ export function InitialHome() {
 
   //
 
-  let urlRt = `${urlGeral}departament/rt`
+  const urlRt = `${urlGeral}departament/rt`
 
   const [rt, setRt] = useState<Rt | null>(null);
 
@@ -302,9 +302,7 @@ export function InitialHome() {
     return acc;
   }, {});
 
-
-
-  let urlVisaoPrograma = `${urlGeral}/graduate_program_production?graduate_program_id=0&year=1900`;
+  const urlVisaoPrograma = `${urlGeral}/graduate_program_production?graduate_program_id=0&year=1900`;
   useMemo(() => {
     const fetchData = async () => {
       try {
@@ -441,8 +439,6 @@ export function InitialHome() {
     },
   };
 
-  /////////////////////////
-
   const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>('producao_bibliografica')
 
   const total = useMemo(
@@ -455,10 +451,6 @@ export function InitialHome() {
     }),
     [dados]
   );
-
-
-  /////////
-
 
   const [visibleChart, setVisibleChart] = useState(0);
   const chartKeys = ['count_article', 'count_patent', 'count_guidance_in_progress'];
@@ -481,11 +473,9 @@ export function InitialHome() {
 
   }
 
-
-  /////////
   const [bolsistas, setBolsistas] = useState<Bolsistas[]>([]);
 
-  let urlBolsistas = urlGeral + `foment`
+  const urlBolsistas = urlGeral + `foment`
 
   useEffect(() => {
     const fetchData = async () => {
@@ -618,7 +608,6 @@ export function InitialHome() {
           <p className="max-w-[750px] text-center text-lg font-light text-foreground"></p>
 
           <div className="lg:max-w-[60vw] lg:w-[60vw] w-full ">
-
             <Search />
           </div>
 

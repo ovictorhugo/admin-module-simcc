@@ -18,6 +18,7 @@ import { GraficoQtdLivrosCapitulos } from "./gráficos/grafico-qtd-livros-ano";
 import { GraficoQtdCitacoesAno } from "./gráficos/grafico-qtd-citacoes-ano";
 import { GraficoQtdOrientacoes } from "./gráficos/grafico-qtd-orientacoes";
 import { GraficoQtdProducaoTecnica } from "./gráficos/grafico-qtd-producao-tecnica";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 type Dados = {
   count_article: number
@@ -306,35 +307,50 @@ export function ResearcherIndicators(props: Research) {
 
   return (
     <div>
-      <div className="mt-8 mb-8 flex items-center gap-8">
-
-        <Avatar className="cursor-pointer rounded-2xl  h-28 w-28">
+      <div className="w-full mt-8 mb-8 flex items-center gap-6 md:gap-8 overflow-x-scroll">
+        <Avatar className="cursor-pointer rounded-2xl h-28 w-28">
           <AvatarImage className={'rounded-md h-28 w-28'} src={`${urlGeral}ResearcherData/Image?name=${props.name}`} />
           <AvatarFallback className="flex items-center justify-center"><User size={16} /></AvatarFallback>
         </Avatar>
-        <div>
-          <h1 className=" max-w-[500px] text-2xl font-medium leading-tight tracking-tighter md:text-3xl lg:leading-[1.1]  md:block mb-3 ">
+        <div className="flex flex-col w-[60%] md:w-full">
+          <h1 className="flex flex-wrap font-medium leading-tight tracking-tighter text-xl md:text-3xl lg:leading-[1.1]  md:block mb-3 ">
             Índices de produção de {props.name}</h1>
-          <div className="flex flex-wrap flex-1 items-center gap-3 mt-2">
-            {props.area != '' && (
-              props.area.split(';').map((value, index) => (
-                <li
-                  key={index}
-                  className={`py-2 whitespace-nowrap px-4 rounded-md text-xs font-bold flex gap-2 text-white items-center ${value.includes('CIENCIAS AGRARIAS') ? 'bg-red-400' : value.includes('CIENCIAS EXATAS E DA TERRA') ? 'bg-green-400' : value.includes('CIENCIAS DA SAUDE') ? 'bg-[#20BDBE]' : value.includes('CIENCIAS HUMANAS') ? 'bg-[#F5831F]' : value.includes('CIENCIAS BIOLOGICAS') ? 'bg-[#EB008B]' : value.includes('ENGENHARIAS') ? 'bg-[#FCB712]' : value.includes('CIENCIAS SOCIAIS APLICADAS') ? 'bg-[#009245]' : value.includes('LINGUISTICA LETRAS E ARTES') ? 'bg-[#A67C52]' : value.includes('OUTROS') ? 'bg-[#1B1464]' : 'bg-[#000]'}`}
-                >
-                  <PuzzlePiece size={12} className="text-white" /> {value.trim()}
-                </li>
-              ))
-            )}
-            {props.graduation != '' && (
-              <div className={`bg-blue-700 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center`}><GraduationCap size={12} className="textwhite" /> {props.graduation}</div>
-            )}
-
-            {props.city != "None" && (
-              <div className="bg-blue-700 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><MapPin size={12} className="textwhite" /> {props.city}</div>
-            )}
-
-          </div>
+          <ScrollArea>
+            <div
+              className="
+                flex w-full flex-1 overflow-x-auto items-center gap-3 my-2
+              "
+            >
+              {props.area != '' && (
+                props.area.split(';').map((value, index) => (
+                  <li
+                    key={index}
+                    className={`
+                      py-2 whitespace-nowrap px-4 rounded-md text-xs font-bold flex gap-2 text-white items-center
+                      ${value.includes('CIENCIAS AGRARIAS') ? 'bg-red-400' :
+                        value.includes('CIENCIAS EXATAS E DA TERRA') ? 'bg-green-400' :
+                          value.includes('CIENCIAS DA SAUDE') ? 'bg-[#20BDBE]' :
+                            value.includes('CIENCIAS HUMANAS') ? 'bg-[#F5831F]' :
+                              value.includes('CIENCIAS BIOLOGICAS') ? 'bg-[#EB008B]' :
+                                value.includes('ENGENHARIAS') ? 'bg-[#FCB712]' :
+                                  value.includes('CIENCIAS SOCIAIS APLICADAS') ? 'bg-[#009245]' :
+                                    value.includes('LINGUISTICA LETRAS E ARTES') ? 'bg-[#A67C52]' :
+                                      value.includes('OUTROS') ? 'bg-[#1B1464]' : 'bg-[#000]'}
+                    `}
+                  >
+                    <PuzzlePiece size={12} className="text-white" /> {value.trim()}
+                  </li>
+                ))
+              )}
+              {props.graduation != '' && (
+                <div className={`bg-blue-700 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center`}><GraduationCap size={12} className="textwhite" /> {props.graduation}</div>
+              )}
+              {props.city != "None" && (
+                <div className="bg-blue-700 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><MapPin size={12} className="textwhite" /> {props.city}</div>
+              )}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </div>
 
       </div>
@@ -442,7 +458,7 @@ export function ResearcherIndicators(props: Research) {
         <div>
           <div>
             <h2 className="text-2xl font-medium mb-8">Artigos qualificados</h2>
-            <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
               <Alert className=" h-[400px] lg:col-span-3 ">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <div>

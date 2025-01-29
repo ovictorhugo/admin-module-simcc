@@ -48,6 +48,7 @@ import { CaretLeft, Funnel, MagnifyingGlass } from "phosphor-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { ModeToggle } from "../mode-toggle";
+import { Separator } from "../ui/separator";
 
 export function Header() {
   const { loggedIn, role, setItensSelecionados, version, searchType, maria, user, permission } = useContext(UserContext)
@@ -77,6 +78,8 @@ export function Header() {
               <Link to={"/"} className="h-[18px]  " onClick={() => handleClick()} >{(theme == 'dark') ? (<LogoIaposWhite />) : (<LogoIapos />)}</Link>
             )}
 
+            <Separator orientation="vertical" className="h-6 bg-slate-300" />
+
             <div className="min-w-max">
               {version ? (
                 <Link to={"https://www.eng.ufmg.br/portal/"} target="_blank" className="whitespace-nowrap "><img src={(theme == 'dark') ? (logo_4_white) : (logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
@@ -91,7 +94,7 @@ export function Header() {
 
         <div className="w-full flex items-center justify-between md:justify-end gap-1">
           {isVisible && (
-            <div onClick={() => onOpen('search')} className="flex  h-8 border border-neutral-200 dark:border-neutral-800 px-1 bg-white dark:bg-neutral-950 rounded-md items-center">
+            <div onClick={() => onOpen('search')} className="hidden md:flex h-8 border border-neutral-200 dark:border-neutral-800 px-1 bg-white dark:bg-neutral-950 rounded-md items-center">
               <MagnifyingGlass size={16} className="w-8" />
               <Input className="border-0 h-full flex flex-1 dark:bg-transparent" placeholder="Fazer pesquisa..." />
               <p className="bg-neutral-100 rounded-md text-[10px] mr-1  dark:bg-neutral-800 h-6 flex items-center justify-center px-2">Ctrl + Q</p>
@@ -102,7 +105,7 @@ export function Header() {
             </div>
           )}
 
-          <div>
+          <div className="flex items-center gap-1 justify-start">
             {!loggedIn && (
               <Link to={'/signIn'}>
                 <Button variant='ghost' size="sm" className="h-8 px-2" >
