@@ -90,6 +90,7 @@ function App() {
 
   const [version, setVersion] = useState(import.meta.env.VITE_VERSION == 'false' ? (false):(true))
   const [simcc, setSimcc] = useState(import.meta.env.VITE_SIMCC == 'false' ? (false):(true))
+  const [test, setTest] = useState(import.meta.env.VITE_TEST_FUNCTIONS == 'false' ? (false):(true))
   const [searchType, setSearchType] = useState('article');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [idGraduateProgram, setIdGraduateProgram] = useState('0');
@@ -240,7 +241,8 @@ useEffect(() => {
       role, setRole,
       permission , setPermission,
       simcc, setSimcc,
-      isCollapsedRight, setIsCollapsedRight
+      isCollapsedRight, setIsCollapsedRight,
+      test, setTest
 
     }}
     >

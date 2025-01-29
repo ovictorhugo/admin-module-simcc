@@ -54,6 +54,8 @@ interface Permission {
 
 
 interface UserContextType {
+  test: boolean;
+  setTest: React.Dispatch<React.SetStateAction<boolean>>;
   loggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   navbar: boolean;
@@ -141,6 +143,8 @@ interface UserContextType {
 export const UserContext = createContext<UserContextType>({
   loggedIn: false,
   setLoggedIn: () => {},
+  test: false,
+  setTest: () => {},
   mapModal:false, 
   setMapModal:() => {},
   navbar: false, 
