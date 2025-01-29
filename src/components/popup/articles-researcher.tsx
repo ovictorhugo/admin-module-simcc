@@ -214,7 +214,7 @@ export function ArticlesResearcherPopUp(props: Props) {
                                                 {publicacoes.length}
                                             </span>
 
-                                            <span className="text-[0.6rem] md:text-[0.8rem]">ocorrências de</span>
+                                            <span >ocorrências de</span>
 
                                             <div className='flex gap-2 items-center'>
                                                 {itemsSelecionadosPopUp.map((valor, index) => {
@@ -240,7 +240,7 @@ export function ArticlesResearcherPopUp(props: Props) {
                                                     );
                                                 })}
 
-                                                <span className="text-[0.6rem] md:text-[0.8rem]">em artigos</span>
+                                                <span >em artigos</span>
                                             </div>
                                         </div>
                                     )}

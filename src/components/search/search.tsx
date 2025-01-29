@@ -368,15 +368,15 @@ export function Search() {
 
   return (
     <div className="bottom-0 mt-4 mb-2  w-full flex flex-col max-sm:flex  max-sm:flex-row">
-      <div className={` max-sm:px-[5px] `}>
+      <div className={` max-sm:px-[5px] w-full`}>
         <div className="">
-          <div className="flex gap-4">
+          <div className="flex gap-4 w-full">
 
             <Alert className="h-14 p-2 flex items-center justify-between">
               <div className="flex items-center gap-2 w-full flex-1">
-                <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
+                <MagnifyingGlass size={16} className="hidden md:block md:whitespace-nowrap md:w-10" />
 
-                <div className="flex gap-2 w-full items-center">
+                <div className="hidden md:flex md:gap-2 md:w-fit md:items-center">
                   <div className="flex items-center gap-2">
 
 
@@ -419,8 +419,8 @@ export function Search() {
                     })}
                   </div>
 
-                  <Input onClick={() => handlePopUppesquisa()} onChange={(e) => setInput(e.target.value)} value={input} type="text" className="border-0 w-full flex flex-1 " />
                 </div>
+                <Input onClick={() => handlePopUppesquisa()} onChange={(e) => setInput(e.target.value)} value={input} type="text" className="border-0 w-full flex flex-1 " />
               </div>
 
               <div className="w-fit flex gap-2">
