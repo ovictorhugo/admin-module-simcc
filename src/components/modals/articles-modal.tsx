@@ -9,6 +9,11 @@ import { ScrollArea } from "../ui/scroll-area";
 
 import { Button } from "../ui/button";
 import { Asterisk, Eye, Plus, SquareArrowOutUpRight, Star, User, X } from "lucide-react";
+interface Message {
+  message: any;
+  direction: string;
+  sender: string;
+}
 
 
 
@@ -17,7 +22,6 @@ interface ItemsSelecionados {
 }
 
 import {
-
   DialogHeader
 } from "../../components/ui/dialog"
 import { Sheet, SheetContent } from "../ui/sheet";
@@ -91,13 +95,32 @@ const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNod
   return result;
 };
 
+const API_KEY = import.meta.env.VITE_API_KEY
+
+
+
 export function ArticlesModal() {
 
   const { urlGeral, itemsSelecionados, version } = useContext(UserContext)
 
   const { onClose, isOpen, type: typeModal, data } = useModalSecundary();
   const isModalOpen = isOpen && typeModal === "articles-modal";
-
+ 
+  const systemMessage = (title: string, author: string) => ({
+    role: "system",
+    content: `Retorne APENAS um JSON com os seguintes campos:
+    {
+      "message": "Forneça um resumo detalhado e preciso do artigo, com no mínimo 500 caracteres. O resumo deve ser fiel ao conteúdo original, baseado em informações verificáveis da internet, sem acréscimos ou invenções. 
+                  
+      Utilize fontes confiáveis para garantir a precisão dos dados. No final do resumo, inclua:
+      - A lista completa de autores do artigo.
+      - As principais fontes utilizadas para obter as informações.
+      - Detalhes adicionais relevantes, como o ano de publicação, revista ou conferência onde foi publicado, metodologia utilizada e principais conclusões do estudo.
+    
+      O título do artigo e um dos autores serão informados como referência inicial."
+    }`
+  });
+  
 
   let qualisColor = {
     'A1': 'bg-[#006837]',
@@ -135,6 +158,7 @@ export function ArticlesModal() {
   }, []);
 
   const [isExpanded, setIsExpanded] = useState(false);
+const [gaia, setGaia] = useState('')
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -142,6 +166,76 @@ export function ArticlesModal() {
 
 
   const teste = highlightText(data.title || '', itemsSelecionados)
+
+  //////
+ const [messages, setMessages] = useState<Message[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  
+  
+    const handleSend = async (message: any) => {
+      const newMessage: Message = {
+        message,
+        direction: 'outgoing',
+        sender: "user"
+      };
+  
+      setMessages([newMessage]); // Substituir todas as mensagens antigas pela nova mensagem
+  
+      // Iniciar uma nova conversa
+      setIsTyping(true);
+      await processMessageToChatGPT(newMessage);
+    };
+
+    
+
+    async function processMessageToChatGPT(messageObject: any) {
+      try {
+        // Valida se "data" está definido antes de acessá-lo
+        const title = data?.title || 'Título Desconhecido';
+        const researcher = data?.researcher || 'Autor Desconhecido';
+    
+        const apiRequestBody = {
+          model: "gpt-3.5-turbo",
+          messages: [
+            systemMessage(title, researcher), 
+            { role: "user", content: messageObject.message },
+            { role: "assistant", content: "" }
+          ]
+        };
+    
+        console.log("Enviando para API:", JSON.stringify(apiRequestBody, null, 2)); // Verifique os dados antes de enviar
+    
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(apiRequestBody)
+        });
+    
+        const data2 = await response.json();
+        console.log("Resposta da API:", data2);
+    
+        if (data2.choices?.length > 0) {
+          const chatGptMessage = data2.choices[0].message;
+          const parsedContent = JSON.parse(chatGptMessage.content); // Verifica se é JSON válido
+    
+          setGaia(parsedContent.message);
+        } else {
+          console.error("Erro: resposta inesperada da API", data);
+        }
+    
+        setIsTyping(false);
+      } catch (error) {
+        console.error("Erro ao processar mensagem:", error);
+        setIsTyping(false);
+      }
+    }
+
+
+    const testeMensagem = `Resumo fiel e sem invenções sobre o artigo '${data.title}', onde um dos autores é '${data.researcher}'.`
+    
 
   return (
     <Sheet open={isModalOpen} onOpenChange={onClose}>
@@ -316,9 +410,9 @@ export function ArticlesModal() {
                  <p className="text-sm text-gray-500 flex flex-wrap text-justify">{data.abstract}</p>
                ):(
                 <div>
-                  <Button variant={'outline'} className="w-full border-eng-blue text-eng-blue hover:text-eng-dark-blue hover:border-eng-dark-blue"><Sparkle size={16}/>Gerar resumo com a {version ? 'Gaia': 'MarIA'}</Button>
+                  <Button onClick={() => handleSend(testeMensagem)} variant={'outline'} className="w-full border-eng-blue text-eng-blue hover:text-eng-dark-blue hover:border-eng-dark-blue"><Sparkle size={16}/>Gerar resumo com a {version ? 'Gaia': 'MarIA'}</Button>
 
-                  <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-6">d</p>
+                  <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-6">{gaia}</p>
                 </div>
                )}
               </div>

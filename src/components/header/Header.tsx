@@ -105,7 +105,9 @@ export function Header() {
             </div>
           )}
 
-          <div className="flex items-center gap-1 justify-start">
+
+          <div className="flex gap-3 items-center">
+
             {!loggedIn && (
               <Link to={'/signIn'}>
                 <Button variant='ghost' size="sm" className="h-8 px-2" >
