@@ -318,7 +318,7 @@ export function ResearcherIndicators(props: Research) {
           <ScrollArea>
             <div
               className="
-                flex w-full flex-1 overflow-x-auto items-center gap-3 my-2
+                flex w-full flex-1 whitespace-nowrap overflow-x-auto items-center gap-3 my-2 pb-1
               "
             >
               {props.area != '' && (

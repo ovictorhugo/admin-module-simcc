@@ -27,10 +27,12 @@ export function SelectTypeSearch() {
     const { searchType, setSearchType } = useContext(UserContext)
 
     return (
-        <div className="max-sm:min-w-max">
+        <div className="min-w-max">
             <Select defaultValue={searchType} value={searchType} onValueChange={(value) => setSearchType(value)}>
                 <SelectTrigger className="w-full whitespace-nowrap">
-                    <SelectValue placeholder="Escolha o tipo de pesquisa" />
+                    <div className="hidden md:block">
+                        <SelectValue placeholder="Escolha o tipo de pesquisa" />
+                    </div>
                 </SelectTrigger>
                 <SelectContent className="z-[9999]">
                     <SelectItem onClick={() => onOpen('researchers-home')} value="article" className="cursor-pointer"> <div className="flex gap-4 items-center mr-2"><div className="bg-blue-500 flex rounded-sm h-4 w-4"></div> Artigos</div></SelectItem>

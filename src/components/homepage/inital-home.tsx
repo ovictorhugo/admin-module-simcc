@@ -631,11 +631,11 @@ export function InitialHome() {
 
       <div className=" w-full md:px-8 gap-8 flex flex-col px-4">
 
-        <Alert className="grid gap-3 lg:grid-cols-4 grid-cols-2">
+        <Alert className="flex flex-col md:grid gap-3 lg:grid-cols-4 grid-cols-2">
           <Link onClick={() => onOpenResult('articles-home')} to={'/resultados?type_search=article&terms=&researcher=false'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
-                <CardTitle className="text-sm font-medium">
+                <CardTitle className="text-[0.9rem] md:text-sm font-medium">
                   Total de artigos
                 </CardTitle>
               </div>
@@ -645,15 +645,16 @@ export function InitialHome() {
             </CardHeader>
 
             <CardContent>
-              <span className="text-lg font-bold leading-none sm:text-3xl">
+              <span className="font-bold leading-none text-3xl">
                 {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.article}</>)) : 0}
               </span>
             </CardContent>
           </Link>
+
           <Link onClick={() => onOpenResult('book-home')} to={'/resultados?type_search=book&terms=&researcher=false'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
-                <CardTitle className="text-sm font-medium">
+                <CardTitle className="text-[0.9rem] md:text-sm font-medium">
                   Total de livros
                 </CardTitle>
               </div>
@@ -663,15 +664,16 @@ export function InitialHome() {
             </CardHeader>
 
             <CardContent>
-              <span className="text-lg font-bold leading-none sm:text-3xl">
+              <span className="font-bold leading-none text-3xl">
                 {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.book}</>)) : 0}
               </span>
             </CardContent>
           </Link>
+
           <Link onClick={() => onOpenResult('book-home')} to={'/resultados?type_search=book&terms=&researcher=false'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <div>
-                <CardTitle className="text-sm font-medium">
+                <CardTitle className="text-[0.9rem] md:text-sm font-medium">
                   Total de capítulos
                 </CardTitle>
               </div>
@@ -681,7 +683,7 @@ export function InitialHome() {
             </CardHeader>
 
             <CardContent>
-              <span className="text-lg font-bold leading-none sm:text-3xl">
+              <span className="font-bold leading-none text-3xl">
                 {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.book_chapter}</>)) : 0}
               </span>
             </CardContent>
@@ -690,7 +692,7 @@ export function InitialHome() {
           <Link onClick={() => onOpenResult('patent-home')} to={'/resultados?type_search=patent&terms=&researcher=false'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <div>
-                <CardTitle className="text-sm font-medium">
+                <CardTitle className="text-[0.9rem] md:text-sm font-medium">
                   Total de patentes
                 </CardTitle>
 
@@ -701,7 +703,7 @@ export function InitialHome() {
             </CardHeader>
 
             <CardContent>
-              <span className="text-lg font-bold leading-none sm:text-3xl">
+              <span className="font-bold leading-none text-3xl">
                 {VisaoPrograma.length != 0 ? VisaoPrograma.map((props) => (<>{props.patent}</>)) : 0}
               </span>
             </CardContent>

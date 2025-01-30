@@ -477,7 +477,7 @@ export function SearchModal() {
 
         <Alert onKeyDown={handleEnterPress} className="h-14 bg-white p-2 flex items-center gap-3 justify-between">
           <div className="flex items-center gap-2 w-full flex-1">
-            <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
+            <MagnifyingGlass size={16} className="hidden md:block whitespace-nowrap w-10" />
 
             <div className="flex gap-2 w-full items-center">
               <div className='flex gap-2 items-center'>
@@ -573,7 +573,6 @@ export function SearchModal() {
                 1200: 2
               }}
             >
-
               <Masonry gutter="20px">
                 {filteredItems.filter(item => item.type_ === 'ARTICLE').length != 0 && (
                   <div>

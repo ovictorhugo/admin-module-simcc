@@ -28,6 +28,8 @@ import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
 import { MUfmg } from "../svg/MUfmg";
 import { useTheme } from "next-themes";
 import { LogoIaposWhite } from "../svg/LogoIaposWhite";
+import { LogoConectee } from "../svg/LogoConectee";
+import { LogoIapos } from "../svg/LogoIapos";
 
 export function SignInContent() {
 
@@ -38,6 +40,7 @@ export function SignInContent() {
     const { setLoggedIn, urlGeralAdm, version } = useContext(UserContext);
     const history = useNavigate();
     const { setUser } = useContext(UserContext);
+    const { theme, setTheme } = useTheme()
 
     const handleLogin = async () => {
         try {
@@ -91,8 +94,8 @@ export function SignInContent() {
                         }
                     ]
 
-                    let urlProgram = urlGeralAdm + 's/user'
-                    let urlUser = urlGeralAdm + `s/user?uid=${result.user.uid}`
+                    const urlProgram = urlGeralAdm + 's/user'
+                    const urlUser = urlGeralAdm + `s/user?uid=${result.user.uid}`
 
                     const fetchData = async () => {
 
@@ -336,14 +339,6 @@ export function SignInContent() {
             })
     };
 
-
-
-    ///minha ufmg
-
-
-
-    //frases
-
     const quotesWithAuthors = [
         {
             quote: 'A gente continua apaixonado pela Escola de Engenharia e pelas pessoas que flutuam nela',
@@ -365,7 +360,6 @@ export function SignInContent() {
             quote: 'Assim que eu cheguei na Escola foi tipo amor à primeira vista',
             author: 'Fátima Aparecida de Carvalho. Funcionária Técnico-administrativo do Departamento de Engenharia de Estruturas. Na escola desde 1983.'
         },
-
     ];
 
     // Estado para a frase e autor atuais
@@ -382,15 +376,24 @@ export function SignInContent() {
         setCurrentQuote(getRandomQuote());
     }, []);
 
+    const navigate = useNavigate();
 
-
+    function handleClick(): void {
+        navigate("/")
+    }
 
     return (
         <div className="w-full h-screen flex">
-            <div className="w-1/2 h-full p-16 md:flex justify-between flex-col hidden bg-cover bg-center bg-no-repeat bg-eng-blue" style={{ backgroundImage: `url(${img1})` }}>
+
+            <div
+                className="
+                    w-1/2 md:hidden h-full p-16 lg:flex justify-between flex-col 
+                    hidden bg-cover bg-center bg-no-repeat bg-eng-blue"
+                style={{ backgroundImage: `url(${img1})` }}>
                 {version ? (
                     <Link to={'/'} className="w-fit">
-                        <div className="h-[28px]"><LogoConecteeWhite /></div></Link>
+                        <div className="h-[28px]"><LogoConecteeWhite /></div>
+                    </Link>
                 ) : (
                     <Link to={'/'} className="w-fit">
                         <div className="h-[28px]"><LogoIaposWhite /></div></Link>
@@ -407,10 +410,23 @@ export function SignInContent() {
                 </div>
             </div>
 
-            <div className="md:w-1/2 w-full h-full flex md:px-16 items-center justify-center flex-col">
-
-
+            <div className="px-8 md:w-full lg:w-1/2 w-full h-full flex md:px-16 items-center justify-center flex-col">
                 <div className="max-w-[400px] w-full">
+                    <div className="flex items-center mb-8 lg:hidden">
+                        {version ? (
+                            <Link to={'/'} className="w-fit" onClick={() => handleClick()}>
+                                <div className="h-[28px]">
+                                    {(theme == 'dark') ? (<LogoConecteeWhite />) : (<LogoConectee />)}
+                                </div>
+                            </Link>
+                        ) : (
+                            <Link to={'/'} className="w-fit" onClick={() => handleClick()}>
+                                <div className="h-[28px]">
+                                    {(theme == 'dark') ? (<LogoIaposWhite />) : (<LogoIapos />)}
+                                </div>
+                            </Link>
+                        )}
+                    </div>
                     <CardHeader className="p-0 pb-6">
                         <CardTitle>Fazer login</CardTitle>
                         <CardDescription className="pt-2">
