@@ -42,7 +42,6 @@ function BahiaMap() {
   const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram[]>([]);
 
  
-  const [selectedGraduateProgramId, setSelectedGraduateProgramId] = useState<string | null>(null);
 
 
    
@@ -182,7 +181,7 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
     };
   }, [graduatePrograms]); // O array vazio garante que o useEffect seja executado apenas uma vez na montagem
 
-  return <div className={` absolute w-[140%] h-[130%] left-[-20px]`} id="containerone" />;
+  return <div className={` absolute w-[140%] z-[3] h-full left-[-20px]`} id="containerone" />;
 }
 
 export default BahiaMap;

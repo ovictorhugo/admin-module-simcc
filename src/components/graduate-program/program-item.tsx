@@ -55,7 +55,7 @@ export function ProgramItem(props: GraduateProgram) {
   }
 
   return (
-    <div className="flex items-center relative w-full" onClick={() => handlePesquisaFinal()} >
+    <div className="flex items-center z-[99] relative w-full" onClick={() => handlePesquisaFinal()} >
       <div className="flex w-full" >
         {props.type != undefined && (<div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border min-h-[120px]  border-neutral-200 border-r-0 ${qualisColor[props.type.toUpperCase() as keyof typeof qualisColor]} min-h-full relative `}></div>)}
 

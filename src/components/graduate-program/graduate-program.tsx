@@ -17,6 +17,7 @@ import { ArrowRight, Info } from "lucide-react";
 import bg_graduate from '../../assets/bg_graduate.png'
 import { Helmet } from "react-helmet";
 import BahiaMap from "./bahia-map";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface GraduateProgram {
   area: string;
@@ -55,6 +56,7 @@ export function GraduateProgram() {
 
   const isModalOpen = isOpen && type === "graduation-home";
 
+  const [cidade, setCidade] = useState('')
   const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram[]>([]);
   let programSelecionado = type_search || ''
 
@@ -103,7 +105,7 @@ export function GraduateProgram() {
     return searchString.includes(normalizedSearch);
   }) : [];
 
-  const {version} = useContext(UserContext)
+  const {version, simcc} = useContext(UserContext)
   
   return (
     <>
@@ -117,13 +119,15 @@ export function GraduateProgram() {
         <>
           {programSelecionado.length == 0 ? (
             <div>
-               <div className="w-full h-screen max-h-screen overflow-y-hidden overflow-hidden flex items-center absolute top-0 "><BahiaMap/></div>
+              {simcc && (
+                 <div className="w-full hidden lg:flex h-[120vh] overflow-hidden items-center absolute top-[-68px]  "><BahiaMap/></div>
+              )}
               <main className="  gap-4 md:gap-8 flex flex-col  p-4 md:p-8 pt-0 md:pt-0 w-full">
-              <div className="bg-cover bg-bottom bg-no-repeat" style={{ backgroundImage: `url(${bg_graduate})` }}>
-                <div className="justify-center m w-full  flex max-w-[980px] flex-col items-center lg:items-start  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
-                  <Link to={'/informacoes'} className="inline-flex z-[2] w-fit items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12} /></Link>
+              <div className="bg-cover w-fit z-[6] bg-bottom bg-no-repeat" >
+                <div className="justify-center h-[calc(100vh-132px)] z-[9] m w-full  flex max-w-[980px] flex-col items-center lg:items-start  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
+                  <Link to={'/informacoes'} className="inline-flex lg:w-fit  z-[2] w-fit items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12} /></Link>
 
-                  <h1 className="z-[2] lg:text-left text-center max-w-[600px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
+                  <h1 className="lg:w-fit  lg:text-left text-center max-w-[600px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
                     Selecione um programa de {" "}
                     <strong className="bg-eng-blue  rounded-md px-3 pb-2 text-white font-medium">
                       {" "}
@@ -131,16 +135,32 @@ export function GraduateProgram() {
                     </strong>{" "}
                   </h1>
 
-                  <Alert className="h-14 mt-8 p-2 flex items-center justify-between lg:max-w-[600px] lg:w-[60vw] w-full">
+                 <div className="flex mt-8 lg:w-fit  z-[9] items-center gap-3">
+                 <Alert className="h-14  p-2 flex items-center justify-between lg:max-w-[600px] lg:w-[60vw] w-full">
                     <div className="flex items-center gap-2 w-full flex-1">
                       <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
                       <Input onChange={(e) => setSearch(e.target.value)} value={search} type="text" className="border-0 w-full " />
                     </div>
                   </Alert>
+{simcc && (
+  
+  <Select>
+  <SelectTrigger className="w-[180px] rounded-md px-4 z-[99] h-[56px]">
+    <SelectValue placeholder="Theme" className="" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="light">Light</SelectItem>
+    <SelectItem value="dark">Dark</SelectItem>
+    <SelectItem value="system">System</SelectItem>
+  </SelectContent>
+</Select>
+)}
+                 </div>
                 </div>
               </div>
-
-              <ResponsiveMasonry
+<div>
+  
+<ResponsiveMasonry
                 columnsCountBreakPoints={{
                   350: 1,
                   750: 2,
@@ -149,7 +169,7 @@ export function GraduateProgram() {
                   1700: 4
                 }}
               >
-                <Masonry gutter="16px" className="w-full">
+                <Masonry gutter="16px" className=" z-[99] w-full">
                   {filteredTotal
                     .filter(item => item.visible == "True") // Filtra os itens onde `visible` é `true`
                     .map((props, index) => (
@@ -177,6 +197,7 @@ export function GraduateProgram() {
                     ))}
                 </Masonry>
               </ResponsiveMasonry>
+</div>
 
             </main>
             </div>

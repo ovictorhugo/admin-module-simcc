@@ -28,6 +28,7 @@ import { Sheet, SheetContent } from "../ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useModalSecundary } from "../hooks/use-modal-store-secundary";
+import { Skeleton } from "../ui/skeleton";
 
 const decodeHtmlEntities = (text: string): string => {
   const entities = {
@@ -417,14 +418,25 @@ const [gaia, setGaia] = useState('')
                 <div>
                   <Button onClick={() => handleSend(testeMensagem)} variant={'outline'} className="w-full border-eng-blue text-eng-blue hover:text-eng-dark-blue hover:border-eng-dark-blue"><Sparkle size={16}/>Gerar resumo com a {version ? 'Gaia': 'MarIA'}</Button>
 
-               {gaia != '' && (
-                 <div>
-                 <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-6">
-                   {gaia}</p>
- 
-                   <p className="text-sm text-gray-500 flex flex-wrap font-bold text-justify mt-6">
-                   A {version ? 'Gaia': 'MarIA'} pode cometer erros. Considere verificar informações importantes.</p>
-                 </div>
+               {isTyping ? (
+                <div className="flex flex-col gap-3 mt-8">
+                  <Skeleton className="w-full h-5 rounded-md"/>
+                  <Skeleton className="w-full h-5 rounded-md"/>
+                  <Skeleton className="w-full h-5 rounded-md"/>
+                  <Skeleton className="w-full h-5 rounded-md"/>
+                  <Skeleton className="w-full h-5 rounded-md"/>
+                  <Skeleton className="w-[80%] h-5 rounded-md"/>
+                </div>
+               ):(
+                gaia != '' && (
+                  <div>
+                  <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-6">
+                    {gaia}</p>
+  
+                    <p className="text-sm text-gray-500 flex flex-wrap font-bold text-justify mt-6">
+                    A {version ? 'Gaia': 'MarIA'} pode cometer erros. Considere verificar informações importantes.</p>
+                  </div>
+                )
                )}
                 </div>
                )}
