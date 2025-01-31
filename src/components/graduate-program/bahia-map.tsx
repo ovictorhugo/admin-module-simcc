@@ -5,7 +5,7 @@ import HighchartsAccessibility from 'highcharts/modules/accessibility';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsOfflineExporting from 'highcharts/modules/offline-exporting';
 
-import { UserContext } from '../contexts/context'
+
 import { useEffect, useState, useContext } from "react";
 
 // Initialize Highcharts modules
@@ -34,17 +34,18 @@ interface GraduateProgram {
 // Importar dados GeoJSON do Brasil
 
 import brazilStatesGeoJSON from './ba_state.json'; // Substitua pelo caminho correto
+import { UserContext } from '../../context/context';
 
 function BahiaMap() {
   const { urlGeral, setUrlGeral } = useContext(UserContext);
   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext);
   const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram[]>([]);
 
-  const { estadoSelecionado, setEstadoSelecionado } = useContext(UserContext);
+ 
   const [selectedGraduateProgramId, setSelectedGraduateProgramId] = useState<string | null>(null);
 
 
-   const { idVersao, setIdVersao } = useContext(UserContext);
+   
   const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=`;
 
   useEffect(() => {
@@ -154,7 +155,7 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
                   }
                 }
 
-                setEstadoSelecionado(city);
+                //SsetEstadoSelecionado(city);
 
                 if (cityProgramCount[city] > 1) {
                   setIdGraduateProgram('0');

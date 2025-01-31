@@ -117,7 +117,7 @@ export function GraduateProgram() {
         <>
           {programSelecionado.length == 0 ? (
             <div>
-               <div className="w-full h-screen max-h-screen overflow-y-hidden  overflow-hidden flex items-center absolute top-0 "><BahiaMap/></div>
+               <div className="w-full h-screen max-h-screen overflow-y-hidden overflow-hidden flex items-center absolute top-0 "><BahiaMap/></div>
               <main className="  gap-4 md:gap-8 flex flex-col  p-4 md:p-8 pt-0 md:pt-0 w-full">
               <div className="bg-cover bg-bottom bg-no-repeat" style={{ backgroundImage: `url(${bg_graduate})` }}>
                 <div className="justify-center m w-full  flex max-w-[980px] flex-col items-center lg:items-start  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
