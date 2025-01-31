@@ -16,6 +16,7 @@ import { ArrowRight, Info } from "lucide-react";
 
 import bg_graduate from '../../assets/bg_graduate.png'
 import { Helmet } from "react-helmet";
+import BahiaMap from "./bahia-map";
 
 interface GraduateProgram {
   area: string;
@@ -115,7 +116,9 @@ export function GraduateProgram() {
       
         <>
           {programSelecionado.length == 0 ? (
-            <main className="  gap-4 md:gap-8 flex flex-col  p-4 md:p-8 pt-0 md:pt-0 w-full">
+            <div>
+               <div className="w-full h-screen max-h-screen overflow-y-hidden  overflow-hidden flex items-center absolute top-0 "><BahiaMap/></div>
+              <main className="  gap-4 md:gap-8 flex flex-col  p-4 md:p-8 pt-0 md:pt-0 w-full">
               <div className="bg-cover bg-bottom bg-no-repeat" style={{ backgroundImage: `url(${bg_graduate})` }}>
                 <div className="justify-center m w-full  flex max-w-[980px] flex-col items-center lg:items-start  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
                   <Link to={'/informacoes'} className="inline-flex z-[2] w-fit items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12} /></Link>
@@ -176,6 +179,7 @@ export function GraduateProgram() {
               </ResponsiveMasonry>
 
             </main>
+            </div>
           ) : (
             <VisualizacaoPrograma />
           )}

@@ -25,23 +25,23 @@ export function CloudWordItemResearcher(props:Props) {
           className="inline-flex whitespace-nowrap cursor-pointer"
         >
           <Alert
-           className={`flex gap-4 font-semibold   text-white items-center
+           className={`flex gap-2 font-semibold   text-white items-center
            ${
-            ( searchType === 'article') && 'bg-blue-500 ' ||
-            (searchType === 'abstract') && 'bg-yellow-500 ' ||
-            (searchType === 'speaker') && 'bg-orange-500' ||
-            (searchType === 'book') && 'bg-pink-500 ' ||
-            (searchType === 'patent') && 'bg-cyan-500 ' ||
-            (searchType === 'name') && 'bg-red-500' ||
-            (searchType=== 'area') && 'bg-green-500' ||
+            ( searchType === 'article') && 'bg-blue-500 dark:bg-blue-500 ' ||
+            (searchType === 'abstract') && 'bg-yellow-500 dark:bg-yellow-500 ' ||
+            (searchType === 'speaker') && 'bg-orange-500 dark:bg-orange-500' ||
+            (searchType === 'book') && 'bg-pink-500 dark:bg-pink-500 ' ||
+            (searchType === 'patent') && 'bg-cyan-500 dark:bg-cyan-500 ' ||
+            (searchType === 'name') && 'bg-red-500 dark:bg-red-500' ||
+            (searchType=== 'area') && 'bg-green-500 dark:bg-green-500' ||
             ('')
         }
         `}
             style={{ fontSize: `${props.fontSize}%` }}
           >
             {props.name}
-          <div className="text-xs font-normal">
-          {props.among} ocorrências
+          <div className="font-normal">
+          {props.among} 
           </div>
           </Alert>
         </div>

@@ -128,13 +128,13 @@ export function Coautores(props:Props) {
       
           return (
             <li key={item.id} className="list-none">
-              <div className="">
+              <div className="text-left">
                 <Alert
-                  className={`flex items-start justify-start text-left w-fit gap-4 font-semibold text-white  p-2 truncate 
+                  className={`flex items-start justify-start text-left w-fit gap-2 font-semibold text-white  p-2 
                     ${
-                      (item.type === 'internal' && 'bg-yellow-500') ||
-                      (item.type === 'abstract' && 'bg-orange-400') ||
-                      (item.type === 'speaker' && 'bg-red-400') || ''
+                      (item.type === 'internal' && 'bg-yellow-500 dark:bg-yellow-500') ||
+                      (item.type === 'abstract' && 'bg-orange-400 dark:bg-orange-400') ||
+                      (item.type === 'speaker' && 'bg-red-400 dark:bg-red-400') || ''
                     }
                   `}
                   style={{
@@ -145,7 +145,7 @@ export function Coautores(props:Props) {
                     textAlign: 'center'
                   }}
                 >
-                  {item.name} {item.among}
+               <p className="text-left">{item.name} <strong className="font-normal">{item.among}</strong></p>
                 </Alert>
               </div>
             </li>

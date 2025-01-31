@@ -105,21 +105,26 @@ export function ArticlesModal() {
 
   const { onClose, isOpen, type: typeModal, data } = useModalSecundary();
   const isModalOpen = isOpen && typeModal === "articles-modal";
- 
+  
   const systemMessage = (title: string, author: string) => ({
     role: "system",
-    content: `Retorne APENAS um JSON com os seguintes campos:
+    content: `Com base nas informações inseridas pelo usuário, retorne APENAS UM JSON estruturado com o seguinte formato:
     {
-      "message": "Forneça um resumo detalhado e preciso do artigo, com no mínimo 500 caracteres. O resumo deve ser fiel ao conteúdo original, baseado em informações verificáveis da internet, sem acréscimos ou invenções. 
-                  
-      Utilize fontes confiáveis para garantir a precisão dos dados. No final do resumo, inclua:
+      "message": "Gerar um resumo detalhado e preciso do artigo com pelo menos 500 caracteres. O resumo deve refletir fielmente o conteúdo original, com base em informações verificáveis da internet, sem acréscimos ou invenções.
+      
+      - Caso o artigo possua DOI, utilize-o como fonte principal para obter o resumo.
+      - Se o DOI não estiver disponível, busque informações sobre o artigo em fontes confiáveis da internet.
+      - Garanta que o resumo seja baseado em dados verificáveis e corretamente referenciados.
+      
+      No final do resumo, inclua obrigatoriamente:
       - A lista completa de autores do artigo.
       - As principais fontes utilizadas para obter as informações.
-      - Detalhes adicionais relevantes, como o ano de publicação, revista ou conferência onde foi publicado, metodologia utilizada e principais conclusões do estudo.
-    
-      O título do artigo e um dos autores serão informados como referência inicial."
+      - Detalhes adicionais relevantes, como ano de publicação, revista ou conferência onde foi publicado, metodologia utilizada e principais conclusões do estudo.
+      
+      O título do artigo, DOI e um dos autores serão fornecidos como referência inicial para a busca."
     }`
   });
+  
   
 
   let qualisColor = {
@@ -234,7 +239,7 @@ const [gaia, setGaia] = useState('')
     }
 
 
-    const testeMensagem = `Resumo fiel e sem invenções sobre o artigo '${data.title}', onde um dos autores é '${data.researcher}'.`
+    const testeMensagem = `Resumo fiel e sem invenções sobre o artigo '${data.title}', onde um dos autores é '${data.researcher}'. ${(data.doi != '' && data.doi != null) && (`E o doi do artigo é ${data.doi}`)}`
     
 
   return (
@@ -412,7 +417,15 @@ const [gaia, setGaia] = useState('')
                 <div>
                   <Button onClick={() => handleSend(testeMensagem)} variant={'outline'} className="w-full border-eng-blue text-eng-blue hover:text-eng-dark-blue hover:border-eng-dark-blue"><Sparkle size={16}/>Gerar resumo com a {version ? 'Gaia': 'MarIA'}</Button>
 
-                  <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-6">{gaia}</p>
+               {gaia != '' && (
+                 <div>
+                 <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-6">
+                   {gaia}</p>
+ 
+                   <p className="text-sm text-gray-500 flex flex-wrap font-bold text-justify mt-6">
+                   A {version ? 'Gaia': 'MarIA'} pode cometer erros. Considere verificar informações importantes.</p>
+                 </div>
+               )}
                 </div>
                )}
               </div>

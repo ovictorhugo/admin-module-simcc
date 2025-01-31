@@ -203,8 +203,6 @@ export function ItensListDepartamento(props:Props) {
             </div>
              <Building size={16}/>
              </div>
-
-          
              
           <div className="flex justify-between w-full items-center">
           <div className="flex w-full flex-col">
