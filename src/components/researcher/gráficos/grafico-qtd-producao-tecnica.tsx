@@ -53,7 +53,7 @@ export function GraficoQtdProducaoTecnica(props: ProdTecProps) {
         <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
           <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
           <YAxis hide={true} />
-          <ChartLegend content={<ChartLegendContent />} />
+          <ChartLegend className="flex flex-wrap" content={<ChartLegendContent />} />
           <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
 
           {/* Barras empilhadas */}

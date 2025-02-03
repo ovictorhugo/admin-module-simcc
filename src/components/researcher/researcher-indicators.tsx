@@ -534,7 +534,7 @@ export function ResearcherIndicators(props: Research) {
                 </CardContent>
               </Alert>
 
-              <Alert className="  lg:col-span-3 ">
+              <Alert className="hidden md:block lg:col-span-3 ">
 
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <div>
@@ -562,9 +562,9 @@ export function ResearcherIndicators(props: Research) {
             </div>
           </div>
 
-          <div>
+          <div className="w-full">
             <h2 className="text-2xl font-medium my-8 ">Livros e capítulos de livros</h2>
-            <div className="grid lg:grid-cols-4 gap-4 md:gap-8">
+            <div className="flex md:grid flex-wrap lg:grid-cols-4 gap-4 md:gap-8">
               <Alert className=" h-full lg:col-span-2 ">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <div>
@@ -621,7 +621,7 @@ export function ResearcherIndicators(props: Research) {
 
           <div>
             <h2 className="text-2xl font-medium my-8 ">Produção técnica</h2>
-            <div className="grid lg:grid-cols-2 gap-4 md:gap-8">
+            <div className="flex flex-wrap lg:grid lg:grid-cols-2 gap-4 md:gap-8">
 
               <Alert className=" h-[400px] ">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -680,7 +680,7 @@ export function ResearcherIndicators(props: Research) {
 
           <div>
             <h2 className="text-2xl font-medium my-8 ">Orientações</h2>
-            <div className="grid lg:grid-cols-3 gap-4 md:gap-8">
+            <div className="flex  gap-4 md:gap-8">
 
               <Alert className=" h-full lg:col-span-3 ">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -709,7 +709,7 @@ export function ResearcherIndicators(props: Research) {
 
           <div>
             <h2 className="text-2xl font-medium my-8 ">Outros gráficos</h2>
-            <div className="grid lg:grid-cols-1 gap-4 md:gap-8  bg-red-600">
+            <div className="grid lg:grid-cols-1 gap-4 md:gap-8">
               <Alert className=" h-full  ">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <div>

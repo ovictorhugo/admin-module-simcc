@@ -214,14 +214,10 @@ export function ResearcherPage() {
     });
   }
 
-
-
   const { onClose, isOpen } = useModal();
 
   const [researcher, setResearcher] = useState<Research[]>([]);
   const [loading, isLoading] = useState(false)
-
-
 
   type Filter = {
     year: number[]
@@ -233,10 +229,7 @@ export function ResearcherPage() {
   // Função para lidar com a atualização de researcherData
   const handleResearcherUpdate = (newResearcherData: Filter[]) => {
     setFilters(newResearcherData);
-
-
   };
-
 
   let urlTermPesquisadores = urlGeral + `researcherName?name=${researcher_name}`;
 
@@ -314,8 +307,6 @@ export function ResearcherPage() {
       setValue('speaker')
     }
   }, [isOpen]);
-
-  /////
 
   //csv
   const [jsonData, setJsonData] = useState<any[]>([]);
@@ -592,13 +583,8 @@ export function ResearcherPage() {
                 const isOutdated = monthDifference > 3;
                 const isOutdated6 = monthDifference > 6;
 
-
                 return (
-
-
                   <div className="hidden items-center gap-2  md:flex">
-
-
                     <div className={`border hidden dark:border-neutral-800 w-fit py-2 px-4 text-gray-400 rounded-md text-xs font-bold lg:flex gap-1 items-center ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none') : ('')}`}> <CalendarBlank size={16} /> Atualização do Lattes: {String(props.lattes_update)}</div>
 
 
@@ -606,15 +592,15 @@ export function ResearcherPage() {
                       return (
                         <div
                           className={`
-                      hidden text-[0.5rem] py-2 px-4 border dark:border-neutral-800 w-fit
-                      rounded-md  font-bold gap-1 items-center
+                            hidden text-[0.5rem] py-2 px-4 border dark:border-neutral-800 w-fit
+                            rounded-md  font-bold gap-1 items-center
 
-                      md:text-xs md:py-2 md:px-4 
+                            md:text-xs md:py-2 md:px-4 
 
-                      lg:flex
-                      text-white border-none
-                      ${user.status ? ('bg-green-500 ') : ('bg-red-500')}
-                  `}
+                            lg:flex
+                            text-white border-none
+                            ${user.status ? ('bg-green-500 ') : ('bg-red-500')}
+                          `}
                         >
                           {user.status ? (<Check size={16} />) : (<Minus size={16} />)} {user.status ? ('Ativo') : ('Inativo')}
                         </div>
@@ -623,13 +609,11 @@ export function ResearcherPage() {
 
                     <div className="flex gap-3 items-center">
 
-
-
                       <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
                         <SheetTrigger>
                           <Button onClick={() => setExpand(false)} className="h-8" size={'sm'}><TrendingUp size={16} />Linha do tempo</Button>
                         </SheetTrigger>
-                        <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 ${expand ? ('min-w-[80vw]') : ('min-w-[50vw]')}`}>
+                        <SheetContent className={`p-0 dark:bg-neutral-900 w-full dark:border-gray-600 ${expand ? ('w-full lg:min-w-[80vw]') : ('min-w-[30vw] md:min-w-[100vw]')}`}>
                           <DialogHeader className="h-[50px] justify-center px-4 border-b">
 
                             <div className="flex items-center gap-3 justify-between">
@@ -637,7 +621,7 @@ export function ResearcherPage() {
                                 <TooltipProvider>
                                   <Tooltip>
                                     <TooltipTrigger asChild>
-                                      <Button className="h-8 w-8" onClick={() => setExpand(!expand)} variant={'outline'} size={'icon'}>{expand ? (<ArrowRightFromLine size={16} />) : (<ArrowLeftFromLine size={16} />)}</Button>
+                                      <Button className="hidden lg:flex h-8 w-8" onClick={() => setExpand(!expand)} variant={'outline'} size={'icon'}>{expand ? (<ArrowRightFromLine size={16} />) : (<ArrowLeftFromLine size={16} />)}</Button>
                                     </TooltipTrigger>
                                     <TooltipContent> {expand ? ('Recolher') : ('Expandir')}</TooltipContent>
                                   </Tooltip>
@@ -653,9 +637,7 @@ export function ResearcherPage() {
                                   </Tooltip>
                                 </TooltipProvider>
                               </div>
-                              <div className="flex justify-end">
-
-
+                              <div className="hidden md:flex md:justify-end">
                                 <div className="flex items-center justify-end gap-3 ml-auto">
 
                                   <Button onClick={handleDownload} className="ml-auto relative h-8 px-2">
@@ -665,9 +647,6 @@ export function ResearcherPage() {
                                 </div>
                               </div>
                             </div>
-
-
-
                           </DialogHeader>
 
                           <div className="p-8 pb-0">
@@ -684,9 +663,6 @@ export function ResearcherPage() {
                             <FilterYearTimeLine
                               onFilterUpdate={handleResearcherUpdate} />
                           </div>
-
-
-
 
                           {researcher.slice(0, 1).map((user) => {
                             return (

@@ -4,23 +4,22 @@ import debounce from "lodash.debounce"; // Importing debounce
 
 import { CalendarBlank } from "phosphor-react";
 import { Slider } from "../ui/slider";
+import { useIsMobile } from "../../hooks/use-mobile";
 
 interface Props {
-    onFilterUpdate: (newResearcher: Filter[]) => void;
+  onFilterUpdate: (newResearcher: Filter[]) => void;
 }
 
 type Filter = {
-    year: number[]
-    qualis: string[]
+  year: number[]
+  qualis: string[]
 }
 
-
-
-export function FilterYearIndicators(props:Props) {
+export function FilterYearIndicators(props: Props) {
   const [itensSelecionados] = useState<string[]>([]);
   const currentDate = new Date();
   const year = currentDate.getFullYear();
-  const [filterYear, setFilterYear] = useState([1990]);
+  const [filterYear, setFilterYear] = useState([useIsMobile() ? 2000 : 1990]);
   const [isFirstRender, setIsFirstRender] = useState(true); // State to track the first render
 
   // Função para debounced update
@@ -58,7 +57,7 @@ export function FilterYearIndicators(props:Props) {
             defaultValue={filterYear}
             onValueChange={(value) => setFilterYear(value)}
             max={year}
-            min={1990}
+            min={useIsMobile() ? 2000 : 1990}
             step={1}
             className="color-blue-700"
           />

@@ -41,7 +41,7 @@ export const columnsProjetoPesquisa: ColumnDef<ProjetoPesquisa>[] = [
     header: "Status",
   },
   {
-    header: "Expandir",
+
     id: "actions",
     cell: ({ row }) => {
       const payment = row.original

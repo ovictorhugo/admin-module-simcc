@@ -118,7 +118,7 @@ export function GraficoIndiceProdTec(props: ProdTecProps) {
           <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
           <YAxis tickLine={false} tickMargin={10} axisLine={false} />
           <CartesianGrid vertical={false} horizontal={false} />
-          <ChartLegend content={<ChartLegendContent />} />
+          <ChartLegend className="flex flex-wrap" content={<ChartLegendContent />} />
           <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
           <Bar dataKey="software" radius={4} fill={chartConfig['software'].color} stackId="a">
             <LabelList
