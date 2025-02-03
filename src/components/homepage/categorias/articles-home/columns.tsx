@@ -91,7 +91,7 @@ export const columns: ColumnDef<Articles>[] = [
       const jif = row.original.jif;
       return <div>
         {(row.getValue("jcr_link") != "None" && row.getValue("jcr_link") != "") && (
-          <a href={row.getValue("jcr_link")} target="_blank" rel="noopener noreferrer" className="border-[1px] cursor-pointer border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center  whitespace-nowrap"><LinkBreak size={16} className="text-gray-400" />JCR {jif}</a>
+          <a href={row.getValue("jcr_link")} target="_blank" rel="noopener noreferrer" className="flex w-fit gap-1 whitespace-nowrap text-xs p-2 border items-center border-gray-300 dark:border-stone-700 rounded-md"><LinkBreak size={16} className="" />JCR {jif}</a>
         )}
       </div>
     }

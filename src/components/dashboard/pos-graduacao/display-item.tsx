@@ -1,8 +1,8 @@
-import {  AreaChart,    Globe,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, SquareMenu, Star, User,  Users } from "lucide-react";
+import {  AreaChart,    Book,    Briefcase,    Code,    Copyright,    Globe,  GraduationCap,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, SquareMenu, Star, User,  Users } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { Eye, EyeSlash, Trash } from "phosphor-react";
+import { Books, Eye, EyeSlash, Quotes, StripeLogo, Trash } from "phosphor-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { toast } from "sonner"
 import { useContext, useEffect, useState } from "react";
@@ -19,9 +19,13 @@ import { Input } from "../../ui/input";
 import { v4 as uuidv4 } from 'uuid';
 import { columnsStudent } from "../../componentsModal/columns-student-program";
 
-import { DocentesGraduate } from "./docentes-graduate";
-import { DiscentesGraduate } from "./discentes-graduate";
 import { Helmet } from "react-helmet";
+import { DocentesGraduate } from "../components/docentes-graduate";
+import { DiscentesGraduate } from "../components/discentes-graduate";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { Keepo } from "./keepo";
+import { InfiniteMovingProductions } from "../../ui/infinite-moving-productions";
+import { Total } from "../../graduate-program/homepage-program";
 
 interface Patrimonio {
   graduate_program_id: string
@@ -146,7 +150,80 @@ export function DisplayItem(props:Patrimonio) {
 
 
 
-    const {version} = useContext(UserContext)
+    const {version, urlGeral} = useContext(UserContext)
+
+    const [totalProducao, setTotalProducao] = useState<Total[]>([]);
+
+    const urlTotalProgram = `${urlGeral}graduate_program_production?graduate_program_id=${props.graduate_program_id}&year=1900`;
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(urlTotalProgram, {
+            mode: "cors",
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET",
+              "Access-Control-Allow-Headers": "Content-Type",
+              "Access-Control-Max-Age": "3600",
+              "Content-Type": "text/plain",
+            },
+          });
+          const data = await response.json();
+          if (data) {
+            setTotalProducao(data);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchData();
+    }, [urlTotalProgram]);
+
+    const producoes = [
+      {
+        name: "Artigos",
+        icon: Quotes, // Certifique-se de que Quotes é um componente ou valor válido
+        number: totalProducao.slice(0, 1)[0]?.article, // Corrigido para acessar o primeiro item e a propriedade `article`
+      },
+      {
+        name: "Livros",
+        icon: Book, // Certifique-se de que Quotes é um componente ou valor válido
+        number: totalProducao.slice(0, 1)[0]?.book, // Corrigido para acessar o primeiro item e a propriedade `article`
+      },
+      {
+        name: "Capítulos de livro",
+        icon: Books, // Certifique-se de que Quotes é um componente ou valor válido
+        number: totalProducao.slice(0, 1)[0]?.book_chapter, // Corrigido para acessar o primeiro item e a propriedade `article`
+      },
+      {
+        name: "Patentes",
+        icon: Copyright, // Certifique-se de que Quotes é um componente ou valor válido
+        number: totalProducao.slice(0, 1)[0]?.patent, // Corrigido para acessar o primeiro item e a propriedade `article`
+      },
+      {
+        name: "Marcas",
+        icon: StripeLogo, // Certifique-se de que Quotes é um componente ou valor válido
+        number: totalProducao.slice(0, 1)[0]?.brand, // Corrigido para acessar o primeiro item e a propriedade `article`
+      },
+      {
+        name: "Softwares",
+        icon: Code, // Certifique-se de que Quotes é um componente ou valor válido
+        number: totalProducao.slice(0, 1)[0]?.software, // Corrigido para acessar o primeiro item e a propriedade `article`
+      },
+      {
+        name: "Trabalhos em eventos",
+        icon: Briefcase, // Certifique-se de que Quotes é um componente ou valor válido
+        number: totalProducao.slice(0, 1)[0]?.work_in_event, // Corrigido para acessar o primeiro item e a propriedade `article`
+      },
+      {
+        name: "Bolsistas CNPq",
+        icon: Copyright, // Certifique-se de que Quotes é um componente ou valor válido
+        number: totalProducao.slice(0, 1)[0]?.subsidy, // Corrigido para acessar o primeiro item e a propriedade `article`
+      }
+  
+    ];
+
     return(
 <Tabs  defaultValue={tab} value={tab}>
 <Helmet>
@@ -259,69 +336,46 @@ export function DisplayItem(props:Patrimonio) {
         
 
         <TabsContent value="all" className="mt-0">
-        
-<div className="md:p-8 p-4  flex flex-col">
-  
 
-   <div>
-   <h1 className=" max-w-[700px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
-          {props.name}
-        </h1>
-   </div>
+<div className="p-8 pt-0">
+<div className="flex justify-between items-center py-12">
+        <div className="flex flex-col items-start md:flex-row gap-6 -mt-4">
+          <Avatar className="cursor-pointer rounded-lg  h-24 w-24">
+            <AvatarImage className={'rounded-md h-24 w-24'} src={``} />
+            <AvatarFallback className="flex items-center justify-center"><GraduationCap size={24} /></AvatarFallback>
+          </Avatar>
 
+          <div>
+            <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
+              <div className="flex flex-wrap gap-4 ">
+                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12} />{props.type}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><MapPinIcon size={12} />{props.city}</div>
+                {props.rating != '' && (
+                  <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12} />{props.rating}</div>
+                )}
 
-   <div className="flex flex-wrap gap-4 mb-4 md:mb-8 ">
-   <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12}/>{props.type}</div>
- <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><MapPinIcon size={12}/>{props.city}</div>
- {props.rating != '' && (
-               <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12}/>{props.rating}</div>
-             )}
-
-<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">{props.code != '' ? (props.code):('Sem código')}</div>
-   </div>
-
-
-<div className="w-full flex ">
-                       <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#00A137] dark:bg-[#00A137] whitespace-nowrap"></div>
-
-</div>
-
-<div className="mb-4 md:mb-8">
-            <div
-                    className={`h-3 w-full rounded-t-md dark:border-neutral-800 border border-neutral-200 border-b-0 ${qualisColor[props.type.trim() as keyof typeof qualisColor]}  `}
-                  ></div>
-  
-              <Alert
-                        className="p-0 rounded-t-none"  x-chunk="dashboard-05-chunk-4"
-                      >
-  
-  <CardHeader className="flex flex-row items-start bg-neutral-100 dark:bg-neutral-800">
-              <div className="flex items-center justify-between w-full">
-                <CardTitle className="group flex items-center w-fit gap-2 text-lg">
-                  <div className="w-fit">Informações</div>
-              
-                </CardTitle>
-<div className="flex gap-4 items-center justify-end flex-wrap ">
-
-
-
-<Link to={props.site} target="_blank"><div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Globe size={16}/> {props.site}</div></Link>
-
-
-</div>
+<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize">{props.code != '' ? (props.code):('Sem código')}</div>
               </div>
-              <div className="ml-auto flex items-center gap-1">
-               
-               
-              </div>
-              
-            </CardHeader>
+            </p>
 
-            <CardContent className="p-6 text-sm">
-              {props.description}
-            </CardContent>
-          </Alert>
-            </div>
+            <h1 className="text-2xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+              {props.name}
+            </h1>
+          </div>
+        </div>
+      </div>
+
+     <div className="mb-8 grid grid-cols-1">
+     <InfiniteMovingProductions
+              items={producoes} // Formata cada item como um objeto
+              direction="left"
+              speed='normal'
+              pauseOnHover={false}
+              className="custom-class"
+            />
+     </div>
+
+      <Keepo id={props.graduate_program_id} name={props.name} type="graduate_program"/>
 </div>
             
         </TabsContent>

@@ -34,7 +34,7 @@ import { TooltipProvider } from "../../ui/tooltip";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../../ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Input } from "../../ui/input";
-import { DisplayItem } from "../components/display-item";
+import { DisplayItem } from "./display-item";
 import { ItensList } from "../components/itens-list-vitrine";
 import { Button } from "../../ui/button";
 import { useLocation, useNavigate } from "react-router-dom";

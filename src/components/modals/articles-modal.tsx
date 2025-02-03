@@ -107,23 +107,23 @@ export function ArticlesModal() {
   const { onClose, isOpen, type: typeModal, data } = useModalSecundary();
   const isModalOpen = isOpen && typeModal === "articles-modal";
   
+
   const systemMessage = (title: string, author: string) => ({
     role: "system",
-    content: `Com base nas informações inseridas pelo usuário, retorne APENAS UM JSON estruturado com o seguinte formato:
-    {
-      "message": "Gerar um resumo detalhado e preciso do artigo com pelo menos 500 caracteres. O resumo deve refletir fielmente o conteúdo original, com base em informações verificáveis da internet, sem acréscimos ou invenções.
-      
-      - Caso o artigo possua DOI, utilize-o como fonte principal para obter o resumo.
-      - Se o DOI não estiver disponível, busque informações sobre o artigo em fontes confiáveis da internet.
-      - Garanta que o resumo seja baseado em dados verificáveis e corretamente referenciados.
-      
-      No final do resumo, inclua obrigatoriamente:
-      - A lista completa de autores do artigo.
-      - As principais fontes utilizadas para obter as informações.
-      - Detalhes adicionais relevantes, como ano de publicação, revista ou conferência onde foi publicado, metodologia utilizada e principais conclusões do estudo.
-      
-      O título do artigo, DOI e um dos autores serão fornecidos como referência inicial para a busca."
-    }`
+    content: `Retorne APENAS UM JSON válido e formatado conforme abaixo, sem explicações adicionais. O JSON deve conter informações detalhadas sobre o artigo, com base no DOI (se disponível) ou em fontes confiáveis da internet. O resumo não pode conter informações inventadas. O resumo deve ser em PORTUGUÊS BRASIL
+  
+  {
+    "authors": [], // Lista completa de autores do artigo, tanto o fornecido, e os nomes que você encontrou
+    "doi": "", // DOI do artigo, se disponível
+    "year": "", // Ano de publicação
+    "journal": "", // Nome da revista ou conferência
+    "message": "", // Resumo detalhado com pelo menos 500 caracteres, baseado em fontes verificáveis
+    "methodology": "", // Metodologia utilizada no estudo
+    "main_findings": "", // Principais conclusões do artigo
+    "sources": [] // Lista de fontes usadas para obter as informações, incluindo o DOI se aplicável
+  }
+  
+  Priorize a obtenção do resumo a partir do DOI. Caso o DOI não esteja disponível, busque informações em fontes confiáveis na internet com base no TÍTULO e um dos AUTORES que seram passados. Garanta que os dados sejam verificáveis e corretamente referenciados. Retorne APENAS o JSON acima, sem explicações ou formatação adicional.`,
   });
   
   
@@ -192,7 +192,16 @@ const [gaia, setGaia] = useState('')
       await processMessageToChatGPT(newMessage);
     };
 
-    
+    const [parsedContent, setParsedContent] = useState({
+      authors: [],
+      message: '',
+      journal: '',
+      doi: '',
+      year: '',
+      methodology: '',
+      main_findings: '',
+      sources: []
+    });
 
     async function processMessageToChatGPT(messageObject: any) {
       try {
@@ -225,9 +234,12 @@ const [gaia, setGaia] = useState('')
     
         if (data2.choices?.length > 0) {
           const chatGptMessage = data2.choices[0].message;
-          const parsedContent = JSON.parse(chatGptMessage.content); // Verifica se é JSON válido
+          const parsedData = JSON.parse(chatGptMessage.content); // Tenta fazer o parse do JSON
+         
+            setParsedContent(parsedData); // Garante que o JSON é válido antes de sobrescrever
+          
     
-          setGaia(parsedContent.message);
+          setGaia(parsedData.message);
         } else {
           console.error("Erro: resposta inesperada da API", data);
         }
@@ -240,7 +252,7 @@ const [gaia, setGaia] = useState('')
     }
 
 
-    const testeMensagem = `Resumo fiel e sem invenções sobre o artigo '${data.title}', onde um dos autores é '${data.researcher}'. ${(data.doi != '' && data.doi != null) && (`E o doi do artigo é ${data.doi}`)}`
+    const testeMensagem = `Resumo fiel e sem invenções sobre o artigo '${data.title}', onde um dos autores é '${data.researcher}'. ${(data.doi != '' && data.doi != null && data.doi != undefined) && (`E o doi do artigo é ${data.doi}`)}`
     
 
   return (
@@ -432,6 +444,28 @@ const [gaia, setGaia] = useState('')
                   <div>
                   <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-6">
                     {gaia}</p>
+
+                    <p className="text-md font-medium flex flex-wrap text-justify mt-6">
+                    Metodologia</p>
+
+                    <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-2">
+  {parsedContent.methodology}
+</p>
+
+
+<p className="text-md font-medium flex flex-wrap text-justify mt-6">
+                    Conclusões</p>
+
+                    <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-2">
+  {parsedContent.main_findings}
+</p>
+
+<p className="text-md font-medium flex flex-wrap text-justify mt-6">
+Autores</p>
+
+                    <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-2">
+  {parsedContent.authors.length > 0 ? parsedContent.authors.join(", ") : "Autores não disponíveis"}
+</p>
   
                     <p className="text-sm text-gray-500 flex flex-wrap font-bold text-justify mt-6">
                     A {version ? 'Gaia': 'MarIA'} pode cometer erros. Considere verificar informações importantes.</p>

@@ -11,12 +11,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../../../components/ui/dropdown-menu"
-import { ArrowUpDown, Copy, MoreHorizontal, X } from "lucide-react"
+import { ArrowUpDown, Copy, Maximize2, MoreHorizontal, X } from "lucide-react"
 import { ArrowSquareOut, Buildings, MapPin, Plus, ShareNetwork} from "phosphor-react"
 import { GraduationCap} from "lucide-react"
 import { useContext } from "react"
 import { UserContext } from "../../../../context/context"
 import { useModal } from "../../../hooks/use-modal-store"
+import { toast } from "sonner"
 //import { UserContext } from "../../../../context/context"
 
 
@@ -153,14 +154,14 @@ export const columns: ColumnDef<Research>[] = [
             )}
               </Button>
 
-            <Button onClick={() => onOpen('researcher-modal', {name:row.original.name})} variant={'default'} className="h-8 w-8 p-0 text-white dark:text-white">
+            <Button onClick={() => onOpen('researcher-modal', {name:row.original.name})} variant={'outline'} className="h-8 w-8 p-0 ">
              
-            <ArrowSquareOut size={8} className="h-4 w-4" />
+            <Maximize2 size={8} className="h-4 w-4" />
             </Button>
 
           <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button variant='outline' className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
@@ -169,18 +170,36 @@ export const columns: ColumnDef<Research>[] = [
             <DropdownMenuLabel>Ações</DropdownMenuLabel>
 
             <DropdownMenuItem className="flex items-center gap-3"
-             onClick={() => navigator.clipboard.writeText(payment.lattes_id)}
+             onClick={() => {
+              navigator.clipboard.writeText(payment.lattes_id)
+              toast("Operação realizada", {
+                description: "ID Lattes copiado para área de transferência",
+                action: {
+                  label: "Fechar",
+                  onClick: () => console.log("Undo"),
+                },
+              })
+             }}
             ><Copy className="h-4 w-4" />
               Copiar Lattes ID
             </DropdownMenuItem>
 
             <DropdownMenuItem className="flex items-center gap-3"
-              onClick={() => navigator.clipboard.writeText(urlShare)}
+              onClick={() => {
+                navigator.clipboard.writeText(urlShare)
+                toast("Operação realizada", {
+                  description: "Link copiado para área de transferência",
+                  action: {
+                    label: "Fechar",
+                    onClick: () => console.log("Undo"),
+                  },
+                })
+              }}
             ><ShareNetwork className="h-4 w-4" />
               Copiar link para compartilhar
              
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
+
           </DropdownMenuContent>
         </DropdownMenu>
         </div>
