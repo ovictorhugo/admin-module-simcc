@@ -46,7 +46,7 @@ type Livros = {
   production: Production[]
   foment: Forment[]
   components: Components[]
-  researcher_name:string
+  researcher_name: string
 }
 
 interface Components {
@@ -125,10 +125,10 @@ export function ResearchProject(props: Props) {
   return (
     <div className="">
 
-    <div className="mb-6">
-    <FilterYearPopUp
-        onFilterUpdate={handleResearcherUpdate} />
-    </div>
+      <div className="mb-6">
+        <FilterYearPopUp
+          onFilterUpdate={handleResearcherUpdate} />
+      </div>
 
 
       <Accordion type="single" collapsible defaultValue="item-1" >
@@ -139,7 +139,7 @@ export function ResearchProject(props: Props) {
 
             <AccordionTrigger>
 
-                            </AccordionTrigger>
+            </AccordionTrigger>
           </div>
           <AccordionContent >
             {loading ? (
@@ -174,7 +174,7 @@ export function ResearchProject(props: Props) {
                 </div>
 
                 <AccordionTrigger>
-                 
+
                 </AccordionTrigger>
               </div>
 
