@@ -54,7 +54,7 @@ export function AddResearcherDashboard() {
                 name: nomePesquisador,
                 lattes_id: lattesID,
                 institution_id: user?.institution_id,
-                status:status
+                status:(status == 'ativo' ? (true):(false))
               }
           ]
 
@@ -154,7 +154,7 @@ export function AddResearcherDashboard() {
       // upload
 
       const urlGetResearcher = urlGeralAdm + `ResearcherRest/Query?institution_id=${user?.institution_id}`;
-
+      console.log(urlGetResearcher)
 
       const fetchDataTable = async () => {
         try {

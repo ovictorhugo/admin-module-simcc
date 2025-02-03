@@ -192,7 +192,7 @@ type Publicacao = {
 
 //
 
-interface Total {
+export interface Total {
   article: string
   book: string
   book_chapter: string
