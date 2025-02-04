@@ -255,14 +255,14 @@ export function ResultHome() {
                   <DropdownMenuContent>
                     <DropdownMenuLabel>Mais opções</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="p-0">
                       <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
                         <File size={16} className="" />
                         Dicionário de dados
                       </Button>
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="p-0">
                       <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
                         <Download size={16} className="" />
                         Baixar resultado

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, TabsContent } from "../../ui/tabs";
 import { Button } from "../../ui/button";
-import { AlignLeft, Check, ChevronLeft, Copy, Eye, GalleryHorizontal, Globe, Heading1, LayoutPanelTop, Link, Palette, Rows, SquareDashedMousePointer, SquarePlay, SquarePlus } from "lucide-react";
+import { AlignLeft, BarChart, Check, ChevronDown, ChevronLeft, ChevronUp, Copy, Eye, File, GalleryHorizontal, Globe, GripVertical, Heading1, Heading2, Heading3, Image, LayoutPanelTop, Link, List, Palette, Plus, Rows, SquareDashedMousePointer, SquarePlay, SquarePlus, TableCellsMerge, Users } from "lucide-react";
 import { Separator } from "../../ui/separator";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "../../ui/alert";
@@ -12,6 +12,10 @@ import { Input } from "../../ui/input";
 import { ColorPicker } from "../../ui/color-picker";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../ui/tooltip";
 import { Textarea } from "../../ui/textarea";
+import { AddItem } from "./add-item";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../../ui/dropdown-menu";
+import { AddItemDropdown } from "./add-item-dropdown";
+import { SectionBuilderPage } from "./sections";
 
 interface Keepo {
     app: App;
@@ -40,11 +44,12 @@ interface Keepo {
   }
   
   interface Content {
-    type: "divider" | "video" | "link" | "slider" | "social";
+    type: 'divider' | 'h1' | 'h2'| 'h3'| 'text'| 'list'| 'video' |'grid' | 'image' | 'file' | 'link' | 'slider' | 'social' | 'card';
     title: string;
     emoji: string;
     url: string;
     items: Items[];
+    order:number
   }
   
   interface Items {
@@ -53,7 +58,7 @@ interface Keepo {
     title: string;
     image: string;
   }
-  
+
 export function BuilderPage() {
     const [tab, setTab] = useState('inicio')
 
@@ -89,37 +94,96 @@ export function BuilderPage() {
             "#2F4F4F", // Dark Slate Gray
           ];
 
-          const [keepoData, setKeepoData] = useState({
+          const [keepoData, setKeepoData] = useState<Keepo>({
             app: {
-                background_color: "",
-                text_color: "",
-                card_color: "",
-                card_text_color: "",
-                button_color: "",
-                button_text_color: "",
+              background_color: "",
+              text_color: "",
+              card_color: "",
+              card_text_color: "",
+              button_color: "",
+              button_text_color: "",
             },
             profile_info: {
-                avatar: "",
-                firstName: "",
-                lastName: "",
-                email: "",
-                jobTitle: "",
-                supporting: "",
-                button_text: "",
-                link: "",
+              avatar: "",
+              firstName: "",
+              lastName: "",
+              email: "",
+              jobTitle: "",
+              supporting: "",
+              button_text: "",
+              link: "",
             },
             content: [],
-        });
+          });
 
-        const addContentItem = (type:string) => {
+          const addContentItem = (type: Content["type"], index:number) => {
             setKeepoData((prev) => ({
-                ...prev,
-                content: [
-                    ...prev.content,
-                    { type: type, title: "", emoji: "", url: "", items: [] },
-                ],
+              ...prev,
+              content: [
+                ...prev.content,
+                { type, title: "", emoji: "", url: "", items: [], order:index },
+              ],
             }));
-        };
+          };
+          
+
+
+        //////////////
+
+        const items = [
+            { titulo: "Divisão", desc: "Dividir blocos visualmente", icon: <Rows size={16} />, type: 'divider' as const },
+            { titulo: "Título 1", desc: "Título da seção grande", icon: <Heading1 size={16} />, type: 'h1' as const },
+            { titulo: "Título 2", desc: "Título da seção média", icon: <Heading2 size={16} />, type: 'h2' as const },
+            { titulo: "Título 3", desc: "Título da seção pequena", icon: <Heading3 size={16} />, type: 'h3' as const },
+            { titulo: "Parágrafo", desc: "Escreva um texto sem formatação", icon: <AlignLeft size={16} />, type: 'text' as const },
+            { titulo: "Lista", desc: "Criar lista com marcadores simples", icon: <List size={16} />, type: 'list' as const },
+            { titulo: "Vídeo", desc: "Carregar ou integrar com um link", icon: <SquarePlay size={16} />, type: 'video' as const },
+            { titulo: "Imagem", desc: "Fazer upload do arquivo", icon: <Image size={16} />, type: 'image'  as const},
+            { titulo: "Carrossel", desc: "Crie uma sessão com os cards", icon: <GalleryHorizontal size={16} />, type: 'slider' as const },
+            { titulo: "Link", desc: "Criar link para página externa", icon: <Link size={16} />, type: 'link' as const },
+            { titulo: "Card", desc: "Crie blocos de conteúdo", icon: <SquareDashedMousePointer size={16} />, type: 'card' as const },
+            { titulo: "Arquivo", desc: "Carregar ou integrar com um link", icon: <File size={16} />, type: 'file' as const },
+            { titulo: "Redes sociais", desc: "Links externos", icon: <Globe size={16} />, type: 'social' as const },
+            { titulo: "Grid", desc: "Grade de itens", icon: <TableCellsMerge size={16} />, type: 'grid' as const }
+          ];
+
+          const itemsEspeciais = [
+            { titulo: "Gráfico", desc: "Quantidade e métricas de produções", icon: <BarChart size={16} /> },
+            { titulo: "Pesquisadores", desc: "Carrossel de participantes", icon: <Users size={16} /> },
+           
+          ];
+
+          const [searchTerm, setSearchTerm] = useState("");
+          const [showDropdown, setShowDropdown] = useState(false);
+          
+          useEffect(() => {
+            const handleKeyDown = (event: KeyboardEvent) => {
+              if (event.key === "/") {
+               
+                setShowDropdown(true);
+              }
+            };
+          
+            // Adiciona o evento ao input específico
+            const inputElement = document.getElementById("searchInput");
+            inputElement?.addEventListener("keydown", handleKeyDown);
+          
+            return () => inputElement?.removeEventListener("keydown", handleKeyDown);
+          }, [searchTerm]);
+        
+          const filteredItems = items.filter(item => {
+            const normalizeString = (str:any) => str
+            .normalize("NFD") // Decompõe os caracteres acentuados
+            .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
+            .toLowerCase(); // Converte para minúsculas
+
+            const searchString = normalizeString(item.titulo);
+          const normalizedSearch = normalizeString(searchTerm);
+          return searchString.includes(normalizedSearch);
+        }
+            
+          );
+          
     
       
     return(
@@ -321,65 +385,26 @@ export function BuilderPage() {
 </Accordion>
  </TabsContent>
  <TabsContent value="add" className="m-0 p-4">
+ <Accordion type="single" collapsible>
+  <AccordionItem value="item-1">
+    <AccordionTrigger className="py-2 border-b">Botões</AccordionTrigger>
+    <AccordionContent className="mt-4 flex flex-col gap-4">
     <div className="gap-4 grid grid-cols-2">
+    {items.map((item, index) => (
+        <div className="cursor-pointer rounded-md " onClick={() => addContentItem(item.type, index+1)}>
+            <AddItem
+          key={index} 
+          titulo={item.titulo} 
+          chidren={item.icon} 
+        />
+        </div>
+      ))}
 
-        <Alert className="aspect-square flex flex-col gap-1 items-center justify-center">
-            <div>
-            <Rows size={32}/>
-            </div>
-            <p className="text-sm text-gray-500">Separador</p>
-        </Alert>
-
-        <Alert className="aspect-square flex flex-col gap-1 items-center justify-center">
-            <div>
-            <Heading1 size={32}/>
-            </div>
-            <p className="text-sm text-gray-500">Título</p>
-        </Alert>
-
-        <Alert className="aspect-square flex flex-col gap-1 items-center justify-center">
-            <div>
-            <AlignLeft size={32}/>
-            </div>
-            <p className="text-sm text-gray-500">Parágrafo</p>
-        </Alert>
-
-        <Alert className="aspect-square flex flex-col gap-1 items-center justify-center">
-            <div>
-            <SquarePlay size={32}/>
-            </div>
-            <p className="text-sm text-gray-500">Vídeo</p>
-        </Alert>
-
-        <Alert className="aspect-square flex flex-col gap-1 items-center justify-center">
-            <div>
-            <GalleryHorizontal size={32}/>
-            </div>
-            <p className="text-sm text-gray-500">Carrossel</p>
-        </Alert>
-
-        <Alert className="aspect-square flex flex-col gap-1 items-center justify-center">
-            <div>
-            <Link size={32}/>
-            </div>
-            <p className="text-sm text-gray-500">Link</p>
-        </Alert>
-
-        <Alert className="aspect-square flex flex-col gap-1 items-center justify-center">
-            <div>
-            <SquareDashedMousePointer size={32}/>
-            </div>
-            <p className="text-sm text-gray-500">Card</p>
-        </Alert>
-
-        <Alert className="aspect-square flex flex-col gap-1 items-center justify-center">
-            <div>
-            <Globe size={32}/>
-            </div>
-            <p className="text-sm text-gray-500">Redes sociais</p>
-        </Alert>
-
-    </div>
+</div>
+        </AccordionContent>
+        </AccordionItem>
+        </Accordion>
+   
  </TabsContent>
  </div>
 </Tabs>
@@ -418,25 +443,60 @@ export function BuilderPage() {
                     <h1>sd</h1>
 
                     <div>
-                    {keepoData.content.map((contentItem, index) => (
-                            <div key={index} className="border p-4 rounded-md">
-                                <Label>Tipo</Label>
-                               
-                                {Object.keys(contentItem).map(
-                                    (key) =>
-                                        key !== "type" && (
-                                            <div key={key} className="flex flex-col gap-2 mt-2">
-                                                <Label>{key.replace(/_/g, " ")}</Label>
-                                                <Input
-                                                    type="text"
-                                                    value={contentItem[key]}
-                                                    
-                                                />
-                                            </div>
-                                        )
-                                )}
-                            </div>
-                        ))}
+                    <SectionBuilderPage/>
+                    </div>
+
+                    <div className="flex gap-2 items-center">
+                   
+                    <Button variant={'ghost'} size={'icon'} className="h-8 w-8">
+                            <ChevronDown size={16}/>
+                        </Button>
+
+                        <Button variant={'ghost'} size={'icon'} className="h-8 w-8">
+                            <ChevronUp size={16}/>
+                        </Button>
+
+                    <DropdownMenu open={showDropdown} onOpenChange={() => setShowDropdown(!showDropdown)}>
+                  <DropdownMenuTrigger>
+                  <Button variant={'ghost'} size={'icon'} className="h-8 w-8">
+                            <Plus size={16}/>
+                        </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="max-h-[300px] overflow-y-auto">
+                  <Input 
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                     
+                        className="" placeholder="Pesquisar..."/>
+                  {filteredItems.length != 0 && (
+                    <div>
+                        <DropdownMenuLabel>Elementos</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                    </div>
+                  )}
+                 
+                  {filteredItems.map((item, index) => (
+        <div 
+        className="cursor-pointer rounded-md " 
+        onClick={() => {
+            setShowDropdown(false)
+            addContentItem(item.type, index+1)
+        }}
+        >
+         <AddItemDropdown 
+          key={index} 
+          titulo={item.titulo} 
+          desc={item.desc} 
+          chidren={item.icon} 
+        />
+       </div>
+      ))}
+                    </DropdownMenuContent>
+                    </DropdownMenu>
+                       
+                        <Input 
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      id="searchInput"
+                        className="bg-transparent border-0 p-0" placeholder="Escreva '/' para comandos..."/>
                     </div>
                 </div>
             </div>

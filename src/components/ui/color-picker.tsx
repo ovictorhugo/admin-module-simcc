@@ -54,7 +54,7 @@ const ColorPicker = forwardRef<
             <div />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className='w-full flex flex-col gap-3'>
+        <PopoverContent className='w-full  flex flex-col gap-3'>
           <HexColorPicker color={parsedValue} onChange={onChange} />
           
           <Input
