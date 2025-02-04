@@ -1,4 +1,4 @@
-import {  AreaChart,  ChevronsUpDown, Globe, Hash, Mail, PencilLine, Phone, Plus, SquareArrowOutUpRight,SquareMenu,User } from "lucide-react";
+import {  AreaChart,  ArrowLeftToLine,  ArrowRightToLine,  ChevronsUpDown, Globe, Hash, Mail, PencilLine, Phone, Plus, SquareArrowOutUpRight,SquareMenu,User } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
@@ -311,16 +311,14 @@ const handleSubmit = async () => {
       <div className="flex items-center p-2  justify-between">
         <div className="flex items-center gap-2">
 
-        {!props.menu_state && (
-         <Tooltip>
+        <Tooltip>
          <TooltipTrigger asChild>
            <Button variant="ghost" size="icon"  onClick={() => props.onMenuState(!props.menu_state)} >
-           <SquareMenu size={16}/>
+           {props.menu_state ? (<ArrowLeftToLine size={16}/>):(<ArrowRightToLine size={16}/>)}
            </Button>
          </TooltipTrigger>
-         <TooltipContent>Mostrar menu</TooltipContent>
+         <TooltipContent>{!props.menu_state ? ('Mostrar menu'):('Fechar menu')}</TooltipContent>
        </Tooltip>
-       )}
 
           <Tooltip>
             <TooltipTrigger asChild>

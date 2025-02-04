@@ -48,6 +48,8 @@ export function Dashboard() {
             onOpen('parametros-pesquisa')
         } else if(location.pathname == '/dashboard/secao-pessoal' || location.pathname == '/minhaufmg/dashboard/sessao-pessoal') {
             onOpen('sessao-pessoal')
+        } else if(location.pathname == '/dashboard/construtor-pagina' || location.pathname == '/minhaufmg/dashboard/construtor-pagina') {
+            onOpen('construtor-pagina')
         }
     }, [location]);
   

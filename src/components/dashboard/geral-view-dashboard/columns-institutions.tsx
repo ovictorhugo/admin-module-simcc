@@ -1,6 +1,6 @@
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Button } from "../../components/ui/button"
+import { Button } from "../../ui/button"
 import { toast } from "sonner"
 import {
   DropdownMenu,
@@ -8,29 +8,26 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu"
+} from "../../ui/dropdown-menu"
 import { ArrowUpDown, Maximize2, MoreHorizontal, Pencil, User } from "lucide-react"
 import {Copy, Eye, Trash} from "phosphor-react"
-import { useModal } from "../hooks/use-modal-store"
+import { useModal } from "../../hooks/use-modal-store"
 import { useContext, useState } from "react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { EditResearcherModal } from "../modals/edit-researcher-modal"
-import { UserContext } from "../../context/context"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select"
+import { EditResearcherModal } from "../../modals/edit-researcher-modal"
+import { UserContext } from "../../../context/context"
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar"
 
 
 export interface PesquisadorProps {
-    name: string
-    lattes_id: string
-    researcher_id: string
-    institution_id: string
-    last_update:string
-    status:boolean
-    create_at:string
+  name: string
+  institution_id: string
+  acronym:string
+  lattes_id:string
   }
 
 
-export const columns: ColumnDef<PesquisadorProps>[] = [
+export const columnsInstitution: ColumnDef<PesquisadorProps>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {

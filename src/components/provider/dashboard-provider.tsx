@@ -17,6 +17,7 @@ import { HomeDashboard } from "../dashboard/home-dashboard";
 import { MinhasProducoes } from "../dashboard/minhas-producoes/minhas-producoes";
 import { ParametrosPesquisa } from "../dashboard/parametros-pesquisa/parametros-pesquisa";
 import { SessaoPessoal } from "../dashboard/sessao-pessoal/sessao-pessoal";
+import { BuilderPage } from "../dashboard/builder-page/builder-page";
 
 
 const ModalContent = () => {
@@ -51,6 +52,8 @@ const ModalContent = () => {
           return <ParametrosPesquisa/>
         case 'sessao-pessoal':
           return <SessaoPessoal/>
+        case 'construtor-pagina':
+          return <BuilderPage/>
     default:
       return null;
   }

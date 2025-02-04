@@ -35,7 +35,7 @@ export function ResultHome() {
 
   const type_search = queryUrl.get('type_search');
   const terms = queryUrl.get('terms');
-
+  const [previousTypeSearch, setPreviousTypeSearch] = useState(type_search);
   const isModalOpen = isOpen && type === "result-home";
 
   useEffect(() => {
@@ -57,6 +57,8 @@ export function ResultHome() {
       onOpen('researchers-home')
     }
   }, [typeResult]);
+
+
 
   //csv
   const [jsonData, setJsonData] = useState<any[]>([]);

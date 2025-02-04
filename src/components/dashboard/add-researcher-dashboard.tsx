@@ -4,11 +4,11 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useContext, useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { ChevronLeft,  Plus, User } from "lucide-react";
+import { ChevronLeft,  Copy,  Maximize2,  Plus, Trash, User } from "lucide-react";
 import { toast } from "sonner"
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { UserContext } from "../../context/context";
-import { FileXls } from "phosphor-react";
+import { FileXls, Rows, SquaresFour, UserList } from "phosphor-react";
 import { PesquisadorProps, columns } from "./columns";
 import { useModal } from "../hooks/use-modal-store";
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
@@ -17,13 +17,23 @@ import { DataTable } from "./data-table";
 import { CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Helmet } from "react-helmet";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Skeleton } from "../ui/skeleton";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Separator } from "../ui/separator";
+import { EditResearcherModal } from "../modals/edit-researcher-modal";
 
 
 export function AddResearcherDashboard() {
     const [nomePesquisador, setNomePesquisador] = useState('');
     const [lattesID, setLattesID] = useState('');
+    const [loading, setLoading] = useState(false);
 
-  
+    const [count, setCount] = useState(24)
+    
+    const [typeVisu, setTypeVisu] = useState('block');
 
     const { user, urlGeralAdm, permission } = useContext(UserContext);
 
@@ -157,6 +167,7 @@ export function AddResearcherDashboard() {
       console.log(urlGetResearcher)
 
       const fetchDataTable = async () => {
+        setLoading(true)
         try {
           const response = await fetch(urlGetResearcher, {
             mode: 'cors',
@@ -171,10 +182,12 @@ export function AddResearcherDashboard() {
           const data = await response.json();
           if (data) {
             setResearcher(data);
+            setLoading(false)
          
           }
         } catch (err) {
           console.log(err);
+          setLoading(false)
         }
       };
 
@@ -189,7 +202,7 @@ export function AddResearcherDashboard() {
       fetchDataTable();
     }
 
-    fetchDataTable();
+   
   }, [isOpenModal, type]);
 
   const history = useNavigate();
@@ -199,7 +212,13 @@ export function AddResearcherDashboard() {
   }
 
   const [onOpenAdd, setIsOpenAdd] = useState(false)
-  const {version} = useContext(UserContext)
+  const {version, urlGeral} = useContext(UserContext)
+
+
+  const items = Array.from({ length: 12 }, (_, index) => (
+    <Skeleton key={index} className="w-full rounded-md h-[200px]" />
+  ));
+
     return  (
 <>
 
@@ -322,13 +341,142 @@ export function AddResearcherDashboard() {
        </fieldset>
     )}
 
-        <fieldset className="grid gap-6 rounded-lg  p-4 bg-white dark:border-neutral-800 border border-neutral-200 dark:bg-neutral-950 ">
-        <legend className="-ml-1 px-1 text-sm font-medium">
-          Todos os pesquisadores
-        </legend>
+<div>
+              <Accordion defaultValue="item-1" type="single" collapsible>
+                <AccordionItem value="item-1">
+                  <div className="flex mb-2">
+                    <HeaderResultTypeHome title="Todos os pesquisadores" icon={<UserList size={24} className="text-gray-400" />}>
+                      <div className="hidden md:flex gap-3 mr-3">
+                        <Button onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                          <Rows size={16} className="whitespace-nowrap" />
+                        </Button>
+                        <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'} size={'icon'}>
+                          <SquaresFour size={16} className="whitespace-nowrap" />
+                        </Button>
+                      </div>
+                    </HeaderResultTypeHome>
+                    <AccordionTrigger>
 
-        <DataTable columns={columns} data={researcher} />
-        </fieldset>
+                    </AccordionTrigger>
+                  </div>
+                  <AccordionContent>
+                    {typeVisu === 'block' ? (
+                      loading ? (
+                        <ResponsiveMasonry
+                          columnsCountBreakPoints={{
+                            350: 1,
+                            750: 1,
+                            900: 2,
+                            1200:  3,
+                            1500: 4,
+                            1700: 4
+                          }}
+                        >
+                          <Masonry gutter="16px">
+                            {items.map((item, index) => (
+                              <div key={index}>{item}</div>
+                            ))}
+                          </Masonry>
+                        </ResponsiveMasonry>
+                      ) : (
+                       <div>
+ <ResponsiveMasonry
+    columnsCountBreakPoints={{
+        350: 1,
+        750: 1,
+        900: 2,
+        1200:  3,
+        1500: 4,
+        1700: 4
+    }}
+>
+
+                     <Masonry gutter="16px">
+             {researcher.slice(0, count).map((item: any) => {
+
+                return (
+                  <Alert>
+                      <div className="flex justify-between items-start gap-3">
+                        <div className="flex gap-3">
+                        <Avatar className="cursor-pointer rounded-md  h-10 w-10">
+                        <AvatarImage className={'rounded-md h-10 w-10'} src={`${urlGeral}ResearcherData/Image?name=${item.name}`} />
+                        <AvatarFallback className="flex items-center justify-center"><User size={16} /></AvatarFallback>
+                      </Avatar>
+
+                      <div>
+                        <h1>{item.name}</h1>
+                        <p className="text-gray-500 text-xs">{item.lattes_id}</p>
+                      </div>
+                        </div>
+
+                        <div className="flex gap-2 items-center" > 
+      <div className={` rounded-md h-4 w-4 ${item.status ? ('bg-green-500'):('bg-red-500')}`}></div>
+       <div className="flex-1 flex">{item.status ? ('Ativo'):('Inativo')}</div></div>
+                      </div>
+
+                      <Separator className="my-4"/>
+
+                     <div className="items-center flex justify-between gap-3">
+                      <div className="text-gray-500 text-xs">{item.create_at}</div>
+
+                      <div className="flex gap-3 justify-end w-full ">
+                      <Button  onClick={() => onOpen('confirm-delete-researcher', {id_delete:item.researcher_id, name:item.name})} variant={'destructive'} className="h-8 w-8 p-0 text-white  dark:text-white">
+             
+             <Trash size={8} className="h-4 w-4" />
+           </Button>
+
+<EditResearcherModal
+researcher_id={item.researcher_id}
+name={item.name}
+lattes_id={item.lattes_id}
+institution_id={item.institution_id}
+status={item.status}
+/>
+
+
+<Button  onClick={() => onOpen('researcher-modal', {name:item.name})} variant={'outline'} className="h-8 w-8 p-0 ">
+      <Maximize2 size={8} className="h-4 w-4" />
+</Button>
+                    
+                      <Button   onClick={() => {
+  navigator.clipboard.writeText(item.lattes_id)
+
+  toast("Operação realizada", {
+    description: "ID Lattes copiado para área de transferência",
+    action: {
+      label: "Fechar",
+      onClick: () => console.log("Undo"),
+    },
+  })
+
+}} variant={'outline'} className="h-8 w-8 p-0 ">
+<Copy size={16} />
+</Button>
+                      </div>
+                     </div>
+                  </Alert>
+                )
+             })}
+             </Masonry>
+             </ResponsiveMasonry>
+
+             {researcher.length > count && (
+            <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 24)}><Plus size={16} />Mostrar mais</Button></div>
+        )}
+                       </div>
+                      )
+                    ) : (
+                      loading ? (
+                        <Skeleton className="w-full rounded-md h-[400px]" />
+                      ) : (
+                        <DataTable columns={columns} data={researcher} />
+                      )
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+
      </div>
 
      
