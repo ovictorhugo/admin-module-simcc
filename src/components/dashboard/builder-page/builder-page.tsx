@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Tabs, TabsContent } from "../../ui/tabs";
 import { Button } from "../../ui/button";
 import { AlignLeft, BarChart, Check, ChevronDown, ChevronLeft, ChevronUp, Copy, Eye, File, GalleryHorizontal, Globe, GripVertical, Heading1, Heading2, Heading3, Image, LayoutPanelTop, Link, List, Palette, Plus, Rows, SquareDashedMousePointer, SquarePlay, SquarePlus, TableCellsMerge, Users } from "lucide-react";
@@ -16,8 +16,10 @@ import { AddItem } from "./add-item";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../../ui/dropdown-menu";
 import { AddItemDropdown } from "./add-item-dropdown";
 import { SectionBuilderPage } from "./sections";
+import { Helmet } from "react-helmet";
+import { UserContext } from "../../../context/context";
 
-interface Keepo {
+export interface Keepo {
     app: App;
     profile_info: ProfileInfo;
     content: Content[];
@@ -43,13 +45,14 @@ interface Keepo {
     link: string;
   }
   
-  interface Content {
+ export interface Content {
     type: 'divider' | 'h1' | 'h2'| 'h3'| 'text'| 'list'| 'video' |'grid' | 'image' | 'file' | 'link' | 'slider' | 'social' | 'card';
     title: string;
     emoji: string;
     url: string;
     items: Items[];
     order:number
+    description:string
   }
   
   interface Items {
@@ -58,6 +61,29 @@ interface Keepo {
     title: string;
     image: string;
   }
+
+  export const items = [
+    { titulo: "Divisão", desc: "Dividir blocos visualmente", icon: <Rows size={16} />, type: 'divider' as const },
+    { titulo: "Título 1", desc: "Título da seção grande", icon: <Heading1 size={16} />, type: 'h1' as const },
+    { titulo: "Título 2", desc: "Título da seção média", icon: <Heading2 size={16} />, type: 'h2' as const },
+    { titulo: "Título 3", desc: "Título da seção pequena", icon: <Heading3 size={16} />, type: 'h3' as const },
+    { titulo: "Parágrafo", desc: "Escreva um texto sem formatação", icon: <AlignLeft size={16} />, type: 'text' as const },
+    { titulo: "Lista", desc: "Criar lista com marcadores simples", icon: <List size={16} />, type: 'list' as const },
+    { titulo: "Vídeo", desc: "Carregar ou integrar com um link", icon: <SquarePlay size={16} />, type: 'video' as const },
+    { titulo: "Imagem", desc: "Fazer upload do arquivo", icon: <Image size={16} />, type: 'image'  as const},
+    { titulo: "Carrossel", desc: "Crie uma sessão com os cards", icon: <GalleryHorizontal size={16} />, type: 'slider' as const },
+    { titulo: "Link", desc: "Criar link para página externa", icon: <Link size={16} />, type: 'link' as const },
+    { titulo: "Card", desc: "Crie blocos de conteúdo", icon: <SquareDashedMousePointer size={16} />, type: 'card' as const },
+    { titulo: "Arquivo", desc: "Carregar ou integrar com um link", icon: <File size={16} />, type: 'file' as const },
+    { titulo: "Redes sociais", desc: "Links externos", icon: <Globe size={16} />, type: 'social' as const },
+    { titulo: "Grid", desc: "Grade de itens", icon: <TableCellsMerge size={16} />, type: 'grid' as const }
+  ];
+
+ export  const itemsEspeciais = [
+    { titulo: "Gráfico", desc: "Quantidade e métricas de produções", icon: <BarChart size={16} /> },
+    { titulo: "Pesquisadores", desc: "Carrossel de participantes", icon: <Users size={16} /> },
+   
+  ];
 
 export function BuilderPage() {
     const [tab, setTab] = useState('inicio')
@@ -121,7 +147,7 @@ export function BuilderPage() {
               ...prev,
               content: [
                 ...prev.content,
-                { type, title: "", emoji: "", url: "", items: [], order:index },
+                { type, title: "", emoji: "", url: "", items: [], order:index, description:''},
               ],
             }));
           };
@@ -130,28 +156,7 @@ export function BuilderPage() {
 
         //////////////
 
-        const items = [
-            { titulo: "Divisão", desc: "Dividir blocos visualmente", icon: <Rows size={16} />, type: 'divider' as const },
-            { titulo: "Título 1", desc: "Título da seção grande", icon: <Heading1 size={16} />, type: 'h1' as const },
-            { titulo: "Título 2", desc: "Título da seção média", icon: <Heading2 size={16} />, type: 'h2' as const },
-            { titulo: "Título 3", desc: "Título da seção pequena", icon: <Heading3 size={16} />, type: 'h3' as const },
-            { titulo: "Parágrafo", desc: "Escreva um texto sem formatação", icon: <AlignLeft size={16} />, type: 'text' as const },
-            { titulo: "Lista", desc: "Criar lista com marcadores simples", icon: <List size={16} />, type: 'list' as const },
-            { titulo: "Vídeo", desc: "Carregar ou integrar com um link", icon: <SquarePlay size={16} />, type: 'video' as const },
-            { titulo: "Imagem", desc: "Fazer upload do arquivo", icon: <Image size={16} />, type: 'image'  as const},
-            { titulo: "Carrossel", desc: "Crie uma sessão com os cards", icon: <GalleryHorizontal size={16} />, type: 'slider' as const },
-            { titulo: "Link", desc: "Criar link para página externa", icon: <Link size={16} />, type: 'link' as const },
-            { titulo: "Card", desc: "Crie blocos de conteúdo", icon: <SquareDashedMousePointer size={16} />, type: 'card' as const },
-            { titulo: "Arquivo", desc: "Carregar ou integrar com um link", icon: <File size={16} />, type: 'file' as const },
-            { titulo: "Redes sociais", desc: "Links externos", icon: <Globe size={16} />, type: 'social' as const },
-            { titulo: "Grid", desc: "Grade de itens", icon: <TableCellsMerge size={16} />, type: 'grid' as const }
-          ];
-
-          const itemsEspeciais = [
-            { titulo: "Gráfico", desc: "Quantidade e métricas de produções", icon: <BarChart size={16} /> },
-            { titulo: "Pesquisadores", desc: "Carrossel de participantes", icon: <Users size={16} /> },
-           
-          ];
+        
 
           const [searchTerm, setSearchTerm] = useState("");
           const [showDropdown, setShowDropdown] = useState(false);
@@ -180,14 +185,17 @@ export function BuilderPage() {
             const searchString = normalizeString(item.titulo);
           const normalizedSearch = normalizeString(searchTerm);
           return searchString.includes(normalizedSearch);
-        }
-            
-          );
+        });
           
     
-      
+      const {version} = useContext(UserContext)
     return(
         <main className="h-full p-8 flex gap-3">
+            <Helmet>
+          <title>Construtor de página | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
+          <meta name="description" content={`Construtor de página | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <meta name="robots" content="index, follow" />
+        </Helmet>
             <div className="flex h-full">
             <Tabs defaultValue={tab} value={tab} className="flex gap-3">
  <div className="p-2  flex flex-col gap-1 items-center border rounded-md h-full w-[48px]">
@@ -443,19 +451,14 @@ export function BuilderPage() {
                     <h1>sd</h1>
 
                     <div>
-                    <SectionBuilderPage/>
+                    <SectionBuilderPage keepoData={keepoData} setKeepoData={setKeepoData}/>
                     </div>
 
                     <div className="flex gap-2 items-center">
                    
-                    <Button variant={'ghost'} size={'icon'} className="h-8 w-8">
-                            <ChevronDown size={16}/>
-                        </Button>
+                   
 
-                        <Button variant={'ghost'} size={'icon'} className="h-8 w-8">
-                            <ChevronUp size={16}/>
-                        </Button>
-
+                    <div className="w-28 min-w-28 flex justify-end">
                     <DropdownMenu open={showDropdown} onOpenChange={() => setShowDropdown(!showDropdown)}>
                   <DropdownMenuTrigger>
                   <Button variant={'ghost'} size={'icon'} className="h-8 w-8">
@@ -479,7 +482,7 @@ export function BuilderPage() {
         className="cursor-pointer rounded-md " 
         onClick={() => {
             setShowDropdown(false)
-            addContentItem(item.type, index+1)
+            addContentItem(item.type, (keepoData.content.length + 1));
         }}
         >
          <AddItemDropdown 
@@ -492,11 +495,12 @@ export function BuilderPage() {
       ))}
                     </DropdownMenuContent>
                     </DropdownMenu>
+                    </div>
                        
                         <Input 
                         onChange={(e) => setSearchTerm(e.target.value)}
                       id="searchInput"
-                        className="bg-transparent border-0 p-0" placeholder="Escreva '/' para comandos..."/>
+                        className="bg-transparent border-0 p-0 dark:border-0 dark:bg-transparent" placeholder="Escreva '/' para comandos..."/>
                     </div>
                 </div>
             </div>
