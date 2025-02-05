@@ -13,7 +13,9 @@ import { LinkSection } from "./sections/link";
 import { FileSection } from "./sections/file";
 import { H1Section } from "./sections/h1";
 import { H2Section } from "./sections/h2";
-import { H3Section, SeparatorSection } from "./sections/h3";
+import { SeparatorSection } from "./sections/separator";
+import { H3Section } from "./sections/h3";
+
 
 interface Props {
     keepoData:Keepo

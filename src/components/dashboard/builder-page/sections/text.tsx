@@ -11,10 +11,9 @@ interface Props {
     contentItem:any
 }
 
-export function H3Section (props:Props) {
+export function H2Section (props:Props) {
     return(
         <Base setKeepoData={props.setKeepoData} moveItem={props.moveItem} deleteItem={props.deleteItem} index={props.index} keepoData={props.keepoData}>
-             
              <Input 
                       value={props.contentItem.title}
                       onChange={(e) => {
@@ -26,7 +25,8 @@ export function H3Section (props:Props) {
                          content: newContent, // Atualiza o array no estado
                        }));
                      }}
-                     className="text-xl font-semibold  rounded-none bg-transparent border-0 p-0 dark:border-0 dark:bg-transparent" placeholder="Título 3"/>
+                     className="font-semibold text-2xl  rounded-none bg-transparent border-0 p-0 dark:border-0 dark:bg-transparent" placeholder="Título 2"/>
+                   
         </Base>
     )
 }
