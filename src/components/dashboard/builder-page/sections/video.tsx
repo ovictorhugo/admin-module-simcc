@@ -67,10 +67,10 @@ export function VideoSection (props:Props) {
              
 
              <Input 
-                                   value={props.contentItem.title}
+                                   value={props.contentItem.description}
                                    onChange={(e) => {
                                     const newContent = [...props.keepoData.content]; // Cria uma cópia do array
-                                    newContent[props.index] = { ...newContent[props.index], title: e.target.value }; // Atualiza apenas o item específico
+                                    newContent[props.index] = { ...newContent[props.index], description: e.target.value }; // Atualiza apenas o item específico
                           
                                     props.setKeepoData((prev) => ({
                                       ...prev,

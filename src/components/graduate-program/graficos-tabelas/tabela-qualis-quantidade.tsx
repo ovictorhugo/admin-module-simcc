@@ -4,6 +4,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { UserContext } from "../../../context/context";
 import { DataTable } from "../../dashboard/data-table";
 import { ColumnDef } from "@tanstack/react-table";
+import { Label } from "../../ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
 
 interface Props {
   graduate_program_id: string;
@@ -32,7 +34,7 @@ type Dados = {
     const [year, setYear] = useState(new Date().getFullYear()-4);
 
     const { urlGeral } = useContext(UserContext);
-    const urlDados = `${urlGeral}v2/graduate_program/${props.graduate_program_id}/article_production?year=${year}`;
+    const urlDados = `${urlGeral}/graduate_program/${props.graduate_program_id}/article_production?year=${year}`;
     const fetchData = async () => {
     
       try {
@@ -122,21 +124,19 @@ type Dados = {
       <div className="space-y-4">
         {/* Seletor de anos */}
         <div className="flex items-center gap-4">
-          <label htmlFor="year" className="text-sm font-medium">
+          <Label htmlFor="year" className="text-sm font-medium">
             Selecione o ano:
-          </label>
-          <select
-            id="year"
-            value={anoSelecionado ?? ""}
-            onChange={(e) => setAnoSelecionado(Number(e.target.value))}
-            className="border rounded px-2 py-1 text-sm"
-          >
-            {anos.map((ano) => (
-              <option key={ano} value={ano}>
-                {ano}
-              </option>
+          </Label>
+          <Select  value={String(anoSelecionado) ?? ""}  onValueChange={(value) => setAnoSelecionado(Number(value))}>
+  <SelectTrigger className="gap-3 w-fit">
+    <SelectValue placeholder="Ano" />
+  </SelectTrigger>
+  <SelectContent>
+    {anos.map((ano) => (
+              <SelectItem value={String(ano)}>{ano}</SelectItem>
             ))}
-          </select>
+  </SelectContent>
+</Select>
         </div>
   
         {/* DataTable */}

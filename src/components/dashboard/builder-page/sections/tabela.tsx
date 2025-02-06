@@ -83,8 +83,7 @@ export function TabelaSection (props:Props) {
         }
 
         console.log(urlDados)
-        const [anos, setAnos] = useState<number[]>([]);
-        const [anoSelecionado, setAnoSelecionado] = useState<number | null>(null);
+      
 
   useEffect(() => {
       const fetchData = async () => {
@@ -114,17 +113,12 @@ export function TabelaSection (props:Props) {
       fetchData();
     }, [urlDados]);
 
-    useEffect(() => {
-         // Extrair os anos únicos
-         const uniqueYears = Array.from(new Set(dados.map((item) => item.year))).sort((a, b) => a - b);
-         setAnos(uniqueYears);
-         setAnoSelecionado(uniqueYears[0]); // Definir o primeiro ano como padrão
-    }, [urlDados]);
+
 
     const [showDropdown, setShowDropdown] = useState(false);
 
    const items = [
-        { titulo: "Produção geral", desc: "Gráfico de barras", icon: <Quotes size={16} />, type:'tabela-artigo' },
+        { titulo: "Artigos", desc: "Artigos por ano", icon: <Quotes size={16} />, type:'tabela-artigo' },
         { titulo: "Livros e capítulos", desc: "Gráfico de barras", icon: <Book size={16} />, type:'livro-capitulo' },
         { titulo: "Produção técnica", desc: "Gráfico de barras", icon: <Stamp size={16} />, type:'producao-tecnica' },
        
@@ -189,7 +183,7 @@ export function TabelaSection (props:Props) {
                      {(() => {
                     switch (item.name) {
                         case 'tabela-artigo':
-                            return <TabelaArtigoSection dados={dados} year={year} anos={anos} anoSelecionado={anoSelecionado} setYear={setYear} setAnoSelecionado={setAnoSelecionado} />
+                            return <TabelaArtigoSection  year={year}   setYear={setYear}   />
                        
                         default:
                         return null;

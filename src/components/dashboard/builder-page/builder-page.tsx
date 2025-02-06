@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from "react";
-import { Tabs, TabsContent } from "../../ui/tabs";
+import { useContext, useEffect, useRef, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Button } from "../../ui/button";
-import { AlignLeft, BarChart, Book, Check, ChevronDown, ChevronLeft, ChevronUp, Code, Copy, Eye, File, GalleryHorizontal, Globe, GripVertical, Heading1, Heading2, Heading3, Image, LayoutPanelTop, Link, List, ListOrdered, Palette, Plus, Rows, SquareDashedMousePointer, SquarePlay, SquarePlus, Table, TableCellsMerge, Users } from "lucide-react";
+import { AlignLeft, BarChart, Book, Check, ChevronDown, ChevronLeft, ChevronUp, Code, Copy, Eye, File, GalleryHorizontal, Globe, GripVertical, Heading1, Heading2, Heading3, Image, LayoutPanelTop, Link, List, ListOrdered, Palette, Pencil, Plus, Rows, SquareDashedMousePointer, SquareMousePointer, SquarePlay, SquarePlus, Table, TableCellsMerge, Users } from "lucide-react";
 import { Separator } from "../../ui/separator";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Alert } from "../../ui/alert";
@@ -19,6 +19,7 @@ import { SectionBuilderPage } from "./sections";
 import { Helmet } from "react-helmet";
 import { UserContext } from "../../../context/context";
 import { Quotes } from "phosphor-react";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 export interface Keepo {
     app: App;
@@ -47,7 +48,7 @@ export interface Keepo {
   }
   
  export interface Content {
-    type: 'divider' | 'h1' | 'h2'| 'h3'| 'text'| 'list'| 'video' |'grid' | 'image' | 'file' | 'link' | 'slider' | 'social' | 'card' | 'list-number' | 'grafico' | 'pesquisadores' | 'artigos' | 'nuvem-palavra' | 'livros' | 'tabela' | 'capitulos' |'marcas' | 'sotwares' | 'patentes' | 'html' ;
+    type: 'divider' | 'h1' | 'h2'| 'h3'| 'text'| 'list'| 'video' |'grid' | 'image' | 'file' | 'link' | 'slider' | 'social' | 'card' | 'list-number' | 'grafico' | 'pesquisadores' | 'artigos' | 'nuvem-palavra' | 'livros' | 'tabela' | 'capitulos' |'marcas' | 'sotwares' | 'patentes' | 'html' | 'botoes' ;
     title: string;
     emoji: string;
     url: string;
@@ -123,7 +124,8 @@ export interface Keepo {
     { titulo: "Arquivo", desc: "Carregar ou integrar com um link", icon: <File size={16} />, type: 'file' as const },
     { titulo: "Redes sociais", desc: "Links externos", icon: <Globe size={16} />, type: 'social' as const },
     { titulo: "Grid", desc: "Grade de itens", icon: <TableCellsMerge size={16} />, type: 'grid' as const },
-    { titulo: "HTML", desc: "Crie seu próprio código", icon: <Code size={16} />, type: 'html' as const }
+    { titulo: "HTML", desc: "Crie seu próprio código", icon: <Code size={16} />, type: 'html' as const },
+    { titulo: "Botões", desc: "Adicione ações", icon: <SquareMousePointer size={16} />, type: 'botoes' as const }
   ];
 
  export  const itemsEspeciais = [
@@ -230,6 +232,8 @@ export function BuilderPage() {
             "#2F4F4F", // Dark Slate Gray
           ];
 
+          const documentId = graduate_program_id || group_id || dep_id;
+
           const [keepoData, setKeepoData] = useState<Keepo>({
             app: {
               background_color: "",
@@ -251,6 +255,61 @@ export function BuilderPage() {
             },
             content: [],
           });
+
+          ////firebase
+          const db = getFirestore();
+          const isDataLoaded = useRef(false); // Flag para evitar loop de salvamento
+
+          // Carregar dados ao montar a página
+          useEffect(() => {
+            if (documentId) {
+              const fetchData = async () => {
+                const docRef = doc(db, "construtor-pagina", documentId);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                  const data = docSnap.data() as Partial<Keepo>;
+          
+                  setKeepoData({
+                    app: {
+                      background_color: data.app?.background_color || "",
+                      text_color: data.app?.text_color || "",
+                      card_color: data.app?.card_color || "",
+                      card_text_color: data.app?.card_text_color || "",
+                      button_color: data.app?.button_color || "",
+                      button_text_color: data.app?.button_text_color || "",
+                    },
+                    profile_info: {
+                      avatar: data.profile_info?.avatar || "",
+                      firstName: data.profile_info?.firstName || "",
+                      lastName: data.profile_info?.lastName || "",
+                      email: data.profile_info?.email || "",
+                      jobTitle: data.profile_info?.jobTitle || "",
+                      supporting: data.profile_info?.supporting || "",
+                      button_text: data.profile_info?.button_text || "",
+                      link: data.profile_info?.link || "",
+                    },
+                    content: data.content || [],
+                  });
+          
+                  isDataLoaded.current = true; // Marca que os dados foram carregados
+                }
+              };
+              fetchData();
+            }
+          }, [documentId]);
+          
+          // Salvar automaticamente no Firebase a cada atualização de keepoData
+          useEffect(() => {
+            if (documentId && keepoData && isDataLoaded.current) {
+              const saveData = async () => {
+                await setDoc(doc(db, "construtor-pagina", documentId), keepoData, { merge: true });
+              };
+              saveData();
+            }
+          }, [keepoData, documentId]);
+
+
+          /////
 
           const addContentItem = (type: Content["type"], index:number) => {
             setKeepoData((prev) => ({
@@ -310,6 +369,8 @@ export function BuilderPage() {
           
     
       const {version} = useContext(UserContext)
+
+      const [tab2, setTab2] = useState('editor')
     return(
         <main className="h-full p-8 flex gap-3">
             <Helmet>
@@ -452,11 +513,11 @@ export function BuilderPage() {
     <div className="flex  gap-4">
     <Input
         type="text"
-        value={keepoData.app.background_color}
+        value={keepoData.app.button_color}
         onChange={(e) =>
             setKeepoData((prev) => ({
                 ...prev,
-                app: { ...prev.app, background_color: e.target.value },
+                app: { ...prev.app, button_color: e.target.value },
             }))
         }
     />
@@ -465,10 +526,10 @@ export function BuilderPage() {
           onChange={(v) => {
             setKeepoData((prev) => ({
                 ...prev,
-                app: { ...prev.app, background_color: v },
+                app: { ...prev.app, button_color: v },
             }))
           }}
-          value={keepoData.app.background_color}
+          value={keepoData.app.button_color}
         />
 
 
@@ -480,11 +541,11 @@ export function BuilderPage() {
     <div className="flex  gap-4">
     <Input
         type="text"
-        value={keepoData.app.background_color}
+        value={keepoData.app.button_text_color}
         onChange={(e) =>
             setKeepoData((prev) => ({
                 ...prev,
-                app: { ...prev.app, background_color: e.target.value },
+                app: { ...prev.app, button_text_color: e.target.value },
             }))
         }
     />
@@ -493,10 +554,10 @@ export function BuilderPage() {
           onChange={(v) => {
             setKeepoData((prev) => ({
                 ...prev,
-                app: { ...prev.app, background_color: v },
+                app: { ...prev.app, button_text_color: v },
             }))
           }}
-          value={keepoData.app.background_color}
+          value={keepoData.app.button_text_color}
         />
 
 
@@ -558,26 +619,19 @@ export function BuilderPage() {
 
             </div>
 
+
             <div className="flex flex-1 flex-col gap-3">
-               
+            <Tabs defaultValue={tab2} value={tab2} className="w-full grid grid-cols-1">
                 <div className="w-full px-2 h-[48px] border rounded-md flex items-center  justify-between">
                 <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
                 <ChevronLeft className="h-4 w-4" />
                 <span className="sr-only">Voltar</span>
               </Button>
 
-                    <div className="flex gap-3">
-                    <Button variant={'outline'} className="h-8 px-3">
-                        <Eye size={16}/> Preview
-                    </Button>
-
-                    <div className="h-8 w-[1px] bg-neutral-200 dark:bg-neutral-900"></div>
-                  
-                  <Alert className="h-8 rounded-md p-0 px-1 flex items-center gap-2">
-
-                    <Button size={'icon'} className="h-6 w-6" variant={'ghost'} ><Copy size={12}/></Button>
-                  </Alert>
-                    </div>
+              <TabsList>
+    <TabsTrigger value="editor" onClick={() => setTab2('editor')} className="flex items-center gap-2"><Pencil size={16}/>Editor</TabsTrigger>
+    <TabsTrigger value="preview" onClick={() => setTab2('preview')} className="flex items-center gap-2"><Eye size={16}/>Preview</TabsTrigger>
+  </TabsList>
 
                     <div className="flex gap-3">
                     <Button className="h-8 px-3">
@@ -586,7 +640,10 @@ export function BuilderPage() {
                     </div>
                 </div>
 
-                <div>
+         
+
+  <TabsContent value="editor">
+  <div>
                    <div className="ml-28 px-2 pb-2 flex flex-col gap-2 mr-8">
                     <Alert className="h-[200px]">
                         
@@ -660,6 +717,7 @@ export function BuilderPage() {
         onClick={() => {
             setShowDropdown(false)
             addContentItem(item.type, (keepoData.content.length + 1));
+            setSearchTerm('')
         }}
         >
          <AddItemDropdown 
@@ -680,6 +738,13 @@ export function BuilderPage() {
                         className="bg-transparent border-0 p-0 dark:border-0 dark:bg-transparent" placeholder="Escreva '/' para comandos..."/>
                     </div>
                 </div>
+  </TabsContent>
+  <TabsContent value="preview">
+
+  </TabsContent>
+</Tabs>
+
+               
             </div>
         </main>
     )

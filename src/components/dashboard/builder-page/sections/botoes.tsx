@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { BehanceLogo, FacebookLogo, GithubLogo, Globe, InstagramLogo, LinkedinLogo, X, YoutubeLogo } from "phosphor-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { cn } from "../../../../lib/utils";
 
 interface Props {
     keepoData:Keepo
@@ -19,7 +20,7 @@ interface Props {
     contentItem:any
 }
 
-export function Social (props:Props) {
+export function BotoesSection (props:Props) {
     const [name, setName] = useState('')
     const [url, setUrl] = useState('')
 
@@ -28,13 +29,13 @@ export function Social (props:Props) {
           const updatedContent = [...prev.content];
       
           // Verifica se o índice especificado é válido
-          if (updatedContent[index] && updatedContent[index].type === "social") {
+          if (updatedContent[index] && updatedContent[index].type === "botoes") {
             // Se o item social já existir no índice, adiciona o novo item
             updatedContent[index].items.push({ name, url, title: "", image: "" });
           } else {
             // Caso contrário, cria um novo item social no índice especificado
             updatedContent.splice(index, 0, {
-              type: "social",
+              type: "botoes",
               title: "Redes Sociais",
               emoji: "",
               url: "",
@@ -57,61 +58,30 @@ export function Social (props:Props) {
             <div className="flex flex-wrap gap-3">
             {props.contentItem.items.map((item, idx) => (
                 <Link to={item.url} target="_blank">
-                    <Button variant={'outline'} className="h-8 px-2">
-  {(() => {
-    switch (item.name) {
-      case 'instagram':
-        return <div className="flex gap-2 items-center"><InstagramLogo size={16} /> Instagram</div>;
-      case 'facebook':
-        return <div className="flex gap-2 items-center"><FacebookLogo size={16} /> Facebook</div>;
-      case 'x':
-        return <div className="flex gap-2 items-center"><X size={16} /> X (Twitter)</div>;
-      case 'youtube':
-        return <div className="flex gap-2 items-center"><YoutubeLogo size={16} /> Youtube</div>;
-      case 'linkedin':
-        return <div className="flex gap-2 items-center"><LinkedinLogo size={16} /> LinkedIn</div>;
-      case 'behance':
-        return <div className="flex gap-2 items-center"><BehanceLogo size={16} /> Behance</div>;
-      case 'github':
-        return <div className="flex gap-2 items-center"><GithubLogo size={16} /> Github</div>;
-      case 'pagina-web':
-        return <div className="flex gap-2 items-center"><Globe size={16} /> Página web</div>;
-      default:
-        return null;
-    }
-  })()}
+                <Button
+  variant={'default'}
+  className="h-8 px-2"
+  style={{
+    backgroundColor: props.keepoData.app.button_color,
+    color: props.keepoData.app.button_text_color,
+  
+  }}
+>
+  {item.name}
 </Button>
+
                 </Link>
               ))}
             <Popover>
   <PopoverTrigger>
-  <Button variant={'outline'} className="h-8 px-2"><Plus size={16}/>Adicionar rede social</Button>
+  <Button variant={'outline'} className="h-8 px-2"><Plus size={16}/>Adicionar botão</Button>
   </PopoverTrigger>
   <PopoverContent className="flex flex-col  items-end gap-3 " >
   <div className="grid items-center gap-1.5 w-full">
-                    <Label>Tipo</Label>
-                    <Select  value={name} onValueChange={(value) => setName(value)}>
-  <SelectTrigger className="">
-    <SelectValue placeholder="" />
-  </SelectTrigger>
-  <SelectContent>
-    {['instagram', 'facebook', 'x', 'youtube', 'linkedin', 'behance', 'github', 'pagina-web']
-      .filter(item => !props.contentItem.items.some(content => content.name === item)) // Comparando com a propriedade name
-      .map(item => (
-        <SelectItem key={item} value={item} className="flex items-center gap-2">
-          {item === 'instagram' && <InstagramLogo size={16} />} 
-          {item === 'facebook' && <FacebookLogo size={16} />} 
-          {item === 'x' && <X size={16} />} 
-          {item === 'youtube' && <YoutubeLogo size={16} />} 
-          {item === 'linkedin' && <LinkedinLogo size={16} />} 
-          {item === 'behance' && <BehanceLogo size={16} />} 
-          {item === 'github' && <GithubLogo size={16} />} 
-          {item === 'pagina-web' && <Globe size={16} />} 
-          {item.charAt(0).toUpperCase() + item.slice(1)}
-        </SelectItem>
-      ))}
-  </SelectContent>
-</Select>
+                    <Label>Título do botão</Label>
+                    <Input 
+                    value={name} onChange={(e) => setName(e.target.value)}
+                   />
 
                   </div>
  

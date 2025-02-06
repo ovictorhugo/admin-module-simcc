@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { Dados } from "../sections/grafico";
 import { Alert } from "../../../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../../../ui/card";
@@ -18,19 +18,27 @@ import {
 import { TabelaQualisQuantidadeResarcher } from "../../../researcher/gráficos/tabela-qualis-quantidade-researcher";
 import { DataTable } from "../../data-table";
 import { ColumnDef } from "@tanstack/react-table";
+import { UserContext } from "../../../../context/context";
+import { useLocation } from "react-router-dom";
 
 interface Props {
-    dados:Dados[]
     year:number
     setYear: (year: number) => void; // Corrigido o tipo de setYear
-    anos:number[]
-    anoSelecionado:number | null
-    setAnoSelecionado: (ano: number | null) => void; // Corrigido o tipo da função
+   
 }
 
+ export const useQuery = () => {
+    return new URLSearchParams(useLocation().search);
+  }
 
   
 export function TabelaArtigoSection(props:Props) {
+  
+  const queryUrl = useQuery();
+
+  const graduate_program_id = queryUrl.get('graduate_program_id');
+  const group_id = queryUrl.get('group_id');
+  const dep_id = queryUrl.get('dep_id');
 
   // Definição das colunas para o DataTable
   const columns: ColumnDef<Dados>[] = [
@@ -85,7 +93,57 @@ export function TabelaArtigoSection(props:Props) {
   ];
 
 
- 
+   
+    const {urlGeral} = useContext(UserContext)
+
+          
+          let urlDados= ''
+        if(dep_id) {
+            urlDados =`${urlGeral}departamentos?dep_id=${dep_id}`;
+        } else if (group_id) {
+            urlDados =`${urlGeral}research_group?group_id=${group_id}`;
+        } else if (graduate_program_id) {
+           urlDados =`${urlGeral}graduate_program/${graduate_program_id}/article_production?year=${props.year}`
+        }
+          const [dados, setDados] = useState<Dados[]>([]);
+          const [anos, setAnos] = useState<number[]>([]);
+          const [anoSelecionado, setAnoSelecionado] = useState<number | null>(null);
+
+   useEffect(() => {
+       const fetchData = async () => {
+         try {
+   
+           const response = await fetch(urlDados, {
+             mode: "cors",
+             headers: {
+               "Access-Control-Allow-Origin": "*",
+               "Access-Control-Allow-Methods": "GET",
+               "Access-Control-Allow-Headers": "Content-Type",
+               "Access-Control-Max-Age": "3600",
+               "Content-Type": "text/plain",
+             },
+           });
+           const data = await response.json();
+           type DataItem = { year: number }; // Define um tipo para os objetos do array
+
+if (data && Array.isArray(data)) {
+  setDados(data);
+
+  const uniqueYears = Array.from(new Set(data.map((item: DataItem) => item.year))).sort((a, b) => a - b);
+  
+  setAnos(uniqueYears);
+  setAnoSelecionado(uniqueYears[0]);
+}
+
+          
+         } catch (err) {
+           console.log(err);
+         }
+       };
+       fetchData();
+     }, [urlDados]);
+
+    
 
      return(
          <Alert className="hidden md:block lg:col-span-3 ">
@@ -98,18 +156,16 @@ export function TabelaArtigoSection(props:Props) {
                             <CardDescription>Soma total do pesquisador</CardDescription>
                           </div>
         
-                          <select
-            id="year"
-            value={props.anoSelecionado ?? ""}
-            onChange={(e) => props.setAnoSelecionado(Number(e.target.value))}
-            className="border rounded px-2 py-1 text-sm"
-          >
-            {props.anos.map((ano) => (
-              <option key={ano} value={ano}>
-                {ano}
-              </option>
+                          <Select  value={String(anoSelecionado) ?? ""}  onValueChange={(value) => setAnoSelecionado(Number(value))}>
+  <SelectTrigger className="gap-3 w-fit">
+    <SelectValue placeholder="Ano" />
+  </SelectTrigger>
+  <SelectContent>
+    {anos.map((ano) => (
+              <SelectItem value={String(ano)}>{ano}</SelectItem>
             ))}
-          </select>
+  </SelectContent>
+</Select>
         
                         </CardHeader>
                         <CardContent className="mt-4">
@@ -120,7 +176,7 @@ export function TabelaArtigoSection(props:Props) {
         {/* DataTable */}
         <DataTable
           columns={columns}
-          data={props.dados.filter((item) => item.year === props.anoSelecionado)}
+          data={dados.filter((item) => item.year === anoSelecionado)}
          
         />
       </div>
