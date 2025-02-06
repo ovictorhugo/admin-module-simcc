@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../context/context"
 import { ScrollArea, ScrollBar } from "../ui/scroll-area"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 
 type Research = {
     article_A1: string,
@@ -54,9 +55,7 @@ type Props = {
     pontos: number
     pontuacao_max: number
     id_criterio: number
-
-    researcherSelecionados: Research
-
+    researcherSelecionados: Research[]
     onPesquisadoresUpdate: (newPesquisdor: PesquisadorUpdate) => void
 
 }
@@ -64,100 +63,74 @@ type Props = {
 export function PesquisadorItemBarema(config: Props) {
     const { pesquisadoresSelecionados, urlGeral } = useContext(UserContext)
 
-
     const calcularPontuacao = (pesquisador: any) => {
         switch (config.id_criterio) {
             case 1:
                 break
-
             case 2:
-
-
                 break;
             case 3:
-
-
                 break;
             case 4:
-
-
                 break;
             case 5:
                 //Artigo em periódicos qualificados (A a C)
                 return (config.pontos * Number(pesquisador.article_A1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A1)))
-
             case 20:
                 //Artigo A1
+                console.log("config.pontos: ", config.pontos, "pesquisador.article_A1: ", pesquisador.article_A1, "config.pontuacao_max: ", config.pontuacao_max)
                 return (config.pontos * Number(pesquisador.article_A1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A1)))
-
             case 21:
                 //Artigo A2
                 return (config.pontos * Number(pesquisador.article_A2) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A2)))
-
             case 22:
                 //Artigo A3
                 return (config.pontos * Number(pesquisador.article_A3) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A3)))
-
             case 23:
                 //Artigo A4
                 return (config.pontos * Number(pesquisador.article_A4) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A4)))
-
             case 24:
                 //Artigo B1
                 return (config.pontos * Number(pesquisador.article_B1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_B1)))
-
             case 25:
                 //Artigo B1
                 return (config.pontos * Number(pesquisador.article_B2) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_B2)))
-
             case 26:
                 //Artigo B3
                 return (config.pontos * Number(pesquisador.article_B3) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_B3)))
-
             case 27:
                 //Artigo B4
                 return (config.pontos * Number(pesquisador.article_B4) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_B4)))
-
             case 28:
                 //Artigo C
                 return (config.pontos * Number(pesquisador.article_C) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_C)))
-
             case 6:
                 // Artigos completos em anais de eventos
                 return (config.pontos * Number(pesquisador.work_in_event) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.work_in_event)))
-
             case 12:
                 //Pós-Graduação Stricto Sensu - andamento
                 return ((config.pontos * (Number(pesquisador.guidance_d_a) + Number(pesquisador.guidance_m_a))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_a) + Number(pesquisador.guidance_m_a)))))
-
             case 13:
                 //Iniciação Científica - andamento
                 return (config.pontos * Number(pesquisador.guidance_ic_a) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_ic_a)))
-
             case 30:
                 //Mestrado - andamento
                 return (config.pontos * Number(pesquisador.guidance_m_a) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_m_a)))
-
             case 29:
                 //Doutorado - andamento
                 return (config.pontos * Number(pesquisador.guidance_d_a) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_d_a)))
-
             case 31:
                 //Pós-Graduação Stricto Sensu - concluido
                 return ((config.pontos * (Number(pesquisador.guidance_d_c) + Number(pesquisador.guidance_m_c))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_c) + Number(pesquisador.guidance_m_c)))))
-
             case 16:
                 //Iniciação Científica - concluido
                 return (config.pontos * Number(pesquisador.guidance_ic_c) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_ic_c)))
-
             case 15:
                 //Mestrado - concluido
                 return (config.pontos * Number(pesquisador.guidance_m_c) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_m_c)))
-
             case 14:
                 //Doutorado - concluido
                 return (config.pontos * Number(pesquisador.guidance_d_c) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_d_c)))
-
             default:
                 return 0;
         }
@@ -190,20 +163,64 @@ export function PesquisadorItemBarema(config: Props) {
     // Chamada da função para atualizar os pesquisadores quando houver mudanças
     useEffect(() => {
         handlePesquisadoresUpdate(config.researcherSelecionados);
-    }, [config.researcherSelecionados, config.pontos, config.pontuacao_max]);
+    }, [config.researcherSelecionados, config.pontos, config.pontuacao_max, config.id_criterio]);
 
     return (
         <ScrollArea>
             <div className="flex gap-3 items-center w-full overflow-x-auto flex-nowrap">
                 {Array.isArray(config.researcherSelecionados) && config.researcherSelecionados.map((props) => {
-
                     return (
-                        <div key={props.id} className="group flex transition-all ">
-                            <div className=" rounded-md w-10 h-10 bg-cover bg-center bg-no-repeat rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white dark:bg-neutral-700" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}></div>
-                            <div className="h-10 w-10 text-xs flex items-center justify-center transition-all dark:bg-neutral-950 bg-white border-neutral-200 dark:border-neutral-800 border text-gray-500 dark:text-white rounded-r-md">
+                        <div key={props.id} className="group flex transition-all">
+
+                            <TooltipProvider key={props.id}>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <div className="flex items-center">
+                                            <div
+                                                className="
+                                                    rounded-md w-10 h-10 bg-cover bg-center bg-no-repeat
+                                                    rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
+                                                    dark:bg-neutral-700
+                                                "
+                                                style={{
+                                                    backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) `
+                                                }}
+                                            >
+                                            </div>
+                                        </div>
+
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        {config.researcherSelecionados.filter((pesquisador) => pesquisador.researcher === props.researcher).map((pesquisador) => {
+                                            return (
+                                                <div key={pesquisador.id} className="flex items-center gap-3">
+                                                    <div
+                                                        className="
+                                                            rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat
+                                                            rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
+                                                            dark:bg-neutral-700
+                                                        "
+                                                        style={{
+                                                            backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${pesquisador.id}) `
+                                                        }}
+                                                    ></div>
+                                                    <p>{pesquisador.researcher}</p>
+                                                </div>
+                                            )
+                                        })}
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+
+                            <div
+                                className="
+                                    h-10 w-10 text-xs flex items-center justify-center
+                                    transition-all dark:bg-neutral-950 bg-white
+                                    border-neutral-200 dark:border-neutral-800 border text-gray-500 dark:text-white rounded-r-md
+                                "
+                            >
                                 {parseFloat(calcularPontuacao(props)?.toString() || '0').toFixed(2)}
                             </div>
-
                         </div>
                     )
                 })}

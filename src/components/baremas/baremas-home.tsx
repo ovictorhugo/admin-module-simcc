@@ -122,11 +122,9 @@ type PesquisadorUpdate = {
 interface Categoria {
     id_criterio: number;
     criterio: string;
-
     pontos: string,
     pontuacao_max: string,
     id_grupo: string,
-
     pesquisadores: PesquisadorUpdate[]
 }
 
@@ -153,6 +151,7 @@ import { useModalDashboard } from "../hooks/use-modal-dashboard";
 import { ProcurarBaremas } from "./procurar-barema-public";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { Helmet } from "react-helmet";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
 
 export function BaremasHome() {
@@ -166,24 +165,22 @@ export function BaremasHome() {
         baremaId: string
     }>();
 
-
-    const [anoArtigo, setAnoArtigo] = useState(Number(new Date().getFullYear() - 4));
-    const [anoWorkInEvent, setAnoWorkInEvent] = useState(Number(new Date().getFullYear() - 4));
-    const [anoLivro, setAnoLivro] = useState(Number(new Date().getFullYear() - 4));
-    const [anoCapLivro, setAnoCapLivro] = useState(Number(new Date().getFullYear() - 4));
-    const [anoPatente, setAnoPatente] = useState(Number(new Date().getFullYear() - 4));
-    const [anoMarca, setAnoMarca] = useState(Number(new Date().getFullYear() - 4));
-    const [anoSoftware, setAnoSoftware] = useState(Number(new Date().getFullYear() - 4));
-    const [anoResourceProgess, setAnoResourceProgess] = useState(Number(new Date().getFullYear() - 4));
-    const [anoResourceCompleted, setAnoResourceCompleted] = useState(Number(new Date().getFullYear() - 4));
-    const [anoParticipacao, setAnoParticipacao] = useState(Number(new Date().getFullYear() - 4));
+    const [anoArtigo, setAnoArtigo] = useState(2000);
+    const [anoWorkInEvent, setAnoWorkInEvent] = useState(2000);
+    const [anoLivro, setAnoLivro] = useState(2000);
+    const [anoCapLivro, setAnoCapLivro] = useState(2000);
+    const [anoPatente, setAnoPatente] = useState(2000);
+    const [anoMarca, setAnoMarca] = useState(2000);
+    const [anoSoftware, setAnoSoftware] = useState(2000);
+    const [anoResourceProgess, setAnoResourceProgess] = useState(2000);
+    const [anoResourceCompleted, setAnoResourceCompleted] = useState(2000);
+    const [anoParticipacao, setAnoParticipacao] = useState(2000);
 
     const [idBarema, setIdBarema] = useState('')
 
     const [tituloBarema, setTituloBarema] = useState('Barema de avaliação sem título')
     const [editTituloBarema, setEditTituloBarema] = useState(false)
 
-    ////////////////q
     useEffect(() => {
         if (baremaId) {
             setIdDocumentBarema(baremaId);
@@ -204,10 +201,6 @@ export function BaremasHome() {
 
                         const userDocsRef = collection(db, 'baremas');
                         const userDocSnapshot = await getDocs(userDocsRef);
-
-
-
-
                         if (userDocSnapshot.size > 0) {
                             const userDataArray: Firebase[] = userDocSnapshot.docs.map((doc) => {
                                 // Get the document ID using .id
@@ -251,51 +244,55 @@ export function BaremasHome() {
         fetchData();
     }, [idDocumentBarema]);
 
-    console.log('pesquisadoresSelecionados', pesquisadoresSelecionados)
-    const [criterios, setCriterios] = useState([
-        { id: 1, value: 'Pós-doutorado', type: 'Titulação' },
-        { id: 2, value: 'Doutorado', type: 'Titulação' },
-        { id: 3, value: 'Mestrado', type: 'Titulação' },
-        { id: 4, value: 'Especialista', type: 'Titulação' },
+    const CRITERIOS = [
+        { id: 1, value: "Pós-doutorado", type: "Titulação" },
+        { id: 2, value: "Doutorado", type: "Titulação" },
+        { id: 3, value: "Mestrado", type: "Titulação" },
+        { id: 4, value: "Especialista", type: "Titulação" },
 
-        { id: 5, value: 'Artigo em periódicos qualificados (A a C)', type: 'Artigos' },
-        { id: 19, value: 'Todos os artigos', type: 'Artigos' },
-        { id: 20, value: 'Artigo A1', type: 'Artigos' },
-        { id: 21, value: 'Artigo A2', type: 'Artigos' },
-        { id: 22, value: 'Artigo A3', type: 'Artigos' },
-        { id: 23, value: 'Artigo A4', type: 'Artigos' },
-        { id: 24, value: 'Artigo B1', type: 'Artigos' },
-        { id: 25, value: 'Artigo B2', type: 'Artigos' },
-        { id: 26, value: 'Artigo B3', type: 'Artigos' },
-        { id: 27, value: 'Artigo B4', type: 'Artigos' },
-        { id: 28, value: 'Artigo C', type: 'Artigos' },
-        { id: 6, value: 'Artigos completos em anais de eventos', type: 'Artigos' },
+        { id: 5, value: "Artigo em periódicos qualificados (A a C)", type: "Artigos" },
+        { id: 19, value: "Todos os artigos", type: "Artigos" },
+        { id: 20, value: "Artigo A1", type: "Artigos" },
+        { id: 21, value: "Artigo A2", type: "Artigos" },
+        { id: 22, value: "Artigo A3", type: "Artigos" },
+        { id: 23, value: "Artigo A4", type: "Artigos" },
+        { id: 24, value: "Artigo B1", type: "Artigos" },
+        { id: 25, value: "Artigo B2", type: "Artigos" },
+        { id: 26, value: "Artigo B3", type: "Artigos" },
+        { id: 27, value: "Artigo B4", type: "Artigos" },
+        { id: 28, value: "Artigo C", type: "Artigos" },
+        { id: 6, value: "Artigos completos em anais de eventos", type: "Artigos" },
 
-        { id: 7, value: 'Livro publicado', type: 'Produção científica' },
-        { id: 8, value: 'Capítulo de livro', type: 'Produção científica' },
+        { id: 7, value: "Livro publicado", type: "Produção bibliográfica" },
+        { id: 8, value: "Capítulo de livro", type: "Produção bibliográfica" },
 
-        { id: 9, value: 'Patente', type: 'Produção técnica' },
-        { id: 10, value: 'Software', type: 'Produção técnica' },
+        { id: 9, value: "Patente", type: "Produção técnica" },
+        { id: 10, value: "Software", type: "Produção técnica" },
+        { id: 11, value: "Marca", type: "Produção técnica" },
+        { id: 12, value: "Relatório técnico", type: "Produção técnica" },
 
-        { id: 11, value: 'Projetos de Pesquisa', type: '' },
+        { id: 13, value: "Projetos de Pesquisa", type: "" },
 
-        { id: 12, value: 'Pós-Graduação Stricto Sensu', type: 'Formação de recursos humanos em andamento' },
-        { id: 13, value: 'Iniciação Científica', type: 'Formação de recursos humanos em andamento' },
-        { id: 30, value: 'Mestrado', type: 'Formação de recursos humanos em andamento' },
-        { id: 29, value: 'Doutorado', type: 'Formação de recursos humanos em andamento' },
+        { id: 14, value: "Pós-Graduação Stricto Sensu", type: "Formação de recursos humanos em andamento" },
+        { id: 15, value: "Iniciação Científica", type: "Formação de recursos humanos em andamento" },
+        { id: 30, value: "Mestrado", type: "Formação de recursos humanos em andamento" },
+        { id: 29, value: "Doutorado", type: "Formação de recursos humanos em andamento" },
 
-        { id: 31, value: 'Pós-Graduação Stricto Sensu', type: 'Formação de recursos humanos concluída' },
-        { id: 16, value: 'Iniciação Científica', type: 'Formação de recursos humanos concluída' },
-        { id: 15, value: 'Mestrado', type: 'Formação de recursos humanos concluída' },
-        { id: 14, value: 'Doutorado', type: 'Formação de recursos humanos concluída' },
+        { id: 31, value: "Pós-Graduação Stricto Sensu", type: "Formação de recursos humanos concluída" },
+        { id: 16, value: "Iniciação Científica", type: "Formação de recursos humanos concluída" },
+        { id: 17, value: "Mestrado", type: "Formação de recursos humanos concluída" },
+        { id: 18, value: "Doutorado", type: "Formação de recursos humanos concluída" },
 
+        { id: 33, value: "Organização", type: "Participação em eventos" },
+        { id: 134, value: "Palestrante/ Mesa Redonda/ Conferencista/ Ministrante de Minicurso", type: "Participação em eventos" }
+    ];
 
-
-        { id: 17, value: 'Organização', type: 'Participação em eventos' },
-        { id: 18, value: 'Palestrante/ Mesa Redonda/ Conferencista/ Ministrante de Minicurso', type: 'Participação em eventos' },
-    ])
-
-
+    const criteriosAgrupados = CRITERIOS.reduce((acc, criterio) => {
+        if (!criterio.type) return acc; // Ignorar itens sem tipo
+        if (!acc[criterio.type]) acc[criterio.type] = [];
+        acc[criterio.type].push(criterio);
+        return acc;
+    }, {});
 
     const [grupos, setGrupos] = useState<Grupo[]>([]);
 
@@ -376,6 +373,7 @@ export function BaremasHome() {
                             return {
                                 ...categoria,
                                 [name]: value,
+
                             };
                         }
                         return categoria;
@@ -540,16 +538,16 @@ export function BaremasHome() {
     //reset config
 
     const resetConfig = async () => {
-        setAnoArtigo(Number(new Date().getFullYear() - 4));
-        setAnoWorkInEvent(Number(new Date().getFullYear() - 4));
-        setAnoLivro(Number(new Date().getFullYear() - 4));
-        setAnoCapLivro(Number(new Date().getFullYear() - 4));
-        setAnoPatente(Number(new Date().getFullYear() - 4));
-        setAnoMarca(Number(new Date().getFullYear() - 4));
-        setAnoSoftware(Number(new Date().getFullYear() - 4));
-        setAnoResourceProgess(Number(new Date().getFullYear() - 4));
-        setAnoResourceCompleted(Number(new Date().getFullYear() - 4));
-        setAnoParticipacao(Number(new Date().getFullYear() - 4));
+        setAnoArtigo(Number(2000));
+        setAnoWorkInEvent(Number(2000));
+        setAnoLivro(Number(2000));
+        setAnoCapLivro(Number(2000));
+        setAnoPatente(Number(2000));
+        setAnoMarca(Number(2000));
+        setAnoSoftware(Number(2000));
+        setAnoResourceProgess(Number(2000));
+        setAnoResourceCompleted(Number(2000));
+        setAnoParticipacao(Number(2000));
 
         toast("Resetado", {
             description: "Valores de anos alterados para últimos 4 anos de produção",
@@ -675,6 +673,8 @@ export function BaremasHome() {
                 });
 
                 const data = await response.json();
+
+                console.log("DAODOSS: ", data)
                 if (data) {
                     setResearcherSelecionados(data);
                 }
@@ -684,7 +684,7 @@ export function BaremasHome() {
         };
 
         fetchData();
-    }, [pesquisadoresSelecionados]);
+    }, [pesquisadoresSelecionados, anoArtigo, anoWorkInEvent, anoLivro, anoCapLivro, anoPatente, anoSoftware, anoMarca, anoResourceProgess, anoResourceCompleted, anoParticipacao, urlGeral]);
     //csv
 
     const convertJsonToCsv = (json: any[]): string => {
@@ -810,16 +810,16 @@ export function BaremasHome() {
 
     const [tab, setTab] = useState('all')
 
-    const {version} = useContext(UserContext)
-     
+    const { version } = useContext(UserContext)
+
 
     return (
         <>
-         <Helmet>
-          <title>Baremas | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
-          <meta name="description" content={`Baremas | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
-          <meta name="robots" content="index, follow" />
-        </Helmet>
+            <Helmet>
+                <title>Baremas | Módulo administrativo | {version ? ('Conectee') : ('Iapós')} </title>
+                <meta name="description" content={`Baremas | Módulo administrativo | ${version ? ('Conectee') : ('Iapós')}`} />
+                <meta name="robots" content="index, follow" />
+            </Helmet>
             {isModalOpen && (
                 <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 min-h-[calc(100vh-56px)]">
                     <Tabs defaultValue={tab} value={tab} className="h-full" >
@@ -991,6 +991,7 @@ export function BaremasHome() {
                                                                                 <TableHead className="w-[100px] min-w-[100px]">Pontuação</TableHead>
                                                                                 <TableHead className="w-[200px] min-w-[200px]">Pontuação máxima</TableHead>
                                                                                 <TableHead className="text-right w-ful">Total</TableHead>
+                                                                                <TableHead className="text-right w-ful"></TableHead>
                                                                             </TableRow>
                                                                         </TableHeader>
                                                                     )}
@@ -998,7 +999,7 @@ export function BaremasHome() {
                                                                     <TableBody>
                                                                         {grupo.categorias.length !== 0 && (
                                                                             grupo.categorias.map((categoria, index) => (
-                                                                                <TableRow>
+                                                                                <TableRow className="relative">
                                                                                     <TableCell>
                                                                                         <div className="">
                                                                                             <Dialog
@@ -1032,46 +1033,62 @@ export function BaremasHome() {
                                                                                                         </DialogDescription>
                                                                                                     </DialogHeader>
                                                                                                     <div className={'max-h-[350px] overflow-y-auto elementBarra'}>
-
                                                                                                         <div className="flex flex-col gap-1 p-2">
-                                                                                                            {criterios.map((criterio) => (
-                                                                                                                <Button
-                                                                                                                    variant={'ghost'}
-                                                                                                                    className="text-left justify-start"
-                                                                                                                    key={criterio.id}
-                                                                                                                    value={criterio.value}
-                                                                                                                    onClick={() => selecionarCriterio(grupoIndex, index, criterio.id, criterio.value)}
 
+                                                                                                            {Object.entries(criteriosAgrupados).map(([tipo, lista]) => (
+                                                                                                                <div className="flex flex-col" key={tipo}>
+                                                                                                                    <h2 className="text-sm font-semibold mb-1 bg-slate-200 rounded-sm p-2">{tipo}</h2>
+                                                                                                                    {lista.map(criterio => (
+                                                                                                                        <Button
+                                                                                                                            variant={'ghost'}
+                                                                                                                            className="text-left justify-start"
+                                                                                                                            onClick={() => selecionarCriterio(grupoIndex, index, criterio.id, criterio.value)}
+                                                                                                                            key={criterio.id} value={criterio.value}>
 
-                                                                                                                >
-                                                                                                                    <span>{criterio.value}</span>
-                                                                                                                </Button>
+                                                                                                                            {criterio.value}
+                                                                                                                        </Button>
+                                                                                                                    ))}
+                                                                                                                </div>
                                                                                                             ))}
                                                                                                         </div>
                                                                                                     </div>
-
                                                                                                 </DialogContent>
                                                                                             </Dialog>
                                                                                         </div>
                                                                                     </TableCell>
 
-                                                                                    <TableCell><Input className="w-24" name="pontos" value={categoria.pontos} onChange={(e) => handleInputChange(e, index, grupo.id)} /></TableCell>
-                                                                                    <TableCell><Input className={`w-24 ${categoria.pontos > categoria.pontuacao_max && ('border-red-500')}`} name="pontuacao_max" value={categoria.pontuacao_max} onChange={(e) => handleInputChange(e, index, grupo.id)} /></TableCell>
+                                                                                    <TableCell>
+                                                                                        <Input className="w-24" name="pontos" value={categoria.pontos} onChange={(e) => handleInputChange(e, index, grupo.id)} />
+                                                                                    </TableCell>
 
                                                                                     <TableCell>
-                                                                                        <div className="flex justify-between items-center gap-3">
+                                                                                        <Input className={`w-24 ${categoria.pontos > categoria.pontuacao_max && ('border-red-500')}`} name="pontuacao_max" value={categoria.pontuacao_max} onChange={(e) => handleInputChange(e, index, grupo.id)} />
+                                                                                    </TableCell>
+
+                                                                                    <TableCell className="flex justify-end">
+                                                                                        <div className="flex w-fit justify-between items-center gap-3 bg">
                                                                                             <div className="overflow-x-auto flex-nowrap flex-1">
                                                                                                 <PesquisadorItemBarema
                                                                                                     pontos={Number(categoria.pontos)}
                                                                                                     pontuacao_max={Number(categoria.pontuacao_max)}
                                                                                                     id_criterio={categoria.id_criterio}
-
-                                                                                                    researcherSelecionados={researcherSelecionados[0]}
-
+                                                                                                    researcherSelecionados={researcherSelecionados}
                                                                                                     onPesquisadoresUpdate={handleResearcherUpdate}
                                                                                                 />
                                                                                             </div>
-                                                                                            <Button className=" group-hover:flex hidden whitespace-nowrap" variant={'ghost'} size={'icon'} onClick={() => removerCriterio(grupoIndex, index)}><Trash size={16} /> </Button>
+
+                                                                                            <TooltipProvider>
+                                                                                                <Tooltip>
+                                                                                                    <TooltipTrigger asChild>
+                                                                                                        <Button className="group-hover:flex whitespace-nowrap absolute  right-0" variant={'ghost'} size={'icon'} onClick={() => removerCriterio(grupoIndex, index)}>
+                                                                                                            <Trash size={16} />
+                                                                                                        </Button>
+                                                                                                    </TooltipTrigger>
+                                                                                                    <TooltipContent>
+                                                                                                        Remover critério
+                                                                                                    </TooltipContent>
+                                                                                                </Tooltip>
+                                                                                            </TooltipProvider>
                                                                                         </div>
                                                                                     </TableCell>
                                                                                 </TableRow>
@@ -1172,8 +1189,6 @@ export function BaremasHome() {
                                                                     </TableRow>
                                                                 </TableBody>
                                                             </Table>
-
-
 
                                                             <div>
                                                                 <div className={`w-full flex gap-4 flex-col border border-neutral-200 rounded-t-none border-t-0 dark:border-neutral-800 py-3 px-4 rounded-md `}>
