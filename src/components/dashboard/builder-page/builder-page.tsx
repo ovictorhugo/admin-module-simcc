@@ -378,7 +378,7 @@ export function BuilderPage() {
           <meta name="description" content={`Construtor de página | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
-            <div className="flex h-full">
+            <div className={`h-full ${tab2 == 'editor' ? ('flex'):('hidden')}`}>
             <Tabs defaultValue={tab} value={tab} className="flex gap-3">
  <div className="p-2  flex flex-col gap-1 items-center border rounded-md h-full w-[48px]">
 
@@ -740,7 +740,9 @@ export function BuilderPage() {
                 </div>
   </TabsContent>
   <TabsContent value="preview">
-
+  <div>
+                    <SectionBuilderPage keepoData={keepoData} setKeepoData={setKeepoData}/>
+                    </div>
   </TabsContent>
 </Tabs>
 
