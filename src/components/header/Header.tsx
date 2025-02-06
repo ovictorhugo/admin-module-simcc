@@ -124,7 +124,7 @@ export function Header() {
             )}
           </div>
 
-          <div className="flex gap-2">
+          <div className="hidden md:flex md:gap-2">
             <div>
               {(loggedIn && permission.length > 0) && (
                 <Link to={'/dashboard'}>
