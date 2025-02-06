@@ -11,7 +11,7 @@ export function AddItem(props:Props) {
             <div>
             {props.chidren}
             </div>
-            <p className="">{props.titulo}</p>
+            <p className="text-center">{props.titulo}</p>
         </Alert>
     )
 }

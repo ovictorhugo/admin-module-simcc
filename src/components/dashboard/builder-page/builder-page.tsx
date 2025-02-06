@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { Tabs, TabsContent } from "../../ui/tabs";
 import { Button } from "../../ui/button";
-import { AlignLeft, BarChart, Check, ChevronDown, ChevronLeft, ChevronUp, Copy, Eye, File, GalleryHorizontal, Globe, GripVertical, Heading1, Heading2, Heading3, Image, LayoutPanelTop, Link, List, Palette, Plus, Rows, SquareDashedMousePointer, SquarePlay, SquarePlus, TableCellsMerge, Users } from "lucide-react";
+import { AlignLeft, BarChart, Book, Check, ChevronDown, ChevronLeft, ChevronUp, Code, Copy, Eye, File, GalleryHorizontal, Globe, GripVertical, Heading1, Heading2, Heading3, Image, LayoutPanelTop, Link, List, ListOrdered, Palette, Plus, Rows, SquareDashedMousePointer, SquarePlay, SquarePlus, Table, TableCellsMerge, Users } from "lucide-react";
 import { Separator } from "../../ui/separator";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Alert } from "../../ui/alert";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../ui/accordion";
 import { ScrollArea, ScrollBar } from "../../ui/scroll-area";
@@ -18,6 +18,7 @@ import { AddItemDropdown } from "./add-item-dropdown";
 import { SectionBuilderPage } from "./sections";
 import { Helmet } from "react-helmet";
 import { UserContext } from "../../../context/context";
+import { Quotes } from "phosphor-react";
 
 export interface Keepo {
     app: App;
@@ -46,7 +47,7 @@ export interface Keepo {
   }
   
  export interface Content {
-    type: 'divider' | 'h1' | 'h2'| 'h3'| 'text'| 'list'| 'video' |'grid' | 'image' | 'file' | 'link' | 'slider' | 'social' | 'card';
+    type: 'divider' | 'h1' | 'h2'| 'h3'| 'text'| 'list'| 'video' |'grid' | 'image' | 'file' | 'link' | 'slider' | 'social' | 'card' | 'list-number' | 'grafico' | 'pesquisadores' | 'artigos' | 'nuvem-palavra' | 'livros' | 'tabela' | 'capitulos' |'marcas' | 'sotwares' | 'patentes' | 'html' ;
     title: string;
     emoji: string;
     url: string;
@@ -62,13 +63,58 @@ export interface Keepo {
     image: string;
   }
 
+
+  ////
+
+
+  export interface Total {
+    area: string;
+    code: string;
+    graduate_program_id: string;
+    modality: string;
+    name: string;
+    rating: string;
+    type: string;
+    city: string
+    state: string
+    instituicao: string
+    url_image: string
+    region: string
+    sigla: string
+    latitude: string
+    longitude: string
+    visible: string
+    qtd_discente: string
+    qtd_colaborador: string
+    qtd_permanente: string
+    create_at: string
+
+    institution: string,
+    first_leader: string,
+    first_leader_id: string,
+    second_leader:string,
+    second_leader_id: string,
+    id:string
+
+    dep_id:string
+    org_cod: string
+    dep_nom: string
+    dep_des: string
+    dep_email: string
+    dep_site: string
+    dep_tel: string
+    img_data:string
+    dep_sigla: string
+  }
+
   export const items = [
     { titulo: "Divisão", desc: "Dividir blocos visualmente", icon: <Rows size={16} />, type: 'divider' as const },
     { titulo: "Título 1", desc: "Título da seção grande", icon: <Heading1 size={16} />, type: 'h1' as const },
     { titulo: "Título 2", desc: "Título da seção média", icon: <Heading2 size={16} />, type: 'h2' as const },
     { titulo: "Título 3", desc: "Título da seção pequena", icon: <Heading3 size={16} />, type: 'h3' as const },
     { titulo: "Parágrafo", desc: "Escreva um texto sem formatação", icon: <AlignLeft size={16} />, type: 'text' as const },
-    { titulo: "Lista", desc: "Criar lista com marcadores simples", icon: <List size={16} />, type: 'list' as const },
+    { titulo: "Lista com marcadores", desc: "Criar lista com marcadores simples", icon: <List size={16} />, type: 'list' as const },
+    { titulo: "Lista numerada", desc: "Criar lista com numeração", icon: <ListOrdered size={16} />, type: 'list-number' as const },
     { titulo: "Vídeo", desc: "Carregar ou integrar com um link", icon: <SquarePlay size={16} />, type: 'video' as const },
     { titulo: "Imagem", desc: "Fazer upload do arquivo", icon: <Image size={16} />, type: 'image'  as const},
     { titulo: "Carrossel", desc: "Crie uma sessão com os cards", icon: <GalleryHorizontal size={16} />, type: 'slider' as const },
@@ -76,17 +122,81 @@ export interface Keepo {
     { titulo: "Card", desc: "Crie blocos de conteúdo", icon: <SquareDashedMousePointer size={16} />, type: 'card' as const },
     { titulo: "Arquivo", desc: "Carregar ou integrar com um link", icon: <File size={16} />, type: 'file' as const },
     { titulo: "Redes sociais", desc: "Links externos", icon: <Globe size={16} />, type: 'social' as const },
-    { titulo: "Grid", desc: "Grade de itens", icon: <TableCellsMerge size={16} />, type: 'grid' as const }
+    { titulo: "Grid", desc: "Grade de itens", icon: <TableCellsMerge size={16} />, type: 'grid' as const },
+    { titulo: "HTML", desc: "Crie seu próprio código", icon: <Code size={16} />, type: 'html' as const }
   ];
 
  export  const itemsEspeciais = [
-    { titulo: "Gráfico", desc: "Quantidade e métricas de produções", icon: <BarChart size={16} /> },
-    { titulo: "Pesquisadores", desc: "Carrossel de participantes", icon: <Users size={16} /> },
-   
+    { titulo: "Gráfico", desc: "Quantidade e métricas de produções", icon: <BarChart size={16} />, type: 'grafico' as const },
+    { titulo: "Pesquisadores", desc: "Carrossel de participantes", icon: <Users size={16} />, type: 'pesquisadores' as const },
+    { titulo: "Nuvem de palavras", desc: "Palavras com maiores ocorrências", icon: <Users size={16} />, type: 'nuvem-palavra' as const },
+    { titulo: "Tabela", desc: "Dados de produção", icon: <Table size={16} />, type: 'tabela' as const },
+    { titulo: "Todos os artigos", desc: "Artigos dos pesquisadores", icon: <Quotes size={16} />, type: 'artigos' as const },
+    { titulo: "Todos os livros", desc: "Livros dos pesquisadores", icon: <Book size={16} />, type: 'livros' as const },
+    { titulo: "Todos os livros e capítulos", desc: "Livros e capítulos dos pesquisadores", icon: <Book size={16} />, type: 'capitulos' as const },
+    { titulo: "Todos os livros e capítulos", desc: "Livros e capítulos dos pesquisadores", icon: <Book size={16} />, type: 'patentes' as const },
+    { titulo: "Todos os livros e capítulos", desc: "Livros e capítulos dos pesquisadores", icon: <Book size={16} />, type: 'sotwares' as const },
+    { titulo: "Todos os livros e capítulos", desc: "Livros e capítulos dos pesquisadores", icon: <Book size={16} />, type: 'marcas' as const },
   ];
+
+  const useQuery = () => {
+    return new URLSearchParams(useLocation().search);
+  }
 
 export function BuilderPage() {
     const [tab, setTab] = useState('inicio')
+
+    const queryUrl = useQuery();
+
+    const graduate_program_id = queryUrl.get('graduate_program_id');
+    const group_id = queryUrl.get('group_id');
+    const dep_id = queryUrl.get('dep_id');
+
+    
+        const [isLoading, setIsLoading] = useState(false)
+    
+        const [total, setTotal] = useState<Total[]>([]);
+    
+        const {urlGeral} = useContext(UserContext)
+        let urlPatrimonioInsert = ''
+      if(dep_id) {
+        urlPatrimonioInsert =` ${urlGeral}departamentos?dep_id=${dep_id}`;
+      } else if (group_id) {
+        urlPatrimonioInsert =` ${urlGeral}research_group?group_id=${group_id}`;
+      } else if (graduate_program_id) {
+        urlPatrimonioInsert =` ${urlGeral}graduate_program_profnit?id=${graduate_program_id}`;
+      }
+
+    useEffect(() => {
+        setIsLoading(true)
+      const fetchData = async () => {
+       
+        try {
+            
+          const response = await fetch(urlPatrimonioInsert , {
+            mode: "cors",
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET",
+              "Access-Control-Allow-Headers": "Content-Type",
+              "Access-Control-Max-Age": "3600",
+              "Content-Type": "text/plain",
+            },
+          });
+          const data = await response.json();
+          if (data) {
+              setTotal(data)
+              setIsLoading(false)
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchData()
+  
+     
+    }, [urlPatrimonioInsert]);
+
 
      //voltar
           const history = useNavigate();
@@ -177,6 +287,17 @@ export function BuilderPage() {
           }, [searchTerm]);
         
           const filteredItems = items.filter(item => {
+            const normalizeString = (str:any) => str
+            .normalize("NFD") // Decompõe os caracteres acentuados
+            .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
+            .toLowerCase(); // Converte para minúsculas
+
+            const searchString = normalizeString(item.titulo);
+          const normalizedSearch = normalizeString(searchTerm);
+          return searchString.includes(normalizedSearch);
+        });
+
+        const filteredItemsEspeciais = itemsEspeciais.filter(item => {
             const normalizeString = (str:any) => str
             .normalize("NFD") // Decompõe os caracteres acentuados
             .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
@@ -395,11 +516,29 @@ export function BuilderPage() {
  <TabsContent value="add" className="m-0 p-4">
  <Accordion type="single" collapsible>
   <AccordionItem value="item-1">
-    <AccordionTrigger className="py-2 border-b">Botões</AccordionTrigger>
+    <AccordionTrigger className="py-2 border-b">Elementos</AccordionTrigger>
     <AccordionContent className="mt-4 flex flex-col gap-4">
     <div className="gap-4 grid grid-cols-2">
     {items.map((item, index) => (
-        <div className="cursor-pointer rounded-md " onClick={() => addContentItem(item.type, index+1)}>
+        <div className="cursor-pointer rounded-md " onClick={() =>   addContentItem(item.type, (keepoData.content.length + 1))}>
+            <AddItem
+          key={index} 
+          titulo={item.titulo} 
+          chidren={item.icon} 
+        />
+        </div>
+      ))}
+
+</div>
+        </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="item-2">
+    <AccordionTrigger className="py-2 border-b">Funções</AccordionTrigger>
+    <AccordionContent className="mt-4 flex flex-col gap-4">
+    <div className="gap-4 grid grid-cols-2">
+    {itemsEspeciais.map((item, index) => (
+        <div className="cursor-pointer rounded-md " onClick={() =>   addContentItem(item.type, (keepoData.content.length + 1))}>
             <AddItem
           key={index} 
           titulo={item.titulo} 
@@ -448,7 +587,20 @@ export function BuilderPage() {
                 </div>
 
                 <div>
-                    <h1>sd</h1>
+                   <div className="ml-28 px-2 pb-2 flex flex-col gap-2 mr-8">
+                    <Alert className="h-[200px]">
+                        
+                    </Alert>
+
+                    <div>
+
+                    </div>
+
+                    <div>
+                        <h1></h1>
+                        <p></p>
+                    </div>
+                   </div>
 
                     <div>
                     <SectionBuilderPage keepoData={keepoData} setKeepoData={setKeepoData}/>
@@ -467,9 +619,9 @@ export function BuilderPage() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="max-h-[300px] overflow-y-auto">
                   <Input 
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                     className="mb-1"    onChange={(e) => setSearchTerm(e.target.value)}
                      
-                        className="" placeholder="Pesquisar..."/>
+                        placeholder="Pesquisar..."/>
                   {filteredItems.length != 0 && (
                     <div>
                         <DropdownMenuLabel>Elementos</DropdownMenuLabel>
@@ -478,6 +630,31 @@ export function BuilderPage() {
                   )}
                  
                   {filteredItems.map((item, index) => (
+        <div 
+        className="cursor-pointer rounded-md " 
+        onClick={() => {
+            setShowDropdown(false)
+            addContentItem(item.type, (keepoData.content.length + 1));
+        }}
+        >
+         <AddItemDropdown 
+          key={index} 
+          titulo={item.titulo} 
+          desc={item.desc} 
+          chidren={item.icon} 
+        />
+       </div>
+      ))}
+
+
+{filteredItemsEspeciais.length != 0 && (
+                    <div>
+                        <DropdownMenuLabel>Funções</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                    </div>
+                  )}
+                 
+                  {filteredItemsEspeciais.map((item, index) => (
         <div 
         className="cursor-pointer rounded-md " 
         onClick={() => {

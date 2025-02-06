@@ -6,6 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../../../ui/popover";
 import { Base } from "../base";
 import { Keepo } from "../builder-page";
 import { EmojiPicker } from "../emoji-picker";
+import { Label } from "../../../ui/label";
 
 interface Props {
     keepoData:Keepo
@@ -22,6 +23,7 @@ export function LinkSection (props:Props) {
              <div className="w-full">
                       <Alert className="flex gap-2 items-center p-4  w-full">
                       <EmojiPicker
+                      contentItem={props.contentItem}
                   onSelect={(emoji) => {
                     const newContent = [...props.keepoData.content]; // Cria uma cópia do array
                     newContent[props.index] = { ...newContent[props.index], emoji: emoji }; // Atualiza apenas o item específico
@@ -58,9 +60,13 @@ export function LinkSection (props:Props) {
                       <Link size={16} />
                     </Button>
   </PopoverTrigger>
-  <PopoverContent className="flex flex-col gap-3" side='left' align='center'>
-    <Input placeholder="https://www..." />
-    <Button className="w-full"><Plus size={16}/>Adicionar link</Button>
+  <PopoverContent className="flex  items-end gap-3 w-[500px]" side='left' align='center'>
+  <div className="grid items-center gap-1.5 w-full">
+                    <Label>Link</Label>
+                    <Input placeholder="https://www..." />
+                  </div>
+    
+    <Button className="w-fit"><Plus size={16}/>Adicionar link</Button>
     </PopoverContent>
 </Popover>
 

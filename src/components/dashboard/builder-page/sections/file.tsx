@@ -22,6 +22,7 @@ export function FileSection (props:Props) {
              <div className="w-full">
                       <Alert className="flex gap-2 items-center p-4  w-full">
                       <EmojiPicker
+                       contentItem={props.contentItem}
                   onSelect={(emoji) => {
                     const newContent = [...props.keepoData.content]; // Cria uma cópia do array
                     newContent[props.index] = { ...newContent[props.index], emoji: emoji }; // Atualiza apenas o item específico
