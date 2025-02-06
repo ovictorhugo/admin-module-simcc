@@ -35,7 +35,7 @@ export function ResultHome() {
 
   const type_search = queryUrl.get('type_search');
   const terms = queryUrl.get('terms');
-
+  const [previousTypeSearch, setPreviousTypeSearch] = useState(type_search);
   const isModalOpen = isOpen && type === "result-home";
 
   useEffect(() => {
@@ -57,6 +57,8 @@ export function ResultHome() {
       onOpen('researchers-home')
     }
   }, [typeResult]);
+
+
 
   //csv
   const [jsonData, setJsonData] = useState<any[]>([]);
@@ -253,14 +255,14 @@ export function ResultHome() {
                   <DropdownMenuContent>
                     <DropdownMenuLabel>Mais opções</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="p-0">
                       <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
                         <File size={16} className="" />
                         Dicionário de dados
                       </Button>
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="p-0">
                       <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
                         <Download size={16} className="" />
                         Baixar resultado

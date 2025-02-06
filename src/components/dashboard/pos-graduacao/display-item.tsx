@@ -1,4 +1,4 @@
-import {  AreaChart,    Book,    Briefcase,    Code,    Copyright,    Globe,  GraduationCap,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, SquareMenu, Star, User,  Users } from "lucide-react";
+import {  AreaChart,    ArrowLeftToLine,    ArrowRightToLine,    Book,    Briefcase,    Code,    Copyright,    Globe,  GraduationCap,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, SquareMenu, Star, User,  Users } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
@@ -224,6 +224,13 @@ export function DisplayItem(props:Patrimonio) {
   
     ];
 
+    useEffect(() => {
+  
+
+      setTab('all')
+
+      }, [urlGeralAdm, props.graduate_program_id]);
+
     return(
 <Tabs  defaultValue={tab} value={tab}>
 <Helmet>
@@ -238,16 +245,16 @@ export function DisplayItem(props:Patrimonio) {
       <div className="flex border dark:border-neutral-800 flex-col sticky top-[68px] z-[3] rounded-lg bg-white dark:bg-black">
       <div className="flex items-center p-2 justify-between">
         <div className="flex items-center gap-2">
-       {!props.menu_state && (
+
          <Tooltip>
          <TooltipTrigger asChild>
            <Button variant="ghost" size="icon"  onClick={() => props.onMenuState(!props.menu_state)} >
-           <SquareMenu size={16}/>
+           {props.menu_state ? (<ArrowLeftToLine size={16}/>):(<ArrowRightToLine size={16}/>)}
            </Button>
          </TooltipTrigger>
-         <TooltipContent>Mostrar menu</TooltipContent>
+         <TooltipContent>{!props.menu_state ? ('Mostrar menu'):('Fechar menu')}</TooltipContent>
        </Tooltip>
-       )}
+ 
 
         <Tooltip>
             <TooltipTrigger asChild>

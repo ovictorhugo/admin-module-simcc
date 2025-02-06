@@ -591,13 +591,12 @@ export function ResearcherIndicators(props: Research) {
               </Alert>
 
               <Alert className=" h-full lg:col-span-2 ">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <div>
-                    <CardTitle className="text-sm font-medium mb-5">
-                      Quantidade de livros e capítulos de livro por ano
+                    <CardTitle className="text-sm font-medium">
+                    Quantidade de livros e capítulos de livro por ano
                     </CardTitle>
-                    <CardDescription>Análise de produção por ano do pesquisador</CardDescription>
-
+                    <CardDescription>Análise da quantidade de produção por ano</CardDescription>
                   </div>
 
                   <TooltipProvider>
@@ -611,6 +610,7 @@ export function ResearcherIndicators(props: Research) {
 
 
                 </CardHeader>
+               
                 <CardContent className="mt-4">
                   <GraficoQtdLivrosCapitulos articles={dados} />
                 </CardContent>

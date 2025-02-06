@@ -79,7 +79,7 @@ export function GeralViewDashboard() {
 
   const [total, setTotal] = useState<TotalPatrimonios[]>([]);
 
-  const urlPatrimonioInsert = `${urlGeralAdm}InstitutionRest/Query/Count?institution_id=${user?.institution_id}`;
+  const urlPatrimonioInsert = `${urlGeralAdm}InstitutionRest/Query/Count?institution_id=`;
 
   console.log(urlPatrimonioInsert)
 

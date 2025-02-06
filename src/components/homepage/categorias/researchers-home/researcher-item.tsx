@@ -26,7 +26,7 @@ type Research = {
     graduation: string,
     patent: string,
     speaker: string
-
+status:boolean
     h_index:string,
     relevance_score:string,
     works_count:string,
@@ -69,6 +69,7 @@ export function ResearchItem(props: Research) {
             <div className="flex flex-col justify-between h-full">
             <div className="z-[1] w-full  p-4 flex gap-3 justify-end">
             
+            <div className="mr-auto">
             <Button 
              onClick={() => {
                 // Verifica se o pesquisador já está selecionado pelo nome
@@ -92,7 +93,7 @@ export function ResearchItem(props: Research) {
                 }
               }}
             
-            size={'icon'} className={`hidden mr-auto group-hover:flex transition-all h-8 w-8  ${
+            size={'icon'} className={`hidden  group-hover:flex transition-all h-8 w-8  ${
                 pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) && 'bg-red-500 hover:bg-red-600 text-white'
               }`}>
 
@@ -102,6 +103,13 @@ export function ResearchItem(props: Research) {
               <Plus size={16} className="" />
             )}
               </Button>
+
+              <div className="flex group-hover:hidden">
+              <div className="flex text-white gap-2 items-center" > 
+      <div className={` rounded-md h-4 w-4 ${props.status ? ('bg-green-500'):('bg-red-500')}`}></div>
+       <div className="flex-1 flex">{props.status ? ('Ativo'):('Inativo')}</div></div>
+              </div>
+            </div>
 
               {props.subsidy && props.subsidy.length != 0 && props.subsidy.slice(0,1).map((item) => (
                   <img src={item.modality_code == 'DT'  ? (dt):(pq)} className="w-8 relative -top-4" alt="" />

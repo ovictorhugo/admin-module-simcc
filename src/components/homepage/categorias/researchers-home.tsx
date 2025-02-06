@@ -16,6 +16,7 @@ import { Alert } from "../../ui/alert";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Hash, MapIcon, Sparkles, Trash, User, X } from "lucide-react";
 import bg_popup from '../../../assets/bg_popup.png';
+import bg_user from '../../../assets/user.png';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../../ui/dialog";
 import { useModal } from "../../hooks/use-modal-store";
 import { ToggleGroup, ToggleGroupItem } from "../../ui/toggle-group"
@@ -45,6 +46,7 @@ type CityData = {
 
 type Research = {
   among: number,
+  satus:boolean
   articles: number,
   book: number,
   book_chapters: number,
@@ -132,6 +134,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [selectedUniversities, setSelectedUniversities] = useState<string[]>([]);
   const [selectedSubsidies, setSelectedSubsidies] = useState<string[]>([]);
+  const [selectedGraduatePrograms, setSelectedGraduatePrograms] = useState<string[]>([]);
   const [filteredCount, setFilteredCount] = useState<number>(0);
 
   const { simcc } = useContext(UserContext)
@@ -158,8 +161,14 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
         return r.subsidy.some(s => selectedSubsidies.includes(s.modality_name));
       });
     }
+    if (selectedGraduatePrograms.length > 0) {
+      filtered = filtered.filter((r) => {
+        if (!r.graduate_programs || !Array.isArray(r.graduate_programs)) return false;
+        return r.graduate_programs.some(gp => selectedGraduatePrograms.includes(gp.name));
+      });
+    }
     setFilteredCount(filtered.length);
-  }, [researcher, selectedAreas, selectedGraduations, selectedCities, selectedUniversities, selectedSubsidies]);
+  }, [researcher, selectedAreas, selectedGraduations, selectedCities, selectedUniversities, selectedSubsidies, selectedGraduatePrograms]);
 
   const handleAreaToggle = (value: any) => {
     setSelectedAreas(value);
@@ -181,6 +190,11 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
     setSelectedSubsidies(value);
   };
 
+  const handleGraduateProgramToggle = (value: any) => {
+    setSelectedGraduatePrograms(value);
+  };
+  
+
   const filteredResearchers = researcher.filter((res) => {
     const areas = res.area.split(';').map(area => area.trim());
     const hasSelectedArea = selectedAreas.length === 0 || selectedAreas.some((selectedArea) =>
@@ -193,7 +207,11 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
       res.subsidy && res.subsidy.some(sub => selectedSubsidies.includes(sub.modality_name))
     );
 
-    return hasSelectedArea && hasSelectedGraduation && hasSelectedCity && hasSelectedUniversity && hasSelectedSubsidy;
+    const hasSelectedGraduateProgram = selectedGraduatePrograms.length === 0 || (
+      res.graduate_programs && res.graduate_programs.some(gp => selectedGraduatePrograms.includes(gp.name))
+    );
+
+    return hasSelectedArea && hasSelectedGraduation && hasSelectedCity && hasSelectedUniversity && hasSelectedSubsidy && hasSelectedGraduateProgram;
   });
 
   const applyFilters = () => {
@@ -220,6 +238,14 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
     new Set(
       researcher.flatMap((res) =>
         Array.isArray(res.subsidy) ? res.subsidy.map((sub) => sub.modality_name) : []
+      )
+    )
+  ).filter(Boolean);
+
+  const uniqueGraduatePrograms = Array.from(
+    new Set(
+      researcher.flatMap((res) =>
+        Array.isArray(res.graduate_programs) ? res.graduate_programs.map((gp) => gp.name) : []
       )
     )
   ).filter(Boolean);
@@ -262,8 +288,12 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
 
         <div className="relative flex">
 
-          <div className="hidden lg:block p-8 pr-0">
-            <div className=" h-full w-[270px] rounded-md bg-eng-blue p-8"></div>
+          <div>
+          <div className="hidden lg:block p-8 pr-0 h-full">
+            <div  style={{ backgroundImage: `url(${bg_user})` }} className=" h-full w-[270px]  bg-cover bg-no-repeat bg-left rounded-md bg-eng-blue p-8"></div>
+           
+          </div>
+         
           </div>
           <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
             <div>
@@ -382,6 +412,25 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
                   ))}
                 </ToggleGroup>
               </div>
+
+              <div>
+    <div className="pb-2">
+      <Label>Programas de Pós-graduação</Label>
+    </div>
+    <ToggleGroup
+      type="multiple"
+      variant={'outline'}
+      value={selectedGraduatePrograms}
+      onValueChange={handleGraduateProgramToggle}
+      className="aspect-auto flex flex-wrap items-start justify-start gap-2"
+    >
+      {uniqueGraduatePrograms.map((program) => (
+        <ToggleGroupItem key={program} value={program} className="px-3 py-2 whitespace-normal">
+          {program}
+        </ToggleGroupItem>
+      ))}
+    </ToggleGroup>
+  </div>
             </div>
 
             <DialogFooter className="py-4">

@@ -1,0 +1,134 @@
+import { ChevronDown, ChevronUp, Link, Plus, Smile, Trash, Upload } from "lucide-react";
+import { Button } from "../../ui/button";
+import { Separator } from "../../ui/separator";
+import { Keepo } from "./builder-page";
+import { Input } from "../../ui/input";
+import { DropdownMenuBuilder } from "./dropdown-menu";
+import { Textarea } from "../../ui/textarea";
+import { Alert } from "../../ui/alert";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
+import { EmojiPicker } from "./emoji-picker";
+import { Social } from "./sections/social";
+import { LinkSection } from "./sections/link";
+import { FileSection } from "./sections/file";
+import { H1Section } from "./sections/h1";
+import { H2Section } from "./sections/h2";
+import { SeparatorSection } from "./sections/separator";
+import { H3Section } from "./sections/h3";
+import { TextSection } from "./sections/text";
+import { VideoSection } from "./sections/video";
+import { useEffect } from "react";
+import { ListSection } from "./sections/list";
+import { ListNumberSection } from "./sections/list-number";
+import { GraficoSection } from "./sections/grafico";
+import { TabelaSection } from "./sections/tabela";
+
+
+interface Props {
+    keepoData:Keepo
+    setKeepoData: React.Dispatch<React.SetStateAction<Keepo>>;
+}
+
+export function SectionBuilderPage(props:Props) {
+  const moveItem = (index: number, direction: "up" | "down") => {
+    props.setKeepoData((prev) => {
+      const newContent = [...prev.content]; // Cria uma cópia do array
+      const targetIndex = direction === "up" ? index - 1 : index + 1;
+  
+      // Garante que o índice alvo está dentro dos limites do array
+      if (targetIndex < 0 || targetIndex >= newContent.length) return prev;
+  
+      // Realiza a troca dos elementos mantendo todas as propriedades
+      [newContent[index], newContent[targetIndex]] = [newContent[targetIndex], newContent[index]];
+  
+      return { ...prev, content: newContent }; // Retorna o estado atualizado
+    });
+  };
+
+  // Função para remover um item da lista
+  const deleteItem = (index: number) => {
+    props.setKeepoData((prev) => {
+      const newContent = prev.content.filter((_, i) => i !== index);
+      return { ...prev, content: newContent };
+    });
+  };
+
+     useEffect(() => {
+         
+         console.log(props.keepoData)
+      
+          }, [props.keepoData]);
+
+
+
+    return(
+        <div className="flex flex-col gap-2 mb-2">
+{props.keepoData.content.map((contentItem, index) => (
+        <div key={index} className="">
+          {(() => {
+            switch (contentItem.type) {
+              case "divider":
+                return (
+                  <SeparatorSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                )
+              case "h1":
+                return (
+                  <H1Section contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                )
+              case "h2":
+                return (
+                  <H2Section contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                )
+              
+              case "h3":
+                return (
+                  <H3Section contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                )
+               
+              case "text":
+                return (
+                    <TextSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                  )
+              case "list":
+                return (
+                    <ListSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                  )
+                case "list-number":
+                return (
+                    <ListNumberSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                    )
+              case "video":
+                return (
+                    <VideoSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                  )
+              case "image":
+                return <img src={contentItem.url} alt={contentItem.title} className="w-full rounded-md" />
+              case 'link':
+                return (
+                  <LinkSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                )
+              case 'file':
+                return (
+                  <FileSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                )
+                case 'social':
+                  return (
+                    <Social contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                  )
+                case 'grafico':
+                return (
+                    <GraficoSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                )
+                case 'tabela':
+                return (
+                    <TabelaSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                )
+              default:
+                return <span>Elemento não reconhecido</span>;
+            }
+          })()}
+        </div>
+      ))}
+        </div>
+    )
+}

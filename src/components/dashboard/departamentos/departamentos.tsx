@@ -91,14 +91,7 @@ export function Departamentos() {
  </div>
        )}     
  
- {(menu && total) && (
-            
-            <Button onClick={() => setMenu(!menu) } variant="outline" size="icon" className="h-7 w-7">
-            <SquareMenu className="h-4 w-4" />
-        
-          </Button>
-         )}
-    
+
   </div>
  
   {menu && (
