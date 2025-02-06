@@ -82,6 +82,9 @@ export function TabelaSection (props:Props) {
             urlDados =`${urlGeral}ResearcherData/DadosGerais?year=${year}&graduate_program_id=${graduate_program_id}`
         }
 
+        console.log(urlDados)
+        const [anos, setAnos] = useState<number[]>([]);
+        const [anoSelecionado, setAnoSelecionado] = useState<number | null>(null);
 
   useEffect(() => {
       const fetchData = async () => {
@@ -100,6 +103,8 @@ export function TabelaSection (props:Props) {
           const data = await response.json();
           if (data) {
             setDados(data);
+
+         
   
           }
         } catch (err) {
@@ -107,6 +112,13 @@ export function TabelaSection (props:Props) {
         }
       };
       fetchData();
+    }, [urlDados]);
+
+    useEffect(() => {
+         // Extrair os anos únicos
+         const uniqueYears = Array.from(new Set(dados.map((item) => item.year))).sort((a, b) => a - b);
+         setAnos(uniqueYears);
+         setAnoSelecionado(uniqueYears[0]); // Definir o primeiro ano como padrão
     }, [urlDados]);
 
     const [showDropdown, setShowDropdown] = useState(false);
@@ -177,7 +189,7 @@ export function TabelaSection (props:Props) {
                      {(() => {
                     switch (item.name) {
                         case 'tabela-artigo':
-                            return <TabelaArtigoSection dados={dados} year={year} setYear={setYear} id={graduate_program_id || ''}/>
+                            return <TabelaArtigoSection dados={dados} year={year} anos={anos} anoSelecionado={anoSelecionado} setYear={setYear} setAnoSelecionado={setAnoSelecionado} />
                        
                         default:
                         return null;

@@ -16,19 +16,76 @@ import {
     ChartLegendContent
   } from "../../../ui/chart"
 import { TabelaQualisQuantidadeResarcher } from "../../../researcher/gráficos/tabela-qualis-quantidade-researcher";
+import { DataTable } from "../../data-table";
+import { ColumnDef } from "@tanstack/react-table";
 
 interface Props {
     dados:Dados[]
     year:number
-    id:string
     setYear: (year: number) => void; // Corrigido o tipo de setYear
+    anos:number[]
+    anoSelecionado:number | null
+    setAnoSelecionado: (ano: number | null) => void; // Corrigido o tipo da função
 }
 
 
   
 export function TabelaArtigoSection(props:Props) {
-    
 
+  // Definição das colunas para o DataTable
+  const columns: ColumnDef<Dados>[] = [
+    {
+      accessorKey: "name",
+      header: "Nome",
+    },
+    {
+      accessorKey: "A1",
+      header: "A1",
+    },
+    {
+      accessorKey: "A2",
+      header: "A2",
+    },
+    {
+      accessorKey: "A3",
+      header: "A3",
+    },
+    {
+      accessorKey: "A4",
+      header: "A4",
+    },
+    {
+      accessorKey: "B1",
+      header: "B1",
+    },
+    {
+      accessorKey: "B2",
+      header: "B2",
+    },
+    {
+      accessorKey: "B3",
+      header: "B3",
+    },
+    {
+      accessorKey: "B4",
+      header: "B4",
+    },
+    {
+      accessorKey: "C",
+      header: "C",
+    },
+    {
+      accessorKey: "SQ",
+      header: "SQ",
+    },
+    {
+      accessorKey: "citations",
+      header: "Citações",
+    },
+  ];
+
+
+ 
 
      return(
          <Alert className="hidden md:block lg:col-span-3 ">
@@ -41,18 +98,32 @@ export function TabelaArtigoSection(props:Props) {
                             <CardDescription>Soma total do pesquisador</CardDescription>
                           </div>
         
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                              <TooltipContent>
-                                <p>Fonte: Plataforma Lattes</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
+                          <select
+            id="year"
+            value={props.anoSelecionado ?? ""}
+            onChange={(e) => props.setAnoSelecionado(Number(e.target.value))}
+            className="border rounded px-2 py-1 text-sm"
+          >
+            {props.anos.map((ano) => (
+              <option key={ano} value={ano}>
+                {ano}
+              </option>
+            ))}
+          </select>
         
                         </CardHeader>
                         <CardContent className="mt-4">
-                          <TabelaQualisQuantidadeResarcher graduate_program_id={props.id} year={String(props.year)} />
+                        <div className="space-y-4">
+        {/* Seletor de anos */}
+      
+  
+        {/* DataTable */}
+        <DataTable
+          columns={columns}
+          data={props.dados.filter((item) => item.year === props.anoSelecionado)}
+         
+        />
+      </div>
                         </CardContent>
                       </Alert>
     )
