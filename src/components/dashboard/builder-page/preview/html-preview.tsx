@@ -9,10 +9,10 @@ interface Props {
     contentItem:any
 }
 
-export function H1Preview (props:Props) {
+export function HtmlPreview (props:Props) {
     return(
         <BasePreview index={props.index} keepoData={props.keepoData}>
-            <h1 className="font-semibold rounded-none text-3xl">{props.contentItem.title}</h1> 
+             <div dangerouslySetInnerHTML={{ __html: props.contentItem.description }} />
         </BasePreview>
     )
 }

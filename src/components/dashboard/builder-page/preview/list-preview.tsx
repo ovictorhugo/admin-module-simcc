@@ -1,3 +1,4 @@
+import { Dot } from "lucide-react";
 import { Input } from "../../../ui/input";
 import { Base } from "../base";
 import { BasePreview } from "../base-preview";
@@ -9,10 +10,18 @@ interface Props {
     contentItem:any
 }
 
-export function H1Preview (props:Props) {
+export function ListPreview (props:Props) {
     return(
         <BasePreview index={props.index} keepoData={props.keepoData}>
-            <h1 className="font-semibold rounded-none text-3xl">{props.contentItem.title}</h1> 
+             <div className="flex flex-col gap-3">
+            {props.contentItem.items.map((item, idx) => (
+  <div className="flex  items-center">
+    <Dot size={16} />
+ 
+    <p className="text-gray-500 pl-1 text-sm ">{item.title}</p>
+    </div>
+    ))}
+    </div>
         </BasePreview>
     )
 }

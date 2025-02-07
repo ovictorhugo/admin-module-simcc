@@ -26,6 +26,7 @@ import { NuvemPalavraSection } from "./sections/nuvem-palavra";
 import { ArtigosSection } from "./sections/artigos";
 import { HtmlSection } from "./sections/html";
 import { BotoesSection } from "./sections/botoes";
+import { ImageSection } from "./sections/image";
 
 
 interface Props {
@@ -143,6 +144,10 @@ export function SectionBuilderPage(props:Props) {
                     return (
                         <BotoesSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
                     )
+                case "image":
+                  return (
+                      <ImageSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                  )
               default:
                 return <span>Elemento não reconhecido</span>;
             }

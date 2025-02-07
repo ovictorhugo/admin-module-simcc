@@ -48,7 +48,7 @@ export function VideoSection (props:Props) {
                              allowFullScreen
                          />
                                  </div>
-                                   <Alert className="flex gap-2 items-center md:rounded-tr-md p-4 px-8 w-full rounded-t-none md:rounded-l-none">
+                                   <Alert className="flex gap-2 items-center md:rounded-tr-md p-4  w-full rounded-t-none md:rounded-l-none">
                                    
                                   
                                  <div className="w-full flex flex-1 flex-col">

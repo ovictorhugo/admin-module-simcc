@@ -9,10 +9,10 @@ interface Props {
     contentItem:any
 }
 
-export function H1Preview (props:Props) {
+export function H2Preview (props:Props) {
     return(
         <BasePreview index={props.index} keepoData={props.keepoData}>
-            <h1 className="font-semibold rounded-none text-3xl">{props.contentItem.title}</h1> 
+            <h2 className="font-semibold text-2xl ">{props.contentItem.title}</h2> 
         </BasePreview>
     )
 }

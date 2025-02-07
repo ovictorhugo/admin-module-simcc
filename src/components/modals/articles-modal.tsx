@@ -286,11 +286,13 @@ const [gaia, setGaia] = useState('')
 
               <div className="flex ml-auto items-center w-full justify-between">
                 <div className="flex ml-auto items-center gap-3">
-                  <Link target="_blank" to={data.pdf || data.landing_page_url || `https://doi.org/${data.doi || 'default-doi'}`}>
+                  {(data.pdf != '' || data.landing_page_url != '' || data.doi != '') && (
+                    <Link target="_blank" to={data.pdf || data.landing_page_url || `https://doi.org/${data.doi || 'default-doi'}`}>
                     <Button variant={'default'} className="h-8  text-white dark:text-white">
                       Download do arquivo
                       <DownloadSimple size={8} className="h-4 w-4" />
                     </Button></Link>
+                  )}
                 </div>
               </div>
             </div>

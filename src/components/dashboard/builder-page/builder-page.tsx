@@ -20,6 +20,7 @@ import { Helmet } from "react-helmet";
 import { UserContext } from "../../../context/context";
 import { Quotes } from "phosphor-react";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import { PreviewBuilderPage } from "./preview";
 
 export interface Keepo {
     app: App;
@@ -741,7 +742,7 @@ export function BuilderPage() {
   </TabsContent>
   <TabsContent value="preview">
   <div>
-                    <SectionBuilderPage keepoData={keepoData} setKeepoData={setKeepoData}/>
+                    <PreviewBuilderPage keepoData={keepoData} />
                     </div>
   </TabsContent>
 </Tabs>

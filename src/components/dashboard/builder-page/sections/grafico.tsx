@@ -179,8 +179,8 @@ export function GraficoSection (props:Props) {
                             return <GraficoProducaoGeralSection dados={dados} year={year} setYear={setYear}/>
                         case 'livro-capitulo':
                             return <GraficoLivrosCapitulosSection dados={dados} year={year} setYear={setYear}/>
-                            case 'producao-tecnica':
-                                return <GraficoProducaoTecnicaSection dados={dados} year={year} setYear={setYear}/>
+                          case 'producao-tecnica':
+                              return <GraficoProducaoTecnicaSection dados={dados} year={year} setYear={setYear}/>
                         default:
                         return null;
                     }
