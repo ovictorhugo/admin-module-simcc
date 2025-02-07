@@ -106,8 +106,6 @@ export function SectionBuilderPage(props:Props) {
                 return (
                     <VideoSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
                   )
-              case "image":
-                return <img src={contentItem.url} alt={contentItem.title} className="w-full rounded-md" />
               case 'link':
                 return (
                   <LinkSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
