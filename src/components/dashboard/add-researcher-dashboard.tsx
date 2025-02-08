@@ -183,6 +183,7 @@ export function AddResearcherDashboard() {
           if (data) {
             setResearcher(data);
             setLoading(false)
+            console.log('dataaaaaa', data)
          
           }
         } catch (err) {
@@ -195,7 +196,11 @@ export function AddResearcherDashboard() {
 
   const {onOpen, isOpen:isOpenModal, type:typeModal} = useModal()
 
-  
+  useEffect(() => {
+    fetchDataTable();
+
+   
+  }, []);
 
   useEffect(() => {
     if (typeModal === 'confirm-delete-researcher' && !isOpenModal) {
