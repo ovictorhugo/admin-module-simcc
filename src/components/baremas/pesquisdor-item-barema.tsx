@@ -65,48 +65,50 @@ export function PesquisadorItemBarema(config: Props) {
 
     const calcularPontuacao = (pesquisador: any) => {
         switch (config.id_criterio) {
-            case 1:
-                break
-            case 2:
+            case 1: // Pós-doutorado
+                config.researcherSelecionados.map((pesquisador) => {
+                    if (pesquisador.graduation === "Pós-doutorado") {
+                        return (config.pontos * Number(pesquisador.guidance_m_a) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_m_a)))
+                    }
+                })
                 break;
-            case 3:
+            case 2: // Doutorado
+                config.researcherSelecionados.map((pesquisador) => {
+                    if (pesquisador.graduation === "Doutorado") {
+                        return (config.pontos * Number(pesquisador.guidance_d_a) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_d_a)))
+                    }
+                })
                 break;
-            case 4:
+            case 3: // Mestrado
+                break;
+            case 4: // Especialista
                 break;
             case 5:
                 //Artigo em periódicos qualificados (A a C)
                 return (config.pontos * Number(pesquisador.article_A1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A1)))
-            case 20:
-                //Artigo A1
-                console.log("config.pontos: ", config.pontos, "pesquisador.article_A1: ", pesquisador.article_A1, "config.pontuacao_max: ", config.pontuacao_max)
+            case 20: //Artigo A1
                 return (config.pontos * Number(pesquisador.article_A1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A1)))
-            case 21:
-                //Artigo A2
+            case 21: // Artigo A2
                 return (config.pontos * Number(pesquisador.article_A2) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A2)))
-            case 22:
-                //Artigo A3
+            case 22: // Artigo A3
                 return (config.pontos * Number(pesquisador.article_A3) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A3)))
-            case 23:
-                //Artigo A4
+            case 23: // Artigo A4
                 return (config.pontos * Number(pesquisador.article_A4) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A4)))
-            case 24:
-                //Artigo B1
+            case 24: // Artigo B1
                 return (config.pontos * Number(pesquisador.article_B1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_B1)))
-            case 25:
-                //Artigo B1
+            case 25: // Artigo B2
                 return (config.pontos * Number(pesquisador.article_B2) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_B2)))
-            case 26:
-                //Artigo B3
+            case 26: // Artigo B3
                 return (config.pontos * Number(pesquisador.article_B3) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_B3)))
-            case 27:
-                //Artigo B4
+            case 27: // Artigo B4
                 return (config.pontos * Number(pesquisador.article_B4) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_B4)))
-            case 28:
-                //Artigo C
+            case 28: // Artigo C
                 return (config.pontos * Number(pesquisador.article_C) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_C)))
-            case 6:
-                // Artigos completos em anais de eventos
+            case 6: // Artigos completos em anais de eventos
                 return (config.pontos * Number(pesquisador.work_in_event) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.work_in_event)))
+
+            // Consertar daqui pra baixo
+
             case 12:
                 //Pós-Graduação Stricto Sensu - andamento
                 return ((config.pontos * (Number(pesquisador.guidance_d_a) + Number(pesquisador.guidance_m_a))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_a) + Number(pesquisador.guidance_m_a)))))
@@ -135,6 +137,7 @@ export function PesquisadorItemBarema(config: Props) {
                 return 0;
         }
     }
+
 
     // Função para formatar os dados do pesquisador
     const formatResearcherData = (researcher: Research, teste: any) => ({
