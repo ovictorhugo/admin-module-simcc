@@ -19,9 +19,10 @@ import { AddItemDropdown } from "./add-item-dropdown";
 import { SectionBuilderPage } from "./sections";
 import { Helmet } from "react-helmet";
 import { UserContext } from "../../../context/context";
-import { Quotes } from "phosphor-react";
+import { EyeClosed, Quotes } from "phosphor-react";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 import { PreviewBuilderPage } from "./preview";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
 
 export interface Keepo {
     app: App;
@@ -243,7 +244,7 @@ export function BuilderPage() {
               background_color: "",
               background_image:'',
               text_color: "",
-              status:'',
+              status:"publicar",
               card_color: "",
               card_text_color: "",
               button_color: "",
@@ -691,9 +692,27 @@ export function BuilderPage() {
   </TabsList>
 
                     <div className="flex gap-3">
-                    <Button className="h-8 px-3">
-                        <Check size={16}/> Publicar
-                    </Button>
+                    <Select
+  value={keepoData.app.status}
+  onValueChange={(value) =>
+    setKeepoData((prev) => ({
+      ...prev,
+      app: { ...prev.app, status: value },
+    }))
+  }
+>
+  <SelectTrigger className="h-8">
+    <SelectValue placeholder="" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="publicado" className="flex items-center gap-2">
+      <EyeClosed size={16} /> Despublicar
+    </SelectItem>
+    <SelectItem value="publicar" className="flex items-center gap-2">
+      <Eye size={16} /> Publicar
+    </SelectItem>
+  </SelectContent>
+</Select>
                     </div>
                 </div>
 
@@ -714,7 +733,7 @@ export function BuilderPage() {
                      {/* Avatar do usuário */}
       <div className="relative group w-fit -top-16 px-16">
         <div
-          className="aspect-square  border-neutral-50 dark:border-neutral-900 bg-no-repeat bg-center bg-contain rounded-md h-28 bg-blue-400"
+          className="aspect-square  border-neutral-50 dark:border-neutral-900 bg-no-repeat bg-center bg-contain rounded-md h-28 bg-white dark:bg-neutral-900"
           style={{ backgroundImage: `url(${keepoData.profile_info.avatar})` }}
         ></div>
 
@@ -846,7 +865,7 @@ export function BuilderPage() {
                      {/* Avatar do usuário */}
       <div className="relative group w-fit -top-16 px-16">
         <div
-          className="aspect-square  border-neutral-50 dark:border-neutral-900 bg-no-repeat bg-center bg-contain rounded-md h-28 bg-blue-400"
+          className="aspect-square  border-neutral-50 dark:border-neutral-900 bg-no-repeat bg-center bg-contain rounded-md h-28 bg-white dark:bg-neutral-900"
           style={{ backgroundImage: `url(${keepoData.profile_info.avatar})` }}
         ></div>
 
