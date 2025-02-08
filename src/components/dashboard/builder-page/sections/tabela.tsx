@@ -82,6 +82,8 @@ export function TabelaSection (props:Props) {
             urlDados =`${urlGeral}ResearcherData/DadosGerais?year=${year}&graduate_program_id=${graduate_program_id}`
         }
 
+        console.log(urlDados)
+      
 
   useEffect(() => {
       const fetchData = async () => {
@@ -100,6 +102,8 @@ export function TabelaSection (props:Props) {
           const data = await response.json();
           if (data) {
             setDados(data);
+
+         
   
           }
         } catch (err) {
@@ -109,10 +113,12 @@ export function TabelaSection (props:Props) {
       fetchData();
     }, [urlDados]);
 
+
+
     const [showDropdown, setShowDropdown] = useState(false);
 
    const items = [
-        { titulo: "Produção geral", desc: "Gráfico de barras", icon: <Quotes size={16} />, type:'tabela-artigo' },
+        { titulo: "Artigos", desc: "Artigos por ano", icon: <Quotes size={16} />, type:'tabela-artigo' },
         { titulo: "Livros e capítulos", desc: "Gráfico de barras", icon: <Book size={16} />, type:'livro-capitulo' },
         { titulo: "Produção técnica", desc: "Gráfico de barras", icon: <Stamp size={16} />, type:'producao-tecnica' },
        
@@ -177,7 +183,7 @@ export function TabelaSection (props:Props) {
                      {(() => {
                     switch (item.name) {
                         case 'tabela-artigo':
-                            return <TabelaArtigoSection dados={dados} year={year} setYear={setYear} id={graduate_program_id || ''}/>
+                            return <TabelaArtigoSection  year={year}   setYear={setYear}   />
                        
                         default:
                         return null;

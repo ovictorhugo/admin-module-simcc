@@ -186,9 +186,9 @@ export function SpeakerResearcherPopUp(props: Props) {
                 <div className="flex gap-4 items-center text-left">
                   <Ticket size={24} className="text-gray-400" />
                   {searchType != 'speaker' || itemsSelecionadosPopUp.length == 0 ? (
-                    <p className="text-sm font-bold">Todas as participações em eventos</p>
+                    <p className="font-medium">Todas as participações em eventos</p>
                   ) : (
-                    <div className="text-sm font-bold flex items-center gap-2">
+                    <div className="font-medium flex items-center gap-2">
                       <span className="">{publicacoes.length} </span> ocorrências de
 
                       <div className='flex gap-2 items-center'>

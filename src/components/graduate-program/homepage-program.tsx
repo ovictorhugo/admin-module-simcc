@@ -102,7 +102,7 @@ interface GraduateProgram {
   description?: string
 }
 
-interface PalavrasChaves {
+export interface PalavrasChaves {
   term: string;
   among: number;
 }

@@ -131,7 +131,7 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
             <div className="flex gap-4 w-full mb-2 justify-between items-center ">
               <div className="flex gap-4 items-center text-left">
                 <Files size={24} className="text-gray-400" />
-                <p className="text-sm font-bold">Todos os relatórios técnicos</p>
+                <p className="font-medium">Todos os relatórios técnicos</p>
               </div>
 
               <div className="flex gap-3 items-center h-full">

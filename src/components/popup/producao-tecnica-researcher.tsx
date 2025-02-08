@@ -261,9 +261,9 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
                 <div className="flex gap-4 items-center">
                   <Copyright size={24} className="text-gray-400" />
                   {searchType != 'patent' || itemsSelecionadosPopUp.length == 0 ? (
-                    <p className="text-sm font-bold">Todas as patentes</p>
+                    <p className="font-medium">Todas as patentes</p>
                   ) : (
-                    <div className="text-sm font-bold flex items-center gap-2">
+                    <div className="font-medium flex items-center gap-2">
                       <span className="">{publicacoes.length} </span> ocorrências de
 
                       <div className='flex gap-2 items-center'>
@@ -373,7 +373,7 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
               <div className="flex gap-4 w-full  justify-between items-center ">
                 <div className="flex gap-4 items-center">
                   <Code size={24} className="text-gray-400" />
-                  <p className="text-sm font-bold">Todos os softwares</p>
+                  <p className="font-medium">Todos os softwares</p>
                 </div>
 
                 <div className="hidden md:flex gap-3 mr-3  items-center h-full">
@@ -443,7 +443,7 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
               <div className="flex gap-4 w-full  justify-between items-center ">
                 <div className="flex gap-4 items-center">
                   <StripeLogo size={24} className="text-gray-400" />
-                  <p className="text-sm font-bold">Todas as marcas</p>
+                  <p className="font-medium">Todas as marcas</p>
                 </div>
 
                 <div className="hidden md:flex gap-3 mr-3 items-center h-full">

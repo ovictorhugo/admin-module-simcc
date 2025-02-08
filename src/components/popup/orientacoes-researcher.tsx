@@ -131,7 +131,7 @@ export function OrientacoesResearcherPopUp(props: Props) {
           <div className="flex flex-col">
             <div className="flex items-center gap-3 mb-4 w-full ">
               <CheckSquare size={24} className="text-gray-400" />
-              <p className="text-sm font-bold whitespace-nowrap">Selecione o tipo de orientação</p>
+              <p className="font-medium whitespace-nowrap">Selecione o tipo de orientação</p>
             </div>
             <Alert className="w-full">
               <Select defaultValue={type} value={type} onValueChange={(value) => setType(value)}>
@@ -186,7 +186,7 @@ export function OrientacoesResearcherPopUp(props: Props) {
               <div className="flex gap-4 w-full justify-between items-center ">
                 <div className="flex gap-4 items-center">
                   <Student size={24} className="text-gray-400" />
-                  <p className="text-sm font-bold">Todas as orientações</p>
+                  <p className="font-medium">Todas as orientações</p>
                 </div>
 
                 <div className="flex gap-3 mr-3  items-center h-full">

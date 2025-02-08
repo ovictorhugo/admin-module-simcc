@@ -203,9 +203,9 @@ export function ArticlesResearcherPopUp(props: Props) {
                                 <div className="flex gap-4 items-center">
                                     <Quotes size={24} className="text-gray-400" />
                                     {searchType != 'article' || itemsSelecionadosPopUp.length == 0 ? (
-                                        <p className="text-sm font-bold">Todos os artigos</p>
+                                        <p className="font-medium">Todos os artigos</p>
                                     ) : (
-                                        <div className="text-sm font-bold flex items-center gap-2">
+                                        <div className="font-medium flex items-center gap-2">
                                             <span
                                                 className="
                                                     text-[0.6rem] md:text-[0.8rem]

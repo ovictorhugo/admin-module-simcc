@@ -104,6 +104,7 @@ chidren={item.icon}
         onClick={() => {
             setShowDropdown(false)
             addContentItem(item.type, (props.number+1));
+            setSearchTerm('')
         }}
         >
          <AddItemDropdown 

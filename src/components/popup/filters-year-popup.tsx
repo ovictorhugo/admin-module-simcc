@@ -47,7 +47,7 @@ export function FilterYearPopUp(props: Props) {
       <div className="w-full flex flex-1 flex-col">
         <div className="flex items-center gap-3 mb-4 ">
           <CalendarBlank size={24} className="text-gray-400" />
-          <p className="text-sm font-bold">Selecione o ano</p>
+          <p className="font-medium">Selecione o ano</p>
         </div>
 
         <Alert className="w-full flex items-center gap-2 h-[74px]">
@@ -59,7 +59,7 @@ export function FilterYearPopUp(props: Props) {
             step={1}
             className="color-blue-700"
           />
-          <p className="text-sm font-bold">{filterYear}</p>
+          <p className="font-medium">{filterYear}</p>
         </Alert>
       </div>
     </div>

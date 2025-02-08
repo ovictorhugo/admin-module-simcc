@@ -48,7 +48,7 @@ export function VideoSection (props:Props) {
                              allowFullScreen
                          />
                                  </div>
-                                   <Alert className="flex gap-2 items-center md:rounded-tr-md p-4 px-8 w-full rounded-t-none md:rounded-l-none">
+                                   <Alert className="flex gap-2 items-center md:rounded-tr-md p-4  w-full rounded-t-none md:rounded-l-none">
                                    
                                   
                                  <div className="w-full flex flex-1 flex-col">
@@ -67,10 +67,10 @@ export function VideoSection (props:Props) {
              
 
              <Input 
-                                   value={props.contentItem.title}
+                                   value={props.contentItem.description}
                                    onChange={(e) => {
                                     const newContent = [...props.keepoData.content]; // Cria uma cópia do array
-                                    newContent[props.index] = { ...newContent[props.index], title: e.target.value }; // Atualiza apenas o item específico
+                                    newContent[props.index] = { ...newContent[props.index], description: e.target.value }; // Atualiza apenas o item específico
                           
                                     props.setKeepoData((prev) => ({
                                       ...prev,

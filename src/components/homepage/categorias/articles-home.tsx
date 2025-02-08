@@ -2,7 +2,7 @@ import { useContext, useMemo, useState } from "react";
 import { useModalResult } from "../../hooks/use-modal-result";
 import { UserContext } from "../../../context/context";
 
-type Publicacao = {
+export type Publicacao = {
   abstract: string,
   article_institution: string,
   authors: string
@@ -199,7 +199,7 @@ export function ArticlesHome() {
                 Distintos
               </div>
 
-              <div className="hidden md:block">
+              <div className="hidden md:flex gap-2 mr-2">
                 <Button onClick={() => setTypeVisu('rows')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800 border')}`} size={'icon'}>
                   <Rows size={16} className=" whitespace-nowrap" />
                 </Button>

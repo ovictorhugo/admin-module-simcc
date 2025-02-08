@@ -108,7 +108,7 @@ export function FilterArticlePopUp(props: Props) {
       <div className="flex flex-col">
         <div className="flex items-center gap-3 mb-4">
           <CheckSquare size={24} className="text-gray-400" />
-          <p className="text-sm font-bold">Selecione o Qualis</p>
+          <p className="font-medium">Selecione o Qualis</p>
         </div>
         <Alert className="w-full">
           <DropdownMenu>
@@ -151,7 +151,7 @@ export function FilterArticlePopUp(props: Props) {
       <div className="w-full flex flex-1 flex-col">
         <div className="flex items-center gap-3 mb-4">
           <CalendarBlank size={24} className="text-gray-400" />
-          <p className="text-sm font-bold">Selecione o ano</p>
+          <p className="font-medium">Selecione o ano</p>
         </div>
         <Alert className="w-full flex items-center gap-2 h-full">
           <Slider

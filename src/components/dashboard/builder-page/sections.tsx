@@ -22,6 +22,13 @@ import { ListSection } from "./sections/list";
 import { ListNumberSection } from "./sections/list-number";
 import { GraficoSection } from "./sections/grafico";
 import { TabelaSection } from "./sections/tabela";
+import { NuvemPalavraSection } from "./sections/nuvem-palavra";
+import { ArtigosSection } from "./sections/artigos";
+import { HtmlSection } from "./sections/html";
+import { BotoesSection } from "./sections/botoes";
+import { ImageSection } from "./sections/image";
+import { CardSection } from "./sections/card";
+import { CarrosselSection } from "./sections/carrossel";
 
 
 interface Props {
@@ -101,8 +108,6 @@ export function SectionBuilderPage(props:Props) {
                 return (
                     <VideoSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
                   )
-              case "image":
-                return <img src={contentItem.url} alt={contentItem.title} className="w-full rounded-md" />
               case 'link':
                 return (
                   <LinkSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
@@ -123,6 +128,34 @@ export function SectionBuilderPage(props:Props) {
                 return (
                     <TabelaSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
                 )
+                case 'nuvem-palavra':
+                return (
+                    <NuvemPalavraSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                )
+                case 'artigos':
+                  return (
+                      <ArtigosSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                  )
+                case 'html':
+                  return (
+                      <HtmlSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                  )
+                  case 'botoes':
+                    return (
+                        <BotoesSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                    )
+                case "image":
+                  return (
+                      <ImageSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                  )
+                  case 'card':
+                    return (
+                        <CardSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                    )
+                    case 'slider':
+                      return (
+                          <CarrosselSection contentItem={contentItem} setKeepoData={props.setKeepoData} moveItem={moveItem} deleteItem={deleteItem} index={index} keepoData={props.keepoData}/>
+                      )
               default:
                 return <span>Elemento não reconhecido</span>;
             }

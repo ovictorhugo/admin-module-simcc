@@ -130,7 +130,7 @@ export function TextoRevista(props: Props) {
             <div className="flex gap-4 w-full justify-between items-center ">
               <div className="flex gap-4 items-center text-left">
                 <BookOpenText size={24} className="text-gray-400" />
-                <p className="text-sm font-bold">Todos os textos em revista</p>
+                <p className="font-medium">Todos os textos em revista</p>
               </div>
 
               <div className="flex gap-3 mr-3  items-center h-full">

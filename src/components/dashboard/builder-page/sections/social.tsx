@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Pencil, Plus, RefreshCcw, Trash } from "lucide-react";
 import { Button } from "../../../ui/button";
 import { Base } from "../base";
 import { Keepo } from "../builder-page";
@@ -56,8 +56,15 @@ export function Social (props:Props) {
         <Base setKeepoData={props.setKeepoData} moveItem={props.moveItem} deleteItem={props.deleteItem} index={props.index} keepoData={props.keepoData}>
             <div className="flex flex-wrap gap-3">
             {props.contentItem.items.map((item, idx) => (
-                <Link to={item.url}>
-                    <Button variant={'outline'} className="h-8 px-2">
+              <Popover>
+              <PopoverTrigger>
+              <Button 
+                style={{
+                  backgroundColor: props.keepoData.app.button_color,
+                  color: props.keepoData.app.button_text_color,
+                
+                }}
+              variant={'outline'} className="h-8 px-2">
   {(() => {
     switch (item.name) {
       case 'instagram':
@@ -81,7 +88,50 @@ export function Social (props:Props) {
     }
   })()}
 </Button>
-                </Link>
+              </PopoverTrigger>
+              <PopoverContent className="flex w-[300px]  items-end gap-3 " >
+
+              <div className="grid items-center gap-1.5 w-full">
+                                <Label>Link</Label>
+                                <Input 
+                                value={item.url} 
+                                onChange={(e) => {
+                                  const newContent = [...props.keepoData.content]; // Clona o array de conteúdo
+                                  const updatedItems = [...props.contentItem.items]; // Clona os itens específicos
+                                  updatedItems[idx] = { ...updatedItems[idx], url: e.target.value }; // Atualiza apenas o item específico
+                          
+                                  newContent[props.index] = { ...newContent[props.index], items: updatedItems }; // Atualiza a lista de itens no objeto content
+                          
+                                  props.setKeepoData((prev) => ({
+                                    ...prev,
+                                    content: newContent, // Atualiza o estado
+                                  }));
+                                }}
+                          
+                                placeholder="https://www..." />
+                              </div>
+                
+
+
+<Button
+          variant='destructive'
+          size="icon"
+          className="min-w-10"
+          onClick={() => {
+            const updatedItems = props.contentItem.items.filter((_, i) => i !== idx);
+            const newContent = [...props.keepoData.content];
+            newContent[props.index] = { ...newContent[props.index], items: updatedItems };
+            props.setKeepoData((prev) => ({ ...prev, content: newContent }));
+          }}
+        >
+          <Trash size={16} />
+          </Button>
+
+                </PopoverContent>
+            </Popover>
+
+                    
+               
               ))}
             <Popover>
   <PopoverTrigger>

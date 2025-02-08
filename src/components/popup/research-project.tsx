@@ -160,7 +160,7 @@ export function ResearchProject(props: Props) {
             <div className="flex gap-4 w-full justify-between items-center text-left">
               <div className="flex gap-4 items-center">
                 <FolderKanban size={24} className="text-gray-400" />
-                <p className="text-sm font-bold">Todos os projetos de pesquisa</p>
+                <p className="font-medium">Todos os projetos de pesquisa</p>
               </div>
 
               <div className="flex gap-3 mr-3  items-center h-full">

@@ -254,9 +254,9 @@ export function BooksResearcherPopUp(props: Props) {
                 <div className="flex gap-4 items-center">
                   <Book size={24} className="text-gray-400" />
                   {searchType != 'book' || itemsSelecionadosPopUp.length == 0 ? (
-                    <p className="text-sm font-bold">Todos os livros</p>
+                    <p className="font-medium">Todos os livros</p>
                   ) : (
-                    <div className="text-sm font-bold flex items-center gap-2">
+                    <div className="font-medium flex items-center gap-2">
                       <span className="">{publicacoes.length} </span> ocorrências de
 
                       <div className='flex gap-2 items-center'>
@@ -365,9 +365,9 @@ export function BooksResearcherPopUp(props: Props) {
                 <div className="flex gap-4 items-center">
                   <Books size={24} className="text-gray-400" />
                   {searchType != 'book' || itemsSelecionadosCap.length == 0 ? (
-                    <p className="text-sm font-bold">Todos os capítulos de livros</p>
+                    <p className="font-medium">Todos os capítulos de livros</p>
                   ) : (
-                    <div className="text-sm font-bold flex items-center gap-2">
+                    <div className="font-medium flex items-center gap-2">
                       <span className="">{capLivros.length} </span> ocorrências de
 
                       <div className='flex gap-2 items-center'>
