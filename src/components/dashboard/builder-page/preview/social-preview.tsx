@@ -19,7 +19,13 @@ export function SocialPreview (props:Props) {
             <div className="flex flex-wrap gap-3">
             {props.contentItem.items.map((item, idx) => (
  <Link to={item.url} target="_blank">
- <Button variant={'outline'} className="h-8 px-2">
+ <Button
+   style={{
+    backgroundColor: props.keepoData.app.button_color,
+    color: props.keepoData.app.button_text_color,
+  
+  }}
+   variant={'outline'} className="h-8 px-2">
 {(() => {
 switch (item.name) {
 case 'instagram':

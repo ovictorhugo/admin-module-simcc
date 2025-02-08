@@ -1,26 +1,57 @@
-import { Plus, Trash } from "lucide-react";
-import { Button } from "../../../ui/button";
+import { Image, Link, Plus, Trash } from "lucide-react";
+import { Input } from "../../../ui/input";
 import { Base } from "../base";
 import { Keepo } from "../builder-page";
+import { Button } from "../../../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../../../ui/popover";
-import { Input } from "../../../ui/input";
-import { Label } from "../../../ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../ui/select";
-import { BehanceLogo, FacebookLogo, GithubLogo, Globe, InstagramLogo, LinkedinLogo, X, YoutubeLogo } from "phosphor-react";
+import { Alert } from "../../../ui/alert";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { cn } from "../../../../lib/utils";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { toast } from "sonner";
+import { Textarea } from "../../../ui/textarea";
+import { Label } from "../../../ui/label";
 
 interface Props {
-    keepoData:Keepo
+    keepoData: Keepo;
     setKeepoData: React.Dispatch<React.SetStateAction<Keepo>>;
     moveItem: (index: number, direction: "up" | "down") => void;
     deleteItem: (index: number) => void;
-    index:number
-    contentItem:any
+    index: number;
+    contentItem: any;
 }
 
-export function BotoesSection (props:Props) {
+export function CardSection(props: Props) {
+    const [open, setOpen] = useState(false);
+
+    const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!event.target.files) return;
+        const file = event.target.files[0];
+        const storage = getStorage();
+        const storageRef = ref(storage, `construtor-pagina/images/${file.name}`);
+        
+        try {
+            await uploadBytes(storageRef, file);
+            const url = await getDownloadURL(storageRef);
+            
+            const newContent = [...props.keepoData.content];
+            newContent[props.index] = { ...newContent[props.index], url };
+            props.setKeepoData((prev) => ({
+                ...prev,
+                content: newContent,
+            }));
+            
+            toast("Upload concluído", {
+                description: "A imagem foi enviada com sucesso!",
+                action: {
+                    label: "Fechar",
+                    onClick: () => console.log("Fechar"),
+                },
+            });
+        } catch (error) {
+            console.error("Erro no upload:", error);
+        }
+    };
+
     const [name, setName] = useState('')
     const [url, setUrl] = useState('')
 
@@ -29,16 +60,16 @@ export function BotoesSection (props:Props) {
           const updatedContent = [...prev.content];
       
           // Verifica se o índice especificado é válido
-          if (updatedContent[index] && updatedContent[index].type === "botoes") {
+          if (updatedContent[index]) {
             // Se o item social já existir no índice, adiciona o novo item
             updatedContent[index].items.push({ name, url, title: "", image: "" });
           } else {
             // Caso contrário, cria um novo item social no índice especificado
             updatedContent.splice(index, 0, {
-              type: "botoes",
-              title: "Redes Sociais",
-              emoji: "",
-              url: "",
+              type: "card",
+              title: props.contentItem.title,
+              emoji: props.contentItem.emoji,
+              url: props.contentItem.url,
               order: props.index,
               description: '',
               items: [{ name, url, title: "", image: "" }]
@@ -51,17 +82,62 @@ export function BotoesSection (props:Props) {
         setName('');
         setUrl('');
       };
-      
 
-    return(
+    return (
         <Base setKeepoData={props.setKeepoData} moveItem={props.moveItem} deleteItem={props.deleteItem} index={props.index} keepoData={props.keepoData}>
-            <div className="flex flex-wrap gap-3">
+            <div className="w-full grid md:grid-cols-2 grid-cols-1 md:h-[300px]">
+                <div>
+                    {!props.contentItem.url && (
+                        <label className="w-full bg-neutral-50 transition-all hover:bg-neutral-100 dark:bg-neutral-900 dark:hover:bg-neutral-800 flex cursor-pointer items-center flex-col gap-3 justify-center h-full border md:border-r-0 border-b-0 md:border-b dark:border-neutral-800 md:rounded-l-md md:rounded-tr-none rounded-t-md">
+                            <Image size={24} /> Adicionar imagem
+                            <input type="file" className="hidden" onChange={handleUpload} />
+                        </label>
+                    )}
+
+                    {props.contentItem.url && (
+                      <div
+                      className="w-full md:h-full h-[350px] border md:border-r-0 border-b-0 md:border-b dark:border-neutral-800 md:rounded-l-md md:rounded-tr-none rounded-t-md bg-no-repeat bg-cover bg-center"
+                      style={{
+                        backgroundImage: props.contentItem.url ? `url(${props.contentItem.url})` : "none",
+                      }}
+                    ></div>
+                    
+                    )}
+                </div>
+                <Alert className="flex gap-2 items-center md:rounded-tr-md p-8  w-full rounded-t-none md:rounded-l-none">
+                    <div className="w-full gap-4 flex flex-1 flex-col">
+                        <Input 
+                            value={props.contentItem.title}
+                            onChange={(e) => {
+                                const newContent = [...props.keepoData.content];
+                                newContent[props.index] = { ...newContent[props.index], title: e.target.value };
+                                props.setKeepoData((prev) => ({
+                                    ...prev,
+                                    content: newContent,
+                                }));
+                            }}
+                            className="rounded-none font-medium text-lg  w-full bg-transparent border-0 p-0 dark:border-0 dark:bg-transparent" placeholder="Digite o título aqui"
+                        />
+                        <Textarea 
+                            value={props.contentItem.description}
+                            onChange={(e) => {
+                                const newContent = [...props.keepoData.content];
+                                newContent[props.index] = { ...newContent[props.index], description: e.target.value };
+                                props.setKeepoData((prev) => ({
+                                    ...prev,
+                                    content: newContent,
+                                }));
+                            }}
+                            className="text-gray-500  rounded-none text-sm w-full bg-transparent border-0 p-0 dark:border-0 dark:bg-transparent" placeholder="Descrição"
+                        />
+
+<div className="flex flex-wrap gap-3">
             {props.contentItem.items.map((item, idx) => (
           <Popover>
             <PopoverTrigger>
                 <Button
   variant={'outline'}
-  className="h-8 px-2"
+  className=""
   style={{
     backgroundColor: props.keepoData.app.button_color,
     color: props.keepoData.app.button_text_color,
@@ -137,7 +213,7 @@ props.setKeepoData((prev) => ({ ...prev, content: newContent }));
               ))}
             <Popover>
   <PopoverTrigger>
-  <Button variant={'outline'} className="h-8 px-2"><Plus size={16}/>Adicionar botão</Button>
+  <Button variant={'outline'} className=""><Plus size={16}/>Adicionar botão</Button>
   </PopoverTrigger>
   <PopoverContent className="flex flex-col  items-end gap-3 " >
   <div className="grid items-center gap-1.5 w-full">
@@ -167,6 +243,11 @@ props.setKeepoData((prev) => ({ ...prev, content: newContent }));
 </Popover>
               
             </div>
+
+                    </div>
+                   
+                </Alert>
+            </div>
         </Base>
-    )
+    );
 }

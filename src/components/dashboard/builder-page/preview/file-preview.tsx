@@ -16,7 +16,7 @@ interface Props {
 export function FilePreview (props:Props) {
     return(
         <BasePreview index={props.index} keepoData={props.keepoData}>
-         <Link to={props.contentItem.url}>
+         <Link to={props.contentItem.url} target="_blank">
          <div className="w-full">
                       <Alert className="flex gap-2 items-center p-4  w-full">
                       <p className="text-gray-500  text-sm ">{props.contentItem.emoji}</p>

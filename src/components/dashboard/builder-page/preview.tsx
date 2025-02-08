@@ -1,9 +1,13 @@
 import { Keepo } from "./builder-page"
+import { BotoesPreview } from "./preview/botoes-preview";
+import { CardPreview } from "./preview/card-preview";
+import { CarrosselPreview } from "./preview/carrossel-preview";
 import { FilePreview } from "./preview/file-preview";
 import { H1Preview } from "./preview/h1-preview";
 import { H2Preview } from "./preview/h2-preview";
 import { H3Preview } from "./preview/h3-preview";
 import { HtmlPreview } from "./preview/html-preview";
+import { ImagePreview } from "./preview/image-preview";
 import { LinkPreview } from "./preview/link-preview";
 import { ListNumberPreview } from "./preview/list-number-preview";
 import { ListPreview } from "./preview/list-preview";
@@ -76,7 +80,24 @@ export function PreviewBuilderPage(props:Props) {
                         return (
                             <VideoPreview contentItem={contentItem} index={index} keepoData={props.keepoData}/>
                         )
+                        case 'image':
+                            return (
+                                <ImagePreview contentItem={contentItem} index={index} keepoData={props.keepoData}/>
+                            )
 
+                case 'botoes':
+                    return (
+                        <BotoesPreview contentItem={contentItem} index={index} keepoData={props.keepoData}/>
+                    )
+
+                    case 'card':
+                        return (
+                            <CardPreview contentItem={contentItem} index={index} keepoData={props.keepoData}/>
+                        )
+                        case 'slider':
+                            return (
+                                <CarrosselPreview contentItem={contentItem} index={index} keepoData={props.keepoData}/>
+                            )
                 default:
                     return <span>Elemento não reconhecido</span>;
                 }

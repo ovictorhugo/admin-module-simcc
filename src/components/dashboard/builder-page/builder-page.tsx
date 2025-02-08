@@ -1,7 +1,8 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Button } from "../../ui/button";
-import { AlignLeft, BarChart, Book, Check, ChevronDown, ChevronLeft, ChevronUp, Code, Copy, Eye, File, GalleryHorizontal, Globe, GripVertical, Heading1, Heading2, Heading3, Image, LayoutPanelTop, Link, List, ListOrdered, Palette, Pencil, Plus, Rows, SquareDashedMousePointer, SquareMousePointer, SquarePlay, SquarePlus, Table, TableCellsMerge, Users } from "lucide-react";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { AlignLeft, BarChart, Book, Check, ChevronDown, ChevronLeft, ChevronUp, Code, Copy, Eye, File, GalleryHorizontal, Globe, GripVertical, Heading1, Heading2, Heading3, Image, LayoutPanelTop, Link, List, ListOrdered, MapPinIcon, Palette, Pencil, Plus, Rows, SquareDashedMousePointer, SquareMousePointer, SquarePlay, SquarePlus, Star, Table, TableCellsMerge, Upload, Users } from "lucide-react";
 import { Separator } from "../../ui/separator";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Alert } from "../../ui/alert";
@@ -30,6 +31,8 @@ export interface Keepo {
   
   interface App {
     background_color: string;
+    background_image:string
+    status:string
     text_color: string;
     card_color: string;
     card_text_color: string;
@@ -238,7 +241,9 @@ export function BuilderPage() {
           const [keepoData, setKeepoData] = useState<Keepo>({
             app: {
               background_color: "",
+              background_image:'',
               text_color: "",
+              status:'',
               card_color: "",
               card_text_color: "",
               button_color: "",
@@ -273,11 +278,13 @@ export function BuilderPage() {
                   setKeepoData({
                     app: {
                       background_color: data.app?.background_color || "",
+                      background_image:data.app?.background_image || "",
                       text_color: data.app?.text_color || "",
                       card_color: data.app?.card_color || "",
                       card_text_color: data.app?.card_text_color || "",
                       button_color: data.app?.button_color || "",
                       button_text_color: data.app?.button_text_color || "",
+                      status:data.app?.status || "",
                     },
                     profile_info: {
                       avatar: data.profile_info?.avatar || "",
@@ -313,6 +320,20 @@ export function BuilderPage() {
           /////
 
           const addContentItem = (type: Content["type"], index:number) => {
+           if(type == 'slider' || 'list' || 'list-number') {
+            setKeepoData((prev) => ({
+              ...prev,
+              content: [
+                ...prev.content,
+                { type, title: "", emoji: "", url: "", items: [
+                 { name:'',
+                  url:'',
+                  title:'',
+                  image:''}
+                ], order:index, description:''},
+              ],
+            }));
+           } else {
             setKeepoData((prev) => ({
               ...prev,
               content: [
@@ -320,6 +341,7 @@ export function BuilderPage() {
                 { type, title: "", emoji: "", url: "", items: [], order:index, description:''},
               ],
             }));
+           }
           };
           
 
@@ -372,6 +394,40 @@ export function BuilderPage() {
       const {version} = useContext(UserContext)
 
       const [tab2, setTab2] = useState('editor')
+
+
+      /////////////////////
+
+      const storage = getStorage();
+      // Função para upload de imagem
+  const handleUpload = async (folder: "profile" | "background") => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.click();
+
+    fileInput.onchange = async (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      const storageRef = ref(storage, `/${folder}/${file.name}`);
+      await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(storageRef);
+
+      setKeepoData((prev) => ({
+        ...prev,
+        app: {
+          ...prev.app,
+          background_image: folder === "background" ? downloadURL : prev.app.background_image,
+        },
+        profile_info: {
+          ...prev.profile_info,
+          avatar: folder === "profile" ? downloadURL : prev.profile_info.avatar,
+        },
+      }));
+    };
+  };
+
     return(
         <main className="h-full p-8 flex gap-3">
             <Helmet>
@@ -646,18 +702,54 @@ export function BuilderPage() {
   <TabsContent value="editor">
   <div>
                    <div className="ml-28 px-2 pb-2 flex flex-col gap-2 mr-8">
-                    <Alert className="h-[200px]">
-                        
-                    </Alert>
+                   <Alert
+        className="h-[200px] flex justify-end bg-no-repeat bg-center bg-cover"
+        style={{ backgroundImage: `url(${keepoData.app.background_image})` }}
+      >
+        <Button variant="outline" size="sm" onClick={() => handleUpload("background")}>
+          <Upload size={16} /> Alterar imagem
+        </Button>
+      </Alert>
 
-                    <div>
+                     {/* Avatar do usuário */}
+      <div className="relative group w-fit -top-16 px-16">
+        <div
+          className="aspect-square  border-neutral-50 dark:border-neutral-900 bg-no-repeat bg-center bg-contain rounded-md h-28 bg-blue-400"
+          style={{ backgroundImage: `url(${keepoData.profile_info.avatar})` }}
+        ></div>
 
-                    </div>
+        {/* Overlay de Upload */}
+        <div
+          className="aspect-square rounded-md h-28 group-hover:flex bg-black/20 items-center justify-center absolute hidden top-0 z-[1] cursor-pointer"
+          onClick={() => handleUpload("profile")}
+        >
+          <Upload size={20} />
+        </div>
+      </div>
 
-                    <div>
-                        <h1></h1>
-                        <p></p>
-                    </div>
+      {total.map((props) => {
+        return(
+          <div className="md:px-16 -top-8 relative">
+               <h1 className="text-2xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+                {props.name}
+              </h1>
+
+              {graduate_program_id && (
+                <div className="flex mt-2 flex-wrap gap-4 ">
+                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12} />{props.type}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><MapPinIcon size={12} />{props.city}</div>
+                {props.rating != '' && (
+                  <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12} />{props.rating}</div>
+                )}
+              </div>
+              )}
+          </div>
+        )
+      })}
+
+     
+
+                    
                    </div>
 
                     <div>
@@ -741,9 +833,56 @@ export function BuilderPage() {
                 </div>
   </TabsContent>
   <TabsContent value="preview">
+
   <div>
+  <div className="ml-28 px-2 pb-2 flex flex-col gap-2 mr-8">
+                   <Alert
+        className="h-[200px] flex justify-end bg-no-repeat bg-center bg-cover"
+        style={{ backgroundImage: `url(${keepoData.app.background_image})` }}
+      >
+       
+      </Alert>
+
+                     {/* Avatar do usuário */}
+      <div className="relative group w-fit -top-16 px-16">
+        <div
+          className="aspect-square  border-neutral-50 dark:border-neutral-900 bg-no-repeat bg-center bg-contain rounded-md h-28 bg-blue-400"
+          style={{ backgroundImage: `url(${keepoData.profile_info.avatar})` }}
+        ></div>
+
+      
+      </div>
+
+      {total.map((props) => {
+        return(
+          <div className="md:px-16 -top-8 relative">
+               <h1 className="text-2xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+                {props.name}
+              </h1>
+
+              {graduate_program_id && (
+                <div className="flex mt-2 flex-wrap gap-4 ">
+                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12} />{props.type}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><MapPinIcon size={12} />{props.city}</div>
+                {props.rating != '' && (
+                  <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12} />{props.rating}</div>
+                )}
+              </div>
+              )}
+          </div>
+        )
+      })}
+
+     
+
+                    
+                   </div>
+
+  <div className="lg:px-48">
                     <PreviewBuilderPage keepoData={keepoData} />
                     </div>
+
+  </div>
   </TabsContent>
 </Tabs>
 
