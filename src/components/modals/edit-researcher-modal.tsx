@@ -48,7 +48,7 @@ const {urlGeralAdm} = useContext(UserContext)
                 try {
                     const response = await fetch(urlProgram, {
                       mode: 'cors',
-                      method: 'POST',
+                      method: 'PUT',
                       headers: {
                         'Access-Control-Allow-Origin': '*',
                         'Access-Control-Allow-Methods': 'PUT',

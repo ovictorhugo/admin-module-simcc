@@ -732,10 +732,10 @@ export function BuilderPage() {
 
                      {/* Avatar do usuário */}
       <div className="relative group w-fit -top-16 px-16">
-        <div
-          className="aspect-square  border-neutral-50 dark:border-neutral-900 bg-no-repeat bg-center bg-contain rounded-md h-28 bg-white dark:bg-neutral-900"
+        <Alert
+          className="aspect-square  bg-no-repeat bg-center bg-contain rounded-md h-28 bg-white dark:bg-neutral-900"
           style={{ backgroundImage: `url(${keepoData.profile_info.avatar})` }}
-        ></div>
+        ></Alert>
 
         {/* Overlay de Upload */}
         <div
@@ -864,10 +864,10 @@ export function BuilderPage() {
 
                      {/* Avatar do usuário */}
       <div className="relative group w-fit -top-16 px-16">
-        <div
-          className="aspect-square  border-neutral-50 dark:border-neutral-900 bg-no-repeat bg-center bg-contain rounded-md h-28 bg-white dark:bg-neutral-900"
+        <Alert
+          className="aspect-square bg-no-repeat bg-center bg-contain rounded-md h-28 bg-white dark:bg-neutral-900"
           style={{ backgroundImage: `url(${keepoData.profile_info.avatar})` }}
-        ></div>
+        ></Alert>
 
       
       </div>

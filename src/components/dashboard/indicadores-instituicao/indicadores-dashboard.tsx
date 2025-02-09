@@ -1,4 +1,4 @@
-import { ArrowRight, Book, Building, ChevronLeft, Copyright, Download, File, GraduationCap, Hash, Info, Link2, User, UserCog } from "lucide-react";
+import { ArrowRight, Book, Building, ChevronLeft, Copyright, Download, File, GraduationCap, Hash, Info, Link2, Upload, User, UserCog } from "lucide-react";
 import { useModalDashboard } from "../../hooks/use-modal-dashboard";
 import { Button } from "../../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
@@ -8,7 +8,8 @@ import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/ca
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../../context/context";
 import { Books, ChartBar, Code, FileCsv, FileXls, Quotes, StripeLogo, Student, Warning } from "phosphor-react";
-
+import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 import {
   Label,
@@ -598,6 +599,74 @@ export function IndicadoresDashboard() {
   const url = 'https://app.powerbi.com/view?r=eyJrIjoiNTBjNmQ3NWQtODNmZC00MWZkLThjNWEtZjU5YmE2ZDkwMjVkIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
   const { version } = useContext(UserContext)
 
+
+  const [profile, setProfile] = useState({
+    img_perfil: '',
+    img_background: '',
+    institution_id: total.map((props) => props.institution_id) || '',
+  });
+
+ const storage = getStorage();
+  const db = getFirestore();
+
+ // Função para buscar as imagens do Firebase com base no 'institution_id'
+ const fetchImages = async () => {
+  // Certifique-se de que 'institution_id' seja válido
+  if (!profile.institution_id) return;
+
+  const docRef = doc(db, "profiles", profile.institution_id); // Caminho correto para o documento
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    const img_background = data?.img_background || '';
+    const img_perfil = data?.img_perfil || '';
+
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      img_background,
+      img_perfil,
+    }));
+  } else {
+    console.log("No such document!");
+  }
+};
+
+// Chama fetchImages assim que o componente é montado ou o 'institution_id' mudar
+useEffect(() => {
+  if (profile.institution_id) {
+    fetchImages();
+  }
+}, [profile.institution_id]);
+
+const handleUpload = async (folder: "profile" | "background") => {
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = "image/*";
+  fileInput.click();
+
+  fileInput.onchange = async (event) => {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    const storageRef = ref(storage, `/${folder}/${file.name}`);
+    await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(storageRef);
+
+    // Atualiza a URL da imagem no Firestore
+    const docRef = doc(db, "profiles", profile.institution_id);
+    await setDoc(docRef, {
+      [`img_${folder}`]: downloadURL, // img_profile ou img_background
+    }, { merge: true });
+
+    // Atualiza o estado com a URL de download
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      [folder === "background" ? "img_background" : "img_perfil"]: downloadURL,
+    }));
+  };
+};
+
   return (
     <>
       <Helmet>
@@ -641,26 +710,47 @@ export function IndicadoresDashboard() {
             </div>
 
             <TabsContent value="all" className="h-auto flex flex-col gap-4 md:gap-8  mt-2">
-              <div className="flex flex-col items-center md:flex-row gap-6 -mt-4">
-                <Avatar className="cursor-pointer rounded-lg  h-24 w-24">
-                  <AvatarImage className={'rounded-md h-24 w-24'} src={``} />
-                  <AvatarFallback className="flex items-center justify-center"><Building size={24} /></AvatarFallback>
-                </Avatar>
+              <div className="flex flex-col items-center md:flex-row gap-6 w-full">
+                
+              <div className="w-full">
+      {/* Seção de Background */}
+      <Alert
+        className="h-[200px] flex justify-end bg-no-repeat bg-center bg-cover"
+        style={{ backgroundImage: `url(${profile.img_background})` }}
+      >
+        <Button variant="outline" size="sm" onClick={() => handleUpload("background")}>
+          <Upload size={16} /> Alterar imagem
+        </Button>
+      </Alert>
 
-                <div>
-                  <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
-                    <div className="flex flex-wrap gap-4 ">
-                      <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><Hash size={12} />{total.map((props) => props.institution_id)}</div>
+      {/* Avatar do usuário */}
+      <div className="relative group w-fit -top-16 px-16">
+        <Alert
+          className="aspect-square   bg-no-repeat bg-center bg-contain rounded-md h-28 bg-white dark:bg-neutral-900"
+          style={{ backgroundImage: `url(${profile.img_perfil})` }}
+        ></Alert>
 
-                    </div>
-                  </p>
+        {/* Overlay de Upload */}
+        <div
+          className="aspect-square rounded-md h-28 group-hover:flex bg-black/20 items-center justify-center absolute hidden top-0 z-[1] cursor-pointer"
+          onClick={() => handleUpload("profile")}
+        >
+          <Upload size={20} />
+        </div>
+      </div>
 
-                  <h1 className="text-2xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
-                    {total.map((props) => props.name)}
-                  </h1>
-                </div>
+      <div className="md:px-16 -top-8 relative">
+      <h1 className="text-2xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+      {total.map((props) => props.name)}
+              </h1>
+              <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><Hash size={12} />{total.map((props) => props.institution_id)}</div>
+      </div>
+    </div>
+
+
+              
               </div>
-
+             
               <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
                 <Alert className="p-0">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -759,41 +849,22 @@ export function IndicadoresDashboard() {
             </TabsContent>
 
             <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8">
-              <AlertDialog open={openModalYearDocente} onOpenChange={() => setOpenModalYearDocente(false)}>
-
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Os dados de {currentYear}/{currentSemester} ainda não foram importados</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete your account
-                      and remove your data from our servers.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel onClick={() => setOpenModalYearDocente(false)}>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction >Importar dados</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+             
 
 
-              <div className="mt-2">
+              <div className="">
 
 
                 <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
                   Painel dos{" "}
-                  <strong className="bg-[#709CB6]  rounded-md px-3 pb-2 text-white font-medium">
+                  <strong className="bg-eng-blue  rounded-md px-3 pb-2 text-white font-medium">
                     {" "}
                     docentes
                   </strong>{" "}
                   da instituição
                 </h1>
-                <p className="max-w-[750px]  text-lg font-light text-foreground">Atualize os dados importando o arquivo .xls na plataforma </p>
-                <div className="flex gap-3 mt-3">
-                  <Button size={'sm'}
-                    onClick={() => onOpen('import-docentes')}><FileXls size={16} />Importar dados dos docentes</Button>
-
-                </div>
+                <p className="max-w-[750px]  text-lg font-light text-foreground">Visão geral dos pesquisadores cadastrados na plataforma</p>
+               
 
               </div>
 
@@ -1598,18 +1669,18 @@ export function IndicadoresDashboard() {
             </TabsContent>
 
             <TabsContent value="tec" className="h-auto flex flex-col gap-4 md:gap-8">
-              <div className="mt-2">
+              <div className="">
 
 
                 <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
                   Painel dos{" "}
-                  <strong className="bg-[#709CB6]  rounded-md px-3 pb-2 text-white font-medium">
+                  <strong className="bg-eng-blue  rounded-md px-3 pb-2 text-white font-medium">
                     {" "}
                     técnicos
                   </strong>{" "}
                   da instituição
                 </h1>
-                <p className="max-w-[750px]  text-lg font-light text-foreground">Atualize os dados importando o arquivo .xls na plataforma </p>
+                <p className="max-w-[750px]  text-lg font-light text-foreground">Visão geral dos técnicos cadastrados na plataforma</p>
                 <div className="flex gap-3 mt-3">
                   <Button size={'sm'}
                     onClick={() => onOpen('import-taes')}><FileXls size={16} />Importar dados dos técnicos</Button>

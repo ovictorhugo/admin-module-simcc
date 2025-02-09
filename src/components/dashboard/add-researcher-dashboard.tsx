@@ -196,11 +196,14 @@ export function AddResearcherDashboard() {
 
   const {onOpen, isOpen:isOpenModal, type:typeModal} = useModal()
 
+  const [carregado, setcarregado] = useState(true)
   useEffect(() => {
+   if (carregado) {
     fetchDataTable();
-
+   }
+setcarregado(false)
    
-  }, []);
+  }, [carregado]);
 
   useEffect(() => {
     if (typeModal === 'confirm-delete-researcher' && !isOpenModal) {
@@ -251,9 +254,10 @@ export function AddResearcherDashboard() {
                 
             
               <div className="hidden items-center h-10 gap-2 md:ml-auto md:flex">
-            {has_importar_bolsistas_cnpq && (  <Button size={'sm'}  onClick={() => onOpen('import-bolsistas')}><FileXls size={16}/>Importar bolsistas CNPq</Button>)}
+            {has_importar_bolsistas_cnpq && (  <Button size={'sm'} variant={'ghost'}  onClick={() => onOpen('import-bolsistas')}><FileXls size={16}/>Importar bolsistas CNPq</Button>)}
           
-             
+            <Button size={'sm'}
+                    onClick={() => onOpen('import-docentes')}><FileXls size={16} />Importar dados dos docentes</Button>
               </div>
             </div>
 
