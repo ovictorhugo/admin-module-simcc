@@ -109,6 +109,7 @@ export function HeaderBarema() {
           },
         });
         const data = await response.json();
+
         if (data) {
           setResearcherSearch(data);
         }
@@ -138,10 +139,6 @@ export function HeaderBarema() {
     <div className="">
       <div className="flex  gap-6 w-full flex-col  ">
         <div>
-
-
-
-
           <h1 className=" max-w-[450px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
             Criar  <strong className="bg-[#719CB8]   rounded-md px-3 pb-2 text-white font-medium">barema</strong> de avaliação dos pesquisadores
           </h1>

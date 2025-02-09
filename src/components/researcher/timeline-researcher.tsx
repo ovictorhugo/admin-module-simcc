@@ -175,8 +175,8 @@ export function TimeLineResearcher(props: Research) {
 
         <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-268px)] p-8 pt-0 ">
 
-          <div className=" flex flex-col justify-center" id="content-to-pdf">
-            <div className={`flex gap-2 rounded-md `}>
+          <div className="flex flex-col justify-center" id="content-to-pdf">
+            <div className={`-ml-[71px] md:-ml-0 flex justify-start gap-2 rounded-md `}>
               <div className="flex items-center gap-3 h-fit">
                 <p className={`text-sm min-w-[63.5px] w-[63.5px]  font-medium h-8 items-center flex p-4   `}></p>
               </div>
@@ -187,7 +187,7 @@ export function TimeLineResearcher(props: Research) {
                 <div className="h-full border-l flex flex-1 dark:border-l-neutral-400 border-neutral-400"></div>
               </div>
 
-              <div className={`flex p-4 pt-0 flex-1   flex-col  gap-3 z-[1]  `}>
+              <div className={`flex p-4 pt-0 flex-1 flex-col gap-3 z-[1]  `}>
                 <div>
                   <div className="font-medium text-xl flex items-center gap-3 ">
                     {props.name}
@@ -215,284 +215,244 @@ export function TimeLineResearcher(props: Research) {
               </div>
             </div>
             {filteredDados.map((item, index) => (
-              <div className={`flex gap-2   rounded-md ${index % 2 != 0 ? ('') : ('bg-neutral-100  dark:bg-neutral-800 ')}`}>
-                <div className="flex items-center gap-3 h-fit">
+              <div className={`flex gap-2 rounded-md ${index % 2 != 0 ? ('') : ('bg-neutral-100  dark:bg-neutral-800 ')}`}>
+
+                <div className="hidden md:flex md:items-center md:gap-3 md:h-fit">
                   <p className={`text-sm  font-medium h-8 items-center flex p-4 pt-8  ${index == 0 ? ('') : ('')}`}>{item.year}</p>
-
-
                 </div>
+
                 <div className="flex flex-col justify-center items-center">
                   <div className="h-4 border-l dark:border-l-neutral-400 border-neutral-400"></div>
                   <div className="w-8 h-8 rounded-full border whitespace-nowrap dark:border-neutral-400 border-neutral-400 flex items-center justify-center"><CalendarBlank size={16} /></div>
                   <div className={`h-full border-l flex flex-1 border-neutral-400  ${index % 2 == 0 ? ('border-neutral-400 dark:border-l-neutral-400') : ('dark:border-l-neutral-400')}`}></div>
                 </div>
 
-                <div className={`flex w-full p-4   flex-col  gap-3 z-[1] pt-4  ${index == 0 ? ('') : ('pt-4')}`}>
-                  {((item.A1 != 0 || '') || (item.A2 != 0 || '') || (item.A3 != 0 || '') || (item.A4 != 0 || '') || (item.B1 != 0 || '') || (item.B2 != 0 || '') || (item.B3 != 0 || '') || (item.B4 != 0 || '') || (item.C != 0 || '') || (item.count_book != 0 || '') || (item.count_book_chapter != 0 || '')) && (
-                    <div className="font-medium text-[1rem] md:text-xl">Produção bibliográfica</div>
-                  )}
-
-                  {item.A1 > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#34663C] `}></div>
-                      <Alert className="rounded-l-none p-2  flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.A1} </strong> {item.A1 == 1 ? ('artigo') : ('artigos')} A1
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.A2 > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#9DC356] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.A2} </strong> {item.A2 == 1 ? ('artigo') : ('artigos')} A2
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.A3 > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#B1C38A] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.A3} </strong> {item.A3 == 1 ? ('artigo') : ('artigos')} A3
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.A4 > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#BEC4B3] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.A4} </strong> {item.A4 == 1 ? ('artigo') : ('artigos')} A4
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.B1 > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#D56438] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.B1} </strong> {item.B1 == 1 ? ('artigo') : ('artigos')} B1
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.B2 > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#DD883D] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.B2} </strong> {item.B2 == 1 ? ('artigo') : ('artigos')} B2
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.B3 > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#E3B081] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.B3} </strong> {item.B3 == 1 ? ('artigo') : ('artigos')} B3
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.B4 > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#E3AC96] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.B4} </strong> {item.B4 == 1 ? ('artigo') : ('artigos')} B4
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.C > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#CE3830] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.C} </strong> {item.C == 1 ? ('artigo') : ('artigos')} C
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.SQ > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#4A1314] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.SQ} </strong> {item.SQ == 1 ? ('artigo') : ('artigos')} sem qualis
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.count_book > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#792F4C] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.count_book} </strong> {item.count_book == 1 ? ('livro') : ('livros')}
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.count_book_chapter > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#DBAFD0] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.count_book_chapter} </strong> {item.count_book == 1 ? ('capítulo de livro') : ('capítulos de livro')}
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-
-                  {((item.count_brand != 0 || '') || (item.count_patent != 0 || '') || (item.count_software != 0 || '')) && (
-                    <div className="font-medium text-xl ">
-                      Produção técnica
-                    </div>
-                  )}
-                  {item.count_brand > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#1B1464] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.count_brand} </strong> {item.count_brand == 1 ? ('marca') : ('marcas')}
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.count_patent > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#66B4D0] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.count_patent} </strong> {item.count_patent == 1 ? ('patente') : ('patentes')}
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.count_software > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#096670] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.count_software} </strong> {item.count_software == 1 ? ('software') : ('softwares')}
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {item.count_guidance > 0 && (
-                    <div className="flex w-full group" >
-                      <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#8BFBD3] `}></div>
-                      <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
-
-                        <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
-                          <strong>{item.count_guidance} </strong> {item.count_guidance == 1 ? ('orientação') : ('orientações')}
-                        </p>
-                      </Alert>
-                    </div>
-                  )}
-
-                  {new Date(props.entradanaufmg).getFullYear().toString() === item.year.toString() && (
-                    <div>
-                      <div className="font-medium text-xl mb-2 pr-12">
-                        Entrada na UFMG
-                      </div>
-
-                      <div className="flex">
-
-                        <div className={`w-2 min-w-[8px] min-h-[70px] flex flex-1 h-full rounded-l-lg bg-[#C80F2E] border border-r-0 border-neutral-200 dark:border-neutral-800 `}></div>
-
-                        <Alert className="flex justify-center items-center  rounded-l-none gap-8 ">
-                          <div className="flex flex-col flex-1 justify-center h-full">
-                            <p className="text-sm font-medium">
-                              {Array.isArray(props.entradanaufmg)
-                                ? props.entradanaufmg.map((entry, index) => (
-                                  <div key={index}>
-                                    {typeof entry === 'string'
-                                      ? entry
-                                      : new Date(entry).toLocaleDateString()}
-                                  </div>
-                                ))
-                                : new Date(props.entradanaufmg).toLocaleDateString()}
-                            </p>
-                          </div>
-                          <img src={'https://upload.wikimedia.org/wikipedia/commons/c/c3/Logo_UFMG.png'} className=" relative  h-[32px]" alt="" />
+                <div className="flex flex-col">
+                  <div className="md:hidden flex items-center gap-3 h-fit">
+                    <p className={`text-sm  font-medium h-8 items-center flex p-4 pt-8  ${index == 0 ? ('') : ('')}`}>{item.year}</p>
+                  </div>
+                  <div className={`flex w-full p-4   flex-col  gap-3 z-[1] pt-4  ${index == 0 ? ('') : ('pt-4')}`}>
+                    {((item.A1 != 0 || '') || (item.A2 != 0 || '') || (item.A3 != 0 || '') || (item.A4 != 0 || '') || (item.B1 != 0 || '') || (item.B2 != 0 || '') || (item.B3 != 0 || '') || (item.B4 != 0 || '') || (item.C != 0 || '') || (item.count_book != 0 || '') || (item.count_book_chapter != 0 || '')) && (
+                      <div className="font-medium text-[1rem] md:text-xl">Produção bibliográfica</div>
+                    )}
+                    {item.A1 > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#34663C] `}></div>
+                        <Alert className="rounded-l-none p-2  flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.A1} </strong> {item.A1 == 1 ? ('artigo') : ('artigos')} A1
+                          </p>
                         </Alert>
                       </div>
-                    </div>
-                  )}
-
-                  {props.subsidy.length > 0 && props.subsidy.some((sub) =>
-                    sub.call_title.includes(item.year.toString())
-                  ) && (
-                      props.subsidy.slice(0, 1).map((item) => (
-                        <div>
-                          <div className="font-medium text-xl mb-2 pr-12">
-                            Bolsa CNPq
-                          </div>
-                          <div className="flex">
-
-                            <div className={`w-2 min-w-[8px] min-h-[125px] flex flex-1 h-full rounded-l-lg ${item.modality_code == 'DT' ? ('bg-[#183EFF]') : ('bg-[#00D000]')} border border-r-0 border-neutral-200 dark:border-neutral-800 `}></div>
-
-                            <Alert className="flex justify-center  rounded-l-none gap-8 ">
-                              <div className="flex flex-col flex-1 justify-center h-full">
-                                <p className="mb-2 font-medium whitespace-normal">{item.modality_name} - Nível {item.category_level_code}</p>
-
-                                <div className="text-xs text-gray-500 flex whitespace-normal items-center gap-2">
-                                  {item.call_title}
-                                </div>
-                              </div>
-
-                              {props.subsidy.slice(0, 1).map((item) => (
-                                <img src={item.modality_code == 'PQ' ? (pq) : (dt)} className="w-8 relative -top-4 h-[52px]" alt="" />
-                              ))}
-                            </Alert>
-                          </div>
-                        </div>
-                      ))
                     )}
-
-
+                    {item.A2 > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#9DC356] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.A2} </strong> {item.A2 == 1 ? ('artigo') : ('artigos')} A2
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {item.A3 > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#B1C38A] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.A3} </strong> {item.A3 == 1 ? ('artigo') : ('artigos')} A3
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {item.A4 > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#BEC4B3] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.A4} </strong> {item.A4 == 1 ? ('artigo') : ('artigos')} A4
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {item.B1 > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#D56438] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.B1} </strong> {item.B1 == 1 ? ('artigo') : ('artigos')} B1
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {item.B2 > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#DD883D] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.B2} </strong> {item.B2 == 1 ? ('artigo') : ('artigos')} B2
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {item.B3 > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#E3B081] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.B3} </strong> {item.B3 == 1 ? ('artigo') : ('artigos')} B3
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {item.B4 > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#E3AC96] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.B4} </strong> {item.B4 == 1 ? ('artigo') : ('artigos')} B4
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {item.C > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#CE3830] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.C} </strong> {item.C == 1 ? ('artigo') : ('artigos')} C
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {item.SQ > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#4A1314] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.SQ} </strong> {item.SQ == 1 ? ('artigo') : ('artigos')} sem qualis
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {item.count_book > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#792F4C] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.count_book} </strong> {item.count_book == 1 ? ('livro') : ('livros')}
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {item.count_book_chapter > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#DBAFD0] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.count_book_chapter} </strong> {item.count_book == 1 ? ('capítulo de livro') : ('capítulos de livro')}
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {((item.count_brand != 0 || '') || (item.count_patent != 0 || '') || (item.count_software != 0 || '')) && (
+                      <div className="font-medium text-xl ">
+                        Produção técnica
+                      </div>
+                    )}
+                    {item.count_brand > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#1B1464] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.count_brand} </strong> {item.count_brand == 1 ? ('marca') : ('marcas')}
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {item.count_patent > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#66B4D0] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.count_patent} </strong> {item.count_patent == 1 ? ('patente') : ('patentes')}
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {item.count_software > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#096670] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.count_software} </strong> {item.count_software == 1 ? ('software') : ('softwares')}
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {item.count_guidance > 0 && (
+                      <div className="flex w-full group" >
+                        <div className={`h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0 bg-[#8BFBD3] `}></div>
+                        <Alert className="rounded-l-none p-2 flex flex-col justify-between  ">
+                          <p className="text-xs  text-gray-500 dark:text-gray-300 font-normal">
+                            <strong>{item.count_guidance} </strong> {item.count_guidance == 1 ? ('orientação') : ('orientações')}
+                          </p>
+                        </Alert>
+                      </div>
+                    )}
+                    {new Date(props.entradanaufmg).getFullYear().toString() === item.year.toString() && (
+                      <div>
+                        <div className="font-medium text-xl mb-2 pr-12">
+                          Entrada na UFMG
+                        </div>
+                        <div className="flex">
+                          <div className={`w-2 min-w-[8px] min-h-[70px] flex flex-1 h-full rounded-l-lg bg-[#C80F2E] border border-r-0 border-neutral-200 dark:border-neutral-800 `}></div>
+                          <Alert className="flex justify-center items-center  rounded-l-none gap-8 ">
+                            <div className="flex flex-col flex-1 justify-center h-full">
+                              <p className="text-sm font-medium">
+                                {Array.isArray(props.entradanaufmg)
+                                  ? props.entradanaufmg.map((entry, index) => (
+                                    <div key={index}>
+                                      {typeof entry === 'string'
+                                        ? entry
+                                        : new Date(entry).toLocaleDateString()}
+                                    </div>
+                                  ))
+                                  : new Date(props.entradanaufmg).toLocaleDateString()}
+                              </p>
+                            </div>
+                            <img src={'https://upload.wikimedia.org/wikipedia/commons/c/c3/Logo_UFMG.png'} className=" relative  h-[32px]" alt="" />
+                          </Alert>
+                        </div>
+                      </div>
+                    )}
+                    {props.subsidy.length > 0 && props.subsidy.some((sub) =>
+                      sub.call_title.includes(item.year.toString())
+                    ) && (
+                        props.subsidy.slice(0, 1).map((item) => (
+                          <div>
+                            <div className="font-medium text-xl mb-2 pr-12">
+                              Bolsa CNPq
+                            </div>
+                            <div className="flex">
+                              <div className={`w-2 min-w-[8px] min-h-[125px] flex flex-1 h-full rounded-l-lg  border-neutral-200 dark:border-neutral-800 `}></div>
+                              <Alert className="flex justify-center rounded-l-none gap-8" style={{ borderLeft: `8px solid ${item.modality_code === 'DT' ? '#183EFF' : '#00D000'}` }}>
+                                <div className="flex flex-col flex-1 justify-center h-full">
+                                  <p className="mb-2 font-medium whitespace-normal">{item.modality_name} - Nível {item.category_level_code}</p>
+                                  <div className="text-xs text-gray-500 flex whitespace-normal items-center gap-2">
+                                    {item.call_title}
+                                  </div>
+                                </div>
+                                {props.subsidy.slice(0, 1).map((item) => (
+                                  <img src={item.modality_code == 'PQ' ? (pq) : (dt)} className="w-8 relative -top-4 h-[52px]" alt="" />
+                                ))}
+                              </Alert>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                  </div>
                 </div>
-
               </div>
             ))}
           </div>

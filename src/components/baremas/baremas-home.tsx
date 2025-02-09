@@ -63,7 +63,8 @@ type Research = {
 }
 
 interface PesquisadoresSelecionados {
-    id: string
+    id: string,
+    id_criterio: number,
     name: string,
     university: string,
     lattes_id: string,
@@ -111,7 +112,6 @@ interface SomaTotalPorGrupoEPesquisador {
     } | { [pesquisadorId: string]: string };
 }
 
-
 type PesquisadorUpdate = {
     total: number,
     id: string,
@@ -152,6 +152,7 @@ import { ProcurarBaremas } from "./procurar-barema-public";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { Helmet } from "react-helmet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { DropdownMenuLabel } from "../ui/dropdown-menu";
 
 
 export function BaremasHome() {
@@ -337,7 +338,7 @@ export function BaremasHome() {
         }]);
     };
 
-    console.log('barema id', idDocumentBarema)
+    console.log('barema iddddddd', idDocumentBarema)
 
     const adicionarCriterio = (idGrupo: any) => {
         const novoCriterio = {
@@ -373,7 +374,6 @@ export function BaremasHome() {
                             return {
                                 ...categoria,
                                 [name]: value,
-
                             };
                         }
                         return categoria;
@@ -385,7 +385,7 @@ export function BaremasHome() {
         setGrupos(novosGrupos);
     };
 
-    console.log(grupos)
+    console.log("GRUPOOOSSS", grupos)
 
     //deletar criterio
 
@@ -413,8 +413,6 @@ export function BaremasHome() {
         setOpenPopovers(novosOpenPopovers);
     };
 
-
-
     //dupicar grupo
 
     const duplicarGrupo = (grupoIndex: any) => {
@@ -440,7 +438,6 @@ export function BaremasHome() {
         setOpenPopovers(novosOpenPopovers);
     };
 
-
     //editar quantidade max pontos
 
     const editarQuantidadeMaxPontos = (grupoIndex: any, novaQuantidade: any) => {
@@ -450,9 +447,6 @@ export function BaremasHome() {
     };
 
     // pesquisadores
-
-
-
     //drag
     const onDragEnd = (result: any) => {
         if (!result.destination) return;
@@ -466,15 +460,17 @@ export function BaremasHome() {
 
     //select
 
-    const selecionarCriterio = (grupoIndex: number, categoriaIndex: number, criterioId: number, criterioItem: string) => {
+    const selecionarCriterio = (grupoIndex: number, categoriaIndex: number, criterioId: number, criterioItem: string, pesquisadores: Research[]) => {
         const novosGrupos = grupos.map((grupo, index) => {
+            console.log("pesquisadores update ", pesquisadores, "criterio id", criterioId)
             if (index === grupoIndex) {
                 const novasCategorias = grupo.categorias.map((categoria, idx) => {
                     if (idx === categoriaIndex) {
                         return {
                             ...categoria,
                             id_criterio: criterioId,
-                            criterio: criterioItem
+                            criterio: criterioItem,
+                            pesquisadores: pesquisadores.filter(pesquisador => pesquisador.graduation === criterioItem)
                         };
                     }
                     return categoria;
@@ -487,6 +483,7 @@ export function BaremasHome() {
             return grupo;
         });
 
+        console.log("GRUPO NOVO:>>> ", novosGrupos)
         // Atualizar os estados
         setGrupos(novosGrupos);
     };
@@ -594,10 +591,7 @@ export function BaremasHome() {
         setGrupos(updatedGrupos);
     };
 
-
-
     const [valueTab, setValueTab] = useState('1')
-
 
     //Somar grupos por id
     const calcularSomaTotalPorGrupoEPesquisador = (grupos: any[]): any[] => {
@@ -674,7 +668,7 @@ export function BaremasHome() {
 
                 const data = await response.json();
 
-                console.log("DAODOSS: ", data)
+                console.log("PESQUISADORESSSSSSS: ", data)
                 if (data) {
                     setResearcherSelecionados(data);
                 }
@@ -686,6 +680,10 @@ export function BaremasHome() {
         fetchData();
     }, [pesquisadoresSelecionados, anoArtigo, anoWorkInEvent, anoLivro, anoCapLivro, anoPatente, anoSoftware, anoMarca, anoResourceProgess, anoResourceCompleted, anoParticipacao, urlGeral]);
     //csv
+
+    useEffect(() => {
+        setPesquisadoresSelecionados(researcherSelecionados);
+    }, [setPesquisadoresSelecionados])
 
     const convertJsonToCsv = (json: any[]): string => {
         const items = json;
@@ -1037,12 +1035,14 @@ export function BaremasHome() {
 
                                                                                                             {Object.entries(criteriosAgrupados).map(([tipo, lista]) => (
                                                                                                                 <div className="flex flex-col" key={tipo}>
-                                                                                                                    <h2 className="text-sm font-semibold mb-1 bg-slate-200 rounded-sm p-2">{tipo}</h2>
+                                                                                                                    <DropdownMenuLabel>
+                                                                                                                        <h2>{tipo}</h2>
+                                                                                                                    </DropdownMenuLabel>
                                                                                                                     {lista.map(criterio => (
                                                                                                                         <Button
                                                                                                                             variant={'ghost'}
                                                                                                                             className="text-left justify-start"
-                                                                                                                            onClick={() => selecionarCriterio(grupoIndex, index, criterio.id, criterio.value)}
+                                                                                                                            onClick={() => selecionarCriterio(grupoIndex, index, criterio.id, criterio.value, pesquisadoresSelecionados)}
                                                                                                                             key={criterio.id} value={criterio.value}>
 
                                                                                                                             {criterio.value}
