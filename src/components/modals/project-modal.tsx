@@ -142,7 +142,7 @@ export function ProjectModal() {
     return (
         <Sheet open={isModalOpen} onOpenChange={onClose}>
             <SheetContent
-                className={`p-0 gap-0 dark:bg-neutral-900  dark:border-gray-600 min-w-[50vw]`}
+                className={`p-0 gap-0 dark:bg-neutral-900  dark:border-gray-600 w-full lg:w-[50vw]`}
             >
                 <div
                     className={`h-full w-2 absolute bg-[#66B4D0]  `}
@@ -192,24 +192,30 @@ export function ProjectModal() {
                                     <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><CalendarBlank size={12} />{data.start_year} - {data.end_year == '' ? ('atual') : (data.end_year)}</div>
                                     <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><SquareAsterisk size={12} />{data.nature}</div>
 
-                                    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><div className={`h-4 w-4 rounded-md ${data.status == 'EM_ANDAMENTO' ? ('bg-yellow-500'):('bg-green-500')}`}></div>{data.status?.split('_').join(' ')}</div>
+                                    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><div className={`h-4 w-4 rounded-md ${data.status == 'EM_ANDAMENTO' ? ('bg-yellow-500') : ('bg-green-500')}`}></div>{data.status?.split('_').join(' ')}</div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="my-6 border-b dark:border-b-neutral-800"></div>
 
-<div className="flex justify-between items-center">
-<div className="text-sm w-fit text-gray-500 dark:text-gray-300 font-normal flex gap-2 items-center"><Avatar className="cursor-pointer rounded-md  h-16 w-16">
-<AvatarImage  className={'rounded-md h-16 w-16'} src={`${urlGeral}ResearcherData/Image?name=${data.researcher_name}`} />
-<AvatarFallback className="flex items-center justify-center"><User size={16}/></AvatarFallback>
-</Avatar>
-<div>
-<p>Encontrado no Lattes de </p>
-<p className="text-black dark:text-white font-medium text-lg">{data.researcher_name}</p></div></div>
+                        <div className="flex justify-between items-center flex-wrap gap-2">
+                            <div className="text-sm w-fit text-gray-500 dark:text-gray-300 font-normal flex gap-2 items-center">
+                                <Avatar className="cursor-pointer rounded-md  h-16 w-16">
+                                    <AvatarImage className={'rounded-md h-16 w-16'} src={`${urlGeral}ResearcherData/Image?name=${data.researcher_name}`} />
+                                    <AvatarFallback className="flex items-center justify-center"><User size={16} /></AvatarFallback>
+                                </Avatar>
 
-<Link to={`/researcher?researcher_name=${data.researcher_name}&search_type=&terms=`} target="_blank" ><Button size={'icon'}><SquareArrowOutUpRight size={16}/></Button></Link>
-</div>
+                                <div>
+                                    <p>Encontrado no Lattes de </p>
+                                    <p className="text-black dark:text-white font-medium text-lg">{data.researcher_name}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-end w-full md:w-fit">
+                                <Link className="flex self-end" to={`/researcher?researcher_name=${data.researcher_name}&search_type=&terms=`} target="_blank" ><Button size={'icon'}><SquareArrowOutUpRight size={16} /></Button></Link>
+                            </div>
+                        </div>
 
                         {data.description != '' && (
                             <div>
@@ -227,7 +233,7 @@ export function ProjectModal() {
 
                                 <div className="flex flex-col gap-3">
                                     {data.production
-                                        
+
                                         .map((props, index) => (
                                             <div className="flex">
                                                 <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border min-h-[120px] border-neutral-200 border-r-0 ${getQualisColor(props.type || '')} min-h-full relative`}></div>

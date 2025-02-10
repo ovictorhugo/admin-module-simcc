@@ -197,7 +197,7 @@ export function InformacoesGeraisResearcher(props: Research) {
   const isOutdated6 = monthDifference > 6;
 
   return (
-    <div className="h-fit text-left">
+    <div className="h-fit text-left w-full">
 
       <div className=" font-medium text-2xl mb-6 pr-12">Informações gerais</div>
 
@@ -277,7 +277,7 @@ export function InformacoesGeraisResearcher(props: Research) {
           ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none') : ('')}
         `}
         >
-         <CalendarBlank size={12}/> Atualização do Lattes: {String(props.data_atualizacao_lattes)}
+          <CalendarBlank size={12} /> Atualização do Lattes: {String(props.data_atualizacao_lattes)}
         </div>
 
       </div>

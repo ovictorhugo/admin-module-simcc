@@ -14,7 +14,7 @@ interface Props {
 export function TotalViewResearcher(props: Props) {
     return (
 
-        <div>
+        <div className="w-full">
             <div className="text-left font-medium text-2xl mb-6 pr-12">Total de produção científica e técnica</div>
             <div
                 className="
@@ -22,7 +22,7 @@ export function TotalViewResearcher(props: Props) {
                     
                     md:grid-cols-3
                     
-                    xl:grid-cols-2  
+                    xl:grid-cols-2
                 "
             >
                 <Alert className="flex items-center gap-3">

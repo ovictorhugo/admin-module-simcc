@@ -15,8 +15,6 @@ interface Message {
   sender: string;
 }
 
-
-
 interface ItemsSelecionados {
   term: string;
 }
@@ -106,7 +104,7 @@ export function ArticlesModal() {
 
   const { onClose, isOpen, type: typeModal, data } = useModalSecundary();
   const isModalOpen = isOpen && typeModal === "articles-modal";
-  
+
 
   const systemMessage = (title: string, author: string) => ({
     role: "system",
@@ -125,10 +123,10 @@ export function ArticlesModal() {
   
   Priorize a obtenção do resumo a partir do DOI. Caso o DOI não esteja disponível, busque informações em fontes confiáveis na internet com base no TÍTULO e um dos AUTORES que seram passados. Garanta que os dados sejam verificáveis e corretamente referenciados. Retorne APENAS o JSON acima, sem explicações ou formatação adicional.`,
   });
-  
-  
 
-  let qualisColor = {
+
+
+  const qualisColor = {
     'A1': 'bg-[#006837]',
     'A2': 'bg-[#8FC53E]',
     'A3': 'bg-[#ACC483]',
@@ -164,101 +162,99 @@ export function ArticlesModal() {
   }, []);
 
   const [isExpanded, setIsExpanded] = useState(false);
-const [gaia, setGaia] = useState('')
+  const [gaia, setGaia] = useState('')
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
 
-
   const teste = highlightText(data.title || '', itemsSelecionados)
 
-  //////
- const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-  
-  
-    const handleSend = async (message: any) => {
-      const newMessage: Message = {
-        message,
-        direction: 'outgoing',
-        sender: "user"
-      };
-  
-      setMessages([newMessage]); // Substituir todas as mensagens antigas pela nova mensagem
-  
-      // Iniciar uma nova conversa
-      setIsTyping(true);
-      await processMessageToChatGPT(newMessage);
+
+
+  const handleSend = async (message: any) => {
+    const newMessage: Message = {
+      message,
+      direction: 'outgoing',
+      sender: "user"
     };
 
-    const [parsedContent, setParsedContent] = useState({
-      authors: [],
-      message: '',
-      journal: '',
-      doi: '',
-      year: '',
-      methodology: '',
-      main_findings: '',
-      sources: []
-    });
+    setMessages([newMessage]); // Substituir todas as mensagens antigas pela nova mensagem
 
-    async function processMessageToChatGPT(messageObject: any) {
-      try {
-        // Valida se "data" está definido antes de acessá-lo
-        const title = data?.title || 'Título Desconhecido';
-        const researcher = data?.researcher || 'Autor Desconhecido';
-    
-        const apiRequestBody = {
-          model: "gpt-3.5-turbo",
-          messages: [
-            systemMessage(title, researcher), 
-            { role: "user", content: messageObject.message },
-            { role: "assistant", content: "" }
-          ]
-        };
-    
-        console.log("Enviando para API:", JSON.stringify(apiRequestBody, null, 2)); // Verifique os dados antes de enviar
-    
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${API_KEY}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(apiRequestBody)
-        });
-    
-        const data2 = await response.json();
-        console.log("Resposta da API:", data2);
-    
-        if (data2.choices?.length > 0) {
-          const chatGptMessage = data2.choices[0].message;
-          const parsedData = JSON.parse(chatGptMessage.content); // Tenta fazer o parse do JSON
-         
-            setParsedContent(parsedData); // Garante que o JSON é válido antes de sobrescrever
-          
-    
-          setGaia(parsedData.message);
-        } else {
-          console.error("Erro: resposta inesperada da API", data);
-        }
-    
-        setIsTyping(false);
-      } catch (error) {
-        console.error("Erro ao processar mensagem:", error);
-        setIsTyping(false);
+    // Iniciar uma nova conversa
+    setIsTyping(true);
+    await processMessageToChatGPT(newMessage);
+  };
+
+  const [parsedContent, setParsedContent] = useState({
+    authors: [],
+    message: '',
+    journal: '',
+    doi: '',
+    year: '',
+    methodology: '',
+    main_findings: '',
+    sources: []
+  });
+
+  async function processMessageToChatGPT(messageObject: any) {
+    try {
+      // Valida se "data" está definido antes de acessá-lo
+      const title = data?.title || 'Título Desconhecido';
+      const researcher = data?.researcher || 'Autor Desconhecido';
+
+      const apiRequestBody = {
+        model: "gpt-3.5-turbo",
+        messages: [
+          systemMessage(title, researcher),
+          { role: "user", content: messageObject.message },
+          { role: "assistant", content: "" }
+        ]
+      };
+
+      console.log("Enviando para API:", JSON.stringify(apiRequestBody, null, 2)); // Verifique os dados antes de enviar
+
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(apiRequestBody)
+      });
+
+      const data2 = await response.json();
+      console.log("Resposta da API:", data2);
+
+      if (data2.choices?.length > 0) {
+        const chatGptMessage = data2.choices[0].message;
+        const parsedData = JSON.parse(chatGptMessage.content); // Tenta fazer o parse do JSON
+
+        setParsedContent(parsedData); // Garante que o JSON é válido antes de sobrescrever
+
+
+        setGaia(parsedData.message);
+      } else {
+        console.error("Erro: resposta inesperada da API", data);
       }
+
+      setIsTyping(false);
+    } catch (error) {
+      console.error("Erro ao processar mensagem:", error);
+      setIsTyping(false);
     }
+  }
 
 
-    const testeMensagem = `Resumo fiel e sem invenções sobre o artigo '${data.title}', onde um dos autores é '${data.researcher}'. ${(data.doi != '' && data.doi != null && data.doi != undefined) && (`E o doi do artigo é ${data.doi}`)}`
-    
+  const testeMensagem = `Resumo fiel e sem invenções sobre o artigo '${data.title}', onde um dos autores é '${data.researcher}'. ${(data.doi != '' && data.doi != null && data.doi != undefined) && (`E o doi do artigo é ${data.doi}`)}`
+
 
   return (
     <Sheet open={isModalOpen} onOpenChange={onClose}>
       <SheetContent
-        className={`p-0 gap-0 dark:bg-neutral-900  dark:border-gray-600 min-w-[50vw]`}
+        className={`p-0 gap-0 dark:bg-neutral-900  dark:border-gray-600 w-full lg:w-1/2`}
       >
         <div
           className={`h-full w-2 absolute  ${qualisColor[data.qualis as keyof typeof qualisColor]} `}
@@ -288,10 +284,10 @@ const [gaia, setGaia] = useState('')
                 <div className="flex ml-auto items-center gap-3">
                   {(data.pdf != '' || data.landing_page_url != '' || data.doi != '') && (
                     <Link target="_blank" to={data.pdf || data.landing_page_url || `https://doi.org/${data.doi || 'default-doi'}`}>
-                    <Button variant={'default'} className="h-8  text-white dark:text-white">
-                      Download do arquivo
-                      <DownloadSimple size={8} className="h-4 w-4" />
-                    </Button></Link>
+                      <Button variant={'default'} className="h-8  text-white dark:text-white">
+                        Download do arquivo
+                        <DownloadSimple size={8} className="h-4 w-4" />
+                      </Button></Link>
                   )}
                 </div>
               </div>
@@ -300,14 +296,14 @@ const [gaia, setGaia] = useState('')
 
 
           <ScrollArea className=" pb-4  h-[calc(100vh-50px)] p-8 flex-1">
-            <div className="mb-8 flex gap-8 justify-between ">
-              <div >
-                <div>
+            <div className="mb-8 flex gap-8 justify-between flex-col-reverse md:flex-row">
+              <div className="">
+                <div className="">
                   {data.relevance && (
                     <div className="relative  py-2 px-4 bg-yellow-600 w-fit rounded-md text-white"><Star size={16} /></div>
                   )}
 
-                  <p className=" mb-2 text-lg font-light text-foreground">
+                  <p className=" mb-2 text-lg text-md md:text-xl font-light text-foreground">
                     {data.magazine}
                   </p>
                 </div>
@@ -322,8 +318,6 @@ const [gaia, setGaia] = useState('')
                   {data.article_institution != '' && (<p className="text-gray-500 dark:text-gray-300 text-sm text-justify  flex items-center gap-1"> <Buildings size={16} />{data.article_institution}</p>)}
                   <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><CalendarBlank size={12} />{data.year}</div>
                   {data.language != '' && (<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Globe size={12} />{data.language}</div>)}
-
-
                 </div>
               </div>
 
@@ -338,20 +332,25 @@ const [gaia, setGaia] = useState('')
                 </div>
               </div>
             </div>
+
             <div>
 
-              <div className="my-6 border-b dark:border-b-neutral-800"></div>
+              <div className="mb-6 border-b dark:border-b-neutral-800"></div>
 
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center flex-wrap">
                 <div className="text-sm w-fit text-gray-500 dark:text-gray-300 font-normal flex gap-2 items-center"><Avatar className="cursor-pointer rounded-md  h-16 w-16">
                   <AvatarImage className={'rounded-md h-16 w-16'} src={`${urlGeral}ResearcherData/Image?name=${data.researcher}`} />
                   <AvatarFallback className="flex items-center justify-center"><User size={16} /></AvatarFallback>
                 </Avatar>
                   <div>
                     <p>Encontrado no Lattes de </p>
-                    <p className="text-black dark:text-white font-medium text-lg">{data.researcher}</p></div></div>
+                    <p className="text-black dark:text-white font-medium text-lg">{data.researcher}</p>
+                  </div>
+                </div>
 
-                <Link to={`/researcher?researcher_name=${data.researcher}&search_type=&terms=`} target="_blank" ><Button size={'icon'}><SquareArrowOutUpRight size={16} /></Button></Link>
+                <div className="flex justify-end w-full md:w-fit">
+                  <Link to={`/researcher?researcher_name=${data.researcher}&search_type=&terms=`} target="_blank" ><Button size={'icon'}><SquareArrowOutUpRight size={16} /></Button></Link>
+                </div>
               </div>
 
               <div className="my-6 border-b dark:border-b-neutral-800"></div>
@@ -378,7 +377,6 @@ const [gaia, setGaia] = useState('')
                 }
 
                 {data.doi != '' && (<Link to={`https://doi.org/${data.doi}`} target="_blank" className=" border-neutral-200 border dark:border-neutral-800 py-2 px-4  rounded-md text-xs  flex gap-2 items-center"><LinkBreak size={16} />DOI {data.doi}</Link>)}
-
               </div>
             </div>
 
@@ -400,7 +398,6 @@ const [gaia, setGaia] = useState('')
                     <div className="absolute h-[300px] inset-0 flex justify-center w-full bg-gradient-to-t from-white dark:from-neutral-900 to-transparent items-end">
                       <Button
                         onClick={toggleExpand}
-
                       >
                         <Eye size={16} />
                         Ver mais
@@ -422,62 +419,59 @@ const [gaia, setGaia] = useState('')
               </div>
             )}
 
-           
-              <div>
-                <div className="my-6 border-b dark:border-b-neutral-800"></div>
-                <h4 className="font-medium text-xl mb-4">Resumo</h4>
-               {data.abstract != '' ? (
-                 <p className="text-sm text-gray-500 flex flex-wrap text-justify">{data.abstract}</p>
-               ):(
+            <div>
+              <div className="my-6 border-b dark:border-b-neutral-800"></div>
+              <h4 className="font-medium text-xl mb-4">Resumo</h4>
+              {data.abstract != '' ? (
+                <p className="text-sm text-gray-500 flex flex-wrap text-justify">{data.abstract}</p>
+              ) : (
                 <div>
-                  <Button onClick={() => handleSend(testeMensagem)} variant={'outline'} className="w-full border-eng-blue text-eng-blue hover:text-eng-dark-blue hover:border-eng-dark-blue"><Sparkle size={16}/>Gerar resumo com a {version ? 'Gaia': 'MarIA'}</Button>
+                  <Button onClick={() => handleSend(testeMensagem)} variant={'outline'} className="w-full border-eng-blue text-eng-blue hover:text-eng-dark-blue hover:border-eng-dark-blue"><Sparkle size={16} />Gerar resumo com a {version ? 'Gaia' : 'MarIA'}</Button>
 
-               {isTyping ? (
-                <div className="flex flex-col gap-3 mt-8">
-                  <Skeleton className="w-full h-5 rounded-md"/>
-                  <Skeleton className="w-full h-5 rounded-md"/>
-                  <Skeleton className="w-full h-5 rounded-md"/>
-                  <Skeleton className="w-full h-5 rounded-md"/>
-                  <Skeleton className="w-full h-5 rounded-md"/>
-                  <Skeleton className="w-[80%] h-5 rounded-md"/>
+                  {isTyping ? (
+                    <div className="flex flex-col gap-3 mt-8">
+                      <Skeleton className="w-full h-5 rounded-md" />
+                      <Skeleton className="w-full h-5 rounded-md" />
+                      <Skeleton className="w-full h-5 rounded-md" />
+                      <Skeleton className="w-full h-5 rounded-md" />
+                      <Skeleton className="w-full h-5 rounded-md" />
+                      <Skeleton className="w-[80%] h-5 rounded-md" />
+                    </div>
+                  ) : (
+                    gaia != '' && (
+                      <div>
+                        <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-6">
+                          {gaia}</p>
+
+                        <p className="text-md font-medium flex flex-wrap text-justify mt-6">
+                          Metodologia</p>
+
+                        <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-2">
+                          {parsedContent.methodology}
+                        </p>
+
+                        <p className="text-md font-medium flex flex-wrap text-justify mt-6">
+                          Conclusões</p>
+
+                        <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-2">
+                          {parsedContent.main_findings}
+                        </p>
+
+                        <p className="text-md font-medium flex flex-wrap text-justify mt-6">
+                          Autores</p>
+
+                        <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-2">
+                          {parsedContent.authors.length > 0 ? parsedContent.authors.join(", ") : "Autores não disponíveis"}
+                        </p>
+
+                        <p className="text-sm text-gray-500 flex flex-wrap font-bold text-justify mt-6">
+                          A {version ? 'Gaia' : 'MarIA'} pode cometer erros. Considere verificar informações importantes.</p>
+                      </div>
+                    )
+                  )}
                 </div>
-               ):(
-                gaia != '' && (
-                  <div>
-                  <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-6">
-                    {gaia}</p>
-
-                    <p className="text-md font-medium flex flex-wrap text-justify mt-6">
-                    Metodologia</p>
-
-                    <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-2">
-  {parsedContent.methodology}
-</p>
-
-
-<p className="text-md font-medium flex flex-wrap text-justify mt-6">
-                    Conclusões</p>
-
-                    <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-2">
-  {parsedContent.main_findings}
-</p>
-
-<p className="text-md font-medium flex flex-wrap text-justify mt-6">
-Autores</p>
-
-                    <p className="text-sm text-gray-500 flex flex-wrap text-justify mt-2">
-  {parsedContent.authors.length > 0 ? parsedContent.authors.join(", ") : "Autores não disponíveis"}
-</p>
-  
-                    <p className="text-sm text-gray-500 flex flex-wrap font-bold text-justify mt-6">
-                    A {version ? 'Gaia': 'MarIA'} pode cometer erros. Considere verificar informações importantes.</p>
-                  </div>
-                )
-               )}
-                </div>
-               )}
-              </div>
-       
+              )}
+            </div>
 
             {data.authors != '' && (
               <div>
@@ -515,7 +509,6 @@ Autores</p>
 
           </ScrollArea>
         </div>
-
       </SheetContent>
     </Sheet>
   )

@@ -106,14 +106,14 @@ export function NuvemPalavras(props: Grafico) {
   }, [urlPalavrasChaves]); // Dependência memoizada
 
   return (
-    <div>
+    <div className="w-full">
       <div className="text-left mb-6 font-medium text-2xl">Palavras-chaves mais recorrentes</div>
       <Alert>
-       {isLoading ? (
-        <Skeleton className="h-[300px] rounded-md"/>
-       ):(
-         <HighchartsReact highcharts={Highcharts} options={options2} />
-       )}
+        {isLoading ? (
+          <Skeleton className="h-[300px] rounded-md" />
+        ) : (
+          <HighchartsReact highcharts={Highcharts} options={options2} />
+        )}
       </Alert>
     </div>
   )
