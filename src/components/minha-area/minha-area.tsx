@@ -303,7 +303,6 @@ export function MinhaArea() {
 
                     <div className="my-6 border-b dark:border-b-neutral-800"></div>
 
-
                     <div className="flex flex-wrap items-center gap-3">
                       <p className="text-sm"> Você está acessando como </p>
                       <DropdownMenu>
@@ -358,6 +357,66 @@ export function MinhaArea() {
                           )}
                         </DropdownMenuContent>
                       </DropdownMenu>
+                    </div>
+
+                    <div className={`flex flex-col lg:hidden lg:sticky w-full lg:w-fit mt-4  ${expand ? ('w-[240px]') : ('w-fit')}`}>
+                      {expand && (<p className="text-gray-500 uppercase text-xs font-medium mb-2">PÁGINAS</p>)}
+                      <div className="flex flex-col gap-2 mb-8">
+                        <Button onClick={() => setTab('all')} variant={'ghost'} className={`  ${!expand ? ('w-10') : ('justify-start')} ${tab == 'all' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><Menu size={16} />{expand && ('Minha área')}</Button>
+                        <Button onClick={() => setTab('seg')} variant={'ghost'} className={` ${!expand ? ('w-10') : ('justify-start')} ${tab == 'seg' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><Shield size={16} />{expand && ('Perfil e segurança')}</Button>
+                        {user?.researcger_name != '' && (
+                          <Button onClick={() => setTab('lin')} variant={'ghost'} className={` ${!expand ? ('w-10') : ('justify-start')} ${tab == 'lin' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><ChartLine size={16} />{expand && ('Linha do tempo')}</Button>
+                        )}
+                      </div>
+
+                      {expand && user?.graduate_program && user.graduate_program.length > 0 && (
+                        <p className="text-gray-500 uppercase text-xs font-medium mb-2">
+                          PROGRAMAS DE PÓS-GRADUAÇÃO
+                        </p>
+                      )}
+
+                      {user?.graduate_program && user.graduate_program.length > 0 && (
+                        <div className="flex flex-col gap-2 mb-8">
+                          {user.graduate_program.map((program) => (
+                            <Link
+                              key={program.graduate_program_id}
+                              className="w-full"
+                              target="_blank"
+                              to={`/pos-graduacao?graduate_program_id=${program.graduate_program_id}`}
+                            >
+                              <Button
+                                variant="ghost"
+                                className={`${!expand ? 'w-10' : 'justify-start  w-full'
+                                  } ${tab === '' && 'bg-neutral-100 dark:bg-neutral-800'}`}
+                                size={expand ? 'default' : 'icon'}
+                              >
+                                <div> <GraduationCap size={16} className="whitespace-nowrap" /></div>
+                                {expand && program.name}
+                              </Button>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+
+                      {expand && (<p className="text-gray-500 uppercase text-xs font-medium mb-2">LINKS EXTERNOS</p>)}
+                      <div className="flex w-full flex-col gap-2 mb-8">
+                        {user?.researcger_name != '' && (
+                          <Button variant={'ghost'} className={` ${!expand ? ('w-10') : ('justify-start w-full')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><Cube size={16} />{expand && ('Meus bens patrimoniados')}</Button>
+                        )}
+                        {user?.researcger_name != '' && (<Link className="w-full" target="_blank" to={`/researcher?researcher_name=${user?.researcger_name}&search_type=&terms=`}><Button variant={'ghost'} className={` ${!expand ? ('w-10') : ('justify-start w-full')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><User size={16} />{expand && ('Página pública do pesquisador')}</Button></Link>)}
+
+                      </div>
+
+                      {expand && (<p className="text-gray-500 uppercase text-xs font-medium mb-2">OUTRAS AÇÕES</p>)}
+                      <div className="flex flex-col gap-2">
+                        <Button onClick={() => {
+                          onClose()
+                          logOut()
+                          history(`/`)
+                          localStorage.removeItem('permission');
+                          localStorage.removeItem('role');
+                        }} variant={'destructive'} className={` ${!expand ? ('w-10') : ('justify-start')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><SignOut size={16} />{expand && ('Encerrar sessão')}</Button>
+                      </div>
                     </div>
 
                     {researcher && researcher.slice(0, 1).map((props) => {
@@ -479,13 +538,117 @@ export function MinhaArea() {
 
                     </div>
 
-
-
                   </div>
                 </TabsContent>
 
                 <TabsContent value="seg" className="w-full">
-                  <SegurancaMinhaArea />
+                  <SegurancaMinhaArea componente={
+                    <div>
+                      <div className="flex flex-wrap items-center gap-3">
+                        <p className="text-sm"> Você está acessando como </p>
+                        <DropdownMenu>
+                          <div className={`   `}>
+                            <DropdownMenuTrigger className={`flex-1 items-center flex justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all w-fit rounded-md  `}>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className="justify-between"
+                              >
+                                {role != '' ? (role) : (user?.display_name)}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                          </div>
+                          <DropdownMenuContent className="min-w-[200px]  gap-1 flex flex-col ">
+                            <DropdownMenuLabel>Conta pessoal</DropdownMenuLabel>
+                            <DropdownMenuItem className="flex gap-2 items-center" onClick={() => {
+                              if (location.pathname.includes('dashboard')) {
+                                history('/');
+                              }
+                              setRole('')
+                              setPermission([])
+                              localStorage.removeItem('role');
+                              localStorage.removeItem('permission');
+                            }}>
+                              <Avatar className="cursor-pointer rounded-md  h-6 w-6">
+                                <AvatarImage className={'rounded-md h-6 w-6'} src={`${user?.photo_url}`} />
+                                <AvatarFallback className="flex items-center justify-center"><User size={16} /></AvatarFallback>
+                              </Avatar>
+                              {user?.display_name}</DropdownMenuItem>
+                            {user?.roles != undefined && (
+                              <div>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuLabel>Cargos</DropdownMenuLabel>
+                              </div>
+                            )}
+                            {user?.roles != undefined && (
+                              user.roles!.map((rola) => (
+                                <DropdownMenuItem className={`flex gap-2 items-center ${role == rola.role_id && ('bg-neutral-100 dark:bg-neutral-800')}`} onClick={() => {
+                                  fetchDataPerm(rola.id)
+                                  localStorage.setItem('role', JSON.stringify(rola.role_id));
+                                  setRole(rola.role_id)
+                                }} key={rola.id}> <div className="h-6 w-6 flex items-center justify-center"><User size={16} /></div>{rola.role_id}</DropdownMenuItem>
+                              ))
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                      <div className={`flex flex-col lg:hidden lg:sticky w-full lg:w-fit mt-4  ${expand ? ('w-[240px]') : ('w-fit')}`}>
+                        {expand && (<p className="text-gray-500 uppercase text-xs font-medium mb-2">PÁGINAS</p>)}
+                        <div className="flex flex-col gap-2 mb-8">
+                          <Button onClick={() => setTab('all')} variant={'ghost'} className={`  ${!expand ? ('w-10') : ('justify-start')} ${tab == 'all' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><Menu size={16} />{expand && ('Minha área')}</Button>
+                          <Button onClick={() => setTab('seg')} variant={'ghost'} className={` ${!expand ? ('w-10') : ('justify-start')} ${tab == 'seg' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><Shield size={16} />{expand && ('Perfil e segurança')}</Button>
+                          {user?.researcger_name != '' && (
+                            <Button onClick={() => setTab('lin')} variant={'ghost'} className={` ${!expand ? ('w-10') : ('justify-start')} ${tab == 'lin' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><ChartLine size={16} />{expand && ('Linha do tempo')}</Button>
+                          )}
+                        </div>
+                        {expand && user?.graduate_program && user.graduate_program.length > 0 && (
+                          <p className="text-gray-500 uppercase text-xs font-medium mb-2">
+                            PROGRAMAS DE PÓS-GRADUAÇÃO
+                          </p>
+                        )}
+                        {user?.graduate_program && user.graduate_program.length > 0 && (
+                          <div className="flex flex-col gap-2 mb-8">
+                            {user.graduate_program.map((program) => (
+                              <Link
+                                key={program.graduate_program_id}
+                                className="w-full"
+                                target="_blank"
+                                to={`/pos-graduacao?graduate_program_id=${program.graduate_program_id}`}
+                              >
+                                <Button
+                                  variant="ghost"
+                                  className={`${!expand ? 'w-10' : 'justify-start  w-full'
+                                    } ${tab === '' && 'bg-neutral-100 dark:bg-neutral-800'}`}
+                                  size={expand ? 'default' : 'icon'}
+                                >
+                                  <div> <GraduationCap size={16} className="whitespace-nowrap" /></div>
+                                  {expand && program.name}
+                                </Button>
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                        {expand && (<p className="text-gray-500 uppercase text-xs font-medium mb-2">LINKS EXTERNOS</p>)}
+                        <div className="flex w-full flex-col gap-2 mb-8">
+                          {user?.researcger_name != '' && (
+                            <Button variant={'ghost'} className={` ${!expand ? ('w-10') : ('justify-start w-full')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><Cube size={16} />{expand && ('Meus bens patrimoniados')}</Button>
+                          )}
+                          {user?.researcger_name != '' && (<Link className="w-full" target="_blank" to={`/researcher?researcher_name=${user?.researcger_name}&search_type=&terms=`}><Button variant={'ghost'} className={` ${!expand ? ('w-10') : ('justify-start w-full')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><User size={16} />{expand && ('Página pública do pesquisador')}</Button></Link>)}
+                        </div>
+                        {expand && (<p className="text-gray-500 uppercase text-xs font-medium mb-2">OUTRAS AÇÕES</p>)}
+                        <div className="flex flex-col gap-2">
+                          <Button onClick={() => {
+                            onClose()
+                            logOut()
+                            history(`/`)
+                            localStorage.removeItem('permission');
+                            localStorage.removeItem('role');
+                          }} variant={'destructive'} className={` ${!expand ? ('w-10') : ('justify-start')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><SignOut size={16} />{expand && ('Encerrar sessão')}</Button>
+                        </div>
+                      </div>
+                    </div>
+                  } />
                 </TabsContent>
 
                 <TabsContent value="lin" className="w-full">
@@ -536,10 +699,10 @@ export function MinhaArea() {
                 </TabsContent>
               </Tabs>
 
-              <div className={`flex flex-col lg:sticky w-full lg:w-fit top-8 ${expand ? ('w-[240px]') : ('w-fit')}`}>
+              <div className={`hidden lg:flex flex-col lg:sticky  w-full lg:w-fit top-8 ${expand ? ('w-[240px]') : ('w-fit')}`}>
                 {expand && (<p className="text-gray-500 uppercase text-xs font-medium mb-2">PÁGINAS</p>)}
                 <div className="flex flex-col gap-2 mb-8">
-                  <Button onClick={() => setTab('all')} variant={'ghost'} className={`  ${!expand ? ('w-10') : ('justify-start')} ${tab == 'all' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><Menu size={16} />{expand && ('Minha área')}</Button>
+                  <Button onClick={() => setTab('all')} variant={'ghost'} className={`${!expand ? ('w-10') : ('justify-start')} ${tab == 'all' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><Menu size={16} />{expand && ('Minha área')}</Button>
                   <Button onClick={() => setTab('seg')} variant={'ghost'} className={` ${!expand ? ('w-10') : ('justify-start')} ${tab == 'seg' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><Shield size={16} />{expand && ('Perfil e segurança')}</Button>
                   {user?.researcger_name != '' && (
                     <Button onClick={() => setTab('lin')} variant={'ghost'} className={` ${!expand ? ('w-10') : ('justify-start')} ${tab == 'lin' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><ChartLine size={16} />{expand && ('Linha do tempo')}</Button>

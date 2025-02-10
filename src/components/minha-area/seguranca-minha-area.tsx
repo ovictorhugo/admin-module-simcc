@@ -10,7 +10,11 @@ import { auth } from '../../lib/firebase';
 import { reauthenticateWithCredential, EmailAuthProvider, updatePassword } from 'firebase/auth';
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 
-export function SegurancaMinhaArea() {
+interface SegurancaMinhaAreaProps {
+  componente: React.ReactNode
+}
+
+export function SegurancaMinhaArea(props: SegurancaMinhaAreaProps) {
 
   const { user, urlGeralAdm } = useContext(UserContext)
 
@@ -42,7 +46,7 @@ export function SegurancaMinhaArea() {
         return;
       }
 
-      let urlGruposPesquisaInsert = `${urlGeralAdm}s/user`;
+      const urlGruposPesquisaInsert = `${urlGeralAdm}s/user`;
 
       const response = await fetch(urlGruposPesquisaInsert, {
         mode: 'cors',
@@ -147,8 +151,6 @@ export function SegurancaMinhaArea() {
     }
   }
 
-
-
   return (
     <div className="flex flex-col flex-1 w-full">
       <div className="flex flex-wrap gap-4 justify-between items-center">
@@ -169,6 +171,10 @@ export function SegurancaMinhaArea() {
       </div>
 
       <div className="my-6 border-b dark:border-b-neutral-800"></div>
+
+      {props.componente}
+
+      <div className="my-6 border-b dark:border-b-neutral-800"></div>
       <h5 className="font-medium text-xl">Perfil</h5>
 
       <div className="flex w-full flex-col gap-2 mt-4">
@@ -185,7 +191,7 @@ export function SegurancaMinhaArea() {
           <Input value={lattes} onChange={(e) => setLattes(e.target.value)} type="text" />
         </div>
 
-        <Button onClick={() => handleSubmit()}><RefreshCcw size={16} />Atualizar dados</Button>
+        <Button className="w-full" onClick={() => handleSubmit()}><RefreshCcw size={16} />Atualizar dados</Button>
       </div>
 
       <div className="my-6 border-b dark:border-b-neutral-800"></div>
