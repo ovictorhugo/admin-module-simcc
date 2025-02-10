@@ -166,6 +166,7 @@ import { GraficoProgressaoTecnicos } from "../graficos/grafico-progressao-tecnic
 import { GraficoTecnicosCargo } from "../graficos/grafico-tecnico-cargo";
 import { Helmet } from "react-helmet";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { toast } from "sonner";
 
 
 const chartConfig = {
@@ -252,6 +253,8 @@ function generateYearSemesterArray(startYear: number, startSemester: number, end
 export function IndicadoresDashboard() {
   const { isOpen, type } = useModalDashboard();
 
+  
+
   const { onOpen } = useModal()
 
   const isModalOpen = isOpen && type === "indicadores";
@@ -266,8 +269,16 @@ export function IndicadoresDashboard() {
 
   const [total, setTotal] = useState<TotalPatrimonios[]>([]);
 
-  const urlPatrimonioInsert = `${urlGeralAdm}/InstitutionRest/Query/Count?institution_id=${user?.institution_id}`;
+  
+  const [profile, setProfile] = useState({
+    img_perfil: '',
+    img_background: '',
+    institution_id: ''
 
+  });
+
+  const urlPatrimonioInsert = `${urlGeralAdm}/InstitutionRest/Query/Count?institution_id=${user?.institution_id}`;
+console.log(urlPatrimonioInsert)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -284,6 +295,12 @@ export function IndicadoresDashboard() {
         const data = await response.json();
         if (data) {
           setTotal(data)
+          setProfile({
+            img_perfil: '',
+            img_background: '',
+            institution_id: data.institution_id,
+        
+          });
         }
       } catch (err) {
         console.log(err);
@@ -600,72 +617,105 @@ export function IndicadoresDashboard() {
   const { version } = useContext(UserContext)
 
 
-  const [profile, setProfile] = useState({
-    img_perfil: '',
-    img_background: '',
-    institution_id: total.map((props) => props.institution_id) || '',
-  });
+  console.log(profile)
 
  const storage = getStorage();
   const db = getFirestore();
 
  // Função para buscar as imagens do Firebase com base no 'institution_id'
- const fetchImages = async () => {
-  // Certifique-se de que 'institution_id' seja válido
-  if (!profile.institution_id) return;
+  // 🔹 Busca imagens do Firestore
+  const fetchImages = async () => {
+    try {
+      const docRef = doc(db, "profiles", profile.institution_id);
+      const docSnap = await getDoc(docRef);
 
-  const docRef = doc(db, "profiles", profile.institution_id); // Caminho correto para o documento
-  const docSnap = await getDoc(docRef);
-
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    const img_background = data?.img_background || '';
-    const img_perfil = data?.img_perfil || '';
-
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      img_background,
-      img_perfil,
-    }));
-  } else {
-    console.log("No such document!");
-  }
-};
-
-// Chama fetchImages assim que o componente é montado ou o 'institution_id' mudar
-useEffect(() => {
-  if (profile.institution_id) {
-    fetchImages();
-  }
-}, [profile.institution_id]);
-
-const handleUpload = async (folder: "profile" | "background") => {
-  const fileInput = document.createElement("input");
-  fileInput.type = "file";
-  fileInput.accept = "image/*";
-  fileInput.click();
-
-  fileInput.onchange = async (event) => {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (!file) return;
-
-    const storageRef = ref(storage, `/${folder}/${file.name}`);
-    await uploadBytes(storageRef, file);
-    const downloadURL = await getDownloadURL(storageRef);
-
-    // Atualiza a URL da imagem no Firestore
-    const docRef = doc(db, "profiles", profile.institution_id);
-    await setDoc(docRef, {
-      [`img_${folder}`]: downloadURL, // img_profile ou img_background
-    }, { merge: true });
-
-    // Atualiza o estado com a URL de download
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      [folder === "background" ? "img_background" : "img_perfil"]: downloadURL,
-    }));
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        console.log("Firestore Data:", data);
+        setProfile((prevProfile) => ({
+          ...prevProfile,
+          img_background: data?.img_background || "",
+          img_perfil: data?.img_perfil || "",
+      
+        }));
+      } else {
+        console.log("Documento não encontrado. Criando um novo...");
+        await setDoc(docRef, { img_background: "", img_perfil: "" });
+      }
+    } catch (error) {
+      console.error("Erro ao buscar imagens:", error);
+    }
   };
-};
+
+  // 🔹 Chama fetchImages quando 'institution_id' muda
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
+  // 🔹 Upload da Imagem
+  const handleUpload = async (folder: "profile" | "background") => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.click();
+  
+    fileInput.onchange = async (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      console.log(profile)
+      // 🔹 Verifica se `institution_id` está definido antes de continuar
+      if (!profile.institution_id) {
+        console.error("Erro: institution_id não está definido!");
+        return;
+      }
+  
+      try {
+        const storagePath = `profiles/${profile.institution_id}/${folder}/${file.name}`;
+        const storageRef = ref(storage, storagePath);
+        console.log("Uploading to:", storageRef.fullPath);
+  
+        await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(storageRef);
+  
+        // 🔹 Atualiza Firestore, verificando se o caminho é válido
+        const docRef = doc(db, "profiles", profile.institution_id);
+        if (!docRef) {
+          console.error("Erro: docRef inválido!");
+          return;
+        }
+  
+        await setDoc(docRef, { [`img_${folder}`]: downloadURL }, { merge: true });
+  
+        // 🔹 Atualiza estado
+        setProfile((prevProfile) => ({
+          ...prevProfile,
+          [folder === "background" ? "img_background" : "img_perfil"]: downloadURL,
+        }));
+
+        fetchImages();
+
+        toast("Imagem atualizada", {
+          description: "Documento carregado no banco de dados",
+          action: {
+              label: "Fechar",
+              onClick: () => console.log("Undo"),
+          },
+      })
+  
+        console.log(`Upload concluído: ${downloadURL}`);
+      } catch (error) {
+        console.error("Erro no upload:", error);
+
+        toast("Erro ao atualizar imagem", {
+          description: "Documento não carregado no banco de dados",
+          action: {
+              label: "Fechar",
+              onClick: () => console.log("Undo"),
+          },
+      })
+      }
+    };
+  };
 
   return (
     <>

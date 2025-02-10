@@ -10,6 +10,7 @@ import { CookiesModal } from "../modals/cookies";
 import { EditArticle } from "../modals/edit-article";
 import { ProjectModal } from "../modals/project-modal";
 import { CoautoresModal } from "../modals/coautores-modal";
+import { EditorpageModal } from "../modals/editor-page";
 
 
 const ModalContentSecundary = () => {
@@ -24,6 +25,8 @@ const ModalContentSecundary = () => {
           return <ProjectModal/>
           case 'coautores':
             return <CoautoresModal/>
+            case 'editor-page':
+              return <EditorpageModal/>
     default:
       return null;
   }

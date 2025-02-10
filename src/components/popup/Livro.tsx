@@ -438,7 +438,7 @@ export function BookItem(props: Publicacao) {
           )}
 
 {props.type == 'research-project' && (
-             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><div className={`h-4 w-4 rounded-md ${props.status == 'EM_ANDAMENTO' ? ('bg-yellow-500'):('bg-green-500')}`}></div>{props.status?.split('_').join(' ')}</div>
+             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><div className={`h-4 w-4 rounded-md ${props.status == 'EM_ANDAMENTO' ? ('bg-yellow-500'): props.status == 'DESATIVADO' ? ('bg-red-500'):('bg-green-500')}`}></div>{props.status?.split('_').join(' ')}</div>
           )}
 
           {props.type == 'orientacoes' && (
