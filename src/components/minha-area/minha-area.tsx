@@ -131,11 +131,7 @@ export function MinhaArea() {
     }
   };
 
-
-
-
-
-  let urlTermPesquisadores = urlGeral + `researcherName?name=${user?.researcger_name}`;
+  const urlTermPesquisadores = urlGeral + `researcherName?name=${user?.researcger_name}`;
   console.log(urlTermPesquisadores)
   const [researcher, setResearcher] = useState<Research[]>([]);
   const [, isLoading] = useState(false)
@@ -253,14 +249,14 @@ export function MinhaArea() {
       onClose()
       setExpand(true)
     }}>
-      <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 ${expand ? ('min-w-[80vw]') : ('min-w-[50vw]')}`}>
+      <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 ${expand ? 'w-full lg:w-[80vw]' : 'lg:w-[50vw]'}`}>
         <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-gray-600">
 
           <div className="flex items-center gap-3">
 
-            <TooltipProvider>
+            <TooltipProvider >
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger asChild className="hidden lg:flex">
                   <Button className="h-8 w-8" onClick={() => setExpand(!expand)} variant={'outline'} size={'icon'}>{expand ? (<ArrowRightFromLine size={16} />) : (<ArrowLeftFromLine size={16} />)}</Button>
                 </TooltipTrigger>
                 <TooltipContent> {expand ? ('Recolher') : ('Expandir')}</TooltipContent>
@@ -278,16 +274,13 @@ export function MinhaArea() {
                 <TooltipContent> Fechar</TooltipContent>
               </Tooltip>
             </TooltipProvider>
-
-
-
           </div>
 
         </DialogHeader>
 
         <div className="relative">
           <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
-            <div className="flex gap-6 relative">
+            <div className="flex flex-col lg:flex-row gap-6 relative ">
               <Tabs defaultValue={tab} value={tab} className="w-full flex flex-1">
                 <TabsContent value="all" className="w-full">
                   <div className="flex flex-col flex-1 w-full">
@@ -311,7 +304,7 @@ export function MinhaArea() {
                     <div className="my-6 border-b dark:border-b-neutral-800"></div>
 
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-3">
                       <p className="text-sm"> Você está acessando como </p>
                       <DropdownMenu>
                         <div className={`   `}>
@@ -327,10 +320,6 @@ export function MinhaArea() {
                             </Button>
 
                           </DropdownMenuTrigger>
-
-
-
-
                         </div>
 
                         <DropdownMenuContent className="min-w-[200px]  gap-1 flex flex-col ">
@@ -414,15 +403,12 @@ export function MinhaArea() {
                             </div></div>
                         )
                       }
-
                     })}
 
                     <div className="my-6 border-b dark:border-b-neutral-800"></div>
 
-
                     <h5 className="font-medium text-xl mb-4">Acesso rápido</h5>
-                    <div className="grid lg:grid-cols-3 gap-4 md:grid-cols-2 grid-cols-1 2xl:grid-cols-4">
-
+                    <div className={`flex flex-col md:grid md:grid-cols-2 gap-4  ${expand ? " grid-cols-3 xl:grid-cols-3" : "xl:grid-cols-2 lg:grid-cols-1"}`}>
                       {has_visualizar_modulo_administrativo && (
                         <Link to={'/dashboard'} onClick={() => onClose()}>
                           <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
@@ -550,9 +536,7 @@ export function MinhaArea() {
                 </TabsContent>
               </Tabs>
 
-
-
-              <div className={`flex flex-col sticky top-8 ${expand ? ('w-[300px]') : ('')}`}>
+              <div className={`flex flex-col lg:sticky w-full lg:w-fit top-8 ${expand ? ('w-[240px]') : ('w-fit')}`}>
                 {expand && (<p className="text-gray-500 uppercase text-xs font-medium mb-2">PÁGINAS</p>)}
                 <div className="flex flex-col gap-2 mb-8">
                   <Button onClick={() => setTab('all')} variant={'ghost'} className={`  ${!expand ? ('w-10') : ('justify-start')} ${tab == 'all' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><Menu size={16} />{expand && ('Minha área')}</Button>
@@ -567,8 +551,6 @@ export function MinhaArea() {
                     PROGRAMAS DE PÓS-GRADUAÇÃO
                   </p>
                 )}
-
-
 
                 {user?.graduate_program && user.graduate_program.length > 0 && (
                   <div className="flex flex-col gap-2 mb-8">
@@ -594,7 +576,7 @@ export function MinhaArea() {
                 )}
 
                 {expand && (<p className="text-gray-500 uppercase text-xs font-medium mb-2">LINKS EXTERNOS</p>)}
-                <div className="flex flex-col gap-2 mb-8">
+                <div className="flex w-full flex-col gap-2 mb-8">
                   {user?.researcger_name != '' && (
                     <Button variant={'ghost'} className={` ${!expand ? ('w-10') : ('justify-start w-full')} ${tab == '' && ('bg-neutral-100 dark:bg-neutral-800')}`} size={expand ? ('default') : ('icon')}><Cube size={16} />{expand && ('Meus bens patrimoniados')}</Button>
                   )}

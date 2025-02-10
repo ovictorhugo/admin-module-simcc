@@ -216,7 +216,7 @@ export function ResultHome() {
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
 
-              <div className="hidden lg:flex md:flex-nowrap gap-2">
+              <div className="hidden xl:flex xl:flex-nowrap gap-2">
                 <div className="md:flex md:flex-nowrap gap-2">
                   <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
                     <File size={16} className="" />
@@ -245,10 +245,10 @@ export function ResultHome() {
                 </Button>
               </div>
 
-              <div className="md:block lg:hidden">
+              <div className="block xl:hidden">
                 <DropdownMenu>
                   <DropdownMenuTrigger>
-                    <Button variant="ghost" className="h-8 w-8 p-0 hidden md:block">
+                    <Button variant="ghost" className="h-8 w-8 p-0 xl:block">
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>

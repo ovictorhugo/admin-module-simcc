@@ -395,7 +395,7 @@ export function GeralViewDashboard() {
               </div>
 
 
-              <div className="grid gap-4 h-full md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+              <div className="flex flex-col md:grid gap-4 h-full md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
                 <Alert className="xl:col-span-2 p-0" x-chunk="dashboard-01-chunk-4" >
                   <CardHeader className="flex gap-6 flex-col md:flex-row  justify-between">
                     <div className="grid gap-2 ">
