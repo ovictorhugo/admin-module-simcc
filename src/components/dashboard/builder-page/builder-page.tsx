@@ -239,30 +239,8 @@ export function BuilderPage() {
           ];
 
           const documentId = graduate_program_id || group_id || dep_id;
-
-          const [keepoData, setKeepoData] = useState<Keepo>({
-            app: {
-              background_color: "",
-              background_image:'',
-              text_color: "",
-              status:"publicar",
-              card_color: "",
-              card_text_color: "",
-              button_color: "",
-              button_text_color: "",
-            },
-            profile_info: {
-              avatar: "",
-              firstName: "",
-              lastName: "",
-              email: "",
-              jobTitle: "",
-              supporting: "",
-              button_text: "",
-              link: "",
-            },
-            content: [],
-          });
+          const {keepoData, setKeepoData} = useContext(UserContext)
+        
 
           ////firebase
           const db = getFirestore();
@@ -444,11 +422,15 @@ export function BuilderPage() {
 
             <div className="flex flex-1 flex-col gap-3">
             <Tabs defaultValue={tab2} value={tab2} className="w-full grid grid-cols-1">
-                <div className="w-full px-2 h-[48px] border rounded-md flex items-center  justify-between">
-                <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
+                <Alert className="w-full px-2 h-[48px]  rounded-md flex items-center  justify-between">
+               <div className="flex items-center gap-4">
+               <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
                 <ChevronLeft className="h-4 w-4" />
                 <span className="sr-only">Voltar</span>
               </Button>
+
+              <h1 className="flex-1 shrink-0 whitespace-nowrap text- font-semibold tracking-tight sm:grow-0">Voltar</h1>
+               </div>
 
               <TabsList>
     <TabsTrigger value="editor" onClick={() => setTab2('editor')} className="flex items-center gap-2"><Pencil size={16}/>Editor</TabsTrigger>
@@ -481,7 +463,7 @@ export function BuilderPage() {
   </SelectContent>
 </Select>
                     </div>
-                </div>
+                </Alert>
 
          
 
@@ -625,7 +607,7 @@ export function BuilderPage() {
   <TabsContent value="preview">
 
   <div>
-  <div className="ml-28 px-2 pb-2 flex flex-col gap-2 mr-8">
+  <div className="  flex flex-col gap-2 ">
                    <Alert
         className="h-[200px] flex justify-end bg-no-repeat bg-center bg-cover"
         style={{ backgroundImage: `url(${keepoData.app.background_image})` }}
@@ -670,7 +652,7 @@ export function BuilderPage() {
                     
                    </div>
 
-  <div className="lg:px-32">
+  <div className="lg:px-16">
   <Separator className="mb-8"/>
 
                     <PreviewBuilderPage keepoData={keepoData} />

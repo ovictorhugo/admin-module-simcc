@@ -27,6 +27,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useModalSecundary } from "../hooks/use-modal-store-secundary";
 import { Skeleton } from "../ui/skeleton";
+import { useModal } from "../hooks/use-modal-store";
 
 const decodeHtmlEntities = (text: string): string => {
   const entities = {
@@ -198,6 +199,8 @@ export function ArticlesModal() {
     main_findings: '',
     sources: []
   });
+
+  const {onOpen} = useModal()
 
   async function processMessageToChatGPT(messageObject: any) {
     try {
@@ -481,8 +484,9 @@ export function ArticlesModal() {
                 <div className="flex flex-wrap gap-3">
                   {data.authors?.split(';').map((author, index) => (
                     <div
+                    onClick={() => onOpen('researcher-modal', {name:author.trim()})}
                       key={index}
-                      className="border-neutral-200 border dark:border-neutral-800 py-2 px-2 rounded-md text-xs flex gap-2 items-center">
+                      className="border-neutral-200 border cursor-pointer dark:border-neutral-800 py-2 px-2 rounded-md text-xs flex gap-2 items-center">
                       <Avatar className="cursor-pointer rounded-md  h-6 w-6">
                         <AvatarImage className={'rounded-md h-6 w-6'} src={`${urlGeral}ResearcherData/Image?name=${author.trim()}`} />
                         <AvatarFallback className="flex items-center justify-center"><User size={16} /></AvatarFallback>

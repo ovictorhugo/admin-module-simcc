@@ -611,7 +611,8 @@ export function InitialHome() {
             <Search />
           </div>
 
-          <div className="hidden sm:flex md:flex-wrap gap-3 z-[3] w-full lg:w-[60vw]">
+          <div className="flex flex-wrap gap-3 z-[2] w-full lg:w-[60vw]">
+
             {words.slice(0, 10).map((word, index) => (
               <div
                 key={index}
