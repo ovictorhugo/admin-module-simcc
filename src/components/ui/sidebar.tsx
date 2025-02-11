@@ -323,7 +323,7 @@ const SidebarInset = React.forwardRef<
       <main
         ref={ref}
         className={cn(
-          "relative w-full md:p-2 md:peer-data-[state=expanded]:pl-2 md:pl-0 md:h-screen dark:bg-black bg-neutral-100 flex flex-col",
+          "relative w-full md:p-2 md:peer-data-[state=expanded]:pl-2  md:h-screen dark:bg-black bg-neutral-100 flex flex-col",
           "md:h-screen dark:bg-black bg-neutral-100 flex flex-col",
           className
         )}
@@ -331,13 +331,13 @@ const SidebarInset = React.forwardRef<
         <Header />
         <div className="flex-grow flex relative h-full w-full  md:h-[calc(100vh - 40px)] -xl overflow-y-auto">
 
-        <div
-          className="flex-grow relative h-full w-full border-0 md:border  bg-neutral-50 md:h-[calc(100vh - 40px)] dark:bg-neutral-900 dark:border-neutral-800 md:rounded-xl overflow-y-auto"
-        >
-          <div className="w-full h-full relative grid grid-cols-1 flex-grow" {...props} />
-          
-        </div>
-        {props2 && <div>{props2}</div>}
+          <div
+            className="flex-grow relative h-full w-full border-0 md:border  bg-neutral-50 md:h-[calc(100vh - 40px)] dark:bg-neutral-900 dark:border-neutral-800 md:rounded-xl overflow-y-auto"
+          >
+            <div className="w-full h-full relative grid grid-cols-1 flex-grow" {...props} />
+
+          </div>
+          {props2 && <div>{props2}</div>}
 
         </div>
       </main>
