@@ -7,7 +7,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../compone
 import { cn } from "../lib"
 import bg_popup from '../assets/bg_welcome.png';
 
-import React, { useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
 import { BarChartBig, Blocks, BookOpen, Bug, Building2, Check, Download, GraduationCap, Home, Info, InfoIcon, LayoutDashboard, Link2, List, LogIn, PanelLeftDashed, SearchCheck, Sparkles, UserPlus, X } from "lucide-react";
@@ -44,11 +44,11 @@ import { Badge } from "../components/ui/badge";
 import { useTheme } from "next-themes";
 
 interface MailProps {
- 
+
   defaultLayout: number[] | undefined
   defaultCollapsed?: boolean
   navCollapsedSize: number
-  children:React.ReactNode
+  children: React.ReactNode
 }
 export default function SearchLayout({
 
@@ -57,16 +57,16 @@ export default function SearchLayout({
   navCollapsedSize,
   children
 }: MailProps) {
-  
-  const {isCollapsed, loggedIn,setIsCollapsed, version, permission, pesquisadoresSelecionados, setItensSelecionados} = useContext(UserContext)
-  
- 
-  const {onOpen, isOpen, type: typeModal } = useModal()
-  const {onOpen:onOpenSecundary } = useModalSecundary()
+
+  const { isCollapsed, loggedIn, setIsCollapsed, version, permission, pesquisadoresSelecionados, setItensSelecionados } = useContext(UserContext)
+
+
+  const { onOpen, isOpen, type: typeModal } = useModal()
+  const { onOpen: onOpenSecundary } = useModalSecundary()
 
   useEffect(() => {
     // Função que será chamada quando o evento de teclado ocorrer
-    const handleKeyDown = (event:any) => {
+    const handleKeyDown = (event: any) => {
       // Verifica se Ctrl + Y foi pressionado
       if (event.ctrlKey && event.key === 'q') {
         onOpen('search')
@@ -88,265 +88,256 @@ export default function SearchLayout({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-      // Verifica no localStorage se o modal já foi exibido
-      const hasVisited = localStorage.getItem('hasVisited');
+    // Verifica no localStorage se o modal já foi exibido
+    const hasVisited = localStorage.getItem('hasVisited');
 
-      if (!hasVisited && (!isOpen)) {
-          // Se não foi exibido, abre o modal
-          setIsModalOpen(true);
-          // Marca no localStorage que o modal foi exibido
-          localStorage.setItem('hasVisited', 'true');
-      }
+    if (!hasVisited && (!isOpen)) {
+      // Se não foi exibido, abre o modal
+      setIsModalOpen(true);
+      // Marca no localStorage que o modal foi exibido
+      localStorage.setItem('hasVisited', 'true');
+    }
   }, []);
 
   const handleClose = () => {
-      setIsModalOpen(false);
+    setIsModalOpen(false);
   };
 
-//cookies
+  //cookies
   useEffect(() => {
     // Verifica no localStorage se o modal já foi exibido
     const hasVisited = localStorage.getItem('cookies');
 
-    if (!hasVisited ) {
-        // Se não foi exibido, abre o modal
-        onOpenSecundary('cookies')
-        // Marca no localStorage que o modal foi exibido
-        localStorage.setItem('cookies', 'true');
+    if (!hasVisited) {
+      // Se não foi exibido, abre o modal
+      onOpenSecundary('cookies')
+      // Marca no localStorage que o modal foi exibido
+      localStorage.setItem('cookies', 'true');
     }
-}, []);
+  }, []);
 
-///BUG
-const location = useLocation();
+  ///BUG
+  const location = useLocation();
 
-useEffect(() => {
-  if(location.pathname == '/relatar-problema') {
-  onOpen('relatar-problema')
-} else  if(location.pathname == '/pesquisadores-selecionados') {
-  onOpen('pesquisadores-selecionados')
-} 
-}, [location]);
+  useEffect(() => {
+    if (location.pathname == '/relatar-problema') {
+      onOpen('relatar-problema')
+    } else if (location.pathname == '/pesquisadores-selecionados') {
+      onOpen('pesquisadores-selecionados')
+    }
+  }, [location]);
 
-const links = [
-  {
-    title: "Página inicial",
-    label: "",
-    icon: Home,
-    link: "/",
-  },
-  {
-    title: "Pesquisar",
-    label: "",
-    icon: SearchCheck,
-    link: "/resultados",
-  },
-  {
-    title: "Pesquisar com IA",
-    label: "",
-    icon: Sparkles,
-    link: "/resultados-ia",
-  },
-  {
-    title: "Indicadores",
-    label: "",
-    icon: BarChartBig,
-    link: "/indicadores",
-  },
-  {
-    title: "Dicionário",
-    label: "",
-    icon: List,
-    link: "/dicionario",
-  },
-  {
-    title: "Listagens",
-    label: "",
-    icon: Download,
-    link: "/listagens",
-  },
-  {
-    title: "Produções recentes",
-    label: "",
-    icon: BookOpen,
-    link: "/producoes-recentes",
-  },
-]
+  const links = [
+    {
+      title: "Página inicial",
+      label: "",
+      icon: Home,
+      link: "/",
+    },
+    {
+      title: "Pesquisar",
+      label: "",
+      icon: SearchCheck,
+      link: "/resultados",
+    },
+    {
+      title: "Pesquisar com IA",
+      label: "",
+      icon: Sparkles,
+      link: "/resultados-ia",
+    },
+    {
+      title: "Indicadores",
+      label: "",
+      icon: BarChartBig,
+      link: "/indicadores",
+    },
+    {
+      title: "Dicionário",
+      label: "",
+      icon: List,
+      link: "/dicionario",
+    },
+    {
+      title: "Listagens",
+      label: "",
+      icon: Download,
+      link: "/listagens",
+    },
+    {
+      title: "Produções recentes",
+      label: "",
+      icon: BookOpen,
+      link: "/producoes-recentes",
+    },
+  ]
 
-const links2 = [
+  const links2 = [
 
-  ...(version
-    ? [
-      {
-        title: "Departamentos",
-        label: "",
-        icon: Building2,
-        link: "/departamentos",
-      },
+    ...(version
+      ? [
+        {
+          title: "Departamentos",
+          label: "",
+          icon: Building2,
+          link: "/departamentos",
+        },
       ]
-    : []),
+      : []),
 
-  {
-    title: "Pós-graduação",
-    label: "",
-    icon: GraduationCap,
-    link: "/pos-graduacao",
-  },
+    {
+      title: "Pós-graduação",
+      label: "",
+      icon: GraduationCap,
+      link: "/pos-graduacao",
+    },
 
-  {
-    title: "Grupos de pesquisa",
-    label: "",
-    icon: Blocks,
-    link: "/grupos-pesquisa",
-  },
-  {
-    title: "Painéis de dados externos",
-    label: "",
-    icon: Link2,
-    link: "/paines-dados-externos",
-  },
-]
+    {
+      title: "Grupos de pesquisa",
+      label: "",
+      icon: Blocks,
+      link: "/grupos-pesquisa",
+    },
+    {
+      title: "Painéis de dados externos",
+      label: "",
+      icon: Link2,
+      link: "/paines-dados-externos",
+    },
+  ]
 
-const hasBaremaAvaliacao = permission.some(
-  (perm) => perm.permission === 'criar_barema_avaliacao'
-);
+  const hasBaremaAvaliacao = permission.some(
+    (perm) => perm.permission === 'criar_barema_avaliacao'
+  );
 
 
-const links3 = [
-  ...(hasBaremaAvaliacao
-    ? [
+  const links3 = [
+    ...(hasBaremaAvaliacao
+      ? [
         {
           title: "Pesquisadores selecionados",
-          label: `${pesquisadoresSelecionados.length == 0 ? (''):(pesquisadoresSelecionados.length)}`,
+          label: `${pesquisadoresSelecionados.length == 0 ? ('') : (pesquisadoresSelecionados.length)}`,
           icon: UserPlus,
           link: "/pesquisadores-selecionados",
         },
       ]
-    : []),
+      : []),
 
-  {
-    title: "Relatar problema",
-    label: "",
-    icon: Bug,
-    link: "/relatar-problema",
-  },
-  {
-    title: "Informações",
-    label: "",
-    icon: Info,
-    link: "/informacoes",
-  },
-]
+    {
+      title: "Relatar problema",
+      label: "",
+      icon: Bug,
+      link: "/relatar-problema",
+    },
+    {
+      title: "Informações",
+      label: "",
+      icon: Info,
+      link: "/informacoes",
+    },
+  ]
 
-const navigate = useNavigate()
+  const navigate = useNavigate()
 
-const handleClick = () => {
-  navigate('/')
-  setItensSelecionados([])
-}
+  const handleClick = () => {
+    navigate('/')
+    setItensSelecionados([])
+  }
 
-const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
 
-const router = useLocation();
+  const router = useLocation();
   const pathSegments = router.pathname.split('/').filter(Boolean); // Divide a URL em segmentos e remove a primeira parte vazia
 
-   // Se a URL estiver vazia, mostramos "Página Inicial"
-   const breadcrumbItems = pathSegments.length === 0 ? ['Página inicial'] : ['Página inicial', ...pathSegments];
+  // Se a URL estiver vazia, mostramos "Página Inicial"
+  const breadcrumbItems = pathSegments.length === 0 ? ['Página inicial'] : ['Página inicial', ...pathSegments];
 
-    return (
+  return (
     <div>
-     
-      
+
+
       <SidebarProvider className="    " defaultOpen={true} open={isCollapsed} onOpenChange={() => setIsCollapsed((prev) => !prev)} >
 
-      <AppSidebar />
+        <AppSidebar />
 
-          <SidebarInset className=" ">
+        <SidebarInset className=" ">
           <main className="h-full flex flex-col flex-1 ">
             {/* Assuming Header is another component */}
-         
 
-           <div className="flex p-8 pt-8 pb-2 h-[68px] items-center justify-between top-0 sticky z-[3] supports-[backdrop-filter]:bg-neutral-50/60 supports-[backdrop-filter]:dark:bg-neutral-900/60 backdrop-blur ">
-           <div className="flex  pb-0 items-center gap-2">
-      <SidebarTrigger className="" />
-      <Separator orientation="vertical" className="mr-2 h-4" />
-      
 
-      <Breadcrumb>
-  <BreadcrumbList>
-    {breadcrumbItems.map((segment, index) => {
-      const isLastItem = index === breadcrumbItems.length - 1;
+            <div className="flex p-8 pt-8 pb-2 h-[68px] items-center justify-between top-0 sticky z-[3] supports-[backdrop-filter]:bg-neutral-50/60 supports-[backdrop-filter]:dark:bg-neutral-900/60 backdrop-blur ">
+              <div className="flex  pb-0 items-center gap-2">
+                <SidebarTrigger className="" />
+                <Separator orientation="vertical" className="mr-2 h-4" />
 
-      // Construir o caminho parcial para cada segmento
-      const href = index === 0 
-        ? '/' // O primeiro item sempre vai para a página inicial
-        : `/${pathSegments.slice(0, index + 1).join('/')}`;
 
-      return (
-        <React.Fragment key={index}>
-          <BreadcrumbItem className="hidden md:block capitalize">
-            {/* Se for o último item, não criamos um link, é apenas texto */}
-            {isLastItem ? (
-              <span>{segment}</span>
-            ) : (
-              <BreadcrumbLink to={href} className="capitalize">
-                {segment}
-              </BreadcrumbLink>
-            )}
-          </BreadcrumbItem>
-          {!isLastItem && <BreadcrumbSeparator className="hidden md:block" />}
-        </React.Fragment>
-      );
-    })}
-  </BreadcrumbList>
-</Breadcrumb>
-    </div>
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    {breadcrumbItems.map((segment, index) => {
+                      const isLastItem = index === breadcrumbItems.length - 1;
 
-    <div className="flex items-center gap-2">
-   
+                      // Construir o caminho parcial para cada segmento
+                      const href = index === 0
+                        ? '/' // O primeiro item sempre vai para a página inicial
+                        : `/${pathSegments.slice(0, index + 1).join('/')}`;
 
-    </div>
-           </div>
-            
-            <div className="h-full ">
-            {children}
+                      return (
+                        <React.Fragment key={index}>
+                          <BreadcrumbItem className="hidden md:block capitalize">
+                            {/* Se for o último item, não criamos um link, é apenas texto */}
+                            {isLastItem ? (
+                              <span>{segment}</span>
+                            ) : (
+                              <BreadcrumbLink to={href} className="capitalize">
+                                {segment}
+                              </BreadcrumbLink>
+                            )}
+                          </BreadcrumbItem>
+                          {!isLastItem && <BreadcrumbSeparator className="hidden md:block" />}
+                        </React.Fragment>
+                      );
+                    })}
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </div>
+
+              <div className="flex items-center gap-2">
+
+
+              </div>
             </div>
 
-         
+            <div className="h-full ">
+              {children}
+            </div>
           </main>
 
-          </SidebarInset>
+        </SidebarInset>
+        <Toaster />
 
-        
-
-        <Toaster/>
-  
       </SidebarProvider >
 
-
       <Dialog open={isModalOpen} >
-            <DialogContent className="p-0  ">
-              <div className="h-[300px] w-full bg-cover bg-no-repeat bg-center"  style={{ backgroundImage: `url(${bg_popup})` }}></div>
-                <DialogHeader className="p-6">
-                    <DialogTitle className="text-2xl font-medium">Apresentamos a plataforma {version ? ('Conectee'):('Iapós')}</DialogTitle>
-                    <DialogDescription>
-                        O jeito mais fácil de visualizar e filtrar as produções técnicas e bibliográficas dos pesquisadores {version ? ('da Escola de Engenharia da UFMG'):('do SENAI CIMATEC')}.
-                    </DialogDescription>
-                   <div className="flex pt-6 items-center justify-between">
-                 <div></div>
+        <DialogContent className="p-0  ">
+          <div className="h-[300px] w-full bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url(${bg_popup})` }}></div>
+          <DialogHeader className="p-6">
+            <DialogTitle className="text-2xl font-medium">Apresentamos a plataforma {version ? ('Conectee') : ('Iapós')}</DialogTitle>
+            <DialogDescription>
+              O jeito mais fácil de visualizar e filtrar as produções técnicas e bibliográficas dos pesquisadores {version ? ('da Escola de Engenharia da UFMG') : ('do SENAI CIMATEC')}.
+            </DialogDescription>
+            <div className="flex pt-6 items-center justify-between">
+              <div></div>
 
-                   <div className="flex gap-3">
-                   <Link to={'/termos-uso'}> <Button variant={'ghost'}><InfoIcon size={16}/> Termos de uso</Button></Link>
-                 
-                   <Button onClick={handleClose}><Check size={16}/>Aceitar todos os cookies</Button>
-                   </div>
-                   </div>
-                </DialogHeader>
-                
-            </DialogContent>
-        </Dialog>
+              <div className="flex gap-3">
+                <Link to={'/termos-uso'}> <Button variant={'ghost'}><InfoIcon size={16} /> Termos de uso</Button></Link>
 
-    
+                <Button onClick={handleClose}><Check size={16} />Aceitar todos os cookies</Button>
+              </div>
+            </div>
+          </DialogHeader>
+
+        </DialogContent>
+      </Dialog>
     </div>
-    );
-  };
-  
+  );
+};

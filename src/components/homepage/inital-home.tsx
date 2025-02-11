@@ -611,8 +611,23 @@ export function InitialHome() {
             <Search />
           </div>
 
-          <div className="flex flex-wrap gap-3 z-[3] w-full lg:w-[60vw]">
+          <div className="hidden sm:flex md:flex-wrap gap-3 z-[3] w-full lg:w-[60vw]">
             {words.slice(0, 10).map((word, index) => (
+              <div
+                key={index}
+                className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`}
+                onClick={() => {
+                  handlePesquisaChange(word.term)
+                  onOpenResult('researchers-home')
+                }}
+              >
+                {word.term}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex md:hiddeen justify-center md:hidden flex-wrap gap-3 z-[3] w-full lg:hidden">
+            {words.slice(0, 5).map((word, index) => (
               <div
                 key={index}
                 className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`}

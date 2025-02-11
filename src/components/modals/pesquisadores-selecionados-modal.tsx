@@ -75,7 +75,7 @@ export function PesquisadoresSelecionadosModal() {
                   Barema de avaliação
                 </p>
 
-                <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+                <h1 className="max-w-[500px] whitespace-pre-wrap flex-wrap text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
                   Pesquisadores selecionados
                 </h1>
               </div>
