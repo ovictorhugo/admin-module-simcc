@@ -747,7 +747,7 @@ export function VisualizacaoDepartamento() {
                   </Alert>
                 </div>
 
-                <div className="grid  gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+                <div className="flex flex-wrap md:grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
 
                   <Alert className="lg:col-span-2">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
