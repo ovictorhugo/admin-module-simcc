@@ -668,7 +668,7 @@ export function VisualizacaoDepartamento() {
                       >
                         <BarChart accessibilityLayer data={dados} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
                           <CartesianGrid vertical={false} horizontal={false} />
-                          <ChartLegend content={<ChartLegendContent />} />
+                          <ChartLegend className="pb-4" content={<ChartLegendContent />} />
 
                           <XAxis
                             dataKey="year"
