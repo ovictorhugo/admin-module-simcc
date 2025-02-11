@@ -556,9 +556,9 @@ export function VisualizacaoDepartamento() {
 
               <div className="flex flex-col md:gap-8 gap-4">
                 <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-                  <div className="h-full gap-8 grid">
+                  <div className="h-full gap-4 grid">
                     <Alert className="p-0 ">
-                      <CardHeader className="flex p-10 flex-row items-center justify-between space-y-0 pb-2">
+                      <CardHeader className="flex p-10 flex-row items-center justify-between space-y-0 md:pb-2">
                         <div>
                           <CardTitle className="text-sm font-medium">
                             Total de   docentes
@@ -578,14 +578,10 @@ export function VisualizacaoDepartamento() {
 
                       </CardHeader>
 
-                      <div className="flex flex-1 px-6">
-
-                      </div>
-
                     </Alert>
 
                     <Alert className="p-0 ">
-                      <CardHeader className="flex flex-row p-10 items-center justify-between space-y-0 pb-2">
+                      <CardHeader className="flex flex-row p-10 items-center justify-between space-y-0 md:pb-2">
                         <div>
                           <CardTitle className="text-sm font-medium">
                             Total de técnicos
