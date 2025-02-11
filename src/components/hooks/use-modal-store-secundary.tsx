@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { useModal } from "./use-modal-store";
+import { Keepo } from "../dashboard/builder-page/builder-page";
 
-export type ModalType = 'articles-modal' | 'cookies' | 'edit-article' | 'image-article' | 'project-modal' | 'coautores'
+export type ModalType = 'articles-modal' | 'cookies' | 'edit-article' | 'image-article' | 'project-modal' | 'coautores' | 'editor-page'
 
 interface ModalData {
   id?: string,
@@ -25,6 +26,9 @@ interface ModalData {
   lattes_id?:string
   researcher?:string
   id_delete?: string
+
+  keepoData?:Keepo
+      setKeepoData?: React.Dispatch<React.SetStateAction<Keepo>>;
 
   abstract?:string,
   article_institution?:string,

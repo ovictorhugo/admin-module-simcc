@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import { Keepo } from "../components/dashboard/builder-page/builder-page";
 
 interface User {
   institution_id: string
@@ -67,9 +68,12 @@ interface UserContextType {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 
+  keepoData:Keepo,
+  setSetKeepoData:React.Dispatch<React.SetStateAction<Keepo>>;
 
   valoresSelecionadosExport: string;
   setValoresSelecionadosExport: React.Dispatch<React.SetStateAction<string>>;
+  
   idDocumentBarema: string;
   setIdDocumentBarema: React.Dispatch<React.SetStateAction<string>>;
 
@@ -153,6 +157,8 @@ export const UserContext = createContext<UserContextType>({
   setMaria: () => { },
   user: {} as User,
   setUser: () => { },
+  keepoData: {} as Keepo,
+  setSetKeepoData: () => { },
 
   valoresSelecionadosExport: "",
   setValoresSelecionadosExport: () => { },

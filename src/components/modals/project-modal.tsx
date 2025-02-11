@@ -192,7 +192,7 @@ export function ProjectModal() {
                                     <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><CalendarBlank size={12} />{data.start_year} - {data.end_year == '' ? ('atual') : (data.end_year)}</div>
                                     <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><SquareAsterisk size={12} />{data.nature}</div>
 
-                                    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><div className={`h-4 w-4 rounded-md ${data.status == 'EM_ANDAMENTO' ? ('bg-yellow-500') : ('bg-green-500')}`}></div>{data.status?.split('_').join(' ')}</div>
+                                    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><div className={`h-4 w-4 rounded-md ${data.status == 'EM_ANDAMENTO' ? ('bg-yellow-500'): data.status == 'DESATIVADO' ? ('bg-red-500'):('bg-green-500')}`}></div>{data.status?.split('_').join(' ')}</div>
                                 </div>
                             </div>
                         </div>

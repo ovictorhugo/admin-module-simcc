@@ -19,10 +19,11 @@ import { AddItemDropdown } from "./add-item-dropdown";
 import { SectionBuilderPage } from "./sections";
 import { Helmet } from "react-helmet";
 import { UserContext } from "../../../context/context";
-import { EyeClosed, Quotes } from "phosphor-react";
+import { EyeClosed, Gear, Quotes } from "phosphor-react";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 import { PreviewBuilderPage } from "./preview";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
+import { useModalSecundary } from "../../hooks/use-modal-store-secundary";
 
 export interface Keepo {
     app: App;
@@ -151,7 +152,7 @@ export interface Keepo {
   }
 
 export function BuilderPage() {
-    const [tab, setTab] = useState('inicio')
+
 
     const queryUrl = useQuery();
 
@@ -429,6 +430,8 @@ export function BuilderPage() {
     };
   };
 
+  const {onOpen} = useModalSecundary()
+
     return(
         <main className="h-full p-8 flex gap-3">
             <Helmet>
@@ -436,246 +439,7 @@ export function BuilderPage() {
           <meta name="description" content={`Construtor de página | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
-            <div className={`h-full ${tab2 == 'editor' ? ('flex'):('hidden')}`}>
-            <Tabs defaultValue={tab} value={tab} className="flex gap-3">
- <div className="p-2  flex flex-col gap-1 items-center border rounded-md h-full w-[48px]">
-
-<TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger>
-    <Button className="h-8 w-8" onClick={() => setTab('inicio')}  variant={tab == 'inicio' ? ('outline'):('ghost')} size={'icon'}>
-<LayoutPanelTop size={16}/>
-</Button>
-    </TooltipTrigger>
-    <TooltipContent side='right'>
-      <p>Início</p>
-    </TooltipContent>
-  </Tooltip>
-</TooltipProvider>
-
-<TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger>
-    <Button className="h-8 w-8" onClick={() => setTab('add')} variant={tab == 'add' ? ('outline'):('ghost')} size={'icon'}>
-    <SquarePlus size={16}/>
-</Button>
-    </TooltipTrigger>
-    <TooltipContent side='right'>
-      <p>Adicionar</p>
-    </TooltipContent>
-  </Tooltip>
-</TooltipProvider>
-
-<TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger>
- 
-<Button className="h-8 w-8" onClick={() => setTab('themes')} variant={tab == 'themes' ? ('outline'):('ghost')} size={'icon'}>
-    <Palette size={16}/>
-</Button>
-    </TooltipTrigger>
-    <TooltipContent side='right'>
-      <p>Layout</p>
-    </TooltipContent>
-  </Tooltip>
-</TooltipProvider>
-
-
-
- </div>
- <div className="h-full  w-[320px] border rounded-md">
- 
- <TabsContent value="inicio" className="m-0 p-4">
-        <h3 className="text-3xl font-semibold">Olá, vamos começar personalizando a página</h3>
-   <p className="text-sm text-gray-500 pt-2 pb-8">Comece adicionando sessões e alterando as cores do layout</p>
-    <div className="flex flex-col gap-4">
-    <div className="flex flex-col w-full gap-2">
-    <Label>Título</Label>
-    <Input
-        type="text"
-        value={keepoData.profile_info.jobTitle}
-        onChange={(e) =>
-            setKeepoData((prev) => ({
-                ...prev,
-                profile_info: { ...prev.profile_info, jobTitle: e.target.value },
-            }))
-        }
-    />
-</div>
-
-<div className="flex flex-col w-full gap-2">
-    <Label>Sigla</Label>
-    <Input
-        type="text"
-        value={keepoData.profile_info.jobTitle}
-        onChange={(e) =>
-            setKeepoData((prev) => ({
-                ...prev,
-                profile_info: { ...prev.profile_info, jobTitle: e.target.value },
-            }))
-        }
-    />
-</div>
-
-<div className="flex flex-col w-full gap-2">
-    <Label>Descrição</Label>
-    <Textarea
-    
-        value={keepoData.profile_info.supporting}
-        onChange={(e) =>
-            setKeepoData((prev) => ({
-                ...prev,
-                profile_info: { ...prev.profile_info, supporting: e.target.value },
-            }))
-        }
-    />
-</div>
-    </div>
- <Accordion type="single" collapsible>
-  <AccordionItem value="item-1">
-    <AccordionTrigger className="py-2 border-b">Informações</AccordionTrigger>
-    <AccordionContent className="mt-4 flex flex-col gap-4">
-    <div className="flex flex-col w-full gap-2">
-    <Label>Título</Label>
-    <Input
-        type="text"
-        value={keepoData.profile_info.jobTitle}
-        onChange={(e) =>
-            setKeepoData((prev) => ({
-                ...prev,
-                profile_info: { ...prev.profile_info, jobTitle: e.target.value },
-            }))
-        }
-    />
-</div>
-
-
-    </AccordionContent>
-  </AccordionItem>
-
-  <AccordionItem value="item-2">
-    <AccordionTrigger className="py-2 border-b">Cards</AccordionTrigger>
-    <AccordionContent  className="mt-4">
-      Yes. It adheres to the WAI-ARIA design pattern.
-    </AccordionContent>
-  </AccordionItem>
-</Accordion>
-</TabsContent>
- <TabsContent value="themes" className="m-0 p-4">
- <Accordion type="single" collapsible>
-  <AccordionItem value="item-1">
-    <AccordionTrigger className="py-2 border-b">Botões</AccordionTrigger>
-    <AccordionContent className="mt-4 flex flex-col gap-4">
-    <div className="flex flex-col gap-2">
-    <Label>Cor de fundo</Label>
-    <div className="flex  gap-4">
-    <Input
-        type="text"
-        value={keepoData.app.button_color}
-        onChange={(e) =>
-            setKeepoData((prev) => ({
-                ...prev,
-                app: { ...prev.app, button_color: e.target.value },
-            }))
-        }
-    />
-
-<ColorPicker
-          onChange={(v) => {
-            setKeepoData((prev) => ({
-                ...prev,
-                app: { ...prev.app, button_color: v },
-            }))
-          }}
-          value={keepoData.app.button_color}
-        />
-
-
-    </div>
-</div>
-
-<div className="flex flex-col gap-2">
-    <Label>Cor do texto</Label>
-    <div className="flex  gap-4">
-    <Input
-        type="text"
-        value={keepoData.app.button_text_color}
-        onChange={(e) =>
-            setKeepoData((prev) => ({
-                ...prev,
-                app: { ...prev.app, button_text_color: e.target.value },
-            }))
-        }
-    />
-
-<ColorPicker
-          onChange={(v) => {
-            setKeepoData((prev) => ({
-                ...prev,
-                app: { ...prev.app, button_text_color: v },
-            }))
-          }}
-          value={keepoData.app.button_text_color}
-        />
-
-
-    </div>
-</div>
-    </AccordionContent>
-  </AccordionItem>
-
-  <AccordionItem value="item-2">
-    <AccordionTrigger className="py-2 border-b">Cards</AccordionTrigger>
-    <AccordionContent  className="mt-4">
-      Yes. It adheres to the WAI-ARIA design pattern.
-    </AccordionContent>
-  </AccordionItem>
-</Accordion>
- </TabsContent>
- <TabsContent value="add" className="m-0 p-4">
- <Accordion type="single" collapsible>
-  <AccordionItem value="item-1">
-    <AccordionTrigger className="py-2 border-b">Elementos</AccordionTrigger>
-    <AccordionContent className="mt-4 flex flex-col gap-4">
-    <div className="gap-4 grid grid-cols-2">
-    {items.map((item, index) => (
-        <div className="cursor-pointer rounded-md " onClick={() =>   addContentItem(item.type, (keepoData.content.length + 1))}>
-            <AddItem
-          key={index} 
-          titulo={item.titulo} 
-          chidren={item.icon} 
-        />
-        </div>
-      ))}
-
-</div>
-        </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="item-2">
-    <AccordionTrigger className="py-2 border-b">Funções</AccordionTrigger>
-    <AccordionContent className="mt-4 flex flex-col gap-4">
-    <div className="gap-4 grid grid-cols-2">
-    {itemsEspeciais.map((item, index) => (
-        <div className="cursor-pointer rounded-md " onClick={() =>   addContentItem(item.type, (keepoData.content.length + 1))}>
-            <AddItem
-          key={index} 
-          titulo={item.titulo} 
-          chidren={item.icon} 
-        />
-        </div>
-      ))}
-
-</div>
-        </AccordionContent>
-        </AccordionItem>
-        </Accordion>
-   
- </TabsContent>
- </div>
-</Tabs>
-
-            </div>
+           
 
 
             <div className="flex flex-1 flex-col gap-3">
@@ -692,6 +456,9 @@ export function BuilderPage() {
   </TabsList>
 
                     <div className="flex gap-3">
+                      <Button onClick={() => onOpen('editor-page')} variant={'outline'} size={'icon'} className="h-8 min-w-8">
+                        <Gear size={16}/>
+                      </Button>
                     <Select
   value={keepoData.app.status}
   onValueChange={(value) =>
@@ -772,6 +539,10 @@ export function BuilderPage() {
                    </div>
 
                     <div>
+                  <div className="lg:pl-32 lg:pr-8">
+                  <Separator className="mb-8 "/>
+                  </div>
+
                     <SectionBuilderPage keepoData={keepoData} setKeepoData={setKeepoData}/>
                     </div>
 
@@ -888,6 +659,8 @@ export function BuilderPage() {
                 )}
               </div>
               )}
+
+             
           </div>
         )
       })}
@@ -897,7 +670,9 @@ export function BuilderPage() {
                     
                    </div>
 
-  <div className="lg:px-48">
+  <div className="lg:px-32">
+  <Separator className="mb-8"/>
+
                     <PreviewBuilderPage keepoData={keepoData} />
                     </div>
 

@@ -69,6 +69,7 @@ import { Error404 } from './components/errors/404';
 import { TermosUso } from './pages/TermosUso';
 import { AboutPage } from './pages/About';
 import useWindowResize from './components/use-windows-resize';
+import { Keepo } from './components/dashboard/builder-page/builder-page';
 
 
 
@@ -104,6 +105,9 @@ function App() {
   const [pesquisadoresSelecionados , setPesquisadoresSelecionados] = useState<PesquisadoresSelecionados[]>([])
   const [messagesMaria, setMessagesMaria] = useState<any[]>([]);
 const [idDocumentBarema, setIdDocumentBarema] = useState('')
+const [keepoData, setKeepoData] = useState<Keepo>({} as Keepo);
+
+
 
 const storedIsCollapsed = localStorage.getItem("isCollapsed");
 const [isCollapsed, setIsCollapsed] = useState(
@@ -242,8 +246,8 @@ useEffect(() => {
       permission , setPermission,
       simcc, setSimcc,
       isCollapsedRight, setIsCollapsedRight,
-      test, setTest
-
+      test, setTest,
+      keepoData, setKeepoData
     }}
     >
     
