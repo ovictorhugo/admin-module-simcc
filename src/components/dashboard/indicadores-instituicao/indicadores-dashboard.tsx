@@ -253,7 +253,7 @@ function generateYearSemesterArray(startYear: number, startSemester: number, end
 export function IndicadoresDashboard() {
   const { isOpen, type } = useModalDashboard();
 
-  
+
 
   const { onOpen } = useModal()
 
@@ -269,7 +269,7 @@ export function IndicadoresDashboard() {
 
   const [total, setTotal] = useState<TotalPatrimonios[]>([]);
 
-  
+
   const [profile, setProfile] = useState({
     img_perfil: '',
     img_background: '',
@@ -278,7 +278,7 @@ export function IndicadoresDashboard() {
   });
 
   const urlPatrimonioInsert = `${urlGeralAdm}/InstitutionRest/Query/Count?institution_id=${user?.institution_id}`;
-console.log(urlPatrimonioInsert)
+  console.log(urlPatrimonioInsert)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -299,7 +299,7 @@ console.log(urlPatrimonioInsert)
             img_perfil: '',
             img_background: '',
             institution_id: data.institution_id,
-        
+
           });
         }
       } catch (err) {
@@ -619,10 +619,10 @@ console.log(urlPatrimonioInsert)
 
   console.log(profile)
 
- const storage = getStorage();
+  const storage = getStorage();
   const db = getFirestore();
 
- // Função para buscar as imagens do Firebase com base no 'institution_id'
+  // Função para buscar as imagens do Firebase com base no 'institution_id'
   // 🔹 Busca imagens do Firestore
   const fetchImages = async () => {
     try {
@@ -636,7 +636,7 @@ console.log(urlPatrimonioInsert)
           ...prevProfile,
           img_background: data?.img_background || "",
           img_perfil: data?.img_perfil || "",
-      
+
         }));
       } else {
         console.log("Documento não encontrado. Criando um novo...");
@@ -658,7 +658,7 @@ console.log(urlPatrimonioInsert)
     fileInput.type = "file";
     fileInput.accept = "image/*";
     fileInput.click();
-  
+
     fileInput.onchange = async (event) => {
       const file = (event.target as HTMLInputElement).files?.[0];
       if (!file) return;
@@ -668,24 +668,24 @@ console.log(urlPatrimonioInsert)
         console.error("Erro: institution_id não está definido!");
         return;
       }
-  
+
       try {
         const storagePath = `profiles/${profile.institution_id}/${folder}/${file.name}`;
         const storageRef = ref(storage, storagePath);
         console.log("Uploading to:", storageRef.fullPath);
-  
+
         await uploadBytes(storageRef, file);
         const downloadURL = await getDownloadURL(storageRef);
-  
+
         // 🔹 Atualiza Firestore, verificando se o caminho é válido
         const docRef = doc(db, "profiles", profile.institution_id);
         if (!docRef) {
           console.error("Erro: docRef inválido!");
           return;
         }
-  
+
         await setDoc(docRef, { [`img_${folder}`]: downloadURL }, { merge: true });
-  
+
         // 🔹 Atualiza estado
         setProfile((prevProfile) => ({
           ...prevProfile,
@@ -697,11 +697,11 @@ console.log(urlPatrimonioInsert)
         toast("Imagem atualizada", {
           description: "Documento carregado no banco de dados",
           action: {
-              label: "Fechar",
-              onClick: () => console.log("Undo"),
+            label: "Fechar",
+            onClick: () => console.log("Undo"),
           },
-      })
-  
+        })
+
         console.log(`Upload concluído: ${downloadURL}`);
       } catch (error) {
         console.error("Erro no upload:", error);
@@ -709,10 +709,10 @@ console.log(urlPatrimonioInsert)
         toast("Erro ao atualizar imagem", {
           description: "Documento não carregado no banco de dados",
           action: {
-              label: "Fechar",
-              onClick: () => console.log("Undo"),
+            label: "Fechar",
+            onClick: () => console.log("Undo"),
           },
-      })
+        })
       }
     };
   };
@@ -761,46 +761,46 @@ console.log(urlPatrimonioInsert)
 
             <TabsContent value="all" className="h-auto flex flex-col gap-4 md:gap-8  mt-2">
               <div className="flex flex-col items-center md:flex-row gap-6 w-full">
-                
-              <div className="w-full">
-      {/* Seção de Background */}
-      <Alert
-        className="h-[200px] flex justify-end bg-no-repeat bg-center bg-cover"
-        style={{ backgroundImage: `url(${profile.img_background})` }}
-      >
-        <Button variant="outline" size="sm" onClick={() => handleUpload("background")}>
-          <Upload size={16} /> Alterar imagem
-        </Button>
-      </Alert>
 
-      {/* Avatar do usuário */}
-      <div className="relative group w-fit -top-16 px-16">
-        <Alert
-          className="aspect-square   bg-no-repeat bg-center bg-contain rounded-md h-28 bg-white dark:bg-neutral-900"
-          style={{ backgroundImage: `url(${profile.img_perfil})` }}
-        ></Alert>
+                <div className="w-full">
+                  {/* Seção de Background */}
+                  <Alert
+                    className="h-[200px] flex justify-end bg-no-repeat bg-center bg-cover"
+                    style={{ backgroundImage: `url(${profile.img_background})` }}
+                  >
+                    <Button variant="outline" size="sm" onClick={() => handleUpload("background")}>
+                      <Upload size={16} /> Alterar imagem
+                    </Button>
+                  </Alert>
 
-        {/* Overlay de Upload */}
-        <div
-          className="aspect-square rounded-md h-28 group-hover:flex bg-black/20 items-center justify-center absolute hidden top-0 z-[1] cursor-pointer"
-          onClick={() => handleUpload("profile")}
-        >
-          <Upload size={20} />
-        </div>
-      </div>
+                  {/* Avatar do usuário */}
+                  <div className="relative group w-fit -top-16 px-16">
+                    <Alert
+                      className="aspect-square   bg-no-repeat bg-center bg-contain rounded-md h-28 bg-white dark:bg-neutral-900"
+                      style={{ backgroundImage: `url(${profile.img_perfil})` }}
+                    ></Alert>
 
-      <div className="md:px-16 -top-8 relative">
-      <h1 className="text-2xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
-      {total.map((props) => props.name)}
-              </h1>
-              <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><Hash size={12} />{total.map((props) => props.institution_id)}</div>
-      </div>
-    </div>
+                    {/* Overlay de Upload */}
+                    <div
+                      className="aspect-square rounded-md h-28 group-hover:flex bg-black/20 items-center justify-center absolute hidden top-0 z-[1] cursor-pointer"
+                      onClick={() => handleUpload("profile")}
+                    >
+                      <Upload size={20} />
+                    </div>
+                  </div>
+
+                  <div className="md:px-16 -top-8 relative">
+                    <h1 className="text-2xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+                      {total.map((props) => props.name)}
+                    </h1>
+                    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><Hash size={12} />{total.map((props) => props.institution_id)}</div>
+                  </div>
+                </div>
 
 
-              
+
               </div>
-             
+
               <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
                 <Alert className="p-0">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -899,7 +899,7 @@ console.log(urlPatrimonioInsert)
             </TabsContent>
 
             <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8">
-             
+
 
 
               <div className="">
@@ -914,7 +914,7 @@ console.log(urlPatrimonioInsert)
                   da instituição
                 </h1>
                 <p className="max-w-[750px]  text-lg font-light text-foreground">Visão geral dos pesquisadores cadastrados na plataforma</p>
-               
+
 
               </div>
 
@@ -1291,10 +1291,6 @@ console.log(urlPatrimonioInsert)
                     </CardContent>
 
                   </div>
-
-
-
-
                 </Alert>
 
                 <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
