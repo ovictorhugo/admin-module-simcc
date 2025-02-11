@@ -468,12 +468,9 @@ export function SearchModal() {
   };
 
 
-
-
-
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}  >
-      <DialogContent className="p-0 border-none min-w-[60vw] bg-transparent dark:bg-transparent">
+      <DialogContent className="p-0 border-none min-w-[60vw] px-4 mx-auto md:px-0 bg-transparent dark:bg-transparent">
 
         <Alert onKeyDown={handleEnterPress} className="h-14 bg-white p-2 flex items-center gap-3 justify-between">
           <div className="flex items-center gap-2 w-full flex-1">

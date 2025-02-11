@@ -607,7 +607,7 @@ export function InitialHome() {
           </h1>
           <p className="max-w-[750px] text-center text-lg font-light text-foreground"></p>
 
-          <div className="lg:max-w-[60vw] lg:w-[60vw] w-full ">
+          <div className="lg:max-w-[60vw] lg:w-[60vw] w-full">
             <Search />
           </div>
 
@@ -625,7 +625,6 @@ export function InitialHome() {
               </div>
             ))}
           </div>
-
         </div>
       </div>
 
