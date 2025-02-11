@@ -22,30 +22,30 @@ import {
 } from "../../components/ui/table"
 
 type Research = {
-    article_A1: string,
-    article_A2: string,
-    article_A3: string,
-    article_A4: string,
-    article_B1: string,
-    article_B2: string,
-    article_B3: string,
-    article_B4: string,
-    article_C: string,
-    article_SQ: string,
+    A1: string,
+    A2: string,
+    A3: string,
+    A4: string,
+    B1: string,
+    B2: string,
+    B3: string,
+    B4: string,
+    C: string,
+    SQ: string,
     book: string,
     book_chapter: string,
     brand: string,
     event_organization: string,
-    guidance_d_a: string,
-    guidance_d_c: string,
-    guidance_e_a: string,
-    guidance_e_c: string,
-    guidance_g_a: string,
-    guidance_g_c: string,
-    guidance_ic_a: string,
-    guidance_ic_c: string,
-    guidance_m_a: string,
-    guidance_m_c: string,
+    d_in_progress: string,
+    d_completed: string,
+    e_in_progress: string,
+    e_completed: string,
+    g_in_progress: string,
+    g_completed: string,
+    ic_in_progress: string,
+    ic_completed: string,
+    m_in_progress: string,
+    m_completed: string,
     participation_event: string,
     patent: string,
     researcher: string,
@@ -59,8 +59,8 @@ type Research = {
     city: string,
     area: string,
     graduation: string,
-
 }
+
 
 interface PesquisadoresSelecionados {
     id: string,
@@ -460,9 +460,8 @@ export function BaremasHome() {
 
     //select
 
-    const selecionarCriterio = (grupoIndex: number, categoriaIndex: number, criterioId: number, criterioItem: string, pesquisadores: Research[]) => {
+    const selecionarCriterio = (grupoIndex: number, categoriaIndex: number, criterioId: number, criterioItem: string) => {
         const novosGrupos = grupos.map((grupo, index) => {
-            console.log("pesquisadores update ", pesquisadores, "criterio id", criterioId)
             if (index === grupoIndex) {
                 const novasCategorias = grupo.categorias.map((categoria, idx) => {
                     if (idx === categoriaIndex) {
@@ -470,7 +469,6 @@ export function BaremasHome() {
                             ...categoria,
                             id_criterio: criterioId,
                             criterio: criterioItem,
-                            pesquisadores: pesquisadores.filter(pesquisador => pesquisador.graduation === criterioItem)
                         };
                     }
                     return categoria;
@@ -506,9 +504,6 @@ export function BaremasHome() {
         novosGrupos[grupoIndex].titulo = value;
         setGrupos(novosGrupos);
     };
-
-
-
 
     //const config
     const config = [
@@ -555,14 +550,10 @@ export function BaremasHome() {
         })
     }
 
-
-
     // Função para calcular a soma das pontuações máximas de todas as categorias do grupo
     const calcularSomaPontuacaoMaxima = (grupo: any) => {
         return grupo.categorias.reduce((total, categoria) => total + parseInt(categoria.pontuacao_max), 0);
     };
-
-
 
     // soma de pontos
     const handleResearcherUpdate = (newResearcherData: PesquisadorUpdate) => {
@@ -666,9 +657,10 @@ export function BaremasHome() {
                     }
                 });
 
+                console.log("URLLLL: ", url)
+
                 const data = await response.json();
 
-                console.log("PESQUISADORESSSSSSS: ", data)
                 if (data) {
                     setResearcherSelecionados(data);
                 }
@@ -989,7 +981,6 @@ export function BaremasHome() {
                                                                                 <TableHead className="w-[100px] min-w-[100px]">Pontuação</TableHead>
                                                                                 <TableHead className="w-[200px] min-w-[200px]">Pontuação máxima</TableHead>
                                                                                 <TableHead className="text-right w-ful">Total</TableHead>
-                                                                                <TableHead className="text-right w-ful"></TableHead>
                                                                             </TableRow>
                                                                         </TableHeader>
                                                                     )}
@@ -1042,7 +1033,7 @@ export function BaremasHome() {
                                                                                                                         <Button
                                                                                                                             variant={'ghost'}
                                                                                                                             className="text-left justify-start"
-                                                                                                                            onClick={() => selecionarCriterio(grupoIndex, index, criterio.id, criterio.value, pesquisadoresSelecionados)}
+                                                                                                                            onClick={() => selecionarCriterio(grupoIndex, index, criterio.id, criterio.value)}
                                                                                                                             key={criterio.id} value={criterio.value}>
 
                                                                                                                             {criterio.value}
@@ -1065,7 +1056,7 @@ export function BaremasHome() {
                                                                                         <Input className={`w-24 ${categoria.pontos > categoria.pontuacao_max && ('border-red-500')}`} name="pontuacao_max" value={categoria.pontuacao_max} onChange={(e) => handleInputChange(e, index, grupo.id)} />
                                                                                     </TableCell>
 
-                                                                                    <TableCell className="flex justify-end">
+                                                                                    <TableCell className="flex justify-end pr-12">
                                                                                         <div className="flex w-fit justify-between items-center gap-3 bg">
                                                                                             <div className="overflow-x-auto flex-nowrap flex-1">
                                                                                                 <PesquisadorItemBarema

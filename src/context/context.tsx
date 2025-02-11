@@ -39,7 +39,6 @@ interface ItemsSelecionados {
 
 interface PesquisadoresSelecionados {
   id: string,
-  id_criterio: number,
   name: string,
   university: string,
   lattes_id: string,
