@@ -15,7 +15,7 @@ import {
 import { ScrollArea } from "../ui/scroll-area";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { storage } from "../../lib/firebase";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -30,18 +30,20 @@ import { ColorPicker } from "../ui/color-picker";
 import { AddItem } from "../dashboard/builder-page/add-item";
 import { Content, items, itemsEspeciais } from "../dashboard/builder-page/builder-page";
 import { Textarea } from "../ui/textarea";
+import { UserContext } from "../../context/context";
 
 
 export function EditorpageModal() {
     const { onClose, isOpen, type: typeModal, data } = useModalSecundary();
     const isModalOpen = (isOpen && typeModal === 'editor-page') 
 
+    const {keepoData, setKeepoData} = useContext(UserContext)
 
         const [tab, setTab] = useState('inicio')
 
           const addContentItem = (type: Content["type"], index:number) => {
                    if(type == 'slider' || 'list' || 'list-number') {
-                    data?.setKeepoData?.((prev) => ({
+                    setKeepoData((prev) => ({
                       ...prev,
                       content: [
                         ...prev.content,
@@ -54,7 +56,7 @@ export function EditorpageModal() {
                       ],
                     }));
                    } else {
-                    data?.setKeepoData?.((prev) => ({
+                    setKeepoData((prev) => ({
                       ...prev,
                       content: [
                         ...prev.content,
@@ -168,9 +170,9 @@ export function EditorpageModal() {
     <Label>Título</Label>
     <Input
         type="text"
-        value={data?.keepoData?.profile_info.jobTitle}
+        value={keepoData.profile_info.jobTitle}
         onChange={(e) =>
-            data?.setKeepoData?.((prev) => ({
+            setKeepoData((prev) => ({
                 ...prev,
                 profile_info: { ...prev.profile_info, jobTitle: e.target.value },
             }))
@@ -184,7 +186,7 @@ export function EditorpageModal() {
         type="text"
         value={data?.keepoData?.profile_info.jobTitle}
         onChange={(e) =>
-            data?.setKeepoData?.((prev) => ({
+            setKeepoData((prev) => ({
                 ...prev,
                 profile_info: { ...prev.profile_info, jobTitle: e.target.value },
             }))
@@ -196,9 +198,9 @@ export function EditorpageModal() {
     <Label>Descrição</Label>
     <Textarea
     
-        value={data?.keepoData?.profile_info.supporting}
+        value={keepoData.profile_info.supporting}
         onChange={(e) =>
-            data?.setKeepoData?.((prev) => ({
+            setKeepoData((prev) => ({
                 ...prev,
                 profile_info: { ...prev.profile_info, supporting: e.target.value },
             }))
@@ -214,9 +216,9 @@ export function EditorpageModal() {
     <Label>Título</Label>
     <Input
         type="text"
-        value={data?.keepoData?.profile_info.jobTitle}
+        value={keepoData.profile_info.jobTitle}
         onChange={(e) =>
-            data?.setKeepoData?.((prev) => ({
+            setKeepoData?.((prev) => ({
                 ...prev,
                 profile_info: { ...prev.profile_info, jobTitle: e.target.value },
             }))
@@ -246,9 +248,9 @@ export function EditorpageModal() {
     <div className="flex  gap-4">
     <Input
         type="text"
-        value={data?.keepoData?.app.button_color}
+        value={keepoData.app.button_color}
         onChange={(e) =>
-            data?.setKeepoData?.((prev) => ({
+            setKeepoData((prev) => ({
                 ...prev,
                 app: { ...prev.app, button_color: e.target.value },
             }))
@@ -257,12 +259,12 @@ export function EditorpageModal() {
 
 <ColorPicker
           onChange={(v) => {
-            data?.setKeepoData?.((prev) => ({
+            setKeepoData((prev) => ({
                 ...prev,
                 app: { ...prev.app, button_color: v },
             }))
           }}
-          value={data?.keepoData?.app.button_color || ''}
+          value={keepoData.app.button_color || ''}
         />
 
 
@@ -274,9 +276,9 @@ export function EditorpageModal() {
     <div className="flex  gap-4">
     <Input
         type="text"
-        value={data?.keepoData?.app.button_text_color}
+        value={keepoData.app.button_text_color}
         onChange={(e) =>
-            data?.setKeepoData?.((prev) => ({
+            setKeepoData((prev) => ({
                 ...prev,
                 app: { ...prev.app, button_text_color: e.target.value },
             }))
@@ -285,12 +287,12 @@ export function EditorpageModal() {
 
 <ColorPicker
           onChange={(v) => {
-            data?.setKeepoData?.((prev) => ({
+            setKeepoData((prev) => ({
                 ...prev,
                 app: { ...prev.app, button_text_color: v },
             }))
           }}
-          value={data?.keepoData?.app.button_text_color || ''}
+          value={keepoData.app.button_text_color || ''}
         />
 
 
@@ -314,7 +316,7 @@ export function EditorpageModal() {
     <AccordionContent className="mt-4 flex flex-col gap-4">
     <div className="gap-4 grid grid-cols-2">
     {items.map((item, index) => (
-        <div className="cursor-pointer rounded-md " onClick={() =>   addContentItem(item.type, ((data?.keepoData?.content.length || 0) + 1 ))}>
+        <div className="cursor-pointer rounded-md " onClick={() =>   addContentItem(item.type, ((keepoData.content.length || 0) + 1 ))}>
             <AddItem
           key={index} 
           titulo={item.titulo} 
@@ -332,7 +334,7 @@ export function EditorpageModal() {
     <AccordionContent className="mt-4 flex flex-col gap-4">
     <div className="gap-4 grid grid-cols-2">
     {itemsEspeciais.map((item, index) => (
-        <div className="cursor-pointer rounded-md " onClick={() =>   addContentItem(item.type, ((data?.keepoData?.content.length || 0) + 1))}>
+        <div className="cursor-pointer rounded-md " onClick={() =>   addContentItem(item.type, ((keepoData.content.length || 0) + 1))}>
             <AddItem
           key={index} 
           titulo={item.titulo} 

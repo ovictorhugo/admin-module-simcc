@@ -68,8 +68,8 @@ export function Header() {
   const { onOpen } = useModal()
 
   return (
-    <div className={'top-0 w-full flex items-center bg-white'}>
-      <header className={`h-[40px] px-4 flex justify-between bg-white md:bg-neutral-100 dark:bg-black  gap-2 items-center w-full relative`}>
+    <div className={'top-0 w-full'}>
+      <header className={`h-[40px] px-4 mb-2 flex justify-between bg-neutral-50 dark:bg-neutral-900 md:bg-neutral-100 md:dark:bg-black  gap-2 items-center w-full relative`}>
         <div className="flex gap-2">
           <div className="flex w-full md:gap-3 gap-1 items-center md:h-full md:justify-center">
             {version ? (

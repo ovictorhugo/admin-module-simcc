@@ -105,8 +105,29 @@ function App() {
   const [pesquisadoresSelecionados , setPesquisadoresSelecionados] = useState<PesquisadoresSelecionados[]>([])
   const [messagesMaria, setMessagesMaria] = useState<any[]>([]);
 const [idDocumentBarema, setIdDocumentBarema] = useState('')
-const [keepoData, setKeepoData] = useState<Keepo>({} as Keepo);
-
+const [keepoData, setKeepoData] = useState<Keepo>({
+  app: {
+    background_color: "",
+    background_image:'',
+    text_color: "",
+    status:"publicar",
+    card_color: "",
+    card_text_color: "",
+    button_color: "",
+    button_text_color: "",
+  },
+  profile_info: {
+    avatar: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    jobTitle: "",
+    supporting: "",
+    button_text: "",
+    link: "",
+  },
+  content: [],
+});
 
 
 const storedIsCollapsed = localStorage.getItem("isCollapsed");
