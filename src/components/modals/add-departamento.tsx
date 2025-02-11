@@ -50,9 +50,9 @@ export function AddDepartamento() {
   const [img, setImg] = useState('');
 
   useEffect(() => {
-    if(typeModal == 'edit-departamento') {
+    if (typeModal == 'edit-departamento') {
       setDepId(data.dep_id || uuid.replace(/\D/g, "").slice(0, 10))
-      setOrgCod(data.org_cod  || '')
+      setOrgCod(data.org_cod || '')
       setDepNom(data.dep_nom || '')
       setDepDes(data.dep_des || '')
       setDepEmail(data.dep_email || '')
@@ -62,8 +62,8 @@ export function AddDepartamento() {
       setDepTel(data.dep_tel || '')
       setImg(data.img_data || '')
     }
-}, [data]);
-  
+  }, [data]);
+
 
   const [, setFileInfo] = useState({
     name: "",
@@ -116,15 +116,15 @@ export function AddDepartamento() {
         });
         return;
       }
-  
+
       let urlDepartamentoInsert = urlGeralAdm + `departamentos`;
-  
+
       if (typeModal === "edit-departamento") {
         urlDepartamentoInsert = urlGeralAdm + `departamentos/update`;
       }
-  
+
       const data = new FormData();
-  
+
       const dataDep = {
         dep_id: depId,
         org_cod: orgCod,
@@ -135,18 +135,18 @@ export function AddDepartamento() {
         dep_tel: depTel,
         dep_sigla: depSigla,
       };
-  
+
       Object.entries(dataDep).forEach(([key, value]) => {
         data.append(key, value as string);
       });
-  
+
       // Adicionar o arquivo apenas se ele existir ou se estiver adicionando um novo departamento
       if (pdfs.img_data && typeModal === "add-departamento") {
         data.append("img_data", pdfs.img_data);
       } else if (pdfs.img_data && typeModal === "edit-departamento") {
         data.append("img_data", pdfs.img_data);
       }
-  
+
       const response = await axios.post(urlDepartamentoInsert, data, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -156,7 +156,7 @@ export function AddDepartamento() {
           "Access-Control-Max-Age": "3600",
         },
       });
-  
+
       if (response.status === 201 || response.status === 200) {
         toast("Dados enviados com sucesso", {
           description: "Todos os dados foram enviados.",
@@ -165,7 +165,7 @@ export function AddDepartamento() {
             onClick: () => console.log("Fechar"),
           },
         });
-  
+
         setDepId(uuid.replace(/\D/g, "").slice(0, 10));
         setOrgCod("");
         setDepNom("");
@@ -176,7 +176,7 @@ export function AddDepartamento() {
         setDepSigla("");
         setFileInfo({ name: "", size: 0 });
         setPdfs({ img_data: null });
-  
+
         onClose();
       }
     } catch (error) {
@@ -190,12 +190,12 @@ export function AddDepartamento() {
       });
     }
   };
-  
+
 
   return (
     <Sheet open={isModalOpen} onOpenChange={onClose}>
       <SheetContent
-        className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[50vw]`}
+        className={`p-0 dark:bg-neutral-900 dark:border-gray-600 w-[50vw]`}
       >
         <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-b-neutral-600">
           <div className="flex items-center gap-3">
@@ -224,21 +224,21 @@ export function AddDepartamento() {
         <div>
           <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
             <div className="mb-8 flex justify-between items-center">
-            <div >
-              <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
-                Departamentos
-              </p>
+              <div >
+                <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
+                  Departamentos
+                </p>
 
-              <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
-                {typeModal === "add-departamento"
-                  ? "Adicionar departamento"
-                  : "Editar departamento"}
-              </h1>
-            </div>
+                <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+                  {typeModal === "add-departamento"
+                    ? "Adicionar departamento"
+                    : "Editar departamento"}
+                </h1>
+              </div>
 
-            <div>
-           {typeModal == 'edit-departamento' && ( <img className="h-12 mix-blend-multiply" src={`data:image/jpeg;base64,${img}`}  />)}
-            </div>
+              <div>
+                {typeModal == 'edit-departamento' && (<img className="h-12 mix-blend-multiply" src={`data:image/jpeg;base64,${img}`} />)}
+              </div>
             </div>
             <div className="flex gap-3 flex-col">
               <div className="flex flex-col gap-3 w-full">
@@ -250,7 +250,7 @@ export function AddDepartamento() {
                       name="dep_nom"
                       value={depNom}
                       onChange={(e) => setDepNom(e.target.value)}
-                    
+
                     />
                   </div>
                   <div className="grid w-1/3 items-center gap-1.5">
@@ -260,7 +260,7 @@ export function AddDepartamento() {
                       name="dep_sigla"
                       value={depSigla}
                       onChange={(e) => setDepSigla(e.target.value)}
-                   
+
                     />
                   </div>
                 </div>
@@ -272,7 +272,7 @@ export function AddDepartamento() {
                       name="org_cod"
                       value={orgCod}
                       onChange={(e) => setOrgCod(e.target.value)}
-                     
+
                     />
                   </div>
                   <div className="grid w-2/3 items-center gap-1.5">
@@ -282,14 +282,14 @@ export function AddDepartamento() {
                       name="dep_email"
                       value={depEmail}
                       onChange={(e) => setDepEmail(e.target.value)}
-                    
+
                     />
                   </div>
                 </div>
 
-              
+
                 <div className="flex w-full gap-3">
-                <div className="grid w-2/3 items-center gap-1.5">
+                  <div className="grid w-2/3 items-center gap-1.5">
                     <Label>Site*</Label>
                     <Input
                       type="text"
@@ -305,10 +305,10 @@ export function AddDepartamento() {
                       name="dep_tel"
                       value={depTel}
                       onChange={handlePhoneChange}
-                     
+
                     />
                   </div>
-                 
+
                 </div>
                 <div className="grid w-full items-center gap-1.5">
                   <Label>Imagem</Label>
@@ -321,20 +321,20 @@ export function AddDepartamento() {
                     name="dep_des"
                     value={depDes}
                     onChange={(e) => setDepDes(e.target.value)}
-                   
+
                   />
                 </div>
               </div>
 
               <Button onClick={handleSubmit} className="mt-3 ml-auto flex ">
-              {typeModal === "edit-departamento" ? <PencilSimple size={16} className="" /> : <Plus size={16} className="" />}
-            {typeModal === "edit-departamento" ? "Editar departamento" : "Adicionar departamento"}
-          </Button>
+                {typeModal === "edit-departamento" ? <PencilSimple size={16} className="" /> : <Plus size={16} className="" />}
+                {typeModal === "edit-departamento" ? "Editar departamento" : "Adicionar departamento"}
+              </Button>
             </div>
           </ScrollArea>
         </div>
 
-       
+
       </SheetContent>
     </Sheet>
   );

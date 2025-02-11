@@ -11,7 +11,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 
 import { toast } from "sonner"
 
-
 import {
     Table,
     TableBody,
@@ -1035,7 +1034,6 @@ export function BaremasHome() {
                                                                                                                             className="text-left justify-start"
                                                                                                                             onClick={() => selecionarCriterio(grupoIndex, index, criterio.id, criterio.value)}
                                                                                                                             key={criterio.id} value={criterio.value}>
-
                                                                                                                             {criterio.value}
                                                                                                                         </Button>
                                                                                                                     ))}
@@ -1056,7 +1054,7 @@ export function BaremasHome() {
                                                                                         <Input className={`w-24 ${categoria.pontos > categoria.pontuacao_max && ('border-red-500')}`} name="pontuacao_max" value={categoria.pontuacao_max} onChange={(e) => handleInputChange(e, index, grupo.id)} />
                                                                                     </TableCell>
 
-                                                                                    <TableCell className="flex justify-end pr-12">
+                                                                                    <TableCell className="flex justify-end pr-12 relative">
                                                                                         <div className="flex w-fit justify-between items-center gap-3 bg">
                                                                                             <div className="overflow-x-auto flex-nowrap flex-1">
                                                                                                 <PesquisadorItemBarema
@@ -1071,7 +1069,7 @@ export function BaremasHome() {
                                                                                             <TooltipProvider>
                                                                                                 <Tooltip>
                                                                                                     <TooltipTrigger asChild>
-                                                                                                        <Button className="group-hover:flex whitespace-nowrap absolute  right-0" variant={'ghost'} size={'icon'} onClick={() => removerCriterio(grupoIndex, index)}>
+                                                                                                        <Button className="group-hover:flex whitespace-nowrap absolute top-1/2 right-0" variant={'ghost'} size={'icon'} onClick={() => removerCriterio(grupoIndex, index)}>
                                                                                                             <Trash size={16} />
                                                                                                         </Button>
                                                                                                     </TooltipTrigger>
@@ -1084,7 +1082,6 @@ export function BaremasHome() {
                                                                                     </TableCell>
                                                                                 </TableRow>
                                                                             ))
-
                                                                         )}
                                                                     </TableBody>
                                                                 </Table>

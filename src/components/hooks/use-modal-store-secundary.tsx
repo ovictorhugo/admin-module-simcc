@@ -22,24 +22,24 @@ interface ModalData {
   jcr_link?: string
   lattes_10_id?: string,
   researcher_id?: string
-  magazine?:string
-  lattes_id?:string
-  researcher?:string
+  magazine?: string
+  lattes_id?: string
+  researcher?: string
   id_delete?: string
 
-  keepoData?:Keepo
-      setKeepoData?: React.Dispatch<React.SetStateAction<Keepo>>;
+  keepoData?: Keepo
+  setKeepoData?: React.Dispatch<React.SetStateAction<Keepo>>;
 
-  abstract?:string,
-  article_institution?:string,
-  authors?:string
-  authors_institution?:string
-  citations_count?:string 
-  issn?:string 
-  keywords?:string 
-  landing_page_url?:string 
-  language?:string 
-  pdf?:string
+  abstract?: string,
+  article_institution?: string,
+  authors?: string
+  authors_institution?: string
+  citations_count?: string
+  issn?: string
+  keywords?: string
+  landing_page_url?: string
+  language?: string
+  pdf?: string
 
   code?: string
   area?: string
@@ -49,38 +49,38 @@ interface ModalData {
   institution_id?: string
   description?: string
   url_image?: string
-  city?:string
+  city?: string
   visible?: string
-  qtd_discente?:string
-  qtd_colaborador?:string
-  qtd_permanente?:string
-  acronym?:string
+  qtd_discente?: string
+  qtd_colaborador?: string
+  qtd_permanente?: string
+  acronym?: string
 
-  researcher_name?:string
-  id_dep?:string
+  researcher_name?: string
+  id_dep?: string
 
-  relevance?:boolean
-  has_image?:boolean
+  relevance?: boolean
+  has_image?: boolean
 
-  type_reset?:string
+  type_reset?: string
 
   agency_code?: string
   agency_name?: string
   nature?: string
-  
+
   end_year?: string
-   
+
   number_academic_masters?: string
   number_phd?: string
   number_specialists?: string
-  number_undergraduates?:string
-  project_name?:string
-  start_year?:string
-  status?:string
+  number_undergraduates?: string
+  project_name?: string
+  start_year?: string
+  status?: string
 
-  production?:Production[]
-  foment?:Forment[]
-  components?:Components[]
+  production?: Production[]
+  foment?: Forment[]
+  components?: Components[]
   apiUrl?: string;
   query?: string;
   data?: any;
@@ -88,27 +88,27 @@ interface ModalData {
 }
 
 interface Components {
-  citations:string 
-  lattes_id:string 
-  name:string
+  citations: string
+  lattes_id: string
+  name: string
 }
 
 interface Production {
 
-  title:string
-  type:string
+  title: string
+  type: string
 }
 
 interface Forment {
-  agency_code:string
-  agency_name:string
-  nature:string
+  agency_code: string
+  agency_name: string
+  nature: string
 }
 
 interface ModalStoreSecundary {
   type: ModalType | null;
   isOpen: boolean;
-  onOpen: (type: ModalType, data?:ModalData) => void;
+  onOpen: (type: ModalType, data?: ModalData) => void;
   onClose: () => void;
   data: ModalData;
   onUpdate: (newData: Partial<ModalData>) => void;
@@ -121,11 +121,11 @@ export const useModalSecundary = create<ModalStoreSecundary>((set: any) => ({
   onOpen: (type, newData = {}) => {
     // Get primary modal state but don't modify it
     const primaryModal = useModal.getState();
-    
+
     set({ isOpen: true, type, data: newData });
   },
   onClose: () => set({ type: null, isOpen: false }),
-  onUpdate: (newData) => set((state: ModalStoreSecundary) => ({ 
-    data: { ...state.data, ...newData } 
+  onUpdate: (newData) => set((state: ModalStoreSecundary) => ({
+    data: { ...state.data, ...newData }
   })),
 }));

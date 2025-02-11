@@ -17,16 +17,16 @@ const ModalContentSecundary = () => {
   const { type } = useModalSecundary();
 
   switch (type) {
-      case 'articles-modal':
-        return <ArticlesModal/>
-        case 'edit-article':
-          return <EditArticle/>
-        case 'project-modal':
-          return <ProjectModal/>
-          case 'coautores':
-            return <CoautoresModal/>
-            case 'editor-page':
-              return <EditorpageModal/>
+    case 'articles-modal':
+      return <ArticlesModal />
+    case 'edit-article':
+      return <EditArticle />
+    case 'project-modal':
+      return <ProjectModal />
+    case 'coautores':
+      return <CoautoresModal />
+    case 'editor-page':
+      return <EditorpageModal />
     default:
       return null;
   }

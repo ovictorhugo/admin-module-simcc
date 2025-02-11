@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { useModalSecundary } from "./use-modal-store-secundary";
 
-export type ModalType = "search" | "add-graduate-program" | "map-researchers-modal" | 'researcher-modal' | 'confirm-delete-researcher'|'confirm-delete-pos-graduate-program' | 'edit-graduate-program' | 'add-researcher-graduation' | 'add-researcher-csv' | 'add-student-graduation' | 'add-grupo-pesquisa' | 'filters' | 'pesquisadores-selecionados' | 'list-student-program' | 'add-researcher-graduation-two' | 'gratuate-program' | 'confirm-delete-researcher-graduate-program' | 'reset-peso-producoes' | 'confirm-delete-student-graduate-program' | 'import-bolsistas' | 'import-docentes' | 'import-taes' | 'add-departamento' | 'confirm-delete-departamento' | 'edit-departamento' | 'import-disciplina' | 'confirm-delete-researcher-departament' | 'minha-area' | 'add-background' | 'relatar-problema'
+export type ModalType = "search" | "add-graduate-program" | "map-researchers-modal" | 'researcher-modal' | 'confirm-delete-researcher' | 'confirm-delete-pos-graduate-program' | 'edit-graduate-program' | 'add-researcher-graduation' | 'add-researcher-csv' | 'add-student-graduation' | 'add-grupo-pesquisa' | 'filters' | 'pesquisadores-selecionados' | 'list-student-program' | 'add-researcher-graduation-two' | 'gratuate-program' | 'confirm-delete-researcher-graduate-program' | 'reset-peso-producoes' | 'confirm-delete-student-graduate-program' | 'import-bolsistas' | 'import-docentes' | 'import-taes' | 'add-departamento' | 'confirm-delete-departamento' | 'edit-departamento' | 'import-disciplina' | 'confirm-delete-researcher-departament' | 'minha-area' | 'add-background' | 'relatar-problema'
 
 interface ModalData {
   id?: string,
@@ -21,21 +21,21 @@ interface ModalData {
   jcr_link?: string
   lattes_10_id?: string,
   researcher_id?: string
-  magazine?:string
-  lattes_id?:string
-  researcher?:string
+  magazine?: string
+  lattes_id?: string
+  researcher?: string
   id_delete?: string
 
-  abstract?:string,
-  article_institution?:string,
-  authors?:string
-  authors_institution?:string
-  citations_count?:string 
-  issn?:string 
-  keywords?:string 
-  landing_page_url?:string 
-  language?:string 
-  pdf?:string
+  abstract?: string,
+  article_institution?: string,
+  authors?: string
+  authors_institution?: string
+  citations_count?: string
+  issn?: string
+  keywords?: string
+  landing_page_url?: string
+  language?: string
+  pdf?: string
 
   graduate_program_id?: string
   code?: string
@@ -46,26 +46,26 @@ interface ModalData {
   institution_id?: string
   description?: string
   url_image?: string
-  city?:string
+  city?: string
   visible?: string
-  qtd_discente?:string
-  qtd_colaborador?:string
-  qtd_permanente?:string
-  acronym?:string
-  site?:string
+  qtd_discente?: string
+  qtd_colaborador?: string
+  qtd_permanente?: string
+  acronym?: string
+  site?: string
 
-  id_dep?:string
+  id_dep?: string
 
-  type_reset?:string
+  type_reset?: string
 
-  dep_id?:string
+  dep_id?: string
   org_cod?: string
   dep_nom?: string
   dep_des?: string
   dep_email?: string
   dep_site?: string
   dep_tel?: string
-  img_data?:string
+  img_data?: string
   dep_sigla?: string
 
   agency_code?: string
@@ -73,35 +73,35 @@ interface ModalData {
   nature?: string
 
   end_year?: string
-  
+
   number_academic_masters?: string
   number_phd?: string
   number_specialists?: string
-  number_undergraduates?:string
-  project_name?:string
-  start_year?:string
-  status?:string
+  number_undergraduates?: string
+  project_name?: string
+  start_year?: string
+  status?: string
 
-  production?:Production[]
-  foment?:Forment[]
-  components?:Components[]
+  production?: Production[]
+  foment?: Forment[]
+  components?: Components[]
 }
 
 interface Components {
-  title:string 
-  type:string 
+  title: string
+  type: string
 }
 
 interface Production {
-  citations:string 
-  lattes_id:string 
-  name:string
+  citations: string
+  lattes_id: string
+  name: string
 }
 
 interface Forment {
-  agency_code:string
-  agency_name:string
-  nature:string
+  agency_code: string
+  agency_name: string
+  nature: string
 }
 
 interface ModalStore {
