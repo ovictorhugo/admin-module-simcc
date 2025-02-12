@@ -56,6 +56,7 @@ export function ResearchersBloco(props: Research) {
                     departament={item.departament}
                     departments={item.departaments}
                     subsidy={item.subsidy}
+                    status={item.status}
                     graduate_programs={item.graduate_programs}
                     />
                 );
