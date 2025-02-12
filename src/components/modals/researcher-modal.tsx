@@ -7,6 +7,7 @@ import {
 
   DrawerFooter,
   DrawerHeader,
+  DrawerPortal,
 
 } from "../../components/ui/drawer"
 import { Button } from "../ui/button";
@@ -332,10 +333,12 @@ export function ResearcherModal() {
     return variations;
   }
 
+
   return (
     <>
-      <Drawer open={isModalOpen} onClose={onClose}    >
-        <DrawerContent onInteractOutside={onClose} className={`max-h-[88%] border border-b-0`} >
+      <Drawer open={isModalOpen} onClose={onClose}   >
+
+        <DrawerContent  onInteractOutside={onClose}  className={`max-h-[88%] border border-b-0`} >
           {researcher.length == 0 && (
             <div className="flex justify-center items-center h-[80vh] ">
               <div className="w-full flex flex-col items-center justify-center h-full">
@@ -894,6 +897,7 @@ export function ResearcherModal() {
           </div>
 
         </DrawerContent>
+
       </Drawer>
     </>
   )

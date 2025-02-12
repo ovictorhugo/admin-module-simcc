@@ -69,17 +69,15 @@ export function Header() {
 
   return (
     <div className={'top-0 w-full'}>
-      <header className={`h-[40px] mb-2 px-4 flex justify-between dark:bg-black items-center w-full`}>
-        <div className="flex items-center h-12 gap-4">
-          <div className="flex md:gap-3 md:items-center md:h-full md:justify-center">
+      <header className={`h-[40px] px-4 md:mb-2 flex justify-between bg-neutral-50 dark:bg-neutral-900 md:bg-neutral-100 md:dark:bg-black  gap-2 items-center w-full relative`}>
+        <div className="flex gap-2">
+          <div className="flex w-full md:gap-3 gap-1 items-center md:h-full md:justify-center">
             {version ? (
               <Link to={"/"} className="h-[18px]  " onClick={() => handleClick()} >{(theme == 'dark') ? (<LogoConecteeWhite />) : (<LogoConectee />)}</Link>
             ) : (
               <Link to={"/"} className="h-[18px]  " onClick={() => handleClick()} >{(theme == 'dark') ? (<LogoIaposWhite />) : (<LogoIapos />)}</Link>
             )}
-
             <Separator orientation="vertical" className="mx-2 md:mx-0 h-6 bg-slate-300" />
-
             <div className="min-w-max">
               {version ? (
                 <Link to={"https://www.eng.ufmg.br/portal/"} target="_blank" className="whitespace-nowrap "><img src={(theme == 'dark') ? (logo_4_white) : (logo_4)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
@@ -87,8 +85,7 @@ export function Header() {
                 <Link to={"https://www.senaicimatec.com.br/"} target="_blank" className="whitespace-nowrap "><img src={(theme == 'dark') ? (logo_5_white) : (logo_5)} alt="" className="whitespace-nowrap flex flex-1 h-[24px]" /></Link>
               )}
             </div>
-
-            {(role != '' && role != 'Visitante') && (<Badge className="  " variant={'outline'} >{role}</Badge>)}
+            <span className="absolute right-2 md:relative md:ml-3 md:mb-[1px]">{(role != '' && role != 'Visitante') && (<Badge className="  " variant={'outline'} >{role}</Badge>)}</span>
           </div>
         </div>
 

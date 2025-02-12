@@ -9,10 +9,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu"
-import {  MoreHorizontal, Trash, UserCheck } from "lucide-react"
-import { ArrowSquareOut,PencilSimple, Student} from "phosphor-react"
-import {  Eye, EyeSlash, Hash, MapPin, Star } from "phosphor-react"; 
-import {GraduationCapIcon } from "lucide-react";
+import { MoreHorizontal, Trash, UserCheck } from "lucide-react"
+import { ArrowSquareOut, PencilSimple, Student } from "phosphor-react"
+import { Eye, EyeSlash, Hash, MapPin, Star } from "phosphor-react";
+import { GraduationCapIcon } from "lucide-react";
 import { toast } from "sonner"
 import { Link } from "react-router-dom"
 import { useModal } from "../hooks/use-modal-store"
@@ -21,7 +21,7 @@ import { useModal } from "../hooks/use-modal-store"
 
 
 
-export type  PosGraduationsProps = {
+export type PosGraduationsProps = {
   graduate_program_id: string
   code: string
   name: string
@@ -32,7 +32,7 @@ export type  PosGraduationsProps = {
   institution_id: string
   description: string
   url_image: string
-  city:string
+  city: string
   visible: boolean
 }
 
@@ -41,58 +41,54 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
 
 
 
- {
-        accessorKey: "name",
-        header: "Nome do programa",
-        cell: ({ row }) => {
+  {
+    accessorKey: "name",
+    header: "Nome do programa",
+    cell: ({ row }) => {
 
-          return <div className="flex gap-2 items-center"> <img className="w-4  object-cover object-center  whitespace-nowrap" src={row.original.url_image}  /> {row.getValue("name")}</div>
-        }
-      },
-      {
-        accessorKey: "code",
-        header: "Código",
-        cell: ({ row }) => {
+      return <div className="flex gap-2 items-center"> <img className="w-4  object-cover object-center  whitespace-nowrap" src={row.original.url_image} /> {row.getValue("name")}</div>
+    }
+  },
+  {
+    accessorKey: "code",
+    header: "Código",
+    cell: ({ row }) => {
 
-            return <div className="flex gap-1 items-center"><Hash size={12}/> {row.getValue("code")}</div>
-          }
-      },
-      {
-        accessorKey: "type",
-        header: "Tipo",
-        cell: ({ row }) => {
+      return <div className="flex gap-1 items-center"><Hash size={12} /> {row.getValue("code")}</div>
+    }
+  },
+  {
+    accessorKey: "type",
+    header: "Tipo",
+    cell: ({ row }) => {
 
-          return <div className="flex gap-1 items-center"><GraduationCapIcon size={12}/> {row.getValue("type")}</div>
-        }
-      },
-      {
-        accessorKey: "city",
-        header: "Cidade",
-        cell: ({ row }) => {
+      return <div className="flex gap-1 items-center"><GraduationCapIcon size={12} /> {row.getValue("type")}</div>
+    }
+  },
+  {
+    accessorKey: "city",
+    header: "Cidade",
+    cell: ({ row }) => {
 
-          return <div className="flex gap-1 items-center"><MapPin size={12}/> {row.getValue("city")}</div>
-        }
+      return <div className="flex gap-1 items-center"><MapPin size={12} /> {row.getValue("city")}</div>
+    }
 
-      },
-      {
-        accessorKey: "rating",
-        header: "Classificação",
-        cell: ({ row }) => {
+  },
+  {
+    accessorKey: "rating",
+    header: "Classificação",
+    cell: ({ row }) => {
 
-          return <div className="flex gap-1 items-center"><Star size={12}/> {row.getValue("rating")}</div>
-        }
+      return <div className="flex gap-1 items-center"><Star size={12} /> {row.getValue("rating")}</div>
+    }
 
-      },
+  },
 
-     
-    
- 
- 
   {
     id: "actions",
     cell: ({ row }) => {
 
-     
+
       const API_KEY = import.meta.env.VITE_URLGERALADMIN
       const handleVisibleProgram = (id: string) => {
 
@@ -100,7 +96,7 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
         const fetchData = async () => {
 
           console.log(urlVisibleProgram)
-         
+
           try {
             const response = await fetch(urlVisibleProgram, {
               mode: 'cors',
@@ -115,7 +111,7 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
             });
             if (response.ok) {
 
-            
+
               toast("Visibilidade alterada", {
                 description: "Operação realizada com sucesso!",
                 action: {
@@ -123,9 +119,9 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
                   onClick: () => console.log("Undo"),
                 },
               })
-            } 
-      
-          
+            }
+
+
           } catch (err) {
             toast("Erro ao mudar visibilidade", {
               description: "Tente novamente",
@@ -134,63 +130,59 @@ export const columns: ColumnDef<PosGraduationsProps>[] = [
                 onClick: () => console.log("Undo"),
               },
             })
-          } 
+          }
         };
         fetchData();
-     
-    
       };
 
-      const {onOpen} = useModal()
+      const { onOpen } = useModal()
 
-    
- 
       return (
         <div className="flex gap-3 items-center">
 
-       
-          <Button  onClick={() => handleVisibleProgram (row.original.graduate_program_id)} variant="outline"  className="ml-auto p-0  h-8 w-8 text-sm text-gray-500 dark:text-gray-300 flex items-center">
-            {row.original.visible ? (<EyeSlash size={16}/>):(<Eye size={16}/>)}</Button>
+
+          <Button onClick={() => handleVisibleProgram(row.original.graduate_program_id)} variant="outline" className="ml-auto p-0  h-8 w-8 text-sm text-gray-500 dark:text-gray-300 flex items-center">
+            {row.original.visible ? (<EyeSlash size={16} />) : (<Eye size={16} />)}</Button>
 
           <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size={'icon'} className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-          <Link to={`/pos-graducao/${row.original.code}`}><DropdownMenuItem className="flex items-center gap-3"><ArrowSquareOut className="h-4 w-4" />Visualizar página</DropdownMenuItem></Link>
-          <DropdownMenuItem className="flex items-center gap-3" onClick={() => onOpen('edit-graduate-program', {
-            graduate_program_id:row.original.graduate_program_id,
-            code:row.original.code,
-            name:row.original.name,
-            area:row.original.area,
-            modality:row.original.modality,
-            type:row.original.type,
-            rating:row.original.rating,
-            institution_id:row.original.institution_id,
-            description:row.original.description,
-            url_image:row.original.url_image,
-            city:row.original.city,
-            visible:String(row.original.visible)
-            
-            })}  ><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
-     
-         <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('add-researcher-graduation', {graduate_program_id:row.original.graduate_program_id , name:row.original.name})}><UserCheck className="h-4 w-4" />
-         Docentes do programa
-         </DropdownMenuItem>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size={'icon'} className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <Link to={`/pos-graducao/${row.original.code}`}><DropdownMenuItem className="flex items-center gap-3"><ArrowSquareOut className="h-4 w-4" />Visualizar página</DropdownMenuItem></Link>
+              <DropdownMenuItem className="flex items-center gap-3" onClick={() => onOpen('edit-graduate-program', {
+                graduate_program_id: row.original.graduate_program_id,
+                code: row.original.code,
+                name: row.original.name,
+                area: row.original.area,
+                modality: row.original.modality,
+                type: row.original.type,
+                rating: row.original.rating,
+                institution_id: row.original.institution_id,
+                description: row.original.description,
+                url_image: row.original.url_image,
+                city: row.original.city,
+                visible: String(row.original.visible)
 
-         <DropdownMenuItem className="flex items-center gap-3"  onClick={() => onOpen('list-student-program', {graduate_program_id:row.original.graduate_program_id , name:row.original.name})}><Student className="h-4 w-4" />
-         Discentes do programa
-         </DropdownMenuItem>
+              })}  ><PencilSimple className="h-4 w-4" />Editar informações</DropdownMenuItem>
 
-          <DropdownMenuSeparator />
-          <DropdownMenuItem  onClick={() => onOpen('confirm-delete-pos-graduate-program', {id_delete:row.original.graduate_program_id , name:row.original.name})} className="flex items-center gap-3 bg-red-500 hover:bg-red-600 text-white"><Trash className="h-4 w-4" />
-         Deletar programa
-         </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <DropdownMenuItem className="flex items-center gap-3" onClick={() => onOpen('add-researcher-graduation', { graduate_program_id: row.original.graduate_program_id, name: row.original.name })}><UserCheck className="h-4 w-4" />
+                Docentes do programa
+              </DropdownMenuItem>
+
+              <DropdownMenuItem className="flex items-center gap-3" onClick={() => onOpen('list-student-program', { graduate_program_id: row.original.graduate_program_id, name: row.original.name })}><Student className="h-4 w-4" />
+                Discentes do programa
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => onOpen('confirm-delete-pos-graduate-program', { id_delete: row.original.graduate_program_id, name: row.original.name })} className="flex items-center gap-3 bg-red-500 hover:bg-red-600 text-white"><Trash className="h-4 w-4" />
+                Deletar programa
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       )
     },

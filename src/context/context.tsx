@@ -40,7 +40,6 @@ interface ItemsSelecionados {
 
 interface PesquisadoresSelecionados {
   id: string,
-  id_criterio: number,
   name: string,
   university: string,
   lattes_id: string,
@@ -70,7 +69,7 @@ interface UserContextType {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 
   keepoData:Keepo,
-  setSetKeepoData:React.Dispatch<React.SetStateAction<Keepo>>;
+  setKeepoData:React.Dispatch<React.SetStateAction<Keepo>>;
 
   valoresSelecionadosExport: string;
   setValoresSelecionadosExport: React.Dispatch<React.SetStateAction<string>>;
@@ -159,7 +158,7 @@ export const UserContext = createContext<UserContextType>({
   user: {} as User,
   setUser: () => { },
   keepoData: {} as Keepo,
-  setSetKeepoData: () => { },
+  setKeepoData: () => { },
 
   valoresSelecionadosExport: "",
   setValoresSelecionadosExport: () => { },

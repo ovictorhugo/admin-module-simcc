@@ -91,7 +91,10 @@ export function SearchModal() {
       try {
         // Consulta os documentos cujo term começa com o prefixo fornecido
         const filesRef = collection(db, `${version ? ('termos_busca') : ('termos_busca_cimatec')}`);
-        const q = query(filesRef, where('term_normalize', '>=', prefix), where('term_normalize', '<=', prefix + '\uf8ff'));
+        const q = query(filesRef, 
+          where('term_normalize', '>=', prefix), 
+          where('term_normalize', '<=', prefix + '\uf8ff')
+        );
 
         const querySnapshot = await getDocs(q);
         // Extrai os dados dos documentos encontrados
@@ -118,17 +121,18 @@ export function SearchModal() {
   console.log('filter', filteredItems)
 
   const normalizeInput = (value: string): string => {
-    // Remove accents and diacritics
+    // Remove acentos e diacríticos
     value = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    // Convert to lowercase
+    // Converte para minúsculas
     value = value.toLowerCase();
-    // Remove special characters (keep only letters and numbers)
-    value = value.replace(/[^a-z0-9]/g, "");
+    // Remove caracteres especiais, mantendo letras, números e espaços
+    value = value.replace(/[^a-z0-9\s]/g, ""); 
     return value;
-  };
+};
 
   const handleChangeInput = (value: string) => {
     const normalizedValue = normalizeInput(value);
+    console.log(normalizedValue)
     searchFilesByTermPrefix(normalizedValue)
     setInput(value)
   }
@@ -468,12 +472,9 @@ export function SearchModal() {
   };
 
 
-
-
-
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}  >
-      <DialogContent className="p-0 border-none min-w-[60vw] bg-transparent dark:bg-transparent">
+      <DialogContent className="p-0 border-none min-w-[60vw] px-4 mx-auto md:px-0 bg-transparent dark:bg-transparent">
 
         <Alert onKeyDown={handleEnterPress} className="h-14 bg-white p-2 flex items-center gap-3 justify-between">
           <div className="flex items-center gap-2 w-full flex-1">

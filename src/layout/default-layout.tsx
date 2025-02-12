@@ -11,7 +11,7 @@ export default function DefaultLayout({
   }>) {
     return(
         <body className={cn(
-            "  h-screen bg-neutral-50 dark:bg-neutral-900 "
+            "  h-screen bg-neutral-50 dark:bg-black "
             )}>
             <ThemeProvider
             attribute="class"

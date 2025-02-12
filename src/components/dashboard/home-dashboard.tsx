@@ -79,7 +79,7 @@ export function HomeDashboard() {
 
       <h3 className="text-2xl font-medium my-4 md:my-8 ">Acesso rápido na plataforma</h3>
 
-      <div className="grid lg:grid-cols-2 gap-4 md:grid-cols-2 grid-cols-2 2xl:grid-cols-6">
+      <div className="grid lg:grid-cols-3 gap-4 md:grid-cols-2 mgrid-cols-1 2xl:grid-cols-5">
         {has_visualizar_gerencia_modulo_administrativo && (
           <Link to={'/dashboard/administrativo'}>
             <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center lg:p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">

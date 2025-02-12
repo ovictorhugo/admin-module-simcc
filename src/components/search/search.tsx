@@ -108,7 +108,6 @@ export function Search() {
 
   const { searchType, setMode, setSearchType, setInputMaria, inputMaria, maria, setMaria, valoresSelecionadosExport, mode, setValoresSelecionadosExport, setMessagesMaria, itemsSelecionados, setItensSelecionados, setSugestoes, sugestoes, itemsSelecionadosPopUp, version } = useContext(UserContext)
 
-
   const [input, setInput] = useState("");
   const [, setDataModificacao] = useState('');
 
@@ -367,19 +366,16 @@ export function Search() {
   }, [maria]);
 
   return (
-    <div className="bottom-0 mt-4 mb-2  w-full flex flex-col max-sm:flex  max-sm:flex-row">
+    <div className="bottom-0 mt-4 mb-2 w-full flex flex-col max-sm:flex  max-sm:flex-row">
       <div className={` max-sm:px-[5px] w-full`}>
         <div className="">
           <div className="flex gap-4 w-full">
-
             <Alert className="h-14 p-2 flex items-center justify-between">
               <div className="flex items-center gap-2 w-full flex-1">
                 <MagnifyingGlass size={16} className="hidden md:block md:whitespace-nowrap md:w-10" />
 
                 <div className="hidden md:flex md:gap-2 md:w-fit md:items-center">
                   <div className="flex items-center gap-2">
-
-
                     <Switch
                       checked={maria}
                       onCheckedChange={(value) => setMaria(value)}
@@ -390,7 +386,6 @@ export function Search() {
                   {!maria && (
                     <SelectTypeSearch />
                   )}
-
 
                   <div className='flex gap-2 mx-2 items-center'>
                     {itemsSelecionados.map((valor, index) => {
@@ -408,7 +403,6 @@ export function Search() {
                               const connector = itemsSelecionados[index].term.endsWith('|') ? ';' : '|'; // Alterna entre "|" e ";" conforme necessário
                               handleConnectorChange(index, connector);
 
-
                             }} >
                               {itemsSelecionados[index].term.endsWith(';') ? "e" : "ou"}
                             </button>
@@ -420,7 +414,7 @@ export function Search() {
                   </div>
 
                 </div>
-                <Input onClick={() => handlePopUppesquisa()} onChange={(e) => setInput(e.target.value)} value={input} type="text" className="border-0 w-full flex flex-1 " />
+                <Input onClick={() => handlePopUppesquisa()} onChange={(e) => setInput(e.target.value)} value={input} type="text" className="border-0 w-full flex flex-1" />
               </div>
 
               <div className="w-fit flex gap-2">

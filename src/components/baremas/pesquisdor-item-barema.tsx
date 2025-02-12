@@ -4,30 +4,30 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 
 type Research = {
-    article_A1: string,
-    article_A2: string,
-    article_A3: string,
-    article_A4: string,
-    article_B1: string,
-    article_B2: string,
-    article_B3: string,
-    article_B4: string,
-    article_C: string,
-    article_SQ: string,
+    A1: string,
+    A2: string,
+    A3: string,
+    A4: string,
+    B1: string,
+    B2: string,
+    B3: string,
+    B4: string,
+    C: string,
+    SQ: string,
     book: string,
     book_chapter: string,
     brand: string,
     event_organization: string,
-    guidance_d_a: string,
-    guidance_d_c: string,
-    guidance_e_a: string,
-    guidance_e_c: string,
-    guidance_g_a: string,
-    guidance_g_c: string,
-    guidance_ic_a: string,
-    guidance_ic_c: string,
-    guidance_m_a: string,
-    guidance_m_c: string,
+    d_in_progress: string,
+    d_completed: string,
+    e_in_progress: string,
+    e_completed: string,
+    g_in_progress: string,
+    g_completed: string,
+    ic_in_progress: string,
+    ic_completed: string,
+    m_in_progress: string,
+    m_completed: string,
     participation_event: string,
     patent: string,
     researcher: string,
@@ -41,7 +41,6 @@ type Research = {
     city: string,
     area: string,
     graduation: string,
-
 }
 
 type PesquisadorUpdate = {
@@ -58,6 +57,7 @@ type Props = {
     researcherSelecionados: Research[]
     onPesquisadoresUpdate: (newPesquisdor: PesquisadorUpdate) => void
 
+
 }
 
 export function PesquisadorItemBarema(config: Props) {
@@ -66,72 +66,64 @@ export function PesquisadorItemBarema(config: Props) {
     const calcularPontuacao = (pesquisador: any) => {
         switch (config.id_criterio) {
             case 1: // Pós-doutorado
-                config.researcherSelecionados.map((pesquisador) => {
-                    if (pesquisador.graduation === "Pós-doutorado") {
-                        return (config.pontos * Number(pesquisador.guidance_m_a) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_m_a)))
-                    }
-                })
-                break;
+                return (config.pontos >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos))
             case 2: // Doutorado
-                config.researcherSelecionados.map((pesquisador) => {
-                    if (pesquisador.graduation === "Doutorado") {
-                        return (config.pontos * Number(pesquisador.guidance_d_a) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_d_a)))
-                    }
-                })
+                return (config.pontos * Number(pesquisador.d_in_progress) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.d_in_progress)))
                 break;
             case 3: // Mestrado
                 break;
             case 4: // Especialista
                 break;
-            case 5:
-                //Artigo em periódicos qualificados (A a C)
-                return (config.pontos * Number(pesquisador.article_A1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A1)))
+            case 5: // Artigo em periódicos qualificados (A a C)
+                return (config.pontos * Number(pesquisador.A1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A1)))
+            case 19:
+                return (config.pontos * Number(pesquisador.A1 + pesquisador.A2 + pesquisador.A3 + pesquisador.A4 + pesquisador.B1 + pesquisador.B2 + pesquisador.B3 + pesquisador.B4 + pesquisador.C) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A1 + pesquisador.A2 + pesquisador.A3 + pesquisador.A4 + pesquisador.B1 + pesquisador.B2 + pesquisador.B3 + pesquisador.B4 + pesquisador.C)))
             case 20: //Artigo A1
-                return (config.pontos * Number(pesquisador.article_A1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A1)))
+                return (config.pontos * Number(pesquisador.A1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A1)))
             case 21: // Artigo A2
-                return (config.pontos * Number(pesquisador.article_A2) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A2)))
+                return (config.pontos * Number(pesquisador.A2) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A2)))
             case 22: // Artigo A3
-                return (config.pontos * Number(pesquisador.article_A3) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A3)))
+                return (config.pontos * Number(pesquisador.A3) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A3)))
             case 23: // Artigo A4
-                return (config.pontos * Number(pesquisador.article_A4) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_A4)))
+                return (config.pontos * Number(pesquisador.A4) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A4)))
             case 24: // Artigo B1
-                return (config.pontos * Number(pesquisador.article_B1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_B1)))
+                return (config.pontos * Number(pesquisador.B1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.B1)))
             case 25: // Artigo B2
-                return (config.pontos * Number(pesquisador.article_B2) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_B2)))
+                return (config.pontos * Number(pesquisador.B2) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.B2)))
             case 26: // Artigo B3
-                return (config.pontos * Number(pesquisador.article_B3) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_B3)))
+                return (config.pontos * Number(pesquisador.B3) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.B3)))
             case 27: // Artigo B4
-                return (config.pontos * Number(pesquisador.article_B4) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_B4)))
+                return (config.pontos * Number(pesquisador.B4) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.B4)))
             case 28: // Artigo C
-                return (config.pontos * Number(pesquisador.article_C) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.article_C)))
+                return (config.pontos * Number(pesquisador.C) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.C)))
             case 6: // Artigos completos em anais de eventos
                 return (config.pontos * Number(pesquisador.work_in_event) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.work_in_event)))
 
             // Consertar daqui pra baixo
 
             case 12:
-                //Pós-Graduação Stricto Sensu - andamento
+                // Pós-Graduação Stricto Sensu - andamento
                 return ((config.pontos * (Number(pesquisador.guidance_d_a) + Number(pesquisador.guidance_m_a))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_a) + Number(pesquisador.guidance_m_a)))))
             case 13:
-                //Iniciação Científica - andamento
+                // Iniciação Científica - andamento
                 return (config.pontos * Number(pesquisador.guidance_ic_a) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_ic_a)))
             case 30:
-                //Mestrado - andamento
+                // Mestrado - andamento
                 return (config.pontos * Number(pesquisador.guidance_m_a) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_m_a)))
             case 29:
-                //Doutorado - andamento
+                // Doutorado - andamento
                 return (config.pontos * Number(pesquisador.guidance_d_a) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_d_a)))
             case 31:
-                //Pós-Graduação Stricto Sensu - concluido
+                // Pós-Graduação Stricto Sensu - concluido
                 return ((config.pontos * (Number(pesquisador.guidance_d_c) + Number(pesquisador.guidance_m_c))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_c) + Number(pesquisador.guidance_m_c)))))
             case 16:
-                //Iniciação Científica - concluido
+                // Iniciação Científica - concluido
                 return (config.pontos * Number(pesquisador.guidance_ic_c) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_ic_c)))
             case 15:
-                //Mestrado - concluido
+                // Mestrado - concluido
                 return (config.pontos * Number(pesquisador.guidance_m_c) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_m_c)))
             case 14:
-                //Doutorado - concluido
+                // Doutorado - concluido
                 return (config.pontos * Number(pesquisador.guidance_d_c) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_d_c)))
             default:
                 return 0;
