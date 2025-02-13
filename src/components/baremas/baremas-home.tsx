@@ -1022,7 +1022,6 @@ export function BaremasHome() {
                                                                                                     </DialogHeader>
                                                                                                     <div className={'max-h-[350px] overflow-y-auto elementBarra'}>
                                                                                                         <div className="flex flex-col gap-1 p-2">
-
                                                                                                             {Object.entries(criteriosAgrupados).map(([tipo, lista]) => (
                                                                                                                 <div className="flex flex-col" key={tipo}>
                                                                                                                     <DropdownMenuLabel>
@@ -1069,7 +1068,7 @@ export function BaremasHome() {
                                                                                             <TooltipProvider>
                                                                                                 <Tooltip>
                                                                                                     <TooltipTrigger asChild>
-                                                                                                        <Button className="group-hover:flex whitespace-nowrap absolute top-1/2 right-0" variant={'ghost'} size={'icon'} onClick={() => removerCriterio(grupoIndex, index)}>
+                                                                                                        <Button className="group-hover:flex whitespace-nowrap absolute right-0" variant={'ghost'} size={'icon'} onClick={() => removerCriterio(grupoIndex, index)}>
                                                                                                             <Trash size={16} />
                                                                                                         </Button>
                                                                                                     </TooltipTrigger>
