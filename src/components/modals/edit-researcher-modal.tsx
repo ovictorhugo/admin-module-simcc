@@ -41,7 +41,7 @@ const {urlGeralAdm} = useContext(UserContext)
 
           console.log(data)
 
-          let urlProgram = urlGeralAdm + '/ResearcherRest/Insert'
+          let urlProgram = urlGeralAdm + '/ResearcherRest/Update'
 
           const fetchData = async () => {
           
