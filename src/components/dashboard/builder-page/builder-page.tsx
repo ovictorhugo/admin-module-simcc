@@ -454,7 +454,7 @@ export function BuilderPage() {
     <SelectValue placeholder="" />
   </SelectTrigger>
   <SelectContent>
-    <SelectItem value="publicado" className="flex items-center gap-2">
+    <SelectItem value="publicado" className="flex items-center gap-2 ">
       <EyeClosed size={16} /> Despublicar
     </SelectItem>
     <SelectItem value="publicar" className="flex items-center gap-2">
