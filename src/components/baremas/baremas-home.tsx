@@ -161,6 +161,8 @@ export function BaremasHome() {
 
     const isModalOpen = isOpen && type === 'baremas';
 
+    const [criterioSelecionado, setCriterioSelecionado] = useState('');
+
     const { baremaId } = useParams<{
         baremaId: string
     }>();
@@ -244,7 +246,13 @@ export function BaremasHome() {
         fetchData();
     }, [idDocumentBarema]);
 
-    const CRITERIOS = [
+    interface Criterio2 {
+        id: number;
+        value: string;
+        type: string
+    }
+
+    const CRITERIOS: Criterio2[] = [
         { id: 1, value: "Pós-doutorado", type: "Titulação" },
         { id: 2, value: "Doutorado", type: "Titulação" },
         { id: 3, value: "Mestrado", type: "Titulação" },
@@ -460,6 +468,8 @@ export function BaremasHome() {
     //select
 
     const selecionarCriterio = (grupoIndex: number, categoriaIndex: number, criterioId: number, criterioItem: string) => {
+        setCriterioSelecionado(criterioItem)
+        console.log("Criterio selecionado: ", criterioItem)
         const novosGrupos = grupos.map((grupo, index) => {
             if (index === grupoIndex) {
                 const novasCategorias = grupo.categorias.map((categoria, idx) => {
@@ -1056,13 +1066,18 @@ export function BaremasHome() {
                                                                                     <TableCell className="flex justify-end pr-12 relative">
                                                                                         <div className="flex w-fit justify-between items-center gap-3 bg">
                                                                                             <div className="overflow-x-auto flex-nowrap flex-1">
-                                                                                                <PesquisadorItemBarema
-                                                                                                    pontos={Number(categoria.pontos)}
-                                                                                                    pontuacao_max={Number(categoria.pontuacao_max)}
-                                                                                                    id_criterio={categoria.id_criterio}
-                                                                                                    researcherSelecionados={researcherSelecionados}
-                                                                                                    onPesquisadoresUpdate={handleResearcherUpdate}
-                                                                                                />
+                                                                                                {
+                                                                                                    pesquisadoresSelecionados.length != 0 && (
+                                                                                                        <PesquisadorItemBarema
+                                                                                                            pontos={Number(categoria.pontos)}
+                                                                                                            pontuacao_max={Number(categoria.pontuacao_max)}
+                                                                                                            id_criterio={categoria.id_criterio}
+                                                                                                            researcherSelecionados={researcherSelecionados}
+                                                                                                            onPesquisadoresUpdate={handleResearcherUpdate}
+                                                                                                            criterio={criterioSelecionado}
+                                                                                                        />
+                                                                                                    )
+                                                                                                }
                                                                                             </div>
 
                                                                                             <TooltipProvider>

@@ -50,14 +50,19 @@ type PesquisadorUpdate = {
     id_criterio: number
 }
 
+interface Criterio2 {
+    id: number;
+    value: string;
+    type: string
+}
+
 type Props = {
-    pontos: number
-    pontuacao_max: number
-    id_criterio: number
-    researcherSelecionados: Research[]
-    onPesquisadoresUpdate: (newPesquisdor: PesquisadorUpdate) => void
-
-
+    pontos: number,
+    pontuacao_max: number,
+    id_criterio: number,
+    researcherSelecionados: Research[],
+    onPesquisadoresUpdate: (newPesquisdor: PesquisadorUpdate) => void,
+    criterio: string;
 }
 
 export function PesquisadorItemBarema(config: Props) {
@@ -66,12 +71,23 @@ export function PesquisadorItemBarema(config: Props) {
     const calcularPontuacao = (pesquisador: any) => {
         switch (config.id_criterio) {
             case 1: // Pós-doutorado
-                return (config.pontos >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos))
+                if (pesquisador.graduation === "Pós-Doutorado") {
+                    return config.pontos >= config.pontuacao_max ? config.pontuacao_max : config.pontos
+                }
+
+                return 0;
             case 2: // Doutorado
-                return (config.pontos * Number(pesquisador.d_in_progress) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.d_in_progress)))
-                break;
+                if (pesquisador.graduation === "Doutorado") {
+                    return (
+                        config.pontos >= config.pontuacao_max ? config.pontuacao_max : config.pontos
+                    )
+                }
+                return 0;
             case 3: // Mestrado
-                break;
+                if (pesquisador.graduatio === "Mestrado") {
+                    return config.pontos >= config.pontuacao_max ? config.pontuacao_max : config.pontos
+                }
+                return 0;
             case 4: // Especialista
                 break;
             case 5: // Artigo em periódicos qualificados (A a C)
@@ -166,56 +182,59 @@ export function PesquisadorItemBarema(config: Props) {
                 {Array.isArray(config.researcherSelecionados) && config.researcherSelecionados.map((props) => {
                     return (
                         <div key={props.id} className="group flex transition-all">
-
-                            <TooltipProvider key={props.id}>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <div className="flex items-center">
-                                            <div
-                                                className="
-                                                    rounded-md w-10 h-10 bg-cover bg-center bg-no-repeat
-                                                    rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
-                                                    dark:bg-neutral-700
-                                                "
-                                                style={{
-                                                    backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) `
-                                                }}
-                                            >
-                                            </div>
+                            {
+                                (props.graduation).toUpperCase() === (config.criterio).toUpperCase() && (
+                                    <div className="flex">
+                                        <TooltipProvider key={props.id}>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <div className="flex items-center">
+                                                        <div
+                                                            className="
+                                                        rounded-md w-10 h-10 bg-cover bg-center bg-no-repeat
+                                                        rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
+                                                        dark:bg-neutral-700
+                                                    "
+                                                            style={{
+                                                                backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) `
+                                                            }}
+                                                        >
+                                                        </div>
+                                                    </div>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    {config.researcherSelecionados.filter((pesquisador) => pesquisador.researcher === props.researcher).map((pesquisador) => {
+                                                        return (
+                                                            <div key={pesquisador.id} className="flex items-center gap-3">
+                                                                <div
+                                                                    className="
+                                                                rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat
+                                                                rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
+                                                                dark:bg-neutral-700
+                                                            "
+                                                                    style={{
+                                                                        backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${pesquisador.id}) `
+                                                                    }}
+                                                                ></div>
+                                                                <p>{pesquisador.researcher}</p>
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                        <div
+                                            className="
+                                        h-10 w-10 text-xs flex items-center justify-center
+                                        transition-all dark:bg-neutral-950 bg-white
+                                        border-neutral-200 dark:border-neutral-800 border text-gray-500 dark:text-white rounded-r-md
+                                    "
+                                        >
+                                            {parseFloat(calcularPontuacao(props)?.toString() || '0').toFixed(2)}
                                         </div>
-
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        {config.researcherSelecionados.filter((pesquisador) => pesquisador.researcher === props.researcher).map((pesquisador) => {
-                                            return (
-                                                <div key={pesquisador.id} className="flex items-center gap-3">
-                                                    <div
-                                                        className="
-                                                            rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat
-                                                            rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
-                                                            dark:bg-neutral-700
-                                                        "
-                                                        style={{
-                                                            backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${pesquisador.id}) `
-                                                        }}
-                                                    ></div>
-                                                    <p>{pesquisador.researcher}</p>
-                                                </div>
-                                            )
-                                        })}
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-
-                            <div
-                                className="
-                                    h-10 w-10 text-xs flex items-center justify-center
-                                    transition-all dark:bg-neutral-950 bg-white
-                                    border-neutral-200 dark:border-neutral-800 border text-gray-500 dark:text-white rounded-r-md
-                                "
-                            >
-                                {parseFloat(calcularPontuacao(props)?.toString() || '0').toFixed(2)}
-                            </div>
+                                    </div>
+                                )
+                            }
                         </div>
                     )
                 })}
