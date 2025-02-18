@@ -82,7 +82,7 @@ export function PesquisadorItemBarema(config: Props) {
 
     console.log("GRUPOS NO COMPONENTE BAREMA: ", config.grupos);
 
-    const calcularPontuacao = (pesquisador: any) => {
+    const calcularPontuacao = (pesquisador: Research) => {
         switch (config.id_criterio) {
             case 1: // Pós-doutorado
                 if (pesquisador.graduation === "Pós-Doutorado") {
@@ -132,29 +132,29 @@ export function PesquisadorItemBarema(config: Props) {
             // Consertar daqui pra baixo
 
             case 12:
-                // Pós-Graduação Stricto Sensu - andamento
-                return ((config.pontos * (Number(pesquisador.guidance_d_a) + Number(pesquisador.guidance_m_a))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_a) + Number(pesquisador.guidance_m_a)))))
+                // Pós-Graduação Stricto Sensu - andamento | Rever
+                return ((config.pontos * (Number(pesquisador.d_in_progress) + Number(pesquisador.guidance_m_a))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_a) + Number(pesquisador.guidance_m_a)))))
             case 13:
                 // Iniciação Científica - andamento
-                return (config.pontos * Number(pesquisador.guidance_ic_a) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_ic_a)))
+                return (config.pontos * Number(pesquisador.ic_in_progress) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.ic_in_progress)))
             case 30:
                 // Mestrado - andamento
-                return (config.pontos * Number(pesquisador.guidance_m_a) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_m_a)))
+                return (config.pontos * Number(pesquisador.m_in_progress) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.m_in_progress)))
             case 29:
                 // Doutorado - andamento
-                return (config.pontos * Number(pesquisador.guidance_d_a) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_d_a)))
+                return (config.pontos * Number(pesquisador.d_in_progress) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.d_in_progress)))
             case 31:
-                // Pós-Graduação Stricto Sensu - concluido
-                return ((config.pontos * (Number(pesquisador.guidance_d_c) + Number(pesquisador.guidance_m_c))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_c) + Number(pesquisador.guidance_m_c)))))
+                // Pós-Graduação Stricto Sensu - concluido | Rever
+                return ((config.pontos * (Number(pesquisador.d_completed) + Number(pesquisador.d_completed))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_c) + Number(pesquisador.guidance_m_c)))))
             case 16:
                 // Iniciação Científica - concluido
-                return (config.pontos * Number(pesquisador.guidance_ic_c) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_ic_c)))
+                return (config.pontos * Number(pesquisador.ic_completed) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.ic_completed)))
             case 15:
                 // Mestrado - concluido
-                return (config.pontos * Number(pesquisador.guidance_m_c) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_m_c)))
+                return (config.pontos * Number(pesquisador.m_completed) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.m_completed)))
             case 14:
                 // Doutorado - concluido
-                return (config.pontos * Number(pesquisador.guidance_d_c) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.guidance_d_c)))
+                return (config.pontos * Number(pesquisador.d_completed) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.d_completed)))
             default:
                 return 0;
         }
@@ -205,10 +205,10 @@ export function PesquisadorItemBarema(config: Props) {
                                                     [1, 2, 3, 4].includes(config.id_criterio) && calcularPontuacao(props) !== 0 && (
                                                         <div
                                                             className="
-                                                            rounded-md w-10 h-10 bg-cover bg-center bg-no-repeat
-                                                            rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
-                                                            dark:bg-neutral-700
-                                                        "
+                                                                rounded-md w-10 h-10 bg-cover bg-center bg-no-repeat
+                                                                rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
+                                                                dark:bg-neutral-700
+                                                            "
                                                             style={{
                                                                 backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) `
                                                             }}
@@ -221,10 +221,10 @@ export function PesquisadorItemBarema(config: Props) {
                                                     !([1, 2, 3, 4].includes(config.id_criterio)) && Number(calcularPontuacao(props)?.toFixed(2)) >= 0 && (
                                                         <div
                                                             className="
-                                                            rounded-md w-10 h-10 bg-cover bg-center bg-no-repeat
-                                                            rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
-                                                            dark:bg-neutral-700
-                                                        "
+                                                                rounded-md w-10 h-10 bg-cover bg-center bg-no-repeat
+                                                                rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
+                                                                dark:bg-neutral-700
+                                                            "
                                                             style={{
                                                                 backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) `
                                                             }}
@@ -256,7 +256,23 @@ export function PesquisadorItemBarema(config: Props) {
                                                             )
                                                         }
 
-
+                                                        {
+                                                            !([1, 2, 3, 4].includes(config.id_criterio)) && Number(calcularPontuacao(props)?.toFixed(2)) >= 0 && (
+                                                                <div className="flex items-center gap-2">
+                                                                    <div
+                                                                        className="
+                                                                            rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat
+                                                                            rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
+                                                                            dark:bg-neutral-700
+                                                                        "
+                                                                        style={{
+                                                                            backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${pesquisador.id}) `
+                                                                        }}
+                                                                    ></div>
+                                                                    <p>{pesquisador.researcher}</p>
+                                                                </div>
+                                                            )
+                                                        }
                                                     </div>
                                                 )
                                             })}
