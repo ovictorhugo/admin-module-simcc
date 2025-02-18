@@ -214,7 +214,22 @@ export function PesquisadorItemBarema(config: Props) {
                                                             }}
                                                         >
                                                         </div>
+                                                    )
+                                                }
 
+                                                {
+                                                    !([1, 2, 3, 4].includes(config.id_criterio)) && Number(calcularPontuacao(props)?.toFixed(2)) >= 0 && (
+                                                        <div
+                                                            className="
+                                                            rounded-md w-10 h-10 bg-cover bg-center bg-no-repeat
+                                                            rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
+                                                            dark:bg-neutral-700
+                                                        "
+                                                            style={{
+                                                                backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) `
+                                                            }}
+                                                        >
+                                                        </div>
                                                     )
                                                 }
                                             </div>
@@ -238,9 +253,10 @@ export function PesquisadorItemBarema(config: Props) {
                                                                     ></div>
                                                                     <p>{pesquisador.researcher}</p>
                                                                 </div>
-
                                                             )
                                                         }
+
+
                                                     </div>
                                                 )
                                             })}
@@ -257,7 +273,20 @@ export function PesquisadorItemBarema(config: Props) {
                                             >
                                                 {parseFloat(calcularPontuacao(props)?.toString() || '0').toFixed(2)}
                                             </div>
+                                        )
+                                    }
 
+                                    {
+                                        !([1, 2, 3, 4].includes(config.id_criterio)) && Number(calcularPontuacao(props)?.toFixed(2)) >= 0 && (
+                                            <div
+                                                className="
+                                                    h-10 w-10 text-xs flex items-center justify-center
+                                                    transition-all dark:bg-neutral-950 bg-white
+                                                    border-neutral-200 dark:border-neutral-800 border text-gray-500 dark:text-white rounded-r-md
+                                                "
+                                            >
+                                                {parseFloat(calcularPontuacao(props)?.toString() || '0').toFixed(2)}
+                                            </div>
                                         )
                                     }
                                 </TooltipProvider>
