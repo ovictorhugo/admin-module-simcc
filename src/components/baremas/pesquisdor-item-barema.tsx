@@ -86,24 +86,50 @@ export function PesquisadorItemBarema(config: Props) {
         switch (config.id_criterio) {
             case 1: // Pós-doutorado
                 if (pesquisador.graduation === "Pós-Doutorado") {
+                    config.grupos.map(grupo => {
+                        grupo.categorias.map(categoria => {
+                            categoria.pesquisadores.map(pesquisador => {
+
+                                pesquisador.total = config.pontos >= Number(categoria.pontuacao_max) ? Number(categoria.pontuacao_max) : (config.pontos)
+
+                            })
+                        })
+                    })
                     return config.pontos >= config.pontuacao_max ? config.pontuacao_max : config.pontos
                 }
 
                 return 0;
             case 2: // Doutorado
                 if (pesquisador.graduation === "Doutorado") {
-                    return (
-                        config.pontos >= config.pontuacao_max ? config.pontuacao_max : config.pontos
-                    )
+                    config.grupos.map(grupo => {
+                        grupo.categorias.map(categoria => {
+                            categoria.pesquisadores.map(pesquisador => {
+
+                                pesquisador.total = config.pontos >= Number(categoria.pontuacao_max) ? Number(categoria.pontuacao_max) : (config.pontos)
+
+                            })
+                        })
+                    })
+                    return config.pontos >= config.pontuacao_max ? config.pontuacao_max : config.pontos
                 }
                 return 0;
             case 3: // Mestrado
                 if (pesquisador.graduation === "Mestrado") {
+                    config.grupos.map(grupo => {
+                        grupo.categorias.map(categoria => {
+                            categoria.pesquisadores.map(pesquisador => {
+                                pesquisador.total = config.pontos >= Number(categoria.pontuacao_max) ? Number(categoria.pontuacao_max) : (config.pontos)
+                            })
+                        })
+                    })
                     return config.pontos >= config.pontuacao_max ? config.pontuacao_max : config.pontos
                 }
                 return 0;
             case 4: // Especialista
-                break;
+                if (pesquisador.graduation === "Especialista") {
+                    return config.pontos >= config.pontuacao_max ? config.pontuacao_max : config.pontos
+                }
+                return 0;
             case 5: // Artigo em periódicos qualificados (A a C)
                 return (config.pontos * Number(pesquisador.A1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A1)))
             case 19:
@@ -128,9 +154,6 @@ export function PesquisadorItemBarema(config: Props) {
                 return (config.pontos * Number(pesquisador.C) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.C)))
             case 6: // Artigos completos em anais de eventos
                 return (config.pontos * Number(pesquisador.work_in_event) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.work_in_event)))
-
-            // Consertar daqui pra baixo
-
             case 12:
                 // Pós-Graduação Stricto Sensu - andamento | Rever
                 return ((config.pontos * (Number(pesquisador.d_in_progress) + Number(pesquisador.guidance_m_a))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_a) + Number(pesquisador.guidance_m_a)))))

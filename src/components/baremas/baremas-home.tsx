@@ -480,16 +480,19 @@ export function BaremasHome() {
             if (index === grupoIndex) {
                 const novasCategorias = grupo.categorias.map((categoria, idx) => {
 
-                    const pesquisadoresFiltrados = pesquisadores
+                    const pesquisadoresFiltradosTitulacao = pesquisadores
                         .map(pesquisador => (pesquisador.graduation).toUpperCase() === criterioItem.toUpperCase() ? formatResearcherData(pesquisador, criterioId) : undefined)
                         .filter(pesquisador => pesquisador !== undefined);
+
+                    const pesquisadoresFiltradosOutros = pesquisadores.filter(pesquisador => pesquisador.graduation.toUpperCase() !== criterioItem.toUpperCase()).map(pesquisador => formatResearcherData
+                        (pesquisador, criterioId));
 
                     if (idx === categoriaIndex) {
                         return {
                             ...categoria,
                             id_criterio: criterioId,
                             criterio: criterioItem,
-                            pesquisadores: [...pesquisadoresFiltrados]
+                            pesquisadores: [1, 2, 3, 4].includes(criterioId) ? pesquisadoresFiltradosTitulacao : pesquisadoresFiltradosOutros
 
                         };
                     }
