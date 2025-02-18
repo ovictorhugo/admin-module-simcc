@@ -63,7 +63,6 @@ type Research = {
 
 interface PesquisadoresSelecionados {
     id: string,
-    id_criterio: number,
     name: string,
     university: string,
     lattes_id: string,
@@ -152,6 +151,7 @@ import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-
 import { Helmet } from "react-helmet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { DropdownMenuLabel } from "../ui/dropdown-menu";
+import { number, string } from "prop-types";
 
 
 export function BaremasHome() {
@@ -465,23 +465,37 @@ export function BaremasHome() {
         setGrupos(newGrupos);
     };
 
+    // Função para formatar os dados do pesquisador
+    const formatResearcherData = (p: PesquisadoresSelecionados, idCriterio: number) => ({
+        total: 0,
+        id: p.id,
+        name: p.name,
+        id_criterio: idCriterio
+    });
+
     //select
 
-    const selecionarCriterio = (grupoIndex: number, categoriaIndex: number, criterioId: number, criterioItem: string) => {
-        setCriterioSelecionado(criterioItem)
-        console.log("Criterio selecionado: ", criterioItem)
+    const selecionarCriterio = (grupoIndex: number, categoriaIndex: number, criterioId: number, criterioItem: string, pesquisadores: PesquisadoresSelecionados[]) => {
         const novosGrupos = grupos.map((grupo, index) => {
             if (index === grupoIndex) {
                 const novasCategorias = grupo.categorias.map((categoria, idx) => {
+
+                    const pesquisadoresFiltrados = pesquisadores
+                        .map(pesquisador => (pesquisador.graduation).toUpperCase() === criterioItem.toUpperCase() ? formatResearcherData(pesquisador, criterioId) : undefined)
+                        .filter(pesquisador => pesquisador !== undefined);
+
                     if (idx === categoriaIndex) {
                         return {
                             ...categoria,
                             id_criterio: criterioId,
                             criterio: criterioItem,
+                            pesquisadores: [...pesquisadoresFiltrados]
+
                         };
                     }
                     return categoria;
                 });
+
                 return {
                     ...grupo,
                     categorias: novasCategorias
@@ -1041,7 +1055,7 @@ export function BaremasHome() {
                                                                                                                         <Button
                                                                                                                             variant={'ghost'}
                                                                                                                             className="text-left justify-start"
-                                                                                                                            onClick={() => selecionarCriterio(grupoIndex, index, criterio.id, criterio.value)}
+                                                                                                                            onClick={() => selecionarCriterio(grupoIndex, index, criterio.id, criterio.value, pesquisadoresSelecionados)}
                                                                                                                             key={criterio.id} value={criterio.value}>
                                                                                                                             {criterio.value}
                                                                                                                         </Button>
@@ -1074,7 +1088,7 @@ export function BaremasHome() {
                                                                                                             id_criterio={categoria.id_criterio}
                                                                                                             researcherSelecionados={researcherSelecionados}
                                                                                                             onPesquisadoresUpdate={handleResearcherUpdate}
-                                                                                                            criterio={criterioSelecionado}
+                                                                                                            grupos={grupos}
                                                                                                         />
                                                                                                     )
                                                                                                 }

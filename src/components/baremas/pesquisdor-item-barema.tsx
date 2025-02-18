@@ -43,17 +43,29 @@ type Research = {
     graduation: string,
 }
 
+interface Categoria {
+    id_criterio: number;
+    criterio: string;
+    pontos: string,
+    pontuacao_max: string,
+    id_grupo: string,
+    pesquisadores: PesquisadorUpdate[]
+}
+
+interface Grupo {
+    id: string;
+    titulo: string;
+    descricao: string;
+    categorias: Categoria[];
+    quantidade_max_pontos: number;
+    // outras propriedades do grupo
+}
+
 type PesquisadorUpdate = {
     total: number,
     id: string,
     name: string,
     id_criterio: number
-}
-
-interface Criterio2 {
-    id: number;
-    value: string;
-    type: string
 }
 
 type Props = {
@@ -62,11 +74,13 @@ type Props = {
     id_criterio: number,
     researcherSelecionados: Research[],
     onPesquisadoresUpdate: (newPesquisdor: PesquisadorUpdate) => void,
-    criterio: string;
+    grupos: Grupo[]
 }
 
 export function PesquisadorItemBarema(config: Props) {
     const { pesquisadoresSelecionados, urlGeral } = useContext(UserContext)
+
+    console.log("GRUPOS NO COMPONENTE BAREMA: ", config.grupos);
 
     const calcularPontuacao = (pesquisador: any) => {
         switch (config.id_criterio) {
@@ -84,7 +98,7 @@ export function PesquisadorItemBarema(config: Props) {
                 }
                 return 0;
             case 3: // Mestrado
-                if (pesquisador.graduatio === "Mestrado") {
+                if (pesquisador.graduation === "Mestrado") {
                     return config.pontos >= config.pontuacao_max ? config.pontuacao_max : config.pontos
                 }
                 return 0;
@@ -182,59 +196,72 @@ export function PesquisadorItemBarema(config: Props) {
                 {Array.isArray(config.researcherSelecionados) && config.researcherSelecionados.map((props) => {
                     return (
                         <div key={props.id} className="group flex transition-all">
-                            {
-                                (props.graduation).toUpperCase() === (config.criterio).toUpperCase() && (
-                                    <div className="flex">
-                                        <TooltipProvider key={props.id}>
-                                            <Tooltip>
-                                                <TooltipTrigger asChild>
-                                                    <div className="flex items-center">
+                            <div className="flex">
+                                <TooltipProvider key={props.id}>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <div className="flex items-center">
+                                                {
+                                                    [1, 2, 3, 4].includes(config.id_criterio) && calcularPontuacao(props) !== 0 && (
                                                         <div
                                                             className="
-                                                        rounded-md w-10 h-10 bg-cover bg-center bg-no-repeat
-                                                        rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
-                                                        dark:bg-neutral-700
-                                                    "
+                                                            rounded-md w-10 h-10 bg-cover bg-center bg-no-repeat
+                                                            rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
+                                                            dark:bg-neutral-700
+                                                        "
                                                             style={{
                                                                 backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) `
                                                             }}
                                                         >
                                                         </div>
+
+                                                    )
+                                                }
+                                            </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            {config.researcherSelecionados.filter((pesquisador) => pesquisador.researcher === props.researcher).map((pesquisador) => {
+                                                return (
+                                                    <div key={pesquisador.id} className="flex items-center gap-3">
+                                                        {
+                                                            [1, 2, 3, 4].includes(config.id_criterio) && calcularPontuacao(props) !== 0 && (
+                                                                <div className="flex items-center gap-2">
+                                                                    <div
+                                                                        className="
+                                                                            rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat
+                                                                            rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
+                                                                            dark:bg-neutral-700
+                                                                        "
+                                                                        style={{
+                                                                            backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${pesquisador.id}) `
+                                                                        }}
+                                                                    ></div>
+                                                                    <p>{pesquisador.researcher}</p>
+                                                                </div>
+
+                                                            )
+                                                        }
                                                     </div>
-                                                </TooltipTrigger>
-                                                <TooltipContent>
-                                                    {config.researcherSelecionados.filter((pesquisador) => pesquisador.researcher === props.researcher).map((pesquisador) => {
-                                                        return (
-                                                            <div key={pesquisador.id} className="flex items-center gap-3">
-                                                                <div
-                                                                    className="
-                                                                rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat
-                                                                rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
-                                                                dark:bg-neutral-700
-                                                            "
-                                                                    style={{
-                                                                        backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${pesquisador.id}) `
-                                                                    }}
-                                                                ></div>
-                                                                <p>{pesquisador.researcher}</p>
-                                                            </div>
-                                                        )
-                                                    })}
-                                                </TooltipContent>
-                                            </Tooltip>
-                                        </TooltipProvider>
-                                        <div
-                                            className="
-                                        h-10 w-10 text-xs flex items-center justify-center
-                                        transition-all dark:bg-neutral-950 bg-white
-                                        border-neutral-200 dark:border-neutral-800 border text-gray-500 dark:text-white rounded-r-md
-                                    "
-                                        >
-                                            {parseFloat(calcularPontuacao(props)?.toString() || '0').toFixed(2)}
-                                        </div>
-                                    </div>
-                                )
-                            }
+                                                )
+                                            })}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                    {
+                                        [1, 2, 3, 4].includes(config.id_criterio) && calcularPontuacao(props) !== 0 && (
+                                            <div
+                                                className="
+                                                    h-10 w-10 text-xs flex items-center justify-center
+                                                    transition-all dark:bg-neutral-950 bg-white
+                                                    border-neutral-200 dark:border-neutral-800 border text-gray-500 dark:text-white rounded-r-md
+                                                "
+                                            >
+                                                {parseFloat(calcularPontuacao(props)?.toString() || '0').toFixed(2)}
+                                            </div>
+
+                                        )
+                                    }
+                                </TooltipProvider>
+                            </div>
                         </div>
                     )
                 })}
