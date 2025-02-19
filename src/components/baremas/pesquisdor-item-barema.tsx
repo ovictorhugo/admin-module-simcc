@@ -80,8 +80,6 @@ type Props = {
 export function PesquisadorItemBarema(config: Props) {
     const { pesquisadoresSelecionados, urlGeral } = useContext(UserContext)
 
-    console.log("GRUPOS NO COMPONENTE BAREMA: ", config.grupos);
-
     const calcularPontuacao = (pesquisador: Research) => {
         switch (config.id_criterio) {
             case 1: // Pós-doutorado
@@ -97,16 +95,13 @@ export function PesquisadorItemBarema(config: Props) {
                     })
                     return config.pontos >= config.pontuacao_max ? config.pontuacao_max : config.pontos
                 }
-
                 return 0;
             case 2: // Doutorado
                 if (pesquisador.graduation === "Doutorado") {
                     config.grupos.map(grupo => {
                         grupo.categorias.map(categoria => {
                             categoria.pesquisadores.map(pesquisador => {
-
                                 pesquisador.total = config.pontos >= Number(categoria.pontuacao_max) ? Number(categoria.pontuacao_max) : (config.pontos)
-
                             })
                         })
                     })
@@ -127,56 +122,244 @@ export function PesquisadorItemBarema(config: Props) {
                 return 0;
             case 4: // Especialista
                 if (pesquisador.graduation === "Especialista") {
+                    config.grupos.map(grupo => {
+                        grupo.categorias.map(categoria => {
+                            categoria.pesquisadores.map(pesquisador => {
+                                pesquisador.total = config.pontos >= Number(categoria.pontuacao_max) ? Number(categoria.pontuacao_max) : (config.pontos)
+                            })
+                        })
+                    })
                     return config.pontos >= config.pontuacao_max ? config.pontuacao_max : config.pontos
                 }
                 return 0;
             case 5: // Artigo em periódicos qualificados (A a C)
-                return (config.pontos * Number(pesquisador.A1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A1)))
-            case 19:
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 5) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = config.pontos * Number(pRelativo!.A1 + pRelativo!.A2 + pRelativo?.A3 + pRelativo?.A4 + pRelativo?.B1 + pRelativo?.B2 + pRelativo?.B3 + pRelativo?.B4 + pRelativo?.C)
+                            })
+                        }
+                    })
+                })
+                return (config.pontos * Number(pesquisador.A1 + pesquisador.A2 + pesquisador.A3 + pesquisador.A4 + pesquisador.B1 + pesquisador.B2 + pesquisador.B3 + pesquisador.B4 + pesquisador.C) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A1 + pesquisador.A2 + pesquisador.A3 + pesquisador.A4 + pesquisador.B1 + pesquisador.B2 + pesquisador.B3 + pesquisador.B4 + pesquisador.C)))
+
+            case 19: // Todos os artigos
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 19) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.A1 + pRelativo!.A2 + pRelativo?.A3 + pRelativo?.A4 + pRelativo?.B1 + pRelativo?.B2 + pRelativo?.B3 + pRelativo?.B4 + pRelativo?.C)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.A1 + pesquisador.A2 + pesquisador.A3 + pesquisador.A4 + pesquisador.B1 + pesquisador.B2 + pesquisador.B3 + pesquisador.B4 + pesquisador.C) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A1 + pesquisador.A2 + pesquisador.A3 + pesquisador.A4 + pesquisador.B1 + pesquisador.B2 + pesquisador.B3 + pesquisador.B4 + pesquisador.C)))
             case 20: //Artigo A1
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 20) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.A1)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.A1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A1)))
             case 21: // Artigo A2
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 21) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? (config.pontuacao_max) : config.pontos * Number(pRelativo!.A2)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.A2) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A2)))
             case 22: // Artigo A3
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 22) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.A3)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.A3) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A3)))
             case 23: // Artigo A4
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 23) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.A4)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.A4) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.A4)))
             case 24: // Artigo B1
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 24) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.B1)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.B1) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.B1)))
             case 25: // Artigo B2
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 25) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.B2)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.B2) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.B2)))
             case 26: // Artigo B3
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 26) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.B3)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.B3) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.B3)))
             case 27: // Artigo B4
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 27) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.B4)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.B4) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.B4)))
             case 28: // Artigo C
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 28) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.C)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.C) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.C)))
             case 6: // Artigos completos em anais de eventos
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 6) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.work_in_event)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.work_in_event) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.work_in_event)))
             case 12:
                 // Pós-Graduação Stricto Sensu - andamento | Rever
                 return ((config.pontos * (Number(pesquisador.d_in_progress) + Number(pesquisador.guidance_m_a))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_a) + Number(pesquisador.guidance_m_a)))))
             case 13:
                 // Iniciação Científica - andamento
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 13) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.ic_in_progress)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.ic_in_progress) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.ic_in_progress)))
             case 30:
                 // Mestrado - andamento
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 30) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.m_in_progress)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.m_in_progress) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.m_in_progress)))
             case 29:
                 // Doutorado - andamento
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 29) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.d_in_progress)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.d_in_progress) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.d_in_progress)))
             case 31:
                 // Pós-Graduação Stricto Sensu - concluido | Rever
                 return ((config.pontos * (Number(pesquisador.d_completed) + Number(pesquisador.d_completed))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_c) + Number(pesquisador.guidance_m_c)))))
             case 16:
                 // Iniciação Científica - concluido
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 16) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.ic_completed)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.ic_completed) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.ic_completed)))
             case 15:
                 // Mestrado - concluido
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 15) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.m_completed)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.m_completed) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.m_completed)))
             case 14:
                 // Doutorado - concluido
+                config.grupos.map(grupo => {
+                    grupo.categorias.map(categoria => {
+                        if (categoria.id_criterio === 14) {
+                            categoria.pesquisadores.map(pesquisador => {
+                                const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.d_completed)
+                            })
+                        }
+                    })
+                })
                 return (config.pontos * Number(pesquisador.d_completed) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.d_completed)))
             default:
                 return 0;

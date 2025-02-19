@@ -484,8 +484,7 @@ export function BaremasHome() {
                         .map(pesquisador => (pesquisador.graduation).toUpperCase() === criterioItem.toUpperCase() ? formatResearcherData(pesquisador, criterioId) : undefined)
                         .filter(pesquisador => pesquisador !== undefined);
 
-                    const pesquisadoresFiltradosOutros = pesquisadores.filter(pesquisador => pesquisador.graduation.toUpperCase() !== criterioItem.toUpperCase()).map(pesquisador => formatResearcherData
-                        (pesquisador, criterioId));
+                    const pesquisadoresFiltradosOutros = pesquisadores.filter(pesquisador => pesquisador.graduation.toUpperCase() !== criterioItem.toUpperCase()).map(pesquisador => formatResearcherData(pesquisador, criterioId));
 
                     if (idx === categoriaIndex) {
                         return {
@@ -1179,61 +1178,85 @@ export function BaremasHome() {
 
                                                     {grupos.length != 0 && (
                                                         <div>
+                                                            {grupos.map((grupo) => {
+                                                                return (
+                                                                    <TableHead >{grupo.titulo}</TableHead>
+                                                                );
+                                                            })}
                                                             <Table>
                                                                 <TableHeader>
                                                                     <TableRow>
-                                                                        <TableHead className="" >Pesquisadores</TableHead>
-                                                                        {grupos.map((grupo) => {
-                                                                            return (
-                                                                                <TableHead >{grupo.titulo}</TableHead>
-                                                                            );
-                                                                        })}
+                                                                        <TableHead className="">Pesquisadores</TableHead>
+                                                                        {grupos.flatMap((grupo) =>
+                                                                            grupo.categorias.map((categoria) => (
+                                                                                <TableHead key={categoria.id_criterio} className="">{categoria.criterio}</TableHead>
+                                                                            ))
+                                                                        )}
+                                                                        <TableHead className="">Total</TableHead>
                                                                     </TableRow>
                                                                 </TableHeader>
 
-                                                                <TableBody>
-                                                                    <TableRow>
-                                                                        {Object.values(somaTotalPorPesquisador)
-                                                                            .map((grupo) => grupo)
-                                                                            .sort((a, b) => parseFloat(b.total) - parseFloat(a.total))
-                                                                            .map((grupoOrdenado) => (
-                                                                                <TableCell>
-                                                                                    <div className="flex items-center gap-3">
-                                                                                        <div className="rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat group-hover:rounded-l-lg group-hover:rounded-r-none whitespace-nowrap" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${grupoOrdenado.id})` }}></div>
-                                                                                        <p className="flex flex-1 text-gray-500 text-sm truncate dark:text-white">{grupoOrdenado.name}</p>
+                                                                <TableBody className="w-full border border-neutral-200 dark:border-neutral-800 py-3 px-4 rounded-md">
+                                                                    {Object.values(somaTotalPorPesquisador)
+                                                                        .sort((a, b) => parseFloat(b.total) - parseFloat(a.total))
+                                                                        .map((grupoOrdenado) => (
+                                                                            <TableRow key={grupoOrdenado.id} className="border-b border-neutral-200 dark:border-neutral-800">
+                                                                                {/* Coluna com a imagem e nome */}
+                                                                                <TableCell className="flex items-center gap-3">
+                                                                                    <div
+                                                                                        className="rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat"
+                                                                                        style={{
+                                                                                            backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${grupoOrdenado.id})`,
+                                                                                        }}
+                                                                                    ></div>
+                                                                                    <p className="text-gray-500 text-sm truncate dark:text-white">
+                                                                                        {grupoOrdenado.name}
+                                                                                    </p>
+                                                                                </TableCell>
+
+                                                                                {
+                                                                                    grupos.flatMap((grupo) => (
+                                                                                        grupo.categorias.map((categoria) => (
+                                                                                            categoria.pesquisadores.map((pesquisador) => {
+                                                                                                if (pesquisador.id === grupoOrdenado.id) {
+                                                                                                    return (
+                                                                                                        <TableCell key={pesquisador.id} className="text-center">
+                                                                                                            <div className="rounded-md border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 h-10 px-4 py-2 text-gray-600 text-sm dark:text-white font-normal">
+                                                                                                                {pesquisador.total >= Number(categoria.pontuacao_max) ? categoria.pontuacao_max : parseFloat((pesquisador.total).toString()).toFixed(2)}
+                                                                                                            </div>
+                                                                                                        </TableCell>
+                                                                                                    )
+                                                                                                }
+                                                                                            })
+                                                                                        ))
+                                                                                    ))
+                                                                                }
+
+                                                                                {/* Colunas dos grupos 
+                                                                                {grupoOrdenado.grupos.map((grupo) => (
+                                                                                    <TableCell key={grupo.titulo} className="text-center">
+                                                                                        <div className="rounded-md border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 h-10 px-4 py-2 text-gray-600 text-sm dark:text-white font-normal">
+                                                                                            {parseFloat(grupo.total).toFixed(2)}
+                                                                                        </div>
+                                                                                    </TableCell>
+                                                                                ))}*/}
+
+                                                                                {/* Coluna com o total */}
+                                                                                <TableCell className="text-center">
+                                                                                    <div className="rounded-md border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 h-10 px-4 py-2 text-gray-600 text-sm dark:text-white font-normal">
+                                                                                        {grupoOrdenado.total >= grupoOrdenado.quantidade_max_pontos ? grupoOrdenado.quantidade_max_pontos : parseFloat(grupoOrdenado.total).toFixed(2)}
                                                                                     </div>
                                                                                 </TableCell>
 
-                                                                            ))}
-                                                                    </TableRow>
+
+                                                                            </TableRow>
+                                                                        ))}
                                                                 </TableBody>
+
                                                             </Table>
 
-                                                            <div>
-                                                                <div className={`w-full flex gap-4 flex-col border border-neutral-200 rounded-t-none border-t-0 dark:border-neutral-800 py-3 px-4 rounded-md `}>
-                                                                    {Object.values(somaTotalPorPesquisador)
-                                                                        .map((grupo) => grupo)
-                                                                        .sort((a, b) => parseFloat(b.total) - parseFloat(a.total))
-                                                                        .map((grupoOrdenado) => (
-                                                                            <div key={grupoOrdenado.id} className={`grid gap-3 border-neutral-200 dark:border-neutral-800 border-b pb-3 w-full`} style={{ gridTemplateColumns: `repeat(${grupos.length + 2}, minmax(0, 1fr))` }}>
-                                                                                <div className="flex items-center gap-3">
-                                                                                    <div className="rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat group-hover:rounded-l-lg group-hover:rounded-r-none whitespace-nowrap" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${grupoOrdenado.id})` }}></div>
-                                                                                    <p className="flex flex-1 text-gray-500 text-sm truncate dark:text-white">{grupoOrdenado.name}</p>
-                                                                                </div>
-
-                                                                                {grupoOrdenado.grupos.map((grupo) => (
-                                                                                    <div key={grupo.titulo} className="flex items-center gap-3">
-                                                                                        <div className="items-center justify-center whitespace-nowrap rounded-md flex border border-neutral-200 bg-white hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-800 dark:hover:text-neutral-50 h-10 px-4 py-2 w-fit text-gray-600 text-sm dark:text-white font-normal">{parseFloat(grupo.total).toFixed(2)}</div>
-                                                                                    </div>
-                                                                                ))}
-                                                                                <div className="items-center justify-center whitespace-nowrap rounded-md flex border border-neutral-200 bg-white hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-800 dark:hover:text-neutral-50 h-10 px-4 py-2 w-fit text-gray-600 text-sm dark:text-white font-normal">{parseFloat(grupoOrdenado.total).toFixed(2)}</div>
-                                                                            </div>
-                                                                        ))}
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                     )}
-
                                                 </Alert>
                                             </div>
 
