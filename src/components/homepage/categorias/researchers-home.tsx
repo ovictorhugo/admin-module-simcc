@@ -46,7 +46,7 @@ type CityData = {
 
 type Research = {
   among: number,
-  satus:boolean
+  satus: boolean
   articles: number,
   book: number,
   book_chapters: number,
@@ -193,7 +193,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   const handleGraduateProgramToggle = (value: any) => {
     setSelectedGraduatePrograms(value);
   };
-  
+
 
   const filteredResearchers = researcher.filter((res) => {
     const areas = res.area.split(';').map(area => area.trim());
@@ -289,11 +289,11 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
         <div className="relative flex">
 
           <div>
-          <div className="hidden lg:block p-8 pr-0 h-full">
-            <div  style={{ backgroundImage: `url(${bg_user})` }} className=" h-full w-[270px]  bg-cover bg-no-repeat bg-left rounded-md bg-eng-blue p-8"></div>
-           
-          </div>
-         
+            <div className="hidden lg:block p-8 pr-0 h-full">
+              <div style={{ backgroundImage: `url(${bg_user})` }} className=" h-full w-[270px]  bg-cover bg-no-repeat bg-left rounded-md bg-eng-blue p-8"></div>
+
+            </div>
+
           </div>
           <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
             <div>
@@ -414,23 +414,23 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
               </div>
 
               <div>
-    <div className="pb-2">
-      <Label>Programas de Pós-graduação</Label>
-    </div>
-    <ToggleGroup
-      type="multiple"
-      variant={'outline'}
-      value={selectedGraduatePrograms}
-      onValueChange={handleGraduateProgramToggle}
-      className="aspect-auto flex flex-wrap items-start justify-start gap-2"
-    >
-      {uniqueGraduatePrograms.map((program) => (
-        <ToggleGroupItem key={program} value={program} className="px-3 py-2 whitespace-normal">
-          {program}
-        </ToggleGroupItem>
-      ))}
-    </ToggleGroup>
-  </div>
+                <div className="pb-2">
+                  <Label>Programas de Pós-graduação</Label>
+                </div>
+                <ToggleGroup
+                  type="multiple"
+                  variant={'outline'}
+                  value={selectedGraduatePrograms}
+                  onValueChange={handleGraduateProgramToggle}
+                  className="aspect-auto flex flex-wrap items-start justify-start gap-2"
+                >
+                  {uniqueGraduatePrograms.map((program) => (
+                    <ToggleGroupItem key={program} value={program} className="px-3 py-2 whitespace-normal">
+                      {program}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </div>
             </div>
 
             <DialogFooter className="py-4">
@@ -614,7 +614,7 @@ export function ResearchersHome() {
 
   return (
     <div className="w-full">
-      <div className="w-full flex gap-6 mb-8 justify-center">
+      <div className="w-full flex gap-8 mb-8 justify-center">
         <div className="flex-1 flex flex-col">
           <div className="w-full">
             <HeaderResult />
@@ -678,7 +678,7 @@ export function ResearchersHome() {
 
           {searchType !== 'abstract' && searchType !== 'name' && searchType !== 'area' && (
             <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex md:mb-2 w-full">
-              <AccordionItem value="item-1" className="w-full">
+              <AccordionItem value="item-1" className="w-full pt-8">
                 <div className="flex mb-2 w-full">
                   <HeaderResultTypeHome title="Pesquisadores mais relevantes por ordem de ocorrências" icon={<ListNumbers size={24} className="text-gray-400" />}>
                   </HeaderResultTypeHome>
