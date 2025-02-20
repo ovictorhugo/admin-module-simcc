@@ -611,7 +611,7 @@ export function ResearcherPage() {
                         <SheetTrigger>
                           <Button onClick={() => setExpand(false)} className="h-8" size={'sm'}><TrendingUp size={16} />Linha do tempo</Button>
                         </SheetTrigger>
-                        <SheetContent className={`p-0 dark:bg-neutral-900 w-screen dark:border-gray-600 ${expand ? ('lg:w-[80vw]') : ('lg:w-[50vw]')}`}>
+                        <SheetContent className={`p-0 dark:bg-neutral-900 w-screen dark:border-gray-600 ${expand ? ('md:min-w-[80vw]') : ('md:min-w-[50vw]')}`}>
                           <DialogHeader className="h-[50px] justify-center px-4 border-b">
 
                             <div className="flex items-center gap-3 justify-between">
