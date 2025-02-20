@@ -249,7 +249,7 @@ export function MinhaArea() {
       onClose()
       setExpand(true)
     }}>
-      <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 ${expand ? 'w-full lg:min-w-[80vw]' : 'lg:min-w-[50vw]'}`}>
+      <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 ${expand ? 'w-full md:min-w-[80vw] lg:min-w-[80vw]' : 'lg:min-w-[50vw]'}`}>
         <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-gray-600">
 
           <div className="flex items-center gap-3">
