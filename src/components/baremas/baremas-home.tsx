@@ -1257,6 +1257,7 @@ export function BaremasHome() {
 
                                                         </div>
                                                     )}
+
                                                 </Alert>
                                             </div>
 

@@ -37,7 +37,7 @@ export function PesquisadoresSelecionadosModal() {
   return (
     <Sheet open={isModalOpen} onOpenChange={close}>
       <SheetContent
-        className={`p-0 dark:bg-neutral-900 dark:border-gray-600 w-full lg:w-[50vw]`}
+        className={`p-0 dark:bg-neutral-900 dark:border-gray-600 w-full lg:min-w-[50vw]`}
       >
         <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-b-neutral-600">
           <div className="flex items-center gap-3">

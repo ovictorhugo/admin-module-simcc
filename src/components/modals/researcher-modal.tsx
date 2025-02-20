@@ -338,7 +338,7 @@ export function ResearcherModal() {
     <>
       <Drawer open={isModalOpen} onClose={onClose}   >
 
-        <DrawerContent  onInteractOutside={onClose}  className={`max-h-[88%] border border-b-0`} >
+        <DrawerContent onInteractOutside={onClose} className={`max-h-[88%] border border-b-0`} >
           {researcher.length == 0 && (
             <div className="flex justify-center items-center h-[80vh] ">
               <div className="w-full flex flex-col items-center justify-center h-full">
@@ -406,7 +406,7 @@ export function ResearcherModal() {
                         <div
                           className={`
                       hidden text-[0.5rem] py-2 px-4 border dark:border-neutral-800 w-fit
-                       rounded-md  font-bold gap-1 items-center
+                      rounded-md  font-bold gap-1 items-center
 
                       md:text-xs md:py-2 md:px-4 
 

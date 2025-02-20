@@ -138,7 +138,7 @@ export function PesquisadorItemBarema(config: Props) {
                         if (categoria.id_criterio === 5) {
                             categoria.pesquisadores.map(pesquisador => {
                                 const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
-                                pesquisador.total = config.pontos * Number(pRelativo!.A1 + pRelativo!.A2 + pRelativo?.A3 + pRelativo?.A4 + pRelativo?.B1 + pRelativo?.B2 + pRelativo?.B3 + pRelativo?.B4 + pRelativo?.C)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.A1 + pRelativo!.A2 + pRelativo?.A3 + pRelativo?.A4 + pRelativo?.B1 + pRelativo?.B2 + pRelativo?.B3 + pRelativo?.B4 + pRelativo?.C)
                             })
                         }
                     })
