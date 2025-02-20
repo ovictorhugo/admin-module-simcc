@@ -28,42 +28,42 @@ export function TotalViewResearcher(props: Props) {
                 <Alert className="flex items-center gap-3">
                     <Quotes size={16} className="" />
                     <div>
-                        <p className="font-bold">{props.articles} </p><div className="text-sm text-gray-500">Artigos</div>
+                        <p className="font-bold">{props.articles != 0 ? props.articles : "0"} </p><div className="text-sm text-gray-500">Artigos</div>
                     </div>
                 </Alert>
 
                 <Alert className="flex items-center gap-3">
                     <Book size={16} className="" />
                     <div>
-                        <p className="font-bold">{props.book} </p><div className="text-sm text-gray-500">Livros</div>
+                        <p className="font-bold">{props.book != 0 ? props.book : "0"} </p><div className="text-sm text-gray-500">Livros</div>
                     </div>
                 </Alert>
 
                 <Alert className="flex items-center gap-3">
                     <Books size={16} className="" />
                     <div>
-                        <p className="font-bold">{props.book_chapters} </p><div className="text-sm text-gray-500">Capítulos</div>
+                        <p className="font-bold">{props.book_chapters != 0 ? props.book_chapters : "0"} </p><div className="text-sm text-gray-500">Capítulos</div>
                     </div>
                 </Alert>
 
                 <Alert className="flex items-center gap-3">
                     <Copyright size={16} className="" />
                     <div>
-                        <p className="font-bold">{props.patent} </p><div className="text-sm text-gray-500">Patentes</div>
+                        <p className="font-bold">{props.patent != 0 ? props.patent : "0"} </p><div className="text-sm text-gray-500">Patentes</div>
                     </div>
                 </Alert>
 
                 <Alert className="flex items-center gap-3">
                     <StripeLogo size={16} className="" />
                     <div>
-                        <p className="font-bold">{props.brand} </p><div className="text-sm text-gray-500">Marcas</div>
+                        <p className="font-bold">{props.brand != 0 ? props.brand : "0"} </p><div className="text-sm text-gray-500">Marcas</div>
                     </div>
                 </Alert>
 
                 <Alert className="flex items-center gap-3">
                     <Code size={16} className="" />
                     <div>
-                        <p className="font-bold">{props.software} </p><div className="text-sm text-gray-500">Softwares</div>
+                        <p className="font-bold">{props.software != 0 ? props.software : "0"} </p><div className="text-sm text-gray-500">Softwares</div>
                     </div>
                 </Alert>
             </div>
