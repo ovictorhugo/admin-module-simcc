@@ -142,7 +142,7 @@ export function ProjectModal() {
     return (
         <Sheet open={isModalOpen} onOpenChange={onClose}>
             <SheetContent
-                className={`p-0 gap-0 dark:bg-neutral-900  dark:border-gray-600 w-full lg:min-w-[50vw]`}
+                className={`p-0 gap-0 dark:bg-neutral-900  dark:border-gray-600 w-full md:min-w-[50vw]`}
             >
                 <div
                     className={`h-full w-2 absolute bg-[#66B4D0]  `}
