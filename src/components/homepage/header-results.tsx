@@ -109,7 +109,7 @@ export function HeaderResult() {
             <div className="flex items-center justify-between">
               <div className="flex gap-3 items-center">
                 <div>
-                  <div className="flex gap-3 items-center">
+                  <div className="flex flex-wrap gap-3 items-center">
                     <p className="text-sm font-medium">Sugestões:</p>
                     {filteredItems.map((props, index) => (
                       <div
@@ -120,7 +120,7 @@ export function HeaderResult() {
                             { term: props.term },
                           ]);
                         }}
-                        className="flex flex-wrap gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs"
+                        className="flex whitespace-nowrap gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs"
                       >
                         {props.term}
                       </div>

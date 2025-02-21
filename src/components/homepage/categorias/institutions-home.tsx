@@ -76,10 +76,10 @@ export function InstitutionsHome() {
   ));
 
   return (
-    <div className="grid grid-cols-1">
+    <div className="grid grid-cols-1 gap-4">
       <HeaderResult />
 
-      <div className="my-8">
+      <div className="mt-4">
         <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">

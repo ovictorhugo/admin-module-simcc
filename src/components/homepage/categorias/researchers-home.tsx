@@ -265,8 +265,6 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
 
           <div className="flex items-center gap-3">
 
-
-
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -277,9 +275,6 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
                 <TooltipContent> Fechar</TooltipContent>
               </Tooltip>
             </TooltipProvider>
-
-
-
           </div>
 
         </DialogHeader>
@@ -293,7 +288,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
             </div>
 
           </div>
-          <ScrollArea className="relative pb-4 whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
+          <ScrollArea className="relative whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
             <div>
               <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
                 Pesquisadores
@@ -612,13 +607,13 @@ export function ResearchersHome() {
 
   return (
     <div className="w-full">
-      <div className="w-full flex gap-8 mb-8 justify-center">
-        <div className="flex-1 flex flex-col">
+      <div className="w-full flex gap-4 justify-center">
+        <div className="flex-1 gap-4 flex flex-col">
           <div className="w-full">
             <HeaderResult />
           </div>
           {(!isOpenAlex && FinalOpenAlex != 'true') && (
-            <div className="grid gap-4 md:mt-8 mt-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+            <div className="grid gap-4 mt-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
               {(searchType != 'abstract' && searchType != 'name' && searchType != 'area') && (
                 <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3" style={{ backgroundImage: `url(${bg_popup})` }}>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -676,8 +671,8 @@ export function ResearchersHome() {
 
           {searchType !== 'abstract' && searchType !== 'name' && searchType !== 'area' && (
             <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex md:mb-2 w-full">
-              <AccordionItem value="item-1" className="w-full pt-8">
-                <div className="flex mb-2 w-full">
+              <AccordionItem value="item-1" className="w-full">
+                <div className="flex pt-4 w-full">
                   <HeaderResultTypeHome title="Pesquisadores mais relevantes por ordem de ocorrências" icon={<ListNumbers size={24} className="text-gray-400" />}>
                   </HeaderResultTypeHome>
                   <AccordionTrigger>
@@ -827,7 +822,6 @@ export function ResearchersHome() {
             </div>
           )}
         </div>
-
 
         <FiltersModal
           researcher={originalResearcher}

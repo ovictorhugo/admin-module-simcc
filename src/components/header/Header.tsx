@@ -128,19 +128,15 @@ export function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="mr-5">
                 <DropdownMenuItem>
-                  <Link to={'/signIn'}>
-                    <Button size="sm" className="h-8 px-2">
-                      <UserPlus className="h-4 w-4" />
-                      Criar conta
-                    </Button>
+                  <Link className="flex gap-2 items-center" to={'/signIn'}>
+                    <UserPlus className="h-4 w-4" />
+                    <p>Criar conta</p>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to={'/signUp'}>
-                    <Button size="sm" className="h-8 px-2">
-                      <LogIn className="h-4 w-4" />
-                      Fazer login
-                    </Button>
+                  <Link className="flex gap-2 items-center" to={'/signUp'}>
+                    <LogIn className="h-4 w-4" />
+                    <p>Fazer login</p>
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>

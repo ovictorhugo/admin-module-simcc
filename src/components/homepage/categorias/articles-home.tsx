@@ -138,9 +138,9 @@ export function ArticlesHome() {
 
   return (
 
-    <div className="grid grid-cols-1 gap-8">
+    <div className="grid grid-cols-1 gap-4">
       <HeaderResult />
-      <div className="pb-8">
+      <div className="pt-4 mb-4">
         <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -162,7 +162,7 @@ export function ArticlesHome() {
 
       <Accordion defaultValue="item-1" type="single" collapsible >
         <AccordionItem value="item-1" >
-          <div className="flex mb-2">
+          <div className="flex">
             <HeaderResultTypeHome title="Gráfico de quantidade total por Qualis" icon={<ChartBar size={24} className="text-gray-400" />}>
             </HeaderResultTypeHome>
 
