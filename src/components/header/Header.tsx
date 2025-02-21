@@ -20,7 +20,7 @@ import {
 
 
 
-import { Grip, Laptop, LayoutDashboard, LogIn, Moon, Sun, User, UserPlus } from "lucide-react";
+import { Expand, Grip, Laptop, LayoutDashboard, LogIn, Moon, MoreVertical, Sun, User, UserPlus } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { Button } from "../ui/button";
 
@@ -44,7 +44,7 @@ import { SymbolEEWhite } from "../svg/SymbolEEWhite";
 import { useModal } from "../hooks/use-modal-store";
 import { LogoIapos } from "../svg/LogoIapos";
 import { LogoIaposWhite } from "../svg/LogoIaposWhite";
-import { CaretLeft, Funnel, MagnifyingGlass } from "phosphor-react";
+import { CaretLeft, DotsThreeCircleVertical, DotsThreeVertical, Funnel, MagnifyingGlass, Option, UserCircleGear } from "phosphor-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { ModeToggle } from "../mode-toggle";
@@ -89,7 +89,7 @@ export function Header() {
           </div>
         </div>
 
-        <div className="w-full flex items-center justify-between md:justify-end gap-1">
+        <div className="w-full flex items-center justify-end md:justify-end gap-1">
           {isVisible && (
             <div onClick={() => onOpen('search')} className="hidden md:flex h-8 border border-neutral-200 dark:border-neutral-800 px-1 bg-white dark:bg-neutral-950 rounded-md items-center">
               <MagnifyingGlass size={16} className="w-8" />
@@ -97,14 +97,12 @@ export function Header() {
               <p className="bg-neutral-100 rounded-md text-[10px] mr-1  dark:bg-neutral-800 h-6 flex items-center justify-center px-2">Ctrl + Q</p>
               <Button variant="outline" className={` h-6 w-6 ${searchType == 'article' && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract' && ('bg-yellow-500 dark:bg-yellow-500')} ${maria && ('bg-eng-blue   dark:bg-eng-blue  ')} ${searchType == 'speaker' && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book' && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent' && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name' && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area' && ('bg-green-500 dark:bg-green-500')} ${searchType == '' && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 `} size={'icon'}>
                 <Funnel size={10} className="" />
-
               </Button>
             </div>
           )}
 
 
-          <div className="flex gap-3 items-center">
-
+          <div className="hidden md:flex gap-3 items-center">
             {!loggedIn && (
               <Link to={'/signIn'}>
                 <Button variant='ghost' size="sm" className="h-8 px-2" >
@@ -119,6 +117,34 @@ export function Header() {
                   Criar conta
                 </Button></Link>
             )}
+          </div>
+
+          <div className="md:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant='outline' size="icon" className="h-8 w-8" >
+                  <UserCircleGear className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="mr-5">
+                <DropdownMenuItem>
+                  <Link to={'/signIn'}>
+                    <Button size="sm" className="h-8 px-2">
+                      <UserPlus className="h-4 w-4" />
+                      Criar conta
+                    </Button>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to={'/signUp'}>
+                    <Button size="sm" className="h-8 px-2">
+                      <LogIn className="h-4 w-4" />
+                      Fazer login
+                    </Button>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           <div className="hidden md:flex md:gap-2">

@@ -92,8 +92,6 @@ interface GraduatePrograms {
   name: string
 }
 
-
-
 interface ResearchOpenAlex {
   display_name: string
   id: string
