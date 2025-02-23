@@ -878,9 +878,9 @@ export function InitialHome() {
             </Alert>
           )}
 
-          <Alert className="lg:col-span-2 h-fit p-0">
+          <Alert className="lg:col-span-2 h-full p-0">
             <CardHeader className="flex p-0 flex-col md:flex-wrap lg:flex-nowrap items-stretch space-y-0 border-b dark:border-b-neutral-800 sm:flex-row">
-              <div className="w-full flex flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+              <div className="w-fullflex flex-col justify-center gap-1 px-6 py-5 sm:py-6">
                 <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
                   <div>
                     <CardTitle className="text-sm font-medium">

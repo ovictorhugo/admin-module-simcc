@@ -325,6 +325,52 @@ export function BaremasHome() {
         }
     ]);
 
+    const baixarCSV = (grupos: Grupo[]) => {
+        // Criar cabeçalho do CSV
+        let csvContent = "Pesquisadores,";
+        let categorias = grupos.flatMap(grupo => grupo.categorias.map(categoria => categoria.criterio));
+        csvContent += categorias.join(",") + ",Total\n";
+
+        // Criar corpo do CSV
+        Object.values(somaTotalPorPesquisador)
+            .sort((a, b) => parseFloat(b.total) - parseFloat(a.total))
+            .forEach(pesquisador => {
+                let row = `"${pesquisador.name}",`; // Nome do pesquisador
+
+                const valoresCategorias = grupos.flatMap(grupo =>
+                    grupo.categorias.map(categoria => {
+                        const pesquisadorData = categoria.pesquisadores.find(p => p.id === pesquisador.id);
+                        return pesquisadorData ? parseFloat(pesquisadorData.total).toFixed(2) : "0.00";
+                    })
+                );
+
+                row += valoresCategorias.join(",") + ",";
+
+                // Adicionar a coluna do total
+                row += `${pesquisador.total >= pesquisador.quantidade_max_pontos
+                    ? pesquisador.quantidade_max_pontos
+                    : parseFloat(pesquisador.total).toFixed(2)
+                    }\n`;
+
+                csvContent += row;
+            });
+
+        // Criar um blob para download
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+
+        // Criar um link e disparar o download
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "dados.csv");
+        document.body.appendChild(link);
+        link.click();
+
+        // Limpar memória
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
     const adicionarGrupo = () => {
         const uuid = uuidv4()
         setGrupos([...grupos, {
@@ -371,6 +417,8 @@ export function BaremasHome() {
     //atualizar campos
 
     const handleInputChange = (e: any, index: any, idGrupo: any) => {
+
+        console.log("GRUPOS: ", grupos);
         const { name, value } = e.target;
         const novosGrupos = grupos.map(grupo => {
             if (grupo.id === idGrupo) {
@@ -391,8 +439,6 @@ export function BaremasHome() {
         });
         setGrupos(novosGrupos);
     };
-
-    console.log("GRUPOOOSSS", grupos)
 
     //deletar criterio
 
@@ -476,6 +522,7 @@ export function BaremasHome() {
     //select
 
     const selecionarCriterio = (grupoIndex: number, categoriaIndex: number, criterioId: number, criterioItem: string, pesquisadores: PesquisadoresSelecionados[]) => {
+        console.log("GRUPOS: ", grupos);
         const novosGrupos = grupos.map((grupo, index) => {
             if (index === grupoIndex) {
                 const novasCategorias = grupo.categorias.map((categoria, idx) => {
@@ -917,7 +964,7 @@ export function BaremasHome() {
 
                                                 <TabsList className="grid w-full grid-cols-2">
                                                     <TabsTrigger value="1" onClick={() => setValueTab('1')}>Configurações</TabsTrigger>
-                                                    <TabsTrigger value="2" onClick={() => setValueTab('2')}>Resultados</TabsTrigger>
+                                                    <TabsTrigger value="2" onClick={() => { setValueTab('2'); console.log("grupos: ", grupos) }}>Resultados</TabsTrigger>
                                                 </TabsList>
                                             </Alert>
                                         </div>
@@ -1076,7 +1123,7 @@ export function BaremasHome() {
                                                                                     </TableCell>
 
                                                                                     <TableCell>
-                                                                                        <Input className={`w-24 ${categoria.pontos > categoria.pontuacao_max && ('border-red-500')}`} name="pontuacao_max" value={categoria.pontuacao_max} onChange={(e) => handleInputChange(e, index, grupo.id)} />
+                                                                                        <Input className={`w-24 ${Number(categoria.pontos) > Number(categoria.pontuacao_max) && 'border-red-500'}`} name="pontuacao_max" value={categoria.pontuacao_max} onChange={(e) => handleInputChange(e, index, grupo.id)} />
                                                                                     </TableCell>
 
                                                                                     <TableCell className="flex justify-end pr-12 relative">
@@ -1142,7 +1189,7 @@ export function BaremasHome() {
 
                                         <TabsContent value="2" className="w-full flex gap-3 flex-col m-0 p-0">
                                             <div className="w-full flex">
-                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] whitespace-nowrap"></div>
+                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#559FB8] whitespace-nowrap"></div>
 
                                                 <Alert className="rounded-l-none ">
                                                     <div className="flex justify-between  mb-6">
@@ -1159,7 +1206,7 @@ export function BaremasHome() {
                                             </div>
 
                                             <div className="w-full flex">
-                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] whitespace-nowrap"></div>
+                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#559FB8] whitespace-nowrap"></div>
 
                                                 <Alert className="rounded-l-none ">
                                                     <div className="flex justify-between  mb-6">
@@ -1178,20 +1225,20 @@ export function BaremasHome() {
 
                                                     {grupos.length != 0 && (
                                                         <div>
-                                                            {grupos.map((grupo) => {
-                                                                return (
-                                                                    <TableHead >{grupo.titulo}</TableHead>
-                                                                );
-                                                            })}
                                                             <Table>
                                                                 <TableHeader>
                                                                     <TableRow>
                                                                         <TableHead className="">Pesquisadores</TableHead>
-                                                                        {grupos.flatMap((grupo) =>
+                                                                        {grupos.map((grupo) => {
+                                                                            return (
+                                                                                <TableHead>{grupo.titulo}</TableHead>
+                                                                            );
+                                                                        })}
+                                                                        {/*grupos.flatMap((grupo) =>
                                                                             grupo.categorias.map((categoria) => (
                                                                                 <TableHead key={categoria.id_criterio} className="">{categoria.criterio}</TableHead>
                                                                             ))
-                                                                        )}
+                                                                        )*/}
                                                                         <TableHead className="">Total</TableHead>
                                                                     </TableRow>
                                                                 </TableHeader>
@@ -1200,6 +1247,7 @@ export function BaremasHome() {
                                                                     {Object.values(somaTotalPorPesquisador)
                                                                         .sort((a, b) => parseFloat(b.total) - parseFloat(a.total))
                                                                         .map((grupoOrdenado) => (
+
                                                                             <TableRow key={grupoOrdenado.id} className="border-b border-neutral-200 dark:border-neutral-800">
                                                                                 {/* Coluna com a imagem e nome */}
                                                                                 <TableCell className="flex items-center gap-3">
@@ -1215,31 +1263,43 @@ export function BaremasHome() {
                                                                                 </TableCell>
 
                                                                                 {
-                                                                                    grupos.flatMap((grupo) => (
-                                                                                        grupo.categorias.map((categoria) => (
-                                                                                            categoria.pesquisadores.map((pesquisador) => {
-                                                                                                if (pesquisador.id === grupoOrdenado.id) {
-                                                                                                    return (
-                                                                                                        <TableCell key={pesquisador.id} className="text-center">
-                                                                                                            <div className="rounded-md border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 h-10 px-4 py-2 text-gray-600 text-sm dark:text-white font-normal">
-                                                                                                                {pesquisador.total >= Number(categoria.pontuacao_max) ? categoria.pontuacao_max : parseFloat((pesquisador.total).toString()).toFixed(2)}
-                                                                                                            </div>
-                                                                                                        </TableCell>
-                                                                                                    )
-                                                                                                }
-                                                                                            })
-                                                                                        ))
-                                                                                    ))
+                                                                                    grupos.map((grupo) => {
+                                                                                        const totalPorColuna = grupo.categorias.reduce((acc, categoria) => {
+                                                                                            return (
+                                                                                                acc +
+                                                                                                categoria.pesquisadores.reduce((subAcc, pesquisador) => {
+                                                                                                    if (pesquisador.id === grupoOrdenado.id) {
+                                                                                                        return (
+                                                                                                            subAcc +
+                                                                                                            (pesquisador.total >= Number(categoria.pontuacao_max)
+                                                                                                                ? Number(categoria.pontuacao_max)
+                                                                                                                : parseFloat(pesquisador.total.toString()))
+                                                                                                        );
+                                                                                                    }
+                                                                                                    return subAcc;
+                                                                                                }, 0)
+                                                                                            );
+                                                                                        }, 0);
+
+                                                                                        return (
+                                                                                            <TableCell key={grupo.id} className="text-center">
+                                                                                                <div className="rounded-md border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 h-10 px-4 py-2 text-gray-600 text-sm dark:text-white font-normal">
+                                                                                                    {totalPorColuna.toFixed(2)}
+                                                                                                </div>
+                                                                                            </TableCell>
+                                                                                        );
+                                                                                    })
                                                                                 }
 
-                                                                                {/* Colunas dos grupos 
+
+                                                                                {/* Colunas dos grupos /}
                                                                                 {grupoOrdenado.grupos.map((grupo) => (
                                                                                     <TableCell key={grupo.titulo} className="text-center">
                                                                                         <div className="rounded-md border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 h-10 px-4 py-2 text-gray-600 text-sm dark:text-white font-normal">
                                                                                             {parseFloat(grupo.total).toFixed(2)}
                                                                                         </div>
                                                                                     </TableCell>
-                                                                                ))}*/}
+                                                                                ))}*
 
                                                                                 {/* Coluna com o total */}
                                                                                 <TableCell className="text-center">
@@ -1247,8 +1307,6 @@ export function BaremasHome() {
                                                                                         {grupoOrdenado.total >= grupoOrdenado.quantidade_max_pontos ? grupoOrdenado.quantidade_max_pontos : parseFloat(grupoOrdenado.total).toFixed(2)}
                                                                                     </div>
                                                                                 </TableCell>
-
-
                                                                             </TableRow>
                                                                         ))}
                                                                 </TableBody>
@@ -1262,7 +1320,7 @@ export function BaremasHome() {
                                             </div>
 
                                             <div className="w-full flex">
-                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-blue-700 whitespace-nowrap"></div>
+                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#559FB8] whitespace-nowrap"></div>
 
                                                 <Alert className="rounded-l-none ">
                                                     <div className="flex justify-between  mb-6">
@@ -1289,7 +1347,7 @@ export function BaremasHome() {
                                 <div className="w-16 pl-2 whitespace-nowrap">
                                     <div className="bg-white dark:bg-black sticky top-8 flex flex-col gap-2 border dark:border-neutral-800 border-neutral-200 items-center p-2 rounded-md w-full ">
                                         <Button onClick={adicionarGrupo} variant={'ghost'} size={'icon'}><PlusCircle size={20} /> </Button>
-                                        <Button variant={'ghost'} size={'icon'}><FileCsv size={20} /> </Button>
+                                        <Button onClick={() => baixarCSV(grupos)} variant={'ghost'} size={'icon'}><FileCsv size={20} /> </Button>
                                     </div>
                                 </div>
                             </div>

@@ -34,7 +34,7 @@ type Research = {
     software: string,
     work_in_event: string,
 
-    id: string
+    researcher_id: string
     name: string,
     university: string,
     lattes_id: string,
@@ -401,9 +401,9 @@ export function PesquisadorItemBarema(config: Props) {
             <div className="flex gap-3 items-center w-full overflow-x-auto flex-nowrap">
                 {Array.isArray(config.researcherSelecionados) && config.researcherSelecionados.map((props) => {
                     return (
-                        <div key={props.id} className="group flex transition-all">
+                        <div key={props.researcher_id} className="group flex transition-all">
                             <div className="flex">
-                                <TooltipProvider key={props.id}>
+                                <TooltipProvider key={props.researcher_id}>
                                     <Tooltip>
                                         <TooltipTrigger asChild>
                                             <div className="flex items-center">
@@ -416,9 +416,10 @@ export function PesquisadorItemBarema(config: Props) {
                                                                 dark:bg-neutral-700
                                                             "
                                                             style={{
-                                                                backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) `
+                                                                backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.researcher_id}) `
                                                             }}
                                                         >
+
                                                         </div>
                                                     )
                                                 }
@@ -432,9 +433,10 @@ export function PesquisadorItemBarema(config: Props) {
                                                                 dark:bg-neutral-700
                                                             "
                                                             style={{
-                                                                backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) `
+                                                                backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.researcher_id}) `
                                                             }}
                                                         >
+
                                                         </div>
                                                     )
                                                 }
@@ -443,20 +445,10 @@ export function PesquisadorItemBarema(config: Props) {
                                         <TooltipContent>
                                             {config.researcherSelecionados.filter((pesquisador) => pesquisador.researcher === props.researcher).map((pesquisador) => {
                                                 return (
-                                                    <div key={pesquisador.id} className="flex items-center gap-3">
+                                                    <div key={pesquisador.researcher_id} className="flex items-center gap-3">
                                                         {
                                                             [1, 2, 3, 4].includes(config.id_criterio) && calcularPontuacao(props) !== 0 && (
                                                                 <div className="flex items-center gap-2">
-                                                                    <div
-                                                                        className="
-                                                                            rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat
-                                                                            rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
-                                                                            dark:bg-neutral-700
-                                                                        "
-                                                                        style={{
-                                                                            backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${pesquisador.id}) `
-                                                                        }}
-                                                                    ></div>
                                                                     <p>{pesquisador.researcher}</p>
                                                                 </div>
                                                             )
@@ -465,16 +457,6 @@ export function PesquisadorItemBarema(config: Props) {
                                                         {
                                                             !([1, 2, 3, 4].includes(config.id_criterio)) && Number(calcularPontuacao(props)?.toFixed(2)) >= 0 && (
                                                                 <div className="flex items-center gap-2">
-                                                                    <div
-                                                                        className="
-                                                                            rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat
-                                                                            rounded-l-lg rounded-r-none border dark:border-neutral-800 border-r-0 bg-white
-                                                                            dark:bg-neutral-700
-                                                                        "
-                                                                        style={{
-                                                                            backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${pesquisador.id}) `
-                                                                        }}
-                                                                    ></div>
                                                                     <p>{pesquisador.researcher}</p>
                                                                 </div>
                                                             )
