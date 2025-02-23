@@ -439,12 +439,6 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
             </DialogFooter>
           </ScrollArea>
         </div>
-
-
-
-
-
-
       </SheetContent>
     </Sheet>
   );
