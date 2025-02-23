@@ -299,8 +299,6 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
               </h1>
             </div>
 
-
-
             <div className="space-y-6">
               {/* Área de especialidade */}
               <div>

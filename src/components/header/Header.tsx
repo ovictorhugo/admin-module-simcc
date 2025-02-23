@@ -119,29 +119,34 @@ export function Header() {
             )}
           </div>
 
-          <div className="md:hidden">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant='outline' size="icon" className="h-8 w-8" >
-                  <UserCircleGear className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="mr-5">
-                <DropdownMenuItem>
-                  <Link className="flex gap-2 items-center" to={'/signIn'}>
-                    <UserPlus className="h-4 w-4" />
-                    <p>Criar conta</p>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link className="flex gap-2 items-center" to={'/signUp'}>
-                    <LogIn className="h-4 w-4" />
-                    <p>Fazer login</p>
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          {
+            !loggedIn && (
+              <div className="md:hidden">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant='outline' size="icon" className="h-8 w-8" >
+                      <UserCircleGear className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="mr-5">
+                    <DropdownMenuItem>
+                      <Link className="flex gap-2 items-center" to={'/signIn'}>
+                        <UserPlus className="h-4 w-4" />
+                        <p>Criar conta</p>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link className="flex gap-2 items-center" to={'/signUp'}>
+                        <LogIn className="h-4 w-4" />
+                        <p>Fazer login</p>
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+            )
+          }
 
           <div className="hidden md:flex md:gap-2">
             <div>

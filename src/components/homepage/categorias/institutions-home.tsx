@@ -79,7 +79,7 @@ export function InstitutionsHome() {
     <div className="grid grid-cols-1 gap-4">
       <HeaderResult />
 
-      <div className="mt-4">
+      <div className="mt-4 pb-16">
         <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -126,7 +126,7 @@ export function InstitutionsHome() {
             <div className="flex mb-2">
               <HeaderResultTypeHome title="Pesquisadores por detalhamento" icon={<Building2 size={24} className="text-gray-400" />}>
                 <div className="flex gap-3 mr-3">
-                  <Button onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                  <Button className="hidden md:block" onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
                     <Rows size={16} className="whitespace-nowrap" />
                   </Button>
                   <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'} size={'icon'}>

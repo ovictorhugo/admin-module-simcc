@@ -59,7 +59,7 @@ export function Search() {
     // Decodifica a string URL-encoded
     const formatted = decodeURIComponent(encoded);
 
-    let result: { term: string }[] = [];
+    const result: { term: string }[] = [];
     let temp = '';
     let inGroup = false;
 
@@ -246,7 +246,6 @@ export function Search() {
 
   };
 
-
   useEffect(() => {
     const joinedTerms = itemsSelecionados.map(item => item.term).join('');
     // Verifica se o último caractere é ponto e vírgula ou barra vertical
@@ -366,7 +365,7 @@ export function Search() {
   }, [maria]);
 
   return (
-    <div className="bottom-0 mt-4 mb-2 w-full flex flex-col max-sm:flex  max-sm:flex-row">
+    <div className="bottom-0 mt-4 mb-2 w-full flex flex-col max-sm:flex max-sm:flex-row">
       <div className={` max-sm:px-[5px] w-full`}>
         <div className="">
           <div className="flex gap-4 w-full">

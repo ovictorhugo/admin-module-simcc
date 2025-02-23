@@ -138,7 +138,7 @@ export function ArticlesHome() {
 
   return (
 
-    <div className="grid grid-cols-1 gap-4">
+    <div className="grid grid-cols-1 gap-4 pb-16">
       <HeaderResult />
       <div className="pt-4 mb-4">
         <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >

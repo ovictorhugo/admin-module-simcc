@@ -1291,15 +1291,14 @@ export function BaremasHome() {
                                                                                     })
                                                                                 }
 
-
-                                                                                {/* Colunas dos grupos /}
+                                                                                {/* Colunas dos grupos */}
                                                                                 {grupoOrdenado.grupos.map((grupo) => (
                                                                                     <TableCell key={grupo.titulo} className="text-center">
                                                                                         <div className="rounded-md border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 h-10 px-4 py-2 text-gray-600 text-sm dark:text-white font-normal">
                                                                                             {parseFloat(grupo.total).toFixed(2)}
                                                                                         </div>
                                                                                     </TableCell>
-                                                                                ))}*
+                                                                                ))}
 
                                                                                 {/* Coluna com o total */}
                                                                                 <TableCell className="text-center">

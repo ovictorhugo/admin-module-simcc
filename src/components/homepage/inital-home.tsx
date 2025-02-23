@@ -526,8 +526,6 @@ export function InitialHome() {
         <meta name="robots" content="index, follow" />
       </Helmet>
 
-
-
       <div className="bg-cover  bg-no-repeat bg-center w-full" >
         <div className="h-[0vh] z-[-1] opacity-45">
           <ChartContainer config={chartConfig} className="h-[55vh] w-full">
@@ -546,7 +544,6 @@ export function InitialHome() {
                   <stop offset="95%" stopColor="#82AAC0" stopOpacity={0} />
                 </linearGradient>
               </defs>
-
 
               {chartKeys.map((key, index) => {
                 const isVisible = visibleChart === index;
@@ -611,7 +608,7 @@ export function InitialHome() {
             <Search />
           </div>
 
-          <div className="flex flex-wrap gap-3 z-[2] w-full lg:w-[60vw]">
+          <div className="hidden md:flex flex-wrap gap-3 z-[2] w-full lg:w-[60vw]">
 
             {words.slice(0, 10).map((word, index) => (
               <div
@@ -880,9 +877,9 @@ export function InitialHome() {
 
           <Alert className="lg:col-span-2 h-full p-0">
             <CardHeader className="flex p-0 flex-col md:flex-wrap lg:flex-nowrap items-stretch space-y-0 border-b dark:border-b-neutral-800 sm:flex-row">
-              <div className="w-fullflex flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-                <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
-                  <div>
+              <div className="w-full flex flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+                <CardHeader className="flex p-0 flex-row flex-wrap gap-4 items-center justify-between space-y-0 ">
+                  <div className="min-w-fit">
                     <CardTitle className="text-sm font-medium">
                       Produção geral
                     </CardTitle>

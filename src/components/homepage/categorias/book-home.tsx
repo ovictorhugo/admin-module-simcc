@@ -115,7 +115,7 @@ export function BookHome() {
   }, [urlTermCap]);
 
   return (
-    <div className="grid grid-cols-1 gap-4">
+    <div className="grid grid-cols-1 gap-4 pb-16">
       <HeaderResult />
       <div className="mt-4 mb-4 grid gap-4 md:grid-cols-2">
         <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
