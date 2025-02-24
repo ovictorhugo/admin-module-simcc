@@ -91,8 +91,8 @@ export function SearchModal() {
       try {
         // Consulta os documentos cujo term começa com o prefixo fornecido
         const filesRef = collection(db, `${version ? ('termos_busca') : ('termos_busca_cimatec')}`);
-        const q = query(filesRef, 
-          where('term_normalize', '>=', prefix), 
+        const q = query(filesRef,
+          where('term_normalize', '>=', prefix),
           where('term_normalize', '<=', prefix + '\uf8ff')
         );
 
@@ -126,9 +126,9 @@ export function SearchModal() {
     // Converte para minúsculas
     value = value.toLowerCase();
     // Remove caracteres especiais, mantendo letras, números e espaços
-    value = value.replace(/[^a-z0-9\s]/g, ""); 
+    value = value.replace(/[^a-z0-9\s]/g, "");
     return value;
-};
+  };
 
   const handleChangeInput = (value: string) => {
     const normalizedValue = normalizeInput(value);
@@ -473,10 +473,10 @@ export function SearchModal() {
 
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={onClose}  >
-      <DialogContent className="p-0 border-none min-w-[60vw] px-4 mx-auto md:px-0 bg-transparent dark:bg-transparent">
+    <Dialog open={isModalOpen} onOpenChange={onClose}>
+      <DialogContent className="overflow-y-scroll p-0 border-none min-w-[63vw] px-4 mx-auto md:px-0 bg-transparent dark:bg-transparent">
 
-        <Alert onKeyDown={handleEnterPress} className="h-14 bg-white p-2 flex items-center gap-3 justify-between">
+        <Alert onKeyDown={handleEnterPress} className="h-14 bg-white p-2 min-w-[40%] flex items-center gap-3 justify-between">
           <div className="flex items-center gap-2 w-full flex-1">
             <MagnifyingGlass size={16} className="hidden md:block whitespace-nowrap w-10" />
 
@@ -534,19 +534,23 @@ export function SearchModal() {
                 />
               )}
 
-              {(showInput || itemsSelecionadosPopUp.length == 0) && (
-                <p>
-                  {itemsBigrama.slice(0, 1).map((item, index) => (
-                    <div className="text-neutral-500 text-sm w-full" key={index} onClick={() => handleSuggestionClick(item.word)}>
-                      {item.word}
-                    </div>
-                  ))}
-                </p>
-              )}
+              <span className="hidden md:block">
+                {(showInput || itemsSelecionadosPopUp.length == 0) && (
+                  <p>
+                    {itemsBigrama.slice(0, 1).map((item, index) => (
+                      <div className="text-neutral-500 text-sm w-full" key={index} onClick={() => handleSuggestionClick(item.word)}>
+                        {item.word}
+                      </div>
+                    ))}
+                  </p>
+                )}
+              </span>
 
-              {(showInput || itemsSelecionadosPopUp.length == 0) && itemsBigrama.length != 0 && (
-                <div className=" text-xs text-neutral-500 whitespace-nowrap px-2 ml-3  border border-neutral-500 p-1 rounded-md">Tab ↹</div>
-              )}
+              <span className="hidden lg:block">
+                {(showInput || itemsSelecionadosPopUp.length == 0) && itemsBigrama.length != 0 && (
+                  <div className=" text-xs text-neutral-500 whitespace-nowrap px-2 ml-3  border border-neutral-500 p-1 rounded-md">Tab ↹</div>
+                )}
+              </span>
             </div>
           </div>
 
@@ -565,7 +569,7 @@ export function SearchModal() {
         </Alert>
 
         {input.length >= 3 && (
-          <Alert className="">
+          <Alert className="w-full">
             <ResponsiveMasonry
               columnsCountBreakPoints={{
                 350: 1,
@@ -574,7 +578,7 @@ export function SearchModal() {
                 1200: 2
               }}
             >
-              <Masonry gutter="20px">
+              <Masonry className="max-h-[80vh] overflow-y-scroll" gutter="20px">
                 {filteredItems.filter(item => item.type_ === 'ARTICLE').length != 0 && (
                   <div>
                     <p className="uppercase font-medium text-xs mb-3">Artigos</p>
@@ -654,7 +658,7 @@ export function SearchModal() {
                 )}
 
                 {(filteredItems.filter(item => item.type_ === 'NAME').length != 0) && (
-                  <div>
+                  <div className="">
                     <p className="uppercase font-medium text-xs mb-3">Nome</p>
                     <div className="flex flex-wrap gap-3">
                       {filteredItems.filter(item => item.type_ === 'NAME').slice(0, 5).map((props, index) => (
