@@ -54,6 +54,9 @@ export function InstitutionsHome() {
     urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}&university=&type=AREA`
   } 
 
+
+  console.log(urlTermPublicacoes)
+
   useMemo(() => {
     const fetchData = async () => {
       isLoading(true);

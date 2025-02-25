@@ -31,6 +31,7 @@ import { AddBackground } from "../modals/add-background";
 import { CookiesModal } from "../modals/cookies";
 import { RelatarBug } from "../modals/relatar-bug";
 import { PesquisadoresSelecionadosModal } from "../modals/pesquisadores-selecionados-modal";
+import { ConfirmDeleteInstitution } from "../modals/confirm-delete-institution";
 
 const ModalContent = () => {
   const { type } = useModal();
@@ -72,15 +73,14 @@ const ModalContent = () => {
       return <ConfirmDeleteResearcherDepartament />
     case 'minha-area':
       return <MinhaArea />
-
+    case 'confirm-delete-institution':
+      return<ConfirmDeleteInstitution/>
     case 'add-background':
       return <AddBackground />
-
     case 'relatar-problema':
       return <RelatarBug />
     case 'pesquisadores-selecionados':
       return <PesquisadoresSelecionadosModal />
-
     default:
       return null;
   }
