@@ -662,16 +662,16 @@ export function ResearchersHome() {
           <MariaHome />
 
           {searchType !== 'abstract' && searchType !== 'name' && searchType !== 'area' && (
-            <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex md:mb-2 w-full">
+            <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex w-full">
               <AccordionItem value="item-1" className="w-full">
-                <div className="flex pt-4 w-full">
+                <div className="flex  w-full">
                   <HeaderResultTypeHome title="Pesquisadores mais relevantes por ordem de ocorrências" icon={<ListNumbers size={24} className="text-gray-400" />}>
                   </HeaderResultTypeHome>
                   <AccordionTrigger>
 
                   </AccordionTrigger>
                 </div>
-                <AccordionContent className="w-full">
+                <AccordionContent className="w-full p-0">
                   {loading ? (
                     <Skeleton className="w-full rounded-md h-[300px]" />
                   ) : (
@@ -683,8 +683,8 @@ export function ResearchersHome() {
           )}
 
           {(simcc && searchType != 'name') && (
-            <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex md:mb-2">
-              <AccordionItem value="item-1" className="w-full">
+            <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex ">
+              <AccordionItem value="item-1" className="w-full ">
                 <div className="flex mb-2">
                   <HeaderResultTypeHome title="Pesquisadores no mapa" icon={<MapIcon size={24} className="text-gray-400" />}>
                   </HeaderResultTypeHome>
@@ -693,9 +693,9 @@ export function ResearchersHome() {
 
                   </AccordionTrigger>
                 </div>
-                <AccordionContent>
+                <AccordionContent className="p-0">
                   {loading ? (
-                    <Skeleton className="rounded-md h-[300px]" />
+                    <Skeleton className="rounded-md " />
                   ) : (
                     <div>
                       <MapaResearcher

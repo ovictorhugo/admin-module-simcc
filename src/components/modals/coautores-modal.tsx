@@ -156,7 +156,7 @@ export function CoautoresModal() {
                       <Alert
                         className={`flex items-start justify-start text-left w-fit gap-4 font-semibold text-white  p-2 truncate 
                ${(item.type === 'internal' && 'bg-yellow-500 dark:bg-yellow-500') ||
-                          (item.type === 'abstract' && 'bg-orange-400 dark:bg-orange-400') ||
+                          (item.type === 'external' && 'bg-orange-400 dark:bg-orange-400') ||
                           (item.type === 'speaker' && 'bg-red-400 dark:bg-red-400') || ''
                           }
             `}

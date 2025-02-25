@@ -99,8 +99,10 @@ export function TextoRevista(props: Props) {
   return (
     <div className="">
 
-      <FilterYearPopUp
+     <div className="mb-6">
+     <FilterYearPopUp
         onFilterUpdate={handleResearcherUpdate} />
+     </div>
 
       <Accordion type="single" collapsible defaultValue="item-1" >
         <AccordionItem value="item-1" className="text-left" >

@@ -43,7 +43,7 @@ export function FilterYearPopUp(props: Props) {
   }, [filterYear, itensSelecionados, updateResearcher, isFirstRender]);
 
   return (
-    <div className="mt-2 flex gap-6">
+    <div className=" flex gap-6">
       <div className="w-full flex flex-1 flex-col">
         <div className="flex items-center gap-3 mb-4 ">
           <CalendarBlank size={24} className="text-gray-400" />

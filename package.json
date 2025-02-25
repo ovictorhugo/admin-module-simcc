@@ -59,6 +59,7 @@
     "conectee": "file:",
     "correios-brasil": "^3.0.6",
     "cors": "^2.8.5",
+    "culori": "^4.0.1",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "embla-carousel-autoplay": "^8.1.6",

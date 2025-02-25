@@ -520,9 +520,10 @@ export function ResearcherModal() {
                           Copiar Lattes ID
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem className="flex items-center gap-3" onClick={() => handleDownloadJson()}><FileCsv className="h-4 w-4" />Baixar CSV das publicações</DropdownMenuItem>
+                        <DropdownMenuItem className="flex items-center gap-3" onClick={() => handleDownloadJson()}><FileCsv className="h-4 w-4" />CSV dos artigos</DropdownMenuItem>
 
-                        <DropdownMenuItem className="flex items-center gap-3" ><File className="h-4 w-4" />Baixar Dicionário de dados</DropdownMenuItem>
+                       <Link to={`${urlGeral}dictionary.pdf`}>
+                       <DropdownMenuItem className="flex items-center gap-3" ><File className="h-4 w-4" />Dicionário de dados</DropdownMenuItem></Link>
 
                         <DropdownMenuItem className="flex items-center gap-3" onClick={() => setOpen(!open)} ><BracketsCurly className="h-4 w-4" />API da consulta</DropdownMenuItem>
 
@@ -624,7 +625,7 @@ export function ResearcherModal() {
                   <div className="flex w-full flex-1">
                     <Tabs defaultValue="articles" value={value} className="w-[99%]">
                       {researcher.slice(0, 1).map(() => (
-                        <div className=" grid grid-cols-1 mb-2 w-full">
+                        <div className=" grid grid-cols-1  w-full">
                           <ScrollArea className="mb-4">
                             <TabsList className="mb-4 flex h-auto">
                               <TabsTrigger
@@ -798,7 +799,7 @@ export function ResearcherModal() {
                     </Tabs>
                   </div>
 
-                  <div className="xl:w-[350px] w-full grid grid-cols-1">
+                  <div className="xl:w-[350px] w-full grid grid-cols-1 ">
                     <ResponsiveMasonry
                       columnsCountBreakPoints={{
                         350: 1,
@@ -807,7 +808,7 @@ export function ResearcherModal() {
                         1200: 1
                       }}
                     >
-                      <Masonry gutter="24px">
+                      <Masonry gutter="1px">
                         {researcher.slice(0, 1).map((user) => {
 
                           return (

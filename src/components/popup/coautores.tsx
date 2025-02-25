@@ -107,14 +107,14 @@ export function Coautores(props:Props) {
       </div>
 
     {loading ? (
-      <div className="flex gap-2 mt-6 flex-wrap">
+      <div className="flex gap-2 my-6 flex-wrap">
         <Skeleton className="rounded-md  w-full h-[50px]"/>
         <Skeleton className="rounded-md w-[70%] h-[40px]"/>
         <Skeleton className="rounded-md  w-[85%] h-[35px]"/>
         <Skeleton className="rounded-md  w-[40%] h-[25px]"/>
       </div>
     ):(
-        <div className="gap-2 mt-6 flex-wrap flex w-full items-start ">
+        <div className="gap-2 my-6 flex-wrap flex w-full items-start ">
         {sortedResearchers.slice(0, count).map((item) => {
            const maxFontSize = 130;
            const minFontSize = 70;
@@ -133,7 +133,7 @@ export function Coautores(props:Props) {
                   className={`flex items-start justify-start text-left w-fit gap-2 font-semibold text-white  p-2 
                     ${
                       (item.type === 'internal' && 'bg-yellow-500 dark:bg-yellow-500') ||
-                      (item.type === 'abstract' && 'bg-orange-400 dark:bg-orange-400') ||
+                      (item.type === 'external' && 'bg-orange-400 dark:bg-orange-400') ||
                       (item.type === 'speaker' && 'bg-red-400 dark:bg-red-400') || ''
                     }
                   `}
@@ -157,7 +157,7 @@ export function Coautores(props:Props) {
 
 
       {sortedResearchers.length > count && (
-        <div className="w-full mt-8 items-center flex justify-center">
+        <div className="w-full mb-6 items-center flex justify-center">
         <Button onClick={() => setCount(count + 5)} variant={'outline'} size={'sm'}>
           <Plus size={16}/>  Mostrar mais
         </Button>

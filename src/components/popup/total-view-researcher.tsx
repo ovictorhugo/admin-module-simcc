@@ -19,7 +19,7 @@ export function TotalViewResearcher(props: Props) {
             <div
                 className="
                     gap-6 grid grid-cols-2 text-left
-                    
+                    mb-6
                     md:grid-cols-3
                     
                     xl:grid-cols-2
@@ -49,21 +49,21 @@ export function TotalViewResearcher(props: Props) {
                 <Alert className="flex items-center gap-3">
                     <Copyright size={16} className="" />
                     <div>
-                        <p className="font-bold">{props.patent != 0 ? props.patent : "0"} </p><div className="text-sm text-gray-500">Patentes</div>
+                        <p className="font-bold">{Number(props.patent) != 0 ? props.patent : "0"} </p><div className="text-sm text-gray-500">Patentes</div>
                     </div>
                 </Alert>
 
                 <Alert className="flex items-center gap-3">
                     <StripeLogo size={16} className="" />
                     <div>
-                        <p className="font-bold">{props.brand != 0 ? props.brand : "0"} </p><div className="text-sm text-gray-500">Marcas</div>
+                        <p className="font-bold">{Number(props.brand) != 0 ? props.brand : "0"} </p><div className="text-sm text-gray-500">Marcas</div>
                     </div>
                 </Alert>
 
                 <Alert className="flex items-center gap-3">
                     <Code size={16} className="" />
                     <div>
-                        <p className="font-bold">{props.software != 0 ? props.software : "0"} </p><div className="text-sm text-gray-500">Softwares</div>
+                        <p className="font-bold">{Number(props.software) != 0 ? props.software : "0"} </p><div className="text-sm text-gray-500">Softwares</div>
                     </div>
                 </Alert>
             </div>

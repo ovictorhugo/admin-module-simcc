@@ -1,5 +1,5 @@
 import { ArrowLeftFromLine, ArrowRightFromLine, BookOpenText, Boxes, Briefcase, Check, ChevronLeft, Download, FolderKanban, Minus, OctagonAlert, Star, TrendingUp, Waypoints } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
 import { Helmet } from "react-helmet";
 
@@ -788,7 +788,11 @@ export function ResearcherPage() {
                             Copiar Lattes ID
                           </DropdownMenuItem>
 
-                          <DropdownMenuItem className="flex items-center gap-3" onClick={() => handleDownloadJson()}><FileCsv className="h-4 w-4" />Baixar CSV das publicações</DropdownMenuItem>
+                          <DropdownMenuItem className="flex items-center gap-3" onClick={() => handleDownloadJson()}><FileCsv className="h-4 w-4" />CSV dos artigos</DropdownMenuItem>
+
+                          
+                       <Link to={`${urlGeral}dictionary.pdf`}>
+                       <DropdownMenuItem className="flex items-center gap-3" ><File className="h-4 w-4" />Dicionário de dados</DropdownMenuItem></Link>
 
                           <DropdownMenuItem className="flex items-center gap-3" onClick={() => setOpen(!open)} ><BracketsCurly className="h-4 w-4" />API da consulta</DropdownMenuItem>
 

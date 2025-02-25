@@ -170,8 +170,10 @@ export function ArticlesResearcherPopUp(props: Props) {
     return (
         <>
             <div className="">
-                <FilterArticlePopUp
+              <div className="mb-6">
+              <FilterArticlePopUp
                     onFilterUpdate={handleResearcherUpdate} />
+              </div>
 
                 <Accordion type="single" collapsible defaultValue="item-1">
                     <AccordionItem value="item-1" >
@@ -208,7 +210,7 @@ export function ArticlesResearcherPopUp(props: Props) {
                                         <div className="font-medium flex items-center gap-2">
                                             <span
                                                 className="
-                                                    text-[0.6rem] md:text-[0.8rem]
+                                                  
                                                 "
                                             >
                                                 {publicacoes.length}

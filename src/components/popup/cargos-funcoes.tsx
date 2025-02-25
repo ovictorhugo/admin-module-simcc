@@ -11,13 +11,15 @@ import {
 
 } from "../../components/ui/accordion"
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home"
-import { ArrowUDownLeft, ChartBar, Rows, SquaresFour } from "phosphor-react"
+import { ArrowUDownLeft, CalendarBlank, ChartBar, Rows, SquaresFour } from "phosphor-react"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { BookBlockPopUp } from "./book-block-popup"
 import { Button } from "../ui/button"
-import { Briefcase } from "lucide-react"
+import { Briefcase, CircleAlert, Clock, Plus, TextSelectionIcon, Waypoints } from "lucide-react"
 import { GraficoTrabalhoEvento } from "./graficos/grafico-trabalho-evento"
 import { TableTrabalhoEventos } from "./columns/table-trabalho-eventos"
+import { Alert } from "../ui/alert"
+import { TableCargosFuncoes } from "./columns/table-cargos-funcoes"
 
 type Filter = {
   year: number[]
@@ -29,16 +31,18 @@ type Props = {
 }
 
 type Livros = {
-  authors: string;
-  homepage: string;
-  language: string;
-  means_divulgation: string;
-  nature: string;
-  relevance: boolean;
-  scientific_divulgation: boolean;
-  title: string;
-  title_en: string;
-  year_: string;
+  id:string
+  researcher_id:string
+  enterprise:string
+  start_year:string
+  end_year:string
+  employment_type:string
+  other_employment_type:string
+  functional_classification:string
+  other_functional_classification:string
+  workload_hours_weekly:string
+  exclusive_dedication:boolean
+  additional_info:string
 };
 
 
@@ -62,7 +66,7 @@ export function CargosFuncoes(props: Props) {
 
   const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
-  let urlTermPublicacoes = `${urlGeral}researcher_production/events?researcher_id=${props.name}&year=${yearString}`;
+  let urlTermPublicacoes = `${urlGeral}professional_experience?researcher_id=${props.name}&year=${yearString}`;
 
   console.log(urlTermPublicacoes)
 
@@ -101,43 +105,26 @@ export function CargosFuncoes(props: Props) {
   const [distinct] = useState(false)
   //conectores 
 
-
+  const [count, setCount] = useState(12)
 
   return (
     <div className="">
 
-      <FilterYearPopUp
+     <div className="mb-6">
+     <FilterYearPopUp
         onFilterUpdate={handleResearcherUpdate} />
+     </div>
 
 
-      <Accordion type="single" collapsible defaultValue="item-1" >
-        <AccordionItem value="item-1" >
-          <div className="flex mb-2">
-            <HeaderResultTypeHome title="Gráfico de quantidade total de trabalhos em eventos" icon={<ChartBar size={24} className="text-gray-400" />}>
-            </HeaderResultTypeHome>
-
-            <AccordionTrigger>
-
-            </AccordionTrigger>
-          </div>
-          <AccordionContent >
-            {loading ? (
-              <Skeleton className="w-full rounded-md h-[300px]" />
-            ) : (
-              <GraficoTrabalhoEvento publicacoes={publicacoes} />
-            )}
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-
+   
 
       <Accordion defaultValue="item-1" type="single" collapsible >
         <AccordionItem value="item-1" >
           <div className="flex mb-2">
             <div className="flex gap-4 w-full justify-between items-center ">
               <div className="flex gap-4 items-center">
-                <Briefcase size={24} className="text-gray-400" />
-                <p className="text-sm font-bold">Todos os trabalhos em eventos</p>
+                <Waypoints size={24} className="text-gray-400" />
+                <p className="font-medium">Todos os cargos e funções</p>
               </div>
 
               <div className="flex gap-3 mr-3 items-center h-full">
@@ -178,11 +165,87 @@ export function CargosFuncoes(props: Props) {
                 publicacoes.length == 0 ? (
                   <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
                 ) : (
-                  <BookBlockPopUp
-                    articles={publicacoes}
-                    distinct={distinct}
-                    type={'work-event'}
-                  />
+                  <div>
+                     <ResponsiveMasonry
+                columnsCountBreakPoints={{
+                    350: 1,
+                    750: 1,
+                    900: 2,
+                    1200: 2,
+                    1700: 3
+                }}
+            >
+                <Masonry gutter="16px">
+                    {publicacoes.slice(0, count).map((props) => {
+                      return(
+                        <div className="flex group w-full" >
+<div
+        className={`
+          h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0
+          ${props.employment_type.split('_').join(' ') == 'Livre' && ('bg-lime-300')} 
+    ${props.employment_type.split('_').join(' ') == 'Celetista' && ('bg-lime-400')} 
+    ${props.employment_type.split('_').join(' ') == 'Bolsista' && ('bg-lime-500')} 
+    ${props.employment_type.split('_').join(' ') == 'Outro' && ('bg-lime-600')} 
+    ${props.employment_type.split('_').join(' ') == 'Servidor Publico' && ('bg-lime-700')} 
+    ${props.employment_type.split('_').join(' ') == 'Professor Visitante' && ('bg-lime-800')} 
+        `}
+      >
+      </div>
+      <Alert className="rounded-l-none flex flex-col justify-between p-0 text-left">
+    <div className="p-4 pb-0">
+    <h3 className="font-semibold mb-4 ">{props.enterprise}</h3>
+
+<p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">
+ {props.functional_classification} {props.other_functional_classification != null && (`- ${props.other_functional_classification}`)}
+</p>
+
+{props.additional_info && (
+  <p className="text-sm capitalize mt-4 text-gray-500 dark:text-gray-300 font-normal">
+  {props.additional_info}
+</p>
+)}
+
+
+
+
+    </div>
+
+    <div className="flex items-center flex-wrap mt-4 gap-3 p-4 pt-0">
+    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><CalendarBlank size={12} />{props.start_year} - {(props.end_year == null || props.end_year == '') ? 'Atual': (props.end_year)}</div>
+
+    {props.workload_hours_weekly != null && (
+  <p className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
+ <Clock size={12} /> {props.workload_hours_weekly} horas
+ </p>
+)}
+
+{props.employment_type && (
+  <p className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
+ <TextSelectionIcon size={12} /> {props.employment_type.split('_').join(' ')} 
+ </p>
+)}
+
+{props.exclusive_dedication && (
+  <p className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
+  <CircleAlert size={12} /> Dedicação exclusiva
+ </p>
+)}
+
+
+
+    </div>
+      </Alert>
+
+                        </div>
+                      )
+                    })}
+                </Masonry>
+                </ResponsiveMasonry>
+
+                {publicacoes.length > count && (
+                <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
+            )}
+                  </div>
                 )
               )
             ) : (
@@ -190,7 +253,7 @@ export function CargosFuncoes(props: Props) {
 
                 <Skeleton className="w-full rounded-md h-[400px]" />
               ) : (
-                <TableTrabalhoEventos trabalho_evento={publicacoes} />
+                <TableCargosFuncoes trabalho_evento={publicacoes} />
               )
             )}
           </AccordionContent>

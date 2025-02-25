@@ -323,7 +323,7 @@ export function InformacoesGeraisResearcher(props: Research) {
             <div className="font-medium text-left text-2xl mb-6 pr-12">
               Bolsa CNPq
             </div>
-            <div className="flex relative flex-1">
+            <div className="flex relative flex-1 mb-6">
 
               <div className={`w-2 min-w-[8px] min-h-[125px] flex flex-1 relative rounded-l-lg ${item.modality_code == 'DT' ? ('bg-[#183EFF]') : ('bg-[#00D000]')} border border-r-0 border-neutral-200 dark:border-neutral-800 `}></div>
 
@@ -348,11 +348,11 @@ export function InformacoesGeraisResearcher(props: Research) {
 
       {props.graduate_programs.length !== 0 && (
         <div >
-          <div className="font-medium text-2xl my-6 ">
+          <div className="font-medium text-2xl mb-6 ">
             Programas de pós-graduação
           </div>
 
-          <div className="flex gap-3 items-center flex-wrap">
+          <div className="flex gap-3 items-center mb-6 flex-wrap">
             {props.graduate_programs.map((item) => (
               <Link
                 key={item.graduate_program_id}
@@ -382,7 +382,7 @@ export function InformacoesGeraisResearcher(props: Research) {
 
       {props.research_groups?.length != 0 && (
         <div>
-          <div className="my-6 flex items-center justify-between">
+          <div className="mb-6 flex items-center justify-between">
             <div className="font-medium text-2xl ">
               Grupos de pequisa
             </div>
@@ -397,7 +397,7 @@ export function InformacoesGeraisResearcher(props: Research) {
             </TooltipProvider>
           </div>
 
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col mb-6 gap-6">
             {props.research_groups.map((item) => (
               <Link to={`/grupos-pesquisa?group_id=${item.group_id}`} target="_blank" className="w-full">
 

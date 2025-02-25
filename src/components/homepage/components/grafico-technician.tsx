@@ -69,9 +69,9 @@ export function GraficoRtTechnician({ rtData }: { rtData: Rt | null }) {
           <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
           <Tooltip content={<ChartTooltipContent />} />
           <Bar dataKey="count" radius={4}>
-            <LabelList dataKey="count" position="top" offset={10} className="fill-foreground" fontSize={12} />
+            <LabelList dataKey="count" position="top" offset={10}  fontSize={12} />
             {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={getColorForRt(entry.rt)} />
+              <Cell key={`cell-${index}`} fill={'#559fb8'} />
             ))}
           </Bar>
         </BarChart>

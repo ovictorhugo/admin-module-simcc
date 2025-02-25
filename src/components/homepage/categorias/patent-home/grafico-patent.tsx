@@ -51,7 +51,7 @@ export function GraficoPatente({ publicacoes }: { publicacoes: Patente[] }) {
             >
               <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
               {chartData.map((entry, index) =>
-                entry.publicacoes > 0 ? <Cell key={`cell-${index}`} fill={chartConfig.publicacoes.color} /> : null
+                entry.publicacoes > 0 ? <Cell key={`cell-${index}`} /> : null
               )}
             </Bar>
           </BarChart>
