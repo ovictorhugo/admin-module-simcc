@@ -3,7 +3,7 @@ import { useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { Button } from "../../../ui/button";
 import { Plus } from "phosphor-react";
-import { BookItem } from "../../../popup/Livro";
+import { BookItem } from "./Livro";
 
 
 

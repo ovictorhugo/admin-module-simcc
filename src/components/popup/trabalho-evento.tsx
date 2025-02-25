@@ -106,8 +106,10 @@ export function WorkEvent(props: Props) {
   return (
     <div className="">
 
-      <FilterYearPopUp
+     <div className="mb-6">
+     <FilterYearPopUp
         onFilterUpdate={handleResearcherUpdate} />
+     </div>
 
 
       <Accordion type="single" collapsible defaultValue="item-1" >

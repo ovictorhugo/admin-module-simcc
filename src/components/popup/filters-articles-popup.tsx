@@ -100,7 +100,7 @@ export function FilterArticlePopUp(props: Props) {
   return (
     <div
       className="
-        flex flex-col gap-6 mb-6
+        flex flex-col gap-6
 
         md:flex-row
       "

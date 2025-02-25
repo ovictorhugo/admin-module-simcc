@@ -103,8 +103,12 @@ export const columns: ColumnDef<Research>[] = [
 
     header: () => <div className="text-right flex items-center">Cidade</div>,
     cell: ({ row }) => {
-
-      return <div className="flex w-fit gap-1 text-xs p-2 border items-center border-gray-300 dark:border-stone-700 rounded-md"><MapPin size={12} />{row.getValue("city")}</div>
+if((row.original.city != "None" && row.original.city != '')) {
+  return <div className="flex w-fit gap-1 text-xs p-2 border items-center border-gray-300 dark:border-stone-700 rounded-md"><MapPin size={12} />{row.getValue("city")}</div>
+} else {
+  return <div></div>
+}
+      
 
 
 
@@ -119,7 +123,7 @@ export const columns: ColumnDef<Research>[] = [
       const { onOpen } = useModal()
       const { pesquisadoresSelecionados, setPesquisadoresSelecionados } = useContext(UserContext)
       return (
-        <div className="flex gap-3">
+        <div className="flex gap-3 ml-auto w-full">
           <Button
             onClick={() => {
               // Verifica se o pesquisador já está selecionado pelo nome
@@ -143,7 +147,7 @@ export const columns: ColumnDef<Research>[] = [
               }
             }}
 
-            size={'icon'} className={` flex transition-all h-8 w-8  ${pesquisadoresSelecionados.some(pesquisador => pesquisador.name === row.original.name) && 'bg-red-500 hover:bg-red-600 text-white'
+            size={'icon'} className={` ml-auto flex transition-all h-8 w-8  ${pesquisadoresSelecionados.some(pesquisador => pesquisador.name === row.original.name) && 'bg-red-500 hover:bg-red-600 text-white'
               }`}>
 
             {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === row.original.name) ? (

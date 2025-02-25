@@ -4,6 +4,7 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 
 type Research = {
+    researcher_id: string,
     A1: string,
     A2: string,
     A3: string,
@@ -34,7 +35,6 @@ type Research = {
     software: string,
     work_in_event: string,
 
-    researcher_id: string
     name: string,
     university: string,
     lattes_id: string,

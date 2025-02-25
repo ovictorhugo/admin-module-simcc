@@ -118,7 +118,7 @@ export function FilterArticle(props: Props) {
   }, [filterYear, itensSelecionados, updateResearcher, isFirstRender]);
 
   return (
-    <div className="flex py-4 gap-6 lg:flex-row flex-col">
+    <div className="flex  gap-6 lg:flex-row flex-col">
       <div className="flex flex-col">
         <div className="flex items-center gap-3 mb-4">
           <CheckSquare size={24} className="text-gray-400" />

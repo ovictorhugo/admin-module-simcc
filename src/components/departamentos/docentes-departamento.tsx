@@ -185,6 +185,7 @@ export function DocentesDepartamento() {
                              subsidy={item.subsidy}
                              graduate_programs={item.graduate_programs}
                              departments={item.departments}
+                             status={item.status}
                              />
                          );
                      })}

@@ -127,7 +127,7 @@ export function OrientacoesResearcherPopUp(props: Props) {
     <>
       <div className="mb-[150px]">
 
-        <div className="flex flex-col md:flex-row gap-6 w-full">
+        <div className="flex flex-col md:flex-row mb-6  gap-6 w-full">
           <div className="flex flex-col">
             <div className="flex items-center gap-3 mb-4 w-full ">
               <CheckSquare size={24} className="text-gray-400" />

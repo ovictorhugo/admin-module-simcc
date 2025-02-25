@@ -2,18 +2,22 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { UserContext } from "../../context/context";
 import bg_graduate from '../../assets/bg_home.png'
-
+import bg_popup from '../../assets/bg_popup.png';
 
 import {
   Book,
   Books,
+
+  ChartBar,
+
+  ChartLine,
 
   Copyright,
 
   Quotes,
 
 } from "phosphor-react";
-import { ArrowRight, Info } from "lucide-react";
+import { ArrowRight, BarChartBig, Info, InfoIcon } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 
@@ -936,7 +940,7 @@ export function InitialHome() {
             <CardContent className="px-2 sm:p-6">
               <ChartContainer
                 config={chartConfig}
-                className="aspect-auto h-[300px] w-full"
+                className="aspect-auto h-[330px] w-full"
               >
                 <BarChart accessibilityLayer data={dados} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
                   <CartesianGrid vertical={false} horizontal={false} />
@@ -1125,9 +1129,32 @@ export function InitialHome() {
         className=" 
           w-full gap-8
           flex flex-wrap
-          md:px-8 flex-col px-4
+          md:px-8 flex-col px-4 mt-8
         "
       >
+
+<Alert className=" bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url(${bg_popup})` }}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Indicadores
+                  </CardTitle>
+                  <InfoIcon className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <div className="flex gap-6 justify-between">
+
+                  <CardContent>
+                    <div className="text-2xl font-bold">Tenha acesso a lista de definições e atributos do banco de dados</div>
+                    <div className="flex gap-3 mt-3">
+
+                     <Link to={`/indicadores`}>
+                     <Button size={'sm'} ><BarChartBig size={16} />Acessar indicadores</Button>
+                     </Link>
+                    </div>
+                  </CardContent>
+
+                  <div></div>
+                </div>
+              </Alert>
 
         <BannerHome />
 

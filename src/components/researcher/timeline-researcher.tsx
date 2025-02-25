@@ -207,7 +207,7 @@ export function TimeLineResearcher(props: Research) {
                       ))
                     )}
 
-                    {props.city != "None" && (
+                    {(props.city != "None" && props.city != '') && (
                       <div className="bg-blue-700 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><MapPin size={12} className="textwhite" /> {props.city}</div>
                     )}
                   </div>

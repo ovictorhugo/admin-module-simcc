@@ -52,7 +52,7 @@ export function BookHome() {
   const { urlGeral, valoresSelecionadosExport } = useContext(UserContext)
 
   let urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=&year=${yearString}&term=${valoresSelecionadosExport}&distinct=${distinct ? '1' : '0'}`;
-
+  console.log(urlTermPublicacoes)
   useMemo(() => {
     const fetchData = async () => {
       try {
@@ -86,7 +86,7 @@ export function BookHome() {
   ///cap
 
   let urlTermCap = `${urlGeral}book_chapter_production_researcher?researcher_id=&year=${yearString}&term=${valoresSelecionadosExport}&distinct=${distinct2 ? '1' : '0'}`
-
+console.log(urlTermCap)
 
   useMemo(() => {
     const fetchData = async () => {
@@ -117,7 +117,7 @@ export function BookHome() {
   return (
     <div className="grid grid-cols-1 gap-4 pb-16">
       <HeaderResult />
-      <div className="mt-4 mb-4 grid gap-4 md:grid-cols-2">
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
         <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -154,7 +154,7 @@ export function BookHome() {
 
       <Accordion type="single" collapsible defaultValue="item-1">
         <AccordionItem value="item-1" >
-          <div className="flex mb-2">
+          <div className="flex ">
             <HeaderResultTypeHome title="Gráfico de quantidade total de livros e capítulos" icon={<ChartBar size={24} className="text-gray-400" />}>
             </HeaderResultTypeHome>
             <AccordionTrigger>
@@ -173,11 +173,11 @@ export function BookHome() {
 
       <Accordion defaultValue="item-1" type="single" collapsible >
         <AccordionItem value="item-1" >
-          <div className="flex mb-2">
+          <div className="flex ">
             <div className="flex gap-4 w-full justify-between items-center ">
               <div className="flex gap-4 items-center">
                 <Book size={24} className="text-gray-400" />
-                <p className="text-sm font-bold">Livros</p>
+                <p className=" font-medium">Livros</p>
               </div>
 
               <div className="flex gap-3 mr-3  items-center h-full">
@@ -252,11 +252,11 @@ export function BookHome() {
 
       <Accordion defaultValue="item-1" type="single" collapsible >
         <AccordionItem value="item-1" >
-          <div className="flex mb-2">
+          <div className="flex ">
             <div className="flex gap-4 w-full justify-between items-center ">
               <div className="flex gap-4 items-center">
                 <Books size={24} className="text-gray-400" />
-                <p className="text-sm font-bold">Capítulos de livros</p>
+                <p className=" font-medium">Capítulos de livros</p>
               </div>
 
               <div className="flex gap-3 mr-3  items-center h-full">

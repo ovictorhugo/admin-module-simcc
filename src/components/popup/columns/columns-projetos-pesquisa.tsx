@@ -7,10 +7,42 @@ import { useModalSecundary } from "../../hooks/use-modal-store-secundary"
 
 type ProjetoPesquisa = {
 
-  id?: string,
-  title: string,
-  year: string,
+  agency_code: string
+  agency_name: string
+  nature: string
+  description: string
+  end_year: string
+  id: string
+  number_academic_masters: string
+  number_phd: string
+  number_specialists: string
+  number_undergraduates: string
+  project_name: string
+  start_year: string
+  status: string
+  researcher_id: string
+  production: Production[]
+  foment: Forment[]
+  components: Components[]
+  researcher_name: string
+}
+
+interface Components {
+  citations: string
+  lattes_id: string
+  name: string
+}
+
+interface Production {
+
+  title: string
   type: string
+}
+
+interface Forment {
+  agency_code: string
+  agency_name: string
+  nature: string
 }
 
 export const columnsProjetoPesquisa: ColumnDef<ProjetoPesquisa>[] = [
@@ -33,12 +65,15 @@ export const columnsProjetoPesquisa: ColumnDef<ProjetoPesquisa>[] = [
     header: "Ano",
     cell: ({ row }) => {
 
-      return <div className="flex gap-1 items-center"><CalendarBlank size={12} /> {row.getValue("start_year")}</div>
+      return <div className="flex gap-1 items-center"><CalendarBlank size={12} /> <div className="whitespace-nowrap">{row.original.start_year} - {row.original.end_year == '' ? ('atual') : (row.original.end_year)}</div></div>
     }
   },
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      return <div className="text-sm text-gray-500 whitespace-nowrap dark:text-gray-300 font-normal flex gap-1 items-center"><div className={`h-4 w-4 rounded-md ${row.original.status == 'EM ANDAMENTO' ? ('bg-yellow-500'): row.original.status == 'DESATIVADO' ? ('bg-red-500'):('bg-green-500')}`}></div>{row.original.status.split('_').join(' ')}</div>
+    }
   },
   {
 

@@ -45,7 +45,7 @@ export default function MapaResearcher({ cityData }: Props) {
   const {onOpen} = useModal()
 
   return (
-    <div className="h-[350px] w-full rounded-md mb-8">
+    <div className="h-[350px] w-full rounded-md ">
       <Map
         ref={mapRef}
         initialViewState={{
