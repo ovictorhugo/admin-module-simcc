@@ -21,6 +21,7 @@ import { UserContext } from "../../context/context";
 type Research = {
   among: number,
   articles: number,
+  institution_id:string
   book: number,
   book_chapters: number,
   id: string,
@@ -131,6 +132,7 @@ import { WorkEvent } from "../popup/trabalho-evento";
 import { TextoRevista } from "../popup/texto-revista";
 import { CargosFuncoes } from "../popup/cargos-funcoes";
 import { Coautores } from "../popup/coautores";
+import { getInstitutionImage } from "../homepage/categorias/institutions-home/institution-image";
 
 export function ResearcherModal() {
 
@@ -332,6 +334,17 @@ export function ResearcherModal() {
 
     return variations;
   }
+
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      const url = await getInstitutionImage(researcher[0].institution_id);
+      setImageUrl(url);
+    };
+
+    fetchImage();
+  }, [researcher]);
 
 
   return (
@@ -561,10 +574,10 @@ export function ResearcherModal() {
                 >
                   <h4 className="text-3xl font-medium px-8 text-center mb-2">{props.name}</h4>
                   <div className="flex text-gray-500 items-center gap-2 mb-2">
-                    {props.image == "None" ? (
+                    {!imageUrl ? (
                       <Buildings size={16} className="" />
                     ) : (
-                      <img src={props.image} alt="" className="h-6" />
+                      <img src={imageUrl} alt="" className="h-6" />
                     )}
                     <p className="text-md  ">{props.university}</p>
                   </div>

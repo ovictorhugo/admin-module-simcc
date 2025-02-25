@@ -136,6 +136,10 @@ export function InformationResearcher(props: Props) {
       .toLowerCase(); // Converter para letras minúsculas
   };
 
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center flex-col relative">

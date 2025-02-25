@@ -54,6 +54,7 @@ interface Bolsistas {
   researcher_id: string
   scholarship_quantity: string
 }
+
 import { ChartContainer, ChartTooltip, ChartConfig, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
 interface Docentes {
@@ -119,18 +120,6 @@ type Research = {
   SQ: number
 }
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "../../../components/ui/alert-dialog"
-
-
 interface VisaoPrograma {
   article: number;
   book: number;
@@ -170,7 +159,7 @@ import { toast } from "sonner";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../ui/accordion";
 import { ColorPicker } from "../../ui/color-picker";
 import { Input } from "../../ui/input";
-import { Label } from "../../ui/label";
+import { Label as LabelUi } from "../../ui/label";
 
 
 const chartConfig = {
@@ -769,7 +758,7 @@ export function IndicadoresDashboard() {
       {/* 🔹 Avatar do usuário */}
       <div className="relative group w-fit -top-16 px-16">
         <Alert
-          className="aspect-square bg-no-repeat bg-center bg-contain rounded-md h-28 bg-white dark:bg-neutral-900"
+          className="aspect-square bg-no-repeat bg-center bg-contain rounded-md h-28 bg-white dark:bg-white"
           style={{ backgroundImage: `url(${profile.img_perfil})` }}
         ></Alert>
         {/* 🔹 Overlay de Upload */}
@@ -797,7 +786,7 @@ export function IndicadoresDashboard() {
           <AccordionContent className="md:px-16 flex gap-4 w-full">
             {/* 🔹 Campo Site */}
             <div className="flex flex-col gap-2 w-full">
-              <Label>Site da instituição</Label>
+              <LabelUi>Site da instituição</LabelUi>
               <Input
                 type="text"
                 value={profile.site}
@@ -810,7 +799,7 @@ export function IndicadoresDashboard() {
 
             {/* 🔹 Campo Cor Base */}
             <div className="flex flex-col gap-2 w-full">
-              <Label>Cor base</Label>
+              <LabelUi>Cor base</LabelUi>
               <div className="flex gap-4">
                 <Input
                   type="text"

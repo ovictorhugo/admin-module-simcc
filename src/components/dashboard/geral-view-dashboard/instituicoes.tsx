@@ -8,7 +8,7 @@ import { HeaderResultTypeHome } from "../../homepage/categorias/header-result-ty
 import { Rows, SquaresFour } from "phosphor-react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Skeleton } from "../../ui/skeleton";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { Separator } from "../../ui/separator";
 import { toast } from "sonner";
@@ -143,8 +143,8 @@ export function Instituicoes() {
       
       // upload
 
-      const urlGetResearcher = urlGeralAdm + `InstitutionRest`;
-      console.log(urlGetResearcher)
+      const urlGetResearcher = urlGeralAdm + `InstitutionRest/Query`;
+    
 
       const fetchDataTable = async () => {
         setLoading(true)
@@ -171,7 +171,11 @@ export function Instituicoes() {
         }
       };
 
-      
+      useEffect(() => {
+        fetchDataTable();
+      }, [urlGetResearcher]);
+
+      console.log(researcher)
     return(
         <div className="px-8 flex flex-col gap-8">
                 <Alert className="p-0">
