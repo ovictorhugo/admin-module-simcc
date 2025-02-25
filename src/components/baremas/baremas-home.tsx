@@ -1284,7 +1284,7 @@ export function BaremasHome() {
                                                                                         return (
                                                                                             <TableCell key={grupo.id} className="text-center">
                                                                                                 <div className="rounded-md border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 h-10 px-4 py-2 text-gray-600 text-sm dark:text-white font-normal">
-                                                                                                    {totalPorColuna.toFixed(2)}
+                                                                                                    {totalPorColuna >= grupo.quantidade_max_pontos ? grupo.quantidade_max_pontos : totalPorColuna.toFixed(2)}
                                                                                                 </div>
                                                                                             </TableCell>
                                                                                         );

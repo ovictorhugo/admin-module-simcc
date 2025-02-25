@@ -87,9 +87,7 @@ export function PesquisadorItemBarema(config: Props) {
                     config.grupos.map(grupo => {
                         grupo.categorias.map(categoria => {
                             categoria.pesquisadores.map(pesquisador => {
-
                                 pesquisador.total = config.pontos >= Number(categoria.pontuacao_max) ? Number(categoria.pontuacao_max) : (config.pontos)
-
                             })
                         })
                     })
@@ -175,7 +173,7 @@ export function PesquisadorItemBarema(config: Props) {
                         if (categoria.id_criterio === 21) {
                             categoria.pesquisadores.map(pesquisador => {
                                 const pRelativo = config.researcherSelecionados.find(p => p.researcher_id === pesquisador.id)
-                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? (config.pontuacao_max) : config.pontos * Number(pRelativo!.A2)
+                                pesquisador.total = pesquisador.total >= config.pontuacao_max ? config.pontuacao_max : config.pontos * Number(pRelativo!.A2)
                             })
                         }
                     })

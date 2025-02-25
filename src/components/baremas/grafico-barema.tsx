@@ -5,8 +5,6 @@ type Institutions = {
   pesquisadores: any[]
 }
 
-import Highcharts from 'highcharts'
-import HighchartsReact from 'highcharts-react-official'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
