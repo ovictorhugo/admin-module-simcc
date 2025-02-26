@@ -22,7 +22,7 @@ export function ArticleBlock(props:Articles) {
         350: 1,
         750: 2,
         900: 3,
-        1200: isCollapsed !== undefined ? (!isCollapsed ? 3 : 4) : 3,
+        1200: 4,
         1700: 5
       };
 

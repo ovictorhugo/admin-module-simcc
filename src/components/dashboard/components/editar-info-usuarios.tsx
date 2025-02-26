@@ -40,14 +40,53 @@ interface Roles {
   role_id: string;
 }
 
+export interface Props {
+  name: string
+  institution_id: string
+  acronym:string
+  lattes_id:string
+}
+
 export function EditarInfoUsuarios() {
   const { urlGeralAdm, user } = useContext(UserContext);
 
   const [users, setUsers] = useState<User[]>([]);
   const [formData, setFormData] = useState<Record<string, Partial<User>>>({});
 
+  const urlGetResearcher = urlGeralAdm + `InstitutionRest/Query`;
+  const [researcher, setResearcher] = useState<Props[]>([]);
   const urlUser = `${urlGeralAdm}/s/user/entrys?uid=${user?.uid}`;
   console.log(urlUser);
+
+  const fetchDataTable = async () => {
+   
+    try {
+      const response = await fetch(urlGetResearcher, {
+        mode: 'cors',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET',
+          'Access-Control-Allow-Headers': 'Content-Type',
+          'Access-Control-Max-Age': '3600',
+          'Content-Type': 'text/plain',
+        },
+      });
+      const data = await response.json();
+      if (data) {
+        setResearcher(data);
+      
+     
+      }
+    } catch (err) {
+      console.log(err);
+   
+    }
+  };
+
+  useEffect(() => {
+    fetchDataTable();
+  }, [urlGetResearcher]);
+
 
   const fetchData = async () => {
     try {

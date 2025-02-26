@@ -1,11 +1,12 @@
-import { Building2, Copy, Plus } from "lucide-react";
+import { Building2, Copy, Plus, Trash } from "lucide-react";
 import { Alert } from "../../ui/alert";
 import { Button } from "../../ui/button";
 import { v4 as uuidv4 } from 'uuid';
+import bg_popup from '../../../assets/bg_popup.png';
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../ui/accordion";
 import { HeaderResultTypeHome } from "../../homepage/categorias/header-result-type-home";
-import { Rows, SquaresFour } from "phosphor-react";
+import { Buildings, Rows, SquaresFour } from "phosphor-react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Skeleton } from "../../ui/skeleton";
 import { useContext, useEffect, useState } from "react";
@@ -15,6 +16,10 @@ import { toast } from "sonner";
 import { DataTable } from "../data-table";
 import { UserContext } from "../../../context/context";
 import { columnsInstitution } from "./columns-institutions";
+import { Label } from "../../ui/label";
+import { Input } from "../../ui/input";
+import { useModal } from "../../hooks/use-modal-store";
+import { EditInstitutionModal } from "../../modals/edit-institution-modal";
 
 export interface Props {
     name: string
@@ -51,7 +56,6 @@ export function Instituicoes() {
                   {
                     institution_id: docId,
                       name: nome,
-                      lattes_id: lattesId,
                       acronym: sigla,
                     }
                 ]
@@ -79,7 +83,7 @@ export function Instituicoes() {
             
                           if (response.ok) {
                             setLattesId('')
-                           
+                           setSigla('')
                             setNome('')
                             fetchDataTable()
                             toast("Dados enviados com sucesso", {
@@ -91,7 +95,7 @@ export function Instituicoes() {
                               })
                           } else {
                             if (response.status === 400) {
-                              toast("Pesquisador já existe", {
+                              toast("Instituição já existe", {
                                 description: "Tente novamente",
                                 action: {
                                   label: "Fechar",
@@ -133,6 +137,7 @@ export function Instituicoes() {
                   }
                 };
                 fetchData();
+                fetchDataTable()
           
                 
               } catch (error) {
@@ -144,7 +149,7 @@ export function Instituicoes() {
       // upload
 
       const urlGetResearcher = urlGeralAdm + `InstitutionRest/Query`;
-    
+    const {onOpen} = useModal()
 
       const fetchDataTable = async () => {
         setLoading(true)
@@ -176,22 +181,67 @@ export function Instituicoes() {
       }, [urlGetResearcher]);
 
       console.log(researcher)
+
+      const [add, setAdd] = useState(false)
     return(
         <div className="px-8 flex flex-col gap-8">
-                <Alert className="p-0">
-                <CardHeader>
-                    <CardTitle>Gerenciamento de instituições</CardTitle>
-                    <CardDescription>
-                      Adicione os documentos para atualizar o banco de dados
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex mt-6 flex-col gap-4">
-                    <Button className="w-fit">
-                    <Plus size={16}/> Adicionar instituição
-                    </Button>
+                <div className="gap-4 md:gap-8 flex flex-col ">
+                <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+       <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3"  style={{ backgroundImage: `url(${bg_popup})` }}>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
+                        Total de instituições
+                      </CardTitle>
+                      <Buildings className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">{researcher.length}</div>
+                      <p className="text-xs text-muted-foreground">
+                        registrados
+                      </p>
+                    </CardContent>
+                    </Alert>
+  
+                    <Alert onClick={() => setAdd(!add)} className="p-0 hover:bg-eng-dark-blue bg-eng-blue dark:hover:bg-eng-dark-blue dark:bg-eng-blue text-white transition-all cursor-pointer "  >
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
+                        
+                      </CardTitle>
+                      <Plus className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+  
+                    <CardContent>
+                      <h2 className="font-medium text-xl">Adicionar <br/> instituição</h2>
+                    </CardContent>
+                    </Alert>
+       </div>
+                </div>
 
-                  </CardContent>
-                </Alert>
+              {add && (
+                 <fieldset className="grid gap-6 rounded-lg  p-4 bg-white dark:border-neutral-800 border border-neutral-200 dark:bg-neutral-950 bg-cover  bg-center bg-no-repeat "  >
+                 <legend className="-ml-1 px-1 text-sm font-medium">
+                   Adicionar pesquisador à instituição
+                 </legend>
+          
+                 <div className="flex gap-3 items-end">
+                     <div className="flex flex-col space-y-1.5 w-full flex-1">
+                     <Label htmlFor="name">Nome da instituição</Label>
+                     <Input value={nome} onChange={(e) => setNome(e.target.value)} type="text"  />
+                     </div>
+          
+                     <div className="flex flex-col space-y-1.5 w-full flex-1">
+                     <Label htmlFor="name">Sigla</Label>
+                     <Input value={sigla} onChange={(e) => setSigla(e.target.value)} type="text" />
+                     </div>
+          
+                     
+          
+                     <Button onClick={() => handleSubmitPesquisador()} className="text-white dark:text-white"><Plus size={16} className="" /> Adicionar</Button>
+                    
+                    
+                     </div>
+                 </fieldset>
+              )}
 
                 <Accordion defaultValue="item-1" type="single" collapsible>
                 <AccordionItem value="item-1">
@@ -253,23 +303,32 @@ export function Instituicoes() {
 
                       <div>
                         <h1>{item.name}</h1>
-                        <p className="text-gray-500 text-xs">{item.lattes_id}</p>
+                        <p className="text-gray-500 text-xs">{item.acronym}</p>
                       </div>
                         </div>
 
-                        <div className="flex gap-2 items-center" > 
-      <div className={` rounded-md h-4 w-4 ${item.status ? ('bg-green-500'):('bg-red-500')}`}></div>
-       <div className="flex-1 flex">{item.status ? ('Ativo'):('Inativo')}</div></div>
+                       
                       </div>
 
                       <Separator className="my-4"/>
 
                      <div className="items-center flex justify-between gap-3">
-                      <div className="text-gray-500 text-xs">{item.create_at}</div>
+                    
 
                       <div className="flex gap-3 justify-end w-full ">
                      
 
+                      <Button  onClick={() => onOpen('confirm-delete-institution', {id_delete:item.institution_id, name:item.name})} variant={'destructive'} className="h-8 w-8 p-0 text-white  dark:text-white">
+             
+             <Trash size={8} className="h-4 w-4" />
+           </Button>
+
+           <EditInstitutionModal
+acronym={item.acronym}
+name={item.name}
+institution_id={item.institution_id}
+
+/>
 
 
                     

@@ -176,7 +176,7 @@ export function CargosFuncoes(props: Props) {
                 }}
             >
                 <Masonry gutter="16px">
-                    {publicacoes.slice(0, count).map((props) => {
+                {(Array.isArray(publicacoes) ? publicacoes : []).slice(0, count).map((props) => {
                       return(
                         <div className="flex group w-full" >
 <div
