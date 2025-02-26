@@ -41,6 +41,8 @@ type Research = {
     e_completed: string,
     g_in_progress: string,
     g_completed: string,
+    pgss_in_progress: string,
+    pgss_completed: string,
     ic_in_progress: string,
     ic_completed: string,
     m_in_progress: string,
@@ -58,6 +60,7 @@ type Research = {
     city: string,
     area: string,
     graduation: string,
+    researcher_id: string
 }
 
 
@@ -328,7 +331,7 @@ export function BaremasHome() {
     const baixarCSV = (grupos: Grupo[]) => {
         // Criar cabeçalho do CSV
         let csvContent = "Pesquisadores,";
-        let categorias = grupos.flatMap(grupo => grupo.categorias.map(categoria => categoria.criterio));
+        const categorias = grupos.flatMap(grupo => grupo.categorias.map(categoria => categoria.criterio));
         csvContent += categorias.join(",") + ",Total\n";
 
         // Criar corpo do CSV
@@ -340,7 +343,7 @@ export function BaremasHome() {
                 const valoresCategorias = grupos.flatMap(grupo =>
                     grupo.categorias.map(categoria => {
                         const pesquisadorData = categoria.pesquisadores.find(p => p.id === pesquisador.id);
-                        return pesquisadorData ? parseFloat(pesquisadorData.total).toFixed(2) : "0.00";
+                        return pesquisadorData ? parseFloat(pesquisadorData.total.toString()).toFixed(2) : "0.00";
                     })
                 );
 
@@ -1100,7 +1103,7 @@ export function BaremasHome() {
                                                                                                                     <DropdownMenuLabel>
                                                                                                                         <h2>{tipo}</h2>
                                                                                                                     </DropdownMenuLabel>
-                                                                                                                    {lista.map(criterio => (
+                                                                                                                    {(lista as Criterio2[]).map(criterio => (
                                                                                                                         <Button
                                                                                                                             variant={'ghost'}
                                                                                                                             className="text-left justify-start"

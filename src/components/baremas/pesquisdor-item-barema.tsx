@@ -25,6 +25,8 @@ type Research = {
     e_completed: string,
     g_in_progress: string,
     g_completed: string,
+    pgss_in_progress: string;
+    pgss_completed: string;
     ic_in_progress: string,
     ic_completed: string,
     m_in_progress: string,
@@ -277,7 +279,7 @@ export function PesquisadorItemBarema(config: Props) {
                 return (config.pontos * Number(pesquisador.work_in_event) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.work_in_event)))
             case 12:
                 // Pós-Graduação Stricto Sensu - andamento | Rever
-                return ((config.pontos * (Number(pesquisador.d_in_progress) + Number(pesquisador.guidance_m_a))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_a) + Number(pesquisador.guidance_m_a)))))
+                return ((config.pontos * (Number(pesquisador.d_in_progress) + Number(pesquisador.pgss_in_progress))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.pgss_in_progress) + Number(pesquisador.pgss_in_progress)))))
             case 13:
                 // Iniciação Científica - andamento
                 config.grupos.map(grupo => {
@@ -319,7 +321,7 @@ export function PesquisadorItemBarema(config: Props) {
                 return (config.pontos * Number(pesquisador.d_in_progress) >= config.pontuacao_max ? (config.pontuacao_max) : (config.pontos * Number(pesquisador.d_in_progress)))
             case 31:
                 // Pós-Graduação Stricto Sensu - concluido | Rever
-                return ((config.pontos * (Number(pesquisador.d_completed) + Number(pesquisador.d_completed))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.guidance_d_c) + Number(pesquisador.guidance_m_c)))))
+                return ((config.pontos * (Number(pesquisador.d_completed) + Number(pesquisador.pgss_completed))) >= config.pontuacao_max ? (config.pontuacao_max) : ((config.pontos * (Number(pesquisador.pgss_completed) + Number(pesquisador.pgss_completed)))))
             case 16:
                 // Iniciação Científica - concluido
                 config.grupos.map(grupo => {
@@ -368,7 +370,7 @@ export function PesquisadorItemBarema(config: Props) {
     // Função para formatar os dados do pesquisador
     const formatResearcherData = (researcher: Research, teste: any) => ({
         total: teste,
-        id: researcher.id,
+        id: researcher.researcher_id,
         name: researcher.researcher,
         id_criterio: config.id_criterio
     });
