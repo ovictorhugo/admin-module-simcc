@@ -24,8 +24,9 @@ export interface PesquisadorProps {
   name: string
   institution_id: string
   acronym:string
-  lattes_id:string
-}
+
+  }
+
 
 
 export const columnsInstitution: ColumnDef<PesquisadorProps>[] = [
@@ -45,10 +46,12 @@ export const columnsInstitution: ColumnDef<PesquisadorProps>[] = [
     cell: ({ row }) => {
 
       const lattes_id = row.original.name;
-      const { urlGeral } = useContext(UserContext)
-      return <div className="flex gap-3 items-center" >
 
-        <div className="flex-1 flex">{row.getValue("name")}</div></div>
+      const { urlGeral} = useContext(UserContext)
+      return <div className="flex gap-3 items-center" > 
+     
+       <div className="flex-1 flex">{row.getValue("name")}</div></div>
+
     },
   },
 
@@ -65,41 +68,30 @@ export const columnsInstitution: ColumnDef<PesquisadorProps>[] = [
       const name = row.original.name;
 
       const { onOpen } = useModal();
-
-
+     
+  
       return (
         <div className="flex gap-3 justify-end">
 
-          <Button onClick={() => onOpen('confirm-delete-institution', { id_delete: id_pesquisador, name: name })} variant={'destructive'} className="h-8 w-8 p-0 text-white  dark:text-white">
+<Button  onClick={() => onOpen('confirm-delete-institution', {id_delete:id_pesquisador, name:name})} variant={'destructive'} className="h-8 w-8 p-0 text-white  dark:text-white">
+             
+             <Trash size={8} className="h-4 w-4" />
+           </Button>
 
-            <Trash size={8} className="h-4 w-4" />
-          </Button>
+<EditInstitutionModal
 
-          <EditInstitutionModal
+name={row.original.name}
 
-            name={row.original.name}
+institution_id={row.original.institution_id}
+acronym={row.original.acronym}
+/>
 
-            institution_id={row.original.institution_id}
-            acronym={row.original.acronym}
-          />
-
-          <EditInstitutionModal
-          
-            name={row.original.name}
-            acronym={row.original.acronym}
-            institution_id={row.original.institution_id}
-        
-          />
-
-          <Button onClick={() => onOpen('researcher-modal', { name: name })} variant={'outline'} className="h-8 w-8 p-0 ">
-            <Maximize2 size={8} className="h-4 w-4" />
-          </Button>
-
+         
           <Button onClick={() => {
-            navigator.clipboard.writeText(payment.lattes_id)
+            navigator.clipboard.writeText(payment.institution_id)
 
             toast("Operação realizada", {
-              description: "ID Lattes copiado para área de transferência",
+              description: "Id da instituição copiado para área de transferência",
               action: {
                 label: "Fechar",
                 onClick: () => console.log("Undo"),
