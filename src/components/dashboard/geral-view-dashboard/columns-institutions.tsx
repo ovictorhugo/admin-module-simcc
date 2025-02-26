@@ -23,10 +23,8 @@ import { EditInstitutionModal } from "../../modals/edit-institution-modal"
 export interface PesquisadorProps {
   name: string
   institution_id: string
-  acronym: string
-  researcher_id: string
-  lattes_id: string
-  status: boolean
+  acronym:string
+  lattes_id:string
 }
 
 
@@ -85,12 +83,12 @@ export const columnsInstitution: ColumnDef<PesquisadorProps>[] = [
             acronym={row.original.acronym}
           />
 
-          <EditResearcherModal
-            researcher_id={row.original.researcher_id}
+          <EditInstitutionModal
+          
             name={row.original.name}
-            lattes_id={row.original.lattes_id}
+            acronym={row.original.acronym}
             institution_id={row.original.institution_id}
-            status={row.original.status}
+        
           />
 
           <Button onClick={() => onOpen('researcher-modal', { name: name })} variant={'outline'} className="h-8 w-8 p-0 ">

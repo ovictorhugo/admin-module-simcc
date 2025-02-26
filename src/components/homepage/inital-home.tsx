@@ -1143,7 +1143,7 @@ export function InitialHome() {
                 <div className="flex gap-6 justify-between">
 
                   <CardContent>
-                    <div className="text-2xl font-bold">Tenha acesso a lista de definições e atributos do banco de dados</div>
+                    <div className="text-2xl font-bold">Análise quantitativa dos dados da plataforma</div>
                     <div className="flex gap-3 mt-3">
 
                      <Link to={`/indicadores`}>
