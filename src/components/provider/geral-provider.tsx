@@ -15,7 +15,7 @@ import { GruposPesquisaPage } from "../grupos-pesquisa/grupos-pesquisa";
 import { DepartamentPage } from "../departamentos/departamentos-page";
 import { ResearcherPage } from "../researcher/researcher-page";
 import { Maria } from "../maria/maria";
-import { TodosPesquisadores } from "../homepage/categorias/researchers-home/todos-pesquisadores";
+import { TodosPesquisadores } from "../listagens/todos-pesquisadores";
 import { PaineisDadosExternos } from "../homepage/paines-dados-externos";
 import { IndicePesquisador } from "../indice-pesquisador/indice-pesquisador";
 import { ProvimentoCargo } from "../provimento-cargo/provimento-cargo";

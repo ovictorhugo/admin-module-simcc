@@ -119,7 +119,7 @@ import { GraficoRtTechnician } from "./components/grafico-technician";
 import { useModalResult } from "../hooks/use-modal-result";
 import { Button } from "../ui/button";
 import { useModal } from "../hooks/use-modal-store";
-import { TodosPesquisadores } from "./categorias/researchers-home/todos-pesquisadores";
+import { TodosPesquisadores } from "../listagens/todos-pesquisadores";
 import { HeroParallax } from "../ui/hero-parallax";
 import { BannerHome } from "./components/banner";
 import { Helmet } from "react-helmet";

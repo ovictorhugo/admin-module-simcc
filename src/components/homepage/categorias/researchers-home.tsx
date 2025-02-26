@@ -3,7 +3,7 @@ import { useModalResult } from "../../hooks/use-modal-result";
 import { UserContext } from "../../../context/context";
 import { CloudWordResearcherHome } from "./researchers-home/clould-word-researcher-home";
 import { HeaderResultTypeHome } from "./header-result-type-home";
-import { FadersHorizontal, ListNumbers, Rows, SquaresFour, UserList } from "phosphor-react";
+import { FadersHorizontal, ListNumbers, MagnifyingGlass, Rows, SquaresFour, UserList } from "phosphor-react";
 import { Button } from "../../ui/button";
 import { ResearchersBloco } from "./researchers-home/researchers-bloco";
 import { TableReseracherhome } from "./researchers-home/table-reseracher-home";
@@ -34,6 +34,9 @@ import municipios from './researchers-home/municipios.json';
 import { Sheet, SheetContent } from "../../ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../ui/tooltip";
 import { ScrollArea } from "../../ui/scroll-area";
+import { Input } from "../../ui/input";
+import { Separator } from "../../ui/separator";
+import { Badge } from "../../ui/badge";
 
 type CityData = {
   nome: string;
@@ -74,6 +77,18 @@ type Research = {
   openalex: string,
   subsidy: Bolsistas[]
   graduate_programs: GraduatePrograms[]
+  departments: Departments[]
+}
+
+interface Departments {
+  dep_des: string
+  dep_email: string
+  dep_nom: string
+  dep_id: string
+  dep_sigla: string
+  dep_site: string
+  dep_tel: string
+  img_data: string
 }
 
 interface Bolsistas {
@@ -133,6 +148,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   const [selectedUniversities, setSelectedUniversities] = useState<string[]>([]);
   const [selectedSubsidies, setSelectedSubsidies] = useState<string[]>([]);
   const [selectedGraduatePrograms, setSelectedGraduatePrograms] = useState<string[]>([]);
+  const [selectedDepartaments, setSelectedDepartaments] = useState<string[]>([]);
   const [filteredCount, setFilteredCount] = useState<number>(0);
 
   const { simcc } = useContext(UserContext)
@@ -165,8 +181,14 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
         return r.graduate_programs.some(gp => selectedGraduatePrograms.includes(gp.name));
       });
     }
+    if (selectedDepartaments.length > 0) {
+      filtered = filtered.filter((r) => {
+        if (!r.departments || !Array.isArray(r.departments)) return false;
+        return r.departments.some(gp => selectedDepartaments.includes(gp.dep_sigla));
+      });
+    }
     setFilteredCount(filtered.length);
-  }, [researcher, selectedAreas, selectedGraduations, selectedCities, selectedUniversities, selectedSubsidies, selectedGraduatePrograms]);
+  }, [researcher, selectedAreas, selectedGraduations, selectedCities, selectedUniversities, selectedSubsidies, selectedGraduatePrograms, selectedDepartaments]);
 
   const handleAreaToggle = (value: any) => {
     setSelectedAreas(value);
@@ -174,6 +196,10 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
 
   const handleGraduationToggle = (value: any) => {
     setSelectedGraduations(value);
+  };
+
+  const handleDepartamentToggle = (value: any) => {
+    setSelectedDepartaments(value);
   };
 
   const handleCityToggle = (value: any) => {
@@ -209,7 +235,11 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
       res.graduate_programs && res.graduate_programs.some(gp => selectedGraduatePrograms.includes(gp.name))
     );
 
-    return hasSelectedArea && hasSelectedGraduation && hasSelectedCity && hasSelectedUniversity && hasSelectedSubsidy && hasSelectedGraduateProgram;
+    const hasSelectedDepartament = selectedDepartaments.length === 0 || (
+      res.departments && res.departments.some(gp => selectedDepartaments.includes(gp.dep_sigla))
+    );
+
+    return hasSelectedArea && hasSelectedGraduation && hasSelectedCity && hasSelectedUniversity && hasSelectedSubsidy && hasSelectedGraduateProgram && hasSelectedDepartament;
   });
 
   const applyFilters = () => {
@@ -223,6 +253,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
     setSelectedCities([]);
     setSelectedUniversities([]);
     setSelectedSubsidies([]);
+    setSelectedDepartaments([]);
     setResearcher(researcher);
     onClose();
   };
@@ -248,6 +279,14 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
     )
   ).filter(Boolean);
 
+  const uniqueDepartaments = Array.from(
+    new Set(
+      researcher.flatMap((res) =>
+        Array.isArray(res.departments) ? res.departments.map((gp) => gp.dep_sigla) : []
+      )
+    )
+  ).filter(Boolean);
+
   useEffect(() => {
     if (researcher.length == 0) {
       setSelectedAreas([]);
@@ -255,10 +294,37 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
       setSelectedCities([]);
       setSelectedUniversities([]);
       setSelectedSubsidies([]);
+      setSelectedDepartaments([])
     }
   }, [researcher]);
 
-  return (
+  const {version} = useContext(UserContext)
+
+  const [search, setSearch] = useState('')
+
+  const filteredTotal = Array.isArray(uniqueGraduatePrograms) ? uniqueGraduatePrograms.filter(item => {
+    // Normaliza a string do item e da busca para comparação
+    const normalizeString = (str: any) => str
+      .normalize("NFD") // Decompõe os caracteres acentuados
+      .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
+      .toLowerCase(); // Converte para minúsculas
+
+    const searchString = normalizeString(item);
+    const normalizedSearch = normalizeString(search);
+
+    return searchString.includes(normalizedSearch);
+  }) : [];
+
+  return {
+    selectedAreas,
+    selectedGraduations,
+    selectedCities,
+    selectedDepartaments,
+    selectedGraduatePrograms,
+    selectedSubsidies,
+    selectedUniversities,
+    clearFilters,
+    component: (
     <Sheet open={isModalOpen} onOpenChange={onClose}>
       <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[60vw]`}>
         <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-gray-600">
@@ -288,7 +354,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
             </div>
 
           </div>
-          <ScrollArea className="relative whitespace-nowrap h-[calc(100vh-50px)] p-8 ">
+          <ScrollArea className="relative whitespace-nowrap h-[calc(100vh-50px)] p-8 w-full ">
             <div>
               <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
                 Pesquisadores
@@ -299,13 +365,18 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
               </h1>
             </div>
 
-            <div className="space-y-6">
+            <div className="w-full">
               {/* Área de especialidade */}
-              <div>
-                <div className="pb-2">
-                  <Label>Área de especialidade</Label>
-                </div>
-                <ToggleGroup
+             
+
+              <Accordion defaultValue="item-1" type="single" collapsible className="w-full">
+  <AccordionItem value="item-1" className="w-full">
+    <div className="flex items-center justify-between">
+    <Label>Área de especialidade</Label>
+    <AccordionTrigger></AccordionTrigger>
+    </div>
+    <AccordionContent>
+    <ToggleGroup
                   type="multiple"
                   variant={'outline'}
                   value={selectedAreas}
@@ -318,14 +389,16 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
                     </ToggleGroupItem>
                   ))}
                 </ToggleGroup>
-              </div>
+    </AccordionContent>
+  </AccordionItem>
 
-              {/* Titulação */}
-              <div>
-                <div className="pb-2">
-                  <Label>Titulação</Label>
-                </div>
-                <ToggleGroup
+  <AccordionItem value="item-2">
+    <div className="flex items-center justify-between">
+    <Label>Titulação</Label>
+    <AccordionTrigger></AccordionTrigger>
+    </div>
+    <AccordionContent>
+    <ToggleGroup
                   type="multiple"
                   variant={'outline'}
                   value={selectedGraduations}
@@ -338,15 +411,16 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
                     </ToggleGroupItem>
                   ))}
                 </ToggleGroup>
-              </div>
+    </AccordionContent>
+  </AccordionItem>
 
-              {/* Cidade */}
-              {simcc && (
-                <div>
-                  <div className="pb-2">
-                    <Label>Cidade</Label>
-                  </div>
-                  <ToggleGroup
+  <AccordionItem value="item-3">
+    <div className="flex items-center justify-between">
+    <Label>Cidade</Label>
+    <AccordionTrigger></AccordionTrigger>
+    </div>
+    <AccordionContent>
+    <ToggleGroup
                     type="multiple"
                     variant={'outline'}
                     value={selectedCities}
@@ -359,16 +433,16 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
                       </ToggleGroupItem>
                     ))}
                   </ToggleGroup>
-                </div>
-              )}
-
-              {/* Universidade */}
-              {simcc && (
-                <div>
-                  <div className="pb-2">
-                    <Label>Universidade</Label>
-                  </div>
-                  <ToggleGroup
+    </AccordionContent>
+  </AccordionItem>
+  {simcc && (
+  <AccordionItem value="item-4">
+    <div className="flex items-center justify-between">
+    <Label>Universidade</Label>
+    <AccordionTrigger></AccordionTrigger>
+    </div>
+    <AccordionContent>
+    <ToggleGroup
                     type="multiple"
                     variant={'outline'}
                     value={selectedUniversities}
@@ -381,15 +455,17 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
                       </ToggleGroupItem>
                     ))}
                   </ToggleGroup>
-                </div>
-              )}
+    </AccordionContent>
+  </AccordionItem>
+)}
 
-              {/* Tipo de Subsídio */}
-              <div>
-                <div className="pb-2">
-                  <Label>Tipo de Subsídio</Label>
-                </div>
-                <ToggleGroup
+<AccordionItem value="item-5">
+    <div className="flex items-center justify-between">
+    <Label>Tipo de Subsídio</Label>
+    <AccordionTrigger></AccordionTrigger>
+    </div>
+    <AccordionContent>
+    <ToggleGroup
                   type="multiple"
                   variant={'outline'}
                   value={selectedSubsidies}
@@ -402,26 +478,68 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
                     </ToggleGroupItem>
                   ))}
                 </ToggleGroup>
-              </div>
+    </AccordionContent>
+  </AccordionItem>
 
-              <div>
-                <div className="pb-2">
-                  <Label>Programas de Pós-graduação</Label>
+  {version && (
+  <AccordionItem value="item-6">
+    <div className="flex items-center justify-between">
+    <Label>Departamentos</Label>
+    <AccordionTrigger></AccordionTrigger>
+    </div>
+    <AccordionContent>
+    <ToggleGroup
+                type="multiple"
+                variant={'outline'}
+                value={selectedDepartaments}
+                onValueChange={handleDepartamentToggle}
+                className="aspect-auto flex flex-wrap items-start justify-start gap-2"
+              >
+                {uniqueDepartaments.map((program) => (
+                  <ToggleGroupItem key={program} value={program} className="px-3 py-2 whitespace-normal">
+                    {program}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+    </AccordionContent>
+  </AccordionItem>
+)}
+
+<AccordionItem value="item-7">
+    <div className="flex items-center justify-between">
+    <Label>Programas de Pós-graduação</Label>
+    <AccordionTrigger></AccordionTrigger>
+    </div>
+    <AccordionContent>
+    <Alert className="h-12 p-2 mb-4 flex items-center justify-between  w-full ">
+                <div className="flex items-center gap-2 w-full flex-1">
+                  <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
+                  <Input onChange={(e) => setSearch(e.target.value)} value={search} type="text" className="border-0 w-full " />
                 </div>
-                <ToggleGroup
+
+                <div className="w-fit">
+
+
+                </div>
+              </Alert>
+
+    <ToggleGroup
                   type="multiple"
                   variant={'outline'}
                   value={selectedGraduatePrograms}
                   onValueChange={handleGraduateProgramToggle}
                   className="aspect-auto flex flex-wrap items-start justify-start gap-2"
                 >
-                  {uniqueGraduatePrograms.map((program) => (
+                  {filteredTotal.map((program) => (
                     <ToggleGroupItem key={program} value={program} className="px-3 py-2 whitespace-normal">
                       {program}
                     </ToggleGroupItem>
                   ))}
                 </ToggleGroup>
-              </div>
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+
             </div>
 
             <DialogFooter className="py-4">
@@ -439,7 +557,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
         </div>
       </SheetContent>
     </Sheet>
-  );
+  )}
 }
 
 export function ResearchersHome() {
@@ -597,13 +715,56 @@ export function ResearchersHome() {
       .toLowerCase(); // Converte para minúsculas
   };
 
+  const { clearFilters, selectedAreas, selectedGraduations, component, selectedCities, selectedDepartaments, selectedGraduatePrograms, selectedSubsidies, selectedUniversities } = FiltersModal({
+    researcher: originalResearcher,
+    setResearcher,
+  });
+
   return (
     <div className="w-full">
       <div className="w-full flex gap-4 justify-center">
         <div className="flex-1 gap-4 flex flex-col">
+         
           <div className="w-full">
             <HeaderResult />
           </div>
+<div className={`flex flex-col gap-4 w-full ${selectedAreas.length > 0 || selectedCities.length > 0 || selectedDepartaments.length > 0 || selectedGraduatePrograms.length > 0 || selectedGraduations.length > 0 || selectedSubsidies.length > 0 || selectedUniversities.length > 0 ? ('flex'):('hidden')}`}>
+  <Separator/>
+          <div className="flex flex-wrap gap-3 items-center">
+            <p className="text-sm font-medium">Filtros aplicados:</p>
+            {selectedAreas.map((item) => (
+               <Badge className="bg-eng-blue font-normal hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 ">{item}</Badge>
+            ))}
+
+{selectedGraduations.map((item) => (
+               <Badge className="bg-eng-blue hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 font-normal">{item}</Badge>
+            ))}
+
+{selectedCities.map((item) => (
+                <Badge className="bg-eng-blue hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 font-normal">{item}</Badge>
+            ))}
+
+{selectedDepartaments.map((item) => (
+                <Badge className="bg-eng-blue hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 font-normal">{item}</Badge>
+            ))}
+
+{selectedGraduatePrograms.map((item) => (
+               <Badge className="bg-eng-blue hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 font-normal">{item}</Badge>
+            ))}
+
+{selectedSubsidies.map((item) => (
+                <Badge className="bg-eng-blue hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 font-normal">{item}</Badge>
+            ))}
+            {selectedUniversities.map((item) => (
+              <Badge className="bg-eng-blue hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 font-normal">{item}</Badge>
+            ))}
+
+
+<Badge variant={'secondary'} onClick={() => clearFilters()} className=" rounded-md cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-900 border-0  py-2 px-3 font-normal flex items-center justify-center gap-2"><Trash size={12}/>Limpar filtros</Badge>
+         
+          </div>
+</div>
+
           {(!isOpenAlex && FinalOpenAlex != 'true') && (
             <div className="grid gap-4 mt-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
               {(searchType != 'abstract' && searchType != 'name' && searchType != 'area') && (
@@ -815,11 +976,7 @@ export function ResearchersHome() {
           )}
         </div>
 
-        <FiltersModal
-          researcher={originalResearcher}
-          setResearcher={setResearcher}
-        />
-
+     {component}
       </div>
     </div>
   );

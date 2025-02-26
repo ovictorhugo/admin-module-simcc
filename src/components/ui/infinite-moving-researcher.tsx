@@ -98,7 +98,7 @@ export const InfiniteMovingResearchers = ({
       } else if (speed === "normal") {
         containerRef.current.style.setProperty("--animation-duration", "40s");
       } else {
-        containerRef.current.style.setProperty("--animation-duration", "1080s");
+        containerRef.current.style.setProperty("--animation-duration", "500s");
       }
     }
   };
@@ -134,7 +134,7 @@ export const InfiniteMovingResearchers = ({
             <div onClick={() => onOpen('researcher-modal', {name:item.name})} className="flex group min-h-[300px]  min-w-[200px] cursor-pointer">
            
            <Alert className="flex p-0 flex-col flex-1 gap-4 bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${item.id}) ` }}>
-           <div className="bg-[#000000]  bg-opacity-30 hover:bg-opacity-70 transition-all absolute w-full h-full rounded-t-md ">
+           <div className="bg-[#000000] rounded-md  bg-opacity-30 hover:bg-opacity-70 transition-all absolute w-full h-full rounded-t-md ">
            <div className="flex flex-col justify-between h-full">
            <div className="z-[1] w-full  p-4 flex gap-3 justify-end">
            
