@@ -105,8 +105,8 @@ export function IndicePesquisador() {
         <main className="flex  flex-1 flex-col gap-8 p-4  md:p-8">
            
            <Helmet>
-          <title>Índice do pesquisador | {version ? ('Conectee'):('Iapós')}</title>
-          <meta name="description" content={`Índice do pesquisador | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Índice do pesquisador | {version ? ('Conectee'):('Simcc')}</title>
+          <meta name="description" content={`Índice do pesquisador | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
 

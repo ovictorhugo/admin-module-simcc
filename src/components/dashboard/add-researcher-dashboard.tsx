@@ -231,8 +231,8 @@ setcarregado(false)
 <>
 
 <Helmet>
-          <title>Pesquisadores | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
-          <meta name="description" content={`Pesquisadores | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Pesquisadores | Módulo administrativo | {version ? ('Conectee'):('Simcc')} </title>
+          <meta name="description" content={`Pesquisadores | Módulo administrativo | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
 {isModalOpen && (

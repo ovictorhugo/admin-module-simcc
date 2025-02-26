@@ -105,8 +105,8 @@ export function DepartamentPage() {
       {departamentoSelecionado.length == 0 ? (
         <div className="w-full">
           <Helmet>
-            <title>Departamentos | {version ? ('Conectee') : ('Iapós')}</title>
-            <meta name="description" content={`Departamentos | ${version ? ('Conectee') : ('Iapós')}`} />
+            <title>Departamentos | {version ? ('Conectee') : ('Simcc')}</title>
+            <meta name="description" content={`Departamentos | ${version ? ('Conectee') : ('Simcc')}`} />
             <meta name="robots" content="index, follow" />
           </Helmet>
           <main className="  gap-4 md:gap-8 flex flex-col  p-4 md:p-8 pt-0 md:pt-0 w-full">

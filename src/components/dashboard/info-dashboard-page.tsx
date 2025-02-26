@@ -35,8 +35,8 @@ export function InfoDashboardPage() {
     return(
         <main className="flex flex-1 flex-col gap-4 md:gap-8 md:p-8 p-4">
             <Helmet>
-          <title>Informações | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
-          <meta name="description" content={`Informações | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Informações | Módulo administrativo | {version ? ('Conectee'):('Simcc')} </title>
+          <meta name="description" content={`Informações | Módulo administrativo | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
             <Tabs defaultValue={'all'} className="h-full" >

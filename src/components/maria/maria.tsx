@@ -195,8 +195,8 @@ const {version} = useContext(UserContext)
 
         <main className="w-full  h-full p-4 md:p-8 pb-2 md:pb-2 ">
             <Helmet>
-          <title>Pesquisa com IA | {version ? ('Conectee'):('Iapós')}</title>
-          <meta name="description" content={`Pesquisa com IA | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Pesquisa com IA | {version ? ('Conectee'):('Simcc')}</title>
+          <meta name="description" content={`Pesquisa com IA | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
              <main className="grid h-full md:px-8 lg:px-32 xl:px-60 flex-1 gap-4 md:gap-8 overflow-auto   ">

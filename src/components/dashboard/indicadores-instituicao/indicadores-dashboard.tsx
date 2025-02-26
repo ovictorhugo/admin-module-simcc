@@ -705,8 +705,8 @@ export function IndicadoresDashboard() {
   return (
     <>
       <Helmet>
-        <title>Indicadores da instituição | Módulo administrativo | {version ? ('Conectee') : ('Iapós')} </title>
-        <meta name="description" content={`Indicadores da instituição | Módulo administrativo | ${version ? ('Conectee') : ('Iapós')}`} />
+        <title>Indicadores da instituição | Módulo administrativo | {version ? ('Conectee') : ('Simcc')} </title>
+        <meta name="description" content={`Indicadores da instituição | Módulo administrativo | ${version ? ('Conectee') : ('Simcc')}`} />
         <meta name="robots" content="index, follow" />
       </Helmet>
       {isModalOpen && (

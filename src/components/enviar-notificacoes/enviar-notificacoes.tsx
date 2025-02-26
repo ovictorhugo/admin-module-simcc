@@ -74,8 +74,8 @@ export function EnviarNotificacoes() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:p-8">
        <Helmet>
-          <title>Enviar notificações | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
-          <meta name="description" content={`Enviar notificações | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Enviar notificações | Módulo administrativo | {version ? ('Conectee'):('Simcc')} </title>
+          <meta name="description" content={`Enviar notificações | Módulo administrativo | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
       <div className="w-full gap-4">

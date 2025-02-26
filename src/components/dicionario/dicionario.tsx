@@ -138,8 +138,8 @@ export function Dicionario() {
         <>
 
 <Helmet>
-          <title>Dicionário | {version ? ('Conectee'):('Iapós')}</title>
-          <meta name="description" content={`Dicionário | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Dicionário | {version ? ('Conectee'):('Simcc')}</title>
+          <meta name="description" content={`Dicionário | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
             {isModalOpen && (

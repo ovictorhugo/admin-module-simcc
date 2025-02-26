@@ -237,10 +237,10 @@ export function VisualizacaoPrograma() {
   return (
     <>
       <Helmet>
-        <title>{graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | ${version ? 'Conectee' : 'Iapós'}` : `${version ? 'Conectee' : 'Iapós'} | ${version ? 'Escola de Engenharia UFMG' : 'SENAI CIMATEC'}`}</title>
+        <title>{graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | ${version ? 'Conectee' : 'Simcc'}` : `${version ? 'Conectee' : 'Simcc'} | ${version ? 'Escola de Engenharia UFMG' : 'SECTI-BA'}`}</title>
         <meta
           name="description"
-          content={graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : `${version ? 'Conectee' : 'Iapós'} | ${version ? 'Escola de Engenharia UFMG' : 'SENAI CIMATEC'}`}
+          content={graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : `${version ? 'Conectee' : 'Simcc'} | ${version ? 'Escola de Engenharia UFMG' : 'SECTI-BA'}`}
         />
         <meta name="robots" content="index, follow" />
       </Helmet>

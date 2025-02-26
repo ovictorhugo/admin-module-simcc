@@ -13,8 +13,8 @@ export function TermosUso() {
     const { theme } = useTheme();
     const { version } = useContext(UserContext);
 
-    const institution = version ? "a Escola de Engenharia da UFMG" : "o SENAI Cimatec";
-    const platform = version ? "Conectee" : "Iapós";
+    const institution = version ? "a Escola de Engenharia da UFMG" : "o SECTI-BA";
+    const platform = version ? "Conectee" : "Simcc";
 
     return (
         <main className="p-4 md:p-8 px-8 md:px-64 flex flex-col h-auto bg-neutral-50 dark:bg-neutral-900">

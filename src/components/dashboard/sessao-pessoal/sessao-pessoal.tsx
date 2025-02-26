@@ -49,8 +49,8 @@ const {version} = useContext(UserContext)
     return(
         <main className="flex flex-1 flex-col gap-4  md:gap-8 ">
            <Helmet>
-          <title>Seção de pessoal | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
-          <meta name="description" content={`Seção de pessoal | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Seção de pessoal | Módulo administrativo | {version ? ('Conectee'):('Simcc')} </title>
+          <meta name="description" content={`Seção de pessoal | Módulo administrativo | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
              <Tabs defaultValue={tab} value={tab} className="h-full" >

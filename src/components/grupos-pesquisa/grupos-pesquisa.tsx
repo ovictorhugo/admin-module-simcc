@@ -205,8 +205,8 @@ export function GruposPesquisaPage() {
       {programSelecionado.length == 0 ? (
         <main className="flex flex-1 flex-col gap-4 md:gap-8  ">
           <Helmet>
-            <title>Grupos de pesquisa | {version ? ('Conectee') : ('Iapós')}</title>
-            <meta name="description" content={`Grupos de pesquisa | ${version ? ('Conectee') : ('Iapós')}`} />
+            <title>Grupos de pesquisa | {version ? ('Conectee') : ('Simcc')}</title>
+            <meta name="description" content={`Grupos de pesquisa | ${version ? ('Conectee') : ('Simcc')}`} />
             <meta name="robots" content="index, follow" />
           </Helmet>
           <div className="bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${bg_popup})` }}>

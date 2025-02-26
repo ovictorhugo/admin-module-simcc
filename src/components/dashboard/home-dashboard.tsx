@@ -57,8 +57,8 @@ export function HomeDashboard() {
   return (
     <main className="w-full md:p-8 p-4">
       <Helmet>
-        <title>Dashboard | Módulo administrativo | {version ? ('Conectee') : ('Iapós')} </title>
-        <meta name="description" content={`Dashboard | Módulo administrativo | ${version ? ('Conectee') : ('Iapós')}`} />
+        <title>Dashboard | Módulo administrativo | {version ? ('Conectee') : ('Simcc')} </title>
+        <meta name="description" content={`Dashboard | Módulo administrativo | ${version ? ('Conectee') : ('Simcc')}`} />
         <meta name="robots" content="index, follow" />
       </Helmet>
       <div className=" bg-eng-blue rounded-md w-full h-[40vh]  text-white p-8 flex flex-col justify-between">

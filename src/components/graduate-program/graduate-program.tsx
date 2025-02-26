@@ -111,8 +111,8 @@ export function GraduateProgram() {
     <>
 
 <Helmet>
-          <title>Pós-graduações | {version ? ('Conectee'):('Iapós')}</title>
-          <meta name="description" content={`Pós-graduações | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Pós-graduações | {version ? ('Conectee'):('Simcc')}</title>
+          <meta name="description" content={`Pós-graduações | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
       

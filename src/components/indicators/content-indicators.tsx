@@ -26,8 +26,8 @@ export function ContentIndicators() {
   return (
     <main className="flex flex-1 flex-col gap-4  p-4 md:p-8 ">
       <Helmet>
-        <title>Indicadores | {version ? ('Conectee') : ('Iapós')}</title>
-        <meta name="description" content={`Indicadores | ${version ? ('Conectee') : ('Iapós')}`} />
+        <title>Indicadores | {version ? ('Conectee') : ('Simcc')}</title>
+        <meta name="description" content={`Indicadores | ${version ? ('Conectee') : ('Simcc')}`} />
         <meta name="robots" content="index, follow" />
       </Helmet>
       <div className="w-full  gap-4">
@@ -63,7 +63,7 @@ export function ContentIndicators() {
           <strong className="bg-eng-blue rounded-md px-3 pb-2 text-white font-medium">
             estatísticas de produção
           </strong>{" "}
-          {version ? ('da Escola de Engenharia') : ('do SENAI CIMATEC')}
+          {version ? ('da Escola de Engenharia') : ('do SECTI-BA')}
         </h1>
         <p className="max-w-[600px] text-lg font-light text-foreground">
           Produção bibliográfica e técnica, grupos de pesquisa, bolsistas de proatividade e dados sociais da instituição.

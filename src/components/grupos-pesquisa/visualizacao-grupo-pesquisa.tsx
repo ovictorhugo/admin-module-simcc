@@ -357,10 +357,10 @@ export function VisualizacaoGrupo() {
   return (
     <main className="flex flex-1 flex-col gap-4 md:gap-8 ">
       <Helmet>
-        <title>{graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | ${version ? 'Conectee' : 'Iapós'}` : `${version ? 'Conectee' : 'Iapós'} | ${version ? 'Escola de Engenharia UFMG' : 'SENAI CIMATEC'}`}</title>
+        <title>{graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | ${version ? 'Conectee' : 'Simcc'}` : `${version ? 'Conectee' : 'Simcc'} | ${version ? 'Escola de Engenharia UFMG' : 'SECTI-BA'}`}</title>
         <meta
           name="description"
-          content={graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : `${version ? 'Conectee' : 'Iapós'} | ${version ? 'Escola de Engenharia UFMG' : 'SENAI CIMATEC'}`}
+          content={graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : `${version ? 'Conectee' : 'Simcc'} | ${version ? 'Escola de Engenharia UFMG' : 'SECTI-BA'}`}
         />
         <meta name="robots" content="index, follow" />
       </Helmet>

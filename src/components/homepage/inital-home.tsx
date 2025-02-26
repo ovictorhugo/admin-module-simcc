@@ -525,8 +525,8 @@ export function InitialHome() {
 
     <div className=" items-center  flex flex-col   ">
       <Helmet>
-        <title>Página Inicial | {version ? ('Conectee') : ('Iapós')}</title>
-        <meta name="description" content={`Página Inicial | ${version ? ('Conectee') : ('Iapós')}`} />
+        <title>Página Inicial | {version ? ('Conectee') : ('Simcc')}</title>
+        <meta name="description" content={`Página Inicial | ${version ? ('Conectee') : ('Simcc')}`} />
         <meta name="robots" content="index, follow" />
       </Helmet>
 
@@ -777,7 +777,7 @@ export function InitialHome() {
                       <CardTitle className="text-sm font-medium">
                         Total de  {VisaoPrograma.map((props) => (<>{props.researcher}</>))} pesquisadores
                       </CardTitle>
-                      <CardDescription>{version ? ('na Escola de Engenharia') : ('no SENAI CIMATEC')}</CardDescription>
+                      <CardDescription>{version ? ('na Escola de Engenharia') : ('no SECTI-BA')}</CardDescription>
 
                     </div>
 
@@ -785,7 +785,7 @@ export function InitialHome() {
                       <Tooltip>
                         <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                         <TooltipContent>
-                          <p>Fonte: {version ? ('Escola de Engenharia') : ('SENAI CIMATEC')}</p>
+                          <p>Fonte: {version ? ('Escola de Engenharia') : ('SECTI-BA')}</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -831,14 +831,14 @@ export function InitialHome() {
                       <CardTitle className="text-sm font-medium">
                         Total de {totalTechnicianCounts} técnicos
                       </CardTitle>
-                      <CardDescription>{version ? ('na Escola de Engenharia') : ('no SENAI CIMATEC')}</CardDescription>
+                      <CardDescription>{version ? ('na Escola de Engenharia') : ('no SECTI-BA')}</CardDescription>
                     </div>
 
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                         <TooltipContent>
-                          <p>Fonte: {version ? ('Escola de Engenharia') : ('SENAI CIMATEC')}</p>
+                          <p>Fonte: {version ? ('Escola de Engenharia') : ('SECTI-BA')}</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -860,7 +860,7 @@ export function InitialHome() {
                   <Tooltip>
                     <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                     <TooltipContent>
-                      <p>Fonte: {version ? ('Escola de Engenharia') : ('SENAI CIMATEC')}</p>
+                      <p>Fonte: {version ? ('Escola de Engenharia') : ('SECTI-BA')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -872,7 +872,7 @@ export function InitialHome() {
                   <CardTitle className="text-8xl font-medium text-center">
                     {VisaoPrograma.map((props) => (<>{props.researcher}</>))}
                   </CardTitle>
-                  <CardDescription className="dark:text-white">{version ? ('na Escola de Engenharia') : (' pesquisadores no SENAI CIMATEC')}</CardDescription>
+                  <CardDescription className="dark:text-white">{version ? ('na Escola de Engenharia') : (' pesquisadores no SECTI-BA')}</CardDescription>
                 </div>
               </div>
 
@@ -1063,7 +1063,7 @@ export function InitialHome() {
                 <CardTitle className="text-sm font-medium">
                   Gráfico percentual de bolsistas CNPq
                 </CardTitle>
-                <CardDescription>Visão geral {version ? ('da Escola de Engenharia') : ('do SENAI CIMATEC')}</CardDescription>
+                <CardDescription>Visão geral {version ? ('da Escola de Engenharia') : ('do SECTI-BA')}</CardDescription>
               </div>
 
               <TooltipProvider>

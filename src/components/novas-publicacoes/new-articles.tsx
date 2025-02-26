@@ -436,8 +436,8 @@ useMemo(() => {
     return(
         <main ref={containerRef} className="  bg-neutral-50 dark:bg-neutral-900 w-full">
             <Helmet>
-          <title>Produções recentes | {version ? ('Conectee'):('Iapós')}</title>
-          <meta name="description" content={`Produções recentes | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Produções recentes | {version ? ('Conectee'):('Simcc')}</title>
+          <meta name="description" content={`Produções recentes | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
 

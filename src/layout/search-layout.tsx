@@ -321,9 +321,9 @@ export default function SearchLayout({
         <DialogContent className="p-0  ">
           <div className="h-[300px] w-full bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url(${bg_popup})` }}></div>
           <DialogHeader className="p-6">
-            <DialogTitle className="text-2xl font-medium">Apresentamos a plataforma {version ? ('Conectee') : ('Iapós')}</DialogTitle>
+            <DialogTitle className="text-2xl font-medium">Apresentamos a plataforma {version ? ('Conectee') : ('Simcc')}</DialogTitle>
             <DialogDescription>
-              O jeito mais fácil de visualizar e filtrar as produções técnicas e bibliográficas dos pesquisadores {version ? ('da Escola de Engenharia da UFMG') : ('do SENAI CIMATEC')}.
+              O jeito mais fácil de visualizar e filtrar as produções técnicas e bibliográficas dos pesquisadores {version ? ('da Escola de Engenharia da UFMG') : ('do SECTI-BA')}.
             </DialogDescription>
             <div className="flex pt-6 items-center justify-between">
               <div></div>

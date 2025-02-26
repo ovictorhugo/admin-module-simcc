@@ -57,7 +57,7 @@ export function Newsletter() {
     return(
         <div className="w-full flex flex-col items-center py-24">
            <div className="flex items-center flex-col justify-center mb-6">
-           <h2 className="text-2xl font-medium ">Newsletter semanal do {version ? ('Conectee'):('Iapós')}</h2>
+           <h2 className="text-2xl font-medium ">Newsletter semanal do {version ? ('Conectee'):('Simcc')}</h2>
            <p className="max-w-[750px] text-center text-lg font-light text-foreground">Receba atualizações na sua caixa de e-mails sobre as produções mais recentes</p>
            </div>
 
@@ -71,7 +71,7 @@ export function Newsletter() {
            </div>
 
             <p className="text-sm mt-4">Suas informações vão ser usadas de acordo com a
-Política de Privacidade do {version ? ('Conectee'):('Iapós')}. É possível cancelar a inscrição a qualquer momento.</p>
+Política de Privacidade do {version ? ('Conectee'):('Simcc')}. É possível cancelar a inscrição a qualquer momento.</p>
            </div>
 
         </div>

@@ -234,10 +234,10 @@ export function DisplayItem(props:Patrimonio) {
     return(
 <Tabs  defaultValue={tab} value={tab}>
 <Helmet>
-  <title>{props.name ? `${props.name} | ${version ? 'Conectee': 'Iapós'}` : `${version ? 'Conectee': 'Iapós'} | ${version ? 'Escola de Engenharia UFMG': 'SENAI CIMATEC'}`}</title>
+  <title>{props.name ? `${props.name} | ${version ? 'Conectee': 'Simcc'}` : `${version ? 'Conectee': 'Simcc'} | ${version ? 'Escola de Engenharia UFMG': 'SECTI-BA'}`}</title>
   <meta
     name="description"
-    content={props.name ? `${props.name} | ${version ? 'Conectee': 'Iapós'}` : `${version ? 'Conectee': 'Iapós'} | ${version ? 'Escola de Engenharia UFMG': 'SENAI CIMATEC'}`}
+    content={props.name ? `${props.name} | ${version ? 'Conectee': 'Simcc'}` : `${version ? 'Conectee': 'Simcc'} | ${version ? 'Escola de Engenharia UFMG': 'SECTI-BA'}`}
   />
   <meta name="robots" content="index, follow" />
 </Helmet>

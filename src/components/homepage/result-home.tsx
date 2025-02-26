@@ -179,9 +179,9 @@ export function ResultHome() {
                 const connector = item.term.endsWith('|') ? 'ou' : 'e'; // Determina o conector
                 return index < itemsSelecionados.length - 1 ? `${term} ${connector}` : term; // Adiciona o conector apenas se não for o último
               })
-              .join(' ')} | {version ? ('Conectee') : ('Iapós')}
+              .join(' ')} | {version ? ('Conectee') : ('Simcc')}
         </title>
-        <meta name="description" content={`Pesquisa | ${version ? ('Conectee') : ('Iapós')}`} />
+        <meta name="description" content={`Pesquisa | ${version ? ('Conectee') : ('Simcc')}`} />
         <meta name="robots" content="index, follow" />
       </Helmet>
 

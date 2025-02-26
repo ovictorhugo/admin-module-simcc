@@ -217,8 +217,8 @@ export function TodosPesquisadores() {
     return(
         <main className=" w-full grid grid-cols-1 ">
  <Helmet>
-          <title>Listagens | {version ? ('Conectee'):('Iapós')}</title>
-          <meta name="description" content={`Listagens | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Listagens | {version ? ('Conectee'):('Simcc')}</title>
+          <meta name="description" content={`Listagens | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
 <div className="justify-center px-4 md:px-8 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >

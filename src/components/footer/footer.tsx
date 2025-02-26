@@ -19,7 +19,7 @@ const {version} = useContext(UserContext)
             <div className="flex items-center gap-2">
                 <Copyright size={10}/>
           {version ? (  <p className="flex text-[10px] gap-1">Sistema de mapeamento de competências da <Link to={'https://www.eng.ufmg.br/'}>Escola de Engenharia </Link>| <Link to={'https://ufmg.br/'}>UFMG</Link></p>):(
-              <p className="flex text-[10px] gap-1">Sistema de mapeamento de competências da <Link to={'https://www.senaicimatec.com.br/'}>SENAI CIMATEC </Link></p>
+              <p className="flex text-[10px] gap-1">Sistema de mapeamento de competências da <Link to={'https://www.senaicimatec.com.br/'}>SECTI-BA </Link></p>
           )}
             </div>
 

@@ -340,8 +340,8 @@ const [relTec, setRelTec] = useState('');                              // Relat�
     return(
       <>
        <Helmet>
-          <title>Pesos de produção | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
-          <meta name="description" content={`Pesos de produção | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Pesos de produção | Módulo administrativo | {version ? ('Conectee'):('Simcc')} </title>
+          <meta name="description" content={`Pesos de produção | Módulo administrativo | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
      {isModalOpenDashboard && (

@@ -9,8 +9,8 @@ export function HomeAbout() {
     const { theme } = useTheme();
     const { version } = useContext(UserContext);
 
-    const institution = version ? "a Escola de Engenharia da UFMG" : "o SENAI Cimatec";
-    const platform = version ? "Conectee" : "Iapós";
+    const institution = version ? "a Escola de Engenharia da UFMG" : "o SECTI-BA";
+    const platform = version ? "Conectee" : "Simcc";
 
     const products = [
         {

@@ -22,8 +22,8 @@ export function ParametrosPesquisa() {
     return(
         <main className="flex flex-1 flex-col gap-4  md:gap-8 ">
            <Helmet>
-          <title>Parâmetros de pesquisa | Módulo administrativo | {version ? ('Conectee'):('Iapós')} </title>
-          <meta name="description" content={`Parâmetros de pesquisa | Módulo administrativo | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Parâmetros de pesquisa | Módulo administrativo | {version ? ('Conectee'):('Simcc')} </title>
+          <meta name="description" content={`Parâmetros de pesquisa | Módulo administrativo | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
         <Tabs defaultValue={tab} value={tab} className="h-full" >

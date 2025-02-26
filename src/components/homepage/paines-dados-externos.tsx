@@ -103,8 +103,8 @@ export function PaineisDadosExternos() {
     return(
         <main className="flex flex-1 flex-col relative  p-4 md:p-8 ">
  <Helmet>
-          <title>Painéis de dados externos | {version ? ('Conectee'):('Iapós')}</title>
-          <meta name="description" content={`Painéis de dados externos | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Painéis de dados externos | {version ? ('Conectee'):('Simcc')}</title>
+          <meta name="description" content={`Painéis de dados externos | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
 
