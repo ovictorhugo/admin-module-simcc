@@ -291,12 +291,13 @@ export function ResultHome() {
                   <DropdownMenuContent>
                     <DropdownMenuLabel>Mais opções</DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    <Link to={`${urlGeral}dictionary.pdf`} target="_blank">
                     <DropdownMenuItem className="p-0">
-                      <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
+                      <Button variant="ghost" className="">
                         <File size={16} className="" />
                         Dicionário de dados
                       </Button>
-                    </DropdownMenuItem>
+                    </DropdownMenuItem></Link>
 
                     <DropdownMenuItem className="p-0">
                       <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
