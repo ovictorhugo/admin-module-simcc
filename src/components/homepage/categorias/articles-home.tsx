@@ -108,8 +108,9 @@ export function ArticlesHome() {
   console.log('urlTermPublicacoes', urlTermPublicacoes)
   useMemo(() => {
     const fetchData = async () => {
+      isLoading(true)
       try {
-        isLoading(true)
+      
         const response = await fetch(urlTermPublicacoes, {
           mode: "cors",
           headers: {
@@ -222,12 +223,12 @@ export function ArticlesHome() {
                     350: 1,
                     750: 2,
                     900: 3,
-                    1200: navbar || isOpenSidebar ? 3 : 4
+                    1200: 4
                   }}
                 >
                   <Masonry gutter="16px">
                     {items.map((item, index) => (
-                      <div key={index}>{item}</div>
+                      <div className="w-full" key={index}>{item}</div>
                     ))}
                   </Masonry>
                 </ResponsiveMasonry>
