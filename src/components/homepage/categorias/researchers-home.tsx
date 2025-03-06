@@ -254,6 +254,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
     setSelectedUniversities([]);
     setSelectedSubsidies([]);
     setSelectedDepartaments([]);
+    setSelectedGraduatePrograms([])
     setResearcher(researcher);
     onClose();
   };
@@ -856,7 +857,7 @@ export function ResearchersHome() {
                 </div>
                 <AccordionContent className="p-0">
                   {loading ? (
-                    <Skeleton className="rounded-md " />
+                    <Skeleton className="rounded-md w-full h-[300px] " />
                   ) : (
                     <div>
                       <MapaResearcher
@@ -903,7 +904,7 @@ export function ResearchersHome() {
                         >
                           <Masonry gutter="16px">
                             {items.map((item, index) => (
-                              <div key={index}>{item}</div>
+                              <div className="w-full" key={index}>{item}</div>
                             ))}
                           </Masonry>
                         </ResponsiveMasonry>

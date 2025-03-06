@@ -687,9 +687,9 @@ export function InitialHome() {
           </Link>
 
           <Link onClick={() => onOpenResult('book-home')} to={'/resultados?type_search=book&terms=&researcher=false'}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+            <CardHeader className="flex flex-row pb-2 items-center justify-between space-y-0">
               <div>
-                <CardTitle className="text-[0.9rem] md:text-sm font-medium">
+                <CardTitle className="text-[0.9rem]  md:text-sm font-medium">
                   Total de capítulos
                 </CardTitle>
               </div>
@@ -706,7 +706,7 @@ export function InitialHome() {
           </Link>
 
           <Link onClick={() => onOpenResult('patent-home')} to={'/resultados?type_search=patent&terms=&researcher=false'}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+            <CardHeader className="flex flex-row items-center pb-2 justify-between space-y-0">
               <div>
                 <CardTitle className="text-[0.9rem] md:text-sm font-medium">
                   Total de patentes

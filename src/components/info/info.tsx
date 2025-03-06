@@ -3,13 +3,14 @@ import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
 import { Duvidas } from "./duvidas";
-import { useContext } from "react";
+import { useContext, useMemo, useState } from "react";
 import { Alert } from "../ui/alert";
 import { BracketsCurly, LinkSimple } from "phosphor-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { getVersion } from "../../gerVersion";
 import { Badge } from "../ui/badge";
 import { toast } from "sonner"
+import { format } from "date-fns";
 import bg_popup from '../../assets/bg_popup.png';
 import {
   Accordion,
@@ -34,6 +35,14 @@ import { CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Helmet } from "react-helmet";
 import { Colors } from "./colors";
 
+interface Log {
+  created_at: string;
+  detail: string | null;
+  error: boolean;
+  routine_type: string;
+}
+
+
 export function Info() {
     const history = useNavigate();
 
@@ -42,6 +51,36 @@ export function Info() {
     const handleVoltar = () => {
       history(-1);
     }
+
+    const [log, setLog] = useState<Log[]>([]);
+
+    let urlTermPesquisadores = `${urlGeral}logs`
+
+    useMemo(() => {
+      const fetchData = async () => {
+          try {
+         
+            const response = await fetch(  urlTermPesquisadores, {
+              mode: "cors",
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Max-Age": "3600",
+                "Content-Type": "text/plain",
+              },
+            });
+            const data = await response.json();
+            if (data) {
+              setLog(data);
+           
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        };
+        fetchData();
+      }, [urlTermPesquisadores]);
 
     const colors = [
         { name: 'Qualis A1', color: '#34663C' },
@@ -206,8 +245,8 @@ export function Info() {
     return(
         <main className="flex flex-1 flex-col gap-4 md:gap-8 md:p-8 p-4">
            <Helmet>
-          <title>Informações | {version ? ('Conectee'):('Iapós')}</title>
-          <meta name="description" content={`Informações | ${version ? ('Conectee'):('Iapós')}`} />
+          <title>Informações | {version ? ('Conectee'):('Simcc')}</title>
+          <meta name="description" content={`Informações | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
             <Tabs defaultValue={'all'} className="h-full" >
@@ -315,6 +354,29 @@ export function Info() {
                          </CardContent>
               </Alert>
             </div>
+
+            <h3 className="text-2xl font-medium ">Atualização dos dados</h3>
+
+            <Table>
+        <TableHeader>
+          <TableRow>
+          <TableHead>Tipo de Rotina</TableHead>
+            <TableHead>Data</TableHead>
+            
+            <TableHead>Erro</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {log.map((log, index) => (
+            <TableRow key={index}>
+              
+              <TableCell>{log.routine_type}</TableCell>
+              <TableCell>{format(new Date(log.created_at), "dd/MM/yyyy HH:mm:ss")}</TableCell>
+              <TableCell>{log.error ? "Sim" : "Não"}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
                 
                 <h3 className="text-2xl font-medium ">Suporte</h3>

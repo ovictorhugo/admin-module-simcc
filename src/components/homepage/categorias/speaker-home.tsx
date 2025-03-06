@@ -164,7 +164,7 @@ console.log(urlTermPublicacoes)
                 >
                   <Masonry gutter="16px">
                     {items.map((item, index) => (
-                      <div key={index}>{item}</div>
+                      <div className="w-full" key={index}>{item}</div>
                     ))}
                   </Masonry>
                 </ResponsiveMasonry>
