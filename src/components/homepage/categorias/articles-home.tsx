@@ -158,8 +158,10 @@ export function ArticlesHome() {
         </Alert>
       </div>
 
-      <FilterArticle
+     <div className="mt-6">
+     <FilterArticle
         onFilterUpdate={handleResearcherUpdate} />
+     </div>
 
       <Accordion defaultValue="item-1" type="single" collapsible >
         <AccordionItem value="item-1" >

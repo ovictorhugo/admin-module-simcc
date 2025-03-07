@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useModalResult } from "../../hooks/use-modal-result";
 import { UserContext } from "../../../context/context";
 import { CloudWordResearcherHome } from "./researchers-home/clould-word-researcher-home";
@@ -11,7 +11,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { Skeleton } from "../../ui/skeleton";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Alert } from "../../ui/alert";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Hash, MapIcon, Sparkles, Trash, User, X } from "lucide-react";
@@ -139,17 +139,23 @@ type FiltersModalProps = {
 };
 
 export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
+  const isFirstRender = useRef(true);
+  const queryUrl = useQuery();
+  const getArrayFromUrl = (key: string) => queryUrl.get(key)?.split(";") || [];
 
+  
   const { onClose, isOpen, type: typeModal } = useModal();
   const isModalOpen = isOpen && typeModal === "filters";
-  const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
-  const [selectedGraduations, setSelectedGraduations] = useState<string[]>([]);
-  const [selectedCities, setSelectedCities] = useState<string[]>([]);
-  const [selectedUniversities, setSelectedUniversities] = useState<string[]>([]);
-  const [selectedSubsidies, setSelectedSubsidies] = useState<string[]>([]);
-  const [selectedGraduatePrograms, setSelectedGraduatePrograms] = useState<string[]>([]);
-  const [selectedDepartaments, setSelectedDepartaments] = useState<string[]>([]);
+  const [selectedAreas, setSelectedAreas] = useState<string[]>(getArrayFromUrl("areas"));
+  const [selectedGraduations, setSelectedGraduations] = useState<string[]>(getArrayFromUrl("graduations"));
+  const [selectedCities, setSelectedCities] = useState<string[]>(getArrayFromUrl("cities"));
+  const [selectedUniversities, setSelectedUniversities] = useState<string[]>(getArrayFromUrl("universities"));
+  const [selectedSubsidies, setSelectedSubsidies] = useState<string[]>(getArrayFromUrl("subsidy"));
+  const [selectedGraduatePrograms, setSelectedGraduatePrograms] = useState<string[]>(getArrayFromUrl("graduatePrograms"));
+  const [selectedDepartaments, setSelectedDepartaments] = useState<string[]>(getArrayFromUrl("departments"));
+
   const [filteredCount, setFilteredCount] = useState<number>(0);
+  const navigate = useNavigate();
 
   const { simcc } = useContext(UserContext)
   useEffect(() => {
@@ -188,6 +194,25 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
       });
     }
     setFilteredCount(filtered.length);
+
+      updateFilters("areas", selectedAreas );
+    updateFilters("graduations", selectedGraduations);
+    updateFilters("cities", selectedCities);
+    updateFilters("universities", selectedUniversities);
+    updateFilters("subsidy", selectedSubsidies);
+    updateFilters("graduatePrograms", selectedGraduatePrograms);
+    updateFilters("departments", selectedDepartaments);
+
+    navigate({
+      pathname: '/resultados',
+      search: queryUrl.toString(),
+    });
+    
+
+    setResearcher(filteredResearchers);
+
+
+
   }, [researcher, selectedAreas, selectedGraduations, selectedCities, selectedUniversities, selectedSubsidies, selectedGraduatePrograms, selectedDepartaments]);
 
   const handleAreaToggle = (value: any) => {
@@ -248,6 +273,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   };
 
   const clearFilters = () => {
+   
     setSelectedAreas([]);
     setSelectedGraduations([]);
     setSelectedCities([]);
@@ -256,6 +282,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
     setSelectedDepartaments([]);
     setSelectedGraduatePrograms([])
     setResearcher(researcher);
+   
     onClose();
   };
 
@@ -296,12 +323,46 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
       setSelectedUniversities([]);
       setSelectedSubsidies([]);
       setSelectedDepartaments([])
+      setSelectedGraduatePrograms([])
     }
   }, [researcher]);
 
   const {version} = useContext(UserContext)
 
+
+  ///////////q
+
+
+   // Função para atualizar os filtros na URL
+   const updateFilters = (category: string, values: string[]) => {
+    if (values.length > 0 ) {
+     
+      queryUrl.set(category, values.join(";"));
+      setResearcher(filteredResearchers);
+    } else {
+     queryUrl.delete(category)
+    }
+   
+  };
+
+ 
+  // Carrega os valores da URL ao iniciar a página
+  useEffect(() => {
+
+    setSelectedAreas(getArrayFromUrl("areas"));
+    setSelectedGraduations(getArrayFromUrl("graduations"));
+    setSelectedCities(getArrayFromUrl("cities"));
+    setSelectedUniversities(getArrayFromUrl("universities"));
+    setSelectedSubsidies(getArrayFromUrl("subsidy"));
+    setSelectedGraduatePrograms(getArrayFromUrl("graduatePrograms"));
+    setSelectedDepartaments(getArrayFromUrl("departments"));
+
+    setResearcher(filteredResearchers);
+ 
+  }, []);
+
   const [search, setSearch] = useState('')
+  const [search2, setSearch2] = useState('')
 
   const filteredTotal = Array.isArray(uniqueGraduatePrograms) ? uniqueGraduatePrograms.filter(item => {
     // Normaliza a string do item e da busca para comparação
@@ -312,6 +373,19 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
 
     const searchString = normalizeString(item);
     const normalizedSearch = normalizeString(search);
+
+    return searchString.includes(normalizedSearch);
+  }) : [];
+
+  const filteredTotal2 = Array.isArray(uniqueCities) ? uniqueCities.filter(item => {
+    // Normaliza a string do item e da busca para comparação
+    const normalizeString = (str: any) => str
+      .normalize("NFD") // Decompõe os caracteres acentuados
+      .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
+      .toLowerCase(); // Converte para minúsculas
+
+    const searchString = normalizeString(item);
+    const normalizedSearch = normalizeString(search2);
 
     return searchString.includes(normalizedSearch);
   }) : [];
@@ -421,6 +495,18 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
     <AccordionTrigger></AccordionTrigger>
     </div>
     <AccordionContent>
+    <Alert className="h-12 p-2 mb-4 flex items-center justify-between  w-full ">
+                <div className="flex items-center gap-2 w-full flex-1">
+                  <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
+                  <Input onChange={(e) => setSearch2(e.target.value)} value={search2} type="text" className="border-0 w-full " />
+                </div>
+
+                <div className="w-fit">
+
+
+                </div>
+              </Alert>
+
     <ToggleGroup
                     type="multiple"
                     variant={'outline'}
@@ -428,7 +514,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
                     onValueChange={handleCityToggle}
                     className="aspect-auto flex flex-wrap items-start justify-start gap-2"
                   >
-                    {uniqueCities.map((city) => (
+                    {filteredTotal2.map((city) => (
                       <ToggleGroupItem key={city} value={city} className="px-3 py-2">
                         {city}
                       </ToggleGroupItem>

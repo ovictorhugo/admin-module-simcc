@@ -514,7 +514,13 @@ useMemo(() => {
                  <HeaderResultTypeHome title="Pesquisadores" icon={<Users size={24} className="text-gray-400" />}>
                  </HeaderResultTypeHome>
                  </div>
-                  
+                   <InfiniteMovingResearchers
+        items={researcher} // Formata cada item como um objeto
+        direction="left"
+        speed='slow'
+        pauseOnHover={true}
+        className="custom-class"
+      />
                    </div>
 
 <div>
@@ -523,7 +529,13 @@ useMemo(() => {
                  <HeaderResultTypeHome title="Artigos mais recentes" icon={<Quotes size={24} className="text-gray-400" />}>
                  </HeaderResultTypeHome>
                  </div>
-
+<InfiniteMovingArticle
+        items={publicacoes} // Formata cada item como um objeto
+        direction="right"
+        speed='slow'
+        pauseOnHover={true}
+        className="custom-class"
+      />
 
 </div>
                   </div>

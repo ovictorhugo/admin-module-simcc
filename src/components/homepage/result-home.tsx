@@ -11,7 +11,7 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useModal } from "../hooks/use-modal-store";
 import { DotsThreeOutline, DotsThreeVertical, File, Plus, Quotes } from "phosphor-react";
 import { Search } from "../search/search";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
@@ -60,9 +60,35 @@ export function ResultHome() {
 
   ////
   const tab = queryUrl.get('tab');
-  useEffect(() => {
+  const navigate = useNavigate();
+
+  const updateFilters = (category: string, values: any) => {
+    if (values.length > 0 ) {
+     
+      queryUrl.set(category, values);
+     
+    } else {
+     queryUrl.delete(category)
+    }
    
+  };
+
+  useEffect(() => {
+     updateFilters("tab", typeResult );
+
+     navigate({
+      pathname: '/resultados',
+      search: queryUrl.toString(),
+    })
+
   }, [typeResult]);
+
+  useEffect(() => {
+  if(tab) {
+    onOpen(tab)
+  }
+   
+ }, []);
 
 
 
@@ -298,30 +324,28 @@ export function ResultHome() {
                     <DropdownMenuLabel>Mais opções</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <Link to={`${urlGeral}dictionary.pdf`} target="_blank">
-                    <DropdownMenuItem className="p-0">
-                      <Button variant="ghost" className="">
+                    <DropdownMenuItem className="gap-2">
+                    
                         <File size={16} className="" />
                         Dicionário de dados
-                      </Button>
+                  
                     </DropdownMenuItem></Link>
 
-                    <DropdownMenuItem className="p-0">
-                      <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
+                    <DropdownMenuItem onClick={() => handleDownloadJson()} className="gap-2" >
+                     
                         <Download size={16} className="" />
                         Baixar resultado
-                      </Button>
-                    </DropdownMenuItem>
+                      
+                    </DropdownMenuItem >
 
-                    <DropdownMenuItem>
-                      <div>
-                        {typeResult == 'researchers-home' && (
-                          <Button onClick={() => onOpenModal('filters')} variant="ghost" className="">
+                    {typeResult == 'researchers-home' && (
+                    <DropdownMenuItem onClick={() => onOpenModal('filters')} className="gap-2">
+                     
                             <SlidersHorizontal size={16} className="" />
                             Filtros
-                          </Button>
-                        )}
-                      </div>
+                         
                     </DropdownMenuItem>
+                     )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
