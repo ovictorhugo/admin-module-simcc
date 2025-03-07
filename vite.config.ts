@@ -23,7 +23,6 @@ export default defineConfig({
       transformMixedEsModules: true,
     },
     rollupOptions: {
-      external: ['@emoji-mart/react'],
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
@@ -34,7 +33,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      'emoji-mart': '@emoji-mart/react'
     },
   },
   optimizeDeps: {

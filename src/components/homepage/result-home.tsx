@@ -62,26 +62,7 @@ export function ResultHome() {
   const tab = queryUrl.get('tab');
   const navigate = useNavigate();
 
-  const updateFilters = (category: string, values: any) => {
-    if (values.length > 0 ) {
-     
-      queryUrl.set(category, values);
-     
-    } else {
-     queryUrl.delete(category)
-    }
-   
-  };
-
-  useEffect(() => {
-     updateFilters("tab", typeResult );
-
-     navigate({
-      pathname: '/resultados',
-      search: queryUrl.toString(),
-    })
-
-  }, [typeResult]);
+  
 
 
 
