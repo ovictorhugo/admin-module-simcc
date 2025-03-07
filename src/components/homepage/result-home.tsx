@@ -58,6 +58,12 @@ export function ResultHome() {
     }
   }, [typeResult]);
 
+  ////
+  const tab = queryUrl.get('tab');
+  useEffect(() => {
+   
+  }, [typeResult]);
+
 
 
   //csv
