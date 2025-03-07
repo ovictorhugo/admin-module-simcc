@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
-import { useModalResult } from "../hooks/use-modal-result";
+import { ModalType, useModalResult } from "../hooks/use-modal-result";
 import { ResultProvider } from "../provider/result-provider";
 
 import { UserContext } from "../../context/context";
@@ -83,12 +83,7 @@ export function ResultHome() {
 
   }, [typeResult]);
 
-  useEffect(() => {
-  if(tab) {
-    onOpen(tab)
-  }
-   
- }, []);
+
 
 
 
