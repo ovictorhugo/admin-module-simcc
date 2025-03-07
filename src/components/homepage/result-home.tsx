@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
-import { useModalResult } from "../hooks/use-modal-result";
+import { ModalType, useModalResult } from "../hooks/use-modal-result";
 import { ResultProvider } from "../provider/result-provider";
 
 import { UserContext } from "../../context/context";
@@ -11,7 +11,7 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useModal } from "../hooks/use-modal-store";
 import { DotsThreeOutline, DotsThreeVertical, File, Plus, Quotes } from "phosphor-react";
 import { Search } from "../search/search";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
@@ -57,6 +57,33 @@ export function ResultHome() {
       onOpen('researchers-home')
     }
   }, [typeResult]);
+
+  ////
+  const tab = queryUrl.get('tab');
+  const navigate = useNavigate();
+
+  const updateFilters = (category: string, values: any) => {
+    if (values.length > 0 ) {
+     
+      queryUrl.set(category, values);
+     
+    } else {
+     queryUrl.delete(category)
+    }
+   
+  };
+
+  useEffect(() => {
+     updateFilters("tab", typeResult );
+
+     navigate({
+      pathname: '/resultados',
+      search: queryUrl.toString(),
+    })
+
+  }, [typeResult]);
+
+
 
 
 
@@ -179,9 +206,9 @@ export function ResultHome() {
                 const connector = item.term.endsWith('|') ? 'ou' : 'e'; // Determina o conector
                 return index < itemsSelecionados.length - 1 ? `${term} ${connector}` : term; // Adiciona o conector apenas se não for o último
               })
-              .join(' ')} | {version ? ('Conectee') : ('Iapós')}
+              .join(' ')} | {version ? ('Conectee') : ('Simcc')}
         </title>
-        <meta name="description" content={`Pesquisa | ${version ? ('Conectee') : ('Iapós')}`} />
+        <meta name="description" content={`Pesquisa | ${version ? ('Conectee') : ('Simcc')}`} />
         <meta name="robots" content="index, follow" />
       </Helmet>
 
@@ -292,30 +319,28 @@ export function ResultHome() {
                     <DropdownMenuLabel>Mais opções</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <Link to={`${urlGeral}dictionary.pdf`} target="_blank">
-                    <DropdownMenuItem className="p-0">
-                      <Button variant="ghost" className="">
+                    <DropdownMenuItem className="gap-2">
+                    
                         <File size={16} className="" />
                         Dicionário de dados
-                      </Button>
+                  
                     </DropdownMenuItem></Link>
 
-                    <DropdownMenuItem className="p-0">
-                      <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
+                    <DropdownMenuItem onClick={() => handleDownloadJson()} className="gap-2" >
+                     
                         <Download size={16} className="" />
                         Baixar resultado
-                      </Button>
-                    </DropdownMenuItem>
+                      
+                    </DropdownMenuItem >
 
-                    <DropdownMenuItem>
-                      <div>
-                        {typeResult == 'researchers-home' && (
-                          <Button onClick={() => onOpenModal('filters')} variant="ghost" className="">
+                    {typeResult == 'researchers-home' && (
+                    <DropdownMenuItem onClick={() => onOpenModal('filters')} className="gap-2">
+                     
                             <SlidersHorizontal size={16} className="" />
                             Filtros
-                          </Button>
-                        )}
-                      </div>
+                         
                     </DropdownMenuItem>
+                     )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
