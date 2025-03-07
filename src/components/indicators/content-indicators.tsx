@@ -1,10 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import { ChevronLeft, SquareArrowOutUpRight } from "lucide-react";
+import { ChevronLeft, Component, SquareArrowOutUpRight } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useContext, useState } from "react";
 import { UserContext } from "../../context/context";
 import { Helmet } from "react-helmet";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 export function ContentIndicators() {
   const history = useNavigate();
@@ -15,14 +17,26 @@ export function ContentIndicators() {
     history(-1);
   }
 
-  let url = 'https://app.powerbi.com/view?r=eyJrIjoiODJlNTM2NDYtMzBhMi00ZThmLTkyZjQtYjY5NDE5M2Y1NDhkIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
+  let url = 'https://app.powerbi.com/view?r=eyJrIjoiYTk2YmEwNjctMGM5Zi00Mzg5LTlhNjItYzA1NWM1YWMxMjNjIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
 
-  if (!version) {
-    url = 'https://app.powerbi.com/view?r=eyJrIjoiOTMwMGE2ODAtYTNkYy00MDI1LWIyZjQtYTgwNjIwM2IzNzgyIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
-  }
+
 
   const [value, setValue] = useState('article')
-  const url2 = 'https://app.powerbi.com/view?r=eyJrIjoiZTg2MTFiN2ItMjJjNS00Y2EzLWJjNTgtNzE3Yzg2YWZhNDM2IiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
+  const url2 = 'https://app.powerbi.com/view?r=eyJrIjoiOTVmZjM2ZWUtMzliOS00Y2RkLTllYjItMmU3MDg4MjQxOTI5IiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
+
+   const url3 = 'https://app.powerbi.com/view?r=eyJrIjoiNmU0MzhlYTAtZGVmZi00NTAxLThhN2UtOTU2NWJkMzNmZjA5IiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
+
+   const getUrl = () => {
+    if (value === "1") {
+      return url;
+    } else if (value === "2") {
+      return url2;
+    } else if (value === "3") {
+      return url3;
+    }
+    return "#"; // Caso nenhuma condição seja atendida
+  };
+  
   return (
     <main className="flex flex-1 flex-col gap-4  p-4 md:p-8 ">
       <Helmet>
@@ -46,9 +60,16 @@ export function ContentIndicators() {
 
 
           <div className="hidden items-center h-10 gap-2 md:ml-auto md:flex">
-
-
-
+          <DropdownMenu>
+  <DropdownMenuTrigger className="p-0">
+    <Button> <Component size={16} />Incites</Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent className="min-w-[250px]">
+    
+   <Link target="_blank" to={`https://simcc.uesc.br/incite/industria4/`}> <DropdownMenuItem >Indústria 4.0</DropdownMenuItem></Link>
+  
+  </DropdownMenuContent>
+</DropdownMenu>
 
           </div>
         </div>
@@ -58,15 +79,15 @@ export function ContentIndicators() {
       <div className="lg:max-w-[900px]  mt-2">
 
 
-        <h1 className="max-w-[650px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
+        <h1 className="max-w-[550px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
           Confira as {" "}
           <strong className="bg-eng-blue rounded-md px-3 pb-2 text-white font-medium">
-            estatísticas de produção
+            estatísticas 
           </strong>{" "}
-          {version ? ('da Escola de Engenharia') : ('do SECTI-BA')}
+          de produção {version ? ('da Escola de Engenharia') : ('do Simcc')}
         </h1>
         <p className="max-w-[600px] text-lg font-light text-foreground">
-          Produção bibliográfica e técnica, grupos de pesquisa, bolsistas de proatividade e dados sociais da instituição.
+          Produção bibliográfica e técnica, grupos de pesquisa, bolsistas de proatividade e dados das universidades públicas da Bahia.
         </p>
 
       </div>
@@ -79,23 +100,31 @@ export function ContentIndicators() {
               onClick={() => setValue('article')}
               className="flex gap-2 items-center"
             >
-              Produção geral
+             Indicadores de produção
             </TabsTrigger>
 
-            {version && (
+           
               <TabsTrigger
                 value="2"
                 onClick={() => setValue('2')}
                 className=" gap-2 items-center"
               >
-                Painel da instituição
+              Busca de informações
               </TabsTrigger>
-            )}
+
+                 <TabsTrigger
+                value="3"
+                onClick={() => setValue('3')}
+                className=" gap-2 items-center"
+              >
+              Programas de pós-graduação
+              </TabsTrigger>
+       
           </TabsList>
 
 
           <div className="">
-            <Link target="_blank" to={value == 'article' ? url : url2}> <Button size={'sm'}><SquareArrowOutUpRight size={12} /> Abrir em outra página</Button></Link>
+            <Link target="_blank" to={getUrl()}> <Button size={'sm'}><SquareArrowOutUpRight size={12} /> Abrir em outra página</Button></Link>
           </div>
         </div>
         <TabsContent value="article">
@@ -114,6 +143,16 @@ export function ContentIndicators() {
               title="Report Section"
               className="w-full h-screen rounded-md mb-8 border dark:border-neutral-800 "
               src={url2}
+            ></iframe>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="3">
+          <div className="w-full h-screen flex  rounded-md">
+            <iframe
+              title="Report Section"
+              className="w-full h-screen rounded-md mb-8 border dark:border-neutral-800 "
+              src={url3}
             ></iframe>
           </div>
         </TabsContent>
