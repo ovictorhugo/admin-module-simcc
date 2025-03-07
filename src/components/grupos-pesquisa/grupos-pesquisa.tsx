@@ -282,7 +282,7 @@ export function GruposPesquisaPage() {
                   {filteredTotal.slice(0, count).map((item) => {
 
                     return (
-                      <div className="flex" onClick={() => handlePesquisaFinal(item.id)}>
+                      <div className="flex w-full" onClick={() => handlePesquisaFinal(item.id)}>
                         <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border min-h-[120px] border-neutral-200 border-r-0 ${qualisColor[normalizeArea(item.area || '')]} min-h-full relative`}></div>
 
                         <button

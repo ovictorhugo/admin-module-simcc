@@ -1,4 +1,4 @@
-import {   ChevronsUpDown,   Plus,  User, UserIcon} from "lucide-react";
+import {   ChevronsUpDown,   Maximize2,   Plus,  User, UserIcon} from "lucide-react";
 import { Button } from "../../ui/button";
 
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
@@ -407,7 +407,7 @@ console.log(filteredTotal)
               <div className="flex items-center gap-3">
              <div className=" items-center gap-3 hidden group-hover:flex transition-all">
              <Button size={'icon'}  onClick={() => onOpen('researcher-modal', {name:props.name})} variant={'ghost'} className="h-10 w-10 ">
-                   <Eye size={16}  />
+                   <Maximize2 size={16}  />
              </Button>
  
           <Button size={'icon'}  onClick={() => onOpen('confirm-delete-researcher-departament', {lattes_id:props.lattes_id, id_dep:props.dep_id, nome:props.name})} variant={'destructive'} className=" text-white h-10 w-10 dark:text-white">
