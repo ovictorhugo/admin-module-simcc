@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
-import { useModalResult } from "../hooks/use-modal-result";
+import { ModalType, useModalResult } from "../hooks/use-modal-result";
 import { ResultProvider } from "../provider/result-provider";
 
 import { UserContext } from "../../context/context";
@@ -11,7 +11,7 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useModal } from "../hooks/use-modal-store";
 import { DotsThreeOutline, DotsThreeVertical, File, Plus, Quotes } from "phosphor-react";
 import { Search } from "../search/search";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
@@ -58,6 +58,14 @@ export function ResultHome() {
     }
   }, [typeResult]);
 
+  ////
+  const tab = queryUrl.get('tab');
+  const navigate = useNavigate();
+
+  
+
+
+
 
 
   //csv
@@ -68,11 +76,43 @@ export function ResultHome() {
   if (typeResult == 'articles-home') {
     urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=&type=ARTICLE&qualis=&qualis=&year=1900`;
   } else if (typeResult == 'researchers-home') {
-    urlPublicacoesPorPesquisador = `${urlGeral}patent_production_researcher?researcher_id=&year=1900&term=${valoresSelecionadosExport}&distinct=0`
+    if (searchType === 'name') {
+      urlPublicacoesPorPesquisador = `${urlGeral}researcherName?name=${valoresSelecionadosExport?.replace(/[;|()]/g, '')}`;
+    } else if (searchType === 'article') {
+      urlPublicacoesPorPesquisador = `${urlGeral}researcher?terms=${valoresSelecionadosExport}&university=&type=ARTICLE&graduate_program_id=`;
+    } else if (searchType === 'book') {
+      urlPublicacoesPorPesquisador = `${urlGeral}researcherBook?term=${valoresSelecionadosExport}&university=&type=BOOK&graduate_program_id=`; //
+    } else if (searchType === 'area') {
+      urlPublicacoesPorPesquisador = `${urlGeral}researcherArea_specialty?area_specialty=${valoresSelecionadosExport}&university=&graduate_program_id=`;
+    } else if (searchType === 'speaker') {
+      urlPublicacoesPorPesquisador = `${urlGeral}researcherParticipationEvent?term=${valoresSelecionadosExport}&university=&graduate_program_id=`; //
+    } else if (searchType === 'patent') {
+      urlPublicacoesPorPesquisador = `${urlGeral}researcherPatent?term=${valoresSelecionadosExport}&graduate_program_id=&university=`;
+    } else if (searchType === 'abstract') {
+      urlPublicacoesPorPesquisador = `${urlGeral}researcher?terms=${valoresSelecionadosExport}&university=&type=ABSTRACT&graduate_program_id=`;
+    }
   } else if (typeResult == 'speaker-home') {
     urlPublicacoesPorPesquisador = `${urlGeral}pevent_researcher?researcher_id=&year=1900&term=${valoresSelecionadosExport}&nature=`
   } else if (typeResult == 'institutions-home') {
-    urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}&university=&type=ARTICLE`
+    if (searchType == 'article') {
+      urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}&university=&type=ARTICLE`
+    } else if (searchType == 'speaker') {
+      urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}&university=&type=SPEAKER`
+    } else if (searchType == 'patent') {
+      urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}&university=&type=PATENT`
+    } else if (searchType == 'book') {
+      urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}&university=&type=BOOK`
+    } else if (searchType == 'abstract') {
+      urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}&university=&type=ABSTRACT`
+    } else if (searchType == 'area') {
+      urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}&university=&type=AREA`
+    } 
+  } else if (typeResult == 'patent-home') {
+    urlPublicacoesPorPesquisador = `${urlGeral}patent_production_researcher?researcher_id=&year=1900&term=${valoresSelecionadosExport}&distinct=`
+  } else if (typeResult == 'book-home') {
+    urlPublicacoesPorPesquisador = `${urlGeral}book_production_researcher?researcher_id=&year=1900&term=${valoresSelecionadosExport}&distinct=0`
+
+    urlPublicacoesPorPesquisador = `${urlGeral}book_chapter_production_researcher?researcher_id=&year=1900&term=${valoresSelecionadosExport}&distinct=0`
   }
 
 
@@ -147,9 +187,9 @@ export function ResultHome() {
                 const connector = item.term.endsWith('|') ? 'ou' : 'e'; // Determina o conector
                 return index < itemsSelecionados.length - 1 ? `${term} ${connector}` : term; // Adiciona o conector apenas se não for o último
               })
-              .join(' ')} | {version ? ('Conectee') : ('Iapós')}
+              .join(' ')} | {version ? ('Conectee') : ('Simcc')}
         </title>
-        <meta name="description" content={`Pesquisa | ${version ? ('Conectee') : ('Iapós')}`} />
+        <meta name="description" content={`Pesquisa | ${version ? ('Conectee') : ('Simcc')}`} />
         <meta name="robots" content="index, follow" />
       </Helmet>
 
@@ -204,13 +244,15 @@ export function ResultHome() {
                       </Button>
                     </div>
                   )}
-                  {!((simcc && researcher == 'false' && itemsSelecionados.length == 0) && itemsSelecionados.length == 0) && (
+                  {!((simcc && researcher == 'false' && itemsSelecionados.length == 0) && itemsSelecionados.length == 0 ) && (
+                   searchType != 'name' && (
                     <div className={`pb-2 border-b-2 transition-all ${typeResult == 'institutions-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
-                      <Button variant={typeResult == 'institutions-home' ? ('ghost') : ('ghost')} className={`${typeResult}`} onClick={() => onOpen('institutions-home')}>
-                        <Building2 className="h-4 w-4" />
-                        Instituições
-                      </Button>
-                    </div>
+                    <Button variant={typeResult == 'institutions-home' ? ('ghost') : ('ghost')} className={`${typeResult}`} onClick={() => onOpen('institutions-home')}>
+                      <Building2 className="h-4 w-4" />
+                      Instituições
+                    </Button>
+                  </div>
+                   )
                   )}
                 </div>
                 <ScrollBar orientation="horizontal" />
@@ -218,10 +260,12 @@ export function ResultHome() {
 
               <div className="hidden xl:flex xl:flex-nowrap gap-2">
                 <div className="md:flex md:flex-nowrap gap-2">
-                  <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
+                  <Link to={`${urlGeral}dictionary.pdf`} target="_blank">
+                  <Button variant="ghost" className="">
                     <File size={16} className="" />
                     Dicionário de dados
                   </Button>
+                  </Link>
                   <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
                     <Download size={16} className="" />
                     Baixar resultado
@@ -255,30 +299,29 @@ export function ResultHome() {
                   <DropdownMenuContent>
                     <DropdownMenuLabel>Mais opções</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="p-0">
-                      <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
+                    <Link to={`${urlGeral}dictionary.pdf`} target="_blank">
+                    <DropdownMenuItem className="gap-2">
+                    
                         <File size={16} className="" />
                         Dicionário de dados
-                      </Button>
-                    </DropdownMenuItem>
+                  
+                    </DropdownMenuItem></Link>
 
-                    <DropdownMenuItem className="p-0">
-                      <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
+                    <DropdownMenuItem onClick={() => handleDownloadJson()} className="gap-2" >
+                     
                         <Download size={16} className="" />
                         Baixar resultado
-                      </Button>
-                    </DropdownMenuItem>
+                      
+                    </DropdownMenuItem >
 
-                    <DropdownMenuItem>
-                      <div>
-                        {typeResult == 'researchers-home' && (
-                          <Button onClick={() => onOpenModal('filters')} variant="ghost" className="">
+                    {typeResult == 'researchers-home' && (
+                    <DropdownMenuItem onClick={() => onOpenModal('filters')} className="gap-2">
+                     
                             <SlidersHorizontal size={16} className="" />
                             Filtros
-                          </Button>
-                        )}
-                      </div>
+                         
                     </DropdownMenuItem>
+                     )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>

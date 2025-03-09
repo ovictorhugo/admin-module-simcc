@@ -85,9 +85,9 @@ export function PatentHome() {
 
 
     return(
-        <div className="grid grid-cols-1 ">
+        <div className="grid grid-cols-1 gap-4 pb-16 ">
           <HeaderResult/>
-             <div className="my-8">
+             <div className="mt-4">
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
@@ -109,14 +109,14 @@ export function PatentHome() {
 
 <Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
-                <div className="flex mb-2">
+                <div className="flex ">
                 <HeaderResultTypeHome title="Gráfico de quantidade total de produção técnica" icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
                     <AccordionTrigger>
                     
                     </AccordionTrigger>
                     </div>
-                    <AccordionContent >
+                    <AccordionContent className="p-0">
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
@@ -128,11 +128,11 @@ export function PatentHome() {
 
                 <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >
-                <div className="flex mb-2">
+                <div className="flex ">
                 <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
             <Copyright size={24} className="text-gray-400" />
-            <p className="text-sm font-bold"> Patentes</p>
+            <p className=" font-medium"> Patentes</p>
             </div>
 
             <div className="flex gap-3 mr-3  items-center h-full">
@@ -178,7 +178,7 @@ export function PatentHome() {
                     >
                                      <Masonry gutter="16px">
                         {items.map((item, index) => (
-                                <div key={index}>{item}</div>
+                                <div className="w-full" key={index}>{item}</div>
                               ))}
                         </Masonry>
         </ResponsiveMasonry>

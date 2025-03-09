@@ -222,7 +222,7 @@ export function ArticleItem(props: Articles) {
                   <div className="relative -top-4 py-1 px-4 bg-yellow-600 w-fit rounded-b-md text-white"><Star size={12} /></div>
                 )}
 
-                <h3 className="font-semibold mb-4 flex flex-1">{props.name_periodical}{props.magazine}</h3>
+                <h3 className="font-semibold text-left mb-4 flex flex-1">{props.name_periodical}{props.magazine}</h3>
               </div>
 
               <div className="flex items-start justify-end min-w-20   gap-3">

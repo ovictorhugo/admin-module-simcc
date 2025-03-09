@@ -41,6 +41,8 @@ type Research = {
     e_completed: string,
     g_in_progress: string,
     g_completed: string,
+    pgss_in_progress: string,
+    pgss_completed: string,
     ic_in_progress: string,
     ic_completed: string,
     m_in_progress: string,
@@ -58,12 +60,12 @@ type Research = {
     city: string,
     area: string,
     graduation: string,
+    researcher_id: string
 }
 
 
 interface PesquisadoresSelecionados {
     id: string,
-    id_criterio: number,
     name: string,
     university: string,
     lattes_id: string,
@@ -152,6 +154,7 @@ import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-
 import { Helmet } from "react-helmet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { DropdownMenuLabel } from "../ui/dropdown-menu";
+import { number, string } from "prop-types";
 
 
 export function BaremasHome() {
@@ -160,6 +163,8 @@ export function BaremasHome() {
     const { pesquisadoresSelecionados, urlGeral, setPesquisadoresSelecionados, user, idDocumentBarema, setIdDocumentBarema } = useContext(UserContext)
 
     const isModalOpen = isOpen && type === 'baremas';
+
+    const [criterioSelecionado, setCriterioSelecionado] = useState('');
 
     const { baremaId } = useParams<{
         baremaId: string
@@ -244,7 +249,13 @@ export function BaremasHome() {
         fetchData();
     }, [idDocumentBarema]);
 
-    const CRITERIOS = [
+    interface Criterio2 {
+        id: number;
+        value: string;
+        type: string
+    }
+
+    const CRITERIOS: Criterio2[] = [
         { id: 1, value: "Pós-doutorado", type: "Titulação" },
         { id: 2, value: "Doutorado", type: "Titulação" },
         { id: 3, value: "Mestrado", type: "Titulação" },
@@ -317,6 +328,52 @@ export function BaremasHome() {
         }
     ]);
 
+    const baixarCSV = (grupos: Grupo[]) => {
+        // Criar cabeçalho do CSV
+        let csvContent = "Pesquisadores,";
+        const categorias = grupos.flatMap(grupo => grupo.categorias.map(categoria => categoria.criterio));
+        csvContent += categorias.join(",") + ",Total\n";
+
+        // Criar corpo do CSV
+        Object.values(somaTotalPorPesquisador)
+            .sort((a, b) => parseFloat(b.total) - parseFloat(a.total))
+            .forEach(pesquisador => {
+                let row = `"${pesquisador.name}",`; // Nome do pesquisador
+
+                const valoresCategorias = grupos.flatMap(grupo =>
+                    grupo.categorias.map(categoria => {
+                        const pesquisadorData = categoria.pesquisadores.find(p => p.id === pesquisador.id);
+                        return pesquisadorData ? parseFloat(pesquisadorData.total.toString()).toFixed(2) : "0.00";
+                    })
+                );
+
+                row += valoresCategorias.join(",") + ",";
+
+                // Adicionar a coluna do total
+                row += `${pesquisador.total >= pesquisador.quantidade_max_pontos
+                    ? pesquisador.quantidade_max_pontos
+                    : parseFloat(pesquisador.total).toFixed(2)
+                    }\n`;
+
+                csvContent += row;
+            });
+
+        // Criar um blob para download
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+
+        // Criar um link e disparar o download
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "dados.csv");
+        document.body.appendChild(link);
+        link.click();
+
+        // Limpar memória
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
     const adicionarGrupo = () => {
         const uuid = uuidv4()
         setGrupos([...grupos, {
@@ -363,6 +420,8 @@ export function BaremasHome() {
     //atualizar campos
 
     const handleInputChange = (e: any, index: any, idGrupo: any) => {
+
+        console.log("GRUPOS: ", grupos);
         const { name, value } = e.target;
         const novosGrupos = grupos.map(grupo => {
             if (grupo.id === idGrupo) {
@@ -383,8 +442,6 @@ export function BaremasHome() {
         });
         setGrupos(novosGrupos);
     };
-
-    console.log("GRUPOOOSSS", grupos)
 
     //deletar criterio
 
@@ -457,21 +514,40 @@ export function BaremasHome() {
         setGrupos(newGrupos);
     };
 
+    // Função para formatar os dados do pesquisador
+    const formatResearcherData = (p: PesquisadoresSelecionados, idCriterio: number) => ({
+        total: 0,
+        id: p.id,
+        name: p.name,
+        id_criterio: idCriterio
+    });
+
     //select
 
-    const selecionarCriterio = (grupoIndex: number, categoriaIndex: number, criterioId: number, criterioItem: string) => {
+    const selecionarCriterio = (grupoIndex: number, categoriaIndex: number, criterioId: number, criterioItem: string, pesquisadores: PesquisadoresSelecionados[]) => {
+        console.log("GRUPOS: ", grupos);
         const novosGrupos = grupos.map((grupo, index) => {
             if (index === grupoIndex) {
                 const novasCategorias = grupo.categorias.map((categoria, idx) => {
+
+                    const pesquisadoresFiltradosTitulacao = pesquisadores
+                        .map(pesquisador => (pesquisador.graduation).toUpperCase() === criterioItem.toUpperCase() ? formatResearcherData(pesquisador, criterioId) : undefined)
+                        .filter(pesquisador => pesquisador !== undefined);
+
+                    const pesquisadoresFiltradosOutros = pesquisadores.filter(pesquisador => pesquisador.graduation.toUpperCase() !== criterioItem.toUpperCase()).map(pesquisador => formatResearcherData(pesquisador, criterioId));
+
                     if (idx === categoriaIndex) {
                         return {
                             ...categoria,
                             id_criterio: criterioId,
                             criterio: criterioItem,
+                            pesquisadores: [1, 2, 3, 4].includes(criterioId) ? pesquisadoresFiltradosTitulacao : pesquisadoresFiltradosOutros
+
                         };
                     }
                     return categoria;
                 });
+
                 return {
                     ...grupo,
                     categorias: novasCategorias
@@ -891,7 +967,7 @@ export function BaremasHome() {
 
                                                 <TabsList className="grid w-full grid-cols-2">
                                                     <TabsTrigger value="1" onClick={() => setValueTab('1')}>Configurações</TabsTrigger>
-                                                    <TabsTrigger value="2" onClick={() => setValueTab('2')}>Resultados</TabsTrigger>
+                                                    <TabsTrigger value="2" onClick={() => { setValueTab('2'); console.log("grupos: ", grupos) }}>Resultados</TabsTrigger>
                                                 </TabsList>
                                             </Alert>
                                         </div>
@@ -1027,11 +1103,11 @@ export function BaremasHome() {
                                                                                                                     <DropdownMenuLabel>
                                                                                                                         <h2>{tipo}</h2>
                                                                                                                     </DropdownMenuLabel>
-                                                                                                                    {lista.map(criterio => (
+                                                                                                                    {(lista as Criterio2[]).map(criterio => (
                                                                                                                         <Button
                                                                                                                             variant={'ghost'}
                                                                                                                             className="text-left justify-start"
-                                                                                                                            onClick={() => selecionarCriterio(grupoIndex, index, criterio.id, criterio.value)}
+                                                                                                                            onClick={() => selecionarCriterio(grupoIndex, index, criterio.id, criterio.value, pesquisadoresSelecionados)}
                                                                                                                             key={criterio.id} value={criterio.value}>
                                                                                                                             {criterio.value}
                                                                                                                         </Button>
@@ -1050,19 +1126,24 @@ export function BaremasHome() {
                                                                                     </TableCell>
 
                                                                                     <TableCell>
-                                                                                        <Input className={`w-24 ${categoria.pontos > categoria.pontuacao_max && ('border-red-500')}`} name="pontuacao_max" value={categoria.pontuacao_max} onChange={(e) => handleInputChange(e, index, grupo.id)} />
+                                                                                        <Input className={`w-24 ${Number(categoria.pontos) > Number(categoria.pontuacao_max) && 'border-red-500'}`} name="pontuacao_max" value={categoria.pontuacao_max} onChange={(e) => handleInputChange(e, index, grupo.id)} />
                                                                                     </TableCell>
 
                                                                                     <TableCell className="flex justify-end pr-12 relative">
                                                                                         <div className="flex w-fit justify-between items-center gap-3 bg">
                                                                                             <div className="overflow-x-auto flex-nowrap flex-1">
-                                                                                                <PesquisadorItemBarema
-                                                                                                    pontos={Number(categoria.pontos)}
-                                                                                                    pontuacao_max={Number(categoria.pontuacao_max)}
-                                                                                                    id_criterio={categoria.id_criterio}
-                                                                                                    researcherSelecionados={researcherSelecionados}
-                                                                                                    onPesquisadoresUpdate={handleResearcherUpdate}
-                                                                                                />
+                                                                                                {
+                                                                                                    pesquisadoresSelecionados.length != 0 && (
+                                                                                                        <PesquisadorItemBarema
+                                                                                                            pontos={Number(categoria.pontos)}
+                                                                                                            pontuacao_max={Number(categoria.pontuacao_max)}
+                                                                                                            id_criterio={categoria.id_criterio}
+                                                                                                            researcherSelecionados={researcherSelecionados}
+                                                                                                            onPesquisadoresUpdate={handleResearcherUpdate}
+                                                                                                            grupos={grupos}
+                                                                                                        />
+                                                                                                    )
+                                                                                                }
                                                                                             </div>
 
                                                                                             <TooltipProvider>
@@ -1111,7 +1192,7 @@ export function BaremasHome() {
 
                                         <TabsContent value="2" className="w-full flex gap-3 flex-col m-0 p-0">
                                             <div className="w-full flex">
-                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] whitespace-nowrap"></div>
+                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#559FB8] whitespace-nowrap"></div>
 
                                                 <Alert className="rounded-l-none ">
                                                     <div className="flex justify-between  mb-6">
@@ -1128,7 +1209,7 @@ export function BaremasHome() {
                                             </div>
 
                                             <div className="w-full flex">
-                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#719CB8] whitespace-nowrap"></div>
+                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#559FB8] whitespace-nowrap"></div>
 
                                                 <Alert className="rounded-l-none ">
                                                     <div className="flex justify-between  mb-6">
@@ -1150,55 +1231,81 @@ export function BaremasHome() {
                                                             <Table>
                                                                 <TableHeader>
                                                                     <TableRow>
-                                                                        <TableHead className="" >Pesquisadores</TableHead>
+                                                                        <TableHead className="">Pesquisadores</TableHead>
                                                                         {grupos.map((grupo) => {
                                                                             return (
-                                                                                <TableHead >{grupo.titulo}</TableHead>
+                                                                                <TableHead>{grupo.titulo}</TableHead>
                                                                             );
                                                                         })}
+                                                                        {/*grupos.flatMap((grupo) =>
+                                                                            grupo.categorias.map((categoria) => (
+                                                                                <TableHead key={categoria.id_criterio} className="">{categoria.criterio}</TableHead>
+                                                                            ))
+                                                                        )*/}
+                                                                        <TableHead className="">Total</TableHead>
                                                                     </TableRow>
                                                                 </TableHeader>
 
-                                                                <TableBody>
-                                                                    <TableRow>
-                                                                        {Object.values(somaTotalPorPesquisador)
-                                                                            .map((grupo) => grupo)
-                                                                            .sort((a, b) => parseFloat(b.total) - parseFloat(a.total))
-                                                                            .map((grupoOrdenado) => (
-                                                                                <TableCell>
-                                                                                    <div className="flex items-center gap-3">
-                                                                                        <div className="rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat group-hover:rounded-l-lg group-hover:rounded-r-none whitespace-nowrap" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${grupoOrdenado.id})` }}></div>
-                                                                                        <p className="flex flex-1 text-gray-500 text-sm truncate dark:text-white">{grupoOrdenado.name}</p>
-                                                                                    </div>
-                                                                                </TableCell>
-
-                                                                            ))}
-                                                                    </TableRow>
-                                                                </TableBody>
-                                                            </Table>
-
-                                                            <div>
-                                                                <div className={`w-full flex gap-4 flex-col border border-neutral-200 rounded-t-none border-t-0 dark:border-neutral-800 py-3 px-4 rounded-md `}>
+                                                                <TableBody className="w-full border border-neutral-200 dark:border-neutral-800 py-3 px-4 rounded-md">
                                                                     {Object.values(somaTotalPorPesquisador)
-                                                                        .map((grupo) => grupo)
                                                                         .sort((a, b) => parseFloat(b.total) - parseFloat(a.total))
                                                                         .map((grupoOrdenado) => (
-                                                                            <div key={grupoOrdenado.id} className={`grid gap-3 border-neutral-200 dark:border-neutral-800 border-b pb-3 w-full`} style={{ gridTemplateColumns: `repeat(${grupos.length + 2}, minmax(0, 1fr))` }}>
-                                                                                <div className="flex items-center gap-3">
-                                                                                    <div className="rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat group-hover:rounded-l-lg group-hover:rounded-r-none whitespace-nowrap" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${grupoOrdenado.id})` }}></div>
-                                                                                    <p className="flex flex-1 text-gray-500 text-sm truncate dark:text-white">{grupoOrdenado.name}</p>
-                                                                                </div>
 
-                                                                                {grupoOrdenado.grupos.map((grupo) => (
-                                                                                    <div key={grupo.titulo} className="flex items-center gap-3">
-                                                                                        <div className="items-center justify-center whitespace-nowrap rounded-md flex border border-neutral-200 bg-white hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-800 dark:hover:text-neutral-50 h-10 px-4 py-2 w-fit text-gray-600 text-sm dark:text-white font-normal">{parseFloat(grupo.total).toFixed(2)}</div>
+                                                                            <TableRow key={grupoOrdenado.id} className="border-b border-neutral-200 dark:border-neutral-800">
+                                                                                {/* Coluna com a imagem e nome */}
+                                                                                <TableCell className="flex items-center gap-3">
+                                                                                    <div
+                                                                                        className="rounded-md w-8 h-8 bg-cover bg-center bg-no-repeat"
+                                                                                        style={{
+                                                                                            backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${grupoOrdenado.id})`,
+                                                                                        }}
+                                                                                    ></div>
+                                                                                    <p className="text-gray-500 text-sm truncate dark:text-white">
+                                                                                        {grupoOrdenado.name}
+                                                                                    </p>
+                                                                                </TableCell>
+
+                                                                                {
+                                                                                    grupos.map((grupo) => {
+                                                                                        const totalPorColuna = grupo.categorias.reduce((acc, categoria) => {
+                                                                                            return (
+                                                                                                acc +
+                                                                                                categoria.pesquisadores.reduce((subAcc, pesquisador) => {
+                                                                                                    if (pesquisador.id === grupoOrdenado.id) {
+                                                                                                        return (
+                                                                                                            subAcc +
+                                                                                                            (pesquisador.total >= Number(categoria.pontuacao_max)
+                                                                                                                ? Number(categoria.pontuacao_max)
+                                                                                                                : parseFloat(pesquisador.total.toString()))
+                                                                                                        );
+                                                                                                    }
+                                                                                                    return subAcc;
+                                                                                                }, 0)
+                                                                                            );
+                                                                                        }, 0);
+
+                                                                                        return (
+                                                                                            <TableCell key={grupo.id} className="text-center">
+                                                                                                <div className="rounded-md border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 h-10 px-4 py-2 text-gray-600 text-sm dark:text-white font-normal">
+                                                                                                    {totalPorColuna >= grupo.quantidade_max_pontos ? grupo.quantidade_max_pontos : totalPorColuna.toFixed(2)}
+                                                                                                </div>
+                                                                                            </TableCell>
+                                                                                        );
+                                                                                    })
+                                                                                }
+
+                                                                                {/* Coluna com o total */}
+                                                                                <TableCell className="text-center">
+                                                                                    <div className="rounded-md border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 h-10 px-4 py-2 text-gray-600 text-sm dark:text-white font-normal">
+                                                                                        {grupoOrdenado.total >= grupoOrdenado.quantidade_max_pontos ? grupoOrdenado.quantidade_max_pontos : parseFloat(grupoOrdenado.total).toFixed(2)}
                                                                                     </div>
-                                                                                ))}
-                                                                                <div className="items-center justify-center whitespace-nowrap rounded-md flex border border-neutral-200 bg-white hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-800 dark:hover:text-neutral-50 h-10 px-4 py-2 w-fit text-gray-600 text-sm dark:text-white font-normal">{parseFloat(grupoOrdenado.total).toFixed(2)}</div>
-                                                                            </div>
+                                                                                </TableCell>
+                                                                            </TableRow>
                                                                         ))}
-                                                                </div>
-                                                            </div>
+                                                                </TableBody>
+
+                                                            </Table>
+
                                                         </div>
                                                     )}
 
@@ -1206,7 +1313,7 @@ export function BaremasHome() {
                                             </div>
 
                                             <div className="w-full flex">
-                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-blue-700 whitespace-nowrap"></div>
+                                                <div className=" dark:border-neutral-800 border border-r-0 border-neutral-200 w-2 rounded-l-md bg-[#559FB8] whitespace-nowrap"></div>
 
                                                 <Alert className="rounded-l-none ">
                                                     <div className="flex justify-between  mb-6">
@@ -1233,7 +1340,7 @@ export function BaremasHome() {
                                 <div className="w-16 pl-2 whitespace-nowrap">
                                     <div className="bg-white dark:bg-black sticky top-8 flex flex-col gap-2 border dark:border-neutral-800 border-neutral-200 items-center p-2 rounded-md w-full ">
                                         <Button onClick={adicionarGrupo} variant={'ghost'} size={'icon'}><PlusCircle size={20} /> </Button>
-                                        <Button variant={'ghost'} size={'icon'}><FileCsv size={20} /> </Button>
+                                        <Button onClick={() => baixarCSV(grupos)} variant={'ghost'} size={'icon'}><FileCsv size={20} /> </Button>
                                     </div>
                                 </div>
                             </div>

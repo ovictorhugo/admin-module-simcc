@@ -181,7 +181,7 @@ export function HeaderBarema() {
           })}
 
           {pesquisadoresSelecionados.length > 0 && (
-            <Button variant={'secondary'} onClick={() => setPesquisadoresSelecionados([])} size={'icon'}><Trash size={16} /></Button>
+            <Button variant={'secondary'} onClick={() => { setPesquisadoresSelecionados([]); }} size={'icon'}><Trash size={16} /></Button>
 
           )}
           <Dialog open={openPopo2} onOpenChange={setOpenPopo2}>

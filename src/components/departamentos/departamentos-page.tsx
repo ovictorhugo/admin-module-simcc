@@ -196,7 +196,7 @@ export function DepartamentPage() {
                               </div>
                             </div>
                           </div>
-                          <div className="line-clamp-2 text-xs text-muted-foreground flex gap-4">
+                          <div className="flex flex-wrap line-clamp-2 text-xs text-muted-foreground gap-4">
                             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Hash size={12} />{item.org_cod}</div>
                             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Mail size={12} />{item.dep_email}</div>
                             <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Phone size={12} />{item.dep_tel}</div>

@@ -1,6 +1,6 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert } from "../../ui/alert";
-import { BarChart, Bar, XAxis, LabelList, CartesianGrid,  ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, LabelList, CartesianGrid, ResponsiveContainer } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
 type Livros = {
@@ -39,7 +39,7 @@ const chartConfig = {
 } as ChartConfig;
 
 export function GraficosEventos({ publicacoes }: { publicacoes: Livros[] }) {
-  const [chartData, setChartData] = useState<{ year: number; [nature: string]: number }[]>([]);
+  const [chartData, setChartData] = useState<{ year: number;[nature: string]: number }[]>([]);
 
   useEffect(() => {
     const counts: { [year: string]: { [nature: string]: number } } = {};
@@ -73,9 +73,9 @@ export function GraficosEventos({ publicacoes }: { publicacoes: Livros[] }) {
         <ResponsiveContainer>
           <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
-           
+
             <CartesianGrid vertical={false} horizontal={false} />
-            <ChartLegend content={<ChartLegendContent />} />
+            <ChartLegend className="flex flex-wrap" content={<ChartLegendContent />} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
             {Object.keys(chartConfig).map((nature, index) => (
               <Bar
@@ -86,8 +86,8 @@ export function GraficosEventos({ publicacoes }: { publicacoes: Livros[] }) {
                 radius={4}
               >
                 {index === Object.keys(chartConfig).length - 1 && (
-                    <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
-                  )}
+                  <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+                )}
               </Bar>
             ))}
           </BarChart>

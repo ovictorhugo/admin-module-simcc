@@ -200,7 +200,7 @@ export function ArticlesModal() {
     sources: []
   });
 
-  const {onOpen} = useModal()
+  const { onOpen } = useModal()
 
   async function processMessageToChatGPT(messageObject: any) {
     try {
@@ -257,7 +257,7 @@ export function ArticlesModal() {
   return (
     <Sheet open={isModalOpen} onOpenChange={onClose}>
       <SheetContent
-        className={`p-0 gap-0 dark:bg-neutral-900  dark:border-gray-600 w-full lg:w-1/2`}
+        className={`p-0 gap-0 dark:bg-neutral-900  dark:border-gray-600 w-full md:min-w-[50vw]`}
       >
         <div
           className={`h-full w-2 absolute  ${qualisColor[data.qualis as keyof typeof qualisColor]} `}
@@ -341,7 +341,7 @@ export function ArticlesModal() {
               <div className="mb-6 border-b dark:border-b-neutral-800"></div>
 
               <div className="flex justify-between items-center flex-wrap">
-                <div className="text-sm w-fit text-gray-500 dark:text-gray-300 font-normal flex gap-2 items-center"><Avatar className="cursor-pointer rounded-md  h-16 w-16">
+                <div className="text-sm w-fit text-gray-500 dark:text-gray-300 font-normal flex gap-2 items-center"><Avatar className="cursor-pointer rounded-md h-16 w-16">
                   <AvatarImage className={'rounded-md h-16 w-16'} src={`${urlGeral}ResearcherData/Image?name=${data.researcher}`} />
                   <AvatarFallback className="flex items-center justify-center"><User size={16} /></AvatarFallback>
                 </Avatar>
@@ -361,12 +361,12 @@ export function ArticlesModal() {
 
               <div className="flex gap-3 flex-wrap">
                 {data?.jif && (
-                  <Link target="_blank" to={data.jcr_link || ''} className=" border-neutral-200 border dark:border-neutral-800 py-2 px-4  rounded-md text-xs  flex gap-2 items-center">
+                  <Link target="_blank" to={data.jcr_link || ''} className=" border-neutral-200 border dark:border-neutral-800 py-2 px-4 rounded-md text-xs flex gap-2 items-center">
                     <LinkBreak size={16} /> JCR {data.jif}
                   </Link>
                 )}
 
-                {data.citations_count != '' && (<div className=" border-neutral-200 border dark:border-neutral-800 py-2 px-4  rounded-md text-xs  flex gap-2 items-center"><Quotes size={16} />Citações {data.citations_count}</div>)}
+                {data.citations_count != '' && (<div className=" border-neutral-200 border dark:border-neutral-800 py-2 px-4  rounded-md text-xs flex gap-2 items-center"><Quotes size={16} />Citações {data.citations_count}</div>)}
 
 
                 {typeof data.issn === 'string' && data.issn.trim() !== '' &&
@@ -484,7 +484,7 @@ export function ArticlesModal() {
                 <div className="flex flex-wrap gap-3">
                   {data.authors?.split(';').map((author, index) => (
                     <div
-                    onClick={() => onOpen('researcher-modal', {name:author.trim()})}
+                      onClick={() => onOpen('researcher-modal', { name: author.trim() })}
                       key={index}
                       className="border-neutral-200 border cursor-pointer dark:border-neutral-800 py-2 px-2 rounded-md text-xs flex gap-2 items-center">
                       <Avatar className="cursor-pointer rounded-md  h-6 w-6">

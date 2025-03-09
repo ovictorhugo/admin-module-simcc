@@ -15,8 +15,8 @@ export function CloudWordResearcherHome(props: Research) {
                 const distinctAmongCount = distinctAmongValues.length;
                 const fontSize =
                     maxFontSize -
-                    ((maxFontSize - minFontSize) / (distinctAmongCount - 1)) *
-                    distinctAmongValues.indexOf(item.among);
+                    ((maxFontSize - minFontSize) / (distinctAmongCount )) *
+                    distinctAmongValues.indexOf(item.among) ;
 
                 return (
                     <CloudWordItemResearcher

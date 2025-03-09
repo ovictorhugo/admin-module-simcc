@@ -232,18 +232,18 @@ export function VisualizacaoPrograma() {
     setProvider(providerName);
   }, []);
 
-  const {version} = useContext(UserContext)
+  const { version } = useContext(UserContext)
 
   return (
     <>
       <Helmet>
-  <title>{graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | ${version ? 'Conectee': 'Iapós'}` : `${version ? 'Conectee': 'Iapós'} | ${version ? 'Escola de Engenharia UFMG': 'SENAI CIMATEC'}`}</title>
-  <meta
-    name="description"
-    content={graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : `${version ? 'Conectee': 'Iapós'} | ${version ? 'Escola de Engenharia UFMG': 'SENAI CIMATEC'}`}
-  />
-  <meta name="robots" content="index, follow" />
-</Helmet>
+        <title>{graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | ${version ? 'Conectee' : 'Iapós'}` : `${version ? 'Conectee' : 'Iapós'} | ${version ? 'Escola de Engenharia UFMG' : 'SENAI CIMATEC'}`}</title>
+        <meta
+          name="description"
+          content={graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : `${version ? 'Conectee' : 'Iapós'} | ${version ? 'Escola de Engenharia UFMG' : 'SENAI CIMATEC'}`}
+        />
+        <meta name="robots" content="index, follow" />
+      </Helmet>
       {graduatePrograms.slice(0, 1).map((props) => (
         props.visible === 'false' ? (
           <div style={{ backgroundImage: `url(${bg_popup})` }} className="h-screen bg-cover bg-no-repeat bg-center w-full flex flex-col items-center justify-center bg-neutral-50 dark:bg-neutral-900">
@@ -275,11 +275,9 @@ export function VisualizacaoPrograma() {
               <div className="w-full gap-4 md:p-8 p-4 pb-0 md:pb-0">
                 <div
                   className="
-                    flex flex-col items-center gap-4
+                    flex flex-col items-center gap-4 justify-between
 
                     md:flex-row
-
-                    lg:flex-row
                   "
                 >
                   <div className="flex gap-2">
@@ -299,13 +297,12 @@ export function VisualizacaoPrograma() {
                       <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
                         Pós-graduação
                       </h1>
-                     
                     </div>
                   </div>
 
                   <div
                     className="
-                      items-center gap-2 md:ml-auto md:flex
+                      flex items-center gap-2 flex-wrap
                     "
                   >
                     <TabsList>
@@ -313,8 +310,6 @@ export function VisualizacaoPrograma() {
                       <TabsTrigger value="all" onClick={() => setTab('all')} className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
                       <TabsTrigger value="doc" onClick={() => setTab('doc')} className="text-zinc-600 dark:text-zinc-200">Docentes</TabsTrigger>
                       <TabsTrigger disabled={!has_visualizar_indicadores_pos_graduacao} value="ind" onClick={() => setTab('ind')} className="text-zinc-600 dark:text-zinc-200">Indicadores</TabsTrigger>
-
-
 
                     </TabsList>
                     {has_editar_informacoes_programa && (

@@ -2,18 +2,22 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { UserContext } from "../../context/context";
 import bg_graduate from '../../assets/bg_home.png'
-
+import bg_popup from '../../assets/bg_popup.png';
 
 import {
   Book,
   Books,
+
+  ChartBar,
+
+  ChartLine,
 
   Copyright,
 
   Quotes,
 
 } from "phosphor-react";
-import { ArrowRight, Info } from "lucide-react";
+import { ArrowRight, BarChartBig, Info, InfoIcon } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 
@@ -115,7 +119,7 @@ import { GraficoRtTechnician } from "./components/grafico-technician";
 import { useModalResult } from "../hooks/use-modal-result";
 import { Button } from "../ui/button";
 import { useModal } from "../hooks/use-modal-store";
-import { TodosPesquisadores } from "./categorias/researchers-home/todos-pesquisadores";
+import { TodosPesquisadores } from "../listagens/todos-pesquisadores";
 import { HeroParallax } from "../ui/hero-parallax";
 import { BannerHome } from "./components/banner";
 import { Helmet } from "react-helmet";
@@ -526,8 +530,6 @@ export function InitialHome() {
         <meta name="robots" content="index, follow" />
       </Helmet>
 
-
-
       <div className="bg-cover  bg-no-repeat bg-center w-full" >
         <div className="h-[0vh] z-[-1] opacity-45">
           <ChartContainer config={chartConfig} className="h-[55vh] w-full">
@@ -546,7 +548,6 @@ export function InitialHome() {
                   <stop offset="95%" stopColor="#82AAC0" stopOpacity={0} />
                 </linearGradient>
               </defs>
-
 
               {chartKeys.map((key, index) => {
                 const isVisible = visibleChart === index;
@@ -611,7 +612,7 @@ export function InitialHome() {
             <Search />
           </div>
 
-          <div className="flex flex-wrap gap-3 z-[2] w-full lg:w-[60vw]">
+          <div className="hidden md:flex flex-wrap gap-3 z-[2] w-full lg:w-[60vw]">
 
             {words.slice(0, 10).map((word, index) => (
               <div
@@ -686,9 +687,9 @@ export function InitialHome() {
           </Link>
 
           <Link onClick={() => onOpenResult('book-home')} to={'/resultados?type_search=book&terms=&researcher=false'}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+            <CardHeader className="flex flex-row pb-2 items-center justify-between space-y-0">
               <div>
-                <CardTitle className="text-[0.9rem] md:text-sm font-medium">
+                <CardTitle className="text-[0.9rem]  md:text-sm font-medium">
                   Total de capítulos
                 </CardTitle>
               </div>
@@ -705,7 +706,7 @@ export function InitialHome() {
           </Link>
 
           <Link onClick={() => onOpenResult('patent-home')} to={'/resultados?type_search=patent&terms=&researcher=false'}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+            <CardHeader className="flex flex-row items-center pb-2 justify-between space-y-0">
               <div>
                 <CardTitle className="text-[0.9rem] md:text-sm font-medium">
                   Total de patentes
@@ -878,11 +879,11 @@ export function InitialHome() {
             </Alert>
           )}
 
-          <Alert className="lg:col-span-2 h-fit p-0">
+          <Alert className="lg:col-span-2 h-full p-0">
             <CardHeader className="flex p-0 flex-col md:flex-wrap lg:flex-nowrap items-stretch space-y-0 border-b dark:border-b-neutral-800 sm:flex-row">
               <div className="w-full flex flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-                <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0 ">
-                  <div>
+                <CardHeader className="flex p-0 flex-row flex-wrap gap-4 items-center justify-between space-y-0 ">
+                  <div className="min-w-fit">
                     <CardTitle className="text-sm font-medium">
                       Produção geral
                     </CardTitle>
@@ -939,7 +940,7 @@ export function InitialHome() {
             <CardContent className="px-2 sm:p-6">
               <ChartContainer
                 config={chartConfig}
-                className="aspect-auto h-[300px] w-full"
+                className="aspect-auto h-[330px] w-full"
               >
                 <BarChart accessibilityLayer data={dados} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
                   <CartesianGrid vertical={false} horizontal={false} />
@@ -1128,9 +1129,32 @@ export function InitialHome() {
         className=" 
           w-full gap-8
           flex flex-wrap
-          md:px-8 flex-col px-4
+          md:px-8 flex-col px-4 mt-8
         "
       >
+
+<Alert className=" bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url(${bg_popup})` }}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Indicadores
+                  </CardTitle>
+                  <InfoIcon className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <div className="flex gap-6 justify-between">
+
+                  <CardContent>
+                    <div className="text-2xl font-bold">Análise quantitativa dos dados da plataforma</div>
+                    <div className="flex gap-3 mt-3">
+
+                     <Link to={`/indicadores`}>
+                     <Button size={'sm'} ><BarChartBig size={16} />Acessar indicadores</Button>
+                     </Link>
+                    </div>
+                  </CardContent>
+
+                  <div></div>
+                </div>
+              </Alert>
 
         <BannerHome />
 

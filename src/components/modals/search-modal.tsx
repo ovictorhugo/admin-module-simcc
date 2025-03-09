@@ -91,8 +91,8 @@ export function SearchModal() {
       try {
         // Consulta os documentos cujo term começa com o prefixo fornecido
         const filesRef = collection(db, `${version ? ('termos_busca') : ('termos_busca_cimatec')}`);
-        const q = query(filesRef, 
-          where('term_normalize', '>=', prefix), 
+        const q = query(filesRef,
+          where('term_normalize', '>=', prefix),
           where('term_normalize', '<=', prefix + '\uf8ff')
         );
 
@@ -126,9 +126,9 @@ export function SearchModal() {
     // Converte para minúsculas
     value = value.toLowerCase();
     // Remove caracteres especiais, mantendo letras, números e espaços
-    value = value.replace(/[^a-z0-9\s]/g, ""); 
+    value = value.replace(/[^a-z0-9\s]/g, "");
     return value;
-};
+  };
 
   const handleChangeInput = (value: string) => {
     const normalizedValue = normalizeInput(value);
@@ -473,10 +473,10 @@ export function SearchModal() {
 
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={onClose}  >
-      <DialogContent className="p-0 border-none min-w-[60vw] px-4 mx-auto md:px-0 bg-transparent dark:bg-transparent">
+    <Dialog open={isModalOpen} onOpenChange={onClose}>
+      <DialogContent className="overflow-y-scroll md:overflow-y-auto p-0 border-none min-w-[63vw] px-4 mx-auto md:px-0 bg-transparent dark:bg-transparent">
 
-        <Alert onKeyDown={handleEnterPress} className="h-14 bg-white p-2 flex items-center gap-3 justify-between">
+        <Alert onKeyDown={handleEnterPress} className="h-14 bg-white p-2 min-w-[40%] flex items-center gap-3 justify-between">
           <div className="flex items-center gap-2 w-full flex-1">
             <MagnifyingGlass size={16} className="hidden md:block whitespace-nowrap w-10" />
 
@@ -487,7 +487,7 @@ export function SearchModal() {
                 {itemsSelecionadosPopUp.map((valor, index) => (
                   <div key={index} className="flex gap-2 items-center">
                     <div className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs ${searchType == 'article' ? 'bg-blue-500 dark:bg-blue-500' :
-                      searchType == 'abstract' ? 'bg-yellow-500 dark:bg-yellow-500' :
+                      searchType == 'abstract' ? 'bg-yellow-500 dark:bg-yellow-500 ' :
                         searchType == 'speaker' ? 'bg-orange-500 dark:bg-orange-500' :
                           searchType == 'book' ? 'bg-pink-500 dark:bg-pink-500' :
                             searchType == 'patent' ? 'bg-cyan-500 dark:bg-cyan-500' :
@@ -534,19 +534,23 @@ export function SearchModal() {
                 />
               )}
 
-              {(showInput || itemsSelecionadosPopUp.length == 0) && (
-                <p>
-                  {itemsBigrama.slice(0, 1).map((item, index) => (
-                    <div className="text-neutral-500 text-sm w-full" key={index} onClick={() => handleSuggestionClick(item.word)}>
-                      {item.word}
-                    </div>
-                  ))}
-                </p>
-              )}
+              <span className="hidden md:block">
+                {(showInput || itemsSelecionadosPopUp.length == 0) && (
+                  <p>
+                    {itemsBigrama.slice(0, 1).map((item, index) => (
+                      <div className="text-neutral-500 text-sm w-full" key={index} onClick={() => handleSuggestionClick(item.word)}>
+                        {item.word}
+                      </div>
+                    ))}
+                  </p>
+                )}
+              </span>
 
-              {(showInput || itemsSelecionadosPopUp.length == 0) && itemsBigrama.length != 0 && (
-                <div className=" text-xs text-neutral-500 whitespace-nowrap px-2 ml-3  border border-neutral-500 p-1 rounded-md">Tab ↹</div>
-              )}
+              <span className="hidden lg:block">
+                {(showInput || itemsSelecionadosPopUp.length == 0) && itemsBigrama.length != 0 && (
+                  <div className=" text-xs text-neutral-500 whitespace-nowrap px-2 ml-3  border border-neutral-500 p-1 rounded-md">Tab ↹</div>
+                )}
+              </span>
             </div>
           </div>
 
@@ -556,16 +560,31 @@ export function SearchModal() {
                 setItensSelecionadosPopUp([])
               }}><Trash size={16} /></Button>
             )}
-            <Button onClick={() => handlePesquisaFinal()} variant="outline" className={`${searchType == 'article' && ('bg-blue-500 dark:bg-blue-500')} ${searchType == 'abstract' && ('bg-yellow-500 dark:bg-yellow-500')} ${searchType == 'speaker' && ('bg-orange-500 dark:bg-orange-500')} ${searchType == 'book' && ('bg-pink-500 dark:bg-pink-500')} ${searchType == 'patent' && ('bg-cyan-500 dark:bg-cyan-500')} ${searchType == 'name' && ('bg-red-500 dark:bg-red-500')} ${searchType == 'area' && ('bg-green-500 dark:bg-green-500')} ${searchType == '' && ('bg-blue-700 dark:bg-blue-700')} text-white border-0 z-[9999] `} size={'icon'}>
-              <Funnel size={16} className="" />
+           <Button 
+  onClick={() => handlePesquisaFinal()} 
+  variant="outline" 
+  className={`
+    ${searchType == 'article' && 'bg-blue-500 dark:bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white'}
+    ${searchType == 'abstract' && 'bg-yellow-500 dark:bg-yellow-500 hover:bg-yellow-600 dark:hover:bg-yellow-600 hover:text-white'}
+    ${searchType == 'speaker' && 'bg-orange-500 dark:bg-orange-500 hover:bg-orange-600 dark:hover:bg-orange-600 hover:text-white'}
+    ${searchType == 'book' && 'bg-pink-500 dark:bg-pink-500 hover:bg-pink-600 dark:hover:bg-pink-600 hover:text-white'}
+    ${searchType == 'patent' && 'bg-cyan-500 dark:bg-cyan-500 hover:bg-cyan-600 dark:hover:bg-cyan-600 hover:text-white'}
+    ${searchType == 'name' && 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-600 hover:text-white'}
+    ${searchType == 'area' && 'bg-green-500 dark:bg-green-500 hover:bg-green-600 dark:hover:bg-green-600 hover:text-white'}
+    ${searchType == '' && 'bg-blue-700 dark:bg-blue-700 hover:bg-blue-800 dark:hover:bg-blue-800 hover:text-white'}
+    text-white border-0 z-[9999]
+  `} 
+  size={'icon'}
+> 
+  <Funnel size={16} className="" />
+</Button>
 
-            </Button>
           </div>
 
         </Alert>
 
         {input.length >= 3 && (
-          <Alert className="">
+          <Alert className="w-full">
             <ResponsiveMasonry
               columnsCountBreakPoints={{
                 350: 1,
@@ -574,7 +593,7 @@ export function SearchModal() {
                 1200: 2
               }}
             >
-              <Masonry gutter="20px">
+              <Masonry className="max-h-[80vh] md:overflow-y-auto overflow-y-scroll" gutter="20px">
                 {filteredItems.filter(item => item.type_ === 'ARTICLE').length != 0 && (
                   <div>
                     <p className="uppercase font-medium text-xs mb-3">Artigos</p>
@@ -654,7 +673,7 @@ export function SearchModal() {
                 )}
 
                 {(filteredItems.filter(item => item.type_ === 'NAME').length != 0) && (
-                  <div>
+                  <div className="">
                     <p className="uppercase font-medium text-xs mb-3">Nome</p>
                     <div className="flex flex-wrap gap-3">
                       {filteredItems.filter(item => item.type_ === 'NAME').slice(0, 5).map((props, index) => (

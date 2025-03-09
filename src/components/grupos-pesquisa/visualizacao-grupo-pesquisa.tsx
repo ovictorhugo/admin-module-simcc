@@ -410,18 +410,13 @@ export function VisualizacaoGrupo() {
       <div className="px-4 md:px-8">
 
         <div>
-
-
-
-
-
           <Accordion defaultValue="item-1" type="single" collapsible>
             <AccordionItem value="item-1">
               <div className="flex mb-2">
                 <div className="w-full flex items-center justify-between">
                   <h3 className="text-2xl font-medium ">Líderes</h3>
                   <div className="flex gap-3 mr-3">
-                    <Button onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                    <Button className="hidden md:block" onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
                       <Rows size={16} className="whitespace-nowrap" />
                     </Button>
                     <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'} size={'icon'}>
@@ -477,11 +472,7 @@ export function VisualizacaoGrupo() {
                                 <Button size={'icon'} onClick={() => onOpen('researcher-modal', { name: props.name })} variant={'ghost'} className="h-10 w-10 ">
                                   <Eye size={16} />
                                 </Button>
-
-
-
                               </div>
-
 
                             </div>
                           </div>
@@ -499,7 +490,6 @@ export function VisualizacaoGrupo() {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-
 
           {linhasPesquisa.length != 0 && (
             <Accordion defaultValue="item-1" type="single" collapsible>

@@ -232,8 +232,10 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
 
       <div className="">
 
-        <FilterYearPopUp
+       <div className="mb-6">
+       <FilterYearPopUp
           onFilterUpdate={handleResearcherUpdate} />
+       </div>
 
         <Accordion type="single" collapsible defaultValue="item-1">
           <AccordionItem value="item-1" className="text-left" >
@@ -333,12 +335,12 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
                       350: 1,
                       750: 1,
                       900: 2,
-                      1200: 3
+                      1200: 2
                     }}
                   >
                     <Masonry gutter="16px">
                       {items.map((item, index) => (
-                        <div key={index}>{item}</div>
+                        <div className="w-full" key={index}>{item}</div>
                       ))}
                     </Masonry>
                   </ResponsiveMasonry>
@@ -402,12 +404,12 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
                       350: 1,
                       750: 1,
                       900: 2,
-                      1200: 3
+                      1200: 2
                     }}
                   >
                     <Masonry gutter="16px">
                       {items.map((item, index) => (
-                        <div key={index}>{item}</div>
+                        <div className="w-full" key={index}>{item}</div>
                       ))}
                     </Masonry>
                   </ResponsiveMasonry>
@@ -471,12 +473,12 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
                       350: 1,
                       750: 1,
                       900: 2,
-                      1200: 3
+                      1200: 2
                     }}
                   >
                     <Masonry gutter="16px">
                       {items.map((item, index) => (
-                        <div key={index}>{item}</div>
+                        <div className="w-full" key={index}>{item}</div>
                       ))}
                     </Masonry>
                   </ResponsiveMasonry>

@@ -249,7 +249,7 @@ export function MinhaArea() {
       onClose()
       setExpand(true)
     }}>
-      <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 ${expand ? 'w-full lg:w-[80vw]' : 'lg:w-[50vw]'}`}>
+      <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 ${expand ? 'w-full md:min-w-[80vw] lg:min-w-[80vw]' : 'lg:min-w-[50vw]'}`}>
         <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-gray-600">
 
           <div className="flex items-center gap-3">
@@ -467,7 +467,7 @@ export function MinhaArea() {
                     <div className="my-6 border-b dark:border-b-neutral-800"></div>
 
                     <h5 className="font-medium text-xl mb-4">Acesso rápido</h5>
-                    <div className={`flex flex-col md:grid md:grid-cols-2 gap-4  ${expand ? " grid-cols-3 xl:grid-cols-3" : "xl:grid-cols-2 lg:grid-cols-1"}`}>
+                    <div className={`flex flex-col md:grid gap-4  ${expand ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3" : "md:grid-cols-1 xl:grid-cols-2 lg:grid-cols-1"}`}>
                       {has_visualizar_modulo_administrativo && (
                         <Link to={'/dashboard'} onClick={() => onClose()}>
                           <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">

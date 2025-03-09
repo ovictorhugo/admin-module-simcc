@@ -16,24 +16,22 @@ const ModalContent = () => {
 
   switch (type) {
     case 'articles-home':
-      return <ArticlesHome/>
+      return <ArticlesHome />
     case 'researchers-home':
-      return <ResearchersHome/>
+      return <ResearchersHome />
     case 'patent-home':
-      return <PatentHome/>
+      return <PatentHome />
     case 'book-home':
-      return <BookHome/>
+      return <BookHome />
     case 'speaker-home':
-      return <SpeakerHome/>
+      return <SpeakerHome />
     case 'institutions-home':
-      return <InstitutionsHome/>
+      return <InstitutionsHome />
   }
 
 }
 export const ResultProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
-
-
 
   useEffect(() => {
     setIsMounted(true);
@@ -43,6 +41,6 @@ export const ResultProvider = () => {
     return null;
   }
 
-  return  <ModalContent />
+  return <ModalContent />
 
 }

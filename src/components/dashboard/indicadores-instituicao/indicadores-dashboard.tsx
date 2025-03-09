@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "../../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { UserContext } from "../../../context/context";
 import { Books, ChartBar, Code, FileCsv, FileXls, Quotes, StripeLogo, Student, Warning } from "phosphor-react";
 import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
@@ -54,6 +54,7 @@ interface Bolsistas {
   researcher_id: string
   scholarship_quantity: string
 }
+
 import { ChartContainer, ChartTooltip, ChartConfig, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
 interface Docentes {
@@ -119,18 +120,6 @@ type Research = {
   SQ: number
 }
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "../../../components/ui/alert-dialog"
-
-
 interface VisaoPrograma {
   article: number;
   book: number;
@@ -167,6 +156,10 @@ import { GraficoTecnicosCargo } from "../graficos/grafico-tecnico-cargo";
 import { Helmet } from "react-helmet";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { toast } from "sonner";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../ui/accordion";
+import { ColorPicker } from "../../ui/color-picker";
+import { Input } from "../../ui/input";
+import { Label as LabelUi } from "../../ui/label";
 
 
 const chartConfig = {
@@ -270,12 +263,6 @@ export function IndicadoresDashboard() {
   const [total, setTotal] = useState<TotalPatrimonios[]>([]);
 
 
-  const [profile, setProfile] = useState({
-    img_perfil: '',
-    img_background: '',
-    institution_id: ''
-
-  });
 
   const urlPatrimonioInsert = `${urlGeralAdm}/InstitutionRest/Query/Count?institution_id=${user?.institution_id}`;
   console.log(urlPatrimonioInsert)
@@ -295,12 +282,7 @@ export function IndicadoresDashboard() {
         const data = await response.json();
         if (data) {
           setTotal(data)
-          setProfile({
-            img_perfil: '',
-            img_background: '',
-            institution_id: data.institution_id,
-
-          });
+         
         }
       } catch (err) {
         console.log(err);
@@ -312,6 +294,27 @@ export function IndicadoresDashboard() {
   }, [urlPatrimonioInsert]);
 
   console.log(urlPatrimonioInsert)
+
+  
+  const [profile, setProfile] = useState({
+    img_perfil: '',
+    img_background: '',
+    institution_id: '',
+    color:'',
+    site:''
+  });
+
+  useEffect(() => {
+    if (total?.[0]) {
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        institution_id: total[0]?.institution_id || '' // Se não for array, pega direto
+      }));
+    }
+  }, [total]); // Atualiza sempre que `total` mudar
+  
+
+  console.log('total',total)
 
   //
   const [bolsistas, setBolsistas] = useState<Bolsistas[]>([]);
@@ -616,107 +619,89 @@ export function IndicadoresDashboard() {
   const url = 'https://app.powerbi.com/view?r=eyJrIjoiNTBjNmQ3NWQtODNmZC00MWZkLThjNWEtZjU5YmE2ZDkwMjVkIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
   const { version } = useContext(UserContext)
 
-
   console.log(profile)
 
-  const storage = getStorage();
   const db = getFirestore();
-
-  // Função para buscar as imagens do Firebase com base no 'institution_id'
-  // 🔹 Busca imagens do Firestore
-  const fetchImages = async () => {
-    try {
-      const docRef = doc(db, "profiles", profile.institution_id);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        console.log("Firestore Data:", data);
-        setProfile((prevProfile) => ({
-          ...prevProfile,
-          img_background: data?.img_background || "",
-          img_perfil: data?.img_perfil || "",
-
-        }));
-      } else {
-        console.log("Documento não encontrado. Criando um novo...");
-        await setDoc(docRef, { img_background: "", img_perfil: "" });
-      }
-    } catch (error) {
-      console.error("Erro ao buscar imagens:", error);
-    }
-  };
-
-  // 🔹 Chama fetchImages quando 'institution_id' muda
+  const storage = getStorage();
+  const isDataLoaded = useRef(false); // Evita loops de salvamento
+  
+  // Carregar dados ao montar a página
   useEffect(() => {
-    fetchImages();
-  }, []);
+    if (profile.institution_id) {
+      const fetchInstitutionData = async () => {
+        const docRef = doc(db, "institutions", profile.institution_id);
+        const docSnap = await getDoc(docRef);
+  
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+  
+          setProfile({
+            institution_id:data?.institution_id || '',
+            img_background: data?.img_background || "",
+            img_perfil: data?.img_perfil || "",
+            color: data?.color || "",
+            site: data?.site || "",
+          });
+  
+          isDataLoaded.current = true; // Marca que os dados foram carregados
+        } else {
+          console.log("Instituição não encontrada. Criando novo registro...");
+          await setDoc(docRef, {
+            img_background: "",
+            img_perfil: "",
+            color: "",
+            site: "",
+          });
+          isDataLoaded.current = true;
+        }
+      };
+  
+      fetchInstitutionData();
+    }
+  }, [profile.institution_id]);
 
-  // 🔹 Upload da Imagem
-  const handleUpload = async (folder: "profile" | "background") => {
+  console.log('profile',profile)
+  
+  // Salvar automaticamente no Firebase quando os dados mudam
+  useEffect(() => {
+    if (profile.institution_id && isDataLoaded.current) {
+      const saveData = async () => {
+        await setDoc(doc(db, "institutions", profile.institution_id), profile, { merge: true });
+      };
+      saveData();
+    }
+  }, [profile]);
+  
+  // Função para upload de imagem
+  const handleUpload = async (folder: "perfil" | "background") => {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.accept = "image/*";
     fileInput.click();
-
+  
     fileInput.onchange = async (event) => {
       const file = (event.target as HTMLInputElement).files?.[0];
-      if (!file) return;
-      console.log(profile)
-      // 🔹 Verifica se `institution_id` está definido antes de continuar
-      if (!profile.institution_id) {
-        console.error("Erro: institution_id não está definido!");
-        return;
-      }
-
-      try {
-        const storagePath = `profiles/${profile.institution_id}/${folder}/${file.name}`;
-        const storageRef = ref(storage, storagePath);
-        console.log("Uploading to:", storageRef.fullPath);
-
-        await uploadBytes(storageRef, file);
-        const downloadURL = await getDownloadURL(storageRef);
-
-        // 🔹 Atualiza Firestore, verificando se o caminho é válido
-        const docRef = doc(db, "profiles", profile.institution_id);
-        if (!docRef) {
-          console.error("Erro: docRef inválido!");
-          return;
-        }
-
-        await setDoc(docRef, { [`img_${folder}`]: downloadURL }, { merge: true });
-
-        // 🔹 Atualiza estado
-        setProfile((prevProfile) => ({
-          ...prevProfile,
-          [folder === "background" ? "img_background" : "img_perfil"]: downloadURL,
-        }));
-
-        fetchImages();
-
-        toast("Imagem atualizada", {
-          description: "Documento carregado no banco de dados",
-          action: {
-            label: "Fechar",
-            onClick: () => console.log("Undo"),
-          },
-        })
-
-        console.log(`Upload concluído: ${downloadURL}`);
-      } catch (error) {
-        console.error("Erro no upload:", error);
-
-        toast("Erro ao atualizar imagem", {
-          description: "Documento não carregado no banco de dados",
-          action: {
-            label: "Fechar",
-            onClick: () => console.log("Undo"),
-          },
-        })
-      }
+      if (!file || !profile.institution_id) return;
+  
+      const storagePath = `institutions/${profile.institution_id}/${folder}/${file.name}`;
+      const storageRef = ref(storage, storagePath);
+      
+      toast.info("Enviando imagem...");
+      await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(storageRef);
+  
+      setProfile((prev) => ({
+        ...prev,
+        img_background: folder === "background" ? downloadURL : prev.img_background,
+        img_perfil: folder === "perfil" ? downloadURL : prev.img_perfil,
+      }));
+  
+      await setDoc(doc(db, "institutions", profile.institution_id), { [`img_${folder}`]: downloadURL }, { merge: true });
+  
+      toast.success("Upload concluído!");
     };
   };
-
+  
   return (
     <>
       <Helmet>
@@ -739,9 +724,6 @@ export function IndicadoresDashboard() {
                   Indicadores da Instituição
                 </h1>
 
-
-
-
                 <div className="hidden items-center gap-2 md:ml-auto md:flex">
                   <TabsList >
 
@@ -762,40 +744,84 @@ export function IndicadoresDashboard() {
             <TabsContent value="all" className="h-auto flex flex-col gap-4 md:gap-8  mt-2">
               <div className="flex flex-col items-center md:flex-row gap-6 w-full">
 
-                <div className="w-full">
-                  {/* Seção de Background */}
-                  <Alert
-                    className="h-[200px] flex justify-end bg-no-repeat bg-center bg-cover"
-                    style={{ backgroundImage: `url(${profile.img_background})` }}
-                  >
-                    <Button variant="outline" size="sm" onClick={() => handleUpload("background")}>
-                      <Upload size={16} /> Alterar imagem
-                    </Button>
-                  </Alert>
+              <div className="w-full">
+      {/* 🔹 Seção de Background */}
+      <Alert
+        className="h-[200px] flex justify-end bg-no-repeat bg-center bg-cover"
+        style={{ backgroundImage: `url(${profile.img_background})` }}
+      >
+        <Button variant="outline" size="sm" onClick={() => handleUpload("background")}>
+          <Upload size={16} /> Alterar imagem
+        </Button>
+      </Alert>
 
-                  {/* Avatar do usuário */}
-                  <div className="relative group w-fit -top-16 px-16">
-                    <Alert
-                      className="aspect-square   bg-no-repeat bg-center bg-contain rounded-md h-28 bg-white dark:bg-neutral-900"
-                      style={{ backgroundImage: `url(${profile.img_perfil})` }}
-                    ></Alert>
+      {/* 🔹 Avatar do usuário */}
+      <div className="relative group w-fit -top-16 px-16">
+        <Alert
+          className="aspect-square bg-no-repeat bg-center bg-contain rounded-md h-28 bg-white dark:bg-white"
+          style={{ backgroundImage: `url(${profile.img_perfil})` }}
+        ></Alert>
+        {/* 🔹 Overlay de Upload */}
+        <div
+          className="aspect-square rounded-md h-28 group-hover:flex bg-black/20 items-center justify-center absolute hidden top-0 z-[1] cursor-pointer"
+          onClick={() => handleUpload('perfil')}
+        >
+          <Upload size={20} />
+        </div>
+      </div>
 
-                    {/* Overlay de Upload */}
-                    <div
-                      className="aspect-square rounded-md h-28 group-hover:flex bg-black/20 items-center justify-center absolute hidden top-0 z-[1] cursor-pointer"
-                      onClick={() => handleUpload("profile")}
-                    >
-                      <Upload size={20} />
-                    </div>
-                  </div>
-
-                  <div className="md:px-16 -top-8 relative">
-                    <h1 className="text-2xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+      {/* 🔹 Accordion com detalhes */}
+      <Accordion type="single" collapsible>
+        <AccordionItem value="item-1">
+          <div className="md:px-16 -top-8 relative flex justify-between">
+            <div>
+            <h1 className="text-2xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
                       {total.map((props) => props.name)}
                     </h1>
                     <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><Hash size={12} />{total.map((props) => props.institution_id)}</div>
-                  </div>
-                </div>
+            </div>
+            <AccordionTrigger />
+          </div>
+
+          <AccordionContent className="md:px-16 flex gap-4 w-full">
+            {/* 🔹 Campo Site */}
+            <div className="flex flex-col gap-2 w-full">
+              <LabelUi>Site da instituição</LabelUi>
+              <Input
+                type="text"
+                value={profile.site}
+                onChange={(e) => {
+                  setProfile((prev) => ({ ...prev, site: e.target.value }));
+                  
+                }}
+              />
+            </div>
+
+            {/* 🔹 Campo Cor Base */}
+            <div className="flex flex-col gap-2 w-full">
+              <LabelUi>Cor base</LabelUi>
+              <div className="flex gap-4">
+                <Input
+                  type="text"
+                  value={profile.color}
+                  onChange={(e) => {
+                    setProfile((prev) => ({ ...prev, color: e.target.value }));
+                  
+                  }}
+                />
+                <ColorPicker
+                  value={profile.color}
+                  onChange={(v) => {
+                    setProfile((prev) => ({ ...prev, color: v }));
+                   
+                  }}
+                />
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
 
 
 

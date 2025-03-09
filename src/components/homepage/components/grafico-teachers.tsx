@@ -71,7 +71,7 @@ export function GraficoRtTeachers({ rtData }: { rtData: Rt | null }) {
           <Bar dataKey="count" radius={4}>
             <LabelList dataKey="count" position="top" offset={10} className="fill-foreground" fontSize={12} />
             {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={getColorForRt(entry.rt)} />
+              <Cell key={`cell-${index}`} fill={'#004a75'} />
             ))}
           </Bar>
         </BarChart>

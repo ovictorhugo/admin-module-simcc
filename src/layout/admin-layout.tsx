@@ -186,8 +186,10 @@ export default function AdminLayout({
               </div>
             </div>
 
-            <div className="h-full ">
+            <div className={`h-full ${(location.pathname == '/dashboard/administrativo' && has_atualizar_apache_hop) && ('pb-[40px]')}`}>
               {children}
+
+             
             </div>
           </main>
 

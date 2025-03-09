@@ -78,9 +78,8 @@ export function FilterArticle(props: Props) {
         onMouseDown={(e) => e.preventDefault()}
       >
         <label
-          className={`cursor-pointer gap-3 transition-all flex h-10 items-center px-4 rounded-md text-xs font-medium hover:bg-gray-100 dark:hover:bg-neutral-800 ${
-            isChecked ? "bg-neutral-100 dark:bg-neutral-800" : ""
-          }`}
+          className={`cursor-pointer gap-3 transition-all flex h-10 items-center px-4 rounded-md text-xs font-medium hover:bg-gray-100 dark:hover:bg-neutral-800 ${isChecked ? "bg-neutral-100 dark:bg-neutral-800" : ""
+            }`}
         >
           <div className={`rounded-sm h-4 w-4 ${qualisColor[quali.itens]}`}></div>
           <span className="text-center block">{quali.itens}</span>
@@ -119,7 +118,7 @@ export function FilterArticle(props: Props) {
   }, [filterYear, itensSelecionados, updateResearcher, isFirstRender]);
 
   return (
-    <div className="mb-6 flex gap-6 lg:flex-row flex-col">
+    <div className="flex  gap-6 lg:flex-row flex-col">
       <div className="flex flex-col">
         <div className="flex items-center gap-3 mb-4">
           <CheckSquare size={24} className="text-gray-400" />

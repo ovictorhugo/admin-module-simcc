@@ -1,5 +1,5 @@
 import { ArrowLeftFromLine, ArrowRightFromLine, BookOpenText, Boxes, Briefcase, Check, ChevronLeft, Download, FolderKanban, Minus, OctagonAlert, Star, TrendingUp, Waypoints } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
 import { Helmet } from "react-helmet";
 
@@ -57,6 +57,7 @@ import { TextoRevista } from "../popup/texto-revista";
 import { WorkEvent } from "../popup/trabalho-evento";
 import { CargosFuncoes } from "../popup/cargos-funcoes";
 import { Coautores } from "../popup/coautores";
+import { getInstitutionImage } from "../homepage/categorias/institutions-home/institution-image";
 
 export interface Research {
   among: number,
@@ -65,6 +66,7 @@ export interface Research {
   book_chapters: number,
   id: string,
   status: boolean
+  institution_id:string
   name: string,
   university: string,
   lattes_id: string,
@@ -526,6 +528,18 @@ export function ResearcherPage() {
   };
 
   const { version } = useContext(UserContext)
+
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      const url = await getInstitutionImage(researcher[0].institution_id);
+      setImageUrl(url);
+    };
+
+    fetchImage();
+  }, [researcher]);
+
   return (
     <html className="w-full grid grid-cols-1">
       <Helmet>
@@ -611,7 +625,7 @@ export function ResearcherPage() {
                         <SheetTrigger>
                           <Button onClick={() => setExpand(false)} className="h-8" size={'sm'}><TrendingUp size={16} />Linha do tempo</Button>
                         </SheetTrigger>
-                        <SheetContent className={`p-0 dark:bg-neutral-900 w-screen dark:border-gray-600 ${expand ? ('lg:w-[80vw]') : ('lg:w-[50vw]')}`}>
+                        <SheetContent className={`p-0 dark:bg-neutral-900 w-screen dark:border-gray-600 ${expand ? ('md:min-w-[80vw]') : ('md:min-w-[50vw]')}`}>
                           <DialogHeader className="h-[50px] justify-center px-4 border-b">
 
                             <div className="flex items-center gap-3 justify-between">
@@ -788,7 +802,11 @@ export function ResearcherPage() {
                             Copiar Lattes ID
                           </DropdownMenuItem>
 
-                          <DropdownMenuItem className="flex items-center gap-3" onClick={() => handleDownloadJson()}><FileCsv className="h-4 w-4" />Baixar CSV das publicações</DropdownMenuItem>
+                          <DropdownMenuItem className="flex items-center gap-3" onClick={() => handleDownloadJson()}><FileCsv className="h-4 w-4" />CSV dos artigos</DropdownMenuItem>
+
+                          
+                       <Link to={`${urlGeral}dictionary.pdf`}>
+                       <DropdownMenuItem className="flex items-center gap-3" ><File className="h-4 w-4" />Dicionário de dados</DropdownMenuItem></Link>
 
                           <DropdownMenuItem className="flex items-center gap-3" onClick={() => setOpen(!open)} ><BracketsCurly className="h-4 w-4" />API da consulta</DropdownMenuItem>
 
@@ -842,10 +860,10 @@ export function ResearcherPage() {
                 <div className="flex items-center flex-col  relative">
                   <h4 className="text-3xl font-medium px-8 text-center mb-2">{props.name}</h4>
                   <div className="flex text-gray-500 items-center gap-2 mb-2">
-                    {props.image == "None" ? (
+                    {!imageUrl ? (
                       <Buildings size={16} className="" />
                     ) : (
-                      <img src={props.image} alt="" className="h-6" />
+                      <img src={imageUrl || ''} alt="" className="h-6" />
                     )}
                     <p className="text-md  ">{props.university}</p>
                   </div>

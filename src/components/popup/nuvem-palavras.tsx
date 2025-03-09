@@ -108,7 +108,7 @@ export function NuvemPalavras(props: Grafico) {
   return (
     <div className="w-full">
       <div className="text-left mb-6 font-medium text-2xl">Palavras-chaves mais recorrentes</div>
-      <Alert>
+      <Alert className="mb-6">
         {isLoading ? (
           <Skeleton className="h-[300px] rounded-md" />
         ) : (

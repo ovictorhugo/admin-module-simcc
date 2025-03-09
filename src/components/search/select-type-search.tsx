@@ -36,6 +36,14 @@ export function SelectTypeSearch() {
         onValueChange={(value) => {
           setSearchType(value);
           onOpen("researchers-home");
+
+          if(resultados) {
+            queryUrl.set('type_search', value);
+    navigate({
+      pathname: '/resultados',
+      search: queryUrl.toString(),
+    });
+          }
         }}
       >
         <SelectTrigger className="w-full whitespace-nowrap">

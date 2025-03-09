@@ -254,10 +254,12 @@ setcarregado(false)
                 
             
               <div className="hidden items-center h-10 gap-2 md:ml-auto md:flex">
-            {has_importar_bolsistas_cnpq && (  <Button size={'sm'} variant={'ghost'}  onClick={() => onOpen('import-bolsistas')}><FileXls size={16}/>Importar bolsistas CNPq</Button>)}
+            
           
-            <Button size={'sm'}
-                    onClick={() => onOpen('import-docentes')}><FileXls size={16} />Importar dados dos docentes</Button>
+         {version && (
+             <Button size={'sm'}
+             onClick={() => onOpen('import-docentes')}><FileXls size={16} />Importar dados dos docentes</Button>
+         )}
               </div>
             </div>
 

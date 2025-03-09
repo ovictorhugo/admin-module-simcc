@@ -1,14 +1,14 @@
 import { AppWindow, Ticket, IdentificationBadge, CalendarBlank, Copyright, CurrencyCircleDollar, LinkBreak, Paperclip, PenNib, Globe, Check, CheckCircle } from "phosphor-react";
 import { useContext } from "react";
 import { toast } from "sonner";
-import { UserContext } from "../../context/context";
-import { Alert } from "../ui/alert";
+import { UserContext } from "../../../../context/context";
+import { Alert } from "../../../ui/alert";
 import { Link } from "react-router-dom";
 import { Image, Maximize2, Pencil, SquareArrowOutUpRight, SquareAsterisk, Star, Trash, User } from "lucide-react";
-import { Button } from "../ui/button";
-import { useModal } from "../hooks/use-modal-store";
-import { useModalSecundary } from "../hooks/use-modal-store-secundary";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../../../ui/button";
+import { useModal } from "../../../hooks/use-modal-store";
+import { useModalSecundary } from "../../../hooks/use-modal-store-secundary";
+import { Avatar, AvatarFallback, AvatarImage } from "../../../ui/avatar";
 
 type Publicacao = {
 
@@ -475,7 +475,13 @@ export function BookItem(props: Publicacao) {
 
 
 
-           
+            <div className="flex gap-2 items-center cursor-pointer" onClick={() => onOpen2('researcher-modal', {name:props.name})}>
+            <Avatar className="cursor-pointer rounded-md  h-5 w-5">
+                          <AvatarImage className={'rounded-md h-5 w-5'} src={`${urlGeral}ResearcherData/Image?name=${props.name}`} />
+                          <AvatarFallback className="flex items-center justify-center"><User size={10} /></AvatarFallback>
+                        </Avatar>
+              <p className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">{props.name}{props.researcher_name}</p>
+            </div>
 
         </div>
       </Alert>

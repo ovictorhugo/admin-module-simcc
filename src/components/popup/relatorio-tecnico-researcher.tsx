@@ -99,8 +99,10 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
     <>
       <div className="mb-[150px]">
 
-        <FilterYearPopUp
+       <div className="mb-6">
+       <FilterYearPopUp
           onFilterUpdate={handleResearcherUpdate} />
+       </div>
 
         <Accordion type="single" collapsible defaultValue="item-1" >
           <AccordionItem value="item-1" >
@@ -165,7 +167,7 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
                   >
                     <Masonry gutter="16px">
                       {items.map((item, index) => (
-                        <div key={index}>{item}</div>
+                        <div className="w-full" key={index}>{item}</div>
                       ))}
                     </Masonry>
                   </ResponsiveMasonry>

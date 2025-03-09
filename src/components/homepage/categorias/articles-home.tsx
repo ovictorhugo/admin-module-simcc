@@ -108,8 +108,9 @@ export function ArticlesHome() {
   console.log('urlTermPublicacoes', urlTermPublicacoes)
   useMemo(() => {
     const fetchData = async () => {
+      isLoading(true)
       try {
-        isLoading(true)
+      
         const response = await fetch(urlTermPublicacoes, {
           mode: "cors",
           headers: {
@@ -138,9 +139,9 @@ export function ArticlesHome() {
 
   return (
 
-    <div className="grid grid-cols-1">
+    <div className="grid grid-cols-1 gap-4 pb-16">
       <HeaderResult />
-      <div className="my-8">
+      <div className="pt-4">
         <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -157,12 +158,14 @@ export function ArticlesHome() {
         </Alert>
       </div>
 
-      <FilterArticle
+     <div className="mt-6">
+     <FilterArticle
         onFilterUpdate={handleResearcherUpdate} />
+     </div>
 
       <Accordion defaultValue="item-1" type="single" collapsible >
         <AccordionItem value="item-1" >
-          <div className="flex mb-2">
+          <div className="flex">
             <HeaderResultTypeHome title="Gráfico de quantidade total por Qualis" icon={<ChartBar size={24} className="text-gray-400" />}>
             </HeaderResultTypeHome>
 
@@ -171,7 +174,7 @@ export function ArticlesHome() {
             </AccordionTrigger>
           </div>
 
-          <AccordionContent >
+          <AccordionContent className="p-0" >
             {loading ? (
               <Skeleton className="w-full rounded-md h-[300px]" />
             ) : (
@@ -222,12 +225,12 @@ export function ArticlesHome() {
                     350: 1,
                     750: 2,
                     900: 3,
-                    1200: navbar || isOpenSidebar ? 3 : 4
+                    1200: 4
                   }}
                 >
                   <Masonry gutter="16px">
                     {items.map((item, index) => (
-                      <div key={index}>{item}</div>
+                      <div className="w-full" key={index}>{item}</div>
                     ))}
                   </Masonry>
                 </ResponsiveMasonry>

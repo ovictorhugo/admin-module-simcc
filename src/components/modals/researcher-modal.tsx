@@ -21,6 +21,7 @@ import { UserContext } from "../../context/context";
 type Research = {
   among: number,
   articles: number,
+  institution_id:string
   book: number,
   book_chapters: number,
   id: string,
@@ -131,6 +132,7 @@ import { WorkEvent } from "../popup/trabalho-evento";
 import { TextoRevista } from "../popup/texto-revista";
 import { CargosFuncoes } from "../popup/cargos-funcoes";
 import { Coautores } from "../popup/coautores";
+import { getInstitutionImage } from "../homepage/categorias/institutions-home/institution-image";
 
 export function ResearcherModal() {
 
@@ -333,12 +335,23 @@ export function ResearcherModal() {
     return variations;
   }
 
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      const url = await getInstitutionImage(researcher[0].institution_id);
+      setImageUrl(url);
+    };
+
+    fetchImage();
+  }, [researcher]);
+
 
   return (
     <>
       <Drawer open={isModalOpen} onClose={onClose}   >
 
-        <DrawerContent  onInteractOutside={onClose}  className={`max-h-[88%] border border-b-0`} >
+        <DrawerContent onInteractOutside={onClose} className={`max-h-[88%] border border-b-0`} >
           {researcher.length == 0 && (
             <div className="flex justify-center items-center h-[80vh] ">
               <div className="w-full flex flex-col items-center justify-center h-full">
@@ -406,7 +419,7 @@ export function ResearcherModal() {
                         <div
                           className={`
                       hidden text-[0.5rem] py-2 px-4 border dark:border-neutral-800 w-fit
-                       rounded-md  font-bold gap-1 items-center
+                      rounded-md  font-bold gap-1 items-center
 
                       md:text-xs md:py-2 md:px-4 
 
@@ -520,9 +533,10 @@ export function ResearcherModal() {
                           Copiar Lattes ID
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem className="flex items-center gap-3" onClick={() => handleDownloadJson()}><FileCsv className="h-4 w-4" />Baixar CSV das publicações</DropdownMenuItem>
+                        <DropdownMenuItem className="flex items-center gap-3" onClick={() => handleDownloadJson()}><FileCsv className="h-4 w-4" />CSV dos artigos</DropdownMenuItem>
 
-                        <DropdownMenuItem className="flex items-center gap-3" ><File className="h-4 w-4" />Baixar Dicionário de dados</DropdownMenuItem>
+                       <Link to={`${urlGeral}dictionary.pdf`}>
+                       <DropdownMenuItem className="flex items-center gap-3" ><File className="h-4 w-4" />Dicionário de dados</DropdownMenuItem></Link>
 
                         <DropdownMenuItem className="flex items-center gap-3" onClick={() => setOpen(!open)} ><BracketsCurly className="h-4 w-4" />API da consulta</DropdownMenuItem>
 
@@ -560,10 +574,10 @@ export function ResearcherModal() {
                 >
                   <h4 className="text-3xl font-medium px-8 text-center mb-2">{props.name}</h4>
                   <div className="flex text-gray-500 items-center gap-2 mb-2">
-                    {props.image == "None" ? (
+                    {!imageUrl ? (
                       <Buildings size={16} className="" />
                     ) : (
-                      <img src={props.image} alt="" className="h-6" />
+                      <img src={imageUrl} alt="" className="h-6" />
                     )}
                     <p className="text-md  ">{props.university}</p>
                   </div>
@@ -624,7 +638,7 @@ export function ResearcherModal() {
                   <div className="flex w-full flex-1">
                     <Tabs defaultValue="articles" value={value} className="w-[99%]">
                       {researcher.slice(0, 1).map(() => (
-                        <div className=" grid grid-cols-1 mb-2 w-full">
+                        <div className=" grid grid-cols-1  w-full">
                           <ScrollArea className="mb-4">
                             <TabsList className="mb-4 flex h-auto">
                               <TabsTrigger
@@ -798,7 +812,7 @@ export function ResearcherModal() {
                     </Tabs>
                   </div>
 
-                  <div className="xl:w-[350px] w-full grid grid-cols-1">
+                  <div className="xl:w-[350px] w-full grid grid-cols-1 ">
                     <ResponsiveMasonry
                       columnsCountBreakPoints={{
                         350: 1,
@@ -807,7 +821,7 @@ export function ResearcherModal() {
                         1200: 1
                       }}
                     >
-                      <Masonry gutter="24px">
+                      <Masonry gutter="1px">
                         {researcher.slice(0, 1).map((user) => {
 
                           return (
