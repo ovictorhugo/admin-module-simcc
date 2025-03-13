@@ -209,7 +209,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
     });
     
 
-    setResearcher(filteredResearchers);
+   
 
 
 
@@ -273,7 +273,6 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   };
 
   const clearFilters = () => {
-   
     setSelectedAreas([]);
     setSelectedGraduations([]);
     setSelectedCities([]);
@@ -282,7 +281,6 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
     setSelectedDepartaments([]);
     setSelectedGraduatePrograms([])
     setResearcher(researcher);
-   
     onClose();
   };
 
@@ -327,6 +325,8 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
     }
   }, [researcher]);
 
+
+
   const {version} = useContext(UserContext)
 
 
@@ -357,7 +357,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
     setSelectedGraduatePrograms(getArrayFromUrl("graduatePrograms"));
     setSelectedDepartaments(getArrayFromUrl("departments"));
 
-    setResearcher(filteredResearchers);
+   
  
   }, []);
 
@@ -522,7 +522,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
                   </ToggleGroup>
     </AccordionContent>
   </AccordionItem>
-  {simcc && (
+
   <AccordionItem value="item-4">
     <div className="flex items-center justify-between">
     <Label>Universidade</Label>
@@ -544,7 +544,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
                   </ToggleGroup>
     </AccordionContent>
   </AccordionItem>
-)}
+
 
 <AccordionItem value="item-5">
     <div className="flex items-center justify-between">
@@ -930,7 +930,7 @@ export function ResearchersHome() {
             </Accordion>
           )}
 
-          {(simcc && searchType != 'name') && (
+          {(searchType != 'name') && (
             <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex ">
               <AccordionItem value="item-1" className="w-full ">
                 <div className="flex mb-2">

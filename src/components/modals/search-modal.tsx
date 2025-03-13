@@ -9,7 +9,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { toast } from "sonner";
 import { useModal } from "../hooks/use-modal-store";
 import { SelectTypeSearch } from "../search/select-type-search";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
 import { CloudArrowDown, Funnel, MagnifyingGlass, Plus, X } from "phosphor-react";
@@ -86,22 +86,39 @@ export function SearchModal() {
   const [filteredItems, setFilteredItems] = useState<Csv[]>([]);
   /////////////////
 
-  const searchFilesByTermPrefix = async (prefix: string) => {
+  const searchFilesByTermPrefix = async (prefix: string) => { 
     if (prefix.length >= 3) {
       try {
-        // Consulta os documentos cujo term começa com o prefixo fornecido
-        const filesRef = collection(db, `${version ? ('termos_busca') : ('termos_busca_cimatec')}`);
+        const filesRef = collection(db, version ? 'termos_busca' : 'termos_busca_cimatec');
+
+        // Busca APENAS os documentos que NÃO são do tipo "NAME"
         const q = query(filesRef,
-          where('term_normalize', '>=', prefix),
-          where('term_normalize', '<=', prefix + '\uf8ff')
+          where("term_normalize", ">=", prefix),
+          where("term_normalize", "<=", prefix + "\uf8ff"),
+       
         );
 
         const querySnapshot = await getDocs(q);
-        // Extrai os dados dos documentos encontrados
-        const files = querySnapshot.docs.map(doc => doc.data());
+        let otherFiles = querySnapshot.docs.map(doc => doc.data());
 
-        console.log('files', files)
-        const mappedFiles = files.map(file => ({
+        // Agora, busca separadamente os que são "NAME" (sem usar Firestore para filtragem textual)
+        const qName = query(filesRef, where("type_", "==", "NAME"));
+        const querySnapshotName = await getDocs(qName);
+        let filesName = querySnapshotName.docs.map(doc => doc.data());
+
+        // Aplicar filtro manual para os arquivos do tipo "NAME"
+        const filteredNameFiles = filesName.filter(file => {
+            const searchTokens = normalizeInput(prefix).split(/\s+/);
+            const nameTokens = normalizeInput(file.term).split(/\s+/);
+            return searchTokens.every(token => 
+              nameTokens.some(nameToken => nameToken.startsWith(token)) // Busca parcial
+            );
+        });
+
+        // Juntar os resultados
+        const finalFiles = [...filteredNameFiles, ...otherFiles];
+
+        const mappedFiles = finalFiles.map(file => ({
           great_area: file.great_area,
           term: file.term,
           frequency: file.frequency,
@@ -109,14 +126,14 @@ export function SearchModal() {
           term_normalize: file.term_normalize
         }));
 
-        // Define os dados encontrados em filteredItems
         setFilteredItems(mappedFiles);
       } catch (error) {
-        console.error('Erro ao buscar arquivos:', error);
+        console.error("Erro ao buscar arquivos:", error);
         return [];
       }
     }
-  };
+};
+
 
   console.log('filter', filteredItems)
 
@@ -435,6 +452,7 @@ export function SearchModal() {
 
   const handleEnterPress = (event: any) => {
     if (event.key === "Enter") {
+      console.log('oi oi oi')
       handlePesquisaFinal()
     }
   };
@@ -471,12 +489,21 @@ export function SearchModal() {
     setItensSelecionadosPopUp(newItems);
   };
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  
+  useEffect(() => {
+    if (isModalOpen && inputRef.current) {
+      inputRef.current.focus();  // Foca no input quando o modal for aberto
+    }
+  }, [isModalOpen]);  // Este efeito será executado sempre que isModalOpen mudar
+
+
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
-      <DialogContent className="overflow-y-scroll md:overflow-y-auto p-0 border-none min-w-[63vw] px-4 mx-auto md:px-0 bg-transparent dark:bg-transparent">
+      <DialogContent tabIndex={0} onKeyDown={handleEnterPress} className="overflow-y-scroll md:overflow-y-auto p-0 border-none min-w-[63vw] px-4 mx-auto md:px-0 bg-transparent dark:bg-transparent">
 
-        <Alert onKeyDown={handleEnterPress} className="h-14 bg-white p-2 min-w-[40%] flex items-center gap-3 justify-between">
+        <Alert  tabIndex={0} onKeyDown={handleEnterPress} className="h-14 bg-white p-2 min-w-[40%] flex items-center gap-3 justify-between">
           <div className="flex items-center gap-2 w-full flex-1">
             <MagnifyingGlass size={16} className="hidden md:block whitespace-nowrap w-10" />
 
@@ -528,6 +555,7 @@ export function SearchModal() {
                 <Input
                   onChange={(e) => handleChangeInput(e.target.value)}
                   type="text"
+                  ref={inputRef}
                   value={input}
                   className="border-0  flex-1 p-0 w-auto inline-block"
                   onKeyDown={handleTabPress}
@@ -672,18 +700,31 @@ export function SearchModal() {
                   </div>
                 )}
 
-                {(filteredItems.filter(item => item.type_ === 'NAME').length != 0) && (
-                  <div className="">
-                    <p className="uppercase font-medium text-xs mb-3">Nome</p>
-                    <div className="flex flex-wrap gap-3">
-                      {filteredItems.filter(item => item.type_ === 'NAME').slice(0, 5).map((props, index) => (
-                        <div key={index} onClick={() => handlePesquisa(props.term, props.type_)} className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
-                          {props.term}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+{(filteredItems.filter(item => item.type_ === 'NAME').length !== 0) && (
+  <div className="">
+    <p className="uppercase font-medium text-xs mb-3">Nome</p>
+    <div className="flex flex-wrap gap-3">
+      {filteredItems
+        .filter(item => item.type_ === 'NAME')
+        // Remove duplicatas baseadas no 'term'
+        .filter((value, index, self) => 
+          index === self.findIndex((t) => (
+            t.term === value.term // Verifica se o 'term' é único
+          ))
+        )
+        .slice(0, 5)
+        .map((props, index) => (
+          <div 
+            key={index} 
+            onClick={() => handlePesquisa(props.term, props.type_)} 
+            className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} 
+          >
+            {props.term}
+          </div>
+        ))}
+    </div>
+  </div>
+)}
 
                 {!posGrad && (
                   <div>

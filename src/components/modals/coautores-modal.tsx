@@ -138,8 +138,8 @@ export function CoautoresModal() {
           </div>
 
           <div>
-            <div className="gap-2 mt-8 flex-wrap flex w-full items-start ">
-              {sortedResearchers.slice(0, count).map((item) => {
+            <div className="gap-2 mt-8 flex-wrap flex w-full items-center ">
+              {sortedResearchers.map((item) => {
                 const maxFontSize = 250;
                 const minFontSize = 70;
 
@@ -178,13 +178,7 @@ export function CoautoresModal() {
 
 
 
-            {sortedResearchers.length > count && (
-              <div className="w-full mt-8 items-center flex justify-center">
-                <Button onClick={() => setCount(count + 5)} variant={'outline'} size={'sm'}>
-                  <Plus size={16} />  Mostrar mais
-                </Button>
-              </div>
-            )}
+            
           </div>
         </ScrollArea>
       </SheetContent>

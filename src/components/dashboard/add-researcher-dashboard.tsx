@@ -29,6 +29,7 @@ import { EditResearcherModal } from "../modals/edit-researcher-modal";
 export function AddResearcherDashboard() {
     const [nomePesquisador, setNomePesquisador] = useState('');
     const [lattesID, setLattesID] = useState('');
+    const [cpf, setCpf] = useState('');
     const [loading, setLoading] = useState(false);
 
     const [count, setCount] = useState(24)
@@ -63,6 +64,7 @@ export function AddResearcherDashboard() {
                 researcher_id: docId,
                 name: nomePesquisador,
                 lattes_id: lattesID,
+                cpf:cpf,
                 institution_id: user?.institution_id,
                 status:(status == 'ativo' ? (true):(false))
               }
@@ -125,9 +127,9 @@ export function AddResearcherDashboard() {
                     console.log(err);
                   } 
             } else {
-               if(nomePesquisador.length == 0 && lattesID.length == 0) {
+               if(nomePesquisador.length == 0 || ( lattesID.length == 0 && cpf.length == 0)) {
                 toast("Parece que os campos estão vazios", {
-                    description: "Preencha os campos nome do pesquisador e Lattes Id",
+                    description: "Preencha os campos nome do pesquisador e Lattes Id ou CPF",
                     action: {
                       label: "Fechar",
                       onClick: () => console.log("Undo"),
@@ -226,6 +228,19 @@ setcarregado(false)
   const items = Array.from({ length: 12 }, (_, index) => (
     <Skeleton key={index} className="w-full rounded-md h-[200px]" />
   ));
+
+  const formatCPF = (value: string) => {
+    return value
+      .replace(/\D/g, "") // Remove tudo que não for número
+      .slice(0, 11) // Garante que tenha no máximo 11 dígitos
+      .replace(/(\d{3})(\d)/, "$1.$2") // Coloca o primeiro ponto
+      .replace(/(\d{3})(\d)/, "$1.$2") // Coloca o segundo ponto
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2"); // Coloca o traço
+  };
+  
+  const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCpf(formatCPF(e.target.value));
+  };
 
     return  (
 <>
@@ -329,6 +344,11 @@ setcarregado(false)
            <div className="flex flex-col space-y-1.5 w-full flex-1">
            <Label htmlFor="name">Lattes Id</Label>
            <Input value={lattesID} onChange={(e) => setLattesID(e.target.value)} type="text" />
+           </div>
+
+           <div className="flex flex-col space-y-1.5 w-full flex-1">
+           <Label htmlFor="name">CPF</Label>
+           <Input value={cpf} onChange={handleCpfChange} type="text" />
            </div>
 
            <div className="flex flex-col max-w-[250px] space-y-1.5 w-full flex-1">

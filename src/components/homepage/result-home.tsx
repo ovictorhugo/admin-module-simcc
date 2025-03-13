@@ -63,7 +63,7 @@ export function ResultHome() {
   const navigate = useNavigate();
 
   const updateFilters = (category: string, values: any) => {
-    if (values.length > 0 ) {
+    if (values  ) {
      
       queryUrl.set(category, values);
      
@@ -74,6 +74,7 @@ export function ResultHome() {
   };
 
   useEffect(() => {
+    console.log("typeResult mudou para:", typeResult);
      updateFilters("tab", typeResult );
 
      navigate({
@@ -82,6 +83,13 @@ export function ResultHome() {
     })
 
   }, [typeResult]);
+
+  useEffect(() => {
+    if(tab != null && tab != undefined) {
+      onOpen(tab as ModalType)
+    }
+     
+   }, []);
 
 
 
@@ -214,7 +222,7 @@ export function ResultHome() {
 
       {(itemsSelecionados.length > 0 || (researcher == 'false')) && (
         <div className="top-[68px] sticky z-[2] supports-[backdrop-filter]:dark:bg-neutral-900/60 supports-[backdrop-filter]:bg-neutral-50/60 backdrop-blur">
-          <div className={`w-full ${isOn ? 'px-8' : 'px-4'} border-b border-b-neutral-200 dark:border-b-neutral-800`}>
+          <div className={`w-full px-8 border-b border-b-neutral-200 dark:border-b-neutral-800`}>
             {isOn && (
               <div className="w-full pt-4  flex justify-between items-center">
                 <Search />
