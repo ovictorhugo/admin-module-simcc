@@ -101,7 +101,6 @@ export default function MapaResearcher({ cityData }: Props) {
                         <AvatarImage className={'rounded-md h-6 w-6'} src={`${urlGeral}ResearcherData/Image?name=${professor}`} />
                         <AvatarFallback className="flex items-center justify-center"><User size={16} /></AvatarFallback>
                       </Avatar>
-
                           {professor}
                         </div>
                       ))}

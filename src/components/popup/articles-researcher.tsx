@@ -167,6 +167,11 @@ export function ArticlesResearcherPopUp(props: Props) {
         fetchData();
     }, [fetchData]);
 
+    const total = publicacoes.length;
+    const validDoiCount = publicacoes.filter(pub => pub.doi && pub.doi.trim() !== "").length;
+    const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
+    
+
     return (
         <>
             <div className="">
@@ -205,7 +210,7 @@ export function ArticlesResearcherPopUp(props: Props) {
                                 <div className="flex gap-4 items-center">
                                     <Quotes size={24} className="text-gray-400" />
                                     {searchType != 'article' || itemsSelecionadosPopUp.length == 0 ? (
-                                        <p className="font-medium">Todos os artigos</p>
+                                        <p className="font-medium flex gap-2  items-center ">Todos os artigos<p className="text-eng-blue text-sm">({percentage.toFixed(2)}% com DOI)</p></p>
                                     ) : (
                                         <div className="font-medium flex items-center gap-2">
                                             <span
@@ -242,7 +247,7 @@ export function ArticlesResearcherPopUp(props: Props) {
                                                     );
                                                 })}
 
-                                                <span >em artigos</span>
+                                                <span className="flex gap-2  items-center " >em artigos<p className="text-eng-blue text-sm">({percentage.toFixed(2)}% com DOI)</p></span>
                                             </div>
                                         </div>
                                     )}

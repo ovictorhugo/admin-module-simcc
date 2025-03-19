@@ -29,6 +29,7 @@ interface GraduateProgram {
   sigla: string
   latitude: string
   longitude: string
+  visible:string
 }
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -84,7 +85,7 @@ function BahiaMap() {
 
 // Crie um objeto para armazenar a contagem de programas por estado
 const cityProgramCount: Record<string, number> = {};
-  graduatePrograms.forEach((program) => {
+  graduatePrograms.filter(item => item.visible == "True").forEach((program) => {
     const city = program.city;
     if (cityProgramCount[city]) {
       cityProgramCount[city] += 1;

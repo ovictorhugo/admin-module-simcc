@@ -49,7 +49,7 @@ import { query, where } from 'firebase/firestore';
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useModalResult } from "../hooks/use-modal-result";
-import { Trash } from "lucide-react";
+import { Play, Trash } from "lucide-react";
 
 export function SearchModal() {
 
@@ -505,7 +505,7 @@ export function SearchModal() {
 
         <Alert  tabIndex={0} onKeyDown={handleEnterPress} className="h-14 bg-white p-2 min-w-[40%] flex items-center gap-3 justify-between">
           <div className="flex items-center gap-2 w-full flex-1">
-            <MagnifyingGlass size={16} className="hidden md:block whitespace-nowrap w-10" />
+            <Play size={16} className="hidden md:block whitespace-nowrap w-10" />
 
             <div className="flex gap-2 w-full items-center">
               <div className='flex gap-2 items-center'>
@@ -604,7 +604,7 @@ export function SearchModal() {
   `} 
   size={'icon'}
 > 
-  <Funnel size={16} className="" />
+  <MagnifyingGlass size={16} className="" />
 </Button>
 
           </div>

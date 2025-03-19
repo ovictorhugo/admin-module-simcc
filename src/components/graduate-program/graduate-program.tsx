@@ -692,7 +692,7 @@ const { onOpen } = useModal();
                   <GraduationCap className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{graduatePrograms.length}</div>
+                  <div className="text-2xl font-bold">{graduatePrograms.filter(item => item.visible == "True").length}</div>
                   <p className="text-xs text-muted-foreground">
                     encontrados na busca
                   </p>
@@ -746,7 +746,7 @@ const { onOpen } = useModal();
                         }}
                       >
                         <Masonry gutter="16px" className=" z-[1] w-full">
-                          {filteredTotal
+                          {graduatePrograms
                             .filter(item => item.visible == "True") // Filtra os itens onde `visible` é `true`
                             .map((props, index) => (
                               <ProgramItem
@@ -778,7 +778,7 @@ const { onOpen } = useModal();
                       loading ? (
                         <Skeleton className="w-full rounded-md h-[400px]" />
                       ) : (
-                        <DataTable columns={columnsGraduate} data={graduatePrograms} />
+                        <DataTable columns={columnsGraduate} data={graduatePrograms.filter(item => item.visible == "True")} />
                       )
                     )}
                   </AccordionContent>

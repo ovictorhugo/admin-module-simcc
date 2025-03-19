@@ -71,6 +71,10 @@ export function ArticlesHome() {
   const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
   const [typeVisu, setTypeVisu] = useState('block')
 
+  const total = publicacoes.length;
+const validDoiCount = publicacoes.filter(pub => pub.doi && pub.doi.trim() !== "").length;
+const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
+
   const idGraduateProgram = ''
 
   const [filters, setFilters] = useState<Filter[]>([]);
@@ -151,8 +155,8 @@ export function ArticlesHome() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{publicacoes.length}</div>
-            <p className="text-xs text-muted-foreground">
-              encontrados na busca
+            <p className="text-xs text-muted-foreground flex gap-2">
+              encontrados na busca <p className="text-eng-blue">({percentage.toFixed(2)}% com DOI)</p>
             </p>
           </CardContent>
         </Alert>

@@ -82,11 +82,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: "/producoes-recentes",
             icon: BookOpen
           },
-          {
-            title: "Provimento de cargo",
+          ...(version
+            ? [
+              {
+                title: "Provimento de cargo",
             url: "/provimento-cargo",
             icon: CalendarSearch
-          },
+              },
+              ]
+            : []),
+
 
           {
             title: "Dados externos",
@@ -96,7 +101,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         ],
       },
       {
-        title: "Playground",
+        title: "Páginas",
         url: "/",
         icon: SquareTerminal,
         isActive: true,
