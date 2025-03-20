@@ -1013,9 +1013,9 @@ export function ResearcherPage() {
                       <div className="w-full flex-1 flex">
                         <Tabs defaultValue="articles" value={value} className="flex-1 flex flex-col w-full">
                           {researcher.slice(0, 1).map(() => (
-                            <div className="grid grid-cols-1 mb-6">
-                              <ScrollArea className="">
-                                <TabsList className="mb-4 flex h-auto overflow-x-scroll w-full">
+                            <div className="grid grid-cols-1 w-full">
+                              <ScrollArea className="mb-4">
+                                <TabsList className="mb-4 flex h-auto w-full">
 
                                   <TabsTrigger
                                     value="article"

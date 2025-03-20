@@ -7,6 +7,7 @@ type Livros = {
   id: string,
   title: string,
   year: string,
+  name:string
 }
 
 type Patente = {

@@ -5,12 +5,12 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { Button } from "../ui/button";
 
-import { MagnifyingGlass, Quotes, Rows, SquaresFour, Student, UserList } from "phosphor-react";
+import { MagnifyingGlass, Quotes, Rows, SquaresFour, StripeLogo, Student, UserList } from "phosphor-react";
 
 import { ResearchersBloco } from "../homepage/categorias/researchers-home/researchers-bloco";
 import { TableReseracherhome } from "../homepage/categorias/researchers-home/table-reseracher-home";
 import { Link } from "react-router-dom";
-import { ArrowRight, ChevronDown, ChevronUp, Copyright, Download, File, Files, FolderKanban, Info, MoreHorizontal, Ticket, Users } from "lucide-react";
+import { ArrowRight, BookOpen, BookOpenText, Briefcase, ChevronDown, ChevronUp, Code, Copyright, Download, File, Files, FolderKanban, Info, MoreHorizontal, Ticket, Users } from "lucide-react";
 import { InfiniteMovingResearchers } from "../ui/infinite-moving-researcher";
 import { Tabs, TabsContent, TabsList } from "../ui/tabs";
 import { Input } from "../ui/input";
@@ -21,6 +21,11 @@ import { ResearchersHome } from "../homepage/categorias/researchers-home";
 import { ArticlesHome } from "../homepage/categorias/articles-home";
 import { Helmet } from "react-helmet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { BookHome } from "../homepage/categorias/book-home";
+import { PatentHome } from "../homepage/categorias/patent-home";
+import { SoftwareHome } from "./software-home";
+import { BrandHome } from "./brand-home";
+import { MagazineHome } from "./magazine-home";
 type Research = {
     among: number,
     articles: number,
@@ -111,7 +116,9 @@ export function TodosPesquisadores() {
  
             const [value, setValue] = useState('pesquisadores')
 
-            const randomResearchers = researcher.sort(() => Math.random() - 0.5).slice(0, 40);
+            const randomResearchers = useMemo(() => {
+              return researcher.sort(() => Math.random() - 0.5).slice(0, 40);
+            }, [researcher]);
 
             const [jsonData, setJsonData] = useState<any[]>([]);
 
@@ -214,6 +221,26 @@ export function TodosPesquisadores() {
               }
             };
 
+            const tabs = [
+              { id: "pesquisadores", label: "Pesquisadores", icon: Users },
+              { id: "tecnicos", label: "Técnicos", icon: Users, condition: version },
+              { id: "bolsistas", label: "Bolsistas CNPq", icon: Copyright },
+              { id: "article", label: "Artigos", icon: Quotes },
+              { id: "book", label: "Livros e capítulos", icon: File },
+              { id: "patent", label: "Patentes", icon: Copyright },
+              { id: "software", label: "Softwares", icon: Code },
+              { id: "brand", label: "Marcas", icon: StripeLogo },
+              { id: "relatorio-tecnico", label: "Relatório técnico", icon: Files },
+              { id: "orientacoes", label: "Orientações", icon: Student },
+              { id: "speaker", label: "Participação em eventos", icon: Ticket },
+              { id: "research-project", label: "Projetos de pesquisa", icon: FolderKanban },
+              { id: "texto-revista", label: "Texto em revista", icon: BookOpenText },
+              { id: "work-event", label: "Trabalho em evento", icon: Briefcase },
+              { id: "magazine", label: "Revistas", icon: BookOpen }
+            ];
+            
+       
+
     return(
         <main className=" w-full grid grid-cols-1 ">
  <Helmet>
@@ -267,78 +294,23 @@ export function TodosPesquisadores() {
                   <ScrollArea className="">
                   <TabsList className="p-0 flex h-auto bg-transparent dark:bg-transparent">
                  
-                  <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'pesquisadores' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('pesquisadores')}>
-                      <Button variant={value == 'pesquisadores' ? ('ghost'):('ghost')}  className="m-0" >
-                      <Users size={16} className="" />
-                      Pesquisadores
-                      </Button>
-                      </div>
-
-                      {version && (
-                          <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'tecnicos' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('tecnicos')}>
-                          <Button variant={value == 'tecnicos' ? ('ghost'):('ghost')}  className="m-0" >
-                          <Users size={16} className="" />
-                          Técnicos
-                          </Button>
-                          </div>
-                      )}
-
-                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'bolsistas' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('bolsistas')}>
-                      <Button variant={value == 'bolsistas' ? ('ghost'):('ghost')}  className="m-0" >
-                      <Copyright size={16} className="" />
-                      Bolsistas CNPq
-                      </Button>
-                      </div>
-
-
-                  <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'article' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('article')}>
-                      <Button variant={value == 'article' ? ('ghost'):('ghost')}  className="m-0" >
-                      <Quotes size={16} className="" />
-                      Artigos
-                      </Button>
-                      </div>
-
-                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'book' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('book')}>
-                      <Button variant={value == 'book' ? ('ghost'):('ghost')}  className="m-0" >
-                      <File size={16} className="" />
-                      Livros e capítulos
-                      </Button>
-                      </div>
-
-                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'producao-tecnica' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('producao-tecnica')}>
-                      <Button variant={value == 'producao-tecnica' ? ('ghost'):('ghost')}  className="m-0" >
-                      <Copyright size={16} className="" />
-                      Patentes
-                      </Button>
-                      </div>
-
-                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'relatorio-tecnico' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('relatorio-tecnico')}>
-                      <Button variant={value == 'relatorio-tecnico' ? ('ghost'):('ghost')}  className="m-0" >
-                      <Files size={16} className="" />
-                      Relatório técnico
-                      </Button>
-                      </div>
-
-                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'orientacoes' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('orientacoes')}>
-                      <Button variant={value == 'orientacoes' ? ('ghost'):('ghost')}  className="m-0" >
-                      <Student size={16} className="" />
-                      Orientações
-                      </Button>
-                      </div>
-
-                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'speaker' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('speaker')}>
-                      <Button variant={value == 'speaker' ? ('ghost'):('ghost')}  className="m-0" >
-                      <Ticket size={16} className="" />
-                      Participação em eventos
-                      </Button>
-                      </div>
-
-                      <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'research-project' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('research-project')}>
-                      <Button variant={value == 'research-project' ? ('ghost'):('ghost')}  className="m-0" >
-                      <FolderKanban size={16} className="" />
-                    Projetos de pesquisa
-                      </Button>
-                      </div>
+                  {tabs.map(
+      ({ id, label, icon: Icon, condition = true }) =>
+        condition && (
+          <div
+            key={id}
+            className={`pb-2 border-b-2 text-black dark:text-white transition-all ${
+              value === id ? "border-b-[#719CB8]" : "border-b-transparent"
+            }`}
+            onClick={() => setValue(id)}
+          >
+            <Button variant="ghost" className="m-0">
+              <Icon size={16} />
+              {label}
+            </Button>
+          </div>
+        )
+    )}
                   </TabsList>
 
                   <ScrollBar orientation="horizontal"/>
@@ -402,16 +374,29 @@ export function TodosPesquisadores() {
 
             <ScrollArea className="h-full">
             <div className="px-8">
-            <TabsContent value="pesquisadores">
-  {researcher.slice(0, 1).map((user) => {
-                return(
-                 <ResearchersHome/>
-                  )
-                })}
-  </TabsContent>
-
+       
             <TabsContent value="article">
             <ArticlesHome />
+  </TabsContent>
+
+  <TabsContent value="book">
+            <BookHome />
+  </TabsContent>
+
+  <TabsContent value="patent">
+            <PatentHome />
+  </TabsContent>
+
+  <TabsContent value="software">
+            <SoftwareHome />
+  </TabsContent>
+
+  <TabsContent value="brand">
+            <BrandHome />
+  </TabsContent>
+
+  <TabsContent value="magazine">
+            <MagazineHome />
   </TabsContent>
               </div>
            

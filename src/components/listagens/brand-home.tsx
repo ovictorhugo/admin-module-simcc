@@ -1,30 +1,24 @@
-import { useContext, useMemo, useState } from "react";
-import { UserContext } from "../../../context/context";
-import { FilterYearPopUp } from "../../popup/filters-year-popup";
-import { Skeleton } from "../../ui/skeleton";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../ui/accordion";
-import { HeaderResultTypeHome } from "./header-result-type-home";
-import { Copyright } from "lucide-react";
-import { Button } from "../../ui/button";
-import {  ChartBar, Rows, SquaresFour } from "phosphor-react";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { TableReseracherPatentesPopup } from "../../popup/columns/producoes-tecnicas/table-patentes-popup";
-
-
-import { Alert } from "../../ui/alert";
-import { CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { BlockItemGeral } from "./book-home/block-item-geral";
-import { HeaderResult } from "../header-results";
-import { GraficoPatente } from "./patent-home/grafico-patent";
-import { Switch } from "../../ui/switch";
+import { useContext, useMemo, useState } from "react"
+import { UserContext } from "../../context/context"
+import { Skeleton } from "../ui/skeleton"
+import { HeaderResult } from "../homepage/header-results"
+import { Alert } from "../ui/alert"
+import { CardContent, CardHeader, CardTitle } from "../ui/card"
+import { Code } from "lucide-react"
+import { FilterYearPopUp } from "../popup/filters-year-popup"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
+import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home"
+import { ChartBar, Rows, SquaresFour, StripeLogo } from "phosphor-react"
+import { Switch } from "../ui/switch"
+import { Button } from "../ui/button"
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import { BlockItemGeral } from "../homepage/categorias/book-home/block-item-geral"
+import { TableReseracherMarcasPopup } from "../popup/columns/producoes-tecnicas/table-marcas-popup"
 
 type Patente = {
     id: string,
-    grant_date: string,
     title: string,
     year: string,
-    financing: string,
-    project_name: string
     name:string
     }
 
@@ -33,7 +27,7 @@ type Patente = {
         qualis: string[]
       }
 
-export function PatentHome() {
+export function BrandHome() {
     const [publicacoes, setPublicacoes] = useState<Patente[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')
     const [loading, isLoading] = useState(false)
@@ -50,7 +44,7 @@ export function PatentHome() {
     const {urlGeral, valoresSelecionadosExport} = useContext(UserContext)
     const [distinct, setDistinct] = useState(false)
 
-    let urlTermPublicacoes = `${urlGeral}patent_production_researcher?researcher_id=&year=${yearString}&term=${valoresSelecionadosExport}&distinct=${distinct ? '1' : '0'}`;
+    let urlTermPublicacoes = `${urlGeral}brand_production_researcher?researcher_id=&year=${yearString}&distinct=${distinct ? '1' : '0'}`;
   
     console.log(urlTermPublicacoes)
     useMemo(() => {
@@ -87,13 +81,13 @@ export function PatentHome() {
     return(
         <div className="grid grid-cols-1 gap-4 pb-16 ">
           <HeaderResult/>
-             <div className="mt-4">
+             <div className="mt-4 ">
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Total de patentes
+                      Total de marcas
                     </CardTitle>
-                    <Copyright className="h-4 w-4 text-muted-foreground" />
+                    <StripeLogo className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{publicacoes.length}</div>
@@ -104,15 +98,15 @@ export function PatentHome() {
                   </Alert>
              </div>
 
-             <div className="mt-6">
-     <FilterYearPopUp
-        onFilterUpdate={handleResearcherUpdate} />
-     </div>
+          <div className="mt-6">
+          <FilterYearPopUp
+                onFilterUpdate={handleResearcherUpdate}/>
+          </div>
 
 <Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
                 <div className="flex ">
-                <HeaderResultTypeHome title="Gráfico de quantidade total de patentes" icon={<ChartBar size={24} className="text-gray-400" />}>
+                <HeaderResultTypeHome title="Gráfico de quantidade total de marcas" icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
                     <AccordionTrigger>
                     
@@ -122,7 +116,9 @@ export function PatentHome() {
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
-                     <GraficoPatente publicacoes={publicacoes}/>
+                    <div>
+
+                    </div>
                     )}
                     </AccordionContent>
                 </AccordionItem>
@@ -133,13 +129,13 @@ export function PatentHome() {
                 <div className="flex ">
                 <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
-            <Copyright size={24} className="text-gray-400" />
-            <p className=" font-medium"> Patentes</p>
+            <StripeLogo size={24} className="text-gray-400" />
+            <p className=" font-medium"> Marcas</p>
             </div>
 
             <div className="flex gap-3 mr-3  items-center h-full">
             <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
-                        <p>Patentes:</p>
+                        <p>Marcas:</p>
                         Iguais
                     <Switch
                      checked={distinct}
@@ -191,7 +187,7 @@ export function PatentHome() {
                           <BlockItemGeral
                           articles={publicacoes}
                           distinct={distinct}
-                          type={'patente'}
+                          type={'marca'}
                           />
                          )
                       )
@@ -200,9 +196,9 @@ export function PatentHome() {
                         
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
-                        <TableReseracherPatentesPopup
-                        patentes={publicacoes}
-                        />
+                     <TableReseracherMarcasPopup
+                                         livros={publicacoes}
+                                       />
                       )
                     )}
                     </AccordionContent>

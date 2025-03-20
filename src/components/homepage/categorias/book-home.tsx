@@ -149,8 +149,10 @@ console.log(urlTermCap)
         </Alert>
       </div>
 
-      <FilterYearPopUp
+     <div className="mt-6">
+     <FilterYearPopUp
         onFilterUpdate={handleResearcherUpdate} />
+     </div>
 
       <Accordion type="single" collapsible defaultValue="item-1">
         <AccordionItem value="item-1" >
