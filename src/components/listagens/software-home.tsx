@@ -14,6 +14,7 @@ import { Button } from "../ui/button"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { BlockItemGeral } from "../homepage/categorias/book-home/block-item-geral"
 import { TableReseracherMarcasPopup } from "../popup/columns/producoes-tecnicas/table-marcas-popup"
+import { GraficoSoftware } from "./graficos/grafico-software"
 
 type Patente = {
     id: string,
@@ -116,9 +117,7 @@ export function SoftwareHome() {
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
-                    <div>
-
-                    </div>
+                     <GraficoSoftware software={publicacoes}  />
                     )}
                     </AccordionContent>
                 </AccordionItem>

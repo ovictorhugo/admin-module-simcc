@@ -497,7 +497,12 @@ export function SearchModal() {
     }
   }, [isModalOpen]);  // Este efeito será executado sempre que isModalOpen mudar
 
-
+  const normalizeTerm = (term: string) => 
+    term
+      .normalize("NFD") // Separa acentos das letras
+      .replace(/[\u0300-\u036f]/g, "") // Remove acentos
+      .replace(/[^\w\s]/gi, "") // Remove caracteres especiais
+      .toLowerCase(); // Converte para minúsculas
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -701,15 +706,15 @@ export function SearchModal() {
                 )}
 
 {(filteredItems.filter(item => item.type_ === 'NAME').length !== 0) && (
-  <div className="">
+  <div>
     <p className="uppercase font-medium text-xs mb-3">Nome</p>
     <div className="flex flex-wrap gap-3">
       {filteredItems
         .filter(item => item.type_ === 'NAME')
-        // Remove duplicatas baseadas no 'term'
+        // Remove duplicatas baseadas no 'term' normalizado
         .filter((value, index, self) => 
           index === self.findIndex((t) => (
-            t.term === value.term // Verifica se o 'term' é único
+            normalizeTerm(t.term) === normalizeTerm(value.term)
           ))
         )
         .slice(0, 5)
@@ -717,7 +722,7 @@ export function SearchModal() {
           <div 
             key={index} 
             onClick={() => handlePesquisa(props.term, props.type_)} 
-            className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} 
+            className="flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs"
           >
             {props.term}
           </div>

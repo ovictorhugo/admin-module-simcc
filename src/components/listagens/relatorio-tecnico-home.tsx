@@ -4,7 +4,7 @@ import { Skeleton } from "../ui/skeleton"
 import { HeaderResult } from "../homepage/header-results"
 import { Alert } from "../ui/alert"
 import { CardContent, CardHeader, CardTitle } from "../ui/card"
-import { Code } from "lucide-react"
+import { Briefcase, Code, Files } from "lucide-react"
 import { FilterYearPopUp } from "../popup/filters-year-popup"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home"
@@ -14,13 +14,16 @@ import { Button } from "../ui/button"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { BlockItemGeral } from "../homepage/categorias/book-home/block-item-geral"
 import { TableReseracherMarcasPopup } from "../popup/columns/producoes-tecnicas/table-marcas-popup"
-import { GraficoMarca } from "./graficos/grafico-marca"
+import { GraficoTrabalhoEvento } from "../popup/graficos/grafico-trabalho-evento"
+import { GraficoRelatorio } from "../popup/graficos/grafico-relatório"
 
 type Patente = {
-    id: string,
-    title: string,
-    year: string,
-    name:string
+  id: string,
+  grant_date: string,
+  title: string,
+  year: string,
+  financing: string,
+  project_name: string
     }
 
     type Filter = {
@@ -28,7 +31,7 @@ type Patente = {
         qualis: string[]
       }
 
-export function BrandHome() {
+export function RelatorioTecnicoHome() {
     const [publicacoes, setPublicacoes] = useState<Patente[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')
     const [loading, isLoading] = useState(false)
@@ -45,7 +48,7 @@ export function BrandHome() {
     const {urlGeral, valoresSelecionadosExport} = useContext(UserContext)
     const [distinct, setDistinct] = useState(false)
 
-    let urlTermPublicacoes = `${urlGeral}brand_production_researcher?researcher_id=&year=${yearString}&distinct=${distinct ? '1' : '0'}`;
+    let urlTermPublicacoes = `${urlGeral}researcher_report?researcher_id=&year=${yearString}&distinct=${distinct ? '1' : '0'}`;
   
     console.log(urlTermPublicacoes)
     useMemo(() => {
@@ -86,9 +89,9 @@ export function BrandHome() {
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Total de marcas
+                      Total de relatórios técnicos
                     </CardTitle>
-                    <StripeLogo className="h-4 w-4 text-muted-foreground" />
+                    <Files className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{publicacoes.length}</div>
@@ -107,7 +110,7 @@ export function BrandHome() {
 <Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
                 <div className="flex ">
-                <HeaderResultTypeHome title="Gráfico de quantidade total de marcas" icon={<ChartBar size={24} className="text-gray-400" />}>
+                <HeaderResultTypeHome title="Gráfico de quantidade total de relatórios técnicos" icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
                     <AccordionTrigger>
                     
@@ -117,7 +120,9 @@ export function BrandHome() {
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
-                     <GraficoMarca  marca={publicacoes} />
+                     <GraficoRelatorio
+                                      publicacoes={publicacoes}
+                                    />
                     )}
                     </AccordionContent>
                 </AccordionItem>
@@ -128,13 +133,13 @@ export function BrandHome() {
                 <div className="flex ">
                 <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
-            <StripeLogo size={24} className="text-gray-400" />
-            <p className=" font-medium"> Marcas</p>
+            <Files size={24} className="text-gray-400" />
+            <p className=" font-medium"> Relatórios técnicos</p>
             </div>
 
             <div className="flex gap-3 mr-3  items-center h-full">
             <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
-                        <p>Marcas:</p>
+                        <p>Relatórios técnicos:</p>
                         Iguais
                     <Switch
                      checked={distinct}
@@ -186,7 +191,7 @@ export function BrandHome() {
                           <BlockItemGeral
                           articles={publicacoes}
                           distinct={distinct}
-                          type={'marca'}
+                          type={'relatorio-tecnico'}
                           />
                          )
                       )

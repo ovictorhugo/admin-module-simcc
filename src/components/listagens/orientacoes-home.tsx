@@ -4,23 +4,28 @@ import { Skeleton } from "../ui/skeleton"
 import { HeaderResult } from "../homepage/header-results"
 import { Alert } from "../ui/alert"
 import { CardContent, CardHeader, CardTitle } from "../ui/card"
-import { Code } from "lucide-react"
+import { BookOpenText, Code } from "lucide-react"
 import { FilterYearPopUp } from "../popup/filters-year-popup"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home"
-import { ChartBar, Rows, SquaresFour, StripeLogo } from "phosphor-react"
+import { ChartBar, Rows, SquaresFour, StripeLogo, Student } from "phosphor-react"
 import { Switch } from "../ui/switch"
 import { Button } from "../ui/button"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { BlockItemGeral } from "../homepage/categorias/book-home/block-item-geral"
 import { TableReseracherMarcasPopup } from "../popup/columns/producoes-tecnicas/table-marcas-popup"
-import { GraficoMarca } from "./graficos/grafico-marca"
+import { GraficoTextoRevista } from "../popup/graficos/grafico-texto-revista"
+import { GraficoOrientacoes } from "../popup/graficos/grafico-orientacoes"
 
 type Patente = {
-    id: string,
-    title: string,
-    year: string,
-    name:string
+
+  id: string,
+  nature: string,
+  oriented: string,
+  status: string,
+  title: string,
+  type: string,
+  year: string
     }
 
     type Filter = {
@@ -28,7 +33,7 @@ type Patente = {
         qualis: string[]
       }
 
-export function BrandHome() {
+export function OrientacoesHome() {
     const [publicacoes, setPublicacoes] = useState<Patente[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')
     const [loading, isLoading] = useState(false)
@@ -45,7 +50,7 @@ export function BrandHome() {
     const {urlGeral, valoresSelecionadosExport} = useContext(UserContext)
     const [distinct, setDistinct] = useState(false)
 
-    let urlTermPublicacoes = `${urlGeral}brand_production_researcher?researcher_id=&year=${yearString}&distinct=${distinct ? '1' : '0'}`;
+    let urlTermPublicacoes = `${urlGeral}guidance_researcher?researcher_id=&year=${yearString}`;
   
     console.log(urlTermPublicacoes)
     useMemo(() => {
@@ -86,9 +91,9 @@ export function BrandHome() {
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Total de marcas
+                      Total de orientações
                     </CardTitle>
-                    <StripeLogo className="h-4 w-4 text-muted-foreground" />
+                    <Student className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{publicacoes.length}</div>
@@ -107,7 +112,7 @@ export function BrandHome() {
 <Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
                 <div className="flex ">
-                <HeaderResultTypeHome title="Gráfico de quantidade total de marcas" icon={<ChartBar size={24} className="text-gray-400" />}>
+                <HeaderResultTypeHome title="Gráfico de quantidade total de orientações" icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
                     <AccordionTrigger>
                     
@@ -117,7 +122,9 @@ export function BrandHome() {
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
-                     <GraficoMarca  marca={publicacoes} />
+                    <GraficoOrientacoes
+                                    livros={publicacoes}
+                                  />
                     )}
                     </AccordionContent>
                 </AccordionItem>
@@ -128,23 +135,12 @@ export function BrandHome() {
                 <div className="flex ">
                 <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
-            <StripeLogo size={24} className="text-gray-400" />
-            <p className=" font-medium"> Marcas</p>
+            <Student size={24} className="text-gray-400" />
+            <p className=" font-medium"> Orientações</p>
             </div>
 
             <div className="flex gap-3 mr-3  items-center h-full">
-            <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
-                        <p>Marcas:</p>
-                        Iguais
-                    <Switch
-                     checked={distinct}
-                     onCheckedChange={(value) => setDistinct(value)}
-
-                />
-
-                Distintas
-                    </div>
-
+          
             <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu == 'block' ? 'ghost' : 'outline' } size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />
                         </Button>
@@ -186,7 +182,7 @@ export function BrandHome() {
                           <BlockItemGeral
                           articles={publicacoes}
                           distinct={distinct}
-                          type={'marca'}
+                          type={'orientacoes'}
                           />
                          )
                       )

@@ -28,6 +28,12 @@ import { BrandHome } from "./brand-home";
 import { MagazineHome } from "./magazine-home";
 import { WorkEventHome } from "./work-event-home";
 import { TextoRevistaHome } from "./texto-revista";
+import { ResearchersHomeListagens } from "./researchers-home";
+import { BolsistasHome } from "./bolsistas-home";
+import { RelatorioTecnicoHome } from "./relatorio-tecnico-home";
+import { SpeakerHome } from "../homepage/categorias/speaker-home";
+import { ProjetoPesquisaHome } from "./projeto-pesquisa-home";
+import { OrientacoesHome } from "./orientacoes-home";
 type Research = {
     among: number,
     articles: number,
@@ -125,46 +131,26 @@ export function TodosPesquisadores() {
             const [jsonData, setJsonData] = useState<any[]>([]);
 
             let urlPublicacoesPorPesquisador = ''
-            if (value == 'articles-home') {
+            if (value == 'article') {
               urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=&type=ARTICLE&qualis=&qualis=&year=1900`;
-            } else if (value == 'researchers-home') {
-              if (searchType === 'name') {
-                urlPublicacoesPorPesquisador = `${urlGeral}researcherName?name=`;
-              } else if (searchType === 'article') {
-                urlPublicacoesPorPesquisador = `${urlGeral}researcher?terms=&university=&type=ARTICLE&graduate_program_id=`;
-              } else if (searchType === 'book') {
-                urlPublicacoesPorPesquisador = `${urlGeral}researcherBook?term=&university=&type=BOOK&graduate_program_id=`; //
-              } else if (searchType === 'area') {
-                urlPublicacoesPorPesquisador = `${urlGeral}researcherArea_specialty?area_specialty=&university=&graduate_program_id=`;
-              } else if (searchType === 'speaker') {
-                urlPublicacoesPorPesquisador = `${urlGeral}researcherParticipationEvent?term=&university=&graduate_program_id=`; //
-              } else if (searchType === 'patent') {
-                urlPublicacoesPorPesquisador = `${urlGeral}researcherPatent?term=&graduate_program_id=&university=`;
-              } else if (searchType === 'abstract') {
-                urlPublicacoesPorPesquisador = `${urlGeral}researcher?terms=&university=&type=ABSTRACT&graduate_program_id=`;
-              }
-            } else if (value == 'speaker-home') {
+            } else if (value == 'pesquisadores') {
+              urlPublicacoesPorPesquisador = `${urlGeral}researcherName?name=`;
+            } else if (value == 'speaker') {
               urlPublicacoesPorPesquisador = `${urlGeral}pevent_researcher?researcher_id=&year=1900&term=&nature=`
-            } else if (value == 'institutions-home') {
-              if (searchType == 'article') {
-                urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=&university=&type=ARTICLE`
-              } else if (searchType == 'speaker') {
-                urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=&university=&type=SPEAKER`
-              } else if (searchType == 'patent') {
-                urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=&university=&type=PATENT`
-              } else if (searchType == 'book') {
-                urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=&university=&type=BOOK`
-              } else if (searchType == 'abstract') {
-                urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=&university=&type=ABSTRACT`
-              } else if (searchType == 'area') {
-                urlPublicacoesPorPesquisador = `${urlGeral}institutionFrequenci?terms=&university=&type=AREA`
-              } 
-            } else if (value == 'patent-home') {
+            } else if (value == 'patent') {
               urlPublicacoesPorPesquisador = `${urlGeral}patent_production_researcher?researcher_id=&year=1900&term=&distinct=`
-            } else if (value == 'book-home') {
+            } else if (value == 'book') {
               urlPublicacoesPorPesquisador = `${urlGeral}book_production_researcher?researcher_id=&year=1900&term=&distinct=0`
           
               urlPublicacoesPorPesquisador = `${urlGeral}book_chapter_production_researcher?researcher_id=&year=1900&term=&distinct=0`
+            } else if (value == 'bolsistas') {
+              urlPublicacoesPorPesquisador = `${urlGeral}/researcher/foment`
+            } else if (value == 'software') {
+              urlPublicacoesPorPesquisador = `${urlGeral}software_production_researcher?researcher_id=&year=1900&distinct=0`
+            }  else if (value == 'brand') {
+              urlPublicacoesPorPesquisador = `${urlGeral}brand_production_researcher?researcher_id=&year=1900&distinct=0`;
+            }  else if (value == 'relatorio-tecnico') {
+              urlPublicacoesPorPesquisador = `${urlGeral}researcher_report?researcher_id=&year=1900&distinct=0`
             }
 
 
@@ -376,13 +362,37 @@ export function TodosPesquisadores() {
 
             <ScrollArea className="h-full">
             <div className="px-8">
+
+            <TabsContent value="pesquisadores">
+            <ResearchersHomeListagens />
+  </TabsContent>
+
+  <TabsContent value="bolsistas">
+            <BolsistasHome />
+  </TabsContent>
        
             <TabsContent value="article">
             <ArticlesHome />
   </TabsContent>
 
+  <TabsContent value="research-project">
+            <ProjetoPesquisaHome />
+  </TabsContent>
+
   <TabsContent value="book">
             <BookHome />
+  </TabsContent>
+
+    <TabsContent value="relatorio-tecnico">
+            <RelatorioTecnicoHome />
+  </TabsContent>
+
+  <TabsContent value="speaker">
+            <SpeakerHome />
+  </TabsContent>
+
+  <TabsContent value="orientacoes">
+            <OrientacoesHome />
   </TabsContent>
 
   <TabsContent value="patent">

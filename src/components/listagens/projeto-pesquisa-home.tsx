@@ -4,7 +4,7 @@ import { Skeleton } from "../ui/skeleton"
 import { HeaderResult } from "../homepage/header-results"
 import { Alert } from "../ui/alert"
 import { CardContent, CardHeader, CardTitle } from "../ui/card"
-import { Code } from "lucide-react"
+import { Code, FolderKanban } from "lucide-react"
 import { FilterYearPopUp } from "../popup/filters-year-popup"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home"
@@ -14,13 +14,48 @@ import { Button } from "../ui/button"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { BlockItemGeral } from "../homepage/categorias/book-home/block-item-geral"
 import { TableReseracherMarcasPopup } from "../popup/columns/producoes-tecnicas/table-marcas-popup"
+import { GraficoProjetoPesquisa } from "../popup/graficos/grafico-projeto-pesquisa"
+import { TableReseracherProject } from "../popup/columns/table-projetos-pesquisa"
 
 type Patente = {
-    id: string,
-    title: string,
-    year: string,
-    name:string
+  agency_code: string
+  agency_name: string
+  nature: string
+  description: string
+  end_year: string
+  id: string
+  number_academic_masters: string
+  number_phd: string
+  number_specialists: string
+  number_undergraduates: string
+  project_name: string
+  start_year: string
+  status: string
+  researcher_id: string
+  production: Production[]
+  foment: Forment[]
+  components: Components[]
+  researcher_name: string
     }
+
+    interface Components {
+      citations: string
+      lattes_id: string
+      name: string
+    }
+    
+    interface Production {
+    
+      title: string
+      type: string
+    }
+    
+    interface Forment {
+      agency_code: string
+      agency_name: string
+      nature: string
+    }
+    
 
     type Filter = {
         year: number[]
@@ -44,7 +79,7 @@ export function ProjetoPesquisaHome() {
     const {urlGeral, valoresSelecionadosExport} = useContext(UserContext)
     const [distinct, setDistinct] = useState(false)
 
-    let urlTermPublicacoes = `${urlGeral}brand_production_researcher?researcher_id=&year=${yearString}&distinct=${distinct ? '1' : '0'}`;
+    let urlTermPublicacoes = `${urlGeral}researcher_research_project?researcher_id=&term=&year=${yearString}&distinct=${distinct ? '1' : '0'}`;
   
     console.log(urlTermPublicacoes)
     useMemo(() => {
@@ -85,9 +120,9 @@ export function ProjetoPesquisaHome() {
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Total de marcas
+                      Total de projetos de pesquisa
                     </CardTitle>
-                    <StripeLogo className="h-4 w-4 text-muted-foreground" />
+                    <FolderKanban className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{publicacoes.length}</div>
@@ -106,7 +141,7 @@ export function ProjetoPesquisaHome() {
 <Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
                 <div className="flex ">
-                <HeaderResultTypeHome title="Gráfico de quantidade total de marcas" icon={<ChartBar size={24} className="text-gray-400" />}>
+                <HeaderResultTypeHome title="Gráfico de quantidade total de novos projetos de pesquisa" icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
                     <AccordionTrigger>
                     
@@ -116,9 +151,9 @@ export function ProjetoPesquisaHome() {
                     {loading ? (
                       <Skeleton className="w-full rounded-md h-[300px]"/>
                     ):(
-                    <div>
-
-                    </div>
+                     <GraficoProjetoPesquisa
+                                   publicacoes={publicacoes}
+                                 />
                     )}
                     </AccordionContent>
                 </AccordionItem>
@@ -129,8 +164,8 @@ export function ProjetoPesquisaHome() {
                 <div className="flex ">
                 <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
-            <StripeLogo size={24} className="text-gray-400" />
-            <p className=" font-medium"> Marcas</p>
+            <FolderKanban size={24} className="text-gray-400" />
+            <p className=" font-medium"> Projetos de pesquisa</p>
             </div>
 
             <div className="flex gap-3 mr-3  items-center h-full">
@@ -187,7 +222,7 @@ export function ProjetoPesquisaHome() {
                           <BlockItemGeral
                           articles={publicacoes}
                           distinct={distinct}
-                          type={'marca'}
+                          type={'research-project'}
                           />
                          )
                       )
@@ -196,8 +231,8 @@ export function ProjetoPesquisaHome() {
                         
                         <Skeleton className="w-full rounded-md h-[400px]"/>
                       ):(
-                     <TableReseracherMarcasPopup
-                                         livros={publicacoes}
+                     <TableReseracherProject
+                                         projetos={publicacoes}
                                        />
                       )
                     )}

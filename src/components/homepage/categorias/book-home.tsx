@@ -312,7 +312,7 @@ console.log(urlTermCap)
                 ) : (
                   <BlockItemGeral
                     articles={capLivros}
-                    distinct={distinct}
+                    distinct={distinct2}
                     type={'capLivro'}
                   />
                 )

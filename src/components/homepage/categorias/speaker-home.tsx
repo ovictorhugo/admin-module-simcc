@@ -136,7 +136,7 @@ console.log(urlTermPublicacoes)
               <div className="flex gap-3 mr-3  items-center h-full">
 
 
-                <Button className="hidden md:block" onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                <Button className="hidden md:flex" onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
                   <Rows size={16} className=" whitespace-nowrap" />
                 </Button>
 
