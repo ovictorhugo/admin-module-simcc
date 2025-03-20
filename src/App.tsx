@@ -70,6 +70,7 @@ import { TermosUso } from './pages/TermosUso';
 import { AboutPage } from './pages/About';
 import useWindowResize from './components/use-windows-resize';
 import { Keepo } from './components/dashboard/builder-page/builder-page';
+import { Tv } from './pages/Tv';
 
 
 
@@ -293,6 +294,7 @@ useEffect(() => {
         <Route path='/provimento-cargo' element={<Home/>}/>
 
         <Route path='/listagens' element={<Home/>}/>
+        <Route path='/tv' element={<Tv/>}/>
 
        
         <Route path='/termos-uso' element={<TermosUso/>}/>

@@ -26,6 +26,8 @@ import { PatentHome } from "../homepage/categorias/patent-home";
 import { SoftwareHome } from "./software-home";
 import { BrandHome } from "./brand-home";
 import { MagazineHome } from "./magazine-home";
+import { WorkEventHome } from "./work-event-home";
+import { TextoRevistaHome } from "./texto-revista";
 type Research = {
     among: number,
     articles: number,
@@ -397,6 +399,15 @@ export function TodosPesquisadores() {
 
   <TabsContent value="magazine">
             <MagazineHome />
+  </TabsContent>
+
+  
+  <TabsContent value="work-event">
+            <WorkEventHome />
+  </TabsContent>
+
+  <TabsContent value="texto-revista">
+            <TextoRevistaHome />
   </TabsContent>
               </div>
            

@@ -4,7 +4,7 @@ import { Skeleton } from "../ui/skeleton"
 import { HeaderResult } from "../homepage/header-results"
 import { Alert } from "../ui/alert"
 import { CardContent, CardHeader, CardTitle } from "../ui/card"
-import { Code } from "lucide-react"
+import { BookOpenText, Code } from "lucide-react"
 import { FilterYearPopUp } from "../popup/filters-year-popup"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home"
@@ -91,7 +91,7 @@ export function TextoRevistaHome() {
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Total de marcas
+                      Total de textos em revista
                     </CardTitle>
                     <StripeLogo className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
@@ -135,13 +135,13 @@ export function TextoRevistaHome() {
                 <div className="flex ">
                 <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
-            <StripeLogo size={24} className="text-gray-400" />
-            <p className=" font-medium"> Marcas</p>
+            <BookOpenText size={24} className="text-gray-400" />
+            <p className=" font-medium"> Textos em revistas</p>
             </div>
 
             <div className="flex gap-3 mr-3  items-center h-full">
             <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
-                        <p>Marcas:</p>
+                        <p>Texto em revistas:</p>
                         Iguais
                     <Switch
                      checked={distinct}
@@ -193,7 +193,7 @@ export function TextoRevistaHome() {
                           <BlockItemGeral
                           articles={publicacoes}
                           distinct={distinct}
-                          type={'marca'}
+                          type={'texto-revista'}
                           />
                          )
                       )

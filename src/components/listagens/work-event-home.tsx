@@ -4,7 +4,7 @@ import { Skeleton } from "../ui/skeleton"
 import { HeaderResult } from "../homepage/header-results"
 import { Alert } from "../ui/alert"
 import { CardContent, CardHeader, CardTitle } from "../ui/card"
-import { Code } from "lucide-react"
+import { Briefcase, Code } from "lucide-react"
 import { FilterYearPopUp } from "../popup/filters-year-popup"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home"
@@ -16,10 +16,16 @@ import { BlockItemGeral } from "../homepage/categorias/book-home/block-item-gera
 import { TableReseracherMarcasPopup } from "../popup/columns/producoes-tecnicas/table-marcas-popup"
 
 type Patente = {
-    id: string,
-    title: string,
-    year: string,
-    name:string
+  authors: string;
+  homepage: string;
+  language: string;
+  means_divulgation: string;
+  nature: string;
+  relevance: boolean;
+  scientific_divulgation: boolean;
+  title: string;
+  title_en: string;
+  year_: string;
     }
 
     type Filter = {
@@ -44,7 +50,7 @@ export function WorkEventHome() {
     const {urlGeral, valoresSelecionadosExport} = useContext(UserContext)
     const [distinct, setDistinct] = useState(false)
 
-    let urlTermPublicacoes = `${urlGeral}brand_production_researcher?researcher_id=&year=${yearString}&distinct=${distinct ? '1' : '0'}`;
+    let urlTermPublicacoes = `${urlGeral}researcher_production/events?researcher_id=&year=${yearString}&distinct=${distinct ? '1' : '0'}`;
   
     console.log(urlTermPublicacoes)
     useMemo(() => {
@@ -85,9 +91,9 @@ export function WorkEventHome() {
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Total de marcas
+                      Total de trabalhos em eventos
                     </CardTitle>
-                    <StripeLogo className="h-4 w-4 text-muted-foreground" />
+                    <Briefcase className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{publicacoes.length}</div>
@@ -106,7 +112,7 @@ export function WorkEventHome() {
 <Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
                 <div className="flex ">
-                <HeaderResultTypeHome title="Gráfico de quantidade total de marcas" icon={<ChartBar size={24} className="text-gray-400" />}>
+                <HeaderResultTypeHome title="Gráfico de quantidade total de trabalhos em eventos" icon={<ChartBar size={24} className="text-gray-400" />}>
                         </HeaderResultTypeHome>
                     <AccordionTrigger>
                     
@@ -129,13 +135,13 @@ export function WorkEventHome() {
                 <div className="flex ">
                 <div className="flex gap-4 w-full justify-between items-center ">
             <div className="flex gap-4 items-center">
-            <StripeLogo size={24} className="text-gray-400" />
-            <p className=" font-medium"> Marcas</p>
+            <Briefcase size={24} className="text-gray-400" />
+            <p className=" font-medium"> Trabalhos em eventos</p>
             </div>
 
             <div className="flex gap-3 mr-3  items-center h-full">
             <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
-                        <p>Marcas:</p>
+                        <p>Trabalhos em eventos:</p>
                         Iguais
                     <Switch
                      checked={distinct}
@@ -187,7 +193,7 @@ export function WorkEventHome() {
                           <BlockItemGeral
                           articles={publicacoes}
                           distinct={distinct}
-                          type={'marca'}
+                          type={'work-event'}
                           />
                          )
                       )
