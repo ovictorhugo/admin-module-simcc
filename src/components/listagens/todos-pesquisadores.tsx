@@ -34,6 +34,7 @@ import { RelatorioTecnicoHome } from "./relatorio-tecnico-home";
 import { SpeakerHome } from "../homepage/categorias/speaker-home";
 import { ProjetoPesquisaHome } from "./projeto-pesquisa-home";
 import { OrientacoesHome } from "./orientacoes-home";
+import { TechnicianHome } from "./technician-home";
 type Research = {
     among: number,
     articles: number,
@@ -381,6 +382,10 @@ export function TodosPesquisadores() {
 
   <TabsContent value="book">
             <BookHome />
+  </TabsContent>
+
+  <TabsContent value="tecnicos">
+            <TechnicianHome />
   </TabsContent>
 
     <TabsContent value="relatorio-tecnico">

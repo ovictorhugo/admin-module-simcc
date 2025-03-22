@@ -532,12 +532,11 @@ export function InitialHome() {
   return (
 
     <div className=" items-center  flex flex-col   ">
-      <Helmet>
-        <title>Página Inicial | {version ? ('Conectee') : ('Simcc')}</title>
-        <meta name="description" content={`Página Inicial | ${version ? ('Conectee') : ('Simcc')}`} />
-        <meta name="robots" content="index, follow" />
-      </Helmet>
-
+  <Helmet>
+  <title>{`Página Inicial | ${version ? 'Conectee' : 'Simcc'}`}</title>
+  <meta name="description" content={`Página Inicial | ${version ? 'Conectee' : 'Simcc'}`} />
+  <meta name="robots" content="index, follow" />
+</Helmet>
       <div className="bg-cover  bg-no-repeat bg-center w-full" >
         <div className="h-[0vh] z-[-1] opacity-45">
           <ChartContainer config={chartConfig} className="h-[55vh] w-full">

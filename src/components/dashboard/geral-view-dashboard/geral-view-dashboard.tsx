@@ -238,12 +238,12 @@ export function GeralViewDashboard() {
 
     try {
       // Cria uma query para buscar o documento com o campo 'id' igual ao id fornecido
-      const q = query(collection(db, 'background'), where('id', '==', id));
+      const q = query(collection(db, (version ? ('background'):('background_iapos'))), where('id', '==', id));
       const querySnapshot = await getDocs(q);
 
       querySnapshot.forEach(async (docSnapshot) => {
         // Referência do documento no Firestore
-        const docRef = doc(db, 'background', docSnapshot.id);
+        const docRef = doc(db, (version ? ('background'):('background_iapos')), docSnapshot.id);
         await deleteDoc(docRef);
 
         // Atualiza o estado para remover o item excluído
@@ -265,7 +265,7 @@ export function GeralViewDashboard() {
 
   useEffect(() => {
     const fetchEmails = async () => {
-      const querySnapshot = await getDocs(collection(db, 'background'));
+      const querySnapshot = await getDocs(collection(db, (version ? ('background'):('background_iapos'))));
       const emailsData = querySnapshot.docs.map(doc => ({
         id: doc.data().id,
         titulo: doc.data().titulo,
@@ -461,9 +461,9 @@ export function GeralViewDashboard() {
                 <Alert className=" p-0" x-chunk="dashboard-01-chunk-4" >
                   <CardHeader className="flex flex-row items-center">
                     <div className="grid gap-2">
-                      <CardTitle>Acesso externo</CardTitle>
+                      <CardTitle>Feedbacks</CardTitle>
                       <CardDescription>
-                        Recent transactions from your store.
+                        Lista de relatório de problemas da plataforma
                       </CardDescription>
                     </div>
 
@@ -471,7 +471,7 @@ export function GeralViewDashboard() {
                   <CardContent>
                     <div className="flex items-center gap-3">
                       <Input />
-                      <Button ><Copy size={16} />Copiar link</Button>
+                     
                     </div>
 
                     <div className="w-full my-4 h-[0.5px] border-neutral-200 border-b dark:border-neutral-800"></div>
