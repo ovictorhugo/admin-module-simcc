@@ -20,7 +20,7 @@ import {
 
 
 
-import { Expand, Grip, Laptop, LayoutDashboard, LogIn, Moon, MoreVertical, Sun, User, UserPlus } from "lucide-react";
+import { CircleHelp, Expand, Grip, Laptop, LayoutDashboard, LogIn, Moon, MoreVertical, Sun, User, UserPlus } from "lucide-react";
 import { UserContext } from "../../context/context";
 import { Button } from "../ui/button";
 
@@ -160,6 +160,11 @@ export function Header() {
             </div>
 
             <div className="flex items-center gap-2">
+            <Button onClick={() => onOpen('user-profile-initial')} variant='outline' size="icon" className="h-8 w-8" >
+                      <CircleHelp className="h-4 w-4" />
+                      <span className="sr-only">Dúvidas</span>
+                    </Button>
+                    
               <ModeToggle />
               {version && (
                 <DropdownMenu>
@@ -190,6 +195,8 @@ export function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}
+
+
             </div>
           </div>
         </div>

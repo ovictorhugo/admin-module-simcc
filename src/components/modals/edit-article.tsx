@@ -9,6 +9,7 @@ import { Switch } from "../ui/switch";
 import { Check, Image } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { updateMetadata } from "firebase/storage";
+import { Alert } from "../ui/alert";
 
 export const EditArticle: React.FC = () => {
   const { onClose, isOpen, type: typeModal, data, onUpdate } = useModalSecundary();
@@ -170,17 +171,22 @@ export const EditArticle: React.FC = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
-      <DialogContent className="z-[999999999]">
-        <DialogHeader className="p-4 flex flex-col">
-          <DialogTitle className="text-2xl font-medium max-w-[450px]">
-            <strong className="bg-eng-blue text-white transition duration-500 font-medium">Editar</strong> produção {data.name}
+      <DialogContent className="z-[999999999] p-0">
+      <Alert className="rounded-t-md rounded-b-none bg-eng-blue p-6 border-0 border-b">
+      <DialogTitle className="text-2xl font-medium max-w-[450px] text-white">
+           Editar produção {data.name}
           </DialogTitle>
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-white">
             Você pode atualizar a relevância deste artigo ou fazer upload de arquivos associados.
           </DialogDescription>
+            </Alert>
+
+           
+        <DialogHeader className="p-4 pt-0 flex flex-col">
+        
 
 
-          <div className="flex gap-2 items-center pt-4">
+          <div className="flex gap-2 items-center pt-">
             <Switch checked={relevance} onCheckedChange={handleRelevanceChange} />
             <p className="text-sm">{relevance ? "Remover" : "Adicionar"} artigo às produções relevantes</p>
           </div>

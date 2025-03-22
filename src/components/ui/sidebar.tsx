@@ -694,17 +694,16 @@ const SidebarMenuButton = React.forwardRef<
         children: tooltip,
       }
     }
-
+    const { toggleSidebar, open } = useSidebar()
     return (
       <Tooltip >
-        <TooltipTrigger onClick={() => setItensSelecionados([])} asChild>{button}</TooltipTrigger>
-        <TooltipContent
-          side="right"
-          align="center"
-          className="z-999 relative "
-          hidden={state !== "collapsed" || isMobile}
-          {...tooltip}
-        />
+        <TooltipTrigger className="" onClick={() => {
+          setItensSelecionados([])
+          if(!open) {
+            toggleSidebar()
+          }
+        }} asChild>{button}</TooltipTrigger>
+       
       </Tooltip>
     )
   }

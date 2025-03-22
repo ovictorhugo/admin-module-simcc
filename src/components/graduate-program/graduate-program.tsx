@@ -53,7 +53,7 @@ export interface GraduateProgram {
   sigla: string
   latitude: string
   longitude: string
-  visible: string
+  visible: boolean
   qtd_discente: string
   qtd_colaborador: string
   qtd_permanente: string
@@ -577,7 +577,7 @@ const { onOpen } = useModal();
           {programSelecionado.length == 0 ? (
             <div>
               {simcc && (
-                 <div className="w-full hidden lg:flex h-[calc(100vh-68px)] overflow-hidden items-center absolute   "><BahiaMap/></div>
+                 <div className="w-full hidden xl:flex h-[calc(100vh-68px)] overflow-hidden items-center absolute   "><BahiaMap/></div>
               )}
               <main className="z-[2]  gap-4 md:gap-8 flex flex-col  pt-0 md:pt-0 w-full">
               <div className="bg-cover w-fit pl-8 bg-bottom bg-no-repeat" >
@@ -684,7 +684,7 @@ const { onOpen } = useModal();
          
           </div>
 
-          <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
+          <Alert className={`p-0 mb-6 bg-cover bg-no-repeat bg-center `}  >
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
                     Total de programas
@@ -692,7 +692,7 @@ const { onOpen } = useModal();
                   <GraduationCap className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{graduatePrograms.filter(item => item.visible == "True").length}</div>
+                  <div className="text-2xl font-bold">{graduatePrograms.filter(item => item.visible == true).length}</div>
                   <p className="text-xs text-muted-foreground">
                     encontrados na busca
                   </p>
@@ -747,7 +747,7 @@ const { onOpen } = useModal();
                       >
                         <Masonry gutter="16px" className=" z-[1] w-full">
                           {graduatePrograms
-                            .filter(item => item.visible == "True") // Filtra os itens onde `visible` é `true`
+                            .filter(item => item.visible == true) // Filtra os itens onde `visible` é `true`
                             .map((props, index) => (
                               <ProgramItem
                                 key={index} // Adiciona uma chave para cada item
@@ -778,7 +778,7 @@ const { onOpen } = useModal();
                       loading ? (
                         <Skeleton className="w-full rounded-md h-[400px]" />
                       ) : (
-                        <DataTable columns={columnsGraduate} data={graduatePrograms.filter(item => item.visible == "True")} />
+                        <DataTable columns={columnsGraduate} data={graduatePrograms.filter(item => item.visible == true)} />
                       )
                     )}
                   </AccordionContent>

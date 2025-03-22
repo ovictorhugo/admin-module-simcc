@@ -21,7 +21,7 @@ interface GraduateProgram {
   url_image: string
   region: string
   sigla: string
-  visible: string
+  visible: boolean
   qtd_discente: string
   qtd_colaborador: string
   qtd_permanente: string

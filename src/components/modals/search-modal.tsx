@@ -50,6 +50,7 @@ import { query, where } from 'firebase/firestore';
 import { useLocation, useNavigate } from "react-router-dom";
 import { useModalResult } from "../hooks/use-modal-result";
 import { Play, Trash } from "lucide-react";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 export function SearchModal() {
 
@@ -506,7 +507,7 @@ export function SearchModal() {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
-      <DialogContent tabIndex={0} onKeyDown={handleEnterPress} className="overflow-y-scroll md:overflow-y-auto p-0 border-none min-w-[63vw] px-4 mx-auto md:px-0 bg-transparent dark:bg-transparent">
+      <DialogContent tabIndex={0} onKeyDown={handleEnterPress} className=" p-0 border-none min-w-[63vw] px-4 mx-auto md:px-0 bg-transparent dark:bg-transparent">
 
         <Alert  tabIndex={0} onKeyDown={handleEnterPress} className="h-14 bg-white p-2 min-w-[40%] flex items-center gap-3 justify-between">
           <div className="flex items-center gap-2 w-full flex-1">
@@ -516,8 +517,11 @@ export function SearchModal() {
               <div className='flex gap-2 items-center'>
                 <SelectTypeSearch />
 
-                {itemsSelecionadosPopUp.map((valor, index) => (
-                  <div key={index} className="flex gap-2 items-center">
+              <div className="w-full grid grid-cols-1">
+              <ScrollArea>
+              <div className='flex whitespace-nowrap gap-2 items-center'>
+              {itemsSelecionadosPopUp.map((valor, index) => (
+                  <div key={index} className="flex whitespace-nowrap gap-2 items-center">
                     <div className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs ${searchType == 'article' ? 'bg-blue-500 dark:bg-blue-500' :
                       searchType == 'abstract' ? 'bg-yellow-500 dark:bg-yellow-500 ' :
                         searchType == 'speaker' ? 'bg-orange-500 dark:bg-orange-500' :
@@ -554,15 +558,13 @@ export function SearchModal() {
                   </div>
                 )}
 
-              </div>
-
-              {(showInput || itemsSelecionadosPopUp.length == 0) && (
+{(showInput || itemsSelecionadosPopUp.length == 0) && (
                 <Input
                   onChange={(e) => handleChangeInput(e.target.value)}
                   type="text"
                   ref={inputRef}
                   value={input}
-                  className="border-0  flex-1 p-0 w-auto inline-block"
+                  className="border-0 bg-transparent  flex-1 p-0 w-auto inline-block"
                   onKeyDown={handleTabPress}
                 />
               )}
@@ -584,6 +586,15 @@ export function SearchModal() {
                   <div className=" text-xs text-neutral-500 whitespace-nowrap px-2 ml-3  border border-neutral-500 p-1 rounded-md">Tab ↹</div>
                 )}
               </span>
+              </div>
+
+              <ScrollBar orientation='horizontal'/>
+              </ScrollArea>
+              </div>
+
+              </div>
+
+              
             </div>
           </div>
 

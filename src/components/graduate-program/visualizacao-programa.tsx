@@ -33,7 +33,7 @@ import { GraficoIndiceProdBibli } from "./grafico-indice-producao-bibliografica"
 import { useTheme } from "next-themes";
 import { LogoConecteeWhite } from "../svg/LogoConecteeWhite";
 import { LogoConectee } from "../svg/LogoConectee";
-import { GraduateProgram } from "./graduate-program";
+
 import { Badge } from "../ui/badge";
 import { HomepageProgram } from "./homepage-program";
 import { PainelAdminGraduate } from "./painel-admin-graduate";

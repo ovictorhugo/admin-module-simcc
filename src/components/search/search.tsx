@@ -366,7 +366,7 @@ export function Search() {
 
   return (
     <div className="bottom-0 mt-4 mb-2 w-full flex flex-col max-sm:flex max-sm:flex-row">
-      <div className={` max-sm:px-[5px] w-full`}>
+      <div className={` w-full`}>
         <div className="">
           <div className="flex gap-4 w-full">
             <Alert className="h-14 p-2 flex items-center justify-between">

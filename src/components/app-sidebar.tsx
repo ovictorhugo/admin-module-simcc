@@ -1,5 +1,6 @@
 import * as React from "react"
 import {
+  AArrowUp,
   AudioWaveform,
   BarChartBig,
   Blocks,
@@ -41,12 +42,14 @@ import {
 import { UserContext } from "../context/context"
 import { useContext} from "react";
 import { AccountSwitcher } from "./navigation/user-list"
-import { ChartLine, DotsThree } from "phosphor-react"
+import {  DotsThree } from "phosphor-react"
+import { useModal } from "./hooks/use-modal-store"
 // This is sample data.
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
  const {urlGeral, user, version, loggedIn} = useContext(UserContext)
- 
+ const { onOpen } = useModal()
+
   const data = {
     user: {
       name: user?.display_name || '',
@@ -136,20 +139,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         items: [
           {
             title: "Selecionados",
-            url: "/pesquisadores-selecionados",
-            icon: UserPlus
+            icon: UserPlus,
+            onClick: () => onOpen('pesquisadores-selecionados'), // Chama a função onOpen() ao clicar
           },
-          
           {
             title: "Relatar problema",
-            url: "/relatar-problema",
-            icon: Bug
+            icon: Bug,
+            onClick: () => onOpen( 'relatar-problema'), // Chama a função onOpen() ao clicar
           },
 
           {
-            title: "Índice do pesquisador",
+            title: "Índice pesquisador",
             url: "/indice-pesquisador",
-            icon: ChartLine
+            icon: AArrowUp
           },
           {
             title: "Informações",

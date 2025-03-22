@@ -766,9 +766,9 @@ export function ResearcherPage() {
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent> {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
-                              'Remover pesquisador(a)'
+                              'Remover pesquisador(a) do barema'
                             ) : (
-                              'Adicionar pesquisador(a)'
+                              'Adicionar pesquisador(a) ao barema'
                             )}</TooltipContent>
                           </Tooltip>
                         </TooltipProvider>

@@ -808,7 +808,7 @@ export function ResearchersHome() {
   });
 
   return (
-    <div className="w-full">
+    <div className="w-full h-full">
       <div className="w-full flex gap-4 justify-center">
         <div className="flex-1 gap-4 flex flex-col">
          

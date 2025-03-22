@@ -17,7 +17,7 @@ import {
   Quotes,
 
 } from "phosphor-react";
-import { ArrowRight, BarChartBig, Info, InfoIcon } from "lucide-react";
+import { ArrowRight, BarChartBig, Blocks, Download, GraduationCap, Info, InfoIcon, Link2, List } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 
@@ -520,6 +520,14 @@ export function InitialHome() {
 
   const { onOpen } = useModal()
 
+  const accessLinks = [
+    {  to: '/indicadores', icon: <BarChartBig size={16} />, label: 'Indicadores' },
+    {  to: '/pos-graduacao', icon: < GraduationCap size={16} />, label: 'Pós-graduação' },
+    {  to: '/dicionario', icon: <List size={16} />, label: 'Dicionário' },
+    {  to: '/grupos-pesquisa', icon: <Blocks size={16} />, label: 'Grupos de pesquisa' },
+    {  to: '/listagens', icon: <Download size={16} />, label: 'Listagens' },
+   
+  ];
 
   return (
 
@@ -1133,30 +1141,37 @@ export function InitialHome() {
         "
       >
 
-<Alert className=" bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url(${bg_popup})` }}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Indicadores
-                  </CardTitle>
-                  <InfoIcon className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <div className="flex gap-6 justify-between">
 
-                  <CardContent>
-                    <div className="text-2xl font-bold">Análise quantitativa dos dados da plataforma</div>
-                    <div className="flex gap-3 mt-3">
-
-                     <Link to={`/indicadores`}>
-                     <Button size={'sm'} ><BarChartBig size={16} />Acessar indicadores</Button>
-                     </Link>
-                    </div>
-                  </CardContent>
-
-                  <div></div>
-                </div>
-              </Alert>
-
+<h3 className="text-2xl font-medium ">Talvez você goste disto</h3>
         <BannerHome />
+        <h3 className="text-2xl font-medium ">Principais categorias</h3>
+        <div>
+       
+
+<div className="grid lg:grid-cols-3 gap-4 md:grid-cols-2 mgrid-cols-1 2xl:grid-cols-5">
+  {accessLinks.map(({ to, icon, label }) => 
+     <Link to={to} key={to} >
+  <Alert className="h-[80px] bg-blue-100 border-0 hover:bg-blue-200 text-sm dark:bg-blue-100/50 dark:hover:bg-blue-200/50 transition-all cursor-pointer flex items-center lg:p-8">
+    <div className="flex w-full justify-between items-center gap-3  cursor-pointer">
+      <div>
+      {label}
+      </div>
+
+      <div className="h-10 w-10 rounded-md bg-black/10 flex items-center justify-center">
+      {icon}
+      </div>
+    </div>
+  </Alert>
+</Link>
+  )}
+</div>
+        </div>
+
+        <h3 className="text-2xl font-medium ">Acesso rápido na plataforma</h3>
+
+        <div className="rounded-md w-full bg-eng-blue h-[350px]">
+
+        </div>
 
         <Newsletter />
 

@@ -201,7 +201,7 @@ export function ResultHome() {
 
   const { version } = useContext(UserContext)
   return (
-    <div className="h-full w-full grid grid-cols-1">
+    <div className="h-full w-full flex flex-col">
       <Helmet>
         <title>
           {itemsSelecionados.length === 0
@@ -221,7 +221,7 @@ export function ResultHome() {
       </Helmet>
 
       {(itemsSelecionados.length > 0 || (researcher == 'false')) && (
-        <div className="top-[68px] sticky z-[2] supports-[backdrop-filter]:dark:bg-neutral-900/60 supports-[backdrop-filter]:bg-neutral-50/60 backdrop-blur">
+        <div className="top-[68px] h-fit sticky z-[2] supports-[backdrop-filter]:dark:bg-neutral-900/60 supports-[backdrop-filter]:bg-neutral-50/60 backdrop-blur">
           <div className={`w-full px-8 border-b border-b-neutral-200 dark:border-b-neutral-800`}>
             {isOn && (
               <div className="w-full pt-4  flex justify-between items-center">
@@ -229,8 +229,9 @@ export function ResultHome() {
               </div>
             )}
             <div className={`flex w-full flex-wrap pt-2 justify-between ${isOn ? '' : ''} `}>
-              <ScrollArea>
-                <div className="w-full flex overflow-x-scroll md:overflow-x-auto items-center gap-2 pb-4 md:pb-0">
+             <div className="grid grid-cols-1">
+             <ScrollArea>
+                <div className="w-full flex  items-center gap-2">
                   {!((researcher == 'false' && itemsSelecionados.length == 0) && itemsSelecionados.length == 0) && (
                     <div className={`pb-2 border-b-2 transition-all ${typeResult == 'researchers-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
                       <Button variant={typeResult == 'researchers-home' ? ('ghost') : ('ghost')} className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
@@ -284,6 +285,7 @@ export function ResultHome() {
                 </div>
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
+             </div>
 
               <div className="hidden xl:flex xl:flex-nowrap gap-2">
                 <div className="md:flex md:flex-nowrap gap-2">
@@ -319,13 +321,12 @@ export function ResultHome() {
               <div className="block xl:hidden">
                 <DropdownMenu>
                   <DropdownMenuTrigger>
-                    <Button variant="ghost" className="h-8 w-8 p-0 xl:block">
+                    <Button variant="ghost" size={'icon'} className=" p-0 xl:flex">
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuLabel>Mais opções</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
+                    
                     <Link to={`${urlGeral}dictionary.pdf`} target="_blank">
                     <DropdownMenuItem className="gap-2">
                     
@@ -360,7 +361,7 @@ export function ResultHome() {
 
       <div className="relative">
         {(itemsSelecionados.length > 0 || (researcher == 'false')) ? (
-          <div className="px-8">
+          <div className="px-8 h-full">
             <ResultProvider />
           </div>
         ) : (

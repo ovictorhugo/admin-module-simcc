@@ -43,7 +43,7 @@ import { UserContext } from '../../context/context';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 function BahiaMap() {
-  const { urlGeral, setUrlGeral, simcc } = useContext(UserContext);
+  const { version, urlGeral, setUrlGeral, simcc } = useContext(UserContext);
   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext);
   const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram[]>([]);
 
@@ -105,7 +105,7 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
     const chart = Highmaps.mapChart( {
       chart: {
         renderTo: 'containerone',
-        map: simcc ? brazilStatesGeoJSON : mgStateGeoJSON,
+        map: !version ? brazilStatesGeoJSON : mgStateGeoJSON,
         backgroundColor: 'transparent',
      
         
@@ -165,7 +165,7 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
     };
   }, [graduatePrograms]); // O array vazio garante que o useEffect seja executado apenas uma vez na montagem
 
-  return <div className={` absolute w-[140%] z-[3] h-full left-[-20px]`} id="containerone" />;
+  return <div className={` absolute w-[140%] z-[2] h-full left-[-20px]`} id="containerone" />;
 }
 
 export default BahiaMap;

@@ -4,8 +4,9 @@ import { useContext } from "react";
 import { UserContext } from "../../context/context";
 import { Helmet } from "react-helmet";
 import { Button } from "../ui/button";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 export function PaineisDadosExternos() {
 
@@ -128,6 +129,23 @@ export function PaineisDadosExternos() {
             </div>
 
            <div className="relative ">
+        
+<div className="bg-neutral-100 mb-8 flex gap-3 dark:bg-neutral-800 w-full px-8 py-4 rounded-md">
+                <div>
+                <Info className="h-4 w-4" />
+                </div>
+
+                <div>
+                <AlertTitle>Atenção!</AlertTitle>
+  <AlertDescription>
+    Estes são alguns links de fontes de dados públicos que a plataforma acessa de forma autorizada, além de links para outras plataformas com objetivos semelhantes.
+  </AlertDescription>
+
+                </div>
+
+              </div>
+
+
            <div className="w-full rounded-lg absolute bg-eng-blue h-[270px]"></div>
            </div>
 

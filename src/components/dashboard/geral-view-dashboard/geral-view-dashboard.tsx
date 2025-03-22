@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/context";
 
 import { Button } from "../../ui/button";
-import { ChevronLeft, Copy, GraduationCap, Plus, Trash, User, UserCog } from "lucide-react";
+import { ChevronLeft, Copy, GraduationCap, Link2, Pencil, Plus, Trash, User, UserCog } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "../../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
@@ -41,6 +41,11 @@ type Background = {
   id: string;
   imgURL: string;
   titulo: string
+  descricao:string
+  botao:string
+  link:string 
+  textColor:string 
+  color:string
 };
 
 export function GeralViewDashboard() {
@@ -264,8 +269,12 @@ export function GeralViewDashboard() {
       const emailsData = querySnapshot.docs.map(doc => ({
         id: doc.data().id,
         titulo: doc.data().titulo,
-        imgURL: doc.data().imgURL
-
+        imgURL: doc.data().imgURL,
+        descricao: doc.data().descricao,
+        botao:doc.data().botao,
+        link:doc.data().link,
+        color:doc.data().color,
+        textColor:doc.data().textColor
       }));
 
 
@@ -416,13 +425,29 @@ export function GeralViewDashboard() {
                       <div className="flex flex-col gap-3">
                         {background.map((props) => {
                           return (
-                            <Alert className="flex justify-between group border-0 p-0 h-10 items-center">
+                            <Alert className="flex justify-between group bg-neutral-100 border-0  items-center">
                               <div className="flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-md whitespace-nowrap bg-cover bg-center bg-no-repeat " style={{ backgroundImage: `url(${props.imgURL})` }} />
                                 <p className="max-w-[150px] truncate text-sm text-gray-500">{props.titulo}</p>
                               </div>
+                              
 
-                              <Button onClick={() => deleteItem(props.id)} variant={'destructive'} size={'icon'} className="h-8 w-8 hidden transition-all group-hover:flex"><Trash size={13} /></Button>
+                              <div className="flex gap-2 items-center">
+                             {props.link && (
+                              <Link to={props.link} target="_blank"> <Button variant={'ghost'} className="h-8"><Link2 size={16}/> Acessar link</Button></Link>
+                             )}
+
+                              <Button onClick={() => onOpen('edit-background', {
+                                id:props.id,
+                                titulo:props.titulo,
+                                descricao:props.descricao,
+                                botao:props.botao,
+                                link:props.link,
+                                imgURL:props.imgURL,
+                                color:props.color,
+                                textColor:props.textColor                              })} variant={'ghost'} size={'icon'} className="h-8 w-8 transition-all group-hover:flex"><Pencil size={13} /></Button>
+                              <Button onClick={() => deleteItem(props.id)} variant={'destructive'} size={'icon'} className="h-8 w-8  transition-all group-hover:flex"><Trash size={13} /></Button>
+                              </div>
                             </Alert>
                           )
                         })}

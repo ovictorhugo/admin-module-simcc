@@ -10,6 +10,7 @@ import dt from '../../../../assets/dt.png'
 import pq from '../../../../assets/pq.png'
 import { CardTitle } from "../../../ui/card"
 import { InfiniteMovingCards } from "../../../ui/infinite-moving-cards"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../ui/tooltip"
 
 type Research = {
   among: number,
@@ -59,7 +60,11 @@ interface GraduatePrograms {
 
 export function ResearchItem(props: Research) {
   const { onOpen } = useModal();
-  const { urlGeral, setPesquisadoresSelecionados, pesquisadoresSelecionados } = useContext(UserContext)
+  const { urlGeral, setPesquisadoresSelecionados, permission, pesquisadoresSelecionados } = useContext(UserContext)
+
+  const hasBaremaAvaliacao = permission.some(
+    (perm) => perm.permission === 'criar_barema_avaliacao'
+  );
 
   return (
     <div onClick={() => onOpen('researcher-modal', { name: props.name })} className="flex group min-h-[300px] w-full cursor-pointer">
@@ -70,38 +75,54 @@ export function ResearchItem(props: Research) {
             <div className="z-[1] w-full  p-4 flex gap-3 justify-end">
 
               <div className="mr-auto">
-                <Button
-                  onClick={() => {
-                    // Verifica se o pesquisador já está selecionado pelo nome
-                    if (pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name)) {
-                      // Remove o pesquisador selecionado com o nome correspondente
-                      setPesquisadoresSelecionados(prev => prev.filter(pesquisador => pesquisador.name !== props.name));
-                    } else {
-                      // Adiciona o novo pesquisador selecionado
-                      setPesquisadoresSelecionados(prev => [
-                        ...prev,
-                        {
-                          id: props.id,
-                          name: props.name,
-                          university: props.university,
-                          lattes_id: props.lattes_id,
-                          city: props.city,
-                          area: props.area,
-                          graduation: props.graduation,
-                        }
-                      ]);
-                    }
-                  }}
+              {hasBaremaAvaliacao && (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                            <Button
+  onClick={(event) => {
+    event.stopPropagation(); // Impede a propagação do evento de clique para o contêiner pai
 
-                  size={'icon'} className={`hidden  group-hover:flex transition-all h-8 w-8  ${pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) && 'bg-red-500 hover:bg-red-600 text-white'
-                    }`}>
+    if (pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name)) {
+      setPesquisadoresSelecionados(prev =>
+        prev.filter(pesquisador => pesquisador.name !== props.name)
+      );
+    } else {
+      setPesquisadoresSelecionados(prev => [
+        ...prev,
+        {
+          id: props.id,
+          name: props.name,
+          university: props.university,
+          lattes_id: props.lattes_id,
+          city: props.city,
+          area: props.area,
+          graduation: props.graduation,
+        }
+      ]);
+    }
+  }}
+  size={'icon'}
+  className={`hidden group-hover:flex transition-all h-8 w-8 ${pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) && 'bg-red-500 hover:bg-red-600 text-white'}`}
+>
+  {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
+    <X size={16} />
+  ) : (
+    <Plus size={16} />
+  )}
+</Button>
+                            </TooltipTrigger>
+                            <TooltipContent> {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
+                              'Remover pesquisador(a) do barema'
+                            ) : (
+                              'Adicionar pesquisador(a) ao barema'
+                            )}</TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
+              
 
-                  {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
-                    <X size={16} className="" />
-                  ) : (
-                    <Plus size={16} className="" />
-                  )}
-                </Button>
+
 
                 <div className="flex group-hover:hidden">
                   <div className="flex text-white gap-2 items-center" >

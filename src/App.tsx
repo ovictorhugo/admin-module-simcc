@@ -230,7 +230,20 @@ useEffect(() => {
   );
 
 
+//pesquisadores selcionados
 
+useEffect(() => {
+  // Recupera os pesquisadores do localStorage ao carregar a página
+  const storedPesquisadores = localStorage.getItem("pesquisadoresSelecionados");
+  if (storedPesquisadores) {
+    setPesquisadoresSelecionados(JSON.parse(storedPesquisadores));
+  }
+}, []);
+
+useEffect(() => {
+  // Salva os pesquisadores no localStorage sempre que a lista for alterada
+  localStorage.setItem("pesquisadoresSelecionados", JSON.stringify(pesquisadoresSelecionados));
+}, [pesquisadoresSelecionados]);
  
 
   return (
@@ -289,8 +302,7 @@ useEffect(() => {
         <Route path='/resultados-ia' element={<Home/>}/>
         <Route path='/paines-dados-externos' element={<Home/>}/>
         <Route path='/indice-pesquisador' element={<Home/>}/>
-        <Route path='/relatar-problema' element={<Home/>}/>
-        <Route path='/pesquisadores-selecionados' element={<Home/>}/>
+      
         <Route path='/provimento-cargo' element={<Home/>}/>
 
         <Route path='/listagens' element={<Home/>}/>

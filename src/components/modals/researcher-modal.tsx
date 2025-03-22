@@ -18,7 +18,7 @@ import { useContext } from "react";
 import { UserContext } from "../../context/context";
 
 
-type Research = {
+export type Research = {
   among: number,
   articles: number,
   institution_id:string
@@ -387,6 +387,8 @@ export function ResearcherModal() {
             const isOutdated = monthDifference > 3;
             const isOutdated6 = monthDifference > 6;
 
+            
+
             return (
               <div
                 className="
@@ -475,9 +477,9 @@ export function ResearcherModal() {
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent> {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
-                            'Remover pesquisador(a)'
+                            'Remover pesquisador(a) do barema'
                           ) : (
-                            'Adicionar pesquisador(a)'
+                            'Adicionar pesquisador(a) ao barema'
                           )}</TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
