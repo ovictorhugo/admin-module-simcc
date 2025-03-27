@@ -4,7 +4,7 @@ import {
     DialogHeader,
   } from "../ui/dialog";
 
-  import { Image, LoaderCircle, Plus, Upload, X } from "lucide-react";
+  import { Check, Image, LoaderCircle, Plus, Upload, X } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -14,18 +14,19 @@ import {
 import { ScrollArea } from "../ui/scroll-area";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { storage } from "../../lib/firebase";
 import { v4 as uuidv4 } from 'uuid';
 
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { getFirestore,  collection, addDoc, updateDoc, query, where, getDocs } from 'firebase/firestore';
+import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "firebase/storage";
+import { getFirestore,  collection, addDoc, doc, updateDoc, query, where, getDocs } from 'firebase/firestore';
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useDropzone } from "react-dropzone";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { ColorPicker } from "../ui/color-picker";
+import { UserContext } from "../../context/context";
 
 export function AddBackground() {
   const { onClose, isOpen, type: typeModal, data } = useModal();
@@ -34,7 +35,7 @@ export function AddBackground() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(false);
   const [progress, setProgress] = useState(0);
-  
+  const {version} = useContext(UserContext)
   const [titulo, setTitulo] = useState(data.titulo || '');
   const [descricao, setDescricao] = useState(data.descricao || '');
   const [botao, setBotao] = useState(data.botao || '');
@@ -60,13 +61,13 @@ export function AddBackground() {
         size: uploadedFile.size,
       });
       setSelectedFile(uploadedFile);
-      setTitulo(uploadedFile.name);
+     
     }
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-  
+
     if (!selectedFile) {
       toast("Por favor, selecione a imagem", {
         description: "Nenhuma imagem selecionada",
@@ -77,7 +78,7 @@ export function AddBackground() {
       });
       return;
     }
-  
+
     if (!titulo.trim()) {
       toast("Informe um título para a imagem", {
         description: "O título é obrigatório",
@@ -88,17 +89,18 @@ export function AddBackground() {
       });
       return;
     }
-  
+
     setUploadProgress(true);
-  
+
     try {
       const storageRef = ref(storage, `images/${selectedFile.name}`);
       const uploadTask = uploadBytesResumable(storageRef, selectedFile);
-  
+
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setProgress(progress);
         },
         (error) => {
@@ -116,15 +118,11 @@ export function AddBackground() {
           try {
             const url = await getDownloadURL(uploadTask.snapshot.ref);
             setImgURL(url);
-  
-            const db = getFirestore();
-            const backgroundRef = collection(db, "background");
-            const q = query(backgroundRef, where("id", "==", data.id));
-            const querySnapshot = await getDocs(q);
-  
+
+            const docId = uuidv4();
             const formData = {
-              id: data.id || uuidv4(),
-              titulo,
+              id: data.id || docId,
+              titulo: titulo,
               descricao,
               botao,
               link,
@@ -132,28 +130,19 @@ export function AddBackground() {
               color,
               textColor,
             };
-  
-            if (!querySnapshot.empty) {
-              const docRef = querySnapshot.docs[0].ref;
-              await updateDoc(docRef, formData);
-              toast("Atualizado com sucesso!", {
-                description: "Dados atualizados no banco de dados",
-                action: {
-                  label: "Fechar",
-                  onClick: () => console.log("Undo"),
-                },
-              });
-            } else {
-              await addDoc(backgroundRef, formData);
-              toast("Enviado com sucesso!", {
-                description: "Adicionado ao banco de dados",
-                action: {
-                  label: "Fechar",
-                  onClick: () => console.log("Undo"),
-                },
-              });
-            }
-  
+
+            const db = getFirestore();
+            const backgroundRef = collection(db, (version ? ('background'):('background_iapos')));
+            await addDoc(backgroundRef, formData);
+
+            toast("Enviado com sucesso!", {
+              description: "Adicionado ao banco de dados",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            });
+
             setUploadProgress(false);
             setTitulo("");
             setDescricao("");
@@ -164,11 +153,17 @@ export function AddBackground() {
             setTextColor("#000000");
             setProgress(0);
             onClose();
-
-           
           } catch (error) {
             console.error("Erro ao salvar no Firestore:", error);
             setUploadProgress(false);
+            
+            toast("Erro ao salvar!", {
+              description: "Tente novamnete",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            });
           }
         }
       );
@@ -177,7 +172,103 @@ export function AddBackground() {
       setUploadProgress(false);
     }
   };
+
+
+  const updateImageData = async () => {
+    try {
+      const db = getFirestore();
+      const storage = getStorage();
+      const collectionName = version ? "background" : "background_iapos";
+      const backgroundRef = collection(db, collectionName);
   
+      // Busca o documento pelo campo 'id'
+      const q = query(backgroundRef, where("id", "==", (data.id || '')));
+      const querySnapshot = await getDocs(q);
+  
+      if (querySnapshot.empty) {
+        console.error("Documento não encontrado!");
+        toast("Erro ao atualizar!", {
+          description: "Documento não encontrado",
+          action: {
+            label: "Fechar",
+            onClick: () => console.log("Undo"),
+          },
+        });
+        return;
+      }
+  
+      const docRef = querySnapshot.docs[0].ref;
+      let newImgURL = imgURL; // Mantém o imgURL original, caso não haja um novo arquivo
+  
+      // Verifica se há um novo arquivo para upload
+      if (selectedFile) {
+        setUploadProgress(true);
+        const storageRef = ref(storage, `images/${selectedFile.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+  
+        await new Promise<void>((resolve, reject) => {
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              setProgress(progress);
+            },
+            (error) => {
+              console.error("Erro ao enviar imagem:", error);
+              toast("Erro ao carregar imagem", {
+                description: "Tente novamente",
+                action: {
+                  label: "Fechar",
+                  onClick: () => console.log("Undo"),
+                },
+              });
+              setUploadProgress(false);
+              reject(error);
+            },
+            async () => {
+              newImgURL = await getDownloadURL(uploadTask.snapshot.ref);
+              setImgURL(newImgURL);
+              setUploadProgress(false);
+              resolve();
+            }
+          );
+        });
+      }
+  
+      // Atualiza o documento no Firestore
+      await updateDoc(docRef, {
+        titulo,
+        descricao,
+        botao,
+        link,
+        imgURL: newImgURL, // Usa a nova URL se a imagem foi atualizada
+        color,
+        textColor,
+      });
+  
+      console.log("Documento atualizado com sucesso!");
+  
+      toast("Enviado com sucesso!", {
+        description: "Editado no banco de dados",
+        action: {
+          label: "Fechar",
+          onClick: () => console.log("Undo"),
+        },
+      });
+
+      onClose()
+    } catch (error) {
+      console.error("Erro ao atualizar o documento:", error);
+      toast("Erro ao atualizar!", {
+        description: "Tente novamente",
+        action: {
+          label: "Fechar",
+          onClick: () => console.log("Undo"),
+        },
+      });
+    }
+  };
+
 
     return(
         <Sheet open={isModalOpen} onOpenChange={onClose}>
@@ -319,12 +410,6 @@ export function AddBackground() {
                        </div>
                   </div>
 
-                  {imgURL && (
-                    <div>
-                      
-                    </div>
-                  )}
-
 <div {...getRootProps()} className="border-dashed mb-3 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 ">
                         <input {...getInputProps()} />
                         <div className="p-4  border rounded-md">
@@ -352,9 +437,15 @@ export function AddBackground() {
             
          
 
-            <Button onClick={handleSubmit} className="mt-3 ml-auto flex ">
-            {uploadProgress ? (<LoaderCircle size={16} className="an animate-spin" />):(<Plus size={16} className="" />)}  {uploadProgress ? ('Adicionando background'):('Adicionar background')}  
+           {typeModal == 'add-background' ? (
+             <Button onClick={handleSubmit} className="mt-3 ml-auto flex ">
+             {uploadProgress ? (<LoaderCircle size={16} className="an animate-spin" />):(<Plus size={16} className="" />)}  {uploadProgress ? ('Adicionando background'):('Adicionar background')}  
+           </Button>
+           ):(
+            <Button onClick={() => updateImageData()} className="mt-3 ml-auto flex ">
+            {uploadProgress ? (<LoaderCircle size={16} className="an animate-spin" />):(<Check size={16} className="" />)}  {uploadProgress ? ('Editando background'):('Editar background')}  
           </Button>
+           )}
             </ScrollArea>
           </div>
           </SheetContent>

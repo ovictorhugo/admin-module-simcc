@@ -136,7 +136,7 @@ export function RelatarBug() {
               },
             })
 
-
+onClose()
 
           } else {
 

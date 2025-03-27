@@ -1,42 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Alert } from "../../ui/alert";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../../../components/ui/chart";
+import { Research } from "../../listagens/researchers-home";
 
-interface Docentes {
-  matric: string;
-  inscUFMG: string;
-  nome: string;
-  genero: string;
-  situacao: string;
-  rt: string;
-  clas: string;
-  cargo: string;
-  classe: string;
-  ref: string;
-  titulacao: string;
-  entradaNaUFMG: string;
-  progressao: string;
-  year_charge: string;
-  semester: string;
-}
 
 const chartConfig = {
   line: {
     label: "Progressão",
-    color: "#98A8BA",
+    color: "#004A75",
   },
-} satisfies ChartConfig;
+};
 
-export function GraficoProgressaoDocentes({ docentes }: { docentes: Docentes[] }) {
+export function GraficoProgressaoDocentes({ docentes }: { docentes: Research[] }) {
   const [chartData, setChartData] = useState<{ year: string; count: number }[]>([]);
 
   useEffect(() => {
+    if (!Array.isArray(docentes)) {
+      console.error("The 'docentes' prop is not an array:", docentes);
+      return;
+    }
+
     const counts: { [key: string]: number } = {};
 
     docentes.forEach(docente => {
-      const year = new Date(docente.progressao).getFullYear().toString();
-      counts[year] = (counts[year] || 0) + 1;
+      const date = new Date(docente.progressao);
+      if (!isNaN(date.getTime())) {
+        const year = date.getFullYear().toString();
+        counts[year] = (counts[year] || 0) + 1;
+      }
     });
 
     const data = Object.entries(counts)
@@ -53,12 +45,13 @@ export function GraficoProgressaoDocentes({ docentes }: { docentes: Docentes[] }
     <Alert className="p-0 border-0 h-full">
       <ChartContainer config={chartConfig} className="h-[300px] w-full">
         <ResponsiveContainer>
-          <LineChart data={chartData} margin={{ top: 20, right: 10, left: 20, bottom: 0 }}>
+          <LineChart data={chartData} margin={{ top: 20, right: 10, left: 10, bottom: 0 }}>
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
-           
             <CartesianGrid vertical={false} horizontal={false} />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <Line type="monotone" dataKey="count" stroke={chartConfig.line.color} strokeWidth={2} dot={{ r: 4 }} />
+            <Tooltip cursor={false} content={<ChartTooltipContent />} />
+            <Line type="monotone" dataKey="count" stroke={chartConfig.line.color} strokeWidth={2} dot={{ r: 4 }} >
+               <LabelList dataKey="count" position="top" offset={12} className="fill-foreground" fontSize={12} />
+               </Line>
           </LineChart>
         </ResponsiveContainer>
       </ChartContainer>

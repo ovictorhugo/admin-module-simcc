@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useModalResult } from "../hooks/use-modal-result";
 import { UserContext } from "../../context/context";
 import municipios from '../homepage/categorias/researchers-home/municipios.json';
-import { FadersHorizontal, ListNumbers, MagnifyingGlass, Rows, SquaresFour, UserList } from "phosphor-react";
+import { ChartBar, FadersHorizontal, ListNumbers, MagnifyingGlass, Rows, SquaresFour, UserList } from "phosphor-react";
 import { Button } from "../ui/button";
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../components/ui/accordion";
@@ -39,6 +39,8 @@ import MapaResearcher from "../homepage/categorias/researchers-home/mapa-researc
 import { TableReseracherhome } from "../homepage/categorias/researchers-home/table-reseracher-home";
 import { ResearchersBloco } from "../homepage/categorias/researchers-home/researchers-bloco";
 import { HeaderResult } from "../homepage/header-results";
+import { GraficoBolsistasPQ } from "../dashboard/graficos/grafico-bolsista-produtividade";
+import { GraficoBolsistasDT } from "../dashboard/graficos/grafico-bolsista-tecnologico";
 
 type CityData = {
   nome: string;
@@ -703,23 +705,6 @@ export function BolsistasHome() {
 
 
         }
-
-        // Check OpenAlex data only if no researchers found and OpenAlex is enabled
-        if (data.length === 0 && FinalOpenAlex === 'true') {
-          try {
-            const openAlexResponse = await fetch(urlOpenAlex, {
-              mode: "cors"
-            });
-            const openAlexData = await openAlexResponse.json();
-            if (openAlexData.results?.length > 0) {
-              const firstResult = openAlexData.results[0];
-              setResearcherOpenAlex([firstResult]);
-              setIsOpenAlex(true);
-            }
-          } catch (err) {
-            console.error("OpenAlex fetch error:", err);
-          }
-        }
       } catch (err) {
         console.error("Main data fetch error:", err);
         setLoading(false);
@@ -792,6 +777,9 @@ export function BolsistasHome() {
     researcher: originalResearcher,
     setResearcher,
   });
+
+    const [bolsistas, setBolsistas] = useState<Bolsistas[]>([]);
+  
 
   return (
     <div className="w-full">
@@ -881,6 +869,32 @@ export function BolsistasHome() {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+
+
+             <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex ">
+                          <AccordionItem value="item-1" className="w-full ">
+                            <div className="flex mb-2">
+                              <HeaderResultTypeHome title="Gráficos dos bolsistas CNPq" icon={<ChartBar size={24} className="text-gray-400" />}>
+                              </HeaderResultTypeHome>
+            
+                              <AccordionTrigger>
+            
+                              </AccordionTrigger>
+                            </div>
+                            <AccordionContent className="p-0">
+                              {loading ? (
+                                <Skeleton className="rounded-md w-full h-[300px] " />
+                              ) : (
+                                <div>
+                                <div className="grid gap-8 xl:grid-cols-2">
+                                  <GraficoBolsistasPQ researchers={researcher}/>
+                                  <GraficoBolsistasDT researchers={researcher}/>
+                                </div>
+                                </div>
+                              )}
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
      
 
         

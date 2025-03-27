@@ -71,6 +71,8 @@ import { AboutPage } from './pages/About';
 import useWindowResize from './components/use-windows-resize';
 import { Keepo } from './components/dashboard/builder-page/builder-page';
 import { Tv } from './pages/Tv';
+import { logEvent } from '@firebase/analytics';
+import { analytics } from './lib/firebase';
 
 
 
@@ -245,6 +247,19 @@ useEffect(() => {
   localStorage.setItem("pesquisadoresSelecionados", JSON.stringify(pesquisadoresSelecionados));
 }, [pesquisadoresSelecionados]);
  
+const logPageAccess = (url) => {
+  logEvent(analytics, 'page_view', {
+    page_url: url, // Aqui você pode passar a URL ou outros parâmetros que você queira
+    page_title: document.title, // Também pode passar o título da página
+  });
+};
+
+useEffect(() => {
+  const currentURL = window.location.hostname; // Obtém o domínio da página
+  if (currentURL === "conectee.eng.ufmg.br" || currentURL === "iapos.cimatec.com.br" || currentURL === "simcc.uesc.b") {
+    logPageAccess(currentURL); // Registra o evento de acesso
+  }
+}, []);
 
   return (
     <>

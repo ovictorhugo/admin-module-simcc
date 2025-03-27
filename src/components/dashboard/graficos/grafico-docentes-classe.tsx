@@ -1,99 +1,97 @@
 import React, { useEffect, useState } from "react";
 import { Alert } from "../../ui/alert";
-import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, ChartConfig } from "../../../components/ui/chart";
+import { BarChart, Bar, XAxis, YAxis, LabelList, ResponsiveContainer } from "recharts";
+import { ChartContainer, ChartConfig, ChartTooltip, ChartTooltipContent } from "../../../components/ui/chart";
+import { Research } from "../../listagens/researchers-home";
 
 interface Docentes {
-  matric: string;
-  inscUFMG: string;
+  technician_id: string;
   nome: string;
   genero: string;
-  situacao: string;
+  name: string;
+  deno_sit: string;
   rt: string;
-  clas: string;
-  cargo: string;
   classe: string;
+  cargo: string;
+  nivel: string;
   ref: string;
   titulacao: string;
-  entradaNaUFMG: string;
-  progressao: string;
-  year_charge: string;
+  setor: string;
+  detalhe_setor: string;
+  dting_org: string;
+  data_prog: string;
   semester: string;
 }
 
+// Definição da ordem correta dos cargos
+const cargoOrder = [
+  "PROF TITULAR",
+  "PROFESSOR TITULAR-LIVRE",
+  "PROF ASSOCIADO",
+  "PROF ADJUNTO",
+  "PROF AUXILIAR",
+  "PROF ASSISTENTE",
+
+];
+
 const chartConfig = {
-  "PROF ADJUNTO": {
-    label: "Professor Adjunto",
-    color: "hsl(var(--chart-1))",
-  },
-  "PROF ASSOCIADO": {
-    label: "Professor Associado",
-    color: "hsl(var(--chart-2))",
-  },
-  "PROF TITULAR": {
-    label: "Professor Titular",
-    color: "hsl(var(--chart-3))",
-  },
-  "PROF ASSISTENTE": {
-    label: "Professor Assistente",
-    color: "hsl(var(--chart-4))",
-  },
-  "PROF TITULAR - LIVRE": {
-    label: "Professor Titular - Livre",
-    color: "hsl(var(--chart-5))",
-  },
-  "PROF AUXILIAR": {
-    label: "Professor Auxiliar",
-    color: "hsl(var(--chart-6))",
+  cargo: {
+    label: "Cargos",
+    color: "#559DB6",
   },
 } satisfies ChartConfig;
 
-export function GraficoDocentesClasse({ docentes }: { docentes: Docentes[] }) {
-  const [chartData, setChartData] = useState<{ classe: string; count: number }[]>([]);
+export function GraficoDocentesCargo({ docentes }: { docentes: Research[] }) {
+  const [chartData, setChartData] = useState<{ cargo: string; count: number }[]>([]);
 
   useEffect(() => {
     const counts: { [key: string]: number } = {};
 
-    docentes.forEach(docente => {
-      const classe = docente.classe;
-      counts[classe] = (counts[classe] || 0) + 1;
+    docentes.forEach((docente) => {
+      const cargo = docente.classe;
+      counts[cargo] = (counts[cargo] || 0) + 1;
     });
 
-    const data = Object.entries(counts).map(([classe, count]) => ({
-      classe,
-      count,
-    }));
+    // Criando os dados e garantindo que os cargos sigam a ordem predefinida
+    const data = cargoOrder
+      .map((cargo) => ({
+        cargo,
+        count: counts[cargo] || 0, // Garante que cargos sem docentes apareçam com count 0
+      }))
+      .filter((item) => item.count > 0); // Remove cargos sem contagem
 
     setChartData(data);
   }, [docentes]);
-
-  function getColorForClasse(classe: string) {
-    const colors = {
-      "PROF ADJUNTO": '#FFB74D',
-      "PROF ASSOCIADO": '#64B5F6',
-      "PROF TITULAR": '#81C784',
-      "PROF ASSISTENTE": '#FF8A65',
-      "PROF TITULAR - LIVRE": '#E57373',
-      "PROF AUXILIAR": '#BA68C8',
-    };
-    return colors[classe] || '#000000';
-  }
 
   return (
     <Alert className="p-0 border-0 h-full">
       <ChartContainer config={chartConfig} className="h-[300px] w-full">
         <ResponsiveContainer>
-          <BarChart layout="vertical" data={chartData} margin={{ top: 20, right: 5, left: 30, bottom: 0 }}>
-            <XAxis type="number" tickLine={false}  axisLine={false} />
-            <YAxis type="category" dataKey="classe" tickLine={false} tickMargin={10} axisLine={false} />
-            <CartesianGrid horizontal={false} vertical={true} />
-            <ChartLegend content={<ChartLegendContent />} />
+          <BarChart
+            layout="vertical"
+            data={chartData}
+            margin={{ top: 0, right: 25, left: 30, bottom: 0 }}
+          >
+            <YAxis
+              dataKey="cargo"
+              type="category"
+              tickLine={false}
+              axisLine={false}
+              fontSize={12}
+            />
+            <XAxis type="number" tickLine={false} axisLine={false} fontSize={12} />
+
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-            <Bar dataKey="count" radius={4}>
-              <LabelList dataKey="count" position="right" offset={12} className="fill-foreground" fontSize={12} />
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getColorForClasse(entry.classe)} />
-              ))}
+
+            <Bar dataKey="count" radius={4} fill={chartConfig.cargo.color}>
+              <LabelList
+                dataKey="count"
+                position="right"
+                offset={10}
+                className="fill-foreground"
+                fontSize={12}
+                fill="#919191"
+              />
             </Bar>
           </BarChart>
         </ResponsiveContainer>

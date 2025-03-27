@@ -440,14 +440,24 @@ export function SearchModal() {
   }, [urlBigrama]);
 
   const handleSuggestionClick = (suggestion: string) => {
-    setInput(input + ' ' + suggestion);
+    setInput((prevInput) => {
+      const words = prevInput.trim().split(/\s+/); // Divide corretamente em palavras
+      if (words.length > 0) {
+        words[words.length - 1] = suggestion; // Substitui a última palavra
+      } else {
+        words.push(suggestion); // Caso esteja vazio, adiciona a sugestão
+      }
+      return words.join(' ') + ' '; // Garante um espaço no final
+    });
   };
+  
+  
 
   // Função para lidar com a pressão da tecla Tab
   const handleTabPress = (event: any) => {
     if (event.key === "Tab" && itemsBigrama.length > 0) {
       event.preventDefault(); // Impedir que a tecla Tab mova o foco para o próximo elemento
-      setInput(input + ' ' + itemsBigrama[0].word); // Selecionar a primeira sugestão
+      handleSuggestionClick(itemsBigrama[0].word); // Selecionar a primeira sugestão
     }
   };
 
@@ -514,11 +524,11 @@ export function SearchModal() {
             <Play size={16} className="hidden md:block whitespace-nowrap w-10" />
 
             <div className="flex gap-2 w-full items-center">
-              <div className='flex gap-2 items-center'>
+              <div className='flex gap-2 items-center w-full'>
                 <SelectTypeSearch />
 
-              <div className="w-full grid grid-cols-1">
-              <ScrollArea>
+              <div className="flex flex-1 w-full">
+              <ScrollArea className="max-h-[40px] w-full">
               <div className='flex whitespace-nowrap gap-2 items-center'>
               {itemsSelecionadosPopUp.map((valor, index) => (
                   <div key={index} className="flex whitespace-nowrap gap-2 items-center">
@@ -564,7 +574,7 @@ export function SearchModal() {
                   type="text"
                   ref={inputRef}
                   value={input}
-                  className="border-0 bg-transparent  flex-1 p-0 w-auto inline-block"
+                  className="border-0 w-full bg-transparent max-h-[40px] h-[40px]  flex-1 p-0  inline-block"
                   onKeyDown={handleTabPress}
                 />
               )}
@@ -627,7 +637,7 @@ export function SearchModal() {
 
         </Alert>
 
-        {input.length >= 3 && (
+        {(input.length >= 3 && filteredItems.length != 0) && (
           <Alert className="w-full">
             <ResponsiveMasonry
               columnsCountBreakPoints={{
@@ -742,18 +752,7 @@ export function SearchModal() {
   </div>
 )}
 
-                {!posGrad && (
-                  <div>
-                    <p className="uppercase font-medium text-xs mb-3">OpenAlex</p>
-                    <div className="flex flex-wrap gap-3">
-                      {researcherOpenAlex.slice(0, 5).map((props, index) => (
-                        <div key={index} onClick={() => handlePesquisaOpenAlex(props.term)} className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
-                          <CloudArrowDown size={16} className="" />    {props.term}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                
 
 
               </Masonry>

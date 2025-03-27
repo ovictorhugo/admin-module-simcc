@@ -87,6 +87,11 @@ export function PatentHome() {
     return(
         <div className="grid grid-cols-1 gap-4 pb-16 ">
           <HeaderResult/>
+          <div className="mt-6">
+     <FilterYearPopUp
+        onFilterUpdate={handleResearcherUpdate} />
+     </div>
+
              <div className="mt-4">
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -95,19 +100,27 @@ export function PatentHome() {
                     </CardTitle>
                     <Copyright className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{publicacoes.length}</div>
-                    <p className="text-xs text-muted-foreground">
-                      encontradas na busca
-                    </p>
-                  </CardContent>
+                  <CardContent className="flex justify-between items-end">
+            <div>
+            <div className="text-2xl font-bold">{publicacoes.length}</div>
+            <p className="text-xs text-muted-foreground flex gap-2">
+              encontrados na busca 
+            </p>
+            </div>
+
+            <div className="gap-2 flex items-center h-fit text-xs text-gray-500 dark:text-gray-300">
+  <p>Patentes:</p>
+  <Switch
+    checked={distinct}
+    onCheckedChange={(value) => setDistinct(value)}
+  />
+  <span>{distinct ? "Sem repetição" : "Com repetição"}</span>
+</div>
+          </CardContent>
                   </Alert>
              </div>
 
-             <div className="mt-6">
-     <FilterYearPopUp
-        onFilterUpdate={handleResearcherUpdate} />
-     </div>
+            
 
 <Accordion  type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" >
@@ -138,17 +151,7 @@ export function PatentHome() {
             </div>
 
             <div className="flex gap-3 mr-3  items-center h-full">
-            <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
-                        <p>Patentes:</p>
-                        Iguais
-                    <Switch
-                     checked={distinct}
-                     onCheckedChange={(value) => setDistinct(value)}
 
-                />
-
-                Distintas
-                    </div>
 
             <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu == 'block' ? 'ghost' : 'outline' } size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />

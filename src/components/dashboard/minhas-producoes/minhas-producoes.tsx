@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp, Copyright, File, Files, FolderKanban, Stamp, Ticket } from "lucide-react";
+import { BookOpen, ChevronDown, ChevronUp, Copyright, File, Files, FolderKanban, Stamp, Ticket } from "lucide-react";
 import { ScrollArea, ScrollBar } from "../../ui/scroll-area";
 import { Button } from "../../ui/button";
 import { MagnifyingGlass, Quotes, Student } from "phosphor-react";
@@ -163,14 +163,14 @@ export function MinhasProducoes() {
                   <TabsList className="p-0 flex h-auto bg-transparent dark:bg-transparent">
                   <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'article' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('article')}>
                       <Button variant={value == 'article' ? ('ghost'):('ghost')}  className="m-0" >
-                      <Quotes size={16} className="" />
+                      <File size={16} className="" />
                       Artigos
                       </Button>
                       </div>
 
                       <div className={`pb-2 border-b-2 text-black dark:text-white  transition-all ${value == 'book' ? ('border-b-[#719CB8]'):(' border-b-transparent ')}`} onClick={() => setValue('book')}>
                       <Button variant={value == 'book' ? ('ghost'):('ghost')}  className="m-0" >
-                      <File size={16} className="" />
+                      <BookOpen size={16} className="" />
                       Livros e capítulos
                       </Button>
                       </div>

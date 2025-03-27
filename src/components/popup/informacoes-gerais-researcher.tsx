@@ -5,7 +5,7 @@ import pq from '../../assets/pq.png'
 
 type Research = {
   data_atualizacao_lattes?: string,
-
+  entradanaufmg?:string
   orcid: string
   h_index: string,
   relevance_score: string,
@@ -68,10 +68,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../../components/ui/tooltip"
-import { Clock, GraduationCap, Info, Mail, Phone, Shapes, SquareUser } from "lucide-react";
+import { Building2, Clock, GraduationCap, Info, Mail, Phone, Shapes, SquareUser } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { Link } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
+import { useContext } from "react";
+import { UserContext } from "../../context/context";
 
 
 export function InformacoesGeraisResearcher(props: Research) {
@@ -196,6 +198,7 @@ export function InformacoesGeraisResearcher(props: Research) {
   const isOutdated = monthDifference > 3;
   const isOutdated6 = monthDifference > 6;
 
+  const {version} = useContext(UserContext)
   return (
     <div className="h-fit text-left w-full">
 
@@ -205,7 +208,7 @@ export function InformacoesGeraisResearcher(props: Research) {
         {props.h_index?.length != 0 && (
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger className="outline-none"><div className=" py-2 px-4 border border-neutral-200 bg-white dark:bg-black dark:border-neutral-800  rounded-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice H: {props.h_index}</div></TooltipTrigger>
+              <TooltipTrigger className="outline-none"><div className=" py-2 px-4 border border-neutral-200 bg-white dark:bg-black dark:border-neutral-800  rounded-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice H no OpenAlex: {props.h_index}</div></TooltipTrigger>
               <TooltipContent>
                 <p>Dados do OpenAlex</p>
               </TooltipContent>
@@ -220,6 +223,18 @@ export function InformacoesGeraisResearcher(props: Research) {
               <TooltipTrigger className="outline-none"> <div className=" border-neutral-200 border dark:border-neutral-800 bg-white dark:bg-black py-2 px-4  rounded-md text-xs  flex gap-2 items-center"><Quotes size={12} className="textwhite" /> Citações: {props.cited_by_count}</div></TooltipTrigger>
               <TooltipContent>
                 <p>Dados do OpenAlex</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+        )}
+
+{(props.entradanaufmg?.length != 0 && version )&& (
+          <TooltipProvider>
+            <Tooltip>
+            <TooltipTrigger className="outline-none"> <div className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><CalendarBlank size={12} className="textwhite" /> Entrada na UFMG: {props.entradanaufmg}</div></TooltipTrigger>
+              <TooltipContent>
+                <p>Fonte: Escola de Engenharia UFMG</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -250,23 +265,24 @@ export function InformacoesGeraisResearcher(props: Research) {
 
         )}
 
+      {!version && (
         <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger className="outline-none">
-              <Link target="_blank" to={`/indice-pesquisador`} onClick={() => onClose()} className="flex gap-0">
-                <div className=" py-2 px-4 border border-neutral-200 bg-eng-blue text-white dark:bg-eng-blue dark:border-neutral-800  rounded-l-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice do pesquisador: </div>
-                <div
-                  className={`py-2 px-4 border border-neutral-200 border-l-0 text-white dark:border-neutral-800 rounded-r-md text-xs flex gap-2 items-center ${classificationColors[props.classification] || "bg-neutral-200"
-                    }`}
-                >
-                  {props.classification}</div>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Saiba mais</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger className="outline-none">
+            <Link target="_blank" to={`/indice-pesquisador`} onClick={() => onClose()} className="flex gap-0">
+              <div className=" py-2 px-4 border border-neutral-200 bg-eng-blue text-white dark:bg-eng-blue dark:border-neutral-800  rounded-l-md text-xs flex gap-2 items-center"><ChartLine size={12} className="textwhite" /> índice do pesquisador: </div>
+              <div
+                className={`py-2 px-4 border border-neutral-200 border-l-0 text-white dark:border-neutral-800 rounded-r-md text-xs flex gap-2 items-center ${classificationColors[props.classification] || "bg-neutral-200"
+                  }`}
+              >
+                {props.classification}</div>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Saiba mais</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>)}
 
         <div
           className={`

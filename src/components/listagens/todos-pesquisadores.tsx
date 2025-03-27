@@ -5,12 +5,12 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { Button } from "../ui/button";
 
-import { MagnifyingGlass, Quotes, Rows, SquaresFour, StripeLogo, Student, UserList } from "phosphor-react";
+import { ChartLine, ChartLineUp, MagnifyingGlass, Quotes, Rows, SquaresFour, StripeLogo, Student, UserList } from "phosphor-react";
 
 import { ResearchersBloco } from "../homepage/categorias/researchers-home/researchers-bloco";
 import { TableReseracherhome } from "../homepage/categorias/researchers-home/table-reseracher-home";
 import { Link } from "react-router-dom";
-import { ArrowRight, BookOpen, BookOpenText, Briefcase, ChevronDown, ChevronUp, Code, Copyright, Download, File, Files, FolderKanban, Info, MoreHorizontal, Ticket, Users } from "lucide-react";
+import { ArrowRight, BookOpen, BookOpenText, Briefcase, ChevronDown, ChevronUp, Code, Copyright, Download, File, Files, FolderKanban, Info, MoreHorizontal, Ticket, UserCog, Users, UserSearch } from "lucide-react";
 import { InfiniteMovingResearchers } from "../ui/infinite-moving-researcher";
 import { Tabs, TabsContent, TabsList } from "../ui/tabs";
 import { Input } from "../ui/input";
@@ -212,10 +212,10 @@ export function TodosPesquisadores() {
 
             const tabs = [
               { id: "pesquisadores", label: "Pesquisadores", icon: Users },
-              { id: "tecnicos", label: "Técnicos", icon: Users, condition: version },
-              { id: "bolsistas", label: "Bolsistas CNPq", icon: Copyright },
-              { id: "article", label: "Artigos", icon: Quotes },
-              { id: "book", label: "Livros e capítulos", icon: File },
+              { id: "tecnicos", label: "Técnicos", icon: UserCog, condition: version },
+              { id: "bolsistas", label: "Bolsistas CNPq", icon: UserSearch },
+              { id: "article", label: "Artigos", icon: File },
+              { id: "book", label: "Livros e capítulos", icon: BookOpen },
               { id: "patent", label: "Patentes", icon: Copyright },
               { id: "software", label: "Softwares", icon: Code },
               { id: "brand", label: "Marcas", icon: StripeLogo },

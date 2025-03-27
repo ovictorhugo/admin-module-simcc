@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/context";
 
 import { Button } from "../../ui/button";
-import { ChevronLeft, Copy, GraduationCap, Link2, Pencil, Plus, Trash, User, UserCog } from "lucide-react";
+import { ChevronLeft, Copy, GraduationCap, Info, Link2, Pencil, Plus, Trash, User, UserCog } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "../../ui/alert";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
@@ -24,6 +24,12 @@ import { ScrollArea, ScrollBar } from "../../ui/scroll-area";
 import { useModal } from "../../hooks/use-modal-store";
 import { Instituicoes } from "./instituicoes";
 import { Helmet } from "react-helmet";
+import { Feedbacks } from "./feedbacks";
+import { ContagemEventos30Dias } from "./graficos/contagem-eventos-30-dias";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../ui/tooltip";
+import { GraficoContagemEventosDia } from "./graficos/contagem-eventos-dia";
+import { PaisesAcessos } from "./graficos/paises-acesso";
+import { PercentualEventos } from "./graficos/percentual-eventos";
 
 
 
@@ -289,6 +295,8 @@ export function GeralViewDashboard() {
 
   const { version } = useContext(UserContext)
 
+
+
   return (
     <div className="w-full relative">
       <Helmet>
@@ -335,8 +343,8 @@ export function GeralViewDashboard() {
           </TabsContent>
 
           <TabsContent value="all" className=" ">
-            <div className="p-4 md:p-8 pt-0 md:pt-0 h-auto flex flex-col gap-4 md:gap-8">
-              <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+            <div className={`p-4 md:p-8 pt-0 md:pt-0 h-auto flex flex-col gap-4 md:gap-8`}>
+              <div className={`grid gap-4 md:grid-cols-2 md:gap-8 ${version ? ('lg:grid-cols-4'):('lg:grid-cols-3')}`}>
                 <Link to={"/dashboard/pesquisadores"}>
                   <Alert className="p-0">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -354,7 +362,8 @@ export function GeralViewDashboard() {
                   </Alert>
                 </Link>
 
-                <Link to={'/dashboard/indicadores'}>
+              {version && (
+                  <Link to={'/dashboard/indicadores'}>
                   <Alert className="p-0">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
@@ -370,6 +379,7 @@ export function GeralViewDashboard() {
                     </CardContent>
                   </Alert>
                 </Link>
+              )}
 
                 <Alert className="p-0">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -404,11 +414,11 @@ export function GeralViewDashboard() {
               </div>
 
 
-              <div className="flex flex-col md:grid gap-4 h-full md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+              <div className="flex flex-col md:grid  h-full gap-8 lg:grid-cols-2 xl:grid-cols-3">
                 <Alert className="xl:col-span-2 p-0" x-chunk="dashboard-01-chunk-4" >
                   <CardHeader className="flex gap-6 flex-col flex-wrap md:flex-row  justify-between">
                     <div className="grid gap-2 ">
-                      <CardTitle>Todos os backgrounds</CardTitle>
+                      <CardTitle>Todas as campanhas</CardTitle>
                       <CardDescription>
                         Fundos e campanhas exibidos na plataforma
                       </CardDescription>
@@ -421,11 +431,11 @@ export function GeralViewDashboard() {
 
                   <CardContent className="flex flex-col gap-3 p-8 pt-0">
 
-                    <ScrollArea className="flex flex-col gap-3 h-[250px]">
+                    <ScrollArea className="flex flex-col gap-3 h-full">
                       <div className="flex flex-col gap-3">
                         {background.map((props) => {
                           return (
-                            <Alert className="flex justify-between group bg-neutral-100 border-0  items-center">
+                            <Alert className="flex justify-between group bg-neutral-100 border-0 dark:bg-neutral-800 dark:hover:bg-neutral-700 transition-all hover:bg-neutral-200  items-center">
                               <div className="flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-md whitespace-nowrap bg-cover bg-center bg-no-repeat " style={{ backgroundImage: `url(${props.imgURL})` }} />
                                 <p className="max-w-[150px] truncate text-sm text-gray-500">{props.titulo}</p>
@@ -452,7 +462,7 @@ export function GeralViewDashboard() {
                           )
                         })}
                       </div>
-                      <ScrollBar />
+                      <ScrollBar orientation='vertical' />
                     </ScrollArea>
                   </CardContent>
 
@@ -469,41 +479,120 @@ export function GeralViewDashboard() {
 
                   </CardHeader>
                   <CardContent>
-                    <div className="flex items-center gap-3">
-                      <Input />
-                     
-                    </div>
-
-                    <div className="w-full my-4 h-[0.5px] border-neutral-200 border-b dark:border-neutral-800"></div>
-
-
-                    <div>
-                      <p className="font-medium text-sm my-4">Pessoas com acesso</p>
-
-                    </div>
+                  <Feedbacks/>
+                   
                   </CardContent>
                 </Alert>
 
-                <Alert className="xl:col-span-3 p-0" x-chunk="dashboard-01-chunk-4" >
-                  <CardHeader className="flex gap-6 flex-col md:flex-row  justify-between">
-                    <div className="grid gap-2 ">
-                      <CardTitle>Usuários ativos por dia</CardTitle>
-                      <CardDescription>
-                        Dados do Google Analytics dos últimos 30 dias
-                      </CardDescription>
-                    </div>
+                
 
-                    <div className="flex gap-3">
-                      <ChartBar size={16} />
-                    </div>
-                  </CardHeader>
-
-                  <CardContent>
-                    <GraficoAnaliseUsuarios />
-                  </CardContent>
-
-                </Alert>
+              
               </div>
+
+              <div className="w-full ">
+                <Alert className="w-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div>
+                <CardTitle className="text-sm font-medium">
+                Evolução do número de usuários ativos 
+                </CardTitle>
+                <CardDescription>Últimos 30 dia</CardDescription>
+              </div>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                  <TooltipContent>
+                    <p>Fonte: Google Analytics</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+            </CardHeader>
+
+            <CardContent className="flex py-0 flex-1  items-center justify-center">
+            <ContagemEventos30Dias />
+            </CardContent>
+          </Alert>
+                </div>
+
+
+                <div className="grid lg:grid-cols-2 gap-8">
+                <Alert className="w-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div>
+                <CardTitle className="text-sm font-medium">
+                Distribuição percentual dos eventos
+                </CardTitle>
+                <CardDescription>Últimos 30 dia</CardDescription>
+              </div>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                  <TooltipContent>
+                    <p>Fonte: Google Analytics</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+            </CardHeader>
+
+            <CardContent className="flex py-0 flex-1  items-center justify-center">
+            <PercentualEventos />
+            </CardContent>
+          </Alert>
+
+          <Alert className="w-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div>
+                <CardTitle className="text-sm font-medium">
+                Contagem de eventos por dia
+                </CardTitle>
+                <CardDescription>Últimos 30 dia</CardDescription>
+              </div>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                  <TooltipContent>
+                    <p>Fonte: Google Analytics</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+            </CardHeader>
+
+            <CardContent className="flex py-0 flex-1  items-center justify-center">
+            <GraficoContagemEventosDia />
+            </CardContent>
+          </Alert>
+                </div>
+
+                <Alert className="w-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div>
+                <CardTitle className="text-sm font-medium">
+                Número de eventos por país
+                </CardTitle>
+                <CardDescription>Últimos 30 dia</CardDescription>
+              </div>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                  <TooltipContent>
+                    <p>Fonte: Google Analytics</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+            </CardHeader>
+
+            <CardContent className="flex py-0 flex-1  items-center justify-center">
+            <PaisesAcessos />
+            </CardContent>
+          </Alert>
             </div>
 
           </TabsContent>

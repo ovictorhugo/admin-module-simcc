@@ -53,6 +53,8 @@ import { Alert } from "../../ui/alert";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { HeaderResult } from "../header-results";
 import { FilterArticle } from "./articles-home/filters-articles";
+import { GraficoCitationsArticleHome } from "./articles-home/grafico-citacoes";
+import { File } from "lucide-react";
 
 type Filter = {
   year: number[]
@@ -145,32 +147,47 @@ const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
 
     <div className="grid grid-cols-1 gap-4 pb-16">
       <HeaderResult />
-      <div className="pt-4">
-        <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total de artigos
-            </CardTitle>
-            <Quotes className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{publicacoes.length}</div>
-            <p className="text-xs text-muted-foreground flex gap-2">
-              encontrados na busca <p className="text-eng-blue">({percentage.toFixed(2)}% com DOI)</p>
-            </p>
-          </CardContent>
-        </Alert>
-      </div>
+     
 
      <div className="mt-6">
      <FilterArticle
         onFilterUpdate={handleResearcherUpdate} />
      </div>
 
+     <div className="pt-4">
+        <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Total de artigos
+            </CardTitle>
+            <File className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="flex justify-between items-end">
+            <div>
+            <div className="text-2xl font-bold">{publicacoes.length}</div>
+            <p className="text-xs text-muted-foreground flex gap-2">
+              encontrados na busca <p className="text-eng-blue">({percentage.toFixed(2)}% com DOI)</p>
+            </p>
+            </div>
+
+            <div className="gap-2 flex items-center h-fit text-xs text-gray-500 dark:text-gray-300">
+  <p>Artigos:</p>
+  <Switch
+    checked={distinct}
+    onCheckedChange={(value) => setDistinct(value)}
+  />
+  <span>{distinct ? "Sem repetição" : "Com repetição"}</span>
+</div>
+          </CardContent>
+
+          
+        </Alert>
+      </div>
+
       <Accordion defaultValue="item-1" type="single" collapsible >
         <AccordionItem value="item-1" >
           <div className="flex">
-            <HeaderResultTypeHome title="Gráfico de quantidade total por Qualis" icon={<ChartBar size={24} className="text-gray-400" />}>
+            <HeaderResultTypeHome title="Gráfico de artigos" icon={<ChartBar size={24} className="text-gray-400" />}>
             </HeaderResultTypeHome>
 
             <AccordionTrigger>
@@ -180,11 +197,21 @@ const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
 
           <AccordionContent className="p-0" >
             {loading ? (
-              <Skeleton className="w-full rounded-md h-[300px]" />
+             <div className="grid gap-8">
+               <Skeleton className="w-full rounded-md h-[300px]" />
+               <Skeleton className="w-full rounded-md h-[300px]" />
+             </div>
             ) : (
-              <GraficoArticleHome
+             <div className="grid gap-8">
+               <GraficoArticleHome
                 articles={publicacoes}
               />
+
+<GraficoCitationsArticleHome
+                articles={publicacoes}
+              />
+
+             </div>
             )}
           </AccordionContent>
         </AccordionItem>
@@ -193,18 +220,8 @@ const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
       <Accordion defaultValue="item-1" type="single" collapsible>
         <AccordionItem value="item-1" >
           <div className="flex mb-2">
-            <HeaderResultTypeHome title="Artigos" icon={<Quotes size={24} className="text-gray-400" />}>
-              <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
-                <p>Artigos:</p>
-                Iguais
-                <Switch
-                  checked={distinct}
-                  onCheckedChange={(value) => setDistinct(value)}
-
-                />
-
-                Distintos
-              </div>
+            <HeaderResultTypeHome title="Artigos" icon={<File size={24} className="text-gray-400" />}>
+           
 
               <div className="hidden md:flex gap-2 mr-2">
                 <Button onClick={() => setTypeVisu('rows')} variant="outline" className={`bg-transparent border-0 ${typeVisu == 'rows' && ('bg-white dark:bg-neutral-800 border')}`} size={'icon'}>

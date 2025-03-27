@@ -107,32 +107,33 @@ export function HeaderResult() {
   return (
     <div>
       {filteredItems.length > 0 && (
-        <div className='grid grid-cols-1 mt-8'>
+        <div className="grid grid-cols-1 mt-8">
           <ScrollArea>
             <div className="flex items-center justify-between">
               <div className="flex gap-3 items-center">
                 <div>
                   <div className="flex flex-wrap gap-3 items-center">
                     <p className="text-sm font-medium">Sugestões:</p>
-                    {filteredItems.map((props, index) => (
+                    {Array.from(
+                      new Map(
+                        filteredItems.map((item) => [item.term_normalize || item.term, item])
+                      ).values()
+                    ).map((props, index) => (
                       <div
                         key={index}
                         onClick={() => {
-                          // Adiciona o item selecionado à lista existente
-                          setItensSelecionados([
-                            { term: props.term_normalize },
-                          ]);
+                          setItensSelecionados([{ term: props.term_normalize }]);
                         }}
                         className="flex whitespace-nowrap gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs"
                       >
-                        {props.term}{props.term == null && (props.term_normalize)}
+                        {props.term || props.term_normalize}
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
             </div>
-            <ScrollBar className='pb-4 md:pb-0 md:hidden' orientation='horizontal' />
+            <ScrollBar className="pb-4 md:pb-0 md:hidden" orientation="horizontal" />
           </ScrollArea>
         </div>
       )}

@@ -66,12 +66,12 @@ export function MagazineHome() {
     const [distinct, setDistinct] = useState(false)
 
  
-    let urlMagazine = `${urlGeral}magazine?initials=nat&issn=`
+    let urlMagazine = `${urlGeral}magazine?initials=&issn=`
   
     const [pesquisaInput, setPesquisaInput] = useState('');
 
     if (pesquisaInput == "") {
-      urlMagazine = `${urlGeral}magazine?initials=nat&issn=`
+      urlMagazine = `${urlGeral}magazine?initials=&issn=`
     }
 
 else if (/^\d+$/.test(pesquisaInput)) {
@@ -122,7 +122,20 @@ const [count, setCount] = useState(100)
     return(
         <div className="grid grid-cols-1 gap-4  ">
           <HeaderResult/>
-             <div className="mt-4 ">
+
+          <Alert className="h-14 mt-4 p-2 flex items-center justify-between  w-full ">
+                <div className="flex items-center gap-2 w-full flex-1">
+                  <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
+                  <Input value={pesquisaInput} onChange={(e) => setPesquisaInput(e.target.value)}  type="text" className="border-0 w-full " />
+                </div>
+
+                <div className="w-fit">
+
+
+                </div>
+              </Alert>
+
+             <div className="mt-6 ">
              <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
@@ -139,17 +152,7 @@ const [count, setCount] = useState(100)
                   </Alert>
              </div>
 
-             <Alert className="h-14 mt-6 p-2 flex items-center justify-between  w-full ">
-                <div className="flex items-center gap-2 w-full flex-1">
-                  <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
-                  <Input value={pesquisaInput} onChange={(e) => setPesquisaInput(e.target.value)}  type="text" className="border-0 w-full " />
-                </div>
-
-                <div className="w-fit">
-
-
-                </div>
-              </Alert>
+          
    
                 <Accordion defaultValue="item-1"  type="single" collapsible >
                 <AccordionItem value="item-1" >

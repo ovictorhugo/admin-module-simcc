@@ -151,7 +151,7 @@ export function PaineisDadosExternos() {
 
 
             <div className="md:p-16 p-4 z-[1]">
-                <p className="flex-1 mb-8 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0 text-white">Principais links</p>
+                <p className="flex-1 mb-8 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0 text-white">Base de dados da plataforma</p>
 
                 <div className="relative">
                 <ResponsiveMasonry
@@ -181,7 +181,7 @@ export function PaineisDadosExternos() {
             </div>
 
             <div className="md:p-16 p-4 z-[1] pt-0 md:pt-0">
-                <p className="flex-1 mb-8 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0 ">Plataformas</p>
+                <p className="flex-1 mb-8 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0 ">Outras plataformas</p>
 
                 <div className="relative">
                 <ResponsiveMasonry

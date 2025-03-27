@@ -16,6 +16,7 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import { HeaderResult } from "../../homepage/header-results";
 import { HeaderResultTypeHome } from "../../homepage/categorias/header-result-type-home";
 import { FilePdf } from "phosphor-react";
+import { HeaderInstitution } from "../components/header-institutuion";
 
 
 export function SessaoPessoal() {
@@ -84,7 +85,10 @@ const {version} = useContext(UserContext)
 
             </div>
 
+           
+
             <TabsContent value="all" className="px-8 flex flex-col gap-8 ">
+            <HeaderInstitution/>
             <Alert className="p-0">
                 <CardHeader>
                     <CardTitle>Gerenciamento de documentos</CardTitle>

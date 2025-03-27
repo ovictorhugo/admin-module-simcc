@@ -1,4 +1,4 @@
-import { ArrowLeftFromLine, ArrowRightFromLine, Book, ChevronDown, ChevronLeft, ChevronUp, Copyright, File, Globe, Info, LayoutDashboard, MapPinIcon, SlidersHorizontal, Star, Ticket, Users, X } from "lucide-react";
+import { ArrowLeftFromLine, ArrowRightFromLine, Book, BookOpen, ChevronDown, ChevronLeft, ChevronUp, Copyright, File, Globe, Info, LayoutDashboard, MapPinIcon, SlidersHorizontal, Star, Ticket, Users, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -362,14 +362,14 @@ export function VisualizacaoPrograma() {
                           {searchType === 'article' && (
                             <div className={`pb-2 border-b-2  transition-all ${typeResult == 'articles-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
                               <Button variant={typeResult == 'articles-home' ? ('ghost') : ('ghost')} className="m-0" onClick={() => onOpen('articles-home')}>
-                                <Quotes className="h-4 w-4" />
+                                <File className="h-4 w-4" />
                                 Artigos
                               </Button>
                             </div>
                           )}
                           {searchType === 'book' && (
                             <Button variant="ghost" className="m-0" onClick={() => onOpen('researchers-home')}>
-                              <File className="h-4 w-4" />
+                              <BookOpen className="h-4 w-4" />
                               Livros e capítulos
                             </Button>
                           )}

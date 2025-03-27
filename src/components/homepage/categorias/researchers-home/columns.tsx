@@ -62,20 +62,6 @@ export const columns: ColumnDef<Research>[] = [
       return <div className="flex gap-3 items-center" >  <div className="h-8 w-8  bg-cover bg-top bg-no-repeat rounded-md whitespace-nowrap" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${lattes_id}) ` }}></div> <div className="flex-1 flex">{row.getValue("name")}</div></div>
     },
   },
-  {
-    accessorKey: "among",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Nº Ocorrências
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-  },
 
   {
     accessorKey: "university",
@@ -84,7 +70,7 @@ export const columns: ColumnDef<Research>[] = [
     cell: ({ row }) => {
 
 
-      return <div className="text-xs flex items-center gap-1"><Buildings size={12} /> {row.getValue("university")}</div>
+      return <div className="flex whitespace-nowrap gap-2 items-center "><Buildings size={12} /> {row.getValue("university")}</div>
     },
   },
   {
@@ -93,7 +79,7 @@ export const columns: ColumnDef<Research>[] = [
     header: () => <div className="text-right flex items-center">Titulação</div>,
     cell: ({ row }) => {
 
-      return <div className="flex w-fit gap-1 text-xs p-2 border items-center border-gray-300 dark:border-stone-700 rounded-md "><GraduationCap size={12} />{row.getValue("graduation")}</div>
+      return <div className="flex whitespace-nowrap gap-2 items-center "><GraduationCap size={12} />{row.getValue("graduation")}</div>
 
 
     },
@@ -104,7 +90,7 @@ export const columns: ColumnDef<Research>[] = [
     header: () => <div className="text-right flex items-center">Cidade</div>,
     cell: ({ row }) => {
 if((row.original.city != "None" && row.original.city != '')) {
-  return <div className="flex w-fit gap-1 text-xs p-2 border items-center border-gray-300 dark:border-stone-700 rounded-md"><MapPin size={12} />{row.getValue("city")}</div>
+  return <div className="flex whitespace-nowrap gap-2 items-center "><MapPin size={12} />{row.getValue("city")}</div>
 } else {
   return <div></div>
 }

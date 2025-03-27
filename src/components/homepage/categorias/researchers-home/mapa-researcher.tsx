@@ -53,7 +53,7 @@ export default function MapaResearcher({ cityData }: Props) {
           longitude: defaultCenter.longitude,
           zoom: defaultZoom,
         }}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: '100%', borderRadius: '8px' }}
         mapStyle={mapStyle}
         mapboxAccessToken={import.meta.env.VITE_PUBLIC_MAPBOX_TOKEN}
         reuseMaps

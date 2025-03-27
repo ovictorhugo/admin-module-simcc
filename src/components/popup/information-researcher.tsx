@@ -1,6 +1,6 @@
 import { useContext, useState } from "react"
 import { UserContext } from "../../context/context"
-import { BracketsCurly, CaretDown, Copy, GraduationCap, IdentificationBadge, LinkSimple, LinkedinLogo, MapPin, PuzzlePiece } from "phosphor-react"
+import { BracketsCurly, CaretDown, Copy, GraduationCap, IdentificationBadge, LinkSimple, LinkedinLogo, MapPin, PuzzlePiece, StripeLogo } from "phosphor-react"
 
 import { Button } from "../ui/button"
 
@@ -64,44 +64,76 @@ export function InformationResearcher(props: Props) {
   const { itemsSelecionados, version } = useContext(UserContext)
   const [isVisible, setIsVisible] = useState(false);
 
+  const decodeHtmlEntities = (text: string): string => {
+    const entities = {
+      '&quot;': '"',
+      '&lt;': '<',
+      '&gt;': '>',
+      '&amp;': '&',
+      '&apos;': "'",
+      '&QUOT;': '"',
+      '&LT;': '<',
+      '&GT;': '>',
+      '&AMP;': '&'
+    };
+    return text.replace(/&(?:quot|lt|gt|amp|apos|QUOT|LT|GT|AMP);/g, entity => entities[entity.toLowerCase() as keyof typeof entities]);
+  };
+
+  
   const { urlGeral } = useContext(UserContext)
 
   //data atualização
   const urlApi = `${urlGeral}researcherName?name=${props.name.split(' ').join(';')}`
 
+  const stripHtmlTags = (text: string): string => {
+    // Remove HTML tags but preserve their text content
+    const div = document.createElement('div');
+    div.innerHTML = text;
+    return div.textContent || div.innerText || '';
+  };
+
   const normalizeText = (text: string): string => {
-    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    // Remove HTML tags and normalize for comparison
+    const textWithoutTags = stripHtmlTags(text);
+    return textWithoutTags
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")  // Remove acentos
+      .replace(/[|();]/g, '')           // Remove caracteres especiais
+      .toLowerCase();
   };
 
   const highlightText = (text: string, terms: ItemsSelecionados[]): React.ReactNode => {
-    if (terms.length === 0) {
-      return text;
+    if (!text || terms.length === 0) {
+      // Just strip HTML and decode entities for display
+      return stripHtmlTags(decodeHtmlEntities(text));
     }
-
+  
+    // First decode HTML entities and strip tags
+    const cleanText = stripHtmlTags(decodeHtmlEntities(text));
+  
+    // Normalize terms for comparison
     const normalizedTerms = terms.map(term => normalizeText(term.term));
-    const regexPattern = normalizedTerms.join('|');
-    console.log(`Generated regex pattern: ${regexPattern}`);
-
-    const regex = new RegExp(`(${regexPattern})`, 'gi');
-
-    // Use html-react-parser to parse the text and handle the highlighting
-    const parseOptions = {
-      replace: (domNode: any) => {
-        if (domNode.type === 'text') {
-          const parts = domNode.data.split(regex);
-          let originalIndex = 0;
-          return parts.map((part, index) => {
-            const originalPart = text.substr(originalIndex, part.length);
-            originalIndex += part.length;
-            return regex.test(part)
-              ? <span key={index} className="text-blue-500 font-semibold">{originalPart}</span>
-              : originalPart;
-          });
-        }
+  
+    // Split text into words while preserving spaces
+    const words = cleanText.split(/(\s+)/);
+    const result: React.ReactNode[] = [];
+  
+    words.forEach((word, index) => {
+      const normalizedWord = normalizeText(word);
+      const shouldHighlight = normalizedTerms.some(term => normalizedWord.includes(term));
+  
+      if (shouldHighlight) {
+        result.push(
+          <span key={index} className="text-blue-500 font-semibold">
+            {word}
+          </span>
+        );
+      } else {
+        result.push(word);
       }
-    };
-
-    return htmlParser(text, parseOptions);
+    });
+  
+    return result;
   };
 
   // const highlightedAbstract = highlightText(props.abstract, itemsSelecionados);
@@ -179,7 +211,7 @@ export function InformationResearcher(props: Props) {
               )}
               {props.scopus != '' && (
                 <Link to={props.scopus} target="_blank" className="bg-[#FF8200] py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
-                  <IdentificationBadge size={12} className="" />
+                  <StripeLogo size={12} className="" />
                   Scopus
                 </Link>
               )}

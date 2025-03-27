@@ -17,7 +17,7 @@ import {
   Quotes,
 
 } from "phosphor-react";
-import { ArrowRight, BarChartBig, Blocks, Download, GraduationCap, Info, InfoIcon, Link2, List } from "lucide-react";
+import { ArrowRight, BarChartBig, Blocks, Download, File, GraduationCap, Info, InfoIcon, Link2, List } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 
@@ -663,7 +663,7 @@ export function InitialHome() {
                 </CardTitle>
               </div>
 
-              <Quotes className="h-4 w-4 text-muted-foreground" />
+              <File className="h-4 w-4 text-muted-foreground" />
 
             </CardHeader>
 
@@ -782,7 +782,7 @@ export function InitialHome() {
                   >
                     <div>
                       <CardTitle className="text-sm font-medium">
-                        Total de  {VisaoPrograma.map((props) => (<>{props.researcher}</>))} pesquisadores
+                        Total de  {VisaoPrograma.map((props) => (<>{props.researcher}</>))} pesquisadores ativos
                       </CardTitle>
                       <CardDescription>{version ? ('na Escola de Engenharia') : ('no SECTI-BA')}</CardDescription>
 
@@ -836,7 +836,7 @@ export function InitialHome() {
                   >
                     <div>
                       <CardTitle className="text-sm font-medium">
-                        Total de {totalTechnicianCounts} técnicos
+                        Total de {totalTechnicianCounts} técnicos ativos
                       </CardTitle>
                       <CardDescription>{version ? ('na Escola de Engenharia') : ('no SECTI-BA')}</CardDescription>
                     </div>

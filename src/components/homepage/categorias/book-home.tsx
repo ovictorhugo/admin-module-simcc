@@ -117,6 +117,12 @@ console.log(urlTermCap)
   return (
     <div className="grid grid-cols-1 gap-4 pb-16">
       <HeaderResult />
+
+      <div className="mt-6">
+     <FilterYearPopUp
+        onFilterUpdate={handleResearcherUpdate} />
+     </div>
+
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         <Alert className={`p-0 bg-cover bg-no-repeat bg-center `}  >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -125,11 +131,22 @@ console.log(urlTermCap)
             </CardTitle>
             <Book className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex justify-between items-end">
+            <div>
             <div className="text-2xl font-bold">{publicacoes.length}</div>
-            <p className="text-xs text-muted-foreground">
-              encontrados na busca
+            <p className="text-xs text-muted-foreground flex gap-2">
+              encontrados na busca 
             </p>
+            </div>
+
+            <div className="gap-2 flex items-center h-fit text-xs text-gray-500 dark:text-gray-300">
+  <p>Livros:</p>
+  <Switch
+    checked={distinct}
+    onCheckedChange={(value) => setDistinct(value)}
+  />
+  <span>{distinct ? "Sem repetição" : "Com repetição"}</span>
+</div>
           </CardContent>
         </Alert>
 
@@ -140,20 +157,27 @@ console.log(urlTermCap)
             </CardTitle>
             <Books className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex justify-between items-end">
+            <div>
             <div className="text-2xl font-bold">{capLivros.length}</div>
-            <p className="text-xs text-muted-foreground">
-              encontrados na busca
+            <p className="text-xs text-muted-foreground flex gap-2">
+              encontrados na busca 
             </p>
+            </div>
+
+            <div className="gap-2 flex items-center h-fit text-xs text-gray-500 dark:text-gray-300">
+  <p>Capítulos:</p>
+  <Switch
+    checked={distinct2}
+    onCheckedChange={(value) => setDistinct2(value)}
+  />
+  <span>{distinct ? "Sem repetição" : "Com repetição"}</span>
+</div>
           </CardContent>
         </Alert>
       </div>
 
-     <div className="mt-6">
-     <FilterYearPopUp
-        onFilterUpdate={handleResearcherUpdate} />
-     </div>
-
+  
       <Accordion type="single" collapsible defaultValue="item-1">
         <AccordionItem value="item-1" >
           <div className="flex ">

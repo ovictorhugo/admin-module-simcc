@@ -56,7 +56,7 @@ export function BannerHome() {
 
        plugins={[
         Autoplay({
-          delay: 2000,
+          delay: 5000,
         }),
       ]}
       onChange={(index) => setCurrentIndex(Number(index))}

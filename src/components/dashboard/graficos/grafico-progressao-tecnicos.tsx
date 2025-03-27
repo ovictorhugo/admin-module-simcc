@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { Alert } from "../../ui/alert";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../../../components/ui/chart";
 
 interface Docentes {
-  cargo:string
-  classe:string
-  data_prog:string
-  deno_sit:string
-  detalhe_setor:string
-  dting_org:string
-  genero:string
-  ins_ufmg:string
-  matric:string
-  nivel:string
-  nome:string
-  ref:string
-  rt:string
-  semester:string
-  setor:string
-  titulacao:string
+  technician_id: string,
+  nome: string,
+  genero: string,
+    name:string
+    deno_sit:string
+    rt:string 
+    classe:string 
+    cargo:string
+    nivel:string 
+    ref:string
+    titulacao:string 
+    setor:string 
+    detalhe_setor:string 
+    dting_org:string 
+    data_prog:string 
+    semester:string 
 }
 
 const chartConfig = {
   line: {
     label: "Progressão",
-    color: "#98A8BA",
+    color: "#004A75",
   },
 };
 
@@ -62,11 +62,13 @@ export function GraficoProgressaoTecnicos({ docentes }: { docentes: Docentes[] }
     <Alert className="p-0 border-0 h-full">
       <ChartContainer config={chartConfig} className="h-[300px] w-full">
         <ResponsiveContainer>
-          <LineChart data={chartData} margin={{ top: 20, right: 10, left: 20, bottom: 0 }}>
+          <LineChart data={chartData} margin={{ top: 20, right: 10, left: 10, bottom: 0 }}>
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
             <CartesianGrid vertical={false} horizontal={false} />
             <Tooltip cursor={false} content={<ChartTooltipContent />} />
-            <Line type="monotone" dataKey="count" stroke={chartConfig.line.color} strokeWidth={2} dot={{ r: 4 }} />
+            <Line type="monotone" dataKey="count" stroke={chartConfig.line.color} strokeWidth={2} dot={{ r: 4 }} >
+               <LabelList dataKey="count" position="top" offset={12} className="fill-foreground" fontSize={12} />
+               </Line>
           </LineChart>
         </ResponsiveContainer>
       </ChartContainer>

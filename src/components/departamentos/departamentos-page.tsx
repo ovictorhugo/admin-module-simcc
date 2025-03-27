@@ -3,14 +3,19 @@ import { VisualizacaoDepartamento } from "./visualizacao-departamento";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
-import { MagnifyingGlass } from "phosphor-react";
+import { MagnifyingGlass, Rows, SquaresFour } from "phosphor-react";
 import { Input } from "../ui/input";
-import { ArrowRight, Building, Hash, Info, Mail, Phone } from "lucide-react";
+import { ArrowRight, Building, ChevronDown, ChevronUp, Download, File, GraduationCap, Hash, Info, Mail, Phone, SlidersHorizontal } from "lucide-react";
 import { cn } from "../../lib"
 import { Button } from "../ui/button";
 import bg_graduate from '../../assets/bg_graduate.png'
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Helmet } from "react-helmet";
+import { CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Skeleton } from "../ui/skeleton";
+import { DataTable } from "../popup/columns/popup-data-table";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 interface Departamentos {
   dep_id: string
   org_cod: string
@@ -38,11 +43,12 @@ export function DepartamentPage() {
 
   let departamentoSelecionado = type_search || ''
 
-  const { urlGeralAdm } = useContext(UserContext)
+  const { urlGeralAdm, urlGeral } = useContext(UserContext)
 
   const [search, setSearch] = useState('')
 
   const urlPatrimonioInsert = `${urlGeralAdm}departamentos`
+  const [jsonData, setJsonData] = useState<any[]>([]);
 
 
   useEffect(() => {
@@ -64,6 +70,7 @@ export function DepartamentPage() {
         const data = await response.json();
         if (data) {
           setTotal(data)
+          setJsonData(data)
           setIsLoading(false)
         }
       } catch (err) {
@@ -99,7 +106,50 @@ export function DepartamentPage() {
     });
   }
 
+  const [isOn, setIsOn] = useState(true);
+
   const { version } = useContext(UserContext)
+
+
+
+  const convertJsonToCsv = (json: any[]): string => {
+    const items = json;
+    const replacer = (_: string, value: any) => (value === null ? '' : value); // Handle null values
+    const header = Object.keys(items[0]);
+    const csv = [
+      '\uFEFF' + header.join(';'), // Add BOM and CSV header
+      ...items.map((item) =>
+        header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+      ) // CSV data
+    ].join('\r\n');
+
+    return csv;
+  };
+
+  const handleDownloadJson = async () => {
+    try {
+      const csvData = convertJsonToCsv(jsonData);
+      const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = `dados.csv`;
+      link.href = url;
+      link.click();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+   const items = Array.from({ length: 12 }, (_, index) => (
+      <Skeleton key={index} className="w-full rounded-md h-[300px]" />
+    ));
+
+    const [loading, setLoading] = useState(false);
+
+
+    const [typeVisu, setTypeVisu] = useState('block');
+
+
   return (
     <>
       {departamentoSelecionado.length == 0 ? (
@@ -109,54 +159,116 @@ export function DepartamentPage() {
             <meta name="description" content={`Departamentos | ${version ? ('Conectee') : ('Simcc')}`} />
             <meta name="robots" content="index, follow" />
           </Helmet>
-          <main className="  gap-4 md:gap-8 flex flex-col  p-4 md:p-8 pt-0 md:pt-0 w-full">
+          <main className="  ">
 
-            <div className="bg-cover bg-bottom bg-no-repeat" style={{ backgroundImage: `url(${bg_graduate})` }}>
-              <div className="justify-center m w-full  flex max-w-[980px] flex-col items-center lg:items-start  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
-                <Link to={'/informacoes'} className="inline-flex z-[2] w-fit items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12} /></Link>
+          <div className="top-[68px] sticky z-[9] supports-[backdrop-filter]:dark:bg-neutral-900/60 supports-[backdrop-filter]:bg-neutral-50/60 backdrop-blur">
+<div className={`w-full px-8  border-b border-b-neutral-200 dark:border-b-neutral-800`}>
 
-                {totalSelecionado ? (
-                  <h1 className="z-[2] lg:text-left text-center max-w-[600px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
-                    {totalSelecionado.dep_nom}
-                  </h1>
-                ) : (
-                  <h1 className="z-[2] lg:text-left text-center max-w-[700px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
-                    Explore um  {" "}
-                    <strong className="bg-eng-blue  rounded-md px-3 pb-2 text-white font-medium">
-                      {" "}
-                      departamento
-                    </strong>{" "}
-                    da Escola de Engenharia
-                  </h1>
-                )}
 
-                {totalSelecionado ? (
-                  <div className="flex items-center gap-2">
-                    <Button onClick={() => handlePesquisaFinal(totalSelecionado.dep_id)}><ArrowRight size={16} /> Ver informações do departamento</Button>
-                  </div>
-                ) : (
-                  <Alert className="h-14 mt-8 p-2 flex items-center justify-between lg:max-w-[600px] lg:w-[60vw] w-full">
-                    <div className="flex items-center gap-2 w-full flex-1">
-                      <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
-                      <Input onChange={(e) => setSearch(e.target.value)} value={search} type="text" className="border-0 w-full " />
-                    </div>
+          {isOn && (
+           <div className="w-full   flex justify-between items-center">
+ 
+                      <div className="w-full pt-4  flex justify-between items-center">
+                          <Alert className="h-14 mt-4 mb-2  p-2 flex items-center justify-between  w-full">
+          <div className="flex items-center gap-2 w-full flex-1">
+            <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
+            <Input onChange={(e) => setSearch(e.target.value)} value={search} type="text" className="border-0 w-full " />
+          </div>
+        </Alert>
+                      </div>
+                         </div>
+                    )}
 
-                    <div className="w-fit">
-
+<div className={`flex w-full flex-wrap pt-2 pb-3 justify-between `}>
+                    <div>
 
                     </div>
-                  </Alert>
-                )}
 
-                {/*
-<Link to={'/departamentos'}  className="inline-flex z-[2] w-fit items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Ver todos os departamentos<ArrowRight size={12}/></Link>
-*/}
+                    <div className="hidden xl:flex xl:flex-nowrap gap-2">
+                <div className="md:flex md:flex-nowrap gap-2">
+                  <Link to={`${urlGeral}dictionary.pdf`} target="_blank">
+                  <Button variant="ghost" className="">
+                    <File size={16} className="" />
+                    Dicionário de dados
+                  </Button>
+                  </Link>
+                  <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
+                    <Download size={16} className="" />
+                    Baixar resultado
+                  </Button>
+                </div>
 
+                <div>
+
+                </div>
+                <Button variant="ghost" size="icon" onClick={() => setIsOn(!isOn)}>
+                  {isOn ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                </Button>
               </div>
-            </div>
+                  </div>
 
+                  </div>
 
-            <ResponsiveMasonry
+                  </div>
+
+                  <div className="mt-8 px-4 md:px-8">
+                  <Alert className={`p-0 mb-6 bg-cover bg-no-repeat bg-center `}  >
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Total de departamentos
+                  </CardTitle>
+                  <Building className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{filteredTotal.length}</div>
+                  <p className="text-xs text-muted-foreground">
+                    encontrados na busca
+                  </p>
+                </CardContent>
+              </Alert>
+
+              <Accordion defaultValue="item-1" type="single" collapsible>
+                <AccordionItem value="item-1">
+                  <div className="flex mb-2">
+                    <HeaderResultTypeHome title="Programas de pós-graduação" icon={<GraduationCap size={24} className="text-gray-400" />}>
+                      <div className="hidden md:flex gap-3 mr-3">
+                        <Button onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                          <Rows size={16} className="whitespace-nowrap" />
+                        </Button>
+                        <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'} size={'icon'}>
+                          <SquaresFour size={16} className="whitespace-nowrap" />
+                        </Button>
+                      </div>
+                    </HeaderResultTypeHome>
+                    <AccordionTrigger>
+
+                    </AccordionTrigger>
+                  </div>
+                  <AccordionContent>
+                    {typeVisu === 'block' ? (
+                      loading ? (
+                        <ResponsiveMasonry
+                          columnsCountBreakPoints={{
+                            350: 2,
+                            750: 3,
+                            900: 4,
+                            1200: 6,
+                            1500: 6,
+                            1700: 7
+                          }}
+                        >
+                          <Masonry gutter="16px">
+                            {items.map((item, index) => (
+                              <div className="w-full" key={index}>{item}</div>
+                            ))}
+                          </Masonry>
+                        </ResponsiveMasonry>
+                      ) : (
+                        <ResponsiveMasonry
               columnsCountBreakPoints={{
                 350: 1,
                 750: 2,
@@ -208,6 +320,22 @@ export function DepartamentPage() {
                 ))}
               </Masonry>
             </ResponsiveMasonry>
+                      )
+                    ) : (
+                      loading ? (
+                        <Skeleton className="w-full rounded-md h-[400px]" />
+                      ) : (
+                      <div>
+
+                      </div>
+                      )
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+                  </div>
+
+           
 
           </main>
         </div>

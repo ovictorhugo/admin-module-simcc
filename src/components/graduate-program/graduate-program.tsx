@@ -47,6 +47,7 @@ export interface GraduateProgram {
   type: string;
   city: string
   state: string
+  acronym:string
   instituicao: string
   url_image: string
   region: string
@@ -59,6 +60,7 @@ export interface GraduateProgram {
   qtd_permanente: string
   create_at: string
   institution: string;
+  researchers:string[]
 }
 
 const useQuery = () => {
@@ -580,21 +582,23 @@ const { onOpen } = useModal();
                  <div className="w-full hidden xl:flex h-[calc(100vh-68px)] overflow-hidden items-center absolute   "><BahiaMap/></div>
               )}
               <main className="z-[2]  gap-4 md:gap-8 flex flex-col  pt-0 md:pt-0 w-full">
-              <div className="bg-cover w-fit pl-8 bg-bottom bg-no-repeat" >
-                <div className="justify-center h-[calc(100vh-68px)] z-[9] m w-full  flex max-w-[980px] flex-col items-center lg:items-start  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
-                  <Link to={'/informacoes'} className="inline-flex z-[2] lg:w-fit  w-fit items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12} /></Link>
+             {simcc && (
+               <div className="bg-cover w-fit pl-8 bg-bottom bg-no-repeat" >
+               <div className="justify-center h-[calc(100vh-68px)] z-[9] m w-full  flex max-w-[980px] flex-col items-center lg:items-start  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
+                 <Link to={'/informacoes'} className="inline-flex z-[2] lg:w-fit  w-fit items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12} /></Link>
 
-                  <h1 className="lg:w-fit  lg:text-left text-center max-w-[600px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
-                    Selecione um programa de {" "}
-                    <strong className="bg-eng-blue  rounded-md px-3 pb-2 text-white font-medium">
-                      {" "}
-                      pós-graduação
-                    </strong>{" "}
-                  </h1>
+                 <h1 className="lg:w-fit  lg:text-left text-center max-w-[600px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
+                   Selecione um programa de {" "}
+                   <strong className="bg-eng-blue  rounded-md px-3 pb-2 text-white font-medium">
+                     {" "}
+                     pós-graduação
+                   </strong>{" "}
+                 </h1>
 
-               
-                </div>
-              </div>
+              
+               </div>
+             </div>
+             )}
 <div>
 <div className="top-[68px] sticky z-[9] supports-[backdrop-filter]:dark:bg-neutral-900/60 supports-[backdrop-filter]:bg-neutral-50/60 backdrop-blur">
 <div className={`w-full px-8  border-b border-b-neutral-200 dark:border-b-neutral-800`}>
@@ -752,6 +756,8 @@ const { onOpen } = useModal();
                               <ProgramItem
                                 key={index} // Adiciona uma chave para cada item
                                 area={props.area}
+                                institution={props.institution}
+                                researchers={props.researchers}
                                 code={props.code}
                                 graduate_program_id={props.graduate_program_id}
                                 modality={props.modality}
@@ -764,6 +770,7 @@ const { onOpen } = useModal();
                                 url_image={props.url_image}
                                 region={props.region}
                                 sigla={props.sigla}
+                                acronym={props.acronym}
                                 visible={props.visible}
                                 qtd_discente={props.qtd_discente}
                                 qtd_colaborador={props.qtd_colaborador}

@@ -1,4 +1,4 @@
-import {  AreaChart,    ArrowLeftToLine,    ArrowRightToLine,    Book,    Briefcase,    Code,    Copyright,    Globe,  GraduationCap,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, SquareMenu, Star, User,  Users } from "lucide-react";
+import {  AreaChart,    ArrowLeftToLine,    ArrowRightToLine,    Book,    Briefcase,    Code,    Copyright,    File,    Globe,  GraduationCap,  MapPinIcon, PencilLine, Plus, SquareArrowOutUpRight, SquareMenu, Star, User,  Users } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
@@ -183,7 +183,7 @@ export function DisplayItem(props:Patrimonio) {
     const producoes = [
       {
         name: "Artigos",
-        icon: Quotes, // Certifique-se de que Quotes é um componente ou valor válido
+        icon: File, // Certifique-se de que Quotes é um componente ou valor válido
         number: totalProducao.slice(0, 1)[0]?.article, // Corrigido para acessar o primeiro item e a propriedade `article`
       },
       {

@@ -1,4 +1,4 @@
-import { Book, Briefcase, Copyright, GraduationCap, Info, MapPinIcon, SquareArrowOutUpRight, Star, Users } from "lucide-react";
+import { Book, Briefcase, Copyright, File, GraduationCap, Info, MapPinIcon, SquareArrowOutUpRight, Star, Users } from "lucide-react";
 import { Alert } from "../ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -371,7 +371,7 @@ export function HomepageProgram(props: Props) {
   const producoes = [
     {
       name: "Artigos",
-      icon: Quotes, // Certifique-se de que Quotes é um componente ou valor válido
+      icon: File, // Certifique-se de que Quotes é um componente ou valor válido
       number: totalProducao.slice(0, 1)[0]?.article, // Corrigido para acessar o primeiro item e a propriedade `article`
     },
     {

@@ -121,11 +121,15 @@ export function AppSidebarAdmin({ ...props }: React.ComponentProps<typeof Sideba
         icon: DotsThree,
         isActive: true,
         items: [
-          {
-            title: "Seção de pessoal",
-            url: "/dashboard/secao-pessoal",
-            icon: Contact
-          },
+          ...(version
+            ? [
+              {
+                title: "Seção de pessoal",
+                url: "/dashboard/secao-pessoal",
+                icon: Contact
+              },
+            ]
+            : []),
 
           {
             title: "Parâmetros",
@@ -184,15 +188,7 @@ export function AppSidebarAdmin({ ...props }: React.ComponentProps<typeof Sideba
               },
             ]
             : []),
-          ...(has_visualizar_inct
-            ? [
-              {
-                title: "INCT's",
-                icon: FlaskConical,
-                url: "/dashboard/inct",
-              },
-            ]
-            : []),
+         
         ],
       },
       {

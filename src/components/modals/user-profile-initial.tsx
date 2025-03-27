@@ -1,22 +1,38 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { UserContext } from "../../context/context";
 import { useModal } from "../hooks/use-modal-store";
 import { Alert } from "../ui/alert";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList } from "../ui/tabs";
-import { ArrowUpCircle, Check, CheckCircle, ChevronLeft, ChevronRight, Wrench } from "lucide-react";
+import { ArrowUpCircle, Check, CheckCircle, ChevronLeft, ChevronRight, InfoIcon, Wrench } from "lucide-react";
 import { Label } from "../ui/label";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
-import { Student } from "phosphor-react";
+import { ChartBar, GearSix, Student } from "phosphor-react";
 import { Input } from "../ui/input";
 import { Search, BarChart, Users, BookOpen, FileText, GraduationCap, Globe, ClipboardCheck, FolderOpen, UserCheck, Briefcase, Layers, ListChecks } from "lucide-react";
 import { useIsMobile } from "../../hooks/use-mobile";
 import { Drawer, DrawerContent } from "../ui/drawer";
+import { Link } from "react-router-dom";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 export function UserProfileInitialModal() {
         const { onClose, isOpen, type: typeModal, data } = useModal();
-        const isModalOpen = isOpen && typeModal === "user-profile-initial";
+          const [isModalOpen1, setIsModalOpen1] = useState(false);
+
+            useEffect(() => {
+              // Verifica no localStorage se o modal já foi exibido
+              const hasVisited = localStorage.getItem('hasVisited');
+          
+              if (!hasVisited && (!isOpen)) {
+                // Se não foi exibido, abre o modal
+                setIsModalOpen1(true);
+               
+              }
+            }, []);
+          
+        
+        const isModalOpen = (isOpen && typeModal === "user-profile-initial") || isModalOpen1;
         const {urlGeralAdm, loggedIn, user} = useContext(UserContext)
  const isMobile = useIsMobile()
         const [nome, setNome] = useState(loggedIn ? (user?.display_name) : (''))
@@ -24,9 +40,9 @@ export function UserProfileInitialModal() {
 
         const perfis = [
             {name:'Pesquisador', icon:Student},
-            {name:'Gestor de Ciência e Tecnologia', icon:Student},
-            {name:'Coordenador Pós-Graduação', icon:Student},
-            {name:'Administração', icon:Student},
+            {name:'Gestor de Ciência e Tecnologia', icon:ChartBar},
+            {name:'Coordenador Pós-Graduação', icon:GraduationCap},
+            {name:'Administração', icon:GearSix},
         ]
 
      
@@ -78,21 +94,21 @@ export function UserProfileInitialModal() {
             icon: <Student className="w-6 h-6 text-gray-400" />,
             items: [
               {
-                icon: <FileText className="w-6 h-6 text-gray-400" />,
+                icon: <FileText className="w-6 h-6 text-green-500" />,
                 title: 'Acessar produções qualificadas',
-                description: 'Publicize pesquisas relevantes e de impacto social da Bahia.',
+                description: 'Publicize pesquisas relevantes e de impacto social.',
                 active: true,
               },
               {
                 icon: <BarChart className="w-6 h-6 text-gray-400" />,
                 title: 'Monitorar indicadores científicos',
-                description: 'Acompanhe indicadores de produção científica e técnica das instituições da Bahia.',
+                description: 'Acompanhe indicadores de produção científica e técnica.',
                 active: false,
               },
               {
                 icon: <Globe className="w-6 h-6 text-gray-400" />,
                 title: 'Identificar competências',
-                description: 'Descubra as competências das instituições e dos pesquisadores na Bahia.',
+                description: 'Descubra as competências das instituições e dos pesquisadores.',
                 active: false,
               },
               {
@@ -104,7 +120,7 @@ export function UserProfileInitialModal() {
               {
                 icon: <Users className="w-6 h-6 text-gray-400" />,
                 title: 'Analisar grupos e projetos',
-                description: 'Identifique grupos de pesquisa, bolsistas e projetos das instituições da Bahia.',
+                description: 'Identifique grupos de pesquisa, bolsistas e projetos das instituições.',
                 active: false,
               },
               {
@@ -126,7 +142,7 @@ export function UserProfileInitialModal() {
             icon: <Student className="w-6 h-6 text-gray-400" />,
             items: [
               {
-                icon: <BarChart className="w-6 h-6 text-gray-400" />,
+                icon: <BarChart className="w-6 h-6 text-green-500" />,
                 title: 'Planejamento estratégico',
                 description: 'Analise os indicadores do programa para elaborar estratégias.',
                 active: true,
@@ -156,7 +172,7 @@ export function UserProfileInitialModal() {
             icon: <Student className="w-6 h-6 text-gray-400" />,
             items: [
               {
-                icon: <ListChecks className="w-6 h-6 text-gray-400" />,
+                icon: <ListChecks className="w-6 h-6 text-green-500" />,
                 title: 'Elaborar baremas de avaliação',
                 description: 'Crie critérios para avaliar pesquisadores ',
                 active: true,
@@ -180,6 +196,7 @@ export function UserProfileInitialModal() {
 const [tab, setTab] = useState(1)
 
 const [perfil, setPerfil] = useState('')
+const [status, setStatus] = useState('')
 
 console.log(perfil)
 
@@ -203,17 +220,7 @@ const content = () => {
       
       <TabsContent value="1" className="w-full">
       <div className="grid  items-center gap-5">
-         <div className="flex gap-3">
-         <div className="flex flex-col gap-2 w-full md:w-1/2">
-                          <Label>Nome completo*</Label>
-                          <Input className="w-full" value={nome} onChange={(e) => setNome(e.target.value)} type="text" />
-                        </div>
-    
-                         <div className="flex flex-col gap-2 w-full md:w-1/2">
-                                          <Label>Email*</Label>
-                                          <Input className="w-full" value={email} defaultValue={loggedIn ? (user?.email) : ('')} onChange={(e) => setEmail(e.target.value)} type="text" />
-                                        </div>
-         </div>
+
     
                         <Label>Qual o seu perfil?</Label>
                         <ToggleGroup
@@ -229,7 +236,7 @@ const content = () => {
       className="grid grid-cols-4 w-full gap-3"
     >
       {perfis.map((props, index) => (
-        <ToggleGroupItem className="flex flex-1 aspect-square w-full h-full flex-col  items-center gap-2" key={index} value={props.name}>
+        <ToggleGroupItem className="flex flex-1 py-6 w-full h-full flex-col  items-center gap-2" key={index} value={props.name}>
           <props.icon size={32} /> 
           <div className="">
           {props.name}
@@ -239,8 +246,17 @@ const content = () => {
     </ToggleGroup>
     
     <div className="flex flex-col gap-2 w-full ">
-                                          <Label>Qual se encaixa melhor?</Label>
-                                          <Input className="w-full" value={email} defaultValue={loggedIn ? (user?.email) : ('')} onChange={(e) => setEmail(e.target.value)} type="text" />
+                                          <Label>Qual uso se encaixa melhor para você?</Label>
+                                          <Select value={status} onValueChange={setStatus}>
+  <SelectTrigger className="">
+    <SelectValue placeholder="" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="trabalho">Para trabalho</SelectItem>
+    <SelectItem value="uso-pessoal">Para uso pessoal</SelectItem>
+    <SelectItem value="escola">Para estudo</SelectItem>
+  </SelectContent>
+</Select>
                                         </div>
                       </div>
         </TabsContent>
@@ -325,22 +341,35 @@ const content = () => {
     </Tabs>
                     </DialogHeader>
     
-                    <DialogFooter className="flex gap-2 p-4 pt-0">
-    {tab != 1 && (
-                <Button variant="ghost"  onClick={() => setTab(tab - 1)}>
-                <ChevronLeft size={16}/> Anterior
-               </Button>
-    )}
-    
-            {tab == 3 ? (
-                  <Button className="ml-auto flex" onClick={() => setTab(tab + 1)}>
-               <Check size={16}/>   Finalizar
-                 </Button>
-            ):(
-                  <Button className="ml-auto flex" onClick={() => setTab(tab + 1)}>
-                  Próximo <ChevronRight size={16}/>
-                 </Button>
-            )}
+                    <DialogFooter className="flex w-full justify-between  gap-2 p-4 pt-0">
+                  <div className="flex justify-between w-full">
+                  <div className="flex gap-2 ">
+
+<Link to={'/termos-uso'} target="_blank"> <Button variant={'ghost'}><InfoIcon size={16} /> Termos de uso</Button></Link>
+
+</div>
+<div className="flex gap-2 ">
+{tab != 1 && (
+<Button variant="ghost"  onClick={() => setTab(tab - 1)}>
+<ChevronLeft size={16}/> Anterior
+</Button>
+)}
+
+{tab == 3 ? (
+<Button className="ml-auto flex" onClick={() => {
+    if(isModalOpen1) {
+        setIsModalOpen1(false)
+    }
+}}>
+<Check size={16}/>   Finalizar
+</Button>
+):(
+<Button className="ml-auto flex" onClick={() => setTab(tab + 1)}>
+Próximo <ChevronRight size={16}/>
+</Button>
+)}
+</div>
+                  </div>
             </DialogFooter>
     </div>
     )

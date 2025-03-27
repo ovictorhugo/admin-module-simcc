@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Button } from "../ui/button";
-import { Book, ChevronLeft, Copyright, Globe, Hash, Info, Mail, Phone } from "lucide-react";
+import { Book, ChevronLeft, Copyright, File, Globe, Hash, Info, Mail, Phone } from "lucide-react";
 import { DisciplinasDepartamentoPage } from "./disciplinas-departamento";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
@@ -476,7 +476,7 @@ export function VisualizacaoDepartamento() {
 
                     </div>
 
-                    <Quotes className="h-4 w-4 text-muted-foreground" />
+                    <File className="h-4 w-4 text-muted-foreground" />
 
                   </CardHeader>
 

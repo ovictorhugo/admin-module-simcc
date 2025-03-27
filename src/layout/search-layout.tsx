@@ -10,7 +10,7 @@ import bg_popup from '../assets/bg_welcome.png';
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/context";
 import { AccountSwitcher } from "../components/navigation/user-list";
-import { BarChartBig, Blocks, BookOpen, Bug, Building2, Check, Download, GraduationCap, Home, Info, InfoIcon, LayoutDashboard, Link2, List, LogIn, PanelLeftDashed, SearchCheck, Sparkles, UserPlus, X } from "lucide-react";
+import { BarChartBig, Blocks, BookOpen, Bug, Building2, Check, Cookie, Download, GraduationCap, Home, Info, InfoIcon, LayoutDashboard, Link2, List, LogIn, PanelLeftDashed, SearchCheck, Sparkles, UserPlus, X } from "lucide-react";
 import logo_4 from '../assets/logo_4.png';
 import logo_4_white from '../assets/logo_4_white.png';
 
@@ -42,6 +42,7 @@ import { LogoIapos } from "../components/svg/LogoIapos";
 import { LogoIaposWhite } from "../components/svg/LogoIaposWhite";
 import { Badge } from "../components/ui/badge";
 import { useTheme } from "next-themes";
+import { UserProfileInitialModal } from "../components/modals/user-profile-initial";
 
 interface MailProps {
 
@@ -84,9 +85,9 @@ export default function SearchLayout({
 
 
   ///popup
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  
   useEffect(() => {
     // Verifica no localStorage se o modal já foi exibido
     const hasVisited = localStorage.getItem('hasVisited');
@@ -94,27 +95,19 @@ export default function SearchLayout({
     if (!hasVisited && (!isOpen)) {
       // Se não foi exibido, abre o modal
       setIsModalOpen(true);
-      // Marca no localStorage que o modal foi exibido
-      localStorage.setItem('hasVisited', 'true');
+      
     }
   }, []);
 
+  
   const handleClose = () => {
     setIsModalOpen(false);
+    // Marca no localStorage que o modal foi exibido
+    localStorage.setItem('hasVisited', 'true');
   };
 
-  //cookies
-  useEffect(() => {
-    // Verifica no localStorage se o modal já foi exibido
-    const hasVisited = localStorage.getItem('cookies');
 
-    if (!hasVisited) {
-      // Se não foi exibido, abre o modal
-      onOpenSecundary('cookies')
-      // Marca no localStorage que o modal foi exibido
-      localStorage.setItem('cookies', 'true');
-    }
-  }, []);
+
 
   ///BUG
   const location = useLocation();
@@ -263,7 +256,24 @@ export default function SearchLayout({
         <SidebarInset className=" ">
           <main className="h-full flex flex-col flex-1 ">
             {/* Assuming Header is another component */}
+{isModalOpen && (
+  <div className="w-full supports-[backdrop-filter]:bg-eng-blue/20 supports-[backdrop-filter]:dark:bg-neutral-900/60 backdrop-blur gap-8 p-8 md:absolute z-[4] flex-col md:flex-row md:items-center top-0 lg:p-8 bg-white flex justify-between">
+    <div className="flex flex-col flex-1">
+    <h1 className=" font-medium">Apresentamos a plataforma {version ? ('Conectee') : ('Simcc')}</h1>
+            <p className=" text-gray-500 text-xs">
+              O jeito mais fácil de visualizar e filtrar as produções técnicas e bibliográficas dos pesquisadores {version ? ('da Escola de Engenharia da UFMG') : ('do SECTI-BA')}.
+            </p>
 
+    </div>
+
+    <div className="flex gap-3 flex-wrap whitespace-nowrap">
+                <Link to={'/termos-uso'} target="_blank" className="w-full md:w-fit"> <Button className="w-full md:w-fit" variant={'ghost'}><InfoIcon size={16} /> Termos de uso</Button></Link>
+
+                <Button onClick={handleClose} className="w-full md:w-fit animate-pulse hover:animate-none"><Cookie size={16} />Aceitar todos os cookies</Button>
+              </div>
+
+  </div>
+)}
 
             <div className="flex p-8 pt-8 pb-2 h-[68px] items-center justify-between top-0 sticky z-[3] supports-[backdrop-filter]:bg-neutral-50/60 supports-[backdrop-filter]:dark:bg-neutral-900/60 backdrop-blur ">
               <div className="flex  pb-0 items-center gap-2">
@@ -315,29 +325,12 @@ export default function SearchLayout({
         </SidebarInset>
         <Toaster />
 
+
+        <UserProfileInitialModal/>
+
       </SidebarProvider >
 
-      <Dialog open={isModalOpen} >
-        <DialogContent className="p-0  ">
-          <div className="h-[300px] w-full bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url(${bg_popup})` }}></div>
-          <DialogHeader className="p-6">
-            <DialogTitle className="text-2xl font-medium">Apresentamos a plataforma {version ? ('Conectee') : ('Simcc')}</DialogTitle>
-            <DialogDescription>
-              O jeito mais fácil de visualizar e filtrar as produções técnicas e bibliográficas dos pesquisadores {version ? ('da Escola de Engenharia da UFMG') : ('do SECTI-BA')}.
-            </DialogDescription>
-            <div className="flex pt-6 items-center justify-between">
-              <div></div>
-
-              <div className="flex gap-3">
-                <Link to={'/termos-uso'}> <Button variant={'ghost'}><InfoIcon size={16} /> Termos de uso</Button></Link>
-
-                <Button onClick={handleClose}><Check size={16} />Aceitar todos os cookies</Button>
-              </div>
-            </div>
-          </DialogHeader>
-
-        </DialogContent>
-      </Dialog>
+    
     </div>
   );
 };

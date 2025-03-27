@@ -24,6 +24,7 @@ import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
 import { EditResearcherModal } from "../modals/edit-researcher-modal";
+import { HeaderInstitution } from "./components/header-institutuion";
 
 
 export function AddResearcherDashboard() {
@@ -279,6 +280,8 @@ setcarregado(false)
             </div>
 
             </div>
+
+            <HeaderInstitution/>
 
      <div className="gap-4 md:gap-8 flex flex-col ">
     {has_editar_pesquisadores ? (

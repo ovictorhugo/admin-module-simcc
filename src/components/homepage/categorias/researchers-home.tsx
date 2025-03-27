@@ -3,7 +3,7 @@ import { useModalResult } from "../../hooks/use-modal-result";
 import { UserContext } from "../../../context/context";
 import { CloudWordResearcherHome } from "./researchers-home/clould-word-researcher-home";
 import { HeaderResultTypeHome } from "./header-result-type-home";
-import { FadersHorizontal, ListNumbers, MagnifyingGlass, Rows, SquaresFour, UserList } from "phosphor-react";
+import { ChartBar, FadersHorizontal, ListNumbers, MagnifyingGlass, Rows, SquaresFour, UserList } from "phosphor-react";
 import { Button } from "../../ui/button";
 import { ResearchersBloco } from "./researchers-home/researchers-bloco";
 import { TableReseracherhome } from "./researchers-home/table-reseracher-home";
@@ -37,6 +37,8 @@ import { ScrollArea } from "../../ui/scroll-area";
 import { Input } from "../../ui/input";
 import { Separator } from "../../ui/separator";
 import { Badge } from "../../ui/badge";
+import { GraficoTitulacao } from "../../listagens/graficos/grafico-titulacao";
+import { GraficoAreaPesquisares } from "../../listagens/graficos/grafico-area-pesquisadores";
 
 type CityData = {
   nome: string;
@@ -51,6 +53,12 @@ type Research = {
   among: number,
   satus: boolean
   articles: number,
+  classe:string
+  cargo:string 
+  rt:string 
+  progressao:string 
+  genero:string
+  entradanaufmg:string
   book: number,
   book_chapters: number,
   id: string,
@@ -458,11 +466,13 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
                   onValueChange={handleAreaToggle}
                   className="aspect-auto flex flex-wrap items-start justify-start gap-2"
                 >
-                  {uniqueAreas.map((area) => (
-                    <ToggleGroupItem key={area} value={area} className="px-3 py-2">
-                      {area}
-                    </ToggleGroupItem>
-                  ))}
+                {uniqueAreas
+  .filter((area) => area.trim() !== "")
+  .map((area) => (
+    <ToggleGroupItem key={area} value={area} className="px-3 py-2">
+      {area}
+    </ToggleGroupItem>
+  ))}
                 </ToggleGroup>
     </AccordionContent>
   </AccordionItem>
@@ -930,7 +940,7 @@ export function ResearchersHome() {
             </Accordion>
           )}
 
-          {(searchType != 'name') && (
+          {(searchType != 'name' && simcc) && (
             <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex ">
               <AccordionItem value="item-1" className="w-full ">
                 <div className="flex mb-2">
@@ -946,16 +956,43 @@ export function ResearchersHome() {
                     <Skeleton className="rounded-md w-full h-[300px] " />
                   ) : (
                     <div>
-                      <MapaResearcher
-                        cityData={cityData}
-                      />
+                      <Alert className="p-0">
+                                          <MapaResearcher
+                                             cityData={cityData}
+                                           />
+                                          </Alert>
                     </div>
                   )}
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
           )}
-
+  { searchType !== 'name' && searchType !== 'area' && (
+             <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex ">
+                        <AccordionItem value="item-1" className="w-full ">
+                          <div className="flex mb-2">
+                            <HeaderResultTypeHome title="Gráficos dos pesquisadores" icon={<ChartBar size={24} className="text-gray-400" />}>
+                            </HeaderResultTypeHome>
+          
+                            <AccordionTrigger>
+          
+                            </AccordionTrigger>
+                          </div>
+                          <AccordionContent className="p-0">
+                            {loading ? (
+                              <Skeleton className="rounded-md w-full h-[300px] " />
+                            ) : (
+                              <div>
+                              <div className="grid gap-8 xl:grid-cols-2">
+                                <GraficoTitulacao researchers={researcher}/>
+                                <GraficoAreaPesquisares researchers={researcher}/>
+                              </div>
+                              </div>
+                            )}
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+  )}
           {(!isOpenAlex && FinalOpenAlex != 'true') && (
             <div>
               <Accordion defaultValue="item-1" type="single" collapsible>

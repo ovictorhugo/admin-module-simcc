@@ -80,11 +80,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: "/listagens",
             icon: Download
           },
-          {
-            title: "Produções recentes",
-            url: "/producoes-recentes",
-            icon: BookOpen
-          },
+        
           ...(version
             ? [
               {
@@ -97,7 +93,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
 
           {
-            title: "Dados externos",
+            title: "Dados",
             url: "/paines-dados-externos",
             icon: Link2
           },

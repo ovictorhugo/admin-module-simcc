@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useModalResult } from "../hooks/use-modal-result";
 import { UserContext } from "../../context/context";
 import municipios from '../homepage/categorias/researchers-home/municipios.json';
-import { FadersHorizontal, ListNumbers, MagnifyingGlass, Rows, SquaresFour, UserList } from "phosphor-react";
+import { ChartBar, FadersHorizontal, IdentificationBadge, ListNumbers, MagnifyingGlass, Rows, SquaresFour, StripeLogo, UserList } from "phosphor-react";
 import { Button } from "../ui/button";
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../components/ui/accordion";
@@ -11,8 +11,8 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { Alert } from "../ui/alert";
-import { CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Hash, MapIcon, Sparkles, Trash, User, X } from "lucide-react";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Hash, Info, MapIcon, Sparkles, Trash, User, Users, X } from "lucide-react";
 import bg_popup from '../../assets/bg_popup.png';
 import bg_user from '../../assets/user.png';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
@@ -39,6 +39,14 @@ import MapaResearcher from "../homepage/categorias/researchers-home/mapa-researc
 import { TableReseracherhome } from "../homepage/categorias/researchers-home/table-reseracher-home";
 import { ResearchersBloco } from "../homepage/categorias/researchers-home/researchers-bloco";
 import { HeaderResult } from "../homepage/header-results";
+import { GraficoTitulacao } from "./graficos/grafico-titulacao";
+import { GraficoAreaPesquisares } from "./graficos/grafico-area-pesquisadores";
+import { GraficoDocentesGenero } from "../dashboard/graficos/grafico-genero";
+import { GraficoDocentesRt } from "../dashboard/graficos/grafico-docente-rt";
+import { GraficoDocentesCargo } from "../dashboard/graficos/grafico-docentes-classe";
+import { GraficoProgressaoDocentes } from "../dashboard/graficos/grafico-progressao-docentes";
+import { GraficoAtualizacaoCurriculos } from "./graficos/grafico-atualizacao-lattes";
+import { GraficoAtualizacaoCurriculosBar } from "./graficos/grafico-atualizacao-lattes-bar";
 
 type CityData = {
   nome: string;
@@ -49,24 +57,30 @@ type CityData = {
   lattes_10_id: string;
 };
 
-type Research = {
+export type Research = {
   among: number,
   satus: boolean
   articles: number,
   book: number,
+  progressao:string
+  entradanaufmg:string
+  cargo:string
   book_chapters: number,
   id: string,
   name: string,
   university: string,
   lattes_id: string,
+  rt:string
   area: string,
   lattes_10_id: string,
   abstract: string,
   city: string,
+  classe:string
   orcid: string,
   image: string
   graduation: string,
   patent: string,
+  genero:string
   software: string,
   brand: string,
   lattes_update: Date,
@@ -794,6 +808,8 @@ export function ResearchersHomeListagens() {
     setResearcher,
   });
 
+
+  const currentDate = new Date().toLocaleDateString(); 
   return (
     <div className="w-full">
       <div className="w-full flex gap-4 justify-center">
@@ -839,7 +855,8 @@ export function ResearchersHomeListagens() {
           </div>
 </div>
 
-<Alert className={`p-0 mt-4 bg-cover bg-no-repeat bg-center ${(searchType == 'abstract' || searchType == 'name' || searchType == 'area') && ('col-span-4')}`}  >
+<div className="grid gap-8 mt-4   lg:grid-cols-3">
+<Alert className={`p-0  bg-cover bg-no-repeat bg-center ${(searchType == 'abstract' || searchType == 'name' || searchType == 'area') && ('col-span-4')}`}  >
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
                     Total de pesquisadores
@@ -854,12 +871,45 @@ export function ResearchersHomeListagens() {
                 </CardContent>
               </Alert>
 
+              <Alert className={`p-0  bg-cover bg-no-repeat bg-center ${(searchType == 'abstract' || searchType == 'name' || searchType == 'area') && ('col-span-4')}`}  >
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                  Percentual de
+                  </CardTitle>
+                  <IdentificationBadge className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{Number((researcher.filter(res => res.orcid !== null && res.orcid !== undefined && res.orcid !== "").length / researcher.length) * 100).toFixed(2)}%</div>
+                  <p className="text-xs text-muted-foreground">
+                    com ORCID
+                  </p>
+                </CardContent>
+              </Alert>
+
+              <Alert className={`p-0  bg-cover bg-no-repeat bg-center ${(searchType == 'abstract' || searchType == 'name' || searchType == 'area') && ('col-span-4')}`}  >
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                   Percentual de
+                  </CardTitle>
+                  <StripeLogo className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{Number((researcher.filter(res => res.scopus !== null && res.scopus !== undefined && res.scopus !== "").length / researcher.length) * 100).toFixed(2)}%</div>
+                  <p className="text-xs text-muted-foreground">
+                    com SCOPUS
+                  </p>
+                </CardContent>
+              </Alert>
+
+</div>
+
       
 
          
 
   
-            <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex ">
+            {simcc && (
+              <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex ">
               <AccordionItem value="item-1" className="w-full ">
                 <div className="flex mb-2">
                   <HeaderResultTypeHome title="Pesquisadores no mapa" icon={<MapIcon size={24} className="text-gray-400" />}>
@@ -874,16 +924,205 @@ export function ResearchersHomeListagens() {
                     <Skeleton className="rounded-md w-full h-[300px] " />
                   ) : (
                     <div>
-                      <MapaResearcher
+                     <Alert className="p-0">
+                     <MapaResearcher
                         cityData={cityData}
                       />
+                     </Alert>
                     </div>
                   )}
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+            )}
      
+            <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex ">
+              <AccordionItem value="item-1" className="w-full ">
+                <div className="flex mb-2">
+                  <HeaderResultTypeHome title="Gráficos dos pesquisadores" icon={<ChartBar size={24} className="text-gray-400" />}>
+                  </HeaderResultTypeHome>
 
+                  <AccordionTrigger>
+
+                  </AccordionTrigger>
+                </div>
+                <AccordionContent className="p-0">
+                  {loading ? (
+                    <Skeleton className="rounded-md w-full h-[300px] " />
+                  ) : (
+                    <div className="grid gap-8">
+                    <div className="grid gap-8 xl:grid-cols-2">
+                      <GraficoTitulacao researchers={researcher}/>
+                      <GraficoAreaPesquisares researchers={researcher}/>
+                    </div>
+
+                    {version && (
+                       <div className="grid gap-8">
+                       <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+                                      <Alert className="lg:col-span-2 ">
+                                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                          <div>
+                                            <CardTitle className="text-sm font-medium">
+                                              Perfil da carreira
+                                            </CardTitle>
+                                            <CardDescription>Classe de trabalho</CardDescription>
+                                          </div>
+                      
+                                          <TooltipProvider>
+                                            <Tooltip>
+                                              <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                                              <TooltipContent>
+                                                <p>Fonte: Instituição</p>
+                                              </TooltipContent>
+                                            </Tooltip>
+                                          </TooltipProvider>
+                      
+                                        </CardHeader>
+                      
+                                        <CardContent className="flex py-0 flex-1  items-center justify-center">
+                                        <GraficoDocentesCargo docentes={researcher}/>
+                                        </CardContent>
+                      
+                                      </Alert>
+                      
+                                      <Alert className="">
+                                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                          <div>
+                                            <CardTitle className="text-sm font-medium">
+                                              Regime de trabalho
+                                            </CardTitle>
+                                            <CardDescription>Carga horária semanal</CardDescription>
+                                          </div>
+                      
+                                          <TooltipProvider>
+                                            <Tooltip>
+                                              <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                                              <TooltipContent>
+                                                <p>Fonte: Instituição</p>
+                                              </TooltipContent>
+                                            </Tooltip>
+                                          </TooltipProvider>
+                      
+                                        </CardHeader>
+                      
+                                        <CardContent className="flex py-0 flex-1  items-center justify-center">
+                                           <GraficoDocentesRt docentes={researcher} />
+                                        </CardContent>
+                                      </Alert>
+                                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+                      <Alert className=" h-full">
+                                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                          <div>
+                                            <CardTitle className="text-sm font-medium">
+                                              Divisão por gênero
+                                            </CardTitle>
+                                            <CardDescription>Distribuição na instituição</CardDescription>
+                                          </div>
+                      
+                                          <TooltipProvider>
+                                            <Tooltip>
+                                              <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                                              <TooltipContent>
+                                                <p>Fonte: Instituição</p>
+                                              </TooltipContent>
+                                            </Tooltip>
+                                          </TooltipProvider>
+                      
+                                        </CardHeader>
+                      
+                                        <CardContent className="flex py-0 flex-1  items-center justify-center">
+                                          <GraficoDocentesGenero docentes={researcher} />
+                                        </CardContent>
+                      
+                                      </Alert>
+
+                                      <Alert className="">
+                                                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                                          <div>
+                                                            <CardTitle className="text-sm font-medium">
+                                                              Quantidade progressão de classe por ano
+                                                            </CardTitle>
+                                                            <CardDescription>Mudança de classe </CardDescription>
+                                                          </div>
+                                      
+                                                          <TooltipProvider>
+                                                            <Tooltip>
+                                                              <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                                                              <TooltipContent>
+                                                                <p>Fonte: Instituição</p>
+                                                              </TooltipContent>
+                                                            </Tooltip>
+                                                          </TooltipProvider>
+                                      
+                                                        </CardHeader>
+                                      
+                                                        <CardContent className="flex py-0 flex-1  items-center justify-center">
+                                                        <GraficoProgressaoDocentes docentes={researcher}/>
+                                                        </CardContent>
+                                                      </Alert>
+
+
+                                                      <Alert className="">
+                                                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                                          <div>
+                                                            <CardTitle className="text-sm font-medium">
+                                                              Atualização do Currículo Lattes
+                                                            </CardTitle>
+                                                            <CardDescription>Tempo de atualização desde {String(currentDate)}</CardDescription>
+                                                          </div>
+                                      
+                                                          <TooltipProvider>
+                                                            <Tooltip>
+                                                              <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                                                              <TooltipContent>
+                                                                <p>Fonte: Instituição</p>
+                                                              </TooltipContent>
+                                                            </Tooltip>
+                                                          </TooltipProvider>
+                                      
+                                                        </CardHeader>
+                                      
+                                                        <CardContent className="flex py-0 flex-1  items-center justify-center">
+                                                         <GraficoAtualizacaoCurriculos researchers={researcher}/>
+                                                        </CardContent>
+                                                      </Alert>
+                    </div>
+                     </div>
+                    )}
+
+                    {!version && (
+                       <Alert className="">
+                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                         <div>
+                           <CardTitle className="text-sm font-medium">
+                             Atualização do Currículo Lattes
+                           </CardTitle>
+                           <CardDescription>Tempo de atualização desde {String(currentDate)}</CardDescription>
+                         </div>
+     
+                         <TooltipProvider>
+                           <Tooltip>
+                             <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                             <TooltipContent>
+                               <p>Fonte: Instituição</p>
+                             </TooltipContent>
+                           </Tooltip>
+                         </TooltipProvider>
+     
+                       </CardHeader>
+     
+                       <CardContent className="flex py-0 flex-1  items-center justify-center">
+                        <GraficoAtualizacaoCurriculosBar researchers={researcher}/>
+                       </CardContent>
+                     </Alert>
+                    )}
+                    </div>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
         
             <div>
               <Accordion defaultValue="item-1" type="single" collapsible>
