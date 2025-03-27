@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Button } from "../../ui/button";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { AlignLeft, BarChart, Book, Check, ChevronDown, ChevronLeft, ChevronUp, Code, Copy, Eye, File, GalleryHorizontal, Globe, GripVertical, Heading1, Heading2, Heading3, Image, LayoutPanelTop, Link, List, ListOrdered, MapPinIcon, Palette, Pencil, Plus, Rows, SquareDashedMousePointer, SquareMousePointer, SquarePlay, SquarePlus, Star, Table, TableCellsMerge, Upload, Users } from "lucide-react";
+import { AlignLeft, BarChart, Book, BookOpen, Check, ChevronDown, ChevronLeft, ChevronUp, Code, Copy, Eye, File, GalleryHorizontal, Globe, GripVertical, Heading1, Heading2, Heading3, Image, LayoutPanelTop, Link, List, ListOrdered, MapPinIcon, Palette, Pencil, Plus, Rows, SquareDashedMousePointer, SquareMousePointer, SquarePlay, SquarePlus, Star, Table, TableCellsMerge, Upload, Users } from "lucide-react";
 import { Separator } from "../../ui/separator";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Alert } from "../../ui/alert";
@@ -139,8 +139,8 @@ export interface Keepo {
     { titulo: "Pesquisadores", desc: "Carrossel de participantes", icon: <Users size={16} />, type: 'pesquisadores' as const },
     { titulo: "Nuvem de palavras", desc: "Palavras com maiores ocorrências", icon: <Users size={16} />, type: 'nuvem-palavra' as const },
     { titulo: "Tabela", desc: "Dados de produção", icon: <Table size={16} />, type: 'tabela' as const },
-    { titulo: "Todos os artigos", desc: "Artigos dos pesquisadores", icon: <Quotes size={16} />, type: 'artigos' as const },
-    { titulo: "Todos os livros", desc: "Livros dos pesquisadores", icon: <Book size={16} />, type: 'livros' as const },
+    { titulo: "Todos os artigos", desc: "Artigos dos pesquisadores", icon: <File size={16} />, type: 'artigos' as const },
+    { titulo: "Todos os livros", desc: "Livros dos pesquisadores", icon: <BookOpen size={16} />, type: 'livros' as const },
     { titulo: "Todos os livros e capítulos", desc: "Livros e capítulos dos pesquisadores", icon: <Book size={16} />, type: 'capitulos' as const },
     { titulo: "Todos os livros e capítulos", desc: "Livros e capítulos dos pesquisadores", icon: <Book size={16} />, type: 'patentes' as const },
     { titulo: "Todos os livros e capítulos", desc: "Livros e capítulos dos pesquisadores", icon: <Book size={16} />, type: 'sotwares' as const },

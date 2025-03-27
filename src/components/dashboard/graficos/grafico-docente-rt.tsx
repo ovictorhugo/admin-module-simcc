@@ -1,53 +1,27 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Alert } from "../../ui/alert";
-import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import { ChartContainer, ChartTooltip,ChartConfig, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
+import { BarChart, Bar, XAxis,  LabelList, CartesianGrid,  ResponsiveContainer, Cell } from "recharts";
+import { ChartContainer, ChartTooltip, ChartConfig, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
+import { Research } from "../../listagens/researchers-home";
 
-interface Docentes {
-  matric: string;
-  inscUFMG: string;
-  nome: string;
-  genero: string;
-  situacao: string;
-  rt: string;
-  clas: string;
-  cargo: string;
-  classe: string;
-  ref: string;
-  titulacao: string;
-  entradaNaUFMG: string;
-  progressao: string;
-  year_charge: string;
-  semester: string;
-}
+
 
 const chartConfig = {
-  "20H": {
-    label: "20 Horas",
-    color: "hsl(var(--chart-1))",
-  },
-  "40H": {
-    label: "40 Horas",
-    color: "hsl(var(--chart-2))",
-  },
-  DE: {
-    label: "Dedicação Exclusiva",
-    color: "hsl(var(--chart-3))",
-  },
-  "30H": {
-    label: "30 Horas",
-    color: "hsl(var(--chart-4))",
-  },
-  "PROJETO 30H": {
-    label: "Projeto 30 Horas",
-    color: "hsl(var(--chart-5))",
+  regime: {
+    label: "Cargos",
+    color: "#004A75", // Cor única para todas as barras
   },
 } satisfies ChartConfig;
 
-export function GraficoDocentesRt({ docentes }: { docentes: Docentes[] }) {
+export function GraficoDocentesRt({ docentes }: { docentes: Research[] }) {
   const [chartData, setChartData] = useState<{ rt: string; count: number }[]>([]);
 
   useEffect(() => {
+    if (!Array.isArray(docentes)) {
+      console.error("The 'docentes' prop is not an array:", docentes);
+      return;
+    }
+
     const counts: { [key: string]: number } = {};
 
     docentes.forEach(docente => {
@@ -63,16 +37,8 @@ export function GraficoDocentesRt({ docentes }: { docentes: Docentes[] }) {
     setChartData(data);
   }, [docentes]);
 
-  function getColorForRt(rt: string) {
-    const colors = {
-      "20H": '#FFB74D',
-      "40H": '#64B5F6',
-      DE: '#81C784',
-      "30H": '#FF8A65',
-      "PROJETO 30H": '#E57373',
-    };
-    return colors[rt] || '#000000';
-  }
+  
+
 
   return (
     <Alert className="p-0 border-0 h-full">
@@ -80,16 +46,20 @@ export function GraficoDocentesRt({ docentes }: { docentes: Docentes[] }) {
         <ResponsiveContainer>
           <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
             <XAxis dataKey="rt" tickLine={false} tickMargin={10} axisLine={false} />
-           
+        
             <CartesianGrid vertical={false} horizontal={false} />
-            <ChartLegend content={<ChartLegendContent />} />
+         
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-            <Bar dataKey="count" radius={4}>
-              <LabelList dataKey="count" position="top" offset={12} className="fill-foreground" fontSize={12} />
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getColorForRt(entry.rt)} />
-              ))}
-            </Bar>
+             <Bar dataKey="count" radius={4} fill={chartConfig.regime.color}>
+                          <LabelList
+                            dataKey="count"
+                            position="top"
+                            offset={10}
+                            className="fill-foreground"
+                            fontSize={12}
+                            fill="#919191" // Cor fixa para as legendas no topo das barras
+                          />
+                        </Bar>
           </BarChart>
         </ResponsiveContainer>
       </ChartContainer>

@@ -4,44 +4,28 @@ import { BarChart, Bar, XAxis,  LabelList, CartesianGrid,  ResponsiveContainer, 
 import { ChartContainer, ChartTooltip, ChartConfig, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
 
 interface Docentes {
-  cargo:string
-  classe:string
-  data_prog:string
-  deno_sit:string
-  detalhe_setor:string
-  dting_org:string
-  genero:string
-  ins_ufmg:string
-  matric:string
-  nivel:string
-  nome:string
-  ref:string
-  rt:string
-  semester:string
-  setor:string
-  titulacao:string
+  technician_id: string,
+  nome: string,
+  genero: string,
+    name:string
+    deno_sit:string
+    rt:string 
+    classe:string 
+    cargo:string
+    nivel:string 
+    ref:string
+    titulacao:string 
+    setor:string 
+    detalhe_setor:string 
+    dting_org:string 
+    data_prog:string 
+    semester:string 
 }
 
 const chartConfig = {
-  "20H": {
-    label: "20 Horas",
-    color: "hsl(var(--chart-1))",
-  },
-  "40H": {
-    label: "40 Horas",
-    color: "hsl(var(--chart-2))",
-  },
-  "DE": {
-    label: "Dedicação Exclusiva",
-    color: "hsl(var(--chart-3))",
-  },
-  "30H": {
-    label: "30 Horas",
-    color: "hsl(var(--chart-4))",
-  },
-  "PROJETO 30H": {
-    label: "Projeto 30 Horas",
-    color: "hsl(var(--chart-5))",
+  regime: {
+    label: "Cargos",
+    color: "#004A75", // Cor única para todas as barras
   },
 } satisfies ChartConfig;
 
@@ -69,16 +53,8 @@ export function GraficoTecnicosRt({ docentes }: { docentes: Docentes[] }) {
     setChartData(data);
   }, [docentes]);
 
-  function getColorForRt(rt: "20H"| "40H"| "DE" | "30H"| "PROJETO 30H") {
-    const colors = {
-      "20H": '#FFB74D',
-      "40H": '#64B5F6',
-      "DE": '#81C784',
-      "30H": '#FF8A65',
-      "PROJETO 30H": '#E57373',
-    };
-    return colors[rt] || '#000000';
-  }
+  
+
 
   return (
     <Alert className="p-0 border-0 h-full">
@@ -88,19 +64,18 @@ export function GraficoTecnicosRt({ docentes }: { docentes: Docentes[] }) {
             <XAxis dataKey="rt" tickLine={false} tickMargin={10} axisLine={false} />
         
             <CartesianGrid vertical={false} horizontal={false} />
-            <ChartLegend content={<ChartLegendContent />} />
+         
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-            <Bar dataKey="count" radius={4}>
-              <LabelList dataKey="count" position="top" offset={12} className="fill-foreground" fontSize={12} />
-              {chartData.map((entry, index) => {
-                const rt = entry.rt;
-                let color = '#000000'; // Default color
-                if (['20H', '40H', 'DE', '30H', 'PROJETO 30H'].includes(rt)) {
-                  color = getColorForRt(rt as '20H' | '40H' | 'DE' | '30H' | 'PROJETO 30H');
-                }
-                return <Cell key={`cell-${index}`} fill={color} />;
-              })}
-            </Bar>
+             <Bar dataKey="count" radius={4} fill={chartConfig.regime.color}>
+                          <LabelList
+                            dataKey="count"
+                            position="top"
+                            offset={10}
+                            className="fill-foreground"
+                            fontSize={12}
+                            fill="#919191" // Cor fixa para as legendas no topo das barras
+                          />
+                        </Bar>
           </BarChart>
         </ResponsiveContainer>
       </ChartContainer>

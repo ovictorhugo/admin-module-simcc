@@ -1,4 +1,4 @@
-import { BarChart, Book, Plus, Stamp } from "lucide-react";
+import { BarChart, Book, BookOpen, File, Plus, Stamp } from "lucide-react";
 import { Button } from "../../../ui/button";
 import { Base } from "../base";
 import { Keepo } from "../builder-page";
@@ -118,8 +118,8 @@ export function TabelaSection (props:Props) {
     const [showDropdown, setShowDropdown] = useState(false);
 
    const items = [
-        { titulo: "Artigos", desc: "Artigos por ano", icon: <Quotes size={16} />, type:'tabela-artigo' },
-        { titulo: "Livros e capítulos", desc: "Gráfico de barras", icon: <Book size={16} />, type:'livro-capitulo' },
+        { titulo: "Artigos", desc: "Artigos por ano", icon: <File size={16} />, type:'tabela-artigo' },
+        { titulo: "Livros e capítulos", desc: "Gráfico de barras", icon: <BookOpen size={16} />, type:'livro-capitulo' },
         { titulo: "Produção técnica", desc: "Gráfico de barras", icon: <Stamp size={16} />, type:'producao-tecnica' },
        
       ];

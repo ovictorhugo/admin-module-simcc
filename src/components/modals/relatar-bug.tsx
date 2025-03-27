@@ -32,7 +32,7 @@ export function RelatarBug() {
   }
 
   const close = () => {
-    handleVoltar()
+   
     onClose()
   }
 
@@ -51,7 +51,60 @@ export function RelatarBug() {
         description: descricao
       }
 
+      if (!nome) {
+        toast("Erro ao enviar", {
+          description: "O campo Nome é obrigatório.",
+          action: {
+            label: "Fechar",
+            onClick: () => console.log("Fechar"),
+          },
+        });
+        return;
+      }
+      
+      if (!email) {
+        toast("Erro ao enviar", {
+          description: "O campo E-mail é obrigatório.",
+          action: {
+            label: "Fechar",
+            onClick: () => console.log("Fechar"),
+          },
+        });
+        return;
+      }
+      
+      if (!avaliacao) {
+        toast("Erro ao enviar", {
+          description: "O campo Avaliação é obrigatório.",
+          action: {
+            label: "Fechar",
+            onClick: () => console.log("Fechar"),
+          },
+        });
+        return;
+      }
+      
+      if (!descricao) {
+        toast("Erro ao enviar", {
+          description: "O campo Descrição é obrigatório.",
+          action: {
+            label: "Fechar",
+            onClick: () => console.log("Fechar"),
+          },
+        });
+        return;
+      }
 
+      if (!nome || !email || !avaliacao || !descricao) {
+        toast("Erro ao enviar", {
+          description: "Por favor, preencha todos os campos.",
+          action: {
+            label: "Fechar",
+            onClick: () => console.log("Fechar"),
+          },
+        });
+        return; // Impede que o código continue
+      }
 
 
       let urlProgram = urlGeralAdm + 's/feedback'
@@ -83,7 +136,7 @@ export function RelatarBug() {
               },
             })
 
-
+onClose()
 
           } else {
 
@@ -121,7 +174,7 @@ export function RelatarBug() {
   return (
     <Sheet open={isModalOpen} onOpenChange={close}>
       <SheetContent
-        className={`p-0 dark:bg-neutral-900 dark:border-gray-600  w-full lg:w-[50vw]`}
+        className={`p-0 dark:bg-neutral-900 dark:border-gray-600  w-full lg:min-w-[50vw]`}
       >
         <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-b-neutral-600">
           <div className="flex items-center gap-3">
@@ -195,7 +248,7 @@ export function RelatarBug() {
               </div>
 
               <div className="flex flex-col gap-2 mt-4 ">
-                <Label>Avaliação do sistema</Label>
+                <Label>Avaliação do sistema*</Label>
                 <ToggleGroup onValueChange={(value) => setAvaliacao(Number(value))} type="single" variant={'outline'} className="grid grid-cols-5 md:flex md:flex-wrap gap-3">
                   {Array.from({ length: 10 }, (_, index) => (
                     <ToggleGroupItem className="flex flex-1" key={index + 1} value={`${index + 1}`}>

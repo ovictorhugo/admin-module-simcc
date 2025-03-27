@@ -196,52 +196,31 @@ export function MinhaArea() {
 
 
   //permissoes
-  const hasBaremaAvaliacao = permission.some(
-    (perm) => perm.permission === 'criar_barema_avaliacao'
-  );
+  const permissions = {
+    hasBaremaAvaliacao: permission.some(perm => perm.permission === 'criar_barema_avaliacao'),
+    hasNotificacoes: permission.some(perm => perm.permission === 'enviar_notificacoes'),
+    hasVisualizarPesquisadores: permission.some(perm => perm.permission === 'visualizar_pesquisadores'),
+    hasVisualizarTodosDepartamentos: permission.some(perm => perm.permission === 'visualizar_todos_departamentos'),
+    hasVisualizarTodosProgramas: permission.some(perm => perm.permission === 'visualizar_todos_programas'),
+    hasVisualizarGruposPesquisa: permission.some(perm => perm.permission === 'visualizar_grupos_pesquisa'),
+    hasVisualizarInct: permission.some(perm => perm.permission === 'visualizar_inct'),
+    hasEditarPesosAvaliacao: permission.some(perm => perm.permission === 'editar_pesos_avaliacao'),
+    hasVisualizarIndicadoresInstituicao: permission.some(perm => perm.permission === 'visualizar_indicadores_instituicao'),
+    hasVisualizarGerenciaModuloAdministrativo: permission.some(perm => perm.permission === 'visualizar_gerencia_modulo_administrativo')
+  };
 
-  const hasNotificacoes = permission.some(
-    (perm) => perm.permission === 'enviar_notificacoes'
-  );
-
-  const has_visualizar_pesquisadores = permission.some(
-    (perm) => perm.permission === 'visualizar_pesquisadores'
-  );
-
-  const has_visualizar_todos_departamentos = permission.some(
-    (perm) => perm.permission === 'visualizar_todos_departamentos'
-  );
-
-  const has_visualizar_modulo_administrativo = permission.some(
-    (perm) => perm.permission === 'visualizar_modulo_administrativo'
-  );
-
-  const has_visualizar_todos_programas = permission.some(
-    (perm) => perm.permission === 'visualizar_todos_programas'
-  );
-
-  const has_visualizar_grupos_pesquisa = permission.some(
-    (perm) => perm.permission === 'visualizar_grupos_pesquisa'
-  );
-
-  const has_visualizar_inct = permission.some(
-    (perm) => perm.permission === 'visualizar_inct'
-  );
-
-  const has_editar_pesos_avaliacao = permission.some(
-    (perm) => perm.permission === 'editar_pesos_avaliacao'
-  );
-
-  const has_visualizar_indicadores_instituicao = permission.some(
-    (perm) => perm.permission === 'visualizar_indicadores_instituicao'
-  );
-
-
-  const has_visualizar_gerencia_modulo_administrativo = permission.some(
-    (perm) => perm.permission === 'visualizar_gerencia_modulo_administrativo'
-  );
-
-
+  const accessLinks = [
+    { permission: 'hasVisualizarGerenciaModuloAdministrativo', to: '/dashboard/administrativo', icon: <SlidersHorizontal size={16} />, label: 'Administrativo' },
+    { permission: 'hasVisualizarTodosDepartamentos', to: '/dashboard/departamentos', icon: <Building2 size={16} />, label: 'Departamentos' },
+    { permission: 'hasVisualizarPesquisadores', to: '/dashboard/pesquisadores', icon: <Users size={16} />, label: 'Pesquisadores' },
+    { permission: 'hasVisualizarTodosProgramas', to: '/dashboard/programas', icon: <GraduationCap size={16} />, label: 'Programas' },
+    { permission: 'hasVisualizarGruposPesquisa', to: '/dashboard/grupos-pesquisa', icon: <Blocks size={16} />, label: 'Grupos de pesquisa' },
+    { permission: 'hasVisualizarInct', to: '/dashboard/inct', icon: <FlaskConical size={16} />, label: 'INCT\'s' },
+    { permission: 'hasEditarPesosAvaliacao', to: '/dashboard/pesos-avaliacao', icon: <Weight size={16} />, label: 'Pesos de avaliação' },
+    { permission: 'hasVisualizarIndicadoresInstituicao', to: '/dashboard/indicadores', icon: <PieChart size={16} />, label: 'Indicadores' },
+    { permission: 'hasBaremaAvaliacao', to: '/dashboard/baremas', icon: <ClipboardEdit size={16} />, label: 'Baremas' },
+    { permission: 'hasNotificacoes', to: '/dashboard/enviar-notificacoes', icon: <Mail size={16} />, label: 'Enviar notificações' }
+  ];
   const location = useLocation();
 
   return (
@@ -468,73 +447,23 @@ export function MinhaArea() {
 
                     <h5 className="font-medium text-xl mb-4">Acesso rápido</h5>
                     <div className={`flex flex-col md:grid gap-4  ${expand ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3" : "md:grid-cols-1 xl:grid-cols-2 lg:grid-cols-1"}`}>
-                      {has_visualizar_modulo_administrativo && (
-                        <Link to={'/dashboard'} onClick={() => onClose()}>
-                          <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
-                            <LayoutDashboard size={16} />Dashboard</div></Alert></Link>
-                      )}
+                    {accessLinks.map(({ permission, to, icon, label }) => 
+          permissions[permission] && (
+            <Link to={to} key={to} >
+              <Alert className="h-[80px] bg-blue-100 border-0 hover:bg-blue-200 text-sm dark:bg-blue-100/50 dark:hover:bg-blue-200/50 transition-all cursor-pointer flex items-center lg:p-8">
+                <div className="flex w-full justify-between items-center gap-3  cursor-pointer">
+                  <div>
+                  {label}
+                  </div>
 
-                      {has_visualizar_gerencia_modulo_administrativo && (
-                        <Link to={'/dashboard/administrativo'} onClick={() => onClose()}>
-                          <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
-                            <SlidersHorizontal size={16} />Administrativo</div></Alert></Link>
-                      )}
-
-                      {has_visualizar_todos_departamentos && (
-                        <Link to={'/dashboard/departamentos'} onClick={() => onClose()}>
-                          <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
-                            <Building2 size={16} />Departamentos</div></Alert></Link>
-                      )}
-
-                      {has_visualizar_pesquisadores && (
-                        <Link to={'/dashboard/pesquisadores'} onClick={() => onClose()}>
-                          <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
-                            <Users size={16} />Pesquisadores</div></Alert></Link>
-                      )}
-
-
-                      {has_visualizar_todos_programas && (
-                        <Link to={'/dashboard/programas'} onClick={() => onClose()}>
-                          <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
-                            <GraduationCap size={16} />Programas</div></Alert></Link>
-                      )}
-
-                      {has_visualizar_grupos_pesquisa && (
-                        <Link to={'/dashboard/grupos-pesquisa'} onClick={() => onClose()}>
-                          <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
-                            <Blocks size={16} />Grupos de pesquisa</div></Alert></Link>
-                      )}
-
-                      {has_visualizar_inct && (
-                        <Link to={'/dashboard/inct'} onClick={() => onClose()}>
-                          <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
-                            <FlaskConical size={16} />INCT's</div></Alert></Link>
-                      )}
-
-
-                      {has_editar_pesos_avaliacao && (
-                        <Link to={'/dashboard/pesos-avaliacao'} onClick={() => onClose()}>
-                          <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
-                            <Weight size={16} />Pesos de avaliação</div></Alert></Link>
-                      )}
-
-                      {has_visualizar_indicadores_instituicao && (
-                        <Link to={'/dashboard/indicadores'} onClick={() => onClose()}>
-                          <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
-                            <PieChart size={16} />Indicadores</div></Alert></Link>
-                      )}
-
-                      {hasBaremaAvaliacao && (
-                        <Link to={'/dashboard/baremas'} onClick={() => onClose()}>
-                          <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
-                            <ClipboardEdit size={16} />Baremas</div></Alert></Link>
-                      )}
-
-                      {hasNotificacoes && (
-                        <Link to={'/dashboard/enviar-notificacoes'} onClick={() => onClose()}>
-                          <Alert className="h-[80px] hover:bg-neutral-100 text-sm dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center p-8"><div className="flex items-center gap-3 font-medium cursor-pointer">
-                            <Mail size={16} />Enviar notificações</div></Alert></Link>
-                      )}
+                  <div className="h-10 w-10 rounded-md bg-black/10 flex items-center justify-center">
+                  {icon}
+                  </div>
+                </div>
+              </Alert>
+            </Link>
+          )
+        )}
 
                     </div>
 

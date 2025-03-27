@@ -29,20 +29,26 @@ interface GraduateProgram {
   sigla: string
   latitude: string
   longitude: string
+  visible:string
+}
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
 }
 
 // Importar dados GeoJSON do Brasil
 
-import brazilStatesGeoJSON from './ba_state.json'; // Substitua pelo caminho correto
+import brazilStatesGeoJSON from './ba_state.json';
+import mgStateGeoJSON from './mg_state.json'; // Substitua pelo caminho correto
 import { UserContext } from '../../context/context';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function BahiaMap() {
-  const { urlGeral, setUrlGeral } = useContext(UserContext);
+  const { version, urlGeral, setUrlGeral, simcc } = useContext(UserContext);
   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext);
   const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram[]>([]);
 
- 
-
+   const navigate = useNavigate();
+  const queryUrl = useQuery();
 
    
   const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=`;
@@ -79,7 +85,7 @@ function BahiaMap() {
 
 // Crie um objeto para armazenar a contagem de programas por estado
 const cityProgramCount: Record<string, number> = {};
-  graduatePrograms.forEach((program) => {
+  graduatePrograms.filter(item => item.visible == "True").forEach((program) => {
     const city = program.city;
     if (cityProgramCount[city]) {
       cityProgramCount[city] += 1;
@@ -99,7 +105,7 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
     const chart = Highmaps.mapChart( {
       chart: {
         renderTo: 'containerone',
-        map: brazilStatesGeoJSON,
+        map: !version ? brazilStatesGeoJSON : mgStateGeoJSON,
         backgroundColor: 'transparent',
      
         
@@ -137,33 +143,11 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
               // Lidar com o evento de clique para os estados
               click: function () {
                 const city = (this.options as { name: string })['name'];
-
-                // Implementar lógica de zoom ou drilldown aqui
-
-                if (cityProgramCount[city] === 1) {
-                  
-                  // Procurar pelo programa de pós-graduação com o estado correspondente e obter o ID
-                  const programWithState = graduatePrograms.find(program => program.city === city);
-                  if (programWithState) {
-                
-                    const programId = programWithState.graduate_program_id;
-                    console.log('aq porra')
-                    // Definir o ID do programa selecionado em selectedGraduateProgramId
-                    setIdGraduateProgram(programId);
-                    console.log(idGraduateProgram)
-                  }
-                }
-
-                //SsetEstadoSelecionado(city);
-
-                if (cityProgramCount[city] > 1) {
-                  setIdGraduateProgram('0');
-                }
-           
-               
-                console.log(`Estado clicado: ${city}`);
-                // Dar zoom no estado clicado
-               
+                queryUrl.set('cities', city);
+                navigate({
+                  pathname: '/pos-graduacao',
+                  search: queryUrl.toString(),
+                });
               },
             },
 
@@ -181,7 +165,7 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
     };
   }, [graduatePrograms]); // O array vazio garante que o useEffect seja executado apenas uma vez na montagem
 
-  return <div className={` absolute w-[140%] z-[3] h-full left-[-20px]`} id="containerone" />;
+  return <div className={` absolute w-[140%] z-[2] h-full left-[-20px]`} id="containerone" />;
 }
 
 export default BahiaMap;

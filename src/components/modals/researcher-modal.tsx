@@ -18,13 +18,14 @@ import { useContext } from "react";
 import { UserContext } from "../../context/context";
 
 
-type Research = {
+export type Research = {
   among: number,
   articles: number,
   institution_id:string
   book: number,
   book_chapters: number,
   id: string,
+  entradanaufmg:string
   name: string,
   university: string,
   lattes_id: string,
@@ -95,7 +96,7 @@ interface ResearchGroups {
 
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import { ArrowSquareOut, BracketsCurly, Buildings, CalendarBlank, CaretDown, File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, X } from "phosphor-react";
+import { ArrowSquareOut, BracketsCurly, Buildings, CalendarBlank, CaretDown, File, FileCsv, Files, Quotes, ShareNetwork, Stamp, Student, Ticket, UserRectangle, X } from "phosphor-react";
 import { NuvemPalavras } from "../popup/nuvem-palavras";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { TotalViewResearcher } from "../popup/total-view-researcher";
@@ -108,7 +109,7 @@ import { RelatorioTecnicoResearcherPopUp } from "../popup/relatorio-tecnico-rese
 import { SpeakerResearcherPopUp } from "../popup/speaker-researcher";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { BookOpenText, Boxes, Briefcase, Check, Copy, FolderKanban, LoaderCircle, Minus, MoreHorizontal, Plus, Waypoints } from "lucide-react";
+import { BookOpen, BookOpenText, Boxes, Briefcase, Check, Copy, FolderKanban, LoaderCircle, Minus, MoreHorizontal, Plus, Waypoints } from "lucide-react";
 
 import QRCode from "react-qr-code";
 
@@ -364,7 +365,7 @@ export function ResearcherModal() {
           {researcher.slice(0, 1).map((user) => {
             return (
               <div className="w-full flex justify-center ">
-                <div className="bg-cover bg-center bg-no-repeat h-28 w-28  rounded-2xl mb-3 border-4 border-white dark:border-neutral-950  absolute top-[-55px]   " style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${user.id}) ` }}></div>
+                <div className="bg-cover bg-center bg-no-repeat h-28 w-28 bg-white dark:bg-neutral-950   rounded-2xl mb-3 border-4 border-white dark:border-neutral-950  absolute top-[-55px]   " style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${user.id}) ` }}></div>
               </div>
             )
           })}
@@ -386,6 +387,8 @@ export function ResearcherModal() {
 
             const isOutdated = monthDifference > 3;
             const isOutdated6 = monthDifference > 6;
+
+            
 
             return (
               <div
@@ -475,9 +478,9 @@ export function ResearcherModal() {
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent> {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
-                            'Remover pesquisador(a)'
+                            'Remover pesquisador(a) do barema'
                           ) : (
-                            'Adicionar pesquisador(a)'
+                            'Adicionar pesquisador(a) ao barema'
                           )}</TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -646,7 +649,7 @@ export function ResearcherModal() {
                                 onClick={() => setValue('article')}
                                 className="flex gap-2 items-center"
                               >
-                                <Quotes size={16} className="" />
+                                <File size={16} className="" />
                                 Artigos
                               </TabsTrigger>
                               <TabsTrigger
@@ -654,7 +657,7 @@ export function ResearcherModal() {
                                 onClick={() => setValue('book')}
                                 className="flex gap-2 items-center"
                               >
-                                <File size={16} className="" />
+                                <BookOpen size={16} className="" />
                                 Livros e capítulos
                               </TabsTrigger>
                               <TabsTrigger
@@ -840,7 +843,7 @@ export function ResearcherModal() {
                               subsidy={user.subsidy}
                               graduate_programs={user.graduate_programs}
                               departments={user.departments}
-
+                              entradanaufmg={user.entradanaufmg}
                               cargo={user.cargo}
                               clas={user.clas}
                               classe={user.classe}

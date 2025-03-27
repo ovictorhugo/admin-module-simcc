@@ -1,17 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
-import { useModalResult } from "../hooks/use-modal-result";
+import { ModalType, useModalResult } from "../hooks/use-modal-result";
 import { ResultProvider } from "../provider/result-provider";
 
 import { UserContext } from "../../context/context";
 
 import { Button } from "../ui/button";
-import { Building, Building2, ChevronDown, ChevronUp, Copyright, Download, MoreHorizontal, SlidersHorizontal, Ticket, Users } from "lucide-react";
+import { BookOpen, Building, Building2, ChevronDown, ChevronUp, Copyright, Download, MoreHorizontal, SlidersHorizontal, Ticket, Users } from "lucide-react";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useModal } from "../hooks/use-modal-store";
 import { DotsThreeOutline, DotsThreeVertical, File, Plus, Quotes } from "phosphor-react";
 import { Search } from "../search/search";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
@@ -57,6 +57,41 @@ export function ResultHome() {
       onOpen('researchers-home')
     }
   }, [typeResult]);
+
+  ////
+  const tab = queryUrl.get('tab');
+  const navigate = useNavigate();
+
+  const updateFilters = (category: string, values: any) => {
+    if (values  ) {
+     
+      queryUrl.set(category, values);
+     
+    } else {
+     queryUrl.delete(category)
+    }
+   
+  };
+
+  useEffect(() => {
+    console.log("typeResult mudou para:", typeResult);
+     updateFilters("tab", typeResult );
+
+     navigate({
+      pathname: '/resultados',
+      search: queryUrl.toString(),
+    })
+
+  }, [typeResult]);
+
+  useEffect(() => {
+    if(tab != null && tab != undefined) {
+      onOpen(tab as ModalType)
+    }
+     
+   }, []);
+
+
 
 
 
@@ -166,7 +201,7 @@ export function ResultHome() {
 
   const { version } = useContext(UserContext)
   return (
-    <div className="h-full w-full grid grid-cols-1">
+    <div className="h-full w-full flex flex-col">
       <Helmet>
         <title>
           {itemsSelecionados.length === 0
@@ -186,16 +221,17 @@ export function ResultHome() {
       </Helmet>
 
       {(itemsSelecionados.length > 0 || (researcher == 'false')) && (
-        <div className="top-[68px] sticky z-[2] supports-[backdrop-filter]:dark:bg-neutral-900/60 supports-[backdrop-filter]:bg-neutral-50/60 backdrop-blur">
-          <div className={`w-full ${isOn ? 'px-8' : 'px-4'} border-b border-b-neutral-200 dark:border-b-neutral-800`}>
+        <div className="top-[68px] h-fit sticky z-[2] supports-[backdrop-filter]:dark:bg-neutral-900/60 supports-[backdrop-filter]:bg-neutral-50/60 backdrop-blur">
+          <div className={`w-full px-8 border-b border-b-neutral-200 dark:border-b-neutral-800`}>
             {isOn && (
               <div className="w-full pt-4  flex justify-between items-center">
                 <Search />
               </div>
             )}
             <div className={`flex w-full flex-wrap pt-2 justify-between ${isOn ? '' : ''} `}>
-              <ScrollArea>
-                <div className="w-full flex overflow-x-scroll md:overflow-x-auto items-center gap-2 pb-4 md:pb-0">
+             <div className="grid grid-cols-1">
+             <ScrollArea>
+                <div className="w-full flex  items-center gap-2">
                   {!((researcher == 'false' && itemsSelecionados.length == 0) && itemsSelecionados.length == 0) && (
                     <div className={`pb-2 border-b-2 transition-all ${typeResult == 'researchers-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
                       <Button variant={typeResult == 'researchers-home' ? ('ghost') : ('ghost')} className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
@@ -207,7 +243,7 @@ export function ResultHome() {
                   {searchType === 'article' && (
                     <div className={`pb-2 border-b-2  transition-all ${typeResult == 'articles-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
                       <Button variant={typeResult == 'articles-home' ? ('ghost') : ('ghost')} className="m-0" onClick={() => onOpen('articles-home')}>
-                        <Quotes className="h-4 w-4" />
+                        <File className="h-4 w-4" />
                         Artigos
                       </Button>
                     </div>
@@ -215,7 +251,7 @@ export function ResultHome() {
                   {searchType === 'book' && (
                     <div className={`pb-2 border-b-2  transition-all ${typeResult == 'book-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
                       <Button variant={typeResult == 'book-home' ? ('ghost') : ('ghost')} className="m-0" onClick={() => onOpen('book-home')}>
-                        <File className="h-4 w-4" />
+                        <BookOpen className="h-4 w-4" />
                         Livros e capítulos
                       </Button>
                     </div>
@@ -249,6 +285,7 @@ export function ResultHome() {
                 </div>
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
+             </div>
 
               <div className="hidden xl:flex xl:flex-nowrap gap-2">
                 <div className="md:flex md:flex-nowrap gap-2">
@@ -284,38 +321,35 @@ export function ResultHome() {
               <div className="block xl:hidden">
                 <DropdownMenu>
                   <DropdownMenuTrigger>
-                    <Button variant="ghost" className="h-8 w-8 p-0 xl:block">
+                    <Button variant="ghost" size={'icon'} className=" p-0 xl:flex">
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuLabel>Mais opções</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
+                    
                     <Link to={`${urlGeral}dictionary.pdf`} target="_blank">
-                    <DropdownMenuItem className="p-0">
-                      <Button variant="ghost" className="">
+                    <DropdownMenuItem className="gap-2">
+                    
                         <File size={16} className="" />
                         Dicionário de dados
-                      </Button>
+                  
                     </DropdownMenuItem></Link>
 
-                    <DropdownMenuItem className="p-0">
-                      <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
+                    <DropdownMenuItem onClick={() => handleDownloadJson()} className="gap-2" >
+                     
                         <Download size={16} className="" />
                         Baixar resultado
-                      </Button>
-                    </DropdownMenuItem>
+                      
+                    </DropdownMenuItem >
 
-                    <DropdownMenuItem>
-                      <div>
-                        {typeResult == 'researchers-home' && (
-                          <Button onClick={() => onOpenModal('filters')} variant="ghost" className="">
+                    {typeResult == 'researchers-home' && (
+                    <DropdownMenuItem onClick={() => onOpenModal('filters')} className="gap-2">
+                     
                             <SlidersHorizontal size={16} className="" />
                             Filtros
-                          </Button>
-                        )}
-                      </div>
+                         
                     </DropdownMenuItem>
+                     )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
@@ -327,7 +361,7 @@ export function ResultHome() {
 
       <div className="relative">
         {(itemsSelecionados.length > 0 || (researcher == 'false')) ? (
-          <div className="px-8">
+          <div className="px-8 h-full">
             <ResultProvider />
           </div>
         ) : (

@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Alert } from "../../../ui/alert";
-import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, LabelList, CartesianGrid,  ResponsiveContainer, Cell } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../../components/ui/chart";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "../../../ui/card";
+import { Tooltip ,TooltipContent, TooltipProvider, TooltipTrigger } from "../../../ui/tooltip";
+import { Info } from "lucide-react";
 
 type Articles = {
   articles: any[];
@@ -102,7 +105,9 @@ export function GraficoArticleHome(props: Articles) {
 
   return (
     <Alert className="pt-12">
-      <ChartContainer config={chartConfig} className="h-[250px] w-full">
+    
+
+     <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <ResponsiveContainer>
           <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
@@ -132,6 +137,7 @@ export function GraficoArticleHome(props: Articles) {
           </BarChart>
         </ResponsiveContainer>
       </ChartContainer>
+ 
 
     </Alert>
   );

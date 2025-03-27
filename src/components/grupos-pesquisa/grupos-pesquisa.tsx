@@ -1,4 +1,4 @@
-import { ArrowRight, Info, Plus, Shapes, Users } from "lucide-react";
+import { ArrowRight, Blocks, Info, Plus, Shapes, Trash, Users } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
@@ -7,12 +7,20 @@ import { UserContext } from "../../context/context";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "../../lib"
 import { Alert } from "../ui/alert";
-import { MagnifyingGlass } from "phosphor-react";
+import { MagnifyingGlass, Rows, SquaresFour } from "phosphor-react";
 import { Input } from "../ui/input";
 import { VisualizacaoGrupo } from "./visualizacao-grupo-pesquisa";
 
 import bg_popup from '../../assets/bg_home.png'
 import { Helmet } from "react-helmet";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
+import { DataTable } from "../popup/columns/popup-data-table";
+import { columns } from "../componentsModal/columns-grupo-pesquisa";
+import { Badge } from "../ui/badge";
 interface Patrimonio {
   area: string,
   institution: string,
@@ -175,20 +183,71 @@ export function GruposPesquisaPage() {
 
   const [search, setSearch] = useState('')
 
-  const filteredTotal = Array.isArray(total) ? total.filter(item => {
-    // Normaliza a string do item e da busca para comparação
-    const normalizeString = (str: any) => str
-      .normalize("NFD") // Decompõe os caracteres acentuados
-      .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
-      .toLowerCase(); // Converte para minúsculas
+  /////
 
+  const [selectedInstitutions, setSelectedInstitutions] = useState<string[]>([]);
+  const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const institutions = Array.isArray(total) ? [...new Set(total.map(item => item.institution))] : [];
+  const areas = Array.isArray(total) ? [...new Set(total.map(item => item.area))] : [];
+
+  const updateFilters = (category: string, values: string[]) => {
+    const query = new URLSearchParams(location.search);
+    if (values.length > 0) {
+      query.set(category, values.join(";"));
+    } else {
+      query.delete(category);
+    }
+    navigate({ search: query.toString() }, { replace: true });
+  };
+
+  const handleInstitutionChange = (value: string) => {
+    setSelectedInstitutions((prev) => {
+      const newValues = prev.includes(value) ? prev.filter((inst) => inst !== value) : [...prev, value];
+      updateFilters("institution", newValues);
+      return newValues;
+    });
+  };
+
+  const handleAreaChange = (value: string) => {
+    setSelectedAreas((prev) => {
+      const newValues = prev.includes(value) ? prev.filter((area) => area !== value) : [...prev, value];
+      updateFilters("area", newValues);
+      return newValues;
+    });
+  };
+
+  const getArrayFromUrl = (key: string) => {
+    const query = new URLSearchParams(location.search);
+    return query.get(key)?.split(";") || [];
+  };
+
+  useEffect(() => {
+    setSelectedInstitutions(getArrayFromUrl("institution"));
+    setSelectedAreas(getArrayFromUrl("area"));
+  }, [location.search]);
+
+const filteredTotal = Array.isArray(total) ? total.filter(item => { 
+    const normalizeString = (str) => str
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .toLowerCase();
+    
     const searchString = normalizeString(item.name);
     const normalizedSearch = normalizeString(search);
-
-    return searchString.includes(normalizedSearch);
+    
+    return (
+      searchString.includes(normalizedSearch) &&
+      (selectedInstitutions.length > 0 ? selectedInstitutions.includes(item.institution) : true) &&
+      (selectedAreas.length > 0 ? selectedAreas.includes(item.area) : true)
+    );
   }) : [];
 
-  const navigate = useNavigate();
+  ////////
+
+
 
   const handlePesquisaFinal = (id: string) => {
     queryUrl.set('group_id', id);
@@ -199,7 +258,14 @@ export function GruposPesquisaPage() {
   }
 
   const { version } = useContext(UserContext)
+  const [typeVisu, setTypeVisu] = useState('block');
 
+const clearFilters = () => {
+
+setSelectedAreas([])
+setSelectedInstitutions([])
+navigate('/grupos-pesquisa')
+}
   return (
     <>
       {programSelecionado.length == 0 ? (
@@ -231,7 +297,44 @@ export function GruposPesquisaPage() {
                   <Input onChange={(e) => setSearch(e.target.value)} value={search} type="text" className="border-0 w-full " />
                 </div>
 
-                <div className="w-fit">
+                <div className="w-fit flex items-center gap-2">
+   <p className="text-xs">Filtros:</p>
+      {/* DropdownMenu para Instituições */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline">Instituições</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56">
+     
+          {institutions.map(inst => (
+            <DropdownMenuCheckboxItem
+              key={inst}
+              checked={selectedInstitutions.includes(inst)}
+              onCheckedChange={(checked) => handleInstitutionChange(inst)}
+            >
+              {inst}
+            </DropdownMenuCheckboxItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* DropdownMenu para Áreas */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline">Áreas</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="">
+          {areas.map(area => (
+            <DropdownMenuCheckboxItem
+              key={area}
+              checked={selectedAreas.includes(area)}
+              onCheckedChange={(checked) => handleAreaChange(area)}
+            >
+              {area}
+            </DropdownMenuCheckboxItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
 
 
                 </div>
@@ -245,86 +348,159 @@ export function GruposPesquisaPage() {
 
           <div className="px-4 md:px-8">
 
+          <div className={`${selectedAreas.length > 0 || selectedInstitutions.length > 0 ? ('flex'):('hidden')} flex flex-wrap gap-3 mb-6 items-center`}>
+          <p className="text-sm font-medium">Filtros aplicados:</p>
+            {/* Filtros de Áreas */}
+  {selectedAreas.map((item) => (
+    <Badge key={item} className="bg-eng-blue font-normal hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3">
+      {item}
+    </Badge>
+  ))}
 
-            {isLoading ? (
-              <ResponsiveMasonry
-                columnsCountBreakPoints={{
-                  350: 1,
-                  750: 2,
-                  900: 2,
-                  1200: 3,
-                  1700: 4
-                }}
-              >
-                <Masonry gutter="16px" className="pb-4 md:pb-8">
-                  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-                  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-                  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-                  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-                  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-                  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-                  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-                  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-                  <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
-                </Masonry>
-              </ResponsiveMasonry>
-            ) : (
-              <ResponsiveMasonry
-                columnsCountBreakPoints={{
-                  350: 1,
-                  750: 2,
-                  900: 2,
-                  1200: 3,
-                  1700: 4
-                }}
-              >
-                <Masonry gutter="16px" className="pb-4 md:pb-8">
-                  {filteredTotal.slice(0, count).map((item) => {
+   {/* Filtros de Instituições */}
+   {selectedInstitutions.map((item) => (
+    <Badge key={item} className="bg-eng-blue font-normal hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3">
+      {item}
+    </Badge>
+  ))}
 
-                    return (
-                      <div className="flex" onClick={() => handlePesquisaFinal(item.id)}>
-                        <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border min-h-[120px] border-neutral-200 border-r-0 ${qualisColor[normalizeArea(item.area || '')]} min-h-full relative`}></div>
+<Badge variant={'secondary'} onClick={() => clearFilters()} className=" rounded-md cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-900 border-0  py-2 px-3 font-normal flex items-center justify-center gap-2"><Trash size={12}/>Limpar filtros</Badge>
+      
+            </div>
 
-                        <button
+          <Alert className={`p-0 mb-6  bg-cover bg-no-repeat bg-center `}  >
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Total de grupos de pesquisa
+                  </CardTitle>
+                  <Blocks className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{filteredTotal.length}</div>
+                  <p className="text-xs text-muted-foreground">
+                    encontrados na busca
+                  </p>
+                </CardContent>
+              </Alert>
 
-                          className={cn(
-                            "flex flex-col rounded-lg w-full rounded-l-none bg-white dark:bg-neutral-800 dark:border-neutral-700 items-start gap-2  border p-3 text-left text-sm transition-all hover:bg-accent",
-
-                          )}
-
-                        >
-                          <div className="flex w-full flex-col gap-1">
-                            <div className="flex justify-between items-center">
-                              <div className="text-xs font-medium mb-2 flex items-center gap-2">{item.area != '' ? (item.area) : ('Sem código')}
-                              </div>
-                              <Shapes size={16} />
-                            </div>
-                            <div className="flex items-center">
-                              <div className="flex items-center gap-2">
-                                <div className="font-semibold text-lg">{item.name}</div>
-                              </div>
-                            </div>
-
-                          </div>
-                          <div className="line-clamp-2 flex-wrap text-xs text-muted-foreground flex gap-2">
-                            <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12} />{item.first_leader}</div>
-                            {(item.second_leader != '' && item.second_leader != null) && (<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12} />{item.second_leader}</div>)}
-
-                          </div>
-
-                        </button>
+              <Accordion defaultValue="item-1" type="single" collapsible>
+                <AccordionItem value="item-1">
+                  <div className="flex mb-2">
+                    <HeaderResultTypeHome title="Grupos de pesquisa" icon={<Blocks size={24} className="text-gray-400" />}>
+                      <div className="hidden md:flex gap-3 mr-3">
+                        <Button onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                          <Rows size={16} className="whitespace-nowrap" />
+                        </Button>
+                        <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'} size={'icon'}>
+                          <SquaresFour size={16} className="whitespace-nowrap" />
+                        </Button>
                       </div>
-                    )
-                  })}
+                    </HeaderResultTypeHome>
+                    <AccordionTrigger>
 
-                </Masonry>
-              </ResponsiveMasonry>
-            )}
+                    </AccordionTrigger>
+                  </div>
+
+                  <AccordionContent>
+                  {typeVisu === 'block' ? (
+                    isLoading ? (
+                      <ResponsiveMasonry
+                        columnsCountBreakPoints={{
+                          350: 1,
+                          750: 2,
+                          900: 2,
+                          1200: 3,
+                          1700: 4
+                        }}
+                      >
+                        <Masonry gutter="16px" className="pb-4 md:pb-8">
+                          <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+                          <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+                          <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+                          <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+                          <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+                          <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+                          <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+                          <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+                          <Skeleton className="w-full h-[120px] rounded-md"></Skeleton>
+                        </Masonry>
+                      </ResponsiveMasonry>
+                    ) : (
+                     <div>
+                       <ResponsiveMasonry
+                        columnsCountBreakPoints={{
+                          350: 1,
+                          750: 2,
+                          900: 2,
+                          1200: 3,
+                          1700: 4
+                        }}
+                      >
+                        <Masonry gutter="16px" className="pb-4 md:pb-8">
+                          {filteredTotal.slice(0, count).map((item) => {
+        
+                            return (
+                              <div className="flex w-full" onClick={() => handlePesquisaFinal(item.id)}>
+                                <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border min-h-[120px] border-neutral-200 border-r-0 ${qualisColor[normalizeArea(item.area || '')]} min-h-full relative`}></div>
+        
+                                <button
+        
+                                  className={cn(
+                                    "flex flex-col rounded-lg w-full rounded-l-none bg-white dark:bg-neutral-800 dark:border-neutral-700 items-start gap-2  border p-3 text-left text-sm transition-all hover:bg-accent",
+        
+                                  )}
+        
+                                >
+                                  <div className="flex w-full flex-col gap-1">
+                                    <div className="flex justify-between items-center">
+                                      <div className="text-xs font-medium mb-2 flex items-center gap-2">{item.area != '' ? (item.area) : ('Sem código')}
+                                      </div>
+                                      <Shapes size={16} />
+                                    </div>
+                                    <div className="flex items-center">
+                                      <div className="flex items-center gap-2">
+                                        <div className="font-semibold text-lg">{item.name}</div>
+                                      </div>
+                                    </div>
+        
+                                  </div>
+                                  <div className="line-clamp-2 flex-wrap text-xs text-muted-foreground flex gap-2">
+                                    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12} />{item.first_leader}</div>
+                                    {(item.second_leader != '' && item.second_leader != null) && (<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12} />{item.second_leader}</div>)}
+        
+                                  </div>
+        
+                                </button>
+                              </div>
+                            )
+                          })}
+        
+                        </Masonry>
+                      </ResponsiveMasonry>
+
+{filteredTotal.length >= count && (
+  <div className="w-full flex justify-center pb-8"><Button className="w-fit" onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
+)}
+                     </div>
+                    )
+                  ):(
+                    isLoading ? (
+                      <Skeleton className="w-full h-[300px] rounded-md"></Skeleton>
+                    ):(
+                     <DataTable columns={columns} data={filteredTotal}/>
+                    )
+                  )}
+                  </AccordionContent>
+                  </AccordionItem>
+
+
+                  </Accordion>
+
+
+        
           </div>
 
-          {filteredTotal.length >= count && (
-            <div className="w-full flex justify-center pb-8"><Button className="w-fit" onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
-          )}
+          
         </main>
       ) : (
         <VisualizacaoGrupo />

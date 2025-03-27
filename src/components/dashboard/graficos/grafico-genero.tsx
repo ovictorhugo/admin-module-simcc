@@ -2,40 +2,30 @@ import React, { useEffect, useState } from "react";
 import { Alert } from "../../ui/alert";
 import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell, Label } from "recharts";
 import { ChartContainer, ChartConfig, ChartTooltip, ChartTooltipContent } from "../../../components/ui/chart";
+import { Research } from "../../listagens/researchers-home";
 
-interface Docentes {
-  matric: string;
-  inscUFMG: string;
-  nome: string;
-  genero: string;
-  situacao: string;
-  rt: string;
-  clas: string;
-  cargo: string;
-  classe: string;
-  ref: string;
-  titulacao: string;
-  entradaNaUFMG: string;
-  progressao: string;
-  year_charge: string;
-  semester: string;
-}
+
 
 const chartConfig = {
-  MASCULINO: {
+  M: {
     label: "Masculino",
     color: "#5F82ED",
   },
-  FEMININO: {
+  F: {
     label: "Feminino",
     color: "#D15697",
   },
 } satisfies ChartConfig;
 
-export function GraficoDocentesGenero({ docentes }: { docentes: Docentes[] }) {
+export function GraficoDocentesGenero({ docentes }: { docentes: Research[] }) {
   const [chartData, setChartData] = useState<{ genero: string; count: number }[]>([]);
 
   useEffect(() => {
+    if (!Array.isArray(docentes)) {
+      console.error("The 'docentes' prop is not an array:", docentes);
+      return;
+    }
+
     const counts: { [key: string]: number } = {};
 
     docentes.forEach(docente => {
@@ -53,8 +43,8 @@ export function GraficoDocentesGenero({ docentes }: { docentes: Docentes[] }) {
 
   function getColorForGenero(genero: string) {
     const colors = {
-      "MASCULINO": chartConfig.MASCULINO.color,
-      "FEMININO": chartConfig.FEMININO.color,
+      M: chartConfig.M.color,
+      F: chartConfig.F.color,
     };
     return colors[genero] || '#000000';
   }
@@ -63,7 +53,7 @@ export function GraficoDocentesGenero({ docentes }: { docentes: Docentes[] }) {
 
   return (
     <Alert className="p-0 border-0 h-full">
-      <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[300px]">
+      <ChartContainer config={chartConfig} className="h-[300px] w-full">
         <ResponsiveContainer>
           <PieChart>
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
@@ -77,11 +67,12 @@ export function GraficoDocentesGenero({ docentes }: { docentes: Docentes[] }) {
                           {totalDocentes.toLocaleString()}
                         </tspan>
                         <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground">
-                          Docentes
+                          Pesquisadores
                         </tspan>
                       </text>
                     );
                   }
+                  return null;
                 }}
               />
               {chartData.map((entry, index) => (

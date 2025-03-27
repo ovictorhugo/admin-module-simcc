@@ -17,6 +17,7 @@ import { SidebarRight } from "../components/sidebar-right";
 import { Separator } from "../components/ui/separator";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "../components/ui/breadcrumb";
 import React from "react";
+import { Mobile } from "../components/mobile";
 interface MailProps {
 
   defaultLayout: number[] | undefined
@@ -196,6 +197,7 @@ export default function AdminLayout({
         </SidebarInset>
 
         <Toaster />
+        <Mobile/>
 
       </SidebarProvider  >
     </div>

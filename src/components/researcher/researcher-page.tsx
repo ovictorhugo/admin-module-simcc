@@ -1,4 +1,4 @@
-import { ArrowLeftFromLine, ArrowRightFromLine, BookOpenText, Boxes, Briefcase, Check, ChevronLeft, Download, FolderKanban, Minus, OctagonAlert, Star, TrendingUp, Waypoints } from "lucide-react";
+import { ArrowLeftFromLine, ArrowRightFromLine, BookOpen, BookOpenText, Boxes, Briefcase, Check, ChevronLeft, Download, FolderKanban, Minus, OctagonAlert, Star, TrendingUp, Waypoints } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
 import { Helmet } from "react-helmet";
@@ -82,7 +82,7 @@ export interface Research {
   brand: string,
   lattes_update: Date,
   entradanaufmg: Date
-
+  genero:string
   h_index: string,
   relevance_score: string,
   works_count: string,
@@ -766,9 +766,9 @@ export function ResearcherPage() {
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent> {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
-                              'Remover pesquisador(a)'
+                              'Remover pesquisador(a) do barema'
                             ) : (
-                              'Adicionar pesquisador(a)'
+                              'Adicionar pesquisador(a) ao barema'
                             )}</TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
@@ -1013,9 +1013,9 @@ export function ResearcherPage() {
                       <div className="w-full flex-1 flex">
                         <Tabs defaultValue="articles" value={value} className="flex-1 flex flex-col w-full">
                           {researcher.slice(0, 1).map(() => (
-                            <div className="grid grid-cols-1 mb-6">
-                              <ScrollArea className="">
-                                <TabsList className="mb-4 flex h-auto overflow-x-scroll w-full">
+                            <div className="grid grid-cols-1 w-full">
+                              <ScrollArea className="mb-4">
+                                <TabsList className="mb-4 flex h-auto w-full">
 
                                   <TabsTrigger
                                     value="article"
@@ -1030,7 +1030,7 @@ export function ResearcherPage() {
                                     onClick={() => setValue('book')}
                                     className="flex gap-2 items-center"
                                   >
-                                    <File size={16} className="" />
+                                    <BookOpen size={16} className="" />
                                     Livros e capítulos
                                   </TabsTrigger>
                                   <TabsTrigger
@@ -1207,6 +1207,7 @@ export function ResearcherPage() {
                               return (
                                 <InformacoesGeraisResearcher
                                   h_index={user.h_index}
+                                  entradanaufmg={String(user.entradanaufmg)}
                                   relevance_score={user.relevance_score}
                                   works_count={user.works_count}
                                   cited_by_count={user.cited_by_count}

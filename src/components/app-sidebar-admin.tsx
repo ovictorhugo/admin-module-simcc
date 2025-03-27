@@ -51,6 +51,7 @@ import { UserContext } from "../context/context"
 import { useContext } from "react";
 import { AccountSwitcher } from "./navigation/user-list"
 import { DotsThree } from "phosphor-react"
+import { useModal } from "./hooks/use-modal-store"
 // This is sample data.
 
 export function AppSidebarAdmin({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -104,6 +105,8 @@ export function AppSidebarAdmin({ ...props }: React.ComponentProps<typeof Sideba
     (perm) => perm.permission === 'atualizar_apache_hop'
   );
 
+  const {onOpen} = useModal()
+
   const data = {
     user: {
       name: user?.display_name || '',
@@ -118,11 +121,15 @@ export function AppSidebarAdmin({ ...props }: React.ComponentProps<typeof Sideba
         icon: DotsThree,
         isActive: true,
         items: [
-          {
-            title: "Seção de pessoal",
-            url: "/dashboard/secao-pessoal",
-            icon: Contact
-          },
+          ...(version
+            ? [
+              {
+                title: "Seção de pessoal",
+                url: "/dashboard/secao-pessoal",
+                icon: Contact
+              },
+            ]
+            : []),
 
           {
             title: "Parâmetros",
@@ -181,15 +188,7 @@ export function AppSidebarAdmin({ ...props }: React.ComponentProps<typeof Sideba
               },
             ]
             : []),
-          ...(has_visualizar_inct
-            ? [
-              {
-                title: "INCT's",
-                icon: FlaskConical,
-                url: "/dashboard/inct",
-              },
-            ]
-            : []),
+         
         ],
       },
       {
@@ -226,16 +225,16 @@ export function AppSidebarAdmin({ ...props }: React.ComponentProps<typeof Sideba
         icon: DotsThree,
         isActive: true,
         items: [
-          {
-            title: "Selecionados",
-            url: "/dashboard/pesquisadores-selecionados",
-            icon: UserPlus
-          },
-          {
-            title: "Relatar problema",
-            url: "/dashboard/relatar-problema",
-            icon: Bug
-          },
+             {
+                      title: "Selecionados",
+                      icon: UserPlus,
+                      onClick: () => onOpen('pesquisadores-selecionados'), // Chama a função onOpen() ao clicar
+                    },
+                    {
+                      title: "Relatar problema",
+                      icon: Bug,
+                      onClick: () => onOpen( 'relatar-problema'), // Chama a função onOpen() ao clicar
+                    },
           {
             title: "Informações",
             url: "/dashboard/informacoes",

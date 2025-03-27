@@ -1,4 +1,4 @@
-import { BarChart, Book, Plus, Stamp } from "lucide-react";
+import { BarChart, Book, BookOpen, Plus, Stamp } from "lucide-react";
 import { Button } from "../../../ui/button";
 import { Base } from "../base";
 import { Keepo } from "../builder-page";
@@ -112,7 +112,7 @@ export function GraficoSection (props:Props) {
 
    const items = [
         { titulo: "Produção geral", desc: "Gráfico de barras", icon: <BarChart size={16} />, type:'producao-geral' },
-        { titulo: "Livros e capítulos", desc: "Gráfico de barras", icon: <Book size={16} />, type:'livro-capitulo' },
+        { titulo: "Livros e capítulos", desc: "Gráfico de barras", icon: <BookOpen size={16} />, type:'livro-capitulo' },
         { titulo: "Produção técnica", desc: "Gráfico de barras", icon: <Stamp size={16} />, type:'producao-tecnica' },
        
       ];

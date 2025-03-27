@@ -1,4 +1,4 @@
-import {  AreaChart,  ChevronsUpDown,  Globe,  MapPinIcon, PencilLine, Plus, RefreshCcw, SquareArrowOutUpRight, Star, User, UserIcon, Users } from "lucide-react";
+import {  AreaChart,  ChevronsUpDown,  Globe,  MapPinIcon, Maximize2, PencilLine, Plus, RefreshCcw, SquareArrowOutUpRight, Star, User, UserIcon, Users } from "lucide-react";
 import { Button } from "../../ui/button";
 
 import { CardContent, CardHeader, CardTitle } from "../../ui/card";
@@ -752,7 +752,7 @@ const filteredTotal = Array.isArray(researcher) ? researcher.filter(item => {
               <div className="flex items-center gap-3">
              <div className=" items-center gap-3 hidden group-hover:flex transition-all">
              <Button size={'icon'}  onClick={() => onOpen('researcher-modal', {name:props.name})} variant={'ghost'} className="h-10 w-10 ">
-                   <Eye size={16}  />
+                   <Maximize2 size={16}  />
              </Button>
  
           <Button size={'icon'}  onClick={() => onOpen('confirm-delete-researcher-graduate-program', {lattes_id:props.lattes_id, graduate_program_id:props.graduate_program_id, nome:props.name})} variant={'destructive'} className=" text-white h-10 w-10 dark:text-white">

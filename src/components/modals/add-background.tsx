@@ -4,7 +4,7 @@ import {
     DialogHeader,
   } from "../ui/dialog";
 
-  import { Image, LoaderCircle, Plus, Upload, X } from "lucide-react";
+  import { Check, Image, LoaderCircle, Plus, Upload, X } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -14,78 +14,199 @@ import {
 import { ScrollArea } from "../ui/scroll-area";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { storage } from "../../lib/firebase";
 import { v4 as uuidv4 } from 'uuid';
 
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { getFirestore,  collection, addDoc } from 'firebase/firestore';
+import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "firebase/storage";
+import { getFirestore,  collection, addDoc, doc, updateDoc, query, where, getDocs } from 'firebase/firestore';
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useDropzone } from "react-dropzone";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Textarea } from "../ui/textarea";
+import { ColorPicker } from "../ui/color-picker";
+import { UserContext } from "../../context/context";
 
 export function AddBackground() {
-    const { onClose, isOpen, type: typeModal, data } = useModal();
-    const isModalOpen = (isOpen && typeModal === "add-background") 
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [uploadProgress, setUploadProgress] = useState(false);
-    const [titulo, setTitulo] = useState('');
-    const [imgURL, setImgURL] = useState('');
-    const [progress, setProgress] = useState(0);
+  const { onClose, isOpen, type: typeModal, data } = useModal();
+  const isModalOpen = (isOpen && typeModal === "add-background") || (isOpen && typeModal === 'edit-background');
+  
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const {version} = useContext(UserContext)
+  const [titulo, setTitulo] = useState(data.titulo || '');
+  const [descricao, setDescricao] = useState(data.descricao || '');
+  const [botao, setBotao] = useState(data.botao || '');
+  const [link, setLink] = useState(data.link || '');
+  const [imgURL, setImgURL] = useState(data.imgURL || '');
+  
+  const [color, setColor] = useState(data.color || "#ffffff");
+  const [textColor, setTextColor] = useState(data.textColor || "#000000");
 
-    const [fileInfo, setFileInfo] = useState({ name: '', size: 0 });
-    const onDrop = useCallback((acceptedFiles: any) => {
-        handleFileUpload(acceptedFiles);
-    }, []);
+  const [fileInfo, setFileInfo] = useState({ name: "", size: 0 });
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    handleFileUpload(acceptedFiles);
+  }, []);
 
-    const handleFileUpload = (files: any) => {
-        const uploadedFile = files[0];
-        if (uploadedFile) {
-            setFileInfo({
-                name: uploadedFile.name,
-                size: uploadedFile.size,
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  const handleFileUpload = (files: File[]) => {
+    const uploadedFile = files[0];
+    if (uploadedFile) {
+      setFileInfo({
+        name: uploadedFile.name,
+        size: uploadedFile.size,
+      });
+      setSelectedFile(uploadedFile);
+     
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (!selectedFile) {
+      toast("Por favor, selecione a imagem", {
+        description: "Nenhuma imagem selecionada",
+        action: {
+          label: "Fechar",
+          onClick: () => console.log("Undo"),
+        },
+      });
+      return;
+    }
+
+    if (!titulo.trim()) {
+      toast("Informe um título para a imagem", {
+        description: "O título é obrigatório",
+        action: {
+          label: "Fechar",
+          onClick: () => console.log("Undo"),
+        },
+      });
+      return;
+    }
+
+    setUploadProgress(true);
+
+    try {
+      const storageRef = ref(storage, `images/${selectedFile.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setProgress(progress);
+        },
+        (error) => {
+          console.error("Erro ao enviar imagem:", error);
+          toast("Erro ao carregar imagem", {
+            description: "Tente novamente",
+            action: {
+              label: "Fechar",
+              onClick: () => console.log("Undo"),
+            },
+          });
+          setUploadProgress(false);
+        },
+        async () => {
+          try {
+            const url = await getDownloadURL(uploadTask.snapshot.ref);
+            setImgURL(url);
+
+            const docId = uuidv4();
+            const formData = {
+              id: data.id || docId,
+              titulo: titulo,
+              descricao,
+              botao,
+              link,
+              imgURL: url,
+              color,
+              textColor,
+            };
+
+            const db = getFirestore();
+            const backgroundRef = collection(db, (version ? ('background'):('background_iapos')));
+            await addDoc(backgroundRef, formData);
+
+            toast("Enviado com sucesso!", {
+              description: "Adicionado ao banco de dados",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
             });
-            setSelectedFile(uploadedFile)
-            setTitulo(uploadedFile.name)
-          
+
+            setUploadProgress(false);
+            setTitulo("");
+            setDescricao("");
+            setBotao("");
+            setLink("");
+            setImgURL("");
+            setColor("#ffffff");
+            setTextColor("#000000");
+            setProgress(0);
+            onClose();
+          } catch (error) {
+            console.error("Erro ao salvar no Firestore:", error);
+            setUploadProgress(false);
+            
+            toast("Erro ao salvar!", {
+              description: "Tente novamnete",
+              action: {
+                label: "Fechar",
+                onClick: () => console.log("Undo"),
+              },
+            });
+          }
         }
-    };
+      );
+    } catch (error) {
+      console.error("Erro ao enviar os dados:", error);
+      setUploadProgress(false);
+    }
+  };
 
 
-    const handleSubmit = async (event: any) => {
-        try {
-          event.preventDefault();
-      
-          if (!selectedFile) {
-            toast("Por favor, selecione a imagem", {
-              description: "Nenhuma imagem selecionada",
-              action: {
-                label: "Undo",
-                onClick: () => console.log("Undo"),
-              },
-            })
-            return;
-          }
-
-          if (titulo.length == 0) {
-            toast("Selecione o título da imagem", {
-              description: "Tente novamente",
-              action: {
-                label: "Undo",
-                onClick: () => console.log("Undo"),
-              },
-            })
-            return
-          }
-
-          setUploadProgress(true)
-      
-          const storageRef = ref(storage, `images/${selectedFile.name}`);
-          const uploadTask = uploadBytesResumable(storageRef, selectedFile);
-      
+  const updateImageData = async () => {
+    try {
+      const db = getFirestore();
+      const storage = getStorage();
+      const collectionName = version ? "background" : "background_iapos";
+      const backgroundRef = collection(db, collectionName);
+  
+      // Busca o documento pelo campo 'id'
+      const q = query(backgroundRef, where("id", "==", (data.id || '')));
+      const querySnapshot = await getDocs(q);
+  
+      if (querySnapshot.empty) {
+        console.error("Documento não encontrado!");
+        toast("Erro ao atualizar!", {
+          description: "Documento não encontrado",
+          action: {
+            label: "Fechar",
+            onClick: () => console.log("Undo"),
+          },
+        });
+        return;
+      }
+  
+      const docRef = querySnapshot.docs[0].ref;
+      let newImgURL = imgURL; // Mantém o imgURL original, caso não haja um novo arquivo
+  
+      // Verifica se há um novo arquivo para upload
+      if (selectedFile) {
+        setUploadProgress(true);
+        const storageRef = ref(storage, `images/${selectedFile.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+  
+        await new Promise<void>((resolve, reject) => {
           uploadTask.on(
             "state_changed",
             (snapshot) => {
@@ -93,83 +214,60 @@ export function AddBackground() {
               setProgress(progress);
             },
             (error) => {
-              alert(error);
-               toast("Erro ao carregar imagem", {
-                    description: "Tente novamente",
-                    action: {
-                      label: "Undo",
-                      onClick: () => console.log("Undo"),
-                    },
-                  })
-
-                  setUploadProgress(false)
+              console.error("Erro ao enviar imagem:", error);
+              toast("Erro ao carregar imagem", {
+                description: "Tente novamente",
+                action: {
+                  label: "Fechar",
+                  onClick: () => console.log("Undo"),
+                },
+              });
+              setUploadProgress(false);
+              reject(error);
             },
             async () => {
-              try {
-                // Aguarde a obtenção da URL de download
-                const url = await getDownloadURL(uploadTask.snapshot.ref);
-                
-                // Atualize o estado com a URL da imagem
-                setImgURL(url);
-      
-                // Aqui você pode adicionar a lógica para tratar os tipos de programa selecionados
-                // programTypes é um array com os tipos selecionados
-                const docId = uuidv4();
-                
-                // Crie um objeto com os dados do formulário
-                const formData = {
-                  id: docId,
-                  titulo, 
-                  imgURL: url,
-                };
-      
-                // Submeta os dados para o Firestore
-
-               if( titulo != '' ) {
-                const db = getFirestore();
-                const programRef = collection(db, 'background');
-                await addDoc(programRef, formData);
-    
-                toast("Enviado com sucesso!", {
-                  description: "Adicionado ao banco de dados",
-                  action: {
-                    label: "Fechar",
-                    onClick: () => console.log("Undo"),
-                  },
-                })
-
-                setUploadProgress(false)
-    
-                  // Limpe os campos após a conclusão
-                  setTitulo('');
-                  setImgURL('');
-                  setProgress(0);
-                  onClose()
-               } else {
-                toast("Falta preencher algum dado", {
-                  description: "Revise antes de enviar",
-                  action: {
-                    label: "Fechar",
-                    onClick: () => console.log("Undo"),
-                  },
-                })
-
-                setUploadProgress(false)
-               }
-
-      
-              } catch (error) {
-                console.error('Erro ao enviar os dados para o Firestore:', error);
-                setUploadProgress(false)
-              }
+              newImgURL = await getDownloadURL(uploadTask.snapshot.ref);
+              setImgURL(newImgURL);
+              setUploadProgress(false);
+              resolve();
             }
           );
-      
-        } catch (error) {
-          console.error('Erro ao enviar os dados:', error);
-          setUploadProgress(false)
-        }
-      };
+        });
+      }
+  
+      // Atualiza o documento no Firestore
+      await updateDoc(docRef, {
+        titulo,
+        descricao,
+        botao,
+        link,
+        imgURL: newImgURL, // Usa a nova URL se a imagem foi atualizada
+        color,
+        textColor,
+      });
+  
+      console.log("Documento atualizado com sucesso!");
+  
+      toast("Enviado com sucesso!", {
+        description: "Editado no banco de dados",
+        action: {
+          label: "Fechar",
+          onClick: () => console.log("Undo"),
+        },
+      });
+
+      onClose()
+    } catch (error) {
+      console.error("Erro ao atualizar o documento:", error);
+      toast("Erro ao atualizar!", {
+        description: "Tente novamente",
+        action: {
+          label: "Fechar",
+          onClick: () => console.log("Undo"),
+        },
+      });
+    }
+  };
 
 
     return(
@@ -210,7 +308,7 @@ export function AddBackground() {
               </p>
 
               <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
-                Adicionar background
+              {typeModal === "add-background" ? ('Adicionar'):('Editar')} background
               </h1>
             </div>
 
@@ -231,28 +329,86 @@ export function AddBackground() {
                     />
                   </div>
 
-                  <div className="grid w-full items-center gap-1.5">
-                    <Label>Departamento*</Label>
-                    <Select>
-  <SelectTrigger className="">
-    <SelectValue placeholder="" />
-  </SelectTrigger>
-  <SelectContent>
-    <SelectItem value="est">Engenharia de Estruturas</SelectItem>
-    <SelectItem value="ehr">Engenharia Hidráulica e Recursos Hídricos</SelectItem>
-    <SelectItem value="emc">Engenharia de Materiais e Construção</SelectItem>
-    <SelectItem value="etg">Engenharia de Transportes e Geotecnia</SelectItem>
-    <SelectItem value="em">Engenharia Mecânica</SelectItem>
-    <SelectItem value="ene">Engenharia Elétrica</SelectItem>
-    <SelectItem value="enq">Engenharia Química</SelectItem>
-    <SelectItem value="enp">Engenharia de Produção</SelectItem>
-    <SelectItem value="emm">Engenharia Metalúrgica e de Materiais</SelectItem>
- 
-    <SelectItem value="den">Engenharia Nuclear</SelectItem>
-  </SelectContent>
-</Select>
-</div>
+                 
             </div>
+
+            <div className="grid items-center gap-1.5 w-full">
+                    <Label>Descrição*</Label>
+                    <Textarea
+                      name="dep_nom"
+                      value={descricao} 
+                      onChange={(e) => setDescricao(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="flex gap-3 items-center w-full">
+                  <div className="grid items-center gap-1.5 w-full">
+                    <Label>Nome do botão*</Label>
+                    <Input
+                      name="dep_nom"
+                      value={botao} 
+                      onChange={(e) => setBotao(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="grid items-center gap-1.5 w-full">
+                    <Label>Link*</Label>
+                    <Input
+                      name="dep_nom"
+                      value={link} 
+                      onChange={(e) => setLink(e.target.value)}
+                    />
+                  </div>
+
+                 
+                 
+                  </div>
+
+                  <div className="flex gap-3 items-center w-full">
+                  <div className="grid items-center gap-1.5 w-full">
+                    <Label>Cor de fundo*</Label>
+                    <div className="flex  gap-3">
+                       <Input
+                           type="text"
+                           value={color}
+                           onChange={(e) =>
+                               setColor(e.target.value)
+                           }
+                       />
+                   
+                   <ColorPicker
+                             onChange={(v) => {
+                               setColor(v)
+                             }}
+                             value={color || ''}
+                           />
+                   
+                   
+                       </div>
+                  </div>
+
+                  <div className="grid items-center gap-1.5 w-full">
+                    <Label>Cor do texto*</Label>
+                    <div className="flex  gap-3">
+                       <Input
+                           type="text"
+                           value={textColor}
+                           onChange={(e) =>
+                               setTextColor(e.target.value)
+                           }
+                       />
+                   
+                   <ColorPicker
+                             onChange={(v) => {
+                               setTextColor(v)
+                             }}
+                             value={textColor || ''}
+                           />
+                   
+                   
+                       </div>
+                       </div>
+                  </div>
 
 <div {...getRootProps()} className="border-dashed mb-3 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 ">
                         <input {...getInputProps()} />
@@ -281,9 +437,15 @@ export function AddBackground() {
             
          
 
-            <Button onClick={handleSubmit} className="mt-3 ml-auto flex ">
-            {uploadProgress ? (<LoaderCircle size={16} className="an animate-spin" />):(<Plus size={16} className="" />)}  {uploadProgress ? ('Adicionando background'):('Adicionar background')}  
+           {typeModal == 'add-background' ? (
+             <Button onClick={handleSubmit} className="mt-3 ml-auto flex ">
+             {uploadProgress ? (<LoaderCircle size={16} className="an animate-spin" />):(<Plus size={16} className="" />)}  {uploadProgress ? ('Adicionando background'):('Adicionar background')}  
+           </Button>
+           ):(
+            <Button onClick={() => updateImageData()} className="mt-3 ml-auto flex ">
+            {uploadProgress ? (<LoaderCircle size={16} className="an animate-spin" />):(<Check size={16} className="" />)}  {uploadProgress ? ('Editando background'):('Editar background')}  
           </Button>
+           )}
             </ScrollArea>
           </div>
           </SheetContent>

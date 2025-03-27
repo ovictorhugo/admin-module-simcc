@@ -52,7 +52,7 @@ export function BlockItemGeral(propsGeral: Articles) {
                                 nature={props.nature}
                                 participation={props.participation}
 
-
+                                distinct={propsGeral.distinct}
 
 
                                 grant_date={props.grant_date}

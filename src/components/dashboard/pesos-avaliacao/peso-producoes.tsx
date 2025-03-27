@@ -19,7 +19,7 @@ import {
 import { UserContext } from "../../../context/context";
 import { useModal } from "../../hooks/use-modal-store";
 import { useModalDashboard } from "../../hooks/use-modal-dashboard";
-import { ChevronLeft, Info } from "lucide-react";
+import { BookOpen, ChevronLeft, File, Info } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Badge } from "../../ui/badge";
 import { Helmet } from "react-helmet";
@@ -494,7 +494,7 @@ const [relTec, setRelTec] = useState('');                              // Relat√
                        <div className="flex justify-between mb-6">
                            <div>
                            <div className="flex items-center gap-3  ">
-                           <Quotes size={24} className="text-gray-400" />
+                           <File size={24} className="text-gray-400" />
                            <p className="text-sm font-bold">√çndice artigos</p>
                            </div>
                            </div>
@@ -542,7 +542,7 @@ const [relTec, setRelTec] = useState('');                              // Relat√
                        <div className="flex justify-between mb-6">
                            <div>
                            <div className="flex items-center gap-3 ">
-<Book size={24} className="text-gray-400" />
+<BookOpen size={24} className="text-gray-400" />
           <p className="text-sm font-bold">√çndice livros e cap√≠tulos</p>
           </div>
                            </div>

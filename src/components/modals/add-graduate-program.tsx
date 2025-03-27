@@ -7,10 +7,28 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select"
+
+interface City {
+  id: number;
+  nome: string;
+  municipio: {
+    nome: string;
+    microrregiao: {
+      mesorregiao: {
+        UF: {
+          sigla: string; // Pegando a sigla do estado corretamente
+        };
+      };
+    };
+  };
+}
+
 
 import { useModal } from "../hooks/use-modal-store";
 import { useContext, useState } from "react";
@@ -30,6 +48,8 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { ScrollArea } from "../ui/scroll-area";
 import { Textarea } from "../ui/textarea";
+import { Check, ChevronDown } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 export function AddGraduateProgram() {
 
@@ -48,6 +68,31 @@ export function AddGraduateProgram() {
   const [descricao, setDescricao] = useState('');
   const [site, setSite] = useState('');
   const [sigla, setSigla] = useState('');
+
+   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [cities, setCities] = useState<City[]>([]);
+  const [selectedCity, setSelectedCity] = useState<City | null>(null);
+
+  
+  // Função para buscar cidades conforme o usuário digita
+  async function fetchCities(query: string) {
+    if (query.length < 3) return; // Só busca se houver pelo menos 3 letras
+    try {
+      const res = await fetch(
+        `https://servicodados.ibge.gov.br/api/v1/localidades/distritos`
+      );
+      const data: City[] = await res.json();
+      const filtered = data.filter((city) =>
+        city.nome.toLowerCase().includes(query.toLowerCase())
+      );
+      setCities(filtered);
+    } catch (error) {
+      console.error("Erro ao buscar cidades:", error);
+    }
+  }
+
+
 
   const handleSubmit = async () => {
 
@@ -248,7 +293,44 @@ export function AddGraduateProgram() {
 
               <div className="flex flex-col gap-2">
                 <Label>Cidade*</Label>
-                <Input value={city} onChange={(e) => setCity(e.target.value)} type="text" />
+                <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="outline" className="w-full justify-between">
+          {selectedCity ? `${selectedCity.nome} (${selectedCity.municipio.microrregiao.mesorregiao.UF.sigla})` : "Selecione uma cidade"}
+          <ChevronDown className="h-4 w-4 ml-2" />
+        </Button>
+      </PopoverTrigger>
+
+      <PopoverContent className="w-[300px] p-2">
+        <Input
+          placeholder="Digite o nome da cidade..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            fetchCities(e.target.value);
+          }}
+        />
+        <ScrollArea className="h-60 mt-2 border rounded-md">
+          {cities.length > 0 ? (
+            cities.map((city) => (
+              <div
+                key={city.id}
+                className="p-2 hover:bg-gray-100 cursor-pointer flex justify-between items-center"
+                onClick={() => {
+                  setSelectedCity(city);
+                  setOpen(false);
+                }}
+              >
+                {city.nome} ({city.municipio.microrregiao.mesorregiao.UF.sigla})
+                {selectedCity?.id === city.id && <Check className="h-4 w-4 text-green-500" />}
+              </div>
+            ))
+          ) : (
+            <p className="p-2 text-sm text-gray-500">Nenhuma cidade encontrada</p>
+          )}
+        </ScrollArea>
+      </PopoverContent>
+    </Popover>
               </div>
             </div>
 
@@ -270,7 +352,88 @@ export function AddGraduateProgram() {
               <div className="w-1/2 flex gap-4">
                 <div className="flex flex-col gap-2 w-2/3">
                   <Label>Área*</Label>
-                  <Input value={area} onChange={(e) => setArea(e.target.value)} type="text" />
+                  <Select value={area} onValueChange={(value) => setArea(value)}>
+  <SelectTrigger id="area" className="items-start [&_[data-description]]:hidden">
+    <SelectValue placeholder="" className={'whitespace-nowrap'} />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel>Ciências Agrárias</SelectLabel>
+      
+      {/* Ciências Agrárias */}
+      <SelectItem value="ciencia_alimentos">Ciência de Alimentos</SelectItem>
+      <SelectItem value="ciencias_agrarias1">Ciências Agrárias I</SelectItem>
+      <SelectItem value="medicina_veterinaria">Medicina Veterinária</SelectItem>
+      <SelectItem value="zootecnia_pesqueiros">Zootecnia / Recursos Pesqueiros</SelectItem>
+      <SelectLabel>Ciências Biológicas</SelectLabel>
+      {/* Ciências Biológicas */}
+      <SelectItem value="biodiversidade">Biodiversidade</SelectItem>
+      <SelectItem value="ciencias_biologicas1">Ciências Biológicas I</SelectItem>
+      <SelectItem value="ciencias_biologicas2">Ciências Biológicas II</SelectItem>
+      <SelectItem value="ciencias_biologicas3">Ciências Biológicas III</SelectItem>
+
+      {/* Ciências da Saúde */}
+      <SelectLabel>Ciências da Saúde</SelectLabel>
+      <SelectItem value="educacao_fisica">Educação Física, Fisioterapia e Terapia Ocupacional</SelectItem>
+      <SelectItem value="enfermagem">Enfermagem</SelectItem>
+      <SelectItem value="farmacia">Farmácia</SelectItem>
+      <SelectItem value="medicina1">Medicina I</SelectItem>
+      <SelectItem value="medicina2">Medicina II</SelectItem>
+      <SelectItem value="medicina3">Medicina III</SelectItem>
+      <SelectItem value="nutricao">Nutrição</SelectItem>
+      <SelectItem value="odontologia">Odontologia</SelectItem>
+      <SelectItem value="saude_coletiva">Saúde Coletiva</SelectItem>
+     
+      <SelectLabel>Ciências Humanas</SelectLabel>
+      {/* Ciências Humanas */}
+      <SelectItem value="antropologia">Antropologia / Arqueologia</SelectItem>
+      <SelectItem value="ciencia_politica">Ciência Política e Relações Internacionais</SelectItem>
+      <SelectItem value="educacao">Educação</SelectItem>
+      <SelectItem value="filosofia">Filosofia</SelectItem>
+      <SelectItem value="geografia">Geografia</SelectItem>
+      <SelectItem value="historia">História</SelectItem>
+      <SelectItem value="psicologia">Psicologia</SelectItem>
+      <SelectItem value="sociologia">Sociologia</SelectItem>
+      
+      <SelectLabel>Ciências Sociais Aplicadas</SelectLabel>
+      {/* Ciências Sociais Aplicadas */}
+      <SelectItem value="administracao">Administração e Turismo</SelectItem>
+      <SelectItem value="arquitetura">Arquitetura e Urbanismo</SelectItem>
+      <SelectItem value="direito">Direito</SelectItem>
+      <SelectItem value="economia">Economia</SelectItem>
+      <SelectItem value="servico_social">Serviço Social</SelectItem>
+
+      <SelectLabel>Linguística, Letras e Artes</SelectLabel>
+      {/* Linguística, Letras e Artes */}
+      <SelectItem value="artes">Artes</SelectItem>
+      <SelectItem value="linguistica">Linguística e Literatura</SelectItem>
+
+      {/* Ciências Exatas e da Terra */}
+      <SelectLabel>Ciências Exatas e da Terra</SelectLabel>
+      <SelectItem value="astronomia">Astronomia / Física</SelectItem>
+      <SelectItem value="computacao">Computação</SelectItem>
+      <SelectItem value="geociencias">Geociências</SelectItem>
+      <SelectItem value="matematica">Matemática / Estatística</SelectItem>
+      <SelectItem value="quimica">Química</SelectItem>
+
+      {/* Engenharias */}
+      <SelectLabel>Engenharias</SelectLabel>
+      <SelectItem value="engenharias1">Engenharias I</SelectItem>
+      <SelectItem value="engenharias2">Engenharias II</SelectItem>
+      <SelectItem value="engenharias3">Engenharias III</SelectItem>
+      <SelectItem value="engenharias4">Engenharias IV</SelectItem>
+
+      {/* Multidisciplinar */}
+      <SelectLabel>Multidisciplinar</SelectLabel>
+      <SelectItem value="biotecnologia">Biotecnologia</SelectItem>
+      <SelectItem value="ciencias_ambientais">Ciências Ambientais</SelectItem>
+      <SelectItem value="ensino">Ensino</SelectItem>
+      <SelectItem value="interdisciplinar">Interdisciplinar</SelectItem>
+      <SelectItem value="materiais">Materiais</SelectItem>
+    </SelectGroup>
+  </SelectContent>
+</Select>
+
                 </div>
 
                 <div className="flex flex-col gap-2 w-1/3">

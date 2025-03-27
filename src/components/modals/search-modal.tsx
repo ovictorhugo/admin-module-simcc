@@ -9,7 +9,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { toast } from "sonner";
 import { useModal } from "../hooks/use-modal-store";
 import { SelectTypeSearch } from "../search/select-type-search";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
 import { CloudArrowDown, Funnel, MagnifyingGlass, Plus, X } from "phosphor-react";
@@ -49,7 +49,8 @@ import { query, where } from 'firebase/firestore';
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useModalResult } from "../hooks/use-modal-result";
-import { Trash } from "lucide-react";
+import { Play, Trash } from "lucide-react";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 export function SearchModal() {
 
@@ -86,22 +87,39 @@ export function SearchModal() {
   const [filteredItems, setFilteredItems] = useState<Csv[]>([]);
   /////////////////
 
-  const searchFilesByTermPrefix = async (prefix: string) => {
+  const searchFilesByTermPrefix = async (prefix: string) => { 
     if (prefix.length >= 3) {
       try {
-        // Consulta os documentos cujo term começa com o prefixo fornecido
-        const filesRef = collection(db, `${version ? ('termos_busca') : ('termos_busca_cimatec')}`);
+        const filesRef = collection(db, version ? 'termos_busca' : 'termos_busca_cimatec');
+
+        // Busca APENAS os documentos que NÃO são do tipo "NAME"
         const q = query(filesRef,
-          where('term_normalize', '>=', prefix),
-          where('term_normalize', '<=', prefix + '\uf8ff')
+          where("term_normalize", ">=", prefix),
+          where("term_normalize", "<=", prefix + "\uf8ff"),
+       
         );
 
         const querySnapshot = await getDocs(q);
-        // Extrai os dados dos documentos encontrados
-        const files = querySnapshot.docs.map(doc => doc.data());
+        let otherFiles = querySnapshot.docs.map(doc => doc.data());
 
-        console.log('files', files)
-        const mappedFiles = files.map(file => ({
+        // Agora, busca separadamente os que são "NAME" (sem usar Firestore para filtragem textual)
+        const qName = query(filesRef, where("type_", "==", "NAME"));
+        const querySnapshotName = await getDocs(qName);
+        let filesName = querySnapshotName.docs.map(doc => doc.data());
+
+        // Aplicar filtro manual para os arquivos do tipo "NAME"
+        const filteredNameFiles = filesName.filter(file => {
+            const searchTokens = normalizeInput(prefix).split(/\s+/);
+            const nameTokens = normalizeInput(file.term).split(/\s+/);
+            return searchTokens.every(token => 
+              nameTokens.some(nameToken => nameToken.startsWith(token)) // Busca parcial
+            );
+        });
+
+        // Juntar os resultados
+        const finalFiles = [...filteredNameFiles, ...otherFiles];
+
+        const mappedFiles = finalFiles.map(file => ({
           great_area: file.great_area,
           term: file.term,
           frequency: file.frequency,
@@ -109,14 +127,14 @@ export function SearchModal() {
           term_normalize: file.term_normalize
         }));
 
-        // Define os dados encontrados em filteredItems
         setFilteredItems(mappedFiles);
       } catch (error) {
-        console.error('Erro ao buscar arquivos:', error);
+        console.error("Erro ao buscar arquivos:", error);
         return [];
       }
     }
-  };
+};
+
 
   console.log('filter', filteredItems)
 
@@ -422,19 +440,30 @@ export function SearchModal() {
   }, [urlBigrama]);
 
   const handleSuggestionClick = (suggestion: string) => {
-    setInput(input + ' ' + suggestion);
+    setInput((prevInput) => {
+      const words = prevInput.trim().split(/\s+/); // Divide corretamente em palavras
+      if (words.length > 0) {
+        words[words.length - 1] = suggestion; // Substitui a última palavra
+      } else {
+        words.push(suggestion); // Caso esteja vazio, adiciona a sugestão
+      }
+      return words.join(' ') + ' '; // Garante um espaço no final
+    });
   };
+  
+  
 
   // Função para lidar com a pressão da tecla Tab
   const handleTabPress = (event: any) => {
     if (event.key === "Tab" && itemsBigrama.length > 0) {
       event.preventDefault(); // Impedir que a tecla Tab mova o foco para o próximo elemento
-      setInput(input + ' ' + itemsBigrama[0].word); // Selecionar a primeira sugestão
+      handleSuggestionClick(itemsBigrama[0].word); // Selecionar a primeira sugestão
     }
   };
 
   const handleEnterPress = (event: any) => {
     if (event.key === "Enter") {
+      console.log('oi oi oi')
       handlePesquisaFinal()
     }
   };
@@ -471,21 +500,38 @@ export function SearchModal() {
     setItensSelecionadosPopUp(newItems);
   };
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  
+  useEffect(() => {
+    if (isModalOpen && inputRef.current) {
+      inputRef.current.focus();  // Foca no input quando o modal for aberto
+    }
+  }, [isModalOpen]);  // Este efeito será executado sempre que isModalOpen mudar
+
+  const normalizeTerm = (term: string) => 
+    term
+      .normalize("NFD") // Separa acentos das letras
+      .replace(/[\u0300-\u036f]/g, "") // Remove acentos
+      .replace(/[^\w\s]/gi, "") // Remove caracteres especiais
+      .toLowerCase(); // Converte para minúsculas
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
-      <DialogContent className="overflow-y-scroll md:overflow-y-auto p-0 border-none min-w-[63vw] px-4 mx-auto md:px-0 bg-transparent dark:bg-transparent">
+      <DialogContent tabIndex={0} onKeyDown={handleEnterPress} className=" p-0 border-none min-w-[63vw] px-4 mx-auto md:px-0 bg-transparent dark:bg-transparent">
 
-        <Alert onKeyDown={handleEnterPress} className="h-14 bg-white p-2 min-w-[40%] flex items-center gap-3 justify-between">
+        <Alert  tabIndex={0} onKeyDown={handleEnterPress} className="h-14 bg-white p-2 min-w-[40%] flex items-center gap-3 justify-between">
           <div className="flex items-center gap-2 w-full flex-1">
-            <MagnifyingGlass size={16} className="hidden md:block whitespace-nowrap w-10" />
+            <Play size={16} className="hidden md:block whitespace-nowrap w-10" />
 
             <div className="flex gap-2 w-full items-center">
-              <div className='flex gap-2 items-center'>
+              <div className='flex gap-2 items-center w-full'>
                 <SelectTypeSearch />
 
-                {itemsSelecionadosPopUp.map((valor, index) => (
-                  <div key={index} className="flex gap-2 items-center">
+              <div className="flex flex-1 w-full">
+              <ScrollArea className="max-h-[40px] w-full">
+              <div className='flex whitespace-nowrap gap-2 items-center'>
+              {itemsSelecionadosPopUp.map((valor, index) => (
+                  <div key={index} className="flex whitespace-nowrap gap-2 items-center">
                     <div className={`flex gap-2 items-center h-10 p-2 px-4 capitalize rounded-md text-xs ${searchType == 'article' ? 'bg-blue-500 dark:bg-blue-500' :
                       searchType == 'abstract' ? 'bg-yellow-500 dark:bg-yellow-500 ' :
                         searchType == 'speaker' ? 'bg-orange-500 dark:bg-orange-500' :
@@ -522,14 +568,13 @@ export function SearchModal() {
                   </div>
                 )}
 
-              </div>
-
-              {(showInput || itemsSelecionadosPopUp.length == 0) && (
+{(showInput || itemsSelecionadosPopUp.length == 0) && (
                 <Input
                   onChange={(e) => handleChangeInput(e.target.value)}
                   type="text"
+                  ref={inputRef}
                   value={input}
-                  className="border-0  flex-1 p-0 w-auto inline-block"
+                  className="border-0 w-full bg-transparent max-h-[40px] h-[40px]  flex-1 p-0  inline-block"
                   onKeyDown={handleTabPress}
                 />
               )}
@@ -551,6 +596,15 @@ export function SearchModal() {
                   <div className=" text-xs text-neutral-500 whitespace-nowrap px-2 ml-3  border border-neutral-500 p-1 rounded-md">Tab ↹</div>
                 )}
               </span>
+              </div>
+
+              <ScrollBar orientation='horizontal'/>
+              </ScrollArea>
+              </div>
+
+              </div>
+
+              
             </div>
           </div>
 
@@ -576,14 +630,14 @@ export function SearchModal() {
   `} 
   size={'icon'}
 > 
-  <Funnel size={16} className="" />
+  <MagnifyingGlass size={16} className="" />
 </Button>
 
           </div>
 
         </Alert>
 
-        {input.length >= 3 && (
+        {(input.length >= 3 && filteredItems.length != 0) && (
           <Alert className="w-full">
             <ResponsiveMasonry
               columnsCountBreakPoints={{
@@ -672,31 +726,33 @@ export function SearchModal() {
                   </div>
                 )}
 
-                {(filteredItems.filter(item => item.type_ === 'NAME').length != 0) && (
-                  <div className="">
-                    <p className="uppercase font-medium text-xs mb-3">Nome</p>
-                    <div className="flex flex-wrap gap-3">
-                      {filteredItems.filter(item => item.type_ === 'NAME').slice(0, 5).map((props, index) => (
-                        <div key={index} onClick={() => handlePesquisa(props.term, props.type_)} className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
-                          {props.term}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+{(filteredItems.filter(item => item.type_ === 'NAME').length !== 0) && (
+  <div>
+    <p className="uppercase font-medium text-xs mb-3">Nome</p>
+    <div className="flex flex-wrap gap-3">
+      {filteredItems
+        .filter(item => item.type_ === 'NAME')
+        // Remove duplicatas baseadas no 'term' normalizado
+        .filter((value, index, self) => 
+          index === self.findIndex((t) => (
+            normalizeTerm(t.term) === normalizeTerm(value.term)
+          ))
+        )
+        .slice(0, 5)
+        .map((props, index) => (
+          <div 
+            key={index} 
+            onClick={() => handlePesquisa(props.term, props.type_)} 
+            className="flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs"
+          >
+            {props.term}
+          </div>
+        ))}
+    </div>
+  </div>
+)}
 
-                {!posGrad && (
-                  <div>
-                    <p className="uppercase font-medium text-xs mb-3">OpenAlex</p>
-                    <div className="flex flex-wrap gap-3">
-                      {researcherOpenAlex.slice(0, 5).map((props, index) => (
-                        <div key={index} onClick={() => handlePesquisaOpenAlex(props.term)} className={`flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs`} >
-                          <CloudArrowDown size={16} className="" />    {props.term}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                
 
 
               </Masonry>

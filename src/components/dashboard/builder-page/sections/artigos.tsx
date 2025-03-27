@@ -15,6 +15,7 @@ import { useContext, useMemo, useState } from "react";
 import { Publicacao } from "../../../homepage/categorias/articles-home";
 import { UserContext } from "../../../../context/context";
 import { FilterArticle } from "../../../homepage/categorias/articles-home/filters-articles";
+import { File } from "lucide-react";
 
 interface Props {
     keepoData:Keepo
@@ -96,7 +97,7 @@ export function ArtigosSection (props:Props) {
             <Accordion defaultValue="item-1" type="single" collapsible>
         <AccordionItem value="item-1" >
           <div className="flex mb-2">
-            <HeaderResultTypeHome title="Artigos" icon={<Quotes size={24} className="text-gray-400" />}>
+            <HeaderResultTypeHome title="Artigos" icon={<File size={24} className="text-gray-400" />}>
               <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
                 <p>Artigos:</p>
                 Iguais

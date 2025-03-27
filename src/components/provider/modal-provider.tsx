@@ -32,6 +32,7 @@ import { CookiesModal } from "../modals/cookies";
 import { RelatarBug } from "../modals/relatar-bug";
 import { PesquisadoresSelecionadosModal } from "../modals/pesquisadores-selecionados-modal";
 import { ConfirmDeleteInstitution } from "../modals/confirm-delete-institution";
+import { UserProfileInitialModal } from "../modals/user-profile-initial";
 
 const ModalContent = () => {
   const { type } = useModal();
@@ -81,6 +82,10 @@ const ModalContent = () => {
       return <RelatarBug />
     case 'pesquisadores-selecionados':
       return <PesquisadoresSelecionadosModal />
+    case 'user-profile-initial':
+      return <UserProfileInitialModal/>
+    case 'edit-background':
+      return <AddBackground/>
     default:
       return null;
   }

@@ -19,6 +19,7 @@ interface Bolsista {
     lattes_id: string
     researcher_id: string
     institution_id: string
+    cpf:string
 }
 
 export function AddResearcherCsvModal() {
@@ -80,6 +81,7 @@ export function AddResearcherCsvModal() {
                     name: '',
                     lattes_id: '',
                     institution_id: user?.institution_id || '',
+                    cpf: ''
                 };
                 headers.forEach((header, index) => {
                     const key = headerMap[header];

@@ -12,14 +12,15 @@ import { Button } from "../ui/button";
 import { PencilSimple, Plus } from "phosphor-react";
 import { DialogHeader } from "../ui/dialog";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
 import { Alert } from "../ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Research } from "./researcher-modal";
 
 export function PesquisadoresSelecionadosModal() {
   const { onClose, isOpen, type: typeModal, data, onOpen } = useModal();
-  const { pesquisadoresSelecionados, urlGeral } = useContext(UserContext)
+  const { pesquisadoresSelecionados, urlGeral, setPesquisadoresSelecionados } = useContext(UserContext)
   const isModalOpen = (isOpen && typeModal === "pesquisadores-selecionados")
 
   const history = useNavigate();
@@ -29,9 +30,80 @@ export function PesquisadoresSelecionadosModal() {
   }
 
   const close = () => {
-    handleVoltar()
+
     onClose()
   }
+
+  const handleRemove = (indexToRemove: number) => {
+    setPesquisadoresSelecionados((prev) => prev.filter((_, index) => index !== indexToRemove));
+  };
+
+ const [jsonData, setJsonData] = useState<Research[]>([]);
+
+ let urlPesquisadores = `${urlGeral}researcherName?name=${pesquisadoresSelecionados
+  .map((pesquisador) => encodeURIComponent(pesquisador.name))
+  .join("|")}`;
+
+  console.log(urlPesquisadores)
+
+              useEffect(() => {
+                const fetchData = async () => {
+            
+                  try {
+                    const response = await fetch(urlPesquisadores, {
+                      mode: 'cors',
+                      headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'GET',
+                        'Access-Control-Allow-Headers': 'Content-Type',
+                        'Access-Control-Max-Age': '3600',
+                        'Content-Type': 'text/plain'
+                      }
+                    });
+                    const data = await response.json();
+                    if (data) {
+                      setJsonData(data)
+                    }
+                  } catch (err) {
+                    console.log(err);
+                  } finally {
+            
+                  }
+                };
+                fetchData();
+              }, [urlPesquisadores]);
+  
+
+
+  const convertJsonToCsv = (json: any[]): string => {
+    const items = json;
+    const replacer = (_: string, value: any) => (value === null ? '' : value); // Handle null values
+    const header = Object.keys(items[0]);
+    const csv = [
+      '\uFEFF' + header.join(';'), // Add BOM and CSV header
+      ...items.map((item) =>
+        header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+      ) // CSV data
+    ].join('\r\n');
+
+    return csv;
+  };
+
+  const handleDownloadJson = async () => {
+    try {
+      const csvData = convertJsonToCsv(jsonData);
+      const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = `dados.csv`;
+      link.href = url;
+      link.click();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
 
 
   return (
@@ -81,7 +153,15 @@ export function PesquisadoresSelecionadosModal() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col h-full gap-4">
+
+              {pesquisadoresSelecionados.length == 0 && (
+                <div className="flex flex-col py-32 justify-center w-full h-full">
+                                  <p className="text-9xl text-center text-[#719CB8] font-bold mb-16 animate-pulse">{`⚆_⚆`}</p>
+                <h1 className="text-2xl md:text-3xl text-neutral-400 text-center font-medium leading-tight tracking-tighter lg:leading-[1.1] ">Nenhum pesquisador selecionado</h1>
+               
+                </div>
+              )}
               {pesquisadoresSelecionados.map((props, index) => (
                 <Alert key={index}>
                   <div className="flex justify-between items-center h-10 group">
@@ -106,9 +186,14 @@ export function PesquisadoresSelecionadosModal() {
                       <div className=" items-center gap-3 hidden group-hover:flex transition-all">
 
 
-                        <Button size={'icon'} variant={'destructive'} className=" text-white h-10 w-10 dark:text-white">
-                          <Trash size={16} />
-                        </Button>
+                      <Button
+            size="icon"
+            variant="destructive"
+            className="text-white h-8 w-8 dark:text-white"
+            onClick={() => handleRemove(index)} // 🔥 Remove pesquisador
+          >
+            <Trash size={16} />
+          </Button>
                       </div>
 
 
@@ -124,11 +209,11 @@ export function PesquisadoresSelecionadosModal() {
 
             {pesquisadoresSelecionados.length > 0 && (
               <div className="flex items-center gap-3 w-full justify-end">
-                <Button variant={'ghost'} size={'sm'} className=" mt-3  flex ">
+                <Button onClick={() => handleDownloadJson()} variant={'ghost'} size={'sm'} className=" mt-3  flex ">
                   <Download size={16} className="" />Baixar dados
                 </Button>
 
-                <Link to={'/dashbaord'}>
+                <Link to={'/dashboard/baremas'}>
                   <Button size={'sm'} className="text-white dark:text-white mt-3 flex ">
                     <ClipboardIcon size={16} className="" />Criar barema de avaliação
                   </Button></Link>

@@ -4,30 +4,30 @@ import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell, Label } from "rechar
 import { ChartContainer, ChartConfig, ChartTooltip, ChartTooltipContent } from "../../../components/ui/chart";
 
 interface Docentes {
+  technician_id: string,
+  nome: string,
+  genero: string,
+    name:string
+    deno_sit:string
+    rt:string 
+    classe:string 
     cargo:string
-  classe:string
-  data_prog:string
-  deno_sit:string
-  detalhe_setor:string
-  dting_org:string
-  genero:string
-  ins_ufmg:string
-  matric:string
-  nivel:string
-  nome:string
-  ref:string
-  rt:string
-  semester:string
-  setor:string
-  titulacao:string
+    nivel:string 
+    ref:string
+    titulacao:string 
+    setor:string 
+    detalhe_setor:string 
+    dting_org:string 
+    data_prog:string 
+    semester:string 
 }
 
 const chartConfig = {
-  MASCULINO: {
+  M: {
     label: "Masculino",
     color: "#5F82ED",
   },
-  FEMININO: {
+  F: {
     label: "Feminino",
     color: "#D15697",
   },
@@ -59,8 +59,8 @@ export function GraficoTecnicosGenero({ docentes }: { docentes: Docentes[] }) {
 
   function getColorForGenero(genero: string) {
     const colors = {
-      MASCULINO: chartConfig.MASCULINO.color,
-      FEMININO: chartConfig.FEMININO.color,
+      M: chartConfig.M.color,
+      F: chartConfig.F.color,
     };
     return colors[genero] || '#000000';
   }
@@ -83,7 +83,7 @@ export function GraficoTecnicosGenero({ docentes }: { docentes: Docentes[] }) {
                           {totalDocentes.toLocaleString()}
                         </tspan>
                         <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground">
-                          Docentes
+                          TAES
                         </tspan>
                       </text>
                     );
