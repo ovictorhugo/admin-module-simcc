@@ -35,6 +35,7 @@ app.get("/api/analytics", async (req, res) => {
                     stringFilter: {
                         matchType: "EXACT",
                         value: process.env.VITE_URL_SITE
+
                     }
                 }
             }

@@ -34,17 +34,21 @@ const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
-// Importa os dados GeoJSON do Brasil
+
 import brazilStatesGeoJSON from './ba_state.json';
 import mgStateGeoJSON from './mg_state.json'; // Substitua pelo caminho correto
 import { UserContext } from '../../context/context';
 import { useLocation, useNavigate } from 'react-router-dom';
+
 
 interface Props {
   setSelectedCities: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 function BahiaMap({ setSelectedCities }: Props) {
+
+function BahiaMap() {
+
   const { version, urlGeral, setUrlGeral, simcc } = useContext(UserContext);
   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext);
   const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram[]>([]);

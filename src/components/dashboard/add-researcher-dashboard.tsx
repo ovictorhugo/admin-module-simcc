@@ -243,6 +243,7 @@ setcarregado(false)
     setCpf(formatCPF(e.target.value));
   };
 
+
   const [search, setSearch] = useState('')
   const filteredTotal = Array.isArray(researcher) ? researcher.filter(item => { 
     const normalizeString = (str) => str
@@ -259,6 +260,7 @@ setcarregado(false)
     );
   }) : [];
   /////
+
 
     return  (
 <>
@@ -299,8 +301,6 @@ setcarregado(false)
             </div>
 
             <HeaderInstitution/>
-
-            
 
      <div className="gap-4 md:gap-8 flex flex-col ">
      <Alert className="h-14  p-2 flex items-center justify-between  w-full">
