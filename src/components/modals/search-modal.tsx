@@ -100,26 +100,25 @@ const searchFilesByTermPrefix = async (prefix: string) => {
       limit(150) // Limita para evitar sobrecarga
     );
 
-    const qName = query(filesRef, 
-      where("type_", "==", "NAME"),
-      limit(50) // Limita também a busca por "NAME"
-    );
-
-    // Executa as consultas em paralelo para reduzir tempo de espera
+   
+    // Busca separadamente os que são "NAME" (sem usar Firestore para filtragem textual)
+    const qName = query(filesRef, where("type_", "==", "NAME"));
     const [querySnapshot, querySnapshotName] = await Promise.all([
       getDocs(q),
       getDocs(qName)
     ]);
 
-    let otherFiles = querySnapshot.docs.map(doc => doc.data());
-    let filesName = querySnapshotName.docs.map(doc => doc.data());
+
+
+    let otherFiles = querySnapshot.docs.map(doc => doc.data() as Csv);
+    let filesName = querySnapshotName.docs.map(doc => doc.data() as Csv);
 
     // Filtragem manual dos arquivos "NAME"
     const filteredNameFiles = filesName.filter(file => {
       const searchTokens = normalizeInput(prefix).split(/\s+/);
       const nameTokens = normalizeInput(file.term).split(/\s+/);
       return searchTokens.every(token => 
-        nameTokens.some(nameToken => nameToken.startsWith(token))
+        nameTokens.some(nameToken => nameToken.startsWith(token)) // Busca parcial
       );
     });
 
@@ -137,7 +136,6 @@ const searchFilesByTermPrefix = async (prefix: string) => {
     console.error("Erro ao buscar arquivos:", error);
   }
 };
-
 
   console.log('filter', filteredItems)
 
