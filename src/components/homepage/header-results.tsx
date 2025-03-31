@@ -23,7 +23,7 @@ export function HeaderResult() {
     try {
       const search = searchType?.toUpperCase() || 'ARTICLE';
 
-      const filesRef = collection(db, 'termos_busca');
+      const filesRef = collection(db, import.meta.env.VITE_BANCO_FIREBASE_SEARCH);
       const q = query(
         filesRef,
         where('term_normalize', '>=', prefix),

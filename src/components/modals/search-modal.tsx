@@ -44,7 +44,7 @@ const useQuery = () => {
 
 
 
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, limit } from 'firebase/firestore';
 import { query, where } from 'firebase/firestore';
 
 import { useLocation, useNavigate } from "react-router-dom";
@@ -86,53 +86,56 @@ export function SearchModal() {
 
   const [filteredItems, setFilteredItems] = useState<Csv[]>([]);
   /////////////////
+const banco = import.meta.env.VITE_BANCO_FIREBASE_SEARCH
+const searchFilesByTermPrefix = async (prefix: string) => { 
+  if (prefix.length < 3) return;
 
-  const searchFilesByTermPrefix = async (prefix: string) => { 
-    if (prefix.length >= 3) {
-      try {
-        const filesRef = collection(db, version ? 'termos_busca_simcc' : 'termos_busca_simcc');
+  try {
+    const filesRef = collection(db, import.meta.env.VITE_BANCO_FIREBASE_SEARCH);
 
-        // Busca APENAS os documentos que NÃO são do tipo "NAME"
-        const q = query(filesRef,
-          where("term_normalize", ">=", prefix),
-          where("term_normalize", "<=", prefix + "\uf8ff"),
-       
-        );
+    // Definição das queries com limitação de resultados
+    const q = query(filesRef,
+      where("term_normalize", ">=", prefix),
+      where("term_normalize", "<=", prefix + "\uf8ff"),
+      limit(150) // Limita para evitar sobrecarga
+    );
 
-        const querySnapshot = await getDocs(q);
-        let otherFiles = querySnapshot.docs.map(doc => doc.data());
+    const qName = query(filesRef, 
+      where("type_", "==", "NAME"),
+      limit(50) // Limita também a busca por "NAME"
+    );
 
-        // Agora, busca separadamente os que são "NAME" (sem usar Firestore para filtragem textual)
-        const qName = query(filesRef, where("type_", "==", "NAME"));
-        const querySnapshotName = await getDocs(qName);
-        let filesName = querySnapshotName.docs.map(doc => doc.data());
+    // Executa as consultas em paralelo para reduzir tempo de espera
+    const [querySnapshot, querySnapshotName] = await Promise.all([
+      getDocs(q),
+      getDocs(qName)
+    ]);
 
-        // Aplicar filtro manual para os arquivos do tipo "NAME"
-        const filteredNameFiles = filesName.filter(file => {
-            const searchTokens = normalizeInput(prefix).split(/\s+/);
-            const nameTokens = normalizeInput(file.term).split(/\s+/);
-            return searchTokens.every(token => 
-              nameTokens.some(nameToken => nameToken.startsWith(token)) // Busca parcial
-            );
-        });
+    let otherFiles = querySnapshot.docs.map(doc => doc.data());
+    let filesName = querySnapshotName.docs.map(doc => doc.data());
 
-        // Juntar os resultados
-        const finalFiles = [...filteredNameFiles, ...otherFiles];
+    // Filtragem manual dos arquivos "NAME"
+    const filteredNameFiles = filesName.filter(file => {
+      const searchTokens = normalizeInput(prefix).split(/\s+/);
+      const nameTokens = normalizeInput(file.term).split(/\s+/);
+      return searchTokens.every(token => 
+        nameTokens.some(nameToken => nameToken.startsWith(token))
+      );
+    });
 
-        const mappedFiles = finalFiles.map(file => ({
-          great_area: file.great_area,
-          term: file.term,
-          frequency: file.frequency,
-          type_: file.type_,
-          term_normalize: file.term_normalize
-        }));
+    // Remover duplicatas
+    const seen = new Set<string>();
+    const finalFiles = [...filteredNameFiles, ...otherFiles].filter(file => {
+      const key = `${file.term_normalize}_${file.type_}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
 
-        setFilteredItems(mappedFiles);
-      } catch (error) {
-        console.error("Erro ao buscar arquivos:", error);
-        return [];
-      }
-    }
+    setFilteredItems(finalFiles);
+  } catch (error) {
+    console.error("Erro ao buscar arquivos:", error);
+  }
 };
 
 
