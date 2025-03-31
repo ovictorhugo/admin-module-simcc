@@ -15,6 +15,8 @@ import { useIsMobile } from "../../hooks/use-mobile";
 import { Drawer, DrawerContent } from "../ui/drawer";
 import { Link } from "react-router-dom";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import bg_popup from '../../assets/bg_home.png';
 
 export function UserProfileInitialModal() {
         const { onClose, isOpen, type: typeModal, data } = useModal();
@@ -27,12 +29,18 @@ export function UserProfileInitialModal() {
               if (!hasVisited && (!isOpen)) {
                 // Se não foi exibido, abre o modal
                 setIsModalOpen1(true);
-               
+                localStorage.setItem('hasVisited', 'true');
               }
             }, []);
+
+         
           
-        
-        const isModalOpen = (isOpen && typeModal === "user-profile-initial") || isModalOpen1;
+            const isModalClose = () => {
+              localStorage.setItem('hasVisited', 'true');
+              setIsModalOpen1(false); // Garante que o modal inicial fecha corretamente
+            };
+            
+            const isModalOpen = (isOpen && typeModal === "user-profile-initial") || isModalOpen1;
         const {urlGeralAdm, loggedIn, user} = useContext(UserContext)
  const isMobile = useIsMobile()
         const [nome, setNome] = useState(loggedIn ? (user?.display_name) : (''))
@@ -200,6 +208,8 @@ const [status, setStatus] = useState('')
 
 console.log(perfil)
 
+const {version} = useContext(UserContext)
+
 
 const content = () => {
     return(
@@ -218,99 +228,56 @@ const content = () => {
                 <DialogHeader className="p-4 pt-0 flex flex-col w-full">
                 <Tabs defaultValue={String(tab)} value={String(tab)} className="">
       
-      <TabsContent value="1" className="w-full">
-      <div className="grid  items-center gap-5">
+      <TabsContent value="2" className="w-full">
+    <ScrollArea className="h-[350px]">
+    <div className="grid  items-center gap-5">
 
     
-                        <Label>Qual o seu perfil?</Label>
-                        <ToggleGroup
-      onValueChange={(value) => {
-        const perfilSelecionado = perfis.find((perfil) => perfil.name === value);
-        if (perfilSelecionado) {
-          setPerfil(perfilSelecionado.name);
-        }
-      }}
-      type="single"
-      variant='outline'
-      value={perfil}
-      className="grid grid-cols-4 w-full gap-3"
-    >
-      {perfis.map((props, index) => (
-        <ToggleGroupItem className="flex flex-1 py-6 w-full h-full flex-col  items-center gap-2" key={index} value={props.name}>
-          <props.icon size={32} /> 
-          <div className="">
-          {props.name}
-          </div>
-        </ToggleGroupItem>
-      ))}
-    </ToggleGroup>
-    
-    <div className="flex flex-col gap-2 w-full ">
-                                          <Label>Qual uso se encaixa melhor para você?</Label>
-                                          <Select value={status} onValueChange={setStatus}>
-  <SelectTrigger className="">
-    <SelectValue placeholder="" />
-  </SelectTrigger>
-  <SelectContent>
-    <SelectItem value="trabalho">Para trabalho</SelectItem>
-    <SelectItem value="uso-pessoal">Para uso pessoal</SelectItem>
-    <SelectItem value="escola">Para estudo</SelectItem>
-  </SelectContent>
+<Label>Qual o seu perfil?</Label>
+<ToggleGroup
+onValueChange={(value) => {
+const perfilSelecionado = perfis.find((perfil) => perfil.name === value);
+if (perfilSelecionado) {
+setPerfil(perfilSelecionado.name);
+}
+}}
+type="single"
+variant='outline'
+value={perfil}
+className="grid grid-cols-4 w-full gap-3"
+>
+{perfis.map((props, index) => (
+<ToggleGroupItem className="flex aspect-square flex-1 py-6 w-full h-full flex-col  items-center gap-2" key={index} value={props.name}>
+<props.icon size={32} /> 
+<div className="">
+{props.name}
+</div>
+</ToggleGroupItem>
+))}
+</ToggleGroup>
+
+<div className="flex flex-col gap-2 w-full ">
+                  <Label>Qual uso se encaixa melhor para você?</Label>
+                  <Select value={status} onValueChange={setStatus}>
+<SelectTrigger className="">
+<SelectValue placeholder="" />
+</SelectTrigger>
+<SelectContent>
+<SelectItem value="trabalho">Para trabalho</SelectItem>
+<SelectItem value="uso-pessoal">Para uso pessoal</SelectItem>
+<SelectItem value="escola">Para estudo</SelectItem>
+</SelectContent>
 </Select>
-                                        </div>
-                      </div>
+                </div>
+</div>
+      <ScrollBar orientation='vertical'/>
+    </ScrollArea>
         </TabsContent>
-      <TabsContent value="2">
-        <div className="grid gap-6 grid-cols-3">
-            <Alert>
-              <div>
-              <p className="font-medium">Starter</p>
-                <h3 className="text-3xl font-light">Free</h3>
-                <p className="text-sm text-gray-500">Just the backs</p>
-    
-    
-                <div>
-    
-                </div>
-              </div>
-    
-              <Button variant={'secondary'} className="w-full mt-16"></Button>
-            </Alert>
-    
-            <Alert className="border-eng-blue bg-gradient-to-br from-eng-blue/30 to-transparent">
-              <div className=" ">
-              <p className="font-medium">Starter</p>
-                <h3 className="text-3xl font-light">Free</h3>
-                <p className="text-sm text-gray-500">Just the backs</p>
-    
-    
-                <div>
-                    
-                </div>
-              </div>
-    
-              <Button  className="w-full mt-16"></Button>
-            </Alert>
-    
-            <Alert>
-              <div>
-              <p className="font-medium">Starter</p>
-                <h3 className="text-3xl font-light">Free</h3>
-                <p className="text-sm text-gray-500">Just the backs</p>
-    
-    
-                <div>
-                    
-                </div>
-              </div>
-    
-              <Button variant={'secondary'} className="w-full mt-16"></Button>
-            </Alert>
-        </div>
-        </TabsContent>
+   
     
         <TabsContent value="3">
-        <div className="p-6 rounded-lg w-full flex justify-center md:px-32">
+       <ScrollArea className="h-[350px]">
+       <div className="p-6 rounded-lg w-full flex justify-center md:px-32">
       <div className="relative w-full">
       {resposta.map((step, index) => (
       step.name === perfil && step.items?.map((props, subIndex) => ( // Verificando se step.name é igual a "perfil"
@@ -336,7 +303,25 @@ const content = () => {
     ))}
       </div>
     </div>
-    
+      <ScrollBar orientation='vertical'/>
+       </ScrollArea>
+        </TabsContent>
+
+        <TabsContent value="1">
+        <ScrollArea className="h-[350px]">
+        <div className="h-[200px] w-full bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url(${bg_popup})` }}></div>
+
+       <div className="mt-4">
+       <h1 className=" text-2xl mb-2 font-medium">Apresentamos a plataforma {version ? ('Conectee') : ('Simcc')}</h1>
+        <p className="text-sm text-justify text-gray-500">
+  O {version ? ('Conectee') : ('Simcc')} é uma plataforma inovadora desenvolvida para facilitar a busca, filtragem e análise das produções técnicas e bibliográficas dos pesquisadores.  
+  Com uma interface intuitiva, você pode explorar publicações, projetos e indicadores de impacto de forma rápida e eficiente.  
+  Conecte-se ao conhecimento e descubra insights valiosos para suas pesquisas e colaborações!
+</p>
+       </div>
+
+        <ScrollBar orientation='vertical'/>
+       </ScrollArea>
         </TabsContent>
     </Tabs>
                     </DialogHeader>
@@ -359,9 +344,11 @@ const content = () => {
 <Button className="ml-auto flex" onClick={() => {
     if(isModalOpen1) {
         setIsModalOpen1(false)
+        isModalClose()
     }
+    isModalClose()
 }}>
-<Check size={16}/>   Finalizar
+ Finalizar <Check size={16}/>  
 </Button>
 ):(
 <Button className="ml-auto flex" onClick={() => setTab(tab + 1)}>
@@ -377,7 +364,7 @@ Próximo <ChevronRight size={16}/>
 if (isMobile) {
     return (
       <Drawer open={isModalOpen} onOpenChange={onClose}>
-        <DrawerContent className="p-0">{content()}</DrawerContent>
+        <DrawerContent className="p-0 m-0">{content()}</DrawerContent>
       </Drawer>
     );
   } else {

@@ -317,194 +317,15 @@ export function IndicadoresDashboard() {
 
   console.log('total',total)
 
-  //
-  const [bolsistas, setBolsistas] = useState<Bolsistas[]>([]);
 
-  let urlBolsistas = urlGeralAdm + `ResearcherRest/Query/Subsidy`
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(urlBolsistas, {
-          mode: "cors",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Max-Age": "3600",
-            "Content-Type": "text/plain",
-          },
-        });
-        const data = await response.json();
-        if (data) {
-          setBolsistas(data)
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData()
-
-  }, [urlBolsistas]);
-
-  //
-  console.log(urlBolsistas)
-  console.log(bolsistas)
-
-
-  //
-
-  const [docentes, setDocentes] = useState<Docentes[]>([]);
-
-  let urlDocentes = urlGeralAdm + `docentes`
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(urlDocentes, {
-          mode: "cors",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Max-Age": "3600",
-            "Content-Type": "text/plain",
-          },
-        });
-        const data = await response.json();
-        if (data) {
-          setDocentes(data)
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData()
-
-  }, [urlDocentes]);
-
-  console.log(docentes)
-
-  //
-
-  const [taes, setTaes] = useState<Tecnicos[]>([]);
-
-  let urlTecnicos = urlGeralAdm + `tecnicos`
-
-  console.log(urlTecnicos)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(urlTecnicos, {
-          mode: "cors",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Max-Age": "3600",
-            "Content-Type": "text/plain",
-          },
-        });
-        const data = await response.json();
-        if (data) {
-          setTaes(data)
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData()
-
-  }, [urlTecnicos]);
-
-  console.log(taes)
 
 
   //Anos arquivos enviados docentes 
 
-  const [yearDocentes, setYearDocentes] = useState<YearSemester[]>([]);
 
-  let urlYearDocentes = urlGeralAdm + `docentes`
-
-  console.log(urlYearDocentes)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(urlYearDocentes, {
-          mode: "cors",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Max-Age": "3600",
-            "Content-Type": "text/plain",
-          },
-        });
-        const data = await response.json();
-        if (data) {
-          setYearDocentes(data)
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData()
-
-  }, [urlYearDocentes]);
-
-  const currentYear = new Date().getFullYear();
-  const currentSemester = new Date().getMonth() < 6 ? 1 : 2;
-
-  const yearSemesterArray = generateYearSemesterArray(2010, 1, currentYear, currentSemester);
-
-  const items = yearSemesterArray.map(item => ({
-    ...item,
-    selected: yearDocentes.some(docente => docente.year === item.year && docente.semester === item.semester)
-  }));
-
-  const [openModalYearDocente, setOpenModalYearDocente] = useState(false)
-
-  useEffect(() => {
-    const currentItem = items.find(
-      item => item.year === String(currentYear) && item.semester === String(currentSemester)
-    );
-
-    if (currentItem && !currentItem.selected) {
-      setOpenModalYearDocente(true)
-    }
-
-  }, []);
-
-  //
-
-
-  const pqCount = bolsistas.filter(b => b.modality_code === 'PQ').length;
-  const dtCount = bolsistas.filter(b => b.modality_code === 'DT').length;
-  const totalCountR = total.reduce((sum, t) => sum + parseInt(t.count_r), 0);
-  const totalCountGraduateR = total.reduce((sum, t) => sum + parseInt(t.count_gpr), 0);
-
-  const chartData = [
-    { name: 'Produtividade em Pesquisa', value: pqCount },
-    { name: 'Desen. Tec. e Extensão Inovadora', value: dtCount },
-    { name: 'Outros docentes', value: totalCountR - pqCount - dtCount },
-  ];
-
-  const chartData2 = [
-    { name: 'Participam da pós-graduação', value: totalCountGraduateR },
-    { name: 'Outros docentes', value: totalCountR - totalCountGraduateR },
-  ];
-
-  //
 
   const [year, setYear] = useState(new Date().getFullYear() - 9);
 
-
-  const years: number[] = [];
-  for (let i = currentYear; i > currentYear - 30; i--) {
-    years.push(i);
-  }
 
   const [dados, setDados] = useState<Research[]>([]);
 
@@ -583,38 +404,6 @@ export function IndicadoresDashboard() {
   }, [urlVisaoPrograma]);
 
   /////////////// csv
-
-  const handleBtnCsv = () => {
-    try {
-
-      const convertJsonToCsv = (json: any[]): string => {
-        const items = json;
-        const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
-        const header = Object.keys(items[0]);
-        const csv = [
-          '\uFEFF' + header.join(';'), // Add BOM and CSV header
-          ...items.map((item) =>
-            header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
-          ) // CSV data
-        ].join('\r\n');
-
-        return csv;
-      };
-
-
-      const csvData = convertJsonToCsv(bolsistas);
-      const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.download = `bolsistas_escola_engenharia.csv`;
-      link.href = url;
-      link.click();
-
-    } catch (error) {
-      console.error('Error:', error);
-    }
-
-  };
 
 
   const url = 'https://app.powerbi.com/view?r=eyJrIjoiNTBjNmQ3NWQtODNmZC00MWZkLThjNWEtZjU5YmE2ZDkwMjVkIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9'
@@ -737,9 +526,17 @@ export function IndicadoresDashboard() {
                    
 
                   </TabsList>
+                  {version && (
+             <Button size={'sm'}
+             onClick={() => onOpen('import-docentes')}><FileXls size={16} />Importar dados dos docentes</Button>
+         )}
 
+{version && (
+             <Button size={'sm'}
+             onClick={() => onOpen('import-taes')}><FileXls size={16} />Importar dados dos técnicos</Button>
+         )}
 
-                  <Link target="_blank" to={url}><Button size="sm"><ChartBar size={16} />Indicadores Power Bi</Button></Link>
+               
                 </div>
               </div>
 
@@ -831,7 +628,7 @@ export function IndicadoresDashboard() {
 
               </div>
 
-              <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+              <div className={`grid gap-4 md:grid-cols-2 md:gap-8  ${version ? ('lg:grid-cols-4'):('lg:grid-cols-3')}`}>
                 <Alert className="p-0">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
@@ -864,7 +661,7 @@ export function IndicadoresDashboard() {
                   </Alert>
                 )}
 
-                {version && (
+               
                   <Alert className="p-0">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
@@ -879,7 +676,7 @@ export function IndicadoresDashboard() {
                       </p>
                     </CardContent>
                   </Alert>
-                )}
+               
 
                 <Alert className="p-0">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

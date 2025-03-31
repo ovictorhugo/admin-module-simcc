@@ -49,9 +49,9 @@ type CityData = {
   lattes_10_id: string;
 };
 
-type Research = {
+export type Research = {
   among: number,
-  satus: boolean
+  status: boolean
   articles: number,
   classe:string
   cargo:string 
@@ -128,7 +128,6 @@ interface ResearchOpenAlex {
 }
 
 interface SummaryStats {
-
   h_index: string
   i10_index: string
 }
@@ -218,7 +217,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
     
 
    
-
+    setResearcher(filteredResearchers);
 
 
   }, [researcher, selectedAreas, selectedGraduations, selectedCities, selectedUniversities, selectedSubsidies, selectedGraduatePrograms, selectedDepartaments]);
@@ -456,7 +455,19 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   <AccordionItem value="item-1" className="w-full">
     <div className="flex items-center justify-between">
     <Label>Área de especialidade</Label>
-    <AccordionTrigger></AccordionTrigger>
+    <div className="flex gap-2 items-center">
+    {selectedAreas.length > 0 && (
+        <Button
+        onClick={() => {
+          setSelectedAreas([]) 
+          applyFilters()}}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
+       <AccordionTrigger>
+      
+      </AccordionTrigger>
+    </div>
+    
     </div>
     <AccordionContent>
     <ToggleGroup
@@ -469,8 +480,28 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
                 {uniqueAreas
   .filter((area) => area.trim() !== "")
   .map((area) => (
-    <ToggleGroupItem key={area} value={area} className="px-3 py-2">
-      {area}
+    <ToggleGroupItem key={area} value={area} className="px-3 py-2 gap-2 flex">
+     <Alert className={` w-4 rounded-md border-0 h-4 p-0 ${
+                area.includes("CIENCIAS AGRARIAS")
+                  ? "bg-red-400"
+                  : area.includes("CIENCIAS EXATAS E DA TERRA")
+                  ? "bg-green-400"
+                  : area.includes("CIENCIAS DA SAUDE")
+                  ? "bg-[#20BDBE]"
+                  : area.includes("CIENCIAS HUMANAS")
+                  ? "bg-[#F5831F]"
+                  : area.includes("CIENCIAS BIOLOGICAS")
+                  ? "bg-[#EB008B]"
+                  : area.includes("ENGENHARIAS")
+                  ? "bg-[#FCB712]"
+                  : area.includes("CIENCIAS SOCIAIS APLICADAS")
+                  ? "bg-[#009245]"
+                  : area.includes("LINGUISTICA LETRAS E ARTES")
+                  ? "bg-[#A67C52]"
+                  : area.includes("OUTROS")
+                  ? "bg-[#1B1464]"
+                  : "bg-[#000]"
+              }`} />   {area}
     </ToggleGroupItem>
   ))}
                 </ToggleGroup>
@@ -480,7 +511,18 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   <AccordionItem value="item-2">
     <div className="flex items-center justify-between">
     <Label>Titulação</Label>
-    <AccordionTrigger></AccordionTrigger>
+   
+       <div className="flex gap-2 items-center">
+
+       {selectedGraduations.length > 0 && (
+        <Button
+        onClick={() => setSelectedGraduations([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
+<AccordionTrigger>
+
+</AccordionTrigger>
+</div>
     </div>
     <AccordionContent>
     <ToggleGroup
@@ -502,7 +544,19 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   <AccordionItem value="item-3">
     <div className="flex items-center justify-between">
     <Label>Cidade</Label>
-    <AccordionTrigger></AccordionTrigger>
+   
+      
+      <div className="flex gap-2 items-center">
+
+      {selectedCities.length > 0 && (
+        <Button
+        onClick={() => setSelectedCities([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
+<AccordionTrigger>
+
+</AccordionTrigger>
+</div>
     </div>
     <AccordionContent>
     <Alert className="h-12 p-2 mb-4 flex items-center justify-between  w-full ">
@@ -536,7 +590,18 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   <AccordionItem value="item-4">
     <div className="flex items-center justify-between">
     <Label>Universidade</Label>
-    <AccordionTrigger></AccordionTrigger>
+     <div className="flex gap-2 items-center">
+    
+          {selectedUniversities.length > 0 && (
+            <Button
+            onClick={() => setSelectedUniversities([])}
+             className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+          )}
+        <AccordionTrigger>
+          
+          </AccordionTrigger>
+        </div>
+   
     </div>
     <AccordionContent>
     <ToggleGroup
@@ -558,8 +623,20 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
 
 <AccordionItem value="item-5">
     <div className="flex items-center justify-between">
-    <Label>Tipo de Subsídio</Label>
-    <AccordionTrigger></AccordionTrigger>
+    <Label>Bolsa CNPq</Label>
+  
+
+<div className="flex gap-2 items-center">
+
+{selectedSubsidies.length > 0 && (
+        <Button
+        onClick={() => setSelectedSubsidies([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
+<AccordionTrigger>
+
+</AccordionTrigger>
+</div>
     </div>
     <AccordionContent>
     <ToggleGroup
@@ -582,7 +659,17 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   <AccordionItem value="item-6">
     <div className="flex items-center justify-between">
     <Label>Departamentos</Label>
-    <AccordionTrigger></AccordionTrigger>
+    <div className="flex gap-2 items-center">
+
+      {selectedDepartaments.length > 0 && (
+        <Button
+        onClick={() => setSelectedDepartaments([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
+    <AccordionTrigger>
+      
+      </AccordionTrigger>
+    </div>
     </div>
     <AccordionContent>
     <ToggleGroup
@@ -605,7 +692,17 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
 <AccordionItem value="item-7">
     <div className="flex items-center justify-between">
     <Label>Programas de Pós-graduação</Label>
-    <AccordionTrigger></AccordionTrigger>
+    <div className="flex gap-2 items-center">
+
+      {selectedGraduatePrograms.length > 0 && (
+        <Button
+        onClick={() => setSelectedGraduatePrograms([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
+    <AccordionTrigger>
+      
+      </AccordionTrigger>
+    </div>
     </div>
     <AccordionContent>
     <Alert className="h-12 p-2 mb-4 flex items-center justify-between  w-full ">

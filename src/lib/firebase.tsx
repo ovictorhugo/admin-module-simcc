@@ -10,13 +10,13 @@ import { useEffect } from "react";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 export const firebaseConfig = {
-  apiKey: "AIzaSyB6AIST_y7t-XEPHz0qa6e454N3Kd8CMYQ",
-  authDomain: "simccba.firebaseapp.com",
-  projectId: "simccba",
-  storageBucket: "simccba.appspot.com",
-  messagingSenderId: "735553101030",
-  appId: "1:735553101030:web:a3047174edf45a52f0ef27",
-  measurementId: "G-HDJHKXTCFC"
+  apiKey: import.meta.env.VITE_APIKEY,
+  authDomain:import.meta.env.VITE_AUTHDOMAIN,
+  projectId: import.meta.env.VITE_PROJECTID,
+  storageBucket: import.meta.env.VITE_STORAGEBUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGINGSENDERID,
+  appId: import.meta.env.VITE_APPID,
+  measurementId: import.meta.env.VITE_MEASUREMENTID
 };
 
 // Initialize Firebase

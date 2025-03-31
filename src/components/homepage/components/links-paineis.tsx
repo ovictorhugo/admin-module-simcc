@@ -14,13 +14,13 @@ interface Props {
 export function LinksPaineis(props:Props) {
     return(
       
-        <Alert className="flex flex-col justify-between hover:bg-neutral-100 transition-all dark:hover:bg-neutral-900">
+        <Alert className="flex flex-col justify-between  transition-all ">
             <div className="mb-16">
                 <p className="font-medium text-lg" >{props.title}</p>
                 <p className="text-gray-500 text-sm">{props.description}</p>
             </div>
 
-            <div className="flex justify-between items-center">
+            <div className="flex gap-2 justify-end items-center">
             <Link to={props.link} target="_blank">
             <Button variant={'ghost'} size={'icon'}>
            <SquareArrowOutUpRight size={16}/>

@@ -7,15 +7,34 @@ import { useContext, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { toast } from "sonner";
 import { UserContext } from "../../context/context";
+import { ColorPicker } from "../ui/color-picker";
 
 export interface Props {
-    name: string
-    acronym: string
-    institution_id: string
+  name: string;
+  acronym: string;
+  institution_id: string;
+  profile: {
+      img_perfil: string;
+      img_background: string;
+      institution_id: string;
+      color: string;
+      site: string;
+      name: string;
+  };
+  setProfile: React.Dispatch<React.SetStateAction<{
+      img_perfil: string;
+      img_background: string;
+      institution_id: string;
+      color: string;
+      site: string;
+      name: string;
+  }>>;
+}
 
-  }
 
 export function EditInstitutionModal(props:Props) {
+
+  const { profile, setProfile } = props;
 
     const [name, setName] = useState(props.name)
     const [acronym, setAcronym] = useState(props.acronym)
@@ -134,6 +153,39 @@ const {urlGeralAdm} = useContext(UserContext)
                   onChange={(e) => setAcronym(e.target.value)}
                   className="col-span-2 h-8"
                 />
+              </div>
+
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="maxWidth">Site</Label>
+                <Input
+  type="text" className="col-span-2"
+  value={profile.site}
+  onChange={(e) => {
+    setProfile((prev) => ({ ...prev, site: e.target.value }));
+    
+  }}
+/>
+              </div>
+
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="maxWidth">Cor base</Label>
+                <div className="flex gap-4 col-span-2">
+  <Input
+    type="text"
+    value={profile.color}
+    onChange={(e) => {
+      setProfile((prev) => ({ ...prev, color: e.target.value }));
+    
+    }}
+  />
+  <ColorPicker
+    value={profile.color}
+    onChange={(v) => {
+      setProfile((prev) => ({ ...prev, color: v }));
+     
+    }}
+  />
+</div>
               </div>
 
              {/* <div className="grid grid-cols-3 items-center gap-4">

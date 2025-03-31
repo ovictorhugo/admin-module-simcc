@@ -1,4 +1,4 @@
-import { ArrowRight, Blocks, Info, Plus, Shapes, Trash, Users } from "lucide-react";
+import { ArrowRight, Blocks, Building2, ChevronDown, ChevronUp, Download, File, Info, Plus, Shapes, SlidersHorizontal, Trash, Users, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
@@ -7,9 +7,10 @@ import { UserContext } from "../../context/context";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "../../lib"
 import { Alert } from "../ui/alert";
-import { MagnifyingGlass, Rows, SquaresFour } from "phosphor-react";
+import { FadersHorizontal, MagnifyingGlass, Rows, SquaresFour } from "phosphor-react";
 import { Input } from "../ui/input";
 import { VisualizacaoGrupo } from "./visualizacao-grupo-pesquisa";
+import bg_user from '../../assets/user.png';
 
 import bg_popup from '../../assets/bg_home.png'
 import { Helmet } from "react-helmet";
@@ -21,6 +22,12 @@ import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-
 import { DataTable } from "../popup/columns/popup-data-table";
 import { columns } from "../componentsModal/columns-grupo-pesquisa";
 import { Badge } from "../ui/badge";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { DialogFooter, DialogHeader } from "../ui/dialog";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { Label } from "../ui/label";
+import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 interface Patrimonio {
   area: string,
   institution: string,
@@ -74,6 +81,7 @@ export function GruposPesquisaPage() {
         if (data) {
           setTotal(data)
           setIsLoading(false)
+          setJsonData(data)
         }
       } catch (err) {
         console.log(err);
@@ -203,17 +211,18 @@ export function GruposPesquisaPage() {
     navigate({ search: query.toString() }, { replace: true });
   };
 
-  const handleInstitutionChange = (value: string) => {
+  const handleInstitutionChange = (values: string[]) => {
     setSelectedInstitutions((prev) => {
-      const newValues = prev.includes(value) ? prev.filter((inst) => inst !== value) : [...prev, value];
+      const newValues = values;
       updateFilters("institution", newValues);
       return newValues;
     });
+    
   };
 
-  const handleAreaChange = (value: string) => {
+  const handleAreaChange = (values: string[]) => {
     setSelectedAreas((prev) => {
-      const newValues = prev.includes(value) ? prev.filter((area) => area !== value) : [...prev, value];
+      const newValues = values;
       updateFilters("area", newValues);
       return newValues;
     });
@@ -265,88 +274,300 @@ const clearFilters = () => {
 setSelectedAreas([])
 setSelectedInstitutions([])
 navigate('/grupos-pesquisa')
+setOpen(false)
 }
+
+const [isOn, setIsOn] = useState(true);
+
+
+  const [jsonData, setJsonData] = useState<any[]>([]);
+
+
+  const convertJsonToCsv = (json: any[]): string => {
+    const items = json;
+    const replacer = (_: string, value: any) => (value === null ? '' : value); // Handle null values
+    const header = Object.keys(items[0]);
+    const csv = [
+      '\uFEFF' + header.join(';'), // Add BOM and CSV header
+      ...items.map((item) =>
+        header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+      ) // CSV data
+    ].join('\r\n');
+
+    return csv;
+  };
+
+  const handleDownloadJson = async () => {
+    try {
+      const csvData = convertJsonToCsv(jsonData);
+      const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = `dados.csv`;
+      link.href = url;
+      link.click();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const [search2, setSearch2] = useState('')
+
+  const filteredTotal2 = Array.isArray(areas) ? areas.filter(item => {
+    // Normaliza a string do item e da busca para comparação
+    const normalizeString = (str: any) => str
+      .normalize("NFD") // Decompõe os caracteres acentuados
+      .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
+      .toLowerCase(); // Converte para minúsculas
+
+    const searchString = normalizeString(item);
+    const normalizedSearch = normalizeString(search2);
+
+    return searchString.includes(normalizedSearch);
+  }) : [];
+
+  const [search3, setSearch3] = useState('')
+
+  const filteredTotal3 = Array.isArray(institutions) ? institutions.filter(item => {
+    // Normaliza a string do item e da busca para comparação
+    const normalizeString = (str: any) => str
+      .normalize("NFD") // Decompõe os caracteres acentuados
+      .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
+      .toLowerCase(); // Converte para minúsculas
+
+    const searchString = normalizeString(item);
+    const normalizedSearch = normalizeString(search3);
+
+    return searchString.includes(normalizedSearch);
+  }) : [];
+
+  const [open, setOpen] = useState(false)
+
   return (
     <>
       {programSelecionado.length == 0 ? (
-        <main className="flex flex-1 flex-col gap-4 md:gap-8  ">
+        <main className="flex flex-1 flex-col  ">
           <Helmet>
             <title>Grupos de pesquisa | {version ? ('Conectee') : ('Simcc')}</title>
             <meta name="description" content={`Grupos de pesquisa | ${version ? ('Conectee') : ('Simcc')}`} />
             <meta name="robots" content="index, follow" />
           </Helmet>
-          <div className="bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${bg_popup})` }}>
-            <div className="justify-center md:px-8 px-4 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
-              <Link to={'/informacoes'} className="inline-flex z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12} /></Link>
 
-              <h1 className="z-[2] text-center max-w-[600px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
-                Explore as informações dos{" "}
-                <strong className="bg-eng-blue  rounded-md px-3 pb-2 text-white font-medium">
-                  {" "}
-                  grupos de pesquisa
-                </strong>{" "}
+       
+          <div className="top-[68px] sticky z-[9] supports-[backdrop-filter]:dark:bg-neutral-900/60 supports-[backdrop-filter]:bg-neutral-50/60 backdrop-blur">
+<div className={`w-full px-8  border-b border-b-neutral-200 dark:border-b-neutral-800`}>
 
+
+        {isOn && (
+           <div className="w-full   flex justify-between items-center">
+ 
+                      <div className="w-full pt-4  flex justify-between items-center">
+                          <Alert className="h-14 mt-4 mb-2  p-2 flex items-center justify-between  w-full">
+          <div className="flex items-center gap-2 w-full flex-1">
+            <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
+            <Input onChange={(e) => setSearch(e.target.value)} value={search} type="text" className="border-0 w-full " />
+          
+          </div>
+
+          
+        </Alert>
+                      </div>
+                         </div>
+                    )}
+
+              
+           
+
+              <div className={`flex w-full flex-wrap pt-2 pb-3 justify-between `}>
+                    <div>
+
+                    </div>
+
+                    <div className="hidden xl:flex xl:flex-nowrap gap-2">
+                <div className="md:flex md:flex-nowrap gap-2">
+                <Link to={`${urlGeral}dictionary.pdf`} target="_blank">
+                  <Button variant="ghost" className="">
+                    <File size={16} className="" />
+                    Dicionário de dados
+                  </Button>
+                  </Link>
+                  <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
+                    <Download size={16} className="" />
+                    Baixar resultado
+                  </Button>
+                  <Sheet open={open} onOpenChange={setOpen}>
+  <SheetTrigger> <Button   variant="ghost" className="">
+                      <SlidersHorizontal size={16} className="" />
+                      Filtros
+                    </Button></SheetTrigger>
+  <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[60vw]`}>
+      <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-gray-600">
+
+<div className="flex items-center gap-3">
+
+  <TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button className="h-8 w-8" variant={'outline'} onClick={() => {
+
+        }} size={'icon'}><X size={16} /></Button>
+      </TooltipTrigger>
+      <TooltipContent> Fechar</TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+</div>
+
+</DialogHeader>
+
+<div className="relative flex">
+<div>
+            <div className="hidden lg:block p-8 pr-0 h-full">
+              <div style={{ backgroundImage: `url(${bg_user})` }} className=" h-full w-[270px]  bg-cover bg-no-repeat bg-left rounded-md bg-eng-blue p-8"></div>
+
+            </div>
+
+          </div>
+          <ScrollArea className="relative whitespace-nowrap h-[calc(100vh-50px)] p-8 w-full ">
+          <div>
+              <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
+                Pesquisadores
+              </p>
+
+              <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] mb-8 md:block">
+                Filtros de pesquisa
               </h1>
+            </div>
 
+            <div className="w-full">
+            <Accordion defaultValue="item-1" type="single" collapsible className="w-full">
+  <AccordionItem value="item-1" className="w-full">
+    <div className="flex items-center justify-between">
+    <Label>Área </Label>
+    <div className="flex gap-2 items-center">
 
-
-
-              <Alert className="h-14 mt-8 p-2 flex items-center justify-between lg:max-w-[60vw] lg:w-[60vw] w-full ">
-                <div className="flex items-center gap-2 w-full flex-1">
+      {selectedAreas.length > 0 && (
+        <Button
+        onClick={() => setSelectedAreas([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
+    <AccordionTrigger>
+      
+      </AccordionTrigger>
+    </div>
+    </div>
+    <AccordionContent>
+    <Alert className="h-12 p-2 mb-4 flex items-center justify-between  w-full ">
+    <div className="flex items-center gap-2 w-full flex-1">
                   <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
-                  <Input onChange={(e) => setSearch(e.target.value)} value={search} type="text" className="border-0 w-full " />
+                  <Input onChange={(e) => setSearch2(e.target.value)} value={search2} type="text" className="border-0 w-full " />
                 </div>
 
-                <div className="w-fit flex items-center gap-2">
-   <p className="text-xs">Filtros:</p>
-      {/* DropdownMenu para Instituições */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline">Instituições</Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
-     
-          {institutions.map(inst => (
-            <DropdownMenuCheckboxItem
-              key={inst}
-              checked={selectedInstitutions.includes(inst)}
-              onCheckedChange={(checked) => handleInstitutionChange(inst)}
-            >
-              {inst}
-            </DropdownMenuCheckboxItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      {/* DropdownMenu para Áreas */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline">Áreas</Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="">
-          {areas.map(area => (
-            <DropdownMenuCheckboxItem
-              key={area}
-              checked={selectedAreas.includes(area)}
-              onCheckedChange={(checked) => handleAreaChange(area)}
-            >
-              {area}
-            </DropdownMenuCheckboxItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+                <div className="w-fit">
 
 
                 </div>
               </Alert>
 
+    <ToggleGroup
+                  type="multiple"
+                  variant={'outline'}
+                  value={selectedAreas}
+                  onValueChange={handleAreaChange}
+                  className="aspect-auto flex flex-wrap items-start justify-start gap-2"
+                >
+                  {filteredTotal2.map((area) => (
+                    <ToggleGroupItem key={area} value={area} className="px-3 gap-2 flex py-2">
+                     <Alert className={` w-4 rounded-md border-0 h-4 p-0 ${qualisColor[normalizeArea(area || '')]}`} /> {area}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+    </AccordionContent>
+  </AccordionItem>
+
+  <AccordionItem value="item-2" className="w-full">
+    <div className="flex items-center justify-between">
+    <Label>Universidade </Label>
+    <div className="flex gap-2 items-center">
+
+      {selectedInstitutions.length > 0 && (
+        <Button
+        onClick={() => setSelectedInstitutions([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
+    <AccordionTrigger>
+      
+      </AccordionTrigger>
+    </div>
+    </div>
+    <AccordionContent>
+    <Alert className="h-12 p-2 mb-4 flex items-center justify-between  w-full ">
+    <div className="flex items-center gap-2 w-full flex-1">
+                  <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
+                  <Input onChange={(e) => setSearch3(e.target.value)} value={search3} type="text" className="border-0 w-full " />
+                </div>
+
+                <div className="w-fit">
 
 
+                </div>
+              </Alert>
 
-            </div>
-          </div>
+    <ToggleGroup
+                  type="multiple"
+                  variant={'outline'}
+                  value={selectedInstitutions}
+                  onValueChange={handleInstitutionChange}
+                  className="aspect-auto flex flex-wrap items-start justify-start gap-2"
+                >
+                  {filteredTotal3.map((area) => (
+                    <ToggleGroupItem key={area} value={area} className="px-3 gap-2 flex py-2">
+                    {area}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+    </AccordionContent>
+  </AccordionItem>
+  </Accordion>
+              </div>
 
-          <div className="px-4 md:px-8">
+<ScrollBar orientation='vertical'/>
+
+<DialogFooter className="py-4">
+              <Button variant="ghost" onClick={clearFilters} className="gap-2">
+                <Trash size={16} />
+                Limpar Filtros
+              </Button>
+
+              <Button onClick={() => setOpen(false)} className="gap-2">
+                <FadersHorizontal size={16} />
+                Mostrar {filteredTotal.length} resultados
+              </Button>
+            </DialogFooter>
+</ScrollArea>
+</div>
+  </SheetContent>
+</Sheet>
+                  
+               
+                </div>
+
+                <div>
+             
+                </div>
+                <Button variant="ghost" size="icon" onClick={() => setIsOn(!isOn)}>
+                  {isOn ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+                  </div>
+</div>
+</div>
+        
+
+          <div className="p-4 md:p-8">
 
           <div className={`${selectedAreas.length > 0 || selectedInstitutions.length > 0 ? ('flex'):('hidden')} flex flex-wrap gap-3 mb-6 items-center`}>
           <p className="text-sm font-medium">Filtros aplicados:</p>
@@ -464,11 +685,13 @@ navigate('/grupos-pesquisa')
                                     </div>
         
                                   </div>
-                                  <div className="line-clamp-2 flex-wrap text-xs text-muted-foreground flex gap-2">
+                                  <div className="line-clamp-2 flex-wrap text-xs text-muted-foreground flex gap-3">
                                     <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12} />{item.first_leader}</div>
+                                    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Building2 size={12} />{item.institution}</div>
                                     {(item.second_leader != '' && item.second_leader != null) && (<div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12} />{item.second_leader}</div>)}
         
                                   </div>
+
         
                                 </button>
                               </div>

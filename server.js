@@ -34,7 +34,7 @@ app.get("/api/analytics", async (req, res) => {
                     fieldName: "hostName",
                     stringFilter: {
                         matchType: "EXACT",
-                        value: "conectee.eng.ufmg.br"
+                        value: process.env.VITE_URL_SITE
                     }
                 }
             }

@@ -98,7 +98,7 @@ export function BannerHome() {
                        )}
 
                        {banner.link && (
-                        <Link to={banner.link} target="_blank">
+                        <Link className="w-fit" to={banner.link} target="_blank">
                           <Button style={{
   color: banner.textColor,  // Define a cor do texto
   border: `1px solid ${banner.textColor}`, // Corrigido: usa template literals para concatenar o valor da cor com a unidade

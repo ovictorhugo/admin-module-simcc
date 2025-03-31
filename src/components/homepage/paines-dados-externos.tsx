@@ -18,11 +18,7 @@ export function PaineisDadosExternos() {
         description:"CNPq",
         link:"http://bi.cnpq.br/painel/formacao-atuacao-lattes/"
         },
-        {
-        title:"Propriedade Intelectual",
-        description:"INPI",
-        link:"https://busca.inpi.gov.br/pePI/servlet/LoginController?action=login"
-        },
+     
         {
             title:"Plataforma Sucupira",
             description:"Capes",
@@ -33,27 +29,47 @@ export function PaineisDadosExternos() {
                 description:"CNPq",
                 link:"http://bi.cnpq.br/painel/fomento-cti/index.html"
                 },
-    
-
+                {
+                    title:"OpenAlex",
+                    description:"OpenAlex",
+                    link:"https://openalex.org/"
+                    },
+                    {
+                        title:"Currículo Lattes",
+                        description:"CNPq",
+                        link:"https://buscatextual.cnpq.br/buscatextual/busca.do?metodo=apresentar"
+                        },
+        
             
+                        {
+                            title:"Portal de Periódicos da CAPES",
+                            description:"CAPES",
+                            link:"https://www-periodicos-capes-gov-br.ez27.periodicos.capes.gov.br/index.php/acesso-cafe.html"
+                            },
+                            
+                            {
+                                title:"Web of Science",
+                                description:"Clarivate",
+                                link:"https://access.clarivate.com/login?app=wos&alternative=true&shibShireURL=https:%2F%2Fwww.webofknowledge.com%2F%3Fauth%3DShibboleth&shibReturnURL=https:%2F%2Fwww.webofknowledge.com%2F&roaming=true"
+                                },
 
+                                {
+                                    title:"Diretório de grupos de pesquisa",
+                                    description:"CNPq",
+                                    link:"https://lattes.cnpq.br/web/dgp"
+                                    },
             
     ]
 
 
     const plataformas = [
-        {
-            title:"Diretório de grupos de pesquisa",
-            description:"CNPq",
-            link:"https://lattes.cnpq.br/web/dgp"
-            },
+       
 
             {
-                title:"Currículo Lattes",
-                description:"CNPq",
-                link:"https://buscatextual.cnpq.br/buscatextual/busca.do?metodo=apresentar"
+                title:"Propriedade Intelectual",
+                description:"INPI",
+                link:"https://busca.inpi.gov.br/pePI/servlet/LoginController?action=login"
                 },
-
                 ...(version
                     ? [
                         {
@@ -64,11 +80,7 @@ export function PaineisDadosExternos() {
                       ]
                     : []),
 
-                    {
-                        title:"OpenAlex",
-                        description:"OpenAlex",
-                        link:"https://openalex.org/"
-                        },
+                   
 
                         {
                             title:"Scopus",
@@ -76,17 +88,8 @@ export function PaineisDadosExternos() {
                             link:"https://www.scopus.com/"
                             },
 
-                            {
-                                title:"Portal de Periódicos da CAPES",
-                                description:"CAPES",
-                                link:"https://www-periodicos-capes-gov-br.ez27.periodicos.capes.gov.br/index.php/acesso-cafe.html"
-                                },
+                            
 
-                                {
-                                    title:"Web of Science",
-                                    description:"Clarivate",
-                                    link:"https://access.clarivate.com/login?app=wos&alternative=true&shibShireURL=https:%2F%2Fwww.webofknowledge.com%2F%3Fauth%3DShibboleth&shibReturnURL=https:%2F%2Fwww.webofknowledge.com%2F&roaming=true"
-                                    },
 
                                     {
                                         title:"ResearchGate",

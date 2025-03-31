@@ -452,7 +452,11 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   <AccordionItem value="item-1" className="w-full">
     <div className="flex items-center justify-between">
     <Label>Área de especialidade</Label>
-    <AccordionTrigger></AccordionTrigger>
+    {selectedAreas.length > 0 && (
+        <Button
+        onClick={() => setSelectedAreas([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
     </div>
     <AccordionContent>
     <ToggleGroup
@@ -474,7 +478,11 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   <AccordionItem value="item-2">
     <div className="flex items-center justify-between">
     <Label>Titulação</Label>
-    <AccordionTrigger></AccordionTrigger>
+    {selectedGraduations.length > 0 && (
+        <Button
+        onClick={() => setSelectedGraduations([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
     </div>
     <AccordionContent>
     <ToggleGroup
@@ -496,7 +504,11 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   <AccordionItem value="item-3">
     <div className="flex items-center justify-between">
     <Label>Cidade</Label>
-    <AccordionTrigger></AccordionTrigger>
+    {selectedCities.length > 0 && (
+        <Button
+        onClick={() => setSelectedCities([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
     </div>
     <AccordionContent>
     <Alert className="h-12 p-2 mb-4 flex items-center justify-between  w-full ">
@@ -530,7 +542,11 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   <AccordionItem value="item-4">
     <div className="flex items-center justify-between">
     <Label>Universidade</Label>
-    <AccordionTrigger></AccordionTrigger>
+    {selectedUniversities.length > 0 && (
+        <Button
+        onClick={() => setSelectedUniversities([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
     </div>
     <AccordionContent>
     <ToggleGroup
@@ -552,8 +568,12 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
 
 <AccordionItem value="item-5">
     <div className="flex items-center justify-between">
-    <Label>Tipo de Subsídio</Label>
-    <AccordionTrigger></AccordionTrigger>
+    <Label>Bolsa CNPq</Label>
+    {selectedSubsidies.length > 0 && (
+        <Button
+        onClick={() => setSelectedSubsidies([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
     </div>
     <AccordionContent>
     <ToggleGroup
@@ -576,7 +596,11 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
   <AccordionItem value="item-6">
     <div className="flex items-center justify-between">
     <Label>Departamentos</Label>
-    <AccordionTrigger></AccordionTrigger>
+    {selectedDepartaments.length > 0 && (
+        <Button
+        onClick={() => setSelectedDepartaments([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
     </div>
     <AccordionContent>
     <ToggleGroup
@@ -599,7 +623,11 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
 <AccordionItem value="item-7">
     <div className="flex items-center justify-between">
     <Label>Programas de Pós-graduação</Label>
-    <AccordionTrigger></AccordionTrigger>
+  {selectedGraduatePrograms.length > 0 && (
+          <Button
+          onClick={() => setSelectedGraduatePrograms([])}
+           className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+        )}
     </div>
     <AccordionContent>
     <Alert className="h-12 p-2 mb-4 flex items-center justify-between  w-full ">

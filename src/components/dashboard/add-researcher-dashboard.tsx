@@ -8,7 +8,7 @@ import { ChevronLeft,  Copy,  Maximize2,  Plus, Trash, User } from "lucide-react
 import { toast } from "sonner"
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { UserContext } from "../../context/context";
-import { FileXls, Rows, SquaresFour, UserList } from "phosphor-react";
+import { FileXls, MagnifyingGlass, Rows, SquaresFour, UserList } from "phosphor-react";
 import { PesquisadorProps, columns } from "./columns";
 import { useModal } from "../hooks/use-modal-store";
 import { useModalDashboard } from "../hooks/use-modal-dashboard";
@@ -243,6 +243,23 @@ setcarregado(false)
     setCpf(formatCPF(e.target.value));
   };
 
+  const [search, setSearch] = useState('')
+  const filteredTotal = Array.isArray(researcher) ? researcher.filter(item => { 
+    const normalizeString = (str) => str
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .toLowerCase();
+    
+    const searchString = normalizeString(item.name);
+    const normalizedSearch = normalizeString(search);
+    
+    return (
+      searchString.includes(normalizedSearch) 
+     
+    );
+  }) : [];
+  /////
+
     return  (
 <>
 
@@ -283,7 +300,20 @@ setcarregado(false)
 
             <HeaderInstitution/>
 
+            
+
      <div className="gap-4 md:gap-8 flex flex-col ">
+     <Alert className="h-14  p-2 flex items-center justify-between  w-full">
+          <div className="flex items-center gap-2 w-full flex-1">
+            <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
+            <Input onChange={(e) => setSearch(e.target.value)} value={search} type="text" className="border-0 w-full " />
+          
+          </div>
+
+          
+        </Alert>
+
+
     {has_editar_pesquisadores ? (
        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
        <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3"  style={{ backgroundImage: `url(${bg_popup})` }}>
@@ -294,7 +324,7 @@ setcarregado(false)
                       <User className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">{researcher.length}</div>
+                      <div className="text-2xl font-bold">{filteredTotal.length}</div>
                       <p className="text-xs text-muted-foreground">
                         registrados
                       </p>
@@ -323,13 +353,14 @@ setcarregado(false)
         <User className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{researcher.length}</div>
+        <div className="text-2xl font-bold">{filteredTotal.length}</div>
         <p className="text-xs text-muted-foreground">
           registrados
         </p>
       </CardContent>
       </Alert>
     )}
+
 
  
     {onOpenAdd && (
@@ -426,7 +457,7 @@ setcarregado(false)
 >
 
                      <Masonry gutter="16px">
-             {researcher.slice(0, count).map((item: any) => {
+             {filteredTotal.slice(0, count).map((item: any) => {
 
                 return (
                   <Alert>
@@ -494,7 +525,7 @@ status={item.status}
              </Masonry>
              </ResponsiveMasonry>
 
-             {researcher.length > count && (
+             {filteredTotal.length > count && (
             <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 24)}><Plus size={16} />Mostrar mais</Button></div>
         )}
                        </div>
@@ -503,7 +534,7 @@ status={item.status}
                       loading ? (
                         <Skeleton className="w-full rounded-md h-[400px]" />
                       ) : (
-                        <DataTable columns={columns} data={researcher} />
+                        <DataTable columns={columns} data={filteredTotal} />
                       )
                     )}
                   </AccordionContent>

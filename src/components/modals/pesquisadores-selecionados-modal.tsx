@@ -20,7 +20,7 @@ import { Research } from "./researcher-modal";
 
 export function PesquisadoresSelecionadosModal() {
   const { onClose, isOpen, type: typeModal, data, onOpen } = useModal();
-  const { pesquisadoresSelecionados, urlGeral, setPesquisadoresSelecionados } = useContext(UserContext)
+  const { pesquisadoresSelecionados, urlGeral, permission, setPesquisadoresSelecionados } = useContext(UserContext)
   const isModalOpen = (isOpen && typeModal === "pesquisadores-selecionados")
 
   const history = useNavigate();
@@ -103,7 +103,9 @@ export function PesquisadoresSelecionadosModal() {
     }
   };
 
-
+  const hasBaremaAvaliacao = permission.some(
+    (perm) => perm.permission === 'criar_barema_avaliacao'
+  );
 
 
   return (
@@ -209,9 +211,11 @@ export function PesquisadoresSelecionadosModal() {
 
             {pesquisadoresSelecionados.length > 0 && (
               <div className="flex items-center gap-3 w-full justify-end">
-                <Button onClick={() => handleDownloadJson()} variant={'ghost'} size={'sm'} className=" mt-3  flex ">
+              { hasBaremaAvaliacao && (
+                  <Button onClick={() => handleDownloadJson()} variant={'ghost'} size={'sm'} className=" mt-3  flex ">
                   <Download size={16} className="" />Baixar dados
                 </Button>
+              )}
 
                 <Link to={'/dashboard/baremas'}>
                   <Button size={'sm'} className="text-white dark:text-white mt-3 flex ">

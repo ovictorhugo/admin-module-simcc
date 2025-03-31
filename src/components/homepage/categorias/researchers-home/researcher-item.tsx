@@ -75,7 +75,7 @@ export function ResearchItem(props: Research) {
             <div className="z-[1] w-full  p-4 flex gap-3 justify-end">
 
               <div className="mr-auto">
-              {hasBaremaAvaliacao && (
+        
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -119,7 +119,7 @@ export function ResearchItem(props: Research) {
                             )}</TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
-                      )}
+                 
               
 
 

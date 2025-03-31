@@ -90,7 +90,7 @@ export function SearchModal() {
   const searchFilesByTermPrefix = async (prefix: string) => { 
     if (prefix.length >= 3) {
       try {
-        const filesRef = collection(db, version ? 'termos_busca' : 'termos_busca_cimatec');
+        const filesRef = collection(db, version ? 'termos_busca' : 'termos_busca_simcc');
 
         // Busca APENAS os documentos que NÃO são do tipo "NAME"
         const q = query(filesRef,

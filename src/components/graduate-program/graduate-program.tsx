@@ -4,7 +4,7 @@ import { UserContext } from "../../context/context";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 import bg_user from '../../assets/user.png';
 
-import { ProgramItem } from "./program-item";
+import { areasComCores, ProgramItem } from "./program-item";
 import { VisualizacaoPrograma } from "./visualizacao-programa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
@@ -73,55 +73,93 @@ type FiltersModalProps = {
 };
 
 export function FiltersModal({ graduatePrograms, setGraduatePrograms }: FiltersModalProps) {
-const { onClose, isOpen, type: typeModal } = useModal();
+  const { onClose, isOpen, type: typeModal } = useModal();
   const isModalOpen = isOpen && typeModal === "filters-graduate";
 
   const queryUrl = useQuery();
+  const navigate = useNavigate();
+
+  // Função para pegar os valores da URL, com fallback para array vazio
   const getArrayFromUrl = (key: string) => queryUrl.get(key)?.split(";") || [];
 
+  
+
+  // Estados para os filtros
   const [selectedCities, setSelectedCities] = useState<string[]>(getArrayFromUrl("cities"));
   const [selectedTypes, setSelectedTypes] = useState<string[]>(getArrayFromUrl("types"));
   const [selectedUniversities, setSelectedUniversities] = useState<string[]>(getArrayFromUrl("universities"));
   const [selectedAreas, setSelectedAreas] = useState<string[]>(getArrayFromUrl("areas"));
   const [selectedModalities, setSelectedModalities] = useState<string[]>(getArrayFromUrl("modalities"));
 
-  const [filteredCount, setFilteredCount] = useState<number>(0);
-const navigate = useNavigate();
+  // Atualiza a URL com os filtros selecionados
+  const updateFilters = (category: string, values: string[]) => {
+    if (values.length > 0) {
+      queryUrl.set(category, values.join(";"));
+      setGraduatePrograms(filteredPrograms)
+    } else {
+      queryUrl.delete(category)
+    }
 
+  };
+
+  // Efeito para capturar os filtros da URL na inicialização
   useEffect(() => {
-    // Calculate filtered results count
-    let filtered = [...graduatePrograms];
-    if (selectedCities.length > 0) {
-      filtered = filtered.filter((r) => selectedCities.includes(r.city));
-    }
-    if (selectedUniversities.length > 0) {
-      filtered = filtered.filter((r) => selectedUniversities.includes(r.institution));
-    }
-    if (selectedTypes.length > 0) {
-      filtered = filtered.filter((r) => selectedTypes.includes(r.type));
-    }
-    if (selectedAreas.length > 0) {
-      filtered = filtered.filter((r) => selectedAreas.includes(r.area));
-    }
-    if (selectedModalities.length > 0) {
-      filtered = filtered.filter((r) => selectedModalities.includes(r.modality));
-    }
- 
-    setFilteredCount(filtered.length);
+    const areasFromUrl = getArrayFromUrl("areas");
+    const citiesFromUrl = getArrayFromUrl("cities");
+    const universitiesFromUrl = getArrayFromUrl("universities");
+    const typesFromUrl = getArrayFromUrl("types");
+    const modalitiesFromUrl = getArrayFromUrl("modalities");
 
-      updateFilters("areas", selectedAreas );
+    // Apenas se houver filtros na URL, atualize o estado
+    setSelectedAreas(areasFromUrl);
+    setSelectedCities(citiesFromUrl);
+    setSelectedUniversities(universitiesFromUrl);
+    setSelectedTypes(typesFromUrl);
+    setSelectedModalities(modalitiesFromUrl);
+
+
+  }, []); // Executa quando a queryUrl for alterada
+
+
+  // Função para aplicar filtros
+  const applyFilters = () => {
+  
+    setGraduatePrograms(filteredPrograms);
+    onClose();
+  };
+
+  // Efeito para atualizar a URL com os filtros quando eles mudam
+  useEffect(() => {
+    updateFilters("areas", selectedAreas);
     updateFilters("cities", selectedCities);
     updateFilters("universities", selectedUniversities);
-    updateFilters("modalities", selectedModalities);
     updateFilters("types", selectedTypes);
-
+    updateFilters("modalities", selectedModalities);
 
     navigate({
       pathname: '/pos-graduacao',
       search: queryUrl.toString(),
     });
 
-  }, [graduatePrograms, selectedAreas, selectedCities, selectedUniversities, selectedModalities, selectedTypes]);
+    setGraduatePrograms(filteredPrograms)
+  }, [selectedAreas, selectedCities, selectedUniversities, selectedTypes, selectedModalities]); // Sempre que um filtro mudar
+
+  // Função para limpar os filtros
+  const clearFilters = () => {
+    setSelectedAreas([]);
+    setSelectedCities([]);
+    setSelectedUniversities([]);
+    setSelectedTypes([]);
+    setSelectedModalities([]);
+    setGraduatePrograms(graduatePrograms); // Restaura os programas originais
+    onClose();
+  };
+
+  const uniqueAreas = Array.from(new Set(graduatePrograms.flatMap((res) => res.area.split(';').map(area => area.trim()))));
+  const uniqueCities = Array.from(new Set(graduatePrograms.map((res) => res.city))).filter(Boolean);
+  const uniqueUniversities = Array.from(new Set(graduatePrograms.map((res) => res.institution))).filter(Boolean);
+  const uniqueTypes = Array.from(new Set(graduatePrograms.map((res) => res.type))).filter(Boolean);
+  const uniqueModalities = Array.from(new Set(graduatePrograms.map((res) => res.modality))).filter(Boolean);
 
   const handleAreaToggle = (value: string[]) => {
     setSelectedAreas(value);
@@ -143,6 +181,33 @@ const navigate = useNavigate();
     setSelectedModalities(value);
   };
 
+  const [filteredCount, setFilteredCount] = useState<number>(0);
+
+  useEffect(() => {
+    // Calculate filtered results count
+    let filtered = [...graduatePrograms];
+    if (selectedCities.length > 0) {
+      filtered = filtered.filter((r) => selectedCities.includes(r.city));
+    }
+    if (selectedUniversities.length > 0) {
+      filtered = filtered.filter((r) => selectedUniversities.includes(r.institution));
+    }
+    if (selectedTypes.length > 0) {
+      filtered = filtered.filter((r) => selectedTypes.includes(r.type));
+    }
+    if (selectedAreas.length > 0) {
+      filtered = filtered.filter((r) => selectedAreas.includes(r.area));
+    }
+    if (selectedModalities.length > 0) {
+      filtered = filtered.filter((r) => selectedModalities.includes(r.modality));
+    }
+ 
+    setFilteredCount(filtered.length);
+    setGraduatePrograms(filteredPrograms)
+     
+  }, [graduatePrograms, selectedAreas, selectedCities, selectedUniversities, selectedModalities, selectedTypes]);
+
+  
   const filteredPrograms = graduatePrograms.filter((res) => {
    
     const hasSelectedArea = selectedAreas.length === 0 || selectedAreas.includes(res.area);
@@ -156,54 +221,6 @@ const navigate = useNavigate();
    
     return graduatePrograms && hasSelectedArea && hasSelectedCity && hasSelectedUniversity && hasSelectedType && hasSelectedModality;
   });
-
-  const applyFilters = () => {
-    setGraduatePrograms(filteredPrograms);
-    onClose();
-  };
-
-  const clearFilters = () => {
-   
-    setSelectedAreas([]);
-    setSelectedCities([]);
-    setSelectedUniversities([]);
-    setSelectedTypes([]);
-    setSelectedModalities([]);
-    setGraduatePrograms(graduatePrograms);
-   
-    onClose();
-  };
-
-  
-  const updateFilters = (category: string, values: string[]) => {
-    if (values.length > 0 ) {
-     
-      queryUrl.set(category, values.join(";"));
-      setGraduatePrograms(filteredPrograms);
-    } else {
-     queryUrl.delete(category)
-    }
-   
-  };
-
-  const uniqueAreas = Array.from(new Set(graduatePrograms.flatMap((res) => res.area.split(';').map(area => area.trim()))));
-  const uniqueCities = Array.from(new Set(graduatePrograms.map((res) => res.city))).filter(Boolean);
-  const uniqueUniversities = Array.from(new Set(graduatePrograms.map((res) => res.institution))).filter(Boolean);
-  const uniqueTypes = Array.from(new Set(graduatePrograms.map((res) => res.type))).filter(Boolean);
-  const uniqueModalities = Array.from(new Set(graduatePrograms.map((res) => res.modality))).filter(Boolean);
-
-  // Carrega os valores da URL ao iniciar a página
-  useEffect(() => {
-
-    setSelectedAreas(getArrayFromUrl("areas"));
- 
-    setSelectedCities(getArrayFromUrl("cities"));
-    setSelectedUniversities(getArrayFromUrl("universities"));
-    setSelectedTypes(getArrayFromUrl("types"));
-    setSelectedModalities(getArrayFromUrl("modalities"));
-   
- 
-  }, []);
 
   const [search, setSearch] = useState('')
   const [search2, setSearch2] = useState('')
@@ -234,21 +251,31 @@ const navigate = useNavigate();
     return searchString.includes(normalizedSearch);
   }) : [];
 
-  useEffect(() => {
-    if (graduatePrograms.length == 0) {
-      setSelectedAreas([]);
-      setSelectedTypes([]);
-      setSelectedModalities([]);
-      setSelectedCities([]);
-      setSelectedUniversities([]);
-    }
-  }, [graduatePrograms]);
+
 
   useEffect(() => {
     if (!(selectedAreas.length > 0 ||  selectedCities.length > 0 || selectedUniversities.length > 0 || selectedTypes.length > 0 || selectedModalities.length > 0)) {
      setGraduatePrograms(graduatePrograms)
     }
   }, [graduatePrograms, selectedAreas, selectedCities, selectedUniversities, selectedTypes, selectedModalities]);
+
+  const normalizeArea = (area: string): string =>
+    area
+      .toUpperCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // Remove acentos
+      .replace(/[^A-Z0-9 ]/g, "") // Remove caracteres especiais
+      .replace(/\s+/g, " ") // Substitui múltiplos espaços por um único espaço
+      .trim();
+  
+  
+  
+  // Criamos o Map normalizando as chaves antes
+  const qualisColor = new Map(areasComCores.map(([area, color]) => [normalizeArea(area), color]));
+  
+  const getColorByArea = (area: string): string =>
+    qualisColor.get(normalizeArea(area)) || 'bg-gray-500';
+  
 
   return {
     selectedAreas,
@@ -257,6 +284,7 @@ const navigate = useNavigate();
     selectedCities,
     selectedUniversities,
     clearFilters,
+    setSelectedCities,
     component: (
       <Sheet open={isModalOpen} onOpenChange={onClose}>
       <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[60vw]`}>
@@ -302,7 +330,17 @@ const navigate = useNavigate();
   <AccordionItem value="item-1" className="w-full">
     <div className="flex items-center justify-between">
     <Label>Área </Label>
-    <AccordionTrigger></AccordionTrigger>
+    <div className="flex gap-2 items-center">
+
+      {selectedAreas.length > 0 && (
+        <Button
+        onClick={() => setSelectedAreas([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
+    <AccordionTrigger>
+      
+      </AccordionTrigger>
+    </div>
     </div>
     <AccordionContent>
     <Alert className="h-12 p-2 mb-4 flex items-center justify-between  w-full ">
@@ -325,8 +363,8 @@ const navigate = useNavigate();
                   className="aspect-auto flex flex-wrap items-start justify-start gap-2"
                 >
                   {filteredTotal.map((area) => (
-                    <ToggleGroupItem key={area} value={area} className="px-3 py-2">
-                      {area}
+                    <ToggleGroupItem key={area} value={area} className="px-3 gap-2 flex py-2">
+                     <Alert className={` w-4 rounded-md border-0 h-4 p-0 ${getColorByArea(area)}`} /> {area}
                     </ToggleGroupItem>
                   ))}
                 </ToggleGroup>
@@ -336,7 +374,17 @@ const navigate = useNavigate();
   <AccordionItem value="item-3">
     <div className="flex items-center justify-between">
     <Label>Cidade</Label>
-    <AccordionTrigger></AccordionTrigger>
+    <div className="flex gap-2 items-center">
+
+      {selectedCities.length > 0 && (
+        <Button
+        onClick={() => setSelectedCities([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
+    <AccordionTrigger>
+      
+      </AccordionTrigger>
+    </div>
     </div>
     <AccordionContent>
     <Alert className="h-12 p-2 mb-4 flex items-center justify-between  w-full ">
@@ -370,7 +418,17 @@ const navigate = useNavigate();
   <AccordionItem value="item-4">
     <div className="flex items-center justify-between">
     <Label>Universidade</Label>
-    <AccordionTrigger></AccordionTrigger>
+    <div className="flex gap-2 items-center">
+
+{selectedUniversities.length > 0 && (
+  <Button
+  onClick={() => setSelectedUniversities([])}
+   className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+)}
+<AccordionTrigger>
+
+</AccordionTrigger>
+</div>
     </div>
     <AccordionContent>
     <ToggleGroup
@@ -389,10 +447,20 @@ const navigate = useNavigate();
     </AccordionContent>
   </AccordionItem>
 
-  <AccordionItem value="item-4">
+  <AccordionItem value="item-5">
     <div className="flex items-center justify-between">
     <Label>Tipo</Label>
-    <AccordionTrigger></AccordionTrigger>
+    <div className="flex gap-2 items-center">
+
+      {selectedTypes.length > 0 && (
+        <Button
+        onClick={() => setSelectedTypes([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
+    <AccordionTrigger>
+      
+      </AccordionTrigger>
+    </div>
     </div>
     <AccordionContent>
     <ToggleGroup
@@ -411,10 +479,20 @@ const navigate = useNavigate();
     </AccordionContent>
   </AccordionItem>
 
-  <AccordionItem value="item-4">
+  <AccordionItem value="item-6">
     <div className="flex items-center justify-between">
     <Label>Modalidade</Label>
-    <AccordionTrigger></AccordionTrigger>
+    <div className="flex gap-2 items-center">
+
+      {selectedModalities.length > 0 && (
+        <Button
+        onClick={() => setSelectedModalities([])}
+         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
+      )}
+    <AccordionTrigger>
+      
+      </AccordionTrigger>
+    </div>
     </div>
     <AccordionContent>
     <ToggleGroup
@@ -494,9 +572,9 @@ const { onOpen } = useModal();
         });
         const data = await response.json();
         if (data) {
-          setGraduatePrograms(data);
-          setOriginalGraduatePrograms(data);
-          setJsonData(data)
+          setGraduatePrograms(data.filter(item => item.visible == true));
+          setOriginalGraduatePrograms(data.filter(item => item.visible == true));
+          setJsonData(data.filter(item => item.visible == true))
           setLoading(false);
         }
       } catch (err) {
@@ -561,7 +639,7 @@ const { onOpen } = useModal();
 
   const [typeVisu, setTypeVisu] = useState('block');
 
-   const { clearFilters, selectedAreas,  component, selectedCities,  selectedUniversities, selectedModalities, selectedTypes } = FiltersModal({
+   const { setSelectedCities, clearFilters, selectedAreas,  component, selectedCities,  selectedUniversities, selectedModalities, selectedTypes } = FiltersModal({
       graduatePrograms: originalGraduatePrograms,
       setGraduatePrograms,
     });
@@ -579,23 +657,22 @@ const { onOpen } = useModal();
           {programSelecionado.length == 0 ? (
             <div>
               {simcc && (
-                 <div className="w-full hidden xl:flex h-[calc(100vh-68px)] overflow-hidden items-center absolute   "><BahiaMap/></div>
+                 <div className="w-full hidden xl:flex h-[calc(100vh-68px)] overflow-hidden items-center absolute   "><BahiaMap setSelectedCities={setSelectedCities}/></div>
               )}
               <main className="z-[2]  gap-4 md:gap-8 flex flex-col  pt-0 md:pt-0 w-full">
              {simcc && (
                <div className="bg-cover w-fit pl-8 bg-bottom bg-no-repeat" >
-               <div className="justify-center h-[calc(100vh-68px)] z-[9] m w-full  flex max-w-[980px] flex-col items-center lg:items-start  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
+               <div className="justify-center h-[calc(100vh-124px)] z-[9] m w-full  flex max-w-[980px] flex-col items-center lg:items-start  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
                  <Link to={'/informacoes'} className="inline-flex z-[2] lg:w-fit  w-fit items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12} /></Link>
 
-                 <h1 className="lg:w-fit  lg:text-left text-center max-w-[600px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
-                   Selecione um programa de {" "}
-                   <strong className="bg-eng-blue  rounded-md px-3 pb-2 text-white font-medium">
-                     {" "}
-                     pós-graduação
-                   </strong>{" "}
-                 </h1>
+                 <h1 className="lg:w-fit lg:text-left text-center max-w-[600px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1] md:block mb-4">
+  Selecione uma cidade ou{" "}
+  <strong className="bg-eng-blue rounded-md px-3 pb-2 text-white font-medium">
+    pesquise um programa
+  </strong>
+</h1>
 
-              
+<p>Arraste para baixo para explorar os programas disponíveis.</p>
                </div>
              </div>
              )}
@@ -696,7 +773,7 @@ const { onOpen } = useModal();
                   <GraduationCap className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{graduatePrograms.filter(item => item.visible == true).length}</div>
+                  <div className="text-2xl font-bold">{filteredTotal.filter(item => item.visible == true).length}</div>
                   <p className="text-xs text-muted-foreground">
                     encontrados na busca
                   </p>
@@ -725,12 +802,11 @@ const { onOpen } = useModal();
                       loading ? (
                         <ResponsiveMasonry
                           columnsCountBreakPoints={{
-                            350: 2,
-                            750: 3,
-                            900: 4,
-                            1200: 6,
-                            1500: 6,
-                            1700: 7
+                            350: 1,
+                            750: 2,
+                            900: 2,
+                            1200: 3,
+                            1700: 4
                           }}
                         >
                           <Masonry gutter="16px">
@@ -750,7 +826,7 @@ const { onOpen } = useModal();
                         }}
                       >
                         <Masonry gutter="16px" className=" z-[1] w-full">
-                          {graduatePrograms
+                          {filteredTotal
                             .filter(item => item.visible == true) // Filtra os itens onde `visible` é `true`
                             .map((props, index) => (
                               <ProgramItem
@@ -785,7 +861,7 @@ const { onOpen } = useModal();
                       loading ? (
                         <Skeleton className="w-full rounded-md h-[400px]" />
                       ) : (
-                        <DataTable columns={columnsGraduate} data={graduatePrograms.filter(item => item.visible == true)} />
+                        <DataTable columns={columnsGraduate} data={filteredTotal.filter(item => item.visible == true)} />
                       )
                     )}
                   </AccordionContent>

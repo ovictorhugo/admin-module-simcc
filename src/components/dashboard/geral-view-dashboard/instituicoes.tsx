@@ -1,4 +1,4 @@
-import { Building2, Copy, Plus, Trash } from "lucide-react";
+import { Building2, Copy, Plus, Trash, Upload } from "lucide-react";
 import { Alert } from "../../ui/alert";
 import { Button } from "../../ui/button";
 import { v4 as uuidv4 } from 'uuid';
@@ -6,10 +6,10 @@ import bg_popup from '../../../assets/bg_popup.png';
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../ui/accordion";
 import { HeaderResultTypeHome } from "../../homepage/categorias/header-result-type-home";
-import { Buildings, Rows, SquaresFour } from "phosphor-react";
+import { Buildings, MagnifyingGlass, Rows, SquaresFour } from "phosphor-react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Skeleton } from "../../ui/skeleton";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { Separator } from "../../ui/separator";
 import { toast } from "sonner";
@@ -20,6 +20,10 @@ import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
 import { useModal } from "../../hooks/use-modal-store";
 import { EditInstitutionModal } from "../../modals/edit-institution-modal";
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { ColorPicker } from "../../ui/color-picker";
+import { InstitutionItem } from "./institution-item";
 
 export interface Props {
     name: string
@@ -183,9 +187,38 @@ export function Instituicoes() {
       console.log(researcher)
 
       const [add, setAdd] = useState(false)
+
+      
+  const [search, setSearch] = useState('')
+  const filteredTotal = Array.isArray(researcher) ? researcher.filter(item => { 
+    const normalizeString = (str) => str
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .toLowerCase();
+    
+    const searchString = normalizeString(item.name);
+    const normalizedSearch = normalizeString(search);
+    
+    return (
+      searchString.includes(normalizedSearch) 
+     
+    );
+  }) : [];
+
+
     return(
         <div className="px-8 flex flex-col gap-8">
                 <div className="gap-4 md:gap-8 flex flex-col ">
+                <Alert className="h-14  p-2 flex items-center justify-between  w-full">
+          <div className="flex items-center gap-2 w-full flex-1">
+            <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
+            <Input onChange={(e) => setSearch(e.target.value)} value={search} type="text" className="border-0 w-full " />
+          
+          </div>
+
+          
+        </Alert>
+
                 <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
        <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3"  style={{ backgroundImage: `url(${bg_popup})` }}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -220,7 +253,7 @@ export function Instituicoes() {
               {add && (
                  <fieldset className="grid gap-6 rounded-lg  p-4 bg-white dark:border-neutral-800 border border-neutral-200 dark:bg-neutral-950 bg-cover  bg-center bg-no-repeat "  >
                  <legend className="-ml-1 px-1 text-sm font-medium">
-                   Adicionar pesquisador à instituição
+                   Adicionar instituição
                  </legend>
           
                  <div className="flex gap-3 items-end">
@@ -293,68 +326,20 @@ export function Instituicoes() {
 >
 
                      <Masonry gutter="16px">
-             {researcher.slice(0, count).map((item: any) => {
+             {filteredTotal.slice(0, count).map((item: any) => {
 
                 return (
-                  <Alert>
-                      <div className="flex justify-between items-start gap-3">
-                        <div className="flex gap-3">
-                       
-
-                      <div>
-                        <h1>{item.name}</h1>
-                        <p className="text-gray-500 text-xs">{item.acronym}</p>
-                      </div>
-                        </div>
-
-                       
-                      </div>
-
-                      <Separator className="my-4"/>
-
-                     <div className="items-center flex justify-between gap-3">
-                    
-
-                      <div className="flex gap-3 justify-end w-full ">
-                     
-
-                      <Button  onClick={() => onOpen('confirm-delete-institution', {id_delete:item.institution_id, name:item.name})} variant={'destructive'} className="h-8 w-8 p-0 text-white  dark:text-white">
-             
-             <Trash size={8} className="h-4 w-4" />
-           </Button>
-
-           <EditInstitutionModal
-acronym={item.acronym}
-name={item.name}
-institution_id={item.institution_id}
-
-/>
-
-
-                    
-                      <Button   onClick={() => {
-  navigator.clipboard.writeText(item.lattes_id)
-
-  toast("Operação realizada", {
-    description: "Id da instituição copiado para área de transferência",
-    action: {
-      label: "Fechar",
-      onClick: () => console.log("Undo"),
-    },
-  })
-
-}} variant={'outline'} className="h-8 w-8 p-0 ">
-<Copy size={16} />
-</Button>
-                      </div>
-                     </div>
-                  </Alert>
+                 <InstitutionItem
+                 name={item.name}
+                 institution_id={item.institution_id}
+                 acronym={item.acronym}
+                 />
                 )
              })}
              </Masonry>
              </ResponsiveMasonry>
 
-             {researcher.length > count && (
+             {filteredTotal.length > count && (
             <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 24)}><Plus size={16} />Mostrar mais</Button></div>
         )}
                        </div>
@@ -363,7 +348,7 @@ institution_id={item.institution_id}
                       loading ? (
                         <Skeleton className="w-full rounded-md h-[400px]" />
                       ) : (
-                        <DataTable columns={columnsInstitution} data={researcher} />
+                        <DataTable columns={columnsInstitution} data={filteredTotal} />
                       )
                     )}
                   </AccordionContent>

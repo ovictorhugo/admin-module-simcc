@@ -48,16 +48,7 @@ export function GraficoInstitutionsHome(props: InstitutionsProps) {
               tickMargin={10}
               axisLine={false}
             />
-            <YAxis
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              label={{
-                value: "Quantidade",
-                angle: -90,
-                position: "insideLeft",
-              }}
-            />
+          
      
 
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />

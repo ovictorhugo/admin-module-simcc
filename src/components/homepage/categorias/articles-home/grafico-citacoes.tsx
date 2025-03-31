@@ -53,7 +53,7 @@ export function GraficoCitationsArticleHome(props: Articles) {
      
      <ChartContainer config={chartConfig} className="h-[250px] w-full">
         <ResponsiveContainer>
-          <LineChart data={chartData} margin={{ top: 10, right: 20, left: 20, bottom: 0 }}>
+          <LineChart data={chartData} margin={{ top: 20, right: 20, left: 20, bottom: 0 }}>
             <XAxis dataKey="year" tickLine={false} tickMargin={10} axisLine={false} />
           
             <CartesianGrid vertical={false} horizontal={false} />

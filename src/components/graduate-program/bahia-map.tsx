@@ -1,14 +1,12 @@
-
 import Highcharts from 'highcharts';
 import Highmaps from 'highcharts/highmaps';
 import HighchartsAccessibility from 'highcharts/modules/accessibility';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsOfflineExporting from 'highcharts/modules/offline-exporting';
 
-
 import { useEffect, useState, useContext } from "react";
 
-// Initialize Highcharts modules
+// Inicializa os módulos do Highcharts
 HighchartsAccessibility(Highcharts);
 HighchartsExporting(Highcharts);
 HighchartsOfflineExporting(Highcharts);
@@ -21,36 +19,39 @@ interface GraduateProgram {
   name: string;
   rating: string;
   type: string;
-  city: string
-  state: string
-  instituicao: string
-  url_image: string
-  region: string
-  sigla: string
-  latitude: string
-  longitude: string
-  visible:string
+  city: string;
+  state: string;
+  instituicao: string;
+  url_image: string;
+  region: string;
+  sigla: string;
+  latitude: string;
+  longitude: string;
+  visible: boolean;
 }
+
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
-}
+};
 
-// Importar dados GeoJSON do Brasil
-
+// Importa os dados GeoJSON do Brasil
 import brazilStatesGeoJSON from './ba_state.json';
 import mgStateGeoJSON from './mg_state.json'; // Substitua pelo caminho correto
 import { UserContext } from '../../context/context';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-function BahiaMap() {
+interface Props {
+  setSelectedCities: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+function BahiaMap({ setSelectedCities }: Props) {
   const { version, urlGeral, setUrlGeral, simcc } = useContext(UserContext);
   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext);
   const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram[]>([]);
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   const queryUrl = useQuery();
 
-   
   const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=`;
 
   useEffect(() => {
@@ -77,39 +78,61 @@ function BahiaMap() {
     fetchData();
   }, [urlGraduateProgram]);
 
-  console.log(urlGraduateProgram)
+  // Função de normalização de strings (para cidade e programas)
+  const normalizeString = (str: string): string => {
+    return str
+      .normalize("NFD") // Decompõe caracteres acentuados
+      .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos (acentos)
+      .replace(/[^a-zA-Z0-9\s]/g, "") // Remove caracteres especiais
+      .toUpperCase(); // Converte para maiúsculas
+  };
 
-  // UseEffect para inicializar o gráfico quando o componente for montado
   useEffect(() => {
-    // Assumindo que você já tenha os dados dos programas de pós-graduação em graduatePrograms
+    // Criação do objeto para contagem dos programas por cidade
+    const cityProgramCount: Record<string, number> = {};
 
-// Crie um objeto para armazenar a contagem de programas por estado
-const cityProgramCount: Record<string, number> = {};
-  graduatePrograms.filter(item => item.visible == "True").forEach((program) => {
-    const city = program.city;
-    if (cityProgramCount[city]) {
-      cityProgramCount[city] += 1;
-    } else {
-      cityProgramCount[city] = 1;
-    }
-  });
+    graduatePrograms
+      .filter(item => item.visible === true)
+      .forEach((program) => {
+        const normalizedCity = normalizeString(program.city); // Normaliza a cidade do programa
+        console.log("Program City:", program.city, "Normalized:", normalizedCity);
+        if (cityProgramCount[normalizedCity]) {
+          cityProgramCount[normalizedCity] += 1;
+        } else {
+          cityProgramCount[normalizedCity] = 1;
+        }
+      });
 
-// Agora você pode criar o array brazilStateData com base na contagem
-const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => ({
-  name: city.toString(),
-  value: parseFloat(String(count)) || 0,
-}));
+    // Define um máximo para normalizar a opacidade
+    const maxPrograms = Math.max(...Object.values(cityProgramCount), 1);
+
+    // Mapeia os dados das cidades com opacidade variável
+    const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => ({
+      name: city,
+      value: parseFloat(String(count)) || 0,
+      color: Highcharts.color('#559FB8').setOpacity(count / maxPrograms).get(),
+    }));
+
+    // Normaliza os nomes das cidades do GeoJSON
+    const normalizedGeoJSON = {
+      ...brazilStatesGeoJSON,
+      features: brazilStatesGeoJSON.features.map((feature: any) => ({
+        ...feature,
+        properties: {
+          ...feature.properties,
+          name: normalizeString(feature.properties.name), // Substitui pelo nome normalizado
+        },
+      })),
+    };
+    // Verificar as cidades no GeoJSON
 
 
-    // Inicialize o gráfico
-    const chart = Highmaps.mapChart( {
+    // Inicializa o gráfico
+    const chart = Highmaps.mapChart({
       chart: {
         renderTo: 'containerone',
-        map: !version ? brazilStatesGeoJSON : mgStateGeoJSON,
+        map: !version ? normalizedGeoJSON : mgStateGeoJSON,
         backgroundColor: 'transparent',
-     
-        
-     
       },
       title: {
         text: '',
@@ -117,11 +140,8 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
       credits: {
         enabled: false,
       },
-     
-      
-   
       legend: {
-        enabled: false, // Defina esta propriedade como false para remover a legenda
+        enabled: false,
       },
       colorAxis: {
         tickPixelInterval: 100,
@@ -130,40 +150,32 @@ const brazilCityData = Object.entries(cityProgramCount).map(([city, count]) => (
         {
           type: 'map',
           data: brazilCityData,
-          keys: ['name', 'value'],
+          keys: ['name', 'value', 'color'], // Adiciona a chave 'color'
           joinBy: 'name',
-          
-       
-          // Habilitar drilldown para estados
           allowPointSelect: false,
           cursor: 'pointer',
-       
           point: {
             events: {
-              // Lidar com o evento de clique para os estados
               click: function () {
-                const city = (this.options as { name: string })['name'];
-                queryUrl.set('cities', city);
-                navigate({
-                  pathname: '/pos-graduacao',
-                  search: queryUrl.toString(),
+                const city = normalizeString((this.options as { name: string })['name']); // Normaliza a cidade ao clicar
+                setSelectedCities(prevCities => {
+                  if (!prevCities.includes(city)) {
+                    return [...prevCities, city];  // Adiciona a cidade se não estiver presente
+                  }
+                  return prevCities;  // Retorna o estado atual se a cidade já estiver na lista
                 });
               },
             },
-
-            
           },
-        
         },
       ],
     });
-
 
     // Limpar o gráfico quando o componente for desmontado
     return () => {
       chart.destroy();
     };
-  }, [graduatePrograms]); // O array vazio garante que o useEffect seja executado apenas uma vez na montagem
+  }, [graduatePrograms, version]); // Dependência de graduatePrograms para re-executar quando os dados mudarem
 
   return <div className={` absolute w-[140%] z-[2] h-full left-[-20px]`} id="containerone" />;
 }

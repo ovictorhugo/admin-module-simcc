@@ -60,7 +60,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AreaChart, Area, LineChart, Line, BarChart, Bar, XAxis, PieChart, Pie, LabelList, Cell, CartesianGrid, Legend, ResponsiveContainer } from 'recharts';
 import { Label as LabelChart } from 'recharts';
 
-type Research = {
+type Count = {
   count_article: number
   count_book: number
   count_book_chapter: number,
@@ -123,6 +123,9 @@ import { TodosPesquisadores } from "../listagens/todos-pesquisadores";
 import { HeroParallax } from "../ui/hero-parallax";
 import { BannerHome } from "./components/banner";
 import { Helmet } from "react-helmet";
+import { InfiniteMovingResearchers } from "../ui/infinite-moving-researcher";
+import { Research } from "./categorias/researchers-home";
+import { GraficoTitulacaoHome } from "./components/grafico-titulacao";
 
 
 interface Bolsistas {
@@ -333,7 +336,7 @@ export function InitialHome() {
 
   const [loading, isLoading] = useState(false)
 
-  const [dados, setDados] = useState<Research[]>([]);
+  const [dados, setDados] = useState<Count[]>([]);
 
   let urlDados = `${urlGeral}ResearcherData/DadosGerais?year=${year}`
 
@@ -529,7 +532,44 @@ export function InitialHome() {
    
   ];
 
-  return (
+
+  ///
+    const [researcher, setResearcher] = useState<Research[]>([]);
+      let urlTermPesquisadores = `${urlGeral}researcherName?name=`
+console.log(urlTermPesquisadores)
+       useMemo(() => {
+                  const fetchData = async () => {
+                      try {
+                     
+                        const response = await fetch(  urlTermPesquisadores, {
+                          mode: "cors",
+                          headers: {
+                            "Access-Control-Allow-Origin": "*",
+                            "Access-Control-Allow-Methods": "GET",
+                            "Access-Control-Allow-Headers": "Content-Type",
+                            "Access-Control-Max-Age": "3600",
+                            "Content-Type": "text/plain",
+                          },
+                        });
+                        const data = await response.json();
+                        if (data) {
+                          setResearcher(data);
+                       
+                        }
+                      } catch (err) {
+                        console.log(err);
+                      }
+                    };
+                    fetchData();
+                  }, [urlTermPesquisadores]);
+
+                   const randomResearchers = useMemo(() => {
+                                return researcher.sort(() => Math.random() - 0.5).slice(0, 40);
+                              }, [researcher]);
+                  
+ const mesAtual = new Date().toLocaleString("pt-BR", { month: "long" });
+ 
+ return (
 
     <div className=" items-center  flex flex-col   ">
   <Helmet>
@@ -859,31 +899,57 @@ export function InitialHome() {
                 </Alert></Link>
             </div>
           ) : (
-            <Alert className="p-0 relative flex flex-col bg-cover bg-right bg-no-repeat" style={{ backgroundImage: `url(${bg_graduate})` }}>
-              <CardHeader className="flex flex-row p-10 items-center justify-between space-y-0 pb-2">
-                <div></div>
+            <Link
+                className="
+                  w-full
 
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Fonte: {version ? ('Escola de Engenharia') : ('SECTI-BA')}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                  md:flex
 
-              </CardHeader>
+                
+                "
+                to={'/listagens'}
+              >
+                <Alert
+                  className="
+                    p-0
 
-              <div className="flex flex-1 px-6 w-full h-full">
-                <div className="flex flex-col items-center justify-center gap-2 w-full h-full">
-                  <CardTitle className="text-8xl font-medium text-center">
-                    {VisaoPrograma.map((props) => (<>{props.researcher}</>))}
-                  </CardTitle>
-                  <CardDescription className="dark:text-white">{version ? ('na Escola de Engenharia') : (' pesquisadores no SECTI-BA')}</CardDescription>
-                </div>
-              </div>
+                    md:w-full
 
-            </Alert>
+                    lg:h-full
+                  "
+                >
+                  <CardHeader
+                    className="
+                      flex p-10 flex-row items-center justify-between space-y-0
+
+                      md:h-28
+                    "
+                  >
+                    <div>
+                      <CardTitle className="text-sm font-medium">
+                        Total de  {researcher.filter(r => r.status === true).length} pesquisadores ativos
+                      </CardTitle>
+                      <CardDescription>na plataforma</CardDescription>
+
+                    </div>
+
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                        <TooltipContent>
+                          <p>Fonte: {version ? ('Escola de Engenharia') : ('SECTI-BA')}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+
+                  </CardHeader>
+
+                  <div className="flex flex-1 p-6 pt-0">
+                   <GraficoTitulacaoHome researchers={researcher.filter(r => r.status === true)}/>
+                  </div>
+
+                </Alert>
+              </Link>
           )}
 
           <Alert className="lg:col-span-2 h-full p-0">
@@ -1166,10 +1232,48 @@ export function InitialHome() {
 </div>
         </div>
 
-        <h3 className="text-2xl font-medium ">Acesso rápido na plataforma</h3>
+        <h3 className="text-2xl font-medium ">Destaques do mês</h3>
 
-        <div className="rounded-md w-full bg-eng-blue h-[350px]">
+        <div className="rounded-md w-full bg-eng-blue p-8 gap-8 md:p-16  grid lg:grid-cols-2">
+        <CardContent
+                      className="flex p-0 rounded-t-md lg:rounded-tr-none lg:rounded-l-md h-full items-center   bg-cover bg-center"
+                     
+                    >
 
+<div className="flex z-[2] flex-col gap-3">
+      <h1 className="text-2xl text-white font-medium">
+        Pesquisadores em destaque do mês de {mesAtual.charAt(0).toUpperCase() + mesAtual.slice(1)}
+      </h1>
+
+      <p className="text-white">
+        Conheça os pesquisadores que se destacaram em {mesAtual} com suas contribuições acadêmicas e científicas.
+      </p>
+
+      <Link to={"/producoes-recentes"} className="w-fit" target="_blank">
+        <Button
+          className="bg-transparent hover:text-white hover:bg-transparent dark:hover:bg-transparent dark:border-white dark:bg-transparent text-white"
+          variant={"outline"}
+        >
+          <Link2 size={16} /> Ver produções recentes
+        </Button>
+      </Link>
+    </div>
+
+                     
+                    </CardContent>
+
+                    <div className="grid grid-cols-1">
+                    <div className="flex items-center justify-center">
+
+<InfiniteMovingResearchers
+items={randomResearchers} // Formata cada item como um objeto
+direction="right"
+speed='slow'
+pauseOnHover={true}
+className="custom-class"
+/>
+          </div>
+                    </div>
         </div>
 
         <Newsletter />
