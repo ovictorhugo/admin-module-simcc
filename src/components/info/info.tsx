@@ -328,7 +328,10 @@ export function Info() {
                         className="p-0 rounded-t-none"  x-chunk="dashboard-05-chunk-4"
                       >
                          <CardHeader className="flex flex-row items-start bg-neutral-100 dark:bg-neutral-800">
-                         <div className='flex gap-2 items-center text-sm text-gray-500'>O {version ? ('Simcc'):('Simcc')} é uma plataforma desenvolvida {version ? ('pela Escola de Engenharia da Universidade Federal de Minas Gerais (UFMG'):('pelo SECTI-BA')} com o objetivo de centralizar e visualizar de forma abrangente os dados dos pesquisadores da instituição. Integrando informações provenientes de diversas fontes como Lattes, Sucupira, Diretório dos Grupos de Pesquisa (DGP), OpenAlex e Journal Citation Reports (JCR), o Simcc fornece uma visão detalhada e acessível das competências e produções acadêmicas da escola. Todas as informações de produção bibliográfica e técnica apresentadas, foram retiradas da Plataforma Lattes com autorização do CNPq e OpenAlex.</div>
+                         <div className='flex gap-2 items-center text-sm text-gray-500'>
+  O Simcc é uma plataforma desenvolvida para centralizar e visualizar de forma abrangente os dados dos pesquisadores da instituição. Integrando informações de diversas fontes, como Lattes, Sucupira, Diretório dos Grupos de Pesquisa (DGP), OpenAlex e Journal Citation Reports (JCR), o Simcc oferece uma visão detalhada e acessível das competências e produções acadêmicas. Todas as informações de produção bibliográfica e técnica apresentadas foram retiradas da Plataforma Lattes com autorização do CNPq e OpenAlex.
+</div>
+
                          </CardHeader>
 
                          <CardContent className="p-6 text-sm">

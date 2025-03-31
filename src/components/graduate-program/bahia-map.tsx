@@ -47,7 +47,6 @@ interface Props {
 
 function BahiaMap({ setSelectedCities }: Props) {
 
-function BahiaMap() {
 
   const { version, urlGeral, setUrlGeral, simcc } = useContext(UserContext);
   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext);
