@@ -87,53 +87,37 @@ export function SearchModal() {
   const [filteredItems, setFilteredItems] = useState<Csv[]>([]);
   /////////////////
 const banco = import.meta.env.VITE_BANCO_FIREBASE_SEARCH
-const searchFilesByTermPrefix = async (prefix: string) => { 
-  if (prefix.length < 3) return;
-
-  try {
-    const filesRef = collection(db, import.meta.env.VITE_BANCO_FIREBASE_SEARCH);
-
-    // Definição das queries com limitação de resultados
-    const q = query(filesRef,
-      where("term_normalize", ">=", prefix),
-      where("term_normalize", "<=", prefix + "\uf8ff"),
-      limit(150) // Limita para evitar sobrecarga
-    );
-
-   
-    // Busca separadamente os que são "NAME" (sem usar Firestore para filtragem textual)
-    const qName = query(filesRef, where("type_", "==", "NAME"));
-    const [querySnapshot, querySnapshotName] = await Promise.all([
-      getDocs(q),
-      getDocs(qName)
-    ]);
 
 
-
-    let otherFiles = querySnapshot.docs.map(doc => doc.data() as Csv);
-    let filesName = querySnapshotName.docs.map(doc => doc.data() as Csv);
-
-    // Filtragem manual dos arquivos "NAME"
-    const filteredNameFiles = filesName.filter(file => {
-      const searchTokens = normalizeInput(prefix).split(/\s+/);
-      const nameTokens = normalizeInput(file.term).split(/\s+/);
-      return searchTokens.every(token => 
-        nameTokens.some(nameToken => nameToken.startsWith(token)) // Busca parcial
+const searchFilesByTermPrefix = async (prefix: string) => {
+  if (prefix.length >= 3) {
+    try {
+      // Consulta os documentos cujo term começa com o prefixo fornecido
+      const filesRef = collection(db, import.meta.env.VITE_BANCO_FIREBASE_SEARCH);
+      const q = query(filesRef,
+        where('term_normalize', '>=', prefix),
+        where('term_normalize', '<=', prefix + '\uf8ff')
       );
-    });
 
-    // Remover duplicatas
-    const seen = new Set<string>();
-    const finalFiles = [...filteredNameFiles, ...otherFiles].filter(file => {
-      const key = `${file.term_normalize}_${file.type_}`;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
+      const querySnapshot = await getDocs(q);
+      // Extrai os dados dos documentos encontrados
+      const files = querySnapshot.docs.map(doc => doc.data());
 
-    setFilteredItems(finalFiles);
-  } catch (error) {
-    console.error("Erro ao buscar arquivos:", error);
+      console.log('files', files)
+      const mappedFiles = files.map(file => ({
+        great_area: file.great_area,
+        term: file.term,
+        frequency: file.frequency,
+        type_: file.type_,
+        term_normalize: file.term_normalize
+      }));
+
+      // Define os dados encontrados em filteredItems
+      setFilteredItems(mappedFiles);
+    } catch (error) {
+      console.error('Erro ao buscar arquivos:', error);
+      return [];
+    }
   }
 };
 
