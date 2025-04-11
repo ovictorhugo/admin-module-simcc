@@ -207,17 +207,7 @@ console.log(urlTermCap)
               </div>
 
               <div className="flex gap-3 mr-3  items-center h-full">
-                <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
-                  <p>Livros:</p>
-                  Iguais
-                  <Switch
-                    checked={distinct}
-                    onCheckedChange={(value) => setDistinct(value)}
-
-                  />
-
-                  Distintos
-                </div>
+            
 
                 <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
                   <Rows size={16} className=" whitespace-nowrap" />
@@ -286,18 +276,7 @@ console.log(urlTermCap)
               </div>
 
               <div className="flex gap-3 mr-3  items-center h-full">
-                <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
-                  <p>Capítulos de livros:</p>
-                  Iguais
-                  <Switch
-                    checked={distinct2}
-                    onCheckedChange={(value) => setDistinct2(value)}
-
-                  />
-
-                  Distintos
-                </div>
-
+              
                 <Button onClick={() => setTypeVisu2('rows')} variant={typeVisu2 == 'block' ? 'ghost' : 'outline'} size={'icon'}>
                   <Rows size={16} className=" whitespace-nowrap" />
                 </Button>

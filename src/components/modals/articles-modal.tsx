@@ -303,7 +303,7 @@ export function ArticlesModal() {
               <div className="">
                 <div className="">
                   {data.relevance && (
-                    <div className="relative  py-2 px-4 bg-yellow-600 w-fit rounded-md text-white"><Star size={16} /></div>
+                    <div className="relative mb-3  py-2 px-4 bg-yellow-600 w-fit rounded-md text-white"><Star size={16} /></div>
                   )}
 
                   <p className=" mb-2 text-lg text-md md:text-xl font-light text-foreground">

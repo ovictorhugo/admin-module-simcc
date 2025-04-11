@@ -409,7 +409,7 @@ const [isOn, setIsOn] = useState(true);
     <Tooltip>
       <TooltipTrigger asChild>
         <Button className="h-8 w-8" variant={'outline'} onClick={() => {
-
+setOpen(false)
         }} size={'icon'}><X size={16} /></Button>
       </TooltipTrigger>
       <TooltipContent> Fechar</TooltipContent>

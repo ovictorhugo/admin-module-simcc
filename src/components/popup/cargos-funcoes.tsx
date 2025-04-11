@@ -107,6 +107,26 @@ export function CargosFuncoes(props: Props) {
 
   const [count, setCount] = useState(12)
 
+  const groupedByEnterprise = Array.isArray(publicacoes)
+  ? publicacoes.reduce((acc, curr) => {
+      if (!acc[curr.enterprise]) {
+        acc[curr.enterprise] = [];
+      }
+      acc[curr.enterprise].push(curr);
+      return acc;
+    }, {} as Record<string, Livros[]>)
+  : {};
+
+  
+  // Ordena os grupos por start_year
+  Object.keys(groupedByEnterprise).forEach((enterprise) => {
+    groupedByEnterprise[enterprise].sort((a, b) => {
+      const yearA = parseInt(a.start_year);
+      const yearB = parseInt(b.start_year);
+      return yearA - yearB;
+    });
+  });
+
   return (
     <div className="">
 
@@ -157,7 +177,7 @@ export function CargosFuncoes(props: Props) {
                 >
                   <Masonry gutter="16px">
                     {items.map((item, index) => (
-                      <div key={index}>{item}</div>
+                      <div key={index} className="w-full">{item}</div>
                     ))}
                   </Masonry>
                 </ResponsiveMasonry>
@@ -166,81 +186,79 @@ export function CargosFuncoes(props: Props) {
                   <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
                 ) : (
                   <div>
-                     <ResponsiveMasonry
-                columnsCountBreakPoints={{
-                    350: 1,
-                    750: 1,
-                    900: 2,
-                    1200: 2,
-                    1700: 3
-                }}
-            >
-                <Masonry gutter="16px">
-                {(Array.isArray(publicacoes) ? publicacoes : []).slice(0, count).map((props) => {
-                      return(
-                        <div className="flex group w-full" >
-<div
-        className={`
-          h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0
-          ${props.employment_type.split('_').join(' ') == 'Livre' && ('bg-lime-300')} 
-    ${props.employment_type.split('_').join(' ') == 'Celetista' && ('bg-lime-400')} 
-    ${props.employment_type.split('_').join(' ') == 'Bolsista' && ('bg-lime-500')} 
-    ${props.employment_type.split('_').join(' ') == 'Outro' && ('bg-lime-600')} 
-    ${props.employment_type.split('_').join(' ') == 'Servidor Publico' && ('bg-lime-700')} 
-    ${props.employment_type.split('_').join(' ') == 'Professor Visitante' && ('bg-lime-800')} 
-        `}
-      >
-      </div>
-      <Alert className="rounded-l-none flex flex-col justify-between p-0 text-left">
-    <div className="p-4 pb-0">
-    <h3 className="font-semibold mb-4 ">{props.enterprise}</h3>
+                    {Object.entries(groupedByEnterprise).map(([enterprise, livros]) => (
+  <div key={enterprise} className="mb-8">
+    <h2 className="text-lg font-bold mb-4">{enterprise}</h2>
 
-<p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">
- {props.functional_classification} {props.other_functional_classification != null && (`- ${props.other_functional_classification}`)}
-</p>
+    <ResponsiveMasonry
+      columnsCountBreakPoints={{
+        350: 1,
+        750: 1,
+        900: 2,
+        1200: 2,
+        1700: 3
+      }}
+    >
+      <Masonry gutter="16px">
+        {livros.slice(0, count).map((props) => (
+          <div className="flex group w-full" key={props.id}>
+            <div
+              className={`
+                h-full w-2 rounded-l-md dark:border-neutral-800 border border-neutral-200 border-r-0
+                ${props.employment_type.split('_').join(' ') == 'Livre' && 'bg-lime-300'} 
+                ${props.employment_type.split('_').join(' ') == 'Celetista' && 'bg-lime-400'} 
+                ${props.employment_type.split('_').join(' ') == 'Bolsista' && 'bg-lime-500'} 
+                ${props.employment_type.split('_').join(' ') == 'Outro' && 'bg-lime-600'} 
+                ${props.employment_type.split('_').join(' ') == 'Servidor Publico' && 'bg-lime-700'} 
+                ${props.employment_type.split('_').join(' ') == 'Professor Visitante' && 'bg-lime-800'} 
+              `}
+            ></div>
+            <Alert className="rounded-l-none flex flex-col justify-between p-0 text-left">
+              <div className="p-4 pb-0">
+                <h3 className="font-semibold mb-4">{props.enterprise}</h3>
+                <p className="text-sm capitalize text-gray-500 dark:text-gray-300 font-normal">
+                  {props.functional_classification} {props.other_functional_classification && `- ${props.other_functional_classification}`}
+                </p>
 
-{props.additional_info && (
-  <p className="text-sm capitalize mt-4 text-gray-500 dark:text-gray-300 font-normal">
-  {props.additional_info}
-</p>
-)}
+                {props.additional_info && (
+                  <p className="text-sm capitalize mt-4 text-gray-500 dark:text-gray-300 font-normal">
+                    {props.additional_info}
+                  </p>
+                )}
+              </div>
 
+              <div className="flex items-center flex-wrap mt-4 gap-3 p-4 pt-0">
+                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
+                  <CalendarBlank size={12} />
+                  {props.start_year} - {(props.end_year == null || props.end_year === '') ? 'Atual' : props.end_year}
+                </div>
 
+                {props.workload_hours_weekly && (
+                  <p className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
+                    <Clock size={12} /> {props.workload_hours_weekly} horas
+                  </p>
+                )}
 
+                {props.employment_type && (
+                  <p className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
+                    <TextSelectionIcon size={12} /> {props.employment_type.split('_').join(' ')}
+                  </p>
+                )}
 
-    </div>
+                {props.exclusive_dedication && (
+                  <p className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
+                    <CircleAlert size={12} /> Dedicação exclusiva
+                  </p>
+                )}
+              </div>
+            </Alert>
+          </div>
+        ))}
+      </Masonry>
+    </ResponsiveMasonry>
+  </div>
+))}
 
-    <div className="flex items-center flex-wrap mt-4 gap-3 p-4 pt-0">
-    <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><CalendarBlank size={12} />{props.start_year} - {(props.end_year == null || props.end_year == '') ? 'Atual': (props.end_year)}</div>
-
-    {props.workload_hours_weekly != null && (
-  <p className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
- <Clock size={12} /> {props.workload_hours_weekly} horas
- </p>
-)}
-
-{props.employment_type && (
-  <p className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
- <TextSelectionIcon size={12} /> {props.employment_type.split('_').join(' ')} 
- </p>
-)}
-
-{props.exclusive_dedication && (
-  <p className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center">
-  <CircleAlert size={12} /> Dedicação exclusiva
- </p>
-)}
-
-
-
-    </div>
-      </Alert>
-
-                        </div>
-                      )
-                    })}
-                </Masonry>
-                </ResponsiveMasonry>
 
                 {publicacoes.length > count && (
                 <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>

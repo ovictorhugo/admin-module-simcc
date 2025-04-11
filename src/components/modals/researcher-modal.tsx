@@ -178,6 +178,37 @@ export function ResearcherModal() {
     setItensSelecionadosPopUp(itemsSelecionados);
   }, [isOpen, itemsSelecionados]);
 
+  const [loadingMessage, setLoadingMessage] = useState("Estamos procurando todas as informações do(a) pesquisador(a) no nosso banco de dados, aguarde.");
+
+useEffect(() => {
+  let timeouts: NodeJS.Timeout[] = [];
+
+  if (isOpen) {
+    setLoadingMessage("Estamos procurando todas as informações do(a) pesquisador(a) no nosso banco de dados, aguarde.");
+
+    timeouts.push(setTimeout(() => {
+      setLoadingMessage("Estamos quase lá, continue aguardando...");
+    }, 5000));
+
+    timeouts.push(setTimeout(() => {
+      setLoadingMessage("Só mais um pouco...");
+    }, 10000));
+
+    timeouts.push(setTimeout(() => {
+      setLoadingMessage("Está demorando mais que o normal... estamos tentando encontrar tudo.");
+    }, 15000));
+
+    timeouts.push(setTimeout(() => {
+      setLoadingMessage("Estamos empenhados em achar todos os dados, aguarde só mais um pouco");
+    }, 15000));
+  }
+
+  return () => {
+    // Limpa os timeouts ao desmontar ou quando isOpen mudar
+    timeouts.forEach(clearTimeout);
+  };
+}, [isOpen]);
+
   useEffect(() => {
     const fetchData = async () => {
       if (!isOpen) return; // Evita requisição quando modal está fechado
@@ -353,14 +384,18 @@ export function ResearcherModal() {
       <Drawer open={isModalOpen} onClose={onClose}   >
 
         <DrawerContent onInteractOutside={onClose} className={`max-h-[88%] pt-6 border border-b-0`} >
-          {researcher.length == 0 && (
-            <div className="flex justify-center items-center h-[80vh] ">
-              <div className="w-full flex flex-col items-center justify-center h-full">
-                <div className="text-eng-blue mb-4 animate-pulse"><LoaderCircle size={108} className="animate-spin" /></div>
-                <p className="font-medium text-lg max-w-[500px] text-center">Estamos procurando todas as informações do(a) pesquisador(a) no nosso banco de dados, aguarde.</p>
-              </div>
-            </div>
-          )}
+        {researcher.length === 0 && (
+  <div className="flex justify-center items-center h-[80vh]">
+    <div className="w-full flex flex-col items-center justify-center h-full">
+      <div className="text-eng-blue mb-4 animate-pulse">
+        <LoaderCircle size={108} className="animate-spin" />
+      </div>
+      <p className="font-medium text-lg max-w-[500px] text-center">
+        {loadingMessage}
+      </p>
+    </div>
+  </div>
+)}
 
           {researcher.slice(0, 1).map((user) => {
             return (
