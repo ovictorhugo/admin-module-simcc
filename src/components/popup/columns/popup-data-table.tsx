@@ -87,7 +87,7 @@ export function DataTable<TData, TValue>({
       const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.download = `programas-pos.csv`;
+      link.download = `dados.csv`;
       link.href = url;
       link.click();
 

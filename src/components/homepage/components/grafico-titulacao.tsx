@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid,  ResponsiveContainer, LabelList, Cell } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "../../../components/ui/chart";
@@ -8,10 +8,12 @@ import { CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/ca
 import { Tooltip ,TooltipContent, TooltipProvider, TooltipTrigger } from "../../ui/tooltip";
 import { Info } from "lucide-react";
 import { Research } from "../categorias/researchers-home";
+import { UserContext } from "../../../context/context";
 
 
 type ResearchData = {
-  researchers: Research[];
+  graduation: string
+  among:number
 };
 
 const chartConfig = {
@@ -21,33 +23,51 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function GraficoTitulacaoHome(props: ResearchData) {
+export function GraficoTitulacaoHome() {
+  const {urlGeral} = useContext(UserContext)
+
+   let urlTermPesquisadores = `${urlGeral}academic_degree`
+  console.log(urlTermPesquisadores)
+   
+
+    const [researchers, setResearchers] = useState<ResearchData[]>([]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+          try {
+         
+            const response = await fetch(  urlTermPesquisadores, {
+              mode: "cors",
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Max-Age": "3600",
+                "Content-Type": "text/plain",
+              },
+            });
+            const data = await response.json();
+            if (data) {
+              setResearchers(data);
+              setChartData(
+                data.map((item: ResearchData) => ({
+                  graduation: item.graduation?.trim() || "Não informado",
+                  count: item.among,  // pega diretamente o valor do servidor
+                }))
+              );
+           
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        };
+        fetchData();
+      }, [urlTermPesquisadores]);
+
+
   const [chartData, setChartData] = useState<{ graduation: string; count: number }[]>([]);
 
-  useEffect(() => {
-    if (props.researchers) {
-      const counts: { [graduation: string]: number } = {};
 
-      // Conta a quantidade de pesquisadores por nível de graduação
-      props.researchers.forEach((researcher) => {
-        const graduation = researcher.graduation;
-
-        if (!counts[graduation]) {
-          counts[graduation] = 0;
-        }
-
-        counts[graduation] += 1;
-      });
-
-      // Transforma o objeto em um array para o gráfico
-      const data = Object.entries(counts).map(([graduation, count]) => ({
-        graduation,
-        count,
-      }));
-
-      setChartData(data);
-    }
-  }, [props.researchers]);
 
   return (
     <ChartContainer config={chartConfig} className=" w-full h-[340px]">

@@ -35,6 +35,7 @@ import { SpeakerHome } from "../homepage/categorias/speaker-home";
 import { ProjetoPesquisaHome } from "./projeto-pesquisa-home";
 import { OrientacoesHome } from "./orientacoes-home";
 import { TechnicianHome } from "./technician-home";
+import { InfiniteMovingResearchersLoading } from "../ui/infinite-moving-researcher-loading";
 type Research = {
     among: number,
     articles: number,
@@ -90,14 +91,14 @@ export function TodosPesquisadores() {
     
     const [search, setSearch] = useState('')
         const [researcher, setResearcher] = useState<Research[]>([]);
-
+const [loading, setLoading] = useState(false)
         let urlTermPesquisadores = `${urlGeral}researcherName?name=`
         const [typeVisu, setTypeVisu] = useState('block');
       
         useMemo(() => {
             const fetchData = async () => {
                 try {
-               
+                  setLoading(true)
                   const response = await fetch(  urlTermPesquisadores, {
                     mode: "cors",
                     headers: {
@@ -111,10 +112,11 @@ export function TodosPesquisadores() {
                   const data = await response.json();
                   if (data) {
                     setResearcher(data);
-                 
+                    setLoading(false)
                   }
                 } catch (err) {
                   console.log(err);
+
                 }
               };
               fetchData();
@@ -228,7 +230,9 @@ export function TodosPesquisadores() {
               { id: "magazine", label: "Revistas", icon: BookOpen }
             ];
             
-       
+            const nomesAleatorios = Array.from({ length: 20 }, (_, i) => ({
+              name: `Pesquisador ${i + 1}`,
+            }));
 
     return(
         <main className=" w-full grid grid-cols-1 ">
@@ -260,14 +264,26 @@ export function TodosPesquisadores() {
           </div>
 
 
-          <InfiniteMovingResearchers
-        items={randomResearchers} // Formata cada item como um objeto
-        direction="right"
-        speed='slow'
-        pauseOnHover={true}
-        className="custom-class"
-      />
-
+       {loading ? (
+        <div className="flex">
+              <InfiniteMovingResearchersLoading
+          items={nomesAleatorios} // Formata cada item como um objeto
+           direction="right"
+           speed='slow'
+           pauseOnHover={true}
+           className="custom-class"
+         />
+        </div>
+       ):(
+           <InfiniteMovingResearchers
+           items={randomResearchers} // Formata cada item como um objeto
+           direction="right"
+           speed='slow'
+           pauseOnHover={true}
+           className="custom-class"
+         />
+   
+       )}
 <main className="h-full w-full flex flex-col">
            <Tabs defaultValue="articles" value={value} className="">
              <div>

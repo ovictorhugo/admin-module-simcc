@@ -432,7 +432,7 @@ useEffect(() => {
 
                   md:px-10 md:pb-2 md:pt-6
 
-                  lg:px16 
+                  lg:px-16 
                 "
               >
                 <div className="flex justify-between items-center w-full">

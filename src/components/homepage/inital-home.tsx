@@ -28,7 +28,7 @@ interface VisaoPrograma {
   book_chapter: number;
   brand: number;
   patent: number;
-  researcher: string;
+  researcher: number;
   software: number;
   work_in_event: number;
 }
@@ -535,7 +535,7 @@ export function InitialHome() {
 
   ///
     const [researcher, setResearcher] = useState<Research[]>([]);
-      let urlTermPesquisadores = `${urlGeral}researcherName?name=`
+      let urlTermPesquisadores = `${urlGeral}outstanding_researchers`
 console.log(urlTermPesquisadores)
        useMemo(() => {
                   const fetchData = async () => {
@@ -926,9 +926,9 @@ console.log(urlTermPesquisadores)
                     "
                   >
                     <div>
-                      <CardTitle className="text-sm font-medium">
-                        Total de  {researcher.filter(r => r.status === true).length} pesquisadores ativos
-                      </CardTitle>
+                    <CardTitle className="text-sm font-medium">
+  Total de {VisaoPrograma[0]?.researcher ?? 0} pesquisadores ativos
+</CardTitle>
                       <CardDescription>na plataforma</CardDescription>
 
                     </div>
@@ -945,7 +945,7 @@ console.log(urlTermPesquisadores)
                   </CardHeader>
 
                   <div className="flex flex-1 p-6 pt-0">
-                   <GraficoTitulacaoHome researchers={researcher.filter(r => r.status === true)}/>
+                   <GraficoTitulacaoHome />
                   </div>
 
                 </Alert>
@@ -1268,7 +1268,7 @@ console.log(urlTermPesquisadores)
 <InfiniteMovingResearchers
 items={randomResearchers} // Formata cada item como um objeto
 direction="right"
-speed='slow'
+speed='normal'
 pauseOnHover={true}
 className="custom-class"
 />
