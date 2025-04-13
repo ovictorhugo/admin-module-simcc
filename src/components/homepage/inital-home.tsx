@@ -126,6 +126,7 @@ import { Helmet } from "react-helmet";
 import { InfiniteMovingResearchers } from "../ui/infinite-moving-researcher";
 import { Research } from "./categorias/researchers-home";
 import { GraficoTitulacaoHome } from "./components/grafico-titulacao";
+import { InfiniteMovingResearchersLoading } from "../ui/infinite-moving-researcher-loading";
 
 
 interface Bolsistas {
@@ -537,10 +538,11 @@ export function InitialHome() {
     const [researcher, setResearcher] = useState<Research[]>([]);
       let urlTermPesquisadores = `${urlGeral}outstanding_researchers`
 console.log(urlTermPesquisadores)
+const [isLoad, setLoad] = useState(false)
        useMemo(() => {
                   const fetchData = async () => {
                       try {
-                     
+                        setLoad(true)
                         const response = await fetch(  urlTermPesquisadores, {
                           mode: "cors",
                           headers: {
@@ -554,7 +556,7 @@ console.log(urlTermPesquisadores)
                         const data = await response.json();
                         if (data) {
                           setResearcher(data);
-                       
+                          setLoad(false)
                         }
                       } catch (err) {
                         console.log(err);
@@ -569,6 +571,10 @@ console.log(urlTermPesquisadores)
                   
  const mesAtual = new Date().toLocaleString("pt-BR", { month: "long" });
  
+ const nomesAleatorios = Array.from({ length: 20 }, (_, i) => ({
+  name: `Pesquisador ${i + 1}`,
+}));
+
  return (
 
     <div className=" items-center  flex flex-col   ">
@@ -1265,13 +1271,26 @@ console.log(urlTermPesquisadores)
                     <div className="grid grid-cols-1">
                     <div className="flex items-center justify-center">
 
-<InfiniteMovingResearchers
-items={randomResearchers} // Formata cada item como um objeto
-direction="right"
-speed='normal'
-pauseOnHover={true}
-className="custom-class"
-/>
+ {isLoad ? (
+    
+              <InfiniteMovingResearchersLoading
+          items={nomesAleatorios} // Formata cada item como um objeto
+           direction="right"
+           speed='slow'
+           pauseOnHover={true}
+           className="custom-class"
+         />
+    
+       ):(
+           <InfiniteMovingResearchers
+           items={randomResearchers} // Formata cada item como um objeto
+           direction="right"
+           speed='slow'
+           pauseOnHover={true}
+           className="custom-class"
+         />
+   
+       )}
           </div>
                     </div>
         </div>
