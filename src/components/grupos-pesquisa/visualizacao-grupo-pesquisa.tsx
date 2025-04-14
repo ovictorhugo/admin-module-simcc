@@ -15,6 +15,7 @@ import { Alert } from "../ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useModal } from "../hooks/use-modal-store";
 import { Helmet } from "react-helmet";
+import { ResearchItem } from "../homepage/categorias/researchers-home/researcher-item";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -386,7 +387,7 @@ export function VisualizacaoGrupo() {
 
       </div>
 
-      <div className="md:p-8 p-4 py-0 md:py-0 mt-2">
+      <div className="md:p-8 p-4 py-0 md:py-0 ">
 
 
         <h1 className=" max-w-[900px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]  md:block mb-3 ">
@@ -416,7 +417,7 @@ export function VisualizacaoGrupo() {
                 <div className="w-full flex items-center justify-between">
                   <h3 className="text-2xl font-medium ">Líderes</h3>
                   <div className="flex gap-3 mr-3">
-                    <Button className="hidden md:block" onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
+                    <Button className="hidden md:flex" onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
                       <Rows size={16} className="whitespace-nowrap" />
                     </Button>
                     <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'} size={'icon'}>
@@ -446,39 +447,53 @@ export function VisualizacaoGrupo() {
                       </Masonry>
                     </ResponsiveMasonry>
                   ) : (
-                    <div className="flex flex-col gap-4">
-                      {researcher.map((props, index) => (
-                        <Alert key={index}>
-                          <div className="flex justify-between items-center h-10 group">
-                            <div className="h-10">
-                              <div className="flex items-center gap-2">
-                                <Avatar className="cursor-pointer rounded-md h-8 w-8">
-                                  <AvatarImage
-                                    className="rounded-md h-8 w-8"
-                                    src={`${urlGeral}ResearcherData/Image?name=${props.name}`}
-                                  />
-                                  <AvatarFallback className="flex items-center justify-center">
-                                    <UserIcon size={12} />
-                                  </AvatarFallback>
-                                </Avatar>
-                                <div>
-                                  <p className="font-medium">{props.name}</p>
-                                  <div className="text-xs text-gray-500">{props.university}</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <div className=" items-center gap-3 hidden group-hover:flex transition-all">
-                                <Button size={'icon'} onClick={() => onOpen('researcher-modal', { name: props.name })} variant={'ghost'} className="h-10 w-10 ">
-                                  <Eye size={16} />
-                                </Button>
-                              </div>
-
-                            </div>
-                          </div>
-                        </Alert>
-                      ))}
-                    </div>
+                     <ResponsiveMasonry
+                                   columnsCountBreakPoints={{
+                                       350: 2,
+                                       750: 3,
+                                       900: 4,
+                                       1200: 6,
+                                       1500: 6,
+                                       1700: 7
+                                   }}
+                               >
+                   
+                                   <Masonry gutter="16px">
+                                       {researcher.slice(0, count).map((item: any) => {
+                   
+                                           return (
+                                               <ResearchItem
+                                                   among={item.among}
+                                                   articles={item.articles}
+                                                   book={item.book}
+                                                   book_chapters={item.book_chapters}
+                                                   id={item.id}
+                                                   name={item.name}
+                                                   university={item.university}
+                                                   lattes_id={item.lattes_id}
+                                                   area={item.area}
+                                                   lattes_10_id={item.lattes_10_id}
+                                                   city={item.city}
+                                                   graduation={item.graduation}
+                                                   patent={item.patent}
+                                                   speaker={item.speaker}
+                                                   h_index={item.h_index}
+                                                   relevance_score={item.relevance_score}
+                                                   works_count={item.works_count}
+                                                   cited_by_count={item.cited_by_count}
+                                                   i10_index={item.i10_index}
+                                                   scopus={item.scopus}
+                                                   openalex={item.openalex}
+                                                   departament={item.departament}
+                                                   departments={item.departaments}
+                                                   subsidy={item.subsidy}
+                                                   status={item.status}
+                                                   graduate_programs={item.graduate_programs}
+                                               />
+                                           );
+                                       })}
+                                   </Masonry>
+                               </ResponsiveMasonry>
                   )
                 ) : (
                   loading ? (
@@ -514,7 +529,7 @@ export function VisualizacaoGrupo() {
                   >
                     <Masonry gutter="16px">
                       {linhasPesquisa.slice(0, count).map((props) => (
-                        <div className="flex" >
+                        <div className="flex w-full" >
                           <div className={`w-2 min-w-2 rounded-l-md dark:border-neutral-800 border min-h-[120px] border-neutral-200 border-r-0 ${qualisColor[normalizeArea(props.area || '')]} min-h-full relative`}></div>
                           <Alert className="rounded-l-none">
                             <p className="text-xs text-gray-500 mb-2 flex items-center gap-2 justify-between">{props.area}</p>

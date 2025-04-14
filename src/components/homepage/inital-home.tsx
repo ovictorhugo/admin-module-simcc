@@ -1271,26 +1271,14 @@ const [isLoad, setLoad] = useState(false)
                     <div className="grid grid-cols-1">
                     <div className="flex items-center justify-center">
 
- {isLoad ? (
-    
-              <InfiniteMovingResearchersLoading
-          items={nomesAleatorios} // Formata cada item como um objeto
-           direction="right"
-           speed='slow'
-           pauseOnHover={true}
-           className="custom-class"
-         />
-    
-       ):(
-           <InfiniteMovingResearchers
-           items={randomResearchers} // Formata cada item como um objeto
-           direction="right"
-           speed='slow'
-           pauseOnHover={true}
-           className="custom-class"
-         />
-   
-       )}
+                    <InfiniteMovingResearchers
+         items={randomResearchers} // Formata cada item como um objeto
+         direction="right"
+           key="loaded"
+         speed='normal'
+         pauseOnHover={true}
+         className="custom-class"
+       />
           </div>
                     </div>
         </div>

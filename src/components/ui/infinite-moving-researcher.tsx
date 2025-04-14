@@ -55,8 +55,9 @@ export const InfiniteMovingResearchers = ({
   const { urlGeral,  setPesquisadoresSelecionados, pesquisadoresSelecionados} = useContext(UserContext)
 
   useEffect(() => {
+    if (start) return;
     addAnimation();
-  }, []);
+  }, [start]);
 
   function addAnimation() {
     if (containerRef.current && scrollerRef.current) {
@@ -130,8 +131,13 @@ export const InfiniteMovingResearchers = ({
               "transition-all duration-300" // Transição suave
              
             )}
+
+         
           >
-            <div onClick={() => onOpen('researcher-modal', {name:item.name})} className="flex group min-h-[300px]  min-w-[200px] cursor-pointer">
+            <div     onClick={() => {
+              onOpen('researcher-modal', {name:item.name})
+              console.log('opi')
+            }} className="flex group min-h-[300px]  min-w-[200px] cursor-pointer">
            
            <Alert className="flex border-0 p-0 flex-col flex-1 gap-4 bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${item.id}) ` }}>
            <div className="bg-[#000000] rounded-md  bg-opacity-30 hover:bg-opacity-70 transition-all absolute w-full h-full rounded-t-md ">

@@ -81,7 +81,14 @@ export function FiltersModal({ graduatePrograms, setGraduatePrograms }: FiltersM
 
   // Função para pegar os valores da URL, com fallback para array vazio
   const getArrayFromUrl = (key: string) => queryUrl.get(key)?.split(";") || [];
-
+  
+  const normalizeString = (str: string): string => {
+    return str
+      .normalize("NFD") // Decompõe caracteres acentuados
+      .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos (acentos)
+      .replace(/[^a-zA-Z0-9\s]/g, "") // Remove caracteres especiais
+      .toUpperCase(); // Converte para maiúsculas
+  };
   
 
   // Estados para os filtros
@@ -212,7 +219,7 @@ export function FiltersModal({ graduatePrograms, setGraduatePrograms }: FiltersM
    
     const hasSelectedArea = selectedAreas.length === 0 || selectedAreas.includes(res.area);
    
-    const hasSelectedCity = selectedCities.length === 0 || selectedCities.includes(res.city);
+    const hasSelectedCity = selectedCities.length === 0 || selectedCities.includes(normalizeString(res.city));
     const hasSelectedUniversity = selectedUniversities.length === 0 || selectedUniversities.includes(res.institution);
     const hasSelectedType = selectedTypes.length === 0 || selectedTypes.includes(res.type);
     const hasSelectedModality = selectedModalities.length === 0 || selectedModalities.includes(res.modality);
@@ -275,7 +282,7 @@ export function FiltersModal({ graduatePrograms, setGraduatePrograms }: FiltersM
   
   const getColorByArea = (area: string): string =>
     qualisColor.get(normalizeArea(area)) || 'bg-gray-500';
-  
+
 
   return {
     selectedAreas,
@@ -407,7 +414,7 @@ export function FiltersModal({ graduatePrograms, setGraduatePrograms }: FiltersM
                     className="aspect-auto flex flex-wrap items-start justify-start gap-2"
                   >
                     {filteredTotal2.map((city) => (
-                      <ToggleGroupItem key={city} value={city} className="px-3 py-2">
+                      <ToggleGroupItem key={city} value={normalizeString(city)} className="px-3 py-2">
                         {city}
                       </ToggleGroupItem>
                     ))}

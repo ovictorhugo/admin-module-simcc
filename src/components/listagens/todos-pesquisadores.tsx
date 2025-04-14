@@ -233,7 +233,8 @@ const [loading, setLoading] = useState(false)
             const nomesAleatorios = Array.from({ length: 20 }, (_, i) => ({
               name: `Pesquisador ${i + 1}`,
             }));
-
+            
+            
     return(
         <main className=" w-full grid grid-cols-1 ">
  <Helmet>
@@ -295,32 +296,38 @@ const [loading, setLoading] = useState(false)
                 )}
                 <div className={`flex pt-2 gap-8 justify-between  ${isOn ? '' : ''} `}>
                   <div className="flex items-center gap-2">
-                  <div className=" grid grid-cols-1 ">
-                  <ScrollArea className="">
-                  <TabsList className="p-0 flex h-auto bg-transparent dark:bg-transparent">
-                 
-                  {tabs.map(
-      ({ id, label, icon: Icon, condition = true }) =>
-        condition && (
-          <div
-            key={id}
-            className={`pb-2 border-b-2 text-black dark:text-white transition-all ${
-              value === id ? "border-b-[#719CB8]" : "border-b-transparent"
-            }`}
-            onClick={() => setValue(id)}
-          >
-            <Button variant="ghost" className="m-0">
-              <Icon size={16} />
-              {label}
-            </Button>
-          </div>
-        )
-    )}
-                  </TabsList>
+                  <div className="relative grid grid-cols-1">
+  <ScrollArea className="relative overflow-x-auto">
+    <TabsList className="p-0 flex h-auto bg-transparent dark:bg-transparent">
+      {tabs.map(
+        ({ id, label, icon: Icon, condition = true }) =>
+          condition && (
+            <div
+              key={id}
+              className={`pb-2 border-b-2 text-black dark:text-white transition-all ${
+                value === id ? "border-b-[#719CB8]" : "border-b-transparent"
+              }`}
+              onClick={() => setValue(id)}
+            >
+              <Button variant="ghost" className="m-0">
+                <Icon size={16} />
+                {label}
+              </Button>
+            </div>
+          )
+      )}
+    </TabsList>
+    <ScrollBar orientation="horizontal" />
+  </ScrollArea>
 
-                  <ScrollBar orientation="horizontal"/>
-                  </ScrollArea>
-                  </div>
+  {/* Indicador de scroll à direita */}
+  <div className="pointer-events-none absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-white dark:from-black to-transparent flex items-center justify-end">
+    <div className="text-gray-400 dark:text-gray-600 mr-1">
+      ➤
+    </div>
+  </div>
+</div>
+
        
                    
                   </div>
