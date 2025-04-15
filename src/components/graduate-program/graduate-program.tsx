@@ -10,7 +10,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import { Alert } from "../ui/alert";
-import { FadersHorizontal, MagnifyingGlass, Rows, SquaresFour } from "phosphor-react";
+import { ChartBar, FadersHorizontal, MagnifyingGlass, Rows, SquaresFour } from "phosphor-react";
 import { Input } from "../ui/input";
 import { ArrowRight, ChevronDown, ChevronUp, Download, File, GraduationCap, Info, SlidersHorizontal, Trash, X } from "lucide-react";
 
@@ -36,6 +36,9 @@ import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { Badge } from "../ui/badge";
 import { se } from "date-fns/locale";
 import { CardContent, CardHeader, CardTitle } from "../ui/card";
+import { GraficoAreaProgramas } from "./graficos-tabelas/grafico-area-programa";
+import { GraficoInstituicaoProgramas } from "./graficos-tabelas/grafico-instituicoes-programas";
+import { GraficoRatingProgramas } from "./graficos-tabelas/grafico-rating-programas";
 
 export interface GraduateProgram {
   area: string;
@@ -786,6 +789,41 @@ const { onOpen } = useModal();
                   </p>
                 </CardContent>
               </Alert>
+
+              <Accordion defaultValue="item-1" type="single" collapsible className="hidden md:flex ">
+                            <AccordionItem value="item-1" className="w-full ">
+                              <div className="flex mb-2">
+                                <HeaderResultTypeHome title="Gráficos das pós-graduações" icon={<ChartBar size={24} className="text-gray-400" />}>
+                                </HeaderResultTypeHome>
+              
+                                <AccordionTrigger>
+              
+                                </AccordionTrigger>
+                              </div>
+                              <AccordionContent className="p-0">
+                              {loading ? (
+                                 <div className="grid gap-8">
+  <Skeleton className="rounded-md w-full h-[300px] " />
+{simcc && (
+    <Skeleton className="rounded-md w-full h-[300px] " />
+)}
+                                 </div>
+                  
+                  ) : (
+                    <div className="grid gap-8">
+                        <GraficoAreaProgramas group={filteredTotal}/>
+                       {simcc && (
+                                           <div className="grid md:grid-cols-2 gap-8">
+                                                <GraficoInstituicaoProgramas group={filteredTotal}/>
+                                                <GraficoRatingProgramas group={filteredTotal}/>
+                                           </div>
+                                           )}
+                    </div>
+                  )}
+                              </AccordionContent>
+
+                              </AccordionItem>
+                            </Accordion>
 
  <Accordion defaultValue="item-1" type="single" collapsible>
                 <AccordionItem value="item-1">

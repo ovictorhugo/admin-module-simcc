@@ -73,8 +73,12 @@ import { Keepo } from './components/dashboard/builder-page/builder-page';
 import { Tv } from './pages/Tv';
 import { logEvent } from '@firebase/analytics';
 import { analytics } from './lib/firebase';
+import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
 
-
+interface HistoricoItem {
+  termo: string
+  tipo: string
+}
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -132,6 +136,77 @@ const [keepoData, setKeepoData] = useState<Keepo>({
   content: [],
 });
 
+const [historico, setHistorico] = useState<HistoricoItem[]>([])
+const db = getFirestore();
+
+const normalizarTermo = (termo: string): string => {
+  return termo
+    .toLowerCase()
+    .normalize('NFD')                  // separa acentos
+    .replace(/[\u0300-\u036f]/g, '')   // remove acentos
+    .replace(/[^\w\s]/gi, '')          // remove caracteres especiais
+    .trim()
+}
+
+
+useEffect(() => {
+  const updateHistorico = async () => {
+    if (!user || !loggedIn || itemsSelecionados.length === 0) return
+
+    const rawTermo = itemsSelecionados[itemsSelecionados.length - 1].term
+    const termoNormalizado = normalizarTermo(rawTermo)
+    if (!termoNormalizado) return
+
+    const novoItem: HistoricoItem = {
+      termo: termoNormalizado,
+      tipo: searchType
+    }
+
+    let novoHistorico = [
+      novoItem,
+      ...historico.filter(
+        h => !(h.termo === termoNormalizado && h.tipo === searchType)
+      )
+    ]
+
+    if (novoHistorico.length > 10) {
+      novoHistorico = novoHistorico.slice(0, 10)
+    }
+
+    setHistorico(novoHistorico)
+
+    const docRef = doc(db, 'historico', user.uid)
+    await setDoc(docRef, { termos: novoHistorico })
+  }
+
+  updateHistorico()
+}, [itemsSelecionados])
+
+
+useEffect(() => {
+  const fetchHistorico = async () => {
+    if (user && loggedIn) {
+      const docRef = doc(db, 'historico', user.uid)
+      const docSnap = await getDoc(docRef)
+
+      if (docSnap.exists()) {
+        const data = docSnap.data()
+        if (Array.isArray(data.termos)) {
+          const termosNormalizados = data.termos.map((item: any) => ({
+            termo: normalizarTermo(item.termo),
+            tipo: item.tipo || 'article'
+          }))
+          setHistorico(termosNormalizados)
+        }
+      }
+    }
+  }
+
+  fetchHistorico()
+}, [user, loggedIn])
+
+
+
 
 const storedIsCollapsed = localStorage.getItem("isCollapsed");
 const [isCollapsed, setIsCollapsed] = useState(
@@ -164,7 +239,6 @@ const toggleCollapse = () => {
 useEffect(() => {
  if(searchType == "") {
   setSearchType('article')
-  
  }
 }, [searchType]);
 
@@ -297,7 +371,8 @@ useEffect(() => {
       simcc, setSimcc,
       isCollapsedRight, setIsCollapsedRight,
       test, setTest,
-      keepoData, setKeepoData
+      keepoData, setKeepoData,
+      historico, setHistorico
     }}
     >
     
@@ -325,6 +400,8 @@ useEffect(() => {
 
        
         <Route path='/termos-uso' element={<TermosUso/>}/>
+        <Route path='/politica-privacidade' element={<TermosUso/>}/>
+        <Route path='/api-docs' element={<TermosUso/>}/>
         <Route path='/sobre' element={<AboutPage/>}/>
         <Route
         path='/ufmg/'

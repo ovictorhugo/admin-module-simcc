@@ -19,6 +19,11 @@ interface User {
   provider: string
 }
 
+interface HistoricoItem {
+  termo: string
+  tipo: string
+}
+
 interface Departaments {
   dep_nom: string
   dep_id: string
@@ -70,6 +75,10 @@ interface UserContextType {
 
   keepoData:Keepo,
   setKeepoData:React.Dispatch<React.SetStateAction<Keepo>>;
+
+  historico:HistoricoItem[],
+  setHistorico:React.Dispatch<React.SetStateAction<HistoricoItem[]>>;
+
 
   valoresSelecionadosExport: string;
   setValoresSelecionadosExport: React.Dispatch<React.SetStateAction<string>>;
@@ -159,6 +168,9 @@ export const UserContext = createContext<UserContextType>({
   setUser: () => { },
   keepoData: {} as Keepo,
   setKeepoData: () => { },
+
+  historico: [],
+  setHistorico: () => { },
 
   valoresSelecionadosExport: "",
   setValoresSelecionadosExport: () => { },

@@ -631,7 +631,9 @@ setOpen(false)
                     <div className="grid gap-8">
                         <GraficoAreaGrupos group={filteredTotal}/>
                       {simcc && (
-                          <GraficoInstituicaoGrupos group={filteredTotal}/>
+                         <div className="">
+                           <GraficoInstituicaoGrupos group={filteredTotal}/>
+                         </div>
                       )}
                     </div>
                   )}

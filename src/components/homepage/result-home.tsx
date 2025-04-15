@@ -228,8 +228,8 @@ export function ResultHome() {
                 <Search />
               </div>
             )}
-            <div className={`flex w-full flex-wrap pt-2 justify-between ${isOn ? '' : ''} `}>
-             <div className="grid grid-cols-1">
+            <div className={`flex w-full flex-wrap gap-4 pt-2 justify-between ${isOn ? '' : ''} `}>
+             <div className="flex flex-1 w-full">
              <ScrollArea>
                 <div className="w-full flex  items-center gap-2">
                   {!((researcher == 'false' && itemsSelecionados.length == 0) && itemsSelecionados.length == 0) && (

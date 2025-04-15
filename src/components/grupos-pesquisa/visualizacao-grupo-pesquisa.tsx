@@ -379,8 +379,6 @@ export function VisualizacaoGrupo() {
 
           <div className="hidden items-center gap-2 md:ml-auto md:flex">
 
-
-
             <Button size="sm"><SquareArrowOutUpRight size={16} />Visitar página do grupo no DGP CNPq</Button>
           </div>
         </div>

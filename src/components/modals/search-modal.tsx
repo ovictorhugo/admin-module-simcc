@@ -51,6 +51,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useModalResult } from "../hooks/use-modal-result";
 import { Play, Trash } from "lucide-react";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { Separator } from "../ui/separator";
 
 export function SearchModal() {
 
@@ -68,7 +69,7 @@ export function SearchModal() {
   const [researcherOpenAlex, setResearcherOpenAlex] = useState<ResearchOpenAlex[]>([])
   const [showInput, setShowInput] = useState(true);
   const isModalOpen = isOpen && type === "search";
-  const { setValoresSelecionadosExport, setMode, searchType, setSearchType, urlGeral, itemsSelecionados, setItensSelecionados, setValorDigitadoPesquisaDireta, version } = useContext(UserContext)
+  const { setValoresSelecionadosExport, setMode, searchType, setSearchType, urlGeral, itemsSelecionados, setItensSelecionados, setValorDigitadoPesquisaDireta, version, loggedIn, historico } = useContext(UserContext)
   const db = getFirestore();
   const [input, setInput] = useState('')
 
@@ -622,9 +623,37 @@ const searchFilesByTermPrefix = async (prefix: string) => {
 
         </Alert>
 
-        {(input.length >= 3 && filteredItems.length != 0) && (
+        {((input.length >= 3 && filteredItems.length != 0) || (loggedIn && historico.length > 0)) && (
           <Alert className="w-full">
-            <ResponsiveMasonry
+            {historico.length > 0 && (
+               <div>
+               <p className="uppercase font-medium text-xs mb-3">Pesquisas recentes</p>
+                      <div className="flex flex-wrap gap-3">
+                      
+                        {historico.map((props, index) => (
+                          <div key={index} onClick={() => {
+                            handlePesquisa(props.termo, props.tipo.toUpperCase())
+                          }} className={`
+                            ${props.tipo == 'article' && 'bg-blue-500 dark:bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white'}
+      ${props.tipo == 'abstract' && 'bg-yellow-500 dark:bg-yellow-500 hover:bg-yellow-600 dark:hover:bg-yellow-600 hover:text-white'}
+      ${props.tipo == 'speaker' && 'bg-orange-500 dark:bg-orange-500 hover:bg-orange-600 dark:hover:bg-orange-600 hover:text-white'}
+      ${props.tipo == 'book' && 'bg-pink-500 dark:bg-pink-500 hover:bg-pink-600 dark:hover:bg-pink-600 hover:text-white'}
+      ${props.tipo == 'patent' && 'bg-cyan-500 dark:bg-cyan-500 hover:bg-cyan-600 dark:hover:bg-cyan-600 hover:text-white'}
+      ${props.tipo == 'name' && 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-600 hover:text-white'}
+      ${props.tipo == 'area' && 'bg-green-500 dark:bg-green-500 hover:bg-green-600 dark:hover:bg-green-600 hover:text-white'}
+      ${props.tipo == '' && 'bg-blue-700 dark:bg-blue-700 hover:bg-blue-800 dark:hover:bg-blue-800 hover:text-white'}
+                          flex gap-2 h-8 capitalize cursor-pointer transition-all text-white items-center p-2 px-3 rounded-md text-xs`} >
+                            {props.termo}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+            )}
+                  <div className={` ${((input.length >= 3 && filteredItems.length != 0) && (historico.length > 0)) ? ('mt-4 flex'):('hidden')}`}>
+                    <Separator/>
+                  </div>
+          <div className={` ${((input.length >= 3 && filteredItems.length != 0)) ? (''):('hidden')} ${(historico.length > 0) && ('mt-4')}`}>
+          <ResponsiveMasonry
               columnsCountBreakPoints={{
                 350: 1,
                 750: 2,
@@ -742,6 +771,7 @@ const searchFilesByTermPrefix = async (prefix: string) => {
 
               </Masonry>
             </ResponsiveMasonry>
+          </div>
           </Alert>
         )}
       </DialogContent>
