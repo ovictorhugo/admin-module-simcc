@@ -235,11 +235,7 @@ export function AppSidebarAdmin({ ...props }: React.ComponentProps<typeof Sideba
                       icon: Bug,
                       onClick: () => onOpen( 'relatar-problema'), // Chama a função onOpen() ao clicar
                     },
-          {
-            title: "Informações",
-            url: "/dashboard/informacoes",
-            icon: Info
-          },
+       
         ],
       },
 

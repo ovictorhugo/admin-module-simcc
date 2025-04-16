@@ -23,6 +23,10 @@ const {onOpen} = useModalDocs()
         onOpen('politica-privacidade')
     }  else  if(location.pathname == `/api-docs`) {
         onOpen('api-docs')
+    } else if(location.pathname == '/informacoes') {
+        onOpen('informacoes')
+    }  else if(location.pathname == '/dicionario-cores') {
+        onOpen('dicionario-cores')
     } 
         }, [location]);
       

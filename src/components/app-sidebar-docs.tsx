@@ -18,10 +18,12 @@ import {
   GraduationCap,
   Home,
   Info,
+  InfoIcon,
   Link2,
   List,
   Lock,
   Map,
+  Palette,
   PieChart,
   SearchCheck,
   Settings,
@@ -89,6 +91,11 @@ export function AppSidebarDocs({ ...props }: React.ComponentProps<typeof Sidebar
     ],
     projects: [
       {
+        name: "Informações",
+        url: "/informacoes",
+        icon: InfoIcon,
+      },
+      {
         name: "Termos de uso",
         url: "/termos-uso",
         icon: File,
@@ -103,6 +110,12 @@ export function AppSidebarDocs({ ...props }: React.ComponentProps<typeof Sidebar
         url: "/api-docs",
         icon: Braces,
       },
+      {
+        name: "Dicionário de cores",
+        url: "/dicionario-cores",
+        icon: Palette,
+      },
+     
       
     ],
   }

@@ -13,6 +13,8 @@ import { useModalDocs } from "../hooks/use-modal-docs";
 import { TermosUso } from "../docs-api/termos-uso";
 import { PoliticaPrivacidade } from "../docs-api/politica-privacidade";
 import { ApiDocs } from "../docs-api/api-docs";
+import { DicionarioCores } from "../docs-api/dicionario-cores";
+import { Info } from "../info/info";
 
 
 const ModalContent = () => {
@@ -25,7 +27,10 @@ const ModalContent = () => {
         return <PoliticaPrivacidade/>
         case 'api-docs':
             return <ApiDocs/>
- 
+            case 'dicionario-cores':
+            return <DicionarioCores/>
+            case 'informacoes':
+              return <Info/>
   }
 
 }

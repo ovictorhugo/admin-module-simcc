@@ -384,7 +384,7 @@ useEffect(() => {
         <Route path='/dicionario' element={<Home/>}/>
         <Route path='/pos-graduacao' element={<Home/>}/>
         <Route path='/grupos-pesquisa' element={<Home/>}/>
-        <Route path='/informacoes' element={<Home/>}/>
+       
         <Route path='/indicadores' element={<Home/>}/>
         <Route path='/producoes-recentes' element={<Home/>}/>
         <Route path='/departamentos' element={<Home/>}/>
@@ -402,6 +402,8 @@ useEffect(() => {
         <Route path='/termos-uso' element={<TermosUso/>}/>
         <Route path='/politica-privacidade' element={<TermosUso/>}/>
         <Route path='/api-docs' element={<TermosUso/>}/>
+        <Route path='/informacoes' element={<TermosUso/>}/>
+        <Route path='/dicionario-cores' element={<TermosUso/>}/>
         <Route path='/sobre' element={<AboutPage/>}/>
         <Route
         path='/ufmg/'

@@ -36,8 +36,6 @@ const ModalContent = () => {
       return <ContentIndicators/>
     case 'producoes-recentes':
       return <NewsArticles/>
-    case 'informacoes':
-      return <Info/>
     case 'grupos-pesquisa':
       return <GruposPesquisaPage/>
     case 'departamentos':

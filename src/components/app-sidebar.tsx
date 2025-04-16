@@ -6,6 +6,7 @@ import {
   Blocks,
   BookOpen,
   Bot,
+  Boxes,
   Bug,
   Building2,
   CalendarSearch,
@@ -19,6 +20,7 @@ import {
   Link2,
   List,
   Map,
+  PanelsTopLeft,
   PieChart,
   SearchCheck,
   Settings2,
@@ -102,7 +104,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {
         title: "Páginas",
         url: "/",
-        icon: SquareTerminal,
+        icon: PanelsTopLeft,
         isActive: true,
         items: [
           ...(version
@@ -124,6 +126,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: "/grupos-pesquisa",
             icon: Blocks
           },
+          
+          ...(!version
+            ? [
+              {
+                title: "INCITE's",
+                url: "/incites",
+                icon:Boxes
+              },
+              ]
+            : []),
         ],
       },
 
@@ -149,11 +161,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: "/indice-pesquisador",
             icon: AArrowUp
           },
-          {
-            title: "Informações",
-            url: "/informacoes",
-            icon: Info
-          },
+        
         ],
       },
    

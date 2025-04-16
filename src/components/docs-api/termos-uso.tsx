@@ -29,7 +29,7 @@ export function TermosUso() {
           <Link to="/">
             <Button variant="outline">
               <Home size={16} className="mr-2" />
-              Página inicial
+              Página Inicial
             </Button>
           </Link>
 
