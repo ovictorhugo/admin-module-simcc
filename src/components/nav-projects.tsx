@@ -39,7 +39,7 @@ export function NavProjects({
 
   return (
     <SidebarGroup className="">
-      <SidebarGroupLabel>Páginas</SidebarGroupLabel>
+      <SidebarGroupLabel>Acesso rápido</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>

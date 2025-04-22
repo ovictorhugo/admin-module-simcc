@@ -30,6 +30,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../
 import { GraficoContagemEventosDia } from "./graficos/contagem-eventos-dia";
 import { PaisesAcessos } from "./graficos/paises-acesso";
 import { PercentualEventos } from "./graficos/percentual-eventos";
+import { FirestoreView } from "./firestore-view";
 
 
 
@@ -597,71 +598,14 @@ export function GeralViewDashboard() {
 
           </TabsContent>
 
-          <TabsContent value="cargos" className="h-auto flex flex-col gap-8">
+          <TabsContent value="cargos" className="h-auto flex flex-col gap-8 m-0">
             <CargosFuncoes />
           </TabsContent>
 
-          <TabsContent value="unread" className="h-full flex flex-col gap-4 md:gap-8  ">
-            <div className=" p-4 md:p-8 pt-0 md:pt-0 flex flex-col md:gap-8 gap-4" >
-
-              <Alert className="p-0">
-                <CardHeader>
-                  <CardTitle>Diretório de arquivos</CardTitle>
-                  <CardDescription>
-                    O diretório dentro da plataforma, no qual os documentos e configurações estão
-                    localizados.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-
-                  <div className="flex gap-3 items-end">
-                    <div className="flex flex-col space-y-1.5 w-full flex-1">
-                      <Label htmlFor="name">Caminho do diretório</Label>
-                      <Input
-                        disabled
-                        placeholder="Diretório"
-                        value={directoryJson}
-                        onChange={(e) => setDirectoryJson(e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                </CardContent>
-              </Alert>
-
-              <Alert className="p-0 ">
-                <CardHeader>
-                  <CardTitle>Localizar arquivos na API</CardTitle>
-                  <CardDescription>
-                    O diretório dentro da plataforma, no qual os documentos e configurações estão
-                    localizados.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-
-                  <div className="flex gap-3 items-end">
-                    <div className="flex flex-col space-y-1.5 w-full flex-1">
-                      <Label htmlFor="name">Caminho do diretório</Label>
-                      <Input
-                        placeholder="Diretório"
-                        value={directoryInput}
-                        onChange={(e) => setDirectoryInput(e.target.value)}
-                      />
-                    </div>
-
-                    <Button onClick={() => handleSubmitDiretorio()}><MagnifyingGlass size={16} />Buscar arquivos</Button>
-                  </div>
-
-                  <div className="flex flex-col gap-1 mt-6">
-                    {Array.from(String(directory).split(',')).map((props, index) => (
-                      <p key={index} className="text-sm flex items-center gap-1"><ArrowElbowDownRight size={16} />{props}</p>
-                    ))}
-
-                  </div>
-
-                </CardContent>
-              </Alert>
-            </div>
+          <TabsContent value="unread" className="h-full flex flex-col gap-4 md:gap-8 px-4 md:px-8 m-0  ">
+         <div className="h-full flex flex-col gap-4  gap-8  mb-[50px]  ">
+         <FirestoreView/>
+         </div>
           </TabsContent>
         </Tabs>
       </main>

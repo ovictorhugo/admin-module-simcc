@@ -389,16 +389,19 @@ const SidebarInset = React.forwardRef<
   fetchData();
 };
 
+const { isMobile } = useSidebar()
+
   return (
     <div className="w-full flex">
-      <main
-        ref={ref}
-        className={cn(
-          "relative w-full md:p-2 sm:pl-0 md:peer-data-[state=expanded]:pl-2  md:h-screen dark:bg-black bg-neutral-100 flex flex-col",
-          "md:h-screen dark:bg-black bg-neutral-100 flex flex-col",
-          className
-        )}
-      >
+     <main
+  ref={ref}
+  className={cn(
+    isMobile ? "" : "lg:pl-0 ",
+    "relative w-full md:p-2 sm:pl-0 md:peer-data-[state=expanded]:pl-2 md:h-screen dark:bg-black bg-neutral-100 flex flex-col",
+    className
+  )}
+>
+
         <Header />
         <div className="flex-grow flex relative h-full w-full  md:h-[calc(100vh - 40px)] -xl overflow-y-auto">
 
@@ -415,7 +418,7 @@ const SidebarInset = React.forwardRef<
           {(location.pathname == '/dashboard/administrativo' && has_atualizar_apache_hop) && (
                  <div className="bottom-0 flex flex-col w-full  ">
                  <div className=" relative">
-                   <div className={`h-[50px] w-full border dark:border-neutral-800  px-4 bg-neutral-50 ${!isOpenConsole && ('rounded-b-md')} dark:bg-neutral-900 flex items-center justify-between `}>
+                   <div className={`h-[50px] w-full border dark:border-neutral-800  px-4 bg-neutral-50 ${!isOpenConsole && ('rounded-b-xl')} dark:bg-neutral-900 flex items-center justify-between `}>
                        <div className="flex items-center gap-3 font-medium text-sm">
                          <Terminal size={16}/> Terminal Apache Hop
                        </div>

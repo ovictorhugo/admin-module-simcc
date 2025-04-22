@@ -70,7 +70,8 @@ export function GraficoTitulacaoHome() {
 
 
   return (
-    <ChartContainer config={chartConfig} className=" w-full h-[340px]">
+    <div className="grid grid-cols-1">
+      <ChartContainer config={chartConfig} className=" w-full h-[340px]">
     <ResponsiveContainer>
       <BarChart
         data={chartData}
@@ -91,6 +92,7 @@ export function GraficoTitulacaoHome() {
       </BarChart>
     </ResponsiveContainer>
   </ChartContainer>
+    </div>
 
   );
 }

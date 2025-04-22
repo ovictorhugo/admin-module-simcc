@@ -52,7 +52,7 @@ export function PoliticaPrivacidade() {
           <h2 className="text-2xl font-semibold">1. Apresentação</h2>
          
          <p>
-         O {platform} é um sistema desenvolvido e gerido pela Escola de Engenharia da Universidade Federal de Minas Gerais (UFMG), com colaboração da Universidade do Estado da Bahia (UNEB) e da Universidade Federal do Recôncavo da Bahia (UFRB). A plataforma tem como missão promover a organização, análise e divulgação das produções acadêmicas, técnicas e científicas vinculadas à Escola de Engenharia, a partir da integração de bases públicas de dados como Lattes, Sucupira, OpenAlex, Journal Citation Reports (JCR) e Diretório de Grupos de Pesquisa (DGP).
+         O {platform} é um sistema desenvolvido em parceria pela Escola de Engenharia da Universidade Federal de Minas Gerais (UFMG), com colaboração da Universidade do Estado da Bahia (UNEB), Universidade Estadual de Santa Cruz (UESC), Universidade Federal do Recôncavo da Bahia (UFRB) e Secretaria de Ciência e Tecnologia do Estado a Bahia (SECTI). A plataforma tem como missão promover a organização, análise e divulgação das produções acadêmicas, técnicas e científicas vinculadas à Escola de Engenharia, a partir da integração de bases públicas de dados como Lattes, Sucupira, OpenAlex, Journal Citation Reports (JCR) e Diretório de Grupos de Pesquisa (DGP).
          </p>
          <Alert>
             <p>A presente Política de Privacidade tem como objetivo estabelecer, de forma clara, acessível e transparente, as diretrizes adotadas pela Plataforma {platform} em relação ao tratamento de dados pessoais, em conformidade com a Lei Geral de Proteção de Dados Pessoais (LGPD) — Lei nº 13.709/2018.</p>
