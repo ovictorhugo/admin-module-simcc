@@ -4,7 +4,7 @@ import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Info, ShieldCheck, AlertTriangle, Globe, Lock, Home } from "lucide-react";
-import bg_popup from "../../assets/bg_home.png";
+import bg_popup from "../../assets/bg_graduate.png";
 import { getVersion } from "../../gerVersion";
 import { useContext } from "react";
 import { UserContext } from "../../context/context";

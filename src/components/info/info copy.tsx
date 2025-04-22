@@ -1,10 +1,10 @@
-import {   Building2, ChevronLeft, Copy,  Download,  FileJson, Home, InfoIcon, Mail, MapPin } from "lucide-react";
+import {   Building2, ChevronLeft, Copy,  Download,  FileJson, InfoIcon, Mail, MapPin } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
 import { Duvidas } from "./duvidas";
 import { useContext, useMemo, useState } from "react";
-import { Alert, AlertTitle } from "../ui/alert";
+import { Alert } from "../ui/alert";
 import { BracketsCurly, LinkSimple } from "phosphor-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import { getVersion } from "../../gerVersion";
@@ -46,7 +46,7 @@ interface Log {
 export function Info() {
     const history = useNavigate();
 
-    const {urlGeral, version} = useContext(UserContext)
+    const {urlGeral} = useContext(UserContext)
 
     const handleVoltar = () => {
       history(-1);
@@ -233,101 +233,134 @@ export function Info() {
         );
       };
 
-  
+      const version = getVersion();
 
 
     const colaboradores = ColaboradoresData;
 
        const urlApi = `${urlGeral}researcherName?name=`
        const urlApi2 = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=&type=&qualis=&year=`
-       const platform = version ? "Conectee" : "Simcc";
-       const version2 = getVersion();
+
 
     return(
-      <main className="p-4 md:p-8 bg-neutral-50 dark:bg-neutral-900 text-gray-800 dark:text-gray-100">
-     
+        <main className="flex flex-1 flex-col gap-4 md:gap-8 md:p-8 p-4">
            <Helmet>
           <title>Informações | {version ? ('Simcc'):('Simcc')}</title>
           <meta name="description" content={`Informações | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
-
-        <div className="max-w-[936px] mx-auto space-y-8">
- {/* Header */}
- <Alert className="p-0">
-          <Alert className="flex border-0 rounded-b-none justify-between items-center bg-neutral-100 dark:bg-neutral-800 p-4 md:p-6 rounded-md">
-            <AlertTitle className="text-base font-medium text-gray-600 dark:text-gray-300">
-              Informações
-            </AlertTitle>
-            <Link to="/">
-              <Button variant="outline">
-                <Home size={16} className="mr-2" />
-                Página Inicial
+            <Tabs defaultValue={'all'} className="h-full" >
+            <div className="w-full  gap-4  pb-0 md:pb-0">
+            <div className="flex items-center gap-4">
+          
+            <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
+                <ChevronLeft className="h-4 w-4" />
+                <span className="sr-only">Voltar</span>
               </Button>
-            </Link>
-          </Alert>
+          
+              <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+                Informações
+              </h1>
+             
 
-          <div
-          className="p-8 rounded-t-none md:p-12 bg-cover bg-center rounded-md"
-          style={{ backgroundImage: `url(${bg_popup})` }}
-        >
-          <h1 className="text-4xl font-bold mb-2">
-            Plataforma {platform}
-          </h1>
-          <p className="text-sm font-light">
-            Versão da plataforma: {version2}
-          </p>
-        </div>
-        </Alert>
+                
+            
+              <div className="hidden items-center gap-2 md:ml-auto md:flex">
+              <TabsList >
+                
+              <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">Sobre a plataforma</TabsTrigger>
+              <TabsTrigger value="doc" className="text-zinc-600 dark:text-zinc-200">Dicionário de dados </TabsTrigger>
 
-        <Alert className="space-y-4 p-8">
-          <h2 className="text-2xl font-semibold">Sobre a plataforma</h2>
-          <p>
-          O {platform} é uma plataforma desenvolvida para centralizar e visualizar de forma abrangente os dados dos pesquisadores da instituição. Integrando informações de diversas fontes, como Lattes, Sucupira, Diretório dos Grupos de Pesquisa (DGP), OpenAlex e Journal Citation Reports (JCR), o Simcc oferece uma visão detalhada e acessível das competências e produções acadêmicas. Todas as informações de produção bibliográfica e técnica apresentadas foram retiradas da Plataforma Lattes com autorização do CNPq e OpenAlex.
-          </p>
 
-                 
+              
+                </TabsList>
                
-        </Alert>
+          
+             
+              </div>
+            </div>
 
-        <Alert className="space-y-4 p-8">
-          <h2 className="text-2xl font-semibold">Mapeamento de Produções Acadêmicas:</h2>
+            </div>
 
-    
+            <TabsContent value="all" className="flex flex-col gap-4 md:gap-8">
 
-          <ul className="list-disc list-inside space-y-1">
-  <li><strong>Artigos Científicos:</strong> Detalhamento completo com informações como Qualis, Journal Citation Reports (JCR), DOI, autores, ordem de autoria, quantidade de citações, revista, idioma, resumo, link para acesso e validação automática com bases de dados externas.</li>
-  <li><strong>Livros e Capítulos:</strong> Registro de livros e capítulos publicados, com título, autores, editora, ano de publicação e ISBN.</li>
-  <li><strong>Propriedade Intelectual:</strong> Registro de patentes, marcas, softwares. Incluindo, status (concedido, requerido ou publicado), titulares e data de registro.</li>
-  <li><strong>Participação em Eventos:</strong> Apresentações orais, pôsteres, mesas-redondas e participação em congressos, simpósios e seminários, com título do trabalho, evento,  ano e autoria.</li>
-  <li><strong>Relatórios Técnicos:</strong> Produção de relatórios técnicos, pareceres e documentos institucionais com dados do projeto vinculado, órgão financiador ou solicitante, autores e ano de emissão.</li>
-  <li><strong>Orientações:</strong> Registro de orientações e coorientações em nível de graduação, mestrado, doutorado, pós-doutorado e iniciação científica, com dados do orientando, tipo de vínculo, título do trabalho e situação (em andamento ou concluído).</li>
-  <li><strong>Textos em Revista:</strong> Publicações em revistas com título da matéria, nome da revista e ano de publicação.</li>
-  <li><strong>Trabalhos em Eventos:</strong> Registros de trabalhos completos e resumos expandidos publicados em anais de eventos acadêmicos, com título, autoria, evento, ISBN dos anais e ano.</li>
-  <li><strong>Projetos de Pesquisa:</strong> Detalhamento de projetos de pesquisa coordenados ou em que há participação, com título, resumo, instituição de execução, agência financiadora, ano de ínicio, situação atual (em andamento ou concluído), produções associadas.</li>
-  <li><strong>Cargos e Funções:</strong> Registro de atividades administrativas e acadêmicas, incluindo coordenação de cursos, chefias de departamento, direção de unidade, representação em colegiados e outros; com período de atuação e descrição da função.</li>
-  <li><strong>Outras Informações Relevantes:</strong> Dados complementares como índice H, índice i10, total de citações, além de indicadores bibliométricos e métricas de impacto institucional.</li>
+              <Alert className="h-[300px] flex items-center justify-center">
+              <h1 className="z-[2] text-center max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
+            Saiba as informações sobre
+            a plataforma
+            </h1>
+              </Alert>
 
-  <li><strong>Atuação em Grupos de Pesquisa:</strong> Vinculação a grupos de pesquisa certificados pelo CNPq, com nome do grupo, líder e vice-líder, linha de pesquisa e instituição.</li>
- 
-</ul>
+                <Duvidas/>
 
 
-                 <p>
-                 A plataforma possui operadores booleanos de busca (E ou OU) e é capaz de fazer buscas a partir de perguntas com processamento de linguagem natural
-          </p>
+
+                <h3 className="text-2xl font-medium ">Colaboradores</h3>
+
+                <div className="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8">
+                    {colaboradores.map((props) => (
+                        <Alert className="flex gap-3 p-8">
+
+                            <div className="flex flex-1 flex-col">
+                             <div className="mb-8">
+                             <p className="text-lg  font-medium">{props.name}</p>
+                             <div className="flex gap-2 items-center text-sm text-gray-500"><Building2 size={12}/>{props.inst}</div>
+                             </div>
+
+                                <div className="flex gap-4 flex-wrap">
+                                  <Link to={props.lattes} target="_blank">  <div className="flex gap-2 items-center text-xs"><LinkSimple size={12}/>Currículo Lattes</div></Link>
+                                    {props.mail != "" && (
+                                        <div className="flex gap-2 items-center text-xs"><Mail size={12}/>{props.mail}</div>
+                                    )}
+                                </div>
+                            </div>
+                        </Alert>
+                    ))}
+                </div>
+
+                <h3 className="text-2xl font-medium ">Sobre a plataforma</h3>
+                <div className="">
+            <div
+                    className={`h-3 w-full rounded-t-md dark:border-neutral-800 border border-neutral-200 border-b-0 bg-[#719CB8]  `}
+                  ></div>
+  
+              <Alert
+                        className="p-0 rounded-t-none"  x-chunk="dashboard-05-chunk-4"
+                      >
+                         <CardHeader className="flex flex-row items-start bg-neutral-100 dark:bg-neutral-800">
+                         <div className='flex gap-2 items-center text-sm text-gray-500'>
+  O Simcc é uma plataforma desenvolvida para centralizar e visualizar de forma abrangente os dados dos pesquisadores da instituição. Integrando informações de diversas fontes, como Lattes, Sucupira, Diretório dos Grupos de Pesquisa (DGP), OpenAlex e Journal Citation Reports (JCR), o Simcc oferece uma visão detalhada e acessível das competências e produções acadêmicas. Todas as informações de produção bibliográfica e técnica apresentadas foram retiradas da Plataforma Lattes com autorização do CNPq e OpenAlex.
+</div>
+
+                         </CardHeader>
+
+                         <CardContent className="p-6 text-sm">
+                         <div className="flex flex-col gap-3">
+
+               <div className='flex gap-2 items-center text-sm text-gray-500 font-medium'>Mapeamento de Produções Acadêmicas:</div>
+               <div className='flex gap-2 items-center text-sm text-gray-500'>
+                 <ul>
+               <li>Artigos Científicos: Detalhamento com informações como Qualis, JCR, DOI, autores e resumo.</li>
+                 <li>Livros e Capítulos: Informações sobre Nome do livro, título,ano</li>
+                 <li>Propriedade Intelectual: Patentes, marcas, e softwares desenvolvidos.</li>
+                 <li>Participação em eventos: Participações e contribuições e eventos acadêmicos.</li>
+                 <li>Relatórios Técnicos Participações e contribuições e eventos acadêmicos.</li>
+                 <li>Orientações: Participações e contribuições e eventos acadêmicos.</li>
+                 </ul>
                  
-               
-        </Alert>
+                 </div>
+                 <div className='flex gap-2 items-center text-sm text-gray-500'>A plataforma possui operadores booleanos de busca (E ou OU) e é capaz de fazer buscas a partir de perguntas com processamento de linguagem natural</div>
+             
+               <div className='flex gap-2 items-center text-sm text-gray-500'>Versão da plataforma: {version}</div>
+               </div>
 
+                         </CardContent>
+              </Alert>
+            </div>
 
-          {/* Abrangência */}
-          <Alert className="space-y-4 p-8">
-          <h2 className="text-2xl font-semibold">Atualização dos dados</h2>
-          <p>
-            Esta política se aplica a todos os titulares de dados tratados pela plataforma: usuários autenticados, visitantes e dados coletados de fontes públicas ou institucionais.
-          </p>
-          <Table>
+            <h3 className="text-2xl font-medium ">Atualização dos dados</h3>
+
+            <Table>
         <TableHeader>
           <TableRow>
           <TableHead>Tipo de Rotina</TableHead>
@@ -347,51 +380,47 @@ export function Info() {
           ))}
         </TableBody>
       </Table>
-        </Alert>
 
-        
-        <Alert className="space-y-4 p-8">
-          <h2 className="text-2xl font-semibold">Colaboradores</h2>
-          <p>
-          Esses são os colaboradores que, com dedicação, conhecimento e espírito de cooperação, tornam possível a construção, evolução e aprimoramento contínuo da plataforma.
-          </p>
-
-          <div className="grid 2xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
-                    {colaboradores.map((props) => (
-                       <div className="flex">
-                        <div className="w-2 rounded-l-md border border-r-0 bg-eng-blue"></div>
-                         <Alert className=" rounded-l-none flex gap-3 p-8">
-
-<div className="flex flex-1 flex-col">
- <div className="mb-8">
- <p className="text-lg  font-medium">{props.name}</p>
- <div className="flex gap-2 items-center text-sm text-gray-500"><Building2 size={12}/>{props.inst}</div>
- </div>
-
-    <div className="flex gap-4 flex-wrap">
-      <Link to={props.lattes} target="_blank">  <div className="flex gap-2 items-center text-xs"><LinkSimple size={12}/>Currículo Lattes</div></Link>
-        {props.mail != "" && (
-            <div className="flex gap-2 items-center text-xs"><Mail size={12}/>{props.mail}</div>
-        )}
-    </div>
-</div>
-</Alert>
-                       </div>
-                    ))}
-                </div>    
-               
-        </Alert>
+                
+                <h3 className="text-2xl font-medium ">Suporte</h3>
 
 
-          {/* Abrangência */}
-          <Alert className="space-y-4 p-8">
-          <h2 className="text-2xl font-semibold">Suporte</h2>
-          <p className='flex gap-2 items-center '><MapPin size={16}/> {version ? ('Av. Luís Viana Filho, 5ª Avenida, Plataforma II, B, 1º andar - CAB, Salvador - BA, 41745-004'):('Av. Luís Viana Filho, 5ª Avenida, Plataforma II, B, 1º andar - CAB, Salvador - BA, 41745-004')}</p>
-          <p className='flex gap-2 items-center '><Mail size={16}/> {version ? ('observatorio@secti.ba.gov.br'):('observatorio@secti.ba.gov.br')}</p>
+                <div className="flex flex-col gap-3">
+                <div className='flex gap-2 items-center text-sm text-gray-500'><MapPin size={16}/> {version ? ('Av. Luís Viana Filho, 5ª Avenida, Plataforma II, B, 1º andar - CAB, Salvador - BA, 41745-004'):(' Av. Orlando Gomes, 1845 - Piatã, Salvador - BA, 41650-010')}</div>
+                <div className='flex gap-2 items-center text-sm text-gray-500'><Mail size={16}/> {version ? ('observatorio@secti.ba.gov.br'):('o SECTI-BA')}</div>
+                </div>
+            </TabsContent>
 
-        </Alert>
-        </div>
+            <TabsContent value="doc" className="flex flex-col gap-4 md:gap-8">
+            <h3 className="text-2xl font-medium ">Dicionário de chamadas</h3>
+
+            <Alert className=" bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url(${bg_popup})` }}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Documento
+                  </CardTitle>
+                  <InfoIcon className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <div className="flex gap-6 justify-between">
+
+                  <CardContent>
+                    <div className="text-2xl font-bold">Tenha acesso a lista de definições e atributos do banco de dados</div>
+                    <div className="flex gap-3 mt-3">
+
+                     <Link to={`${urlGeral}dictionary.pdf`}>
+                     <Button size={'sm'} ><Download size={16} />Dicionário de dados</Button>
+                     </Link>
+                    </div>
+                  </CardContent>
+
+                  <div></div>
+                </div>
+              </Alert>
+
              
+<Colors/>
+            </TabsContent>
+                </Tabs>
         </main>
     )
 }
