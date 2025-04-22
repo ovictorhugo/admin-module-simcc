@@ -657,7 +657,7 @@ const searchFilesByTermPrefix = async (prefix: string) => {
               columnsCountBreakPoints={{
                 350: 1,
                 750: 2,
-                900: 3,
+                900: 2,
                 1200: 2
               }}
             >

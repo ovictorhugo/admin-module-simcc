@@ -654,6 +654,23 @@ const { onOpen } = useModal();
       setGraduatePrograms,
     });
 
+    const normalizeArea = (area: string): string =>
+      area
+        .toUpperCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // Remove acentos
+        .replace(/[^A-Z0-9 ]/g, "") // Remove caracteres especiais
+        .replace(/\s+/g, " ") // Substitui múltiplos espaços por um único espaço
+        .trim();
+
+     // Criamos o Map normalizando as chaves antes
+  const qualisColor = new Map(areasComCores.map(([area, color]) => [normalizeArea(area), color]));
+  
+  const getColorByArea = (area: string): string =>
+    qualisColor.get(normalizeArea(area)) || 'bg-gray-500';
+
+
+
   return (
     <>
 
@@ -748,7 +765,7 @@ const { onOpen } = useModal();
  <div className={`${selectedAreas.length > 0 || selectedCities.length > 0 || selectedModalities.length > 0 || selectedTypes.length > 0 || selectedUniversities.length > 0 ? ('flex'):('hidden')} flex flex-wrap gap-3 mb-6 items-center`}>
             <p className="text-sm font-medium">Filtros aplicados:</p>
             {selectedAreas.map((item) => (
-               <Badge className="bg-eng-blue font-normal hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 ">{item}</Badge>
+               <Badge className={`bg-eng-blue font-normal hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 ${getColorByArea(item)}`}>{item}</Badge>
             ))}
 
 

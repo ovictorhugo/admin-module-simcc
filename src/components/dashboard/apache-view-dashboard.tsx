@@ -62,7 +62,7 @@ export function ApacheViewDashboard() {
 
     return(
       <div className="grid gap-4">
-      <div className=" bg-neutral-800 p-6 ">
+      <div className=" bg-neutral-800 rounded-b-xl p-6 ">
         <pre>
     
         
