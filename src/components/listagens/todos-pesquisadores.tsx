@@ -320,12 +320,7 @@ const [loading, setLoading] = useState(false)
     <ScrollBar orientation="horizontal" />
   </ScrollArea>
 
-  {/* Indicador de scroll à direita */}
-  <div className="pointer-events-none absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-white dark:from-black to-transparent flex items-center justify-end">
-    <div className="text-gray-400 dark:text-gray-600 mr-1">
-      ➤
-    </div>
-  </div>
+ 
 </div>
 
        

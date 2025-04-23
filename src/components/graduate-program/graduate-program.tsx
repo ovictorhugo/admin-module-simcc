@@ -293,8 +293,13 @@ export function FiltersModal({ graduatePrograms, setGraduatePrograms }: FiltersM
     selectedTypes,
     selectedCities,
     selectedUniversities,
-    clearFilters,
+    setSelectedAreas,
+    setSelectedModalities,
+    setSelectedTypes,
     setSelectedCities,
+    setSelectedUniversities,
+    clearFilters,
+
     component: (
       <Sheet open={isModalOpen} onOpenChange={onClose}>
       <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[60vw]`}>
@@ -649,7 +654,11 @@ const { onOpen } = useModal();
 
   const [typeVisu, setTypeVisu] = useState('block');
 
-   const { setSelectedCities, clearFilters, selectedAreas,  component, selectedCities,  selectedUniversities, selectedModalities, selectedTypes } = FiltersModal({
+   const { setSelectedAreas,
+    setSelectedModalities,
+    setSelectedTypes,
+    setSelectedCities,
+    setSelectedUniversities, clearFilters, selectedAreas,  component, selectedCities,  selectedUniversities, selectedModalities, selectedTypes } = FiltersModal({
       graduatePrograms: originalGraduatePrograms,
       setGraduatePrograms,
     });
@@ -765,26 +774,80 @@ const { onOpen } = useModal();
  <div className={`${selectedAreas.length > 0 || selectedCities.length > 0 || selectedModalities.length > 0 || selectedTypes.length > 0 || selectedUniversities.length > 0 ? ('flex'):('hidden')} flex flex-wrap gap-3 mb-6 items-center`}>
             <p className="text-sm font-medium">Filtros aplicados:</p>
             {selectedAreas.map((item) => (
-               <Badge className={`bg-eng-blue font-normal hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 ${getColorByArea(item)}`}>{item}</Badge>
-            ))}
-
-
+  <Badge
+    key={item}
+    className={`bg-eng-blue font-normal rounded-md dark:bg-eng-blue  dark:text-white py-2 px-3 gap-2 items-center flex ${getColorByArea(item)}`}
+  >
+    {item}
+    <div
+      className="cursor-pointer"
+      onClick={() => setSelectedAreas(selectedAreas.filter(i => i !== item))}
+    >
+      <X size={16} />
+    </div>
+  </Badge>
+))}
 
 {selectedCities.map((item) => (
-                <Badge className="bg-eng-blue hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 font-normal">{item}</Badge>
-            ))}
+  <Badge
+    key={item}
+    className="bg-eng-blue  rounded-md dark:bg-eng-blue  dark:text-white py-2 px-3 font-normal gap-2 items-center flex"
+  >
+    {item}
+    <div
+      className="cursor-pointer"
+      onClick={() => setSelectedCities(selectedCities.filter(i => i !== item))}
+    >
+      <X size={16} />
+    </div>
+  </Badge>
+))}
 
 {selectedUniversities.map((item) => (
-              <Badge className="bg-eng-blue hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 font-normal">{item}</Badge>
-            ))}
+  <Badge
+    key={item}
+    className="bg-eng-blue  rounded-md dark:bg-eng-blue  dark:text-white py-2 px-3 font-normal gap-2 items-center flex"
+  >
+    {item}
+    <div
+      className="cursor-pointer"
+      onClick={() => setSelectedUniversities(selectedUniversities.filter(i => i !== item))}
+    >
+      <X size={16} />
+    </div>
+  </Badge>
+))}
 
 {selectedTypes.map((item) => (
-              <Badge className="bg-eng-blue hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 font-normal">{item}</Badge>
-            ))}
+  <Badge
+    key={item}
+    className="bg-eng-blue  rounded-md dark:bg-eng-blue  dark:text-white py-2 px-3 font-normal gap-2 items-center flex"
+  >
+    {item}
+    <div
+      className="cursor-pointer"
+      onClick={() => setSelectedTypes(selectedTypes.filter(i => i !== item))}
+    >
+      <X size={16} />
+    </div>
+  </Badge>
+))}
 
 {selectedModalities.map((item) => (
-              <Badge className="bg-eng-blue hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3 font-normal">{item}</Badge>
-            ))}
+  <Badge
+    key={item}
+    className="bg-eng-blue rounded-md dark:bg-eng-blue  dark:text-white py-2 px-3 font-normal gap-2 items-center flex"
+  >
+    {item}
+    <div
+      className="cursor-pointer"
+      onClick={() => setSelectedModalities(selectedModalities.filter(i => i !== item))}
+    >
+      <X size={16} />
+    </div>
+  </Badge>
+))}
+
 
 
 

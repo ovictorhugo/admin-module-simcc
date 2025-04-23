@@ -240,7 +240,7 @@ export function GruposPesquisaPage() {
   useEffect(() => {
     setSelectedInstitutions(getArrayFromUrl("institution"));
     setSelectedAreas(getArrayFromUrl("area"));
-  }, [location.search]);
+  }, []);
 
 const filteredTotal = Array.isArray(total) ? total.filter(item => { 
     const normalizeString = (str) => str
@@ -576,18 +576,36 @@ setOpen(false)
           <div className={`${selectedAreas.length > 0 || selectedInstitutions.length > 0 ? ('flex'):('hidden')} flex flex-wrap gap-3 mb-6 items-center`}>
           <p className="text-sm font-medium">Filtros aplicados:</p>
             {/* Filtros de Áreas */}
-  {selectedAreas.map((item) => (
-    <Badge key={item} className="bg-eng-blue font-normal hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3">
-      {item}
-    </Badge>
-  ))}
+            {selectedAreas.map((item) => (
+  <Badge
+    key={item}
+    className={`gap-2 items-center flex font-normal rounded-md dark:text-white py-2 px-3 ${qualisColor[normalizeArea(item || '')]}`}
+  >
+    {item}
+    <div
+      className="cursor-pointer"
+      onClick={() => handleAreaChange(selectedAreas.filter(i => i !== item))}
+    >
+      <X size={16} />
+    </div>
+  </Badge>
+))}
 
-   {/* Filtros de Instituições */}
-   {selectedInstitutions.map((item) => (
-    <Badge key={item} className="bg-eng-blue font-normal hover:bg-eng-dark-blue rounded-md dark:bg-eng-blue dark:hover:bg-eng-dark-blue dark:text-white py-2 px-3">
-      {item}
-    </Badge>
-  ))}
+{selectedInstitutions.map((item) => (
+  <Badge
+    key={item}
+    className="bg-eng-blue gap-2 items-center flex font-normal rounded-md dark:bg-eng-blue dark:text-white py-2 px-3"
+  >
+    {item}
+    <div
+      className="cursor-pointer"
+      onClick={() => handleInstitutionChange(selectedInstitutions.filter(i => i !== item))}
+    >
+      <X size={16} />
+    </div>
+  </Badge>
+))}
+
 
 <Badge variant={'secondary'} onClick={() => clearFilters()} className=" rounded-md cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-900 border-0  py-2 px-3 font-normal flex items-center justify-center gap-2"><Trash size={12}/>Limpar filtros</Badge>
       
