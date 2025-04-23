@@ -404,6 +404,11 @@ useEffect(() => {
         <Route path='/api-docs' element={<TermosUso/>}/>
         <Route path='/informacoes' element={<TermosUso/>}/>
         <Route path='/dicionario-cores' element={<TermosUso/>}/>
+
+
+        <Route path='/api-docs/pesquisadores' element={<TermosUso/>}/>
+
+
         <Route path='/sobre' element={<AboutPage/>}/>
         <Route
         path='/ufmg/'

@@ -15,6 +15,7 @@ import { PoliticaPrivacidade } from "../docs-api/politica-privacidade";
 import { ApiDocs } from "../docs-api/api-docs";
 import { DicionarioCores } from "../docs-api/dicionario-cores";
 import { Info } from "../info/info";
+import { Pesquisadores } from "../docs-api/api/pesquisadores";
 
 
 const ModalContent = () => {
@@ -31,6 +32,8 @@ const ModalContent = () => {
             return <DicionarioCores/>
             case 'informacoes':
               return <Info/>
+            case 'pesquisadores':
+              return <Pesquisadores/>
   }
 
 }

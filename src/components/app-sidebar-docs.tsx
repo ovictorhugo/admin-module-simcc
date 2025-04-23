@@ -31,6 +31,7 @@ import {
   Sparkles,
   SquareTerminal,
   UserPlus,
+  Users,
   Wrench,
 } from "lucide-react"
 
@@ -79,8 +80,8 @@ export function AppSidebarDocs({ ...props }: React.ComponentProps<typeof Sidebar
           },
           {
             title: "Pesquisadores",
-            url: "/api-pesquisadores",
-            icon: Blocks
+            url: "/api-docs/pesquisadores",
+            icon: Users
           },
         ],
       },

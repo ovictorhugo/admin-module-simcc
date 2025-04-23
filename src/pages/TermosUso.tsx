@@ -27,6 +27,8 @@ const {onOpen} = useModalDocs()
         onOpen('informacoes')
     }  else if(location.pathname == '/dicionario-cores') {
         onOpen('dicionario-cores')
+    } else if(location.pathname == '/api-docs/pesquisadores') {
+        onOpen('pesquisadores')
     } 
         }, [location]);
       

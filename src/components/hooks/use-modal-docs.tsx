@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ModalType = 'termos-uso' | 'politica-privacidade' | 'api-docs'| 'informacoes' | 'dicionario-cores'
+export type ModalType = 'termos-uso' | 'politica-privacidade' | 'api-docs'| 'informacoes' | 'dicionario-cores' | 'pesquisadores'
 
 
 interface ModalStore {
