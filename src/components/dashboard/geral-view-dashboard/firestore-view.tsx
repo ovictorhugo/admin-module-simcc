@@ -21,7 +21,7 @@ import { ColaboradorCard } from "./colaborador-card"
 
 type FirestoreData = Record<string, any>
 
-interface Colaborador {
+export interface Colaborador {
   id: string;
   nome: string;
   instituicao: string;
@@ -92,11 +92,7 @@ if (!nomePesquisador || !email) return;
   try {
     let imageUrl = '';
 
-    if (imagem instanceof File) {
-      const imageRef = ref(storage, `pesquisadores/${imagem.name}-${Date.now()}`);
-      const snapshot = await uploadBytes(imageRef, imagem);
-      imageUrl = await getDownloadURL(snapshot.ref);
-    }
+  
 
     await addDoc(collection(db, 'colaboradores'), {
       nome: nomePesquisador,
@@ -164,15 +160,6 @@ if (!nomePesquisador || !email) return;
       await deleteDoc(doc(db, 'colaboradores', id));
       console.log(`Colaborador ${id} removido do banco.`);
   
-      // Apagar imagem do Storage (se houver URL)
-      if (imagemUrl) {
-        const imagePath = decodeURIComponent(
-          imagemUrl.split('/o/')[1].split('?')[0]
-        );
-        const imageRef = ref(storage, imagePath);
-        await deleteObject(imageRef);
-        console.log('Imagem removida do storage.');
-      }
   
       // Atualiza o estado local (opcional, se estiver usando useState)
       setColaboradores((prev) => prev.filter((colab) => colab.id !== id));
@@ -375,7 +362,7 @@ if (!nomePesquisador || !email) return;
            </div>
 
            <div className="flex flex-col space-y-1.5 w-full flex-1">
-           <Label htmlFor="name">Instituiç</Label>
+           <Label htmlFor="name">Instituição</Label>
            <Input value={instituicao} onChange={(e) => setInstituicao(e.target.value)} type="text" />
            </div>
           
@@ -383,14 +370,7 @@ if (!nomePesquisador || !email) return;
            </div>
 
           <div className="flex gap-3 w-full items-end">
-          <div className="flex flex-col space-y-1.5 w-[150px]  flex-1">
-           <Label htmlFor="imagem">Imagem de perfil</Label>
-<Input id="imagem" className="" type="file" accept="image/*" onChange={(e) => {
-  if (e.target.files && e.target.files[0]) {
-    setImagem(e.target.files[0]);
-  }
-}} />
-</div>
+        
 
           <div className="flex flex-col space-y-1.5 w-full flex-1">
            <Label htmlFor="name">Lattes</Label>
@@ -419,13 +399,14 @@ if (!nomePesquisador || !email) return;
                         columnsCountBreakPoints={{
                             350: 1,
                             750: 2,
-                            900: 3,
-                            1200: 4
+                            900: 2,
+                            1200: 3,
+                            1500:4
                         }}
                     >
                                      <Masonry gutter="16px">
                                      {colaboradores.map((colab, index) => (
-  <ColaboradorCard key={index} colaborador={colab} />
+  <ColaboradorCard key={index} colaborador={colab}  deleteColaborador={deleteColaborador} deletable={true} />
 ))}
                         </Masonry>
         </ResponsiveMasonry>

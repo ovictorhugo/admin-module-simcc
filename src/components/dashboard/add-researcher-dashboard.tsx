@@ -4,7 +4,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useContext, useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { ChevronLeft,  Copy,  Maximize2,  Plus, Trash, User } from "lucide-react";
+import { ChevronDown, ChevronLeft,  ChevronUp,  Copy,  Download,  Link,  Maximize2,  Plus, Trash, User } from "lucide-react";
 import { toast } from "sonner"
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { UserContext } from "../../context/context";
@@ -259,6 +259,40 @@ setcarregado(false)
      
     );
   }) : [];
+
+
+  const [isOn, setIsOn] = useState(true);
+
+  const [jsonData, setJsonData] = useState<any[]>([]);
+
+
+  const convertJsonToCsv = (json: any[]): string => {
+    const items = json;
+    const replacer = (_: string, value: any) => (value === null ? '' : value); // Handle null values
+    const header = Object.keys(items[0]);
+    const csv = [
+      '\uFEFF' + header.join(';'), // Add BOM and CSV header
+      ...items.map((item) =>
+        header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+      ) // CSV data
+    ].join('\r\n');
+
+    return csv;
+  };
+
+  const handleDownloadJson = async () => {
+    try {
+      const csvData = convertJsonToCsv(jsonData);
+      const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = `dados.csv`;
+      link.href = url;
+      link.click();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   /////
 
 
@@ -271,8 +305,9 @@ setcarregado(false)
           <meta name="robots" content="index, follow" />
         </Helmet>
 {isModalOpen && (
-  <main className="flex flex-1 flex-col p-4 md:p-8">
+  <main className="flex flex-1 flex-col ">
 
+<div className="p-4 md:p-8 pb-0 md:pb-0">
 <div className="w-full mb-4  gap-4">
             <div className="flex items-center gap-4 mb-4">
           
@@ -301,9 +336,16 @@ setcarregado(false)
             </div>
 
             <HeaderInstitution/>
-
-     <div className="gap-4 md:gap-8 flex flex-col ">
-     <Alert className="h-14  p-2 flex items-center justify-between  w-full">
+</div>
+            <div className="top-[68px] sticky z-[2] supports-[backdrop-filter]:dark:bg-neutral-900/60 supports-[backdrop-filter]:bg-neutral-50/60 backdrop-blur">
+            <div className={`w-full px-8  border-b border-b-neutral-200 dark:border-b-neutral-800`}>
+            
+            
+                    {isOn && (
+                       <div className="w-full   flex justify-between items-center">
+             
+                                  <div className="w-full pt-4  flex justify-between items-center">
+                                  <Alert className="h-14  p-2 flex items-center justify-between  w-full">
           <div className="flex items-center gap-2 w-full flex-1">
             <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
             <Input onChange={(e) => setSearch(e.target.value)} value={search} type="text" className="border-0 w-full " />
@@ -312,6 +354,44 @@ setcarregado(false)
 
           
         </Alert>
+                                  </div>
+                                     </div>
+                                )}
+            
+                          
+                       
+            
+                          <div className={`flex w-full flex-wrap pt-2 pb-3 justify-between `}>
+                                <div>
+            
+                                </div>
+            
+                                <div className="hidden xl:flex xl:flex-nowrap gap-2">
+                            <div className="md:flex md:flex-nowrap gap-2">
+                            
+                              <Button onClick={() => handleDownloadJson()} variant="ghost" className="">
+                                <Download size={16} className="" />
+                                Baixar resultado
+                              </Button>
+                            </div>
+            
+                            <div>
+                         
+                            </div>
+                            <Button variant="ghost" size="icon" onClick={() => setIsOn(!isOn)}>
+                              {isOn ? (
+                                <ChevronUp className="h-4 w-4" />
+                              ) : (
+                                <ChevronDown className="h-4 w-4" />
+                              )}
+                            </Button>
+                          </div>
+                              </div>
+            </div>
+            </div>
+
+     <div className="gap-4 md:gap-8 md:p-8 p-4 flex flex-col ">
+    
 
 
     {has_editar_pesquisadores ? (
@@ -429,12 +509,12 @@ setcarregado(false)
                       loading ? (
                         <ResponsiveMasonry
                           columnsCountBreakPoints={{
-                            350: 1,
-                            750: 1,
-                            900: 2,
-                            1200:  3,
-                            1500: 4,
-                            1700: 4
+                            350: 2,
+                    750: 3,
+                    900: 4,
+                    1200: 6,
+                    1500: 6,
+                    1700: 7
                           }}
                         >
                           <Masonry gutter="16px">
@@ -447,64 +527,38 @@ setcarregado(false)
                        <div>
  <ResponsiveMasonry
     columnsCountBreakPoints={{
-        350: 1,
-        750: 1,
-        900: 2,
-        1200:  3,
-        1500: 4,
-        1700: 4
+      350: 2,
+      750: 3,
+      900: 4,
+      1200: 6,
+      1500: 6,
+      1700: 7
     }}
 >
 
                      <Masonry gutter="16px">
-             {filteredTotal.slice(0, count).map((item: any) => {
+             {filteredTotal.slice(0, count).map((props: any) => {
 
                 return (
-                  <Alert>
-                      <div className="flex justify-between items-start gap-3">
-                        <div className="flex gap-3">
-                        <Avatar className="cursor-pointer rounded-md  h-10 w-10">
-                        <AvatarImage className={'rounded-md h-10 w-10'} src={`${urlGeral}ResearcherData/Image?name=${item.name}`} />
-                        <AvatarFallback className="flex items-center justify-center"><User size={16} /></AvatarFallback>
-                      </Avatar>
+                  <div onClick={() => onOpen('researcher-modal', { name: props.name })} className="flex group min-h-[300px] w-full cursor-pointer">
+ <Alert className="flex p-0 flex-col flex-1 gap-4 bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url("${urlGeral}ResearcherData/Image?name=${props.name}")`}}>
+ <div className="bg-[#000000] rounded-md bg-opacity-30 hover:bg-opacity-70 transition-all absolute w-full h-full rounded-t-md ">
+ <div className="flex flex-col justify-between h-full">
 
-                      <div>
-                        <h1>{item.name}</h1>
-                        <p className="text-gray-500 text-xs">{item.lattes_id}</p>
-                      </div>
-                        </div>
+ <div className="z-[1] w-full  p-4 flex gap-3 justify-end">
+  <div className="flex gap-3">
 
-                        <div className="flex gap-2 items-center" > 
-      <div className={` rounded-md h-4 w-4 ${item.status ? ('bg-green-500'):('bg-red-500')}`}></div>
-       <div className="flex-1 flex">{item.status ? ('Ativo'):('Inativo')}</div></div>
-                      </div>
 
-                      <Separator className="my-4"/>
-
-                     <div className="items-center flex justify-between gap-3">
-                      <div className="text-gray-500 text-xs">{item.create_at}</div>
-
-                      <div className="flex gap-3 justify-end w-full ">
-                      <Button  onClick={() => onOpen('confirm-delete-researcher', {id_delete:item.researcher_id, name:item.name})} variant={'destructive'} className="h-8 w-8 p-0 text-white  dark:text-white">
+  <Button   onClick={(event) => {
+  event.stopPropagation();
+  onOpen('confirm-delete-researcher', {id_delete:props.researcher_id, name:props.name})}} variant={'destructive'} className="h-8 w-8 p-0 text-white hidden group-hover:flex dark:text-white">
              
              <Trash size={8} className="h-4 w-4" />
            </Button>
 
-<EditResearcherModal
-researcher_id={item.researcher_id}
-name={item.name}
-lattes_id={item.lattes_id}
-institution_id={item.institution_id}
-status={item.status}
-/>
-
-
-<Button  onClick={() => onOpen('researcher-modal', {name:item.name})} variant={'outline'} className="h-8 w-8 p-0 ">
-      <Maximize2 size={8} className="h-4 w-4" />
-</Button>
-                    
-                      <Button   onClick={() => {
-  navigator.clipboard.writeText(item.lattes_id)
+           <Button   onClick={(event) => {
+            event.stopPropagation();
+  navigator.clipboard.writeText(props.lattes_id)
 
   toast("Operação realizada", {
     description: "ID Lattes copiado para área de transferência",
@@ -514,12 +568,38 @@ status={item.status}
     },
   })
 
-}} variant={'outline'} className="h-8 w-8 p-0 ">
+}} variant={'outline'} className="h-8 w-8 p-0  hidden group-hover:flex">
 <Copy size={16} />
 </Button>
-                      </div>
-                     </div>
-                  </Alert>
+
+
+           <EditResearcherModal
+researcher_id={props.researcher_id}
+name={props.name}
+lattes_id={props.lattes_id}
+institution_id={props.institution_id}
+status={props.status}
+/>
+  </div>
+ </div>
+
+ <div className="flex gap-2 px-6 flex-col pb-6  w-full h-full text-white justify-end  ">
+ <div className="flex gap-1 flex-col">
+
+
+<CardTitle className="text-lg font-medium">{props.name}</CardTitle>
+
+<div className="group-hover:flex hidden items-center flex-wrap gap-1  mb-2">
+  <div className="flex gap-1 text-sm  items-center ">{props.lattes_id}</div>
+
+
+</div>
+</div>
+ </div>
+ </div>
+ </div>
+ </Alert>
+                  </div>
                 )
              })}
              </Masonry>

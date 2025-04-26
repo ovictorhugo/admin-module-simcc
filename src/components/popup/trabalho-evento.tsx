@@ -39,6 +39,7 @@ type Livros = {
   title: string;
   title_en: string;
   year_: string;
+  event_name:string
 };
 
 

@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useNavigate } from "react-router-dom";
 import { Duvidas } from "./duvidas";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Alert, AlertTitle } from "../ui/alert";
 import { BracketsCurly, LinkSimple } from "phosphor-react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
@@ -34,6 +34,9 @@ import { UserContext } from "../../context/context";
 import { CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Helmet } from "react-helmet";
 import { Colors } from "./colors";
+import { ColaboradorCard } from "../dashboard/geral-view-dashboard/colaborador-card";
+import { Colaborador } from "../dashboard/geral-view-dashboard/firestore-view";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
 
 interface Log {
   created_at: string;
@@ -236,7 +239,27 @@ export function Info() {
   
 
 
-    const colaboradores = ColaboradoresData;
+   const [colaboradores, setColaboradores] = useState<Colaborador[]>([]);
+     const db = getFirestore()
+
+     const fetchColaboradores = async () => {
+       try {
+         const querySnapshot = await getDocs(collection(db, 'colaboradores'));
+         const lista: Colaborador[] = querySnapshot.docs.map((doc) => ({
+           id: doc.id,
+           ...(doc.data() as Omit<Colaborador, 'id'>)
+         }));
+         setColaboradores(lista);
+       } catch (error) {
+         console.error('Erro ao buscar colaboradores:', error);
+       }
+     };
+   
+     useEffect(() => {
+       fetchColaboradores()
+     }, [])
+   
+   
 
        const urlApi = `${urlGeral}researcherName?name=`
        const urlApi2 = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=&type=&qualis=&year=`
@@ -356,29 +379,21 @@ export function Info() {
           Esses são os colaboradores que, com dedicação, conhecimento e espírito de cooperação, tornam possível a construção, evolução e aprimoramento contínuo da plataforma.
           </p>
 
-          <div className="grid 2xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
-                    {colaboradores.map((props) => (
-                       <div className="flex">
-                        <div className="w-2 rounded-l-md border border-r-0 bg-eng-blue"></div>
-                         <Alert className=" rounded-l-none flex gap-3 p-8">
-
-<div className="flex flex-1 flex-col">
- <div className="mb-8">
- <p className="text-lg  font-medium">{props.name}</p>
- <div className="flex gap-2 items-center text-sm text-gray-500"><Building2 size={12}/>{props.inst}</div>
- </div>
-
-    <div className="flex gap-4 flex-wrap">
-      <Link to={props.lattes} target="_blank">  <div className="flex gap-2 items-center text-xs"><LinkSimple size={12}/>Currículo Lattes</div></Link>
-        {props.mail != "" && (
-            <div className="flex gap-2 items-center text-xs"><Mail size={12}/>{props.mail}</div>
-        )}
-    </div>
-</div>
-</Alert>
-                       </div>
-                    ))}
-                </div>    
+            <ResponsiveMasonry
+                                  columnsCountBreakPoints={{
+                                      350: 1,
+                                      750: 1,
+                                      900: 1,
+                                      1200: 2,
+                                      1500:2
+                                  }}
+                              >
+                                               <Masonry gutter="16px">
+                                               {colaboradores.map((colab, index) => (
+            <ColaboradorCard key={index} colaborador={colab}  deletable={false} />
+          ))}
+                                  </Masonry>
+                  </ResponsiveMasonry>
                
         </Alert>
 
