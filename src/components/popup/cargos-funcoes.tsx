@@ -200,7 +200,7 @@ export function CargosFuncoes(props: Props) {
       }}
     >
       <Masonry gutter="16px">
-        {livros.slice(0, count).map((props) => (
+        {livros.map((props) => (
           <div className="flex group w-full" key={props.id}>
             <div
               className={`
@@ -260,9 +260,7 @@ export function CargosFuncoes(props: Props) {
 ))}
 
 
-                {publicacoes.length > count && (
-                <div className="w-full flex justify-center mt-8"><Button onClick={() => setCount(count + 12)}><Plus size={16} />Mostrar mais</Button></div>
-            )}
+               
                   </div>
                 )
               )
