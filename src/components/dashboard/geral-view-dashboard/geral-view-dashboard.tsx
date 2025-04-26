@@ -430,7 +430,7 @@ export function GeralViewDashboard() {
                     </div>
                   </CardHeader>
 
-                  <CardContent className="flex flex-col gap-3 p-8 pt-0">
+                  <CardContent className="flex flex-col gap-3  flex-1 p-8 pt-0">
 
                     <ScrollArea className="flex flex-col gap-3 h-full">
                       <div className="flex flex-col gap-3">
@@ -462,6 +462,10 @@ export function GeralViewDashboard() {
                             </Alert>
                           )
                         })}
+
+                        {background.length == 0 && (
+                          <p className="text-center h-full flex items-center justify-center text-gray-500 text-sm py-36">Nenhum resultado encontrado</p>
+                        )}
                       </div>
                       <ScrollBar orientation='vertical' />
                     </ScrollArea>
@@ -603,7 +607,7 @@ export function GeralViewDashboard() {
           </TabsContent>
 
           <TabsContent value="unread" className="h-full flex flex-col gap-4 md:gap-8 px-4 md:px-8 m-0  ">
-         <div className="h-full flex flex-col gap-4  gap-8  mb-[50px]  ">
+         <div className="h-full flex flex-col gap-4  md:gap-8  mb-[50px]  ">
          <FirestoreView/>
          </div>
           </TabsContent>

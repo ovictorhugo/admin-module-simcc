@@ -1,15 +1,36 @@
 // FirestoreView.tsx
 import { useEffect, useState } from "react"
-import { getFirestore, collection, getDocs, onSnapshot, doc } from "firebase/firestore"
+import { getFirestore, collection, getDocs, onSnapshot, doc, addDoc, deleteDoc } from "firebase/firestore"
 import { Card, CardContent } from "../../ui/card"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../ui/tabs"
 import { Button } from "../../ui/button"
 import { Alert } from "../../ui/alert"
-import { BetweenHorizonalEnd, Database, Download, Home, Pencil, Text } from "lucide-react"
-import { CaretRight } from "phosphor-react"
+import { BetweenHorizonalEnd, Database, Download, Home, Mail, Pencil, Plus, Text } from "lucide-react"
+import { Buildings, CaretRight, LinkSimple } from "phosphor-react"
 import { ScrollArea, ScrollBar } from "../../ui/scroll-area"
+import { Label } from "../../ui/label"
+import { Input } from "../../ui/input"
+import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage"
+import { storage } from "../../../lib/firebase"
+import { toast } from "sonner"
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import { Link } from "react-router-dom"
+import { getInstitutionImage } from "../../homepage/categorias/institutions-home/institution-image"
+import { getInstitutionImageName } from "../../homepage/categorias/institutions-home/institution-image-name"
+import { ColaboradorCard } from "./colaborador-card"
 
 type FirestoreData = Record<string, any>
+
+interface Colaborador {
+  id: string;
+  nome: string;
+  instituicao: string;
+  lattes: string;
+  linkedin: string;
+  email: string;
+  imagem: string;
+  criado_em: any; // pode usar Date se converter com .toDate()
+}
 
 export function FirestoreView() {
   const db = getFirestore()
@@ -54,8 +75,115 @@ export function FirestoreView() {
     return () => unsubscribe()
   }, [db, selectedCollection, selectedDocId])
 
+
+  const [nomePesquisador, setNomePesquisador] = useState('');
+  const [linkedin, setLinkedin] = useState('');
+  const [instituicao, setInstituicao] = useState('');
+  const [lattes, setLattes] = useState('');
+  const [email, setEmail] = useState('');
+
+  const [imagem, setImagem] = useState<File | null>(null);
+
+
+
+  const handleSubmit = async () => {
+if (!nomePesquisador || !email) return;
+
+  try {
+    let imageUrl = '';
+
+    if (imagem instanceof File) {
+      const imageRef = ref(storage, `pesquisadores/${imagem.name}-${Date.now()}`);
+      const snapshot = await uploadBytes(imageRef, imagem);
+      imageUrl = await getDownloadURL(snapshot.ref);
+    }
+
+    await addDoc(collection(db, 'colaboradores'), {
+      nome: nomePesquisador,
+      instituicao,
+      lattes,
+      linkedin,
+      email,
+      imagem: imageUrl,
+      criado_em: new Date()
+    });
+
+    toast("Colaborador cadastrado", {
+      description: "Adicionado ao banco de dados",
+      action: {
+        label: "Fechar",
+        onClick: () => console.log("Undo"),
+      },
+    })
+
+    setEmail('')
+    setLattes('')
+    setLinkedin('')
+    setImagem(null)
+    setNomePesquisador('')
+    setInstituicao('')
+
+    fetchColaboradores()
+  } catch (error) {
+    console.error('Erro ao adicionar pesquisador:', error);
+
+    toast("Erro ao cadastrar colaborador", {
+      description: "Tente novamente",
+      action: {
+        label: "Fechar",
+        onClick: () => console.log("Undo"),
+      },
+    })
+  }
+  }
+
+
+  const [colaboradores, setColaboradores] = useState<Colaborador[]>([]);
+
+  const fetchColaboradores = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'colaboradores'));
+      const lista: Colaborador[] = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Colaborador, 'id'>)
+      }));
+      setColaboradores(lista);
+    } catch (error) {
+      console.error('Erro ao buscar colaboradores:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchColaboradores()
+  }, [])
+
+
+  const deleteColaborador = async (id: string, imagemUrl?: string) => {
+    try {
+      // Apagar do Firestore
+      await deleteDoc(doc(db, 'colaboradores', id));
+      console.log(`Colaborador ${id} removido do banco.`);
+  
+      // Apagar imagem do Storage (se houver URL)
+      if (imagemUrl) {
+        const imagePath = decodeURIComponent(
+          imagemUrl.split('/o/')[1].split('?')[0]
+        );
+        const imageRef = ref(storage, imagePath);
+        await deleteObject(imageRef);
+        console.log('Imagem removida do storage.');
+      }
+  
+      // Atualiza o estado local (opcional, se estiver usando useState)
+      setColaboradores((prev) => prev.filter((colab) => colab.id !== id));
+    } catch (error) {
+      console.error('Erro ao deletar colaborador:', error);
+    }
+  };
+
   return (
-    <Alert className="p-0">
+   <div className="flex flex-col gap-8">
+     <Alert className="p-0">
         <div className="flex items-center gap-3 p-3 justify-between border-b dark:border-b-neutral-800">
            <div className="flex items-center gap-3">
            <Button onClick={() => {
@@ -231,5 +359,76 @@ export function FirestoreView() {
 
      </div>
     </Alert>
+
+    <h3 className="text-2xl font-medium ">Colaboradores</h3>
+
+    <fieldset className="grid gap-6 rounded-lg  p-4 bg-white dark:border-neutral-800 border border-neutral-200 dark:bg-neutral-950 bg-cover  bg-center bg-no-repeat "  >
+       <legend className="-ml-1 px-1 text-sm font-medium">
+         Adicionar pesquisador à instituição
+       </legend>
+
+       <div className="flex flex-col gap-3 items-end">
+           <div className="flex gap-3 w-full ">
+           <div className="flex flex-col space-y-1.5 w-full flex-1">
+           <Label htmlFor="name">Nome completo</Label>
+           <Input value={nomePesquisador} onChange={(e) => setNomePesquisador(e.target.value)} type="text"  />
+           </div>
+
+           <div className="flex flex-col space-y-1.5 w-full flex-1">
+           <Label htmlFor="name">Instituiç</Label>
+           <Input value={instituicao} onChange={(e) => setInstituicao(e.target.value)} type="text" />
+           </div>
+          
+
+           </div>
+
+          <div className="flex gap-3 w-full items-end">
+          <div className="flex flex-col space-y-1.5 w-[150px]  flex-1">
+           <Label htmlFor="imagem">Imagem de perfil</Label>
+<Input id="imagem" className="" type="file" accept="image/*" onChange={(e) => {
+  if (e.target.files && e.target.files[0]) {
+    setImagem(e.target.files[0]);
+  }
+}} />
+</div>
+
+          <div className="flex flex-col space-y-1.5 w-full flex-1">
+           <Label htmlFor="name">Lattes</Label>
+           <Input value={lattes} onChange={(e) => setLattes(e.target.value)} type="text" />
+           </div>
+
+           <div className="flex flex-col space-y-1.5 w-full flex-1">
+           <Label htmlFor="name">LinkedIn</Label>
+           <Input value={linkedin} onChange={(e) => setLinkedin(e.target.value)} type="text" />
+           </div>
+
+           <div className="flex flex-col space-y-1.5 w-full flex-1">
+           <Label htmlFor="name">Email</Label>
+           <Input value={email} onChange={(e) => setEmail(e.target.value)} type="text" />
+           </div>
+
+
+           <Button onClick={() => handleSubmit()} className="text-white dark:text-white"><Plus size={16} className="" /> Adicionar</Button>
+          
+          </div>
+          
+           </div>
+       </fieldset>
+
+       <ResponsiveMasonry
+                        columnsCountBreakPoints={{
+                            350: 1,
+                            750: 2,
+                            900: 3,
+                            1200: 4
+                        }}
+                    >
+                                     <Masonry gutter="16px">
+                                     {colaboradores.map((colab, index) => (
+  <ColaboradorCard key={index} colaborador={colab} />
+))}
+                        </Masonry>
+        </ResponsiveMasonry>
+   </div>
   )
 }

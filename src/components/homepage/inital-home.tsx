@@ -576,7 +576,6 @@ const [isLoad, setLoad] = useState(false)
 }));
 
  return (
-
     <div className=" items-center  flex flex-col   ">
   <Helmet>
   <title>{`Página Inicial | ${version ? 'Conectee' : 'Simcc'}`}</title>
