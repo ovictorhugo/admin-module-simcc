@@ -166,6 +166,7 @@ export function Header() {
                     </Button>
                     
               <ModeToggle />
+              
               {version && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

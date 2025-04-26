@@ -21,6 +21,7 @@ import { FilterArticlePopUp } from "./filters-articles-popup";
 import { ArticleBlockPopUp } from "./articles-block-popup";
 import { TableReseracherArticlesPopup } from "./columns/table-articles-popup";
 import { useModalSecundary } from "../hooks/use-modal-store-secundary";
+import { File } from "lucide-react";
 
 // Cache compartilhado para requisições
 const requestCache = new Map();
@@ -208,7 +209,7 @@ export function ArticlesResearcherPopUp(props: Props) {
                             <div className="flex gap-4 w-full justify-between items-center">
 
                                 <div className="flex gap-4 items-center">
-                                    <Quotes size={24} className="text-gray-400" />
+                                    <File size={24} className="text-gray-400" />
                                     {searchType != 'article' || itemsSelecionadosPopUp.length == 0 ? (
                                         <p className="font-medium flex gap-2  items-center ">Todos os artigos<p className="text-eng-blue text-sm">({percentage.toFixed(2)}% com DOI)</p></p>
                                     ) : (

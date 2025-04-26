@@ -11,6 +11,7 @@ import DocsLayout from "../layout/docs-layout";
 import { DocsProvider } from "../components/provider/docs-provider";
 import { useModalDocs } from "../components/hooks/use-modal-docs";
 import { useLocation } from "react-router-dom";
+
 export function TermosUso() {
     const { theme } = useTheme();
     const { version , defaultLayout, navCollapsedSize, isCollapsed} = useContext(UserContext);
