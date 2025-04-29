@@ -153,7 +153,7 @@ export function Dicionario() {
               </Button>
           
               <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-              Dicionário de termos
+              Mapa de palavras
               </h1>
              
 

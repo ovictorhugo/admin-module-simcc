@@ -49,9 +49,10 @@ import { query, where } from 'firebase/firestore';
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useModalResult } from "../hooks/use-modal-result";
-import { Play, Trash } from "lucide-react";
+import { Play, Trash, User } from "lucide-react";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export function SearchModal() {
 
@@ -628,25 +629,50 @@ const searchFilesByTermPrefix = async (prefix: string) => {
             {historico.length > 0 && (
                <div>
                <p className="uppercase font-medium text-xs mb-3">Pesquisas recentes</p>
-                      <div className="flex flex-wrap gap-3">
+               {historico .filter((props) => props.tipo.toUpperCase() !== 'NAME').length > 0 && (
+                <div className="flex flex-wrap gap-3">
                       
-                        {historico.map((props, index) => (
-                          <div key={index} onClick={() => {
-                            handlePesquisa(props.termo, props.tipo.toUpperCase())
-                          }} className={`
-                            ${props.tipo == 'article' && 'bg-blue-500 dark:bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white'}
-      ${props.tipo == 'abstract' && 'bg-yellow-500 dark:bg-yellow-500 hover:bg-yellow-600 dark:hover:bg-yellow-600 hover:text-white'}
-      ${props.tipo == 'speaker' && 'bg-orange-500 dark:bg-orange-500 hover:bg-orange-600 dark:hover:bg-orange-600 hover:text-white'}
-      ${props.tipo == 'book' && 'bg-pink-500 dark:bg-pink-500 hover:bg-pink-600 dark:hover:bg-pink-600 hover:text-white'}
-      ${props.tipo == 'patent' && 'bg-cyan-500 dark:bg-cyan-500 hover:bg-cyan-600 dark:hover:bg-cyan-600 hover:text-white'}
-      ${props.tipo == 'name' && 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-600 hover:text-white'}
-      ${props.tipo == 'area' && 'bg-green-500 dark:bg-green-500 hover:bg-green-600 dark:hover:bg-green-600 hover:text-white'}
-      ${props.tipo == '' && 'bg-blue-700 dark:bg-blue-700 hover:bg-blue-800 dark:hover:bg-blue-800 hover:text-white'}
-                          flex gap-2 h-8 capitalize cursor-pointer transition-all text-white items-center p-2 px-3 rounded-md text-xs`} >
-                            {props.termo}
-                          </div>
-                        ))}
-                      </div>
+                      {historico .filter((props) => props.tipo.toUpperCase() !== 'NAME').map((props, index) => (
+                        <div key={index} onClick={() => {
+                          handlePesquisa(props.termo, props.tipo.toUpperCase())
+                        }} className={`
+                          ${props.tipo == 'article' && 'bg-blue-500 dark:bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white'}
+    ${props.tipo == 'abstract' && 'bg-yellow-500 dark:bg-yellow-500 hover:bg-yellow-600 dark:hover:bg-yellow-600 hover:text-white'}
+    ${props.tipo == 'speaker' && 'bg-orange-500 dark:bg-orange-500 hover:bg-orange-600 dark:hover:bg-orange-600 hover:text-white'}
+    ${props.tipo == 'book' && 'bg-pink-500 dark:bg-pink-500 hover:bg-pink-600 dark:hover:bg-pink-600 hover:text-white'}
+    ${props.tipo == 'patent' && 'bg-cyan-500 dark:bg-cyan-500 hover:bg-cyan-600 dark:hover:bg-cyan-600 hover:text-white'}
+    ${props.tipo == 'name' && 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-600 hover:text-white'}
+    ${props.tipo == 'area' && 'bg-green-500 dark:bg-green-500 hover:bg-green-600 dark:hover:bg-green-600 hover:text-white'}
+    ${props.tipo == '' && 'bg-blue-700 dark:bg-blue-700 hover:bg-blue-800 dark:hover:bg-blue-800 hover:text-white'}
+                        flex gap-2 h-8 capitalize cursor-pointer transition-all text-white items-center p-2 px-3 rounded-md text-xs`} >
+                          {props.termo}
+                        </div>
+                      ))}
+                    </div>
+               )}
+
+               {historico .filter((props) => props.tipo.toUpperCase() == 'NAME').length > 0 && (
+                <div className="flex gap-3 flex-col mt-3 ">
+                      
+                      {historico .filter((props) => props.tipo.toUpperCase() == 'NAME').map((props, index) => (
+                        <div key={index} onClick={() => {
+                          handlePesquisa(props.termo, props.tipo.toUpperCase())
+                        }} className={`
+                          ${props.tipo == 'article' && 'bg-blue-500 dark:bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white'}
+    ${props.tipo == 'abstract' && 'bg-yellow-500 dark:bg-yellow-500 hover:bg-yellow-600 dark:hover:bg-yellow-600 hover:text-white'}
+    ${props.tipo == 'speaker' && 'bg-orange-500 dark:bg-orange-500 hover:bg-orange-600 dark:hover:bg-orange-600 hover:text-white'}
+    ${props.tipo == 'book' && 'bg-pink-500 dark:bg-pink-500 hover:bg-pink-600 dark:hover:bg-pink-600 hover:text-white'}
+    ${props.tipo == 'patent' && 'bg-cyan-500 dark:bg-cyan-500 hover:bg-cyan-600 dark:hover:bg-cyan-600 hover:text-white'}
+    ${props.tipo == 'name' && 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-600 hover:text-white'}
+    ${props.tipo == 'area' && 'bg-green-500 dark:bg-green-500 hover:bg-green-600 dark:hover:bg-green-600 hover:text-white'}
+    ${props.tipo == '' && 'bg-blue-700 dark:bg-blue-700 hover:bg-blue-800 dark:hover:bg-blue-800 hover:text-white'}
+                        flex gap-2 h-8 capitalize cursor-pointer transition-all text-white items-center p-2 px-3 rounded-md text-xs`} >
+                          {props.termo}
+                        </div>
+                      ))}
+                    </div>
+               )}
+                      
                     </div>
             )}
                   <div className={` ${((input.length >= 3 && filteredItems.length != 0) && (historico.length > 0)) ? ('mt-4 flex'):('hidden')}`}>
@@ -759,6 +785,10 @@ const searchFilesByTermPrefix = async (prefix: string) => {
             onClick={() => handlePesquisa(props.term, props.type_)} 
             className="flex gap-2 capitalize h-8 cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs"
           >
+              <Avatar className="cursor-pointer rounded-md  h-5 w-5">
+                                <AvatarImage className={'rounded-md h-5 w-5'} src={`${urlGeral}ResearcherData/Image?name=${props.term}`} />
+                                <AvatarFallback className="flex items-center justify-center"><User size={10} /></AvatarFallback>
+                              </Avatar>
             {props.term}
           </div>
         ))}

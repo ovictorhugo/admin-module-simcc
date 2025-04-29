@@ -37,7 +37,7 @@ export function Home() {
     onOpen('result-home')
 } else if(location.pathname == '/pos-graduacao') {
     onOpen('graduation-home')
-} else if(location.pathname == '/dicionario') {
+} else if(location.pathname == '/mapa-palavras') {
     onOpen('dicionario')
 }  else if(location.pathname == '/indicadores') {
     onOpen('indicadores')

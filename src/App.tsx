@@ -381,7 +381,7 @@ useEffect(() => {
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/resultados' element={<Home/>}/>
-        <Route path='/dicionario' element={<Home/>}/>
+        <Route path='/mapa-palavras' element={<Home/>}/>
         <Route path='/pos-graduacao' element={<Home/>}/>
         <Route path='/grupos-pesquisa' element={<Home/>}/>
        

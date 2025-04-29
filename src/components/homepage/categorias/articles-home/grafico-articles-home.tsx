@@ -14,6 +14,7 @@ const chartConfig = {
   views: {
     label: "Page Views",
   },
+
   A1: {
     label: "Qualis A1",
     color: "#006837",

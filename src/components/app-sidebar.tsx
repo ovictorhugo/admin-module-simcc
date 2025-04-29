@@ -73,8 +73,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           },
        
           {
-            title: "Dicionário",
-            url: "/dicionario",
+            title: "Mapa de palavras",
+            url: "/mapa-palavras",
             icon: List
           },
           {

@@ -65,7 +65,7 @@ export function ArticlesHome() {
   const { isOpen, type } = useModalResult();
   const { isOpen: isOpenSidebar } = useModalSidebar()
 
-  const { urlGeral, searchType, valoresSelecionadosExport, navbar } = useContext(UserContext)
+  const { urlGeral, searchType, itemsSelecionados, valoresSelecionadosExport, navbar } = useContext(UserContext)
 
   const isModalOpen = isOpen && type === "articles-home";
   const [loading, isLoading] = useState(false)
@@ -92,13 +92,13 @@ const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
     const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
     console.log('yearString', yearString)
-    let url = `${urlGeral}bibliographic_production_article?terms=&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=${String(idGraduateProgram) === "0" ? "" : idGraduateProgram}`;
+    let url = `${urlGeral}bibliographic_production_article?terms=&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=`;
 
-    if (valoresSelecionadosExport !== '') {
+    if (itemsSelecionados.length > 0) {
       if (searchType === 'name') {
         url = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=&type=ARTICLE&qualis=${qualisString}&year=${yearString}`;
       } else if (searchType === 'article') {
-        url = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=${String(idGraduateProgram) === "0" ? "" : idGraduateProgram}`;
+        url = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=`;
       } else if (searchType === 'area') {
         url = `${urlGeral}bibliographic_production_article_area?area_specialty=${valoresSelecionadosExport.replace(/;/g, ' ')}&great_area=&year=${yearString}&qualis=${qualisString}`;
       } else if (searchType === 'abstract') {
