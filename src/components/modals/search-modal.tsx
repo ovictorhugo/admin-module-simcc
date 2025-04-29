@@ -667,7 +667,10 @@ const searchFilesByTermPrefix = async (prefix: string) => {
     ${props.tipo == 'area' && 'bg-green-500 dark:bg-green-500 hover:bg-green-600 dark:hover:bg-green-600 hover:text-white'}
     ${props.tipo == '' && 'bg-blue-700 dark:bg-blue-700 hover:bg-blue-800 dark:hover:bg-blue-800 hover:text-white'}
                         flex gap-2 h-8 capitalize cursor-pointer transition-all text-white items-center p-2 px-3 rounded-md text-xs`} >
-                          {props.termo}
+                       <Avatar className="cursor-pointer rounded-md  h-5 w-5">
+                                <AvatarImage className={'rounded-md h-5 w-5'} src={`${urlGeral}ResearcherData/Image?name=${props.termo}`} />
+                                <AvatarFallback className="flex items-center justify-center"><User size={10} /></AvatarFallback>
+                              </Avatar>    {props.termo}
                         </div>
                       ))}
                     </div>
