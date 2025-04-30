@@ -37,6 +37,8 @@ export function AddResearcherDashboard() {
     
     const [typeVisu, setTypeVisu] = useState('block');
 
+    const [updateFetch, setUpdateFetch] = useState(false)
+
     const { user, urlGeralAdm, permission } = useContext(UserContext);
 
 
@@ -136,7 +138,7 @@ export function AddResearcherDashboard() {
                       onClick: () => console.log("Undo"),
                     },
                   })
-               } else if (lattesID.length < 14) {
+               } else if (lattesID.length < 13) {
                 toast("Parece que o Lattes Id está incorreto ou não preenchido", {
                     description: "O Lattes ID teve conter 13 números",
                     action: {
@@ -197,7 +199,7 @@ export function AddResearcherDashboard() {
 
      
 
-  const {onOpen, isOpen:isOpenModal, type:typeModal} = useModal()
+  const {onOpen, isOpen:isOpenModal, type:typeModal, data:dataModal} = useModal()
 
   const [carregado, setcarregado] = useState(true)
   useEffect(() => {
@@ -215,6 +217,15 @@ setcarregado(false)
 
    
   }, [isOpenModal, type]);
+
+
+  useEffect(() => {
+    if (updateFetch) {
+      fetchDataTable();
+      setUpdateFetch(false)
+    }
+   
+  }, [dataModal.updateFetch]);
 
   const history = useNavigate();
 
@@ -551,7 +562,7 @@ setcarregado(false)
 
   <Button   onClick={(event) => {
   event.stopPropagation();
-  onOpen('confirm-delete-researcher', {id_delete:props.researcher_id, name:props.name})}} variant={'destructive'} className="h-8 w-8 p-0 text-white hidden group-hover:flex dark:text-white">
+  onOpen('confirm-delete-researcher', {id_delete:props.researcher_id, name:props.name, updateFetch, setUpdateFetch})}} variant={'destructive'} className="h-8 w-8 p-0 text-white hidden group-hover:flex dark:text-white">
              
              <Trash size={8} className="h-4 w-4" />
            </Button>

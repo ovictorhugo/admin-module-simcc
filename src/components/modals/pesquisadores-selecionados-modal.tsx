@@ -158,9 +158,10 @@ export function PesquisadoresSelecionadosModal() {
             <div className="flex flex-col h-full gap-4">
 
               {pesquisadoresSelecionados.length == 0 && (
-                <div className="flex flex-col py-32 justify-center w-full h-full">
+                <div className="flex flex-col py-24 justify-center items-center w-full h-full">
                                   <p className="text-9xl text-center text-[#719CB8] font-bold mb-16 animate-pulse">{`⚆_⚆`}</p>
                 <h1 className="text-2xl md:text-3xl text-neutral-400 text-center font-medium leading-tight tracking-tighter lg:leading-[1.1] ">Nenhum pesquisador selecionado</h1>
+                <p className="max-w-[600px] mt-4 text-sm text-gray-500 whitespace-normal text-center">Selecione os pesquisadores na plataforma para realizar o download dos dados em formato CSV. Caso você possua acesso administrativo, é possível criar um novo barema de avaliação para aplicar aos docentes selecionados.</p>
                
                 </div>
               )}
