@@ -92,7 +92,7 @@ export function TodosPesquisadores() {
     const [search, setSearch] = useState('')
         const [researcher, setResearcher] = useState<Research[]>([]);
 const [loading, setLoading] = useState(false)
-        let urlTermPesquisadores = `${urlGeral}researcherName?name=`
+        let urlTermPesquisadores = `${urlGeral}researcherName?name=&page=3&lenght=20`
         const [typeVisu, setTypeVisu] = useState('block');
       
         useMemo(() => {
@@ -265,7 +265,7 @@ const [loading, setLoading] = useState(false)
           </div>
 
 
-       {loading ? (
+       {loading && (
         <div className="flex">
               <InfiniteMovingResearchersLoading
           items={nomesAleatorios} // Formata cada item como um objeto
@@ -275,16 +275,17 @@ const [loading, setLoading] = useState(false)
            className="custom-class"
          />
         </div>
-       ):(
-           <InfiniteMovingResearchers
+       )
+       }
+
+<InfiniteMovingResearchers
            items={randomResearchers} // Formata cada item como um objeto
            direction="right"
            speed='slow'
            pauseOnHover={true}
            className="custom-class"
          />
-   
-       )}
+
 <main className="h-full w-full flex flex-col">
            <Tabs defaultValue="articles" value={value} className="">
              <div>
@@ -298,7 +299,7 @@ const [loading, setLoading] = useState(false)
                   <div className="flex items-center gap-2">
                   <div className="relative grid grid-cols-1">
   <ScrollArea className="relative overflow-x-auto">
-    <TabsList className="p-0 flex h-auto bg-transparent dark:bg-transparent">
+    <TabsList className="p-0 flex gap-2 h-auto bg-transparent dark:bg-transparent">
       {tabs.map(
         ({ id, label, icon: Icon, condition = true }) =>
           condition && (

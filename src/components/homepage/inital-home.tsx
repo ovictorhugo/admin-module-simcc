@@ -555,11 +555,13 @@ const [isLoad, setLoad] = useState(false)
                         });
                         const data = await response.json();
                         if (data) {
-                          setResearcher(data);
                           setLoad(false)
+                          setResearcher(data);
+                          
                         }
                       } catch (err) {
                         console.log(err);
+                        setLoad(false)
                       }
                     };
                     fetchData();
@@ -1270,7 +1272,9 @@ const [isLoad, setLoad] = useState(false)
                     </CardContent>
 
                     <div className="grid grid-cols-1">
-                    <div className="flex items-center justify-center">
+                    <div className="">
+
+
 
                     <InfiniteMovingResearchers
          items={randomResearchers} // Formata cada item como um objeto

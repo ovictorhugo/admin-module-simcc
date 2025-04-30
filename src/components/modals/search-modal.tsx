@@ -44,7 +44,7 @@ const useQuery = () => {
 
 
 
-import { getFirestore, collection, getDocs, limit } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, limit, doc, setDoc } from 'firebase/firestore';
 import { query, where } from 'firebase/firestore';
 
 import { useLocation, useNavigate } from "react-router-dom";
@@ -66,13 +66,26 @@ export function SearchModal() {
 
 
   const [itemsBigrama, setBigrama] = useState<Bigrama[]>([])
-  const [itemsSelecionadosPopUp, setItensSelecionadosPopUp] = useState<ItemsSelecionados[]>([])
+  const [itemsSelecionadosPopUp,  setItensSelecionadosPopUp] = useState<ItemsSelecionados[]>([])
   const [researcherOpenAlex, setResearcherOpenAlex] = useState<ResearchOpenAlex[]>([])
   const [showInput, setShowInput] = useState(true);
   const isModalOpen = isOpen && type === "search";
-  const { setValoresSelecionadosExport, setMode, searchType, setSearchType, urlGeral, itemsSelecionados, setItensSelecionados, setValorDigitadoPesquisaDireta, version, loggedIn, historico } = useContext(UserContext)
+  const { user, setHistorico, setValoresSelecionadosExport, setMode, searchType, setSearchType, urlGeral, itemsSelecionados, setItensSelecionados, setValorDigitadoPesquisaDireta, version, loggedIn, historico } = useContext(UserContext)
   const db = getFirestore();
   const [input, setInput] = useState('')
+
+  const limparHistorico = async () => {
+    if (user && loggedIn) {
+      try {
+        const docRef = doc(db, 'historico', user.uid);
+        await setDoc(docRef, { termos: [] }); // sobrescreve com array vazio
+        setHistorico([]); // limpa no estado local também
+      } catch (error) {
+        console.error("Erro ao limpar o histórico:", error);
+      }
+    }
+  };
+  
 
   const handleClickTermos = (type: string, value: string) => {
     setValoresSelecionadosExport(value)
@@ -625,59 +638,66 @@ const searchFilesByTermPrefix = async (prefix: string) => {
         </Alert>
 
         {((input.length >= 3 && filteredItems.length != 0) || (loggedIn && historico.length > 0)) && (
-          <Alert className="w-full">
-            {historico.length > 0 && (
-               <div>
-               <p className="uppercase font-medium text-xs mb-3">Pesquisas recentes</p>
-               {historico .filter((props) => props.tipo.toUpperCase() !== 'NAME').length > 0 && (
-                <div className="flex flex-wrap gap-3">
-                      
-                      {historico .filter((props) => props.tipo.toUpperCase() !== 'NAME').map((props, index) => (
-                        <div key={index} onClick={() => {
-                          handlePesquisa(props.termo, props.tipo.toUpperCase())
-                        }} className={`
-                          ${props.tipo == 'article' && 'bg-blue-500 dark:bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white'}
-    ${props.tipo == 'abstract' && 'bg-yellow-500 dark:bg-yellow-500 hover:bg-yellow-600 dark:hover:bg-yellow-600 hover:text-white'}
-    ${props.tipo == 'speaker' && 'bg-orange-500 dark:bg-orange-500 hover:bg-orange-600 dark:hover:bg-orange-600 hover:text-white'}
-    ${props.tipo == 'book' && 'bg-pink-500 dark:bg-pink-500 hover:bg-pink-600 dark:hover:bg-pink-600 hover:text-white'}
-    ${props.tipo == 'patent' && 'bg-cyan-500 dark:bg-cyan-500 hover:bg-cyan-600 dark:hover:bg-cyan-600 hover:text-white'}
-    ${props.tipo == 'name' && 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-600 hover:text-white'}
-    ${props.tipo == 'area' && 'bg-green-500 dark:bg-green-500 hover:bg-green-600 dark:hover:bg-green-600 hover:text-white'}
-    ${props.tipo == '' && 'bg-blue-700 dark:bg-blue-700 hover:bg-blue-800 dark:hover:bg-blue-800 hover:text-white'}
-                        flex gap-2 h-8 capitalize cursor-pointer transition-all text-white items-center p-2 px-3 rounded-md text-xs`} >
-                          {props.termo}
-                        </div>
-                      ))}
-                    </div>
-               )}
+         <div>
+         <Alert className={` w-full border-t-0 ${historico.length > 0 && ('rounded-b-none')}`}>
+           {historico.length > 0 && (
+  <div>
+    <p className="uppercase font-medium text-xs mb-3">Pesquisas recentes</p>
+    <div className="flex flex-wrap gap-3">
+      {historico.map((props, index) => {
+        const tipo = props.tipo.toLowerCase();
 
-               {historico .filter((props) => props.tipo.toUpperCase() == 'NAME').length > 0 && (
-                <div className="flex gap-3 flex-col mt-3 ">
-                      
-                      {historico .filter((props) => props.tipo.toUpperCase() == 'NAME').map((props, index) => (
-                        <div key={index} onClick={() => {
-                          handlePesquisa(props.termo, props.tipo.toUpperCase())
-                        }} className={`
-                          ${props.tipo == 'article' && 'bg-blue-500 dark:bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white'}
-    ${props.tipo == 'abstract' && 'bg-yellow-500 dark:bg-yellow-500 hover:bg-yellow-600 dark:hover:bg-yellow-600 hover:text-white'}
-    ${props.tipo == 'speaker' && 'bg-orange-500 dark:bg-orange-500 hover:bg-orange-600 dark:hover:bg-orange-600 hover:text-white'}
-    ${props.tipo == 'book' && 'bg-pink-500 dark:bg-pink-500 hover:bg-pink-600 dark:hover:bg-pink-600 hover:text-white'}
-    ${props.tipo == 'patent' && 'bg-cyan-500 dark:bg-cyan-500 hover:bg-cyan-600 dark:hover:bg-cyan-600 hover:text-white'}
-    ${props.tipo == 'name' && 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-600 hover:text-white'}
-    ${props.tipo == 'area' && 'bg-green-500 dark:bg-green-500 hover:bg-green-600 dark:hover:bg-green-600 hover:text-white'}
-    ${props.tipo == '' && 'bg-blue-700 dark:bg-blue-700 hover:bg-blue-800 dark:hover:bg-blue-800 hover:text-white'}
-                        flex gap-2 h-8 capitalize cursor-pointer transition-all text-white items-center p-2 px-3 rounded-md text-xs`} >
-                       <Avatar className="cursor-pointer rounded-md  h-5 w-5">
-                                <AvatarImage className={'rounded-md h-5 w-5'} src={`${urlGeral}ResearcherData/Image?name=${props.termo}`} />
-                                <AvatarFallback className="flex items-center justify-center"><User size={10} /></AvatarFallback>
-                              </Avatar>    {props.termo}
-                        </div>
-                      ))}
-                    </div>
-               )}
-                      
-                    </div>
-            )}
+        const tipoClass = {
+          article: 'bg-blue-500 dark:bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white',
+          abstract: 'bg-yellow-500 dark:bg-yellow-500 hover:bg-yellow-600 dark:hover:bg-yellow-600 hover:text-white',
+          speaker: 'bg-orange-500 dark:bg-orange-500 hover:bg-orange-600 dark:hover:bg-orange-600 hover:text-white',
+          book: 'bg-pink-500 dark:bg-pink-500 hover:bg-pink-600 dark:hover:bg-pink-600 hover:text-white',
+          patent: 'bg-cyan-500 dark:bg-cyan-500 hover:bg-cyan-600 dark:hover:bg-cyan-600 hover:text-white',
+          name: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-600 hover:text-white', // redundante, mas mantido
+          area: 'bg-green-500 dark:bg-green-500 hover:bg-green-600 dark:hover:bg-green-600 hover:text-white',
+          '': 'bg-blue-700 dark:bg-blue-700 hover:bg-blue-800 dark:hover:bg-blue-800 hover:text-white',
+        };
+
+        if (tipo === 'name') {
+          return (
+            <div
+              key={index}
+              onClick={() => handlePesquisa(props.termo, 'NAME')}
+              className={`    ${tipoClass[tipo] || tipoClass['']} flex gap-2 h-8 capitalize cursor-pointer transition-all bg-neutral-100 hover:bg-neutral-200 dark:hover:bg-neutral-900 dark:bg-neutral-800 items-center p-2 px-3 rounded-md text-xs text-white`}
+            >
+              <Avatar className="cursor-pointer rounded-md h-5 w-5">
+                <AvatarImage
+                  className="rounded-md h-5 w-5"
+                  src={`${urlGeral}ResearcherData/Image?name=${props.termo}`}
+                />
+                <AvatarFallback className="flex items-center justify-center">
+                  <User size={10} />
+                </AvatarFallback>
+              </Avatar>
+              {props.termo}
+            </div>
+          );
+        }
+
+      
+
+        return (
+          <div
+            key={index}
+            onClick={() => handlePesquisa(props.termo, props.tipo.toUpperCase())}
+            className={`
+              flex gap-2 h-8 capitalize cursor-pointer transition-all text-white items-center p-2 px-3 rounded-md text-xs
+              ${tipoClass[tipo] || tipoClass['']}
+            `}
+          >
+            {props.termo}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+)}
+
                   <div className={` ${((input.length >= 3 && filteredItems.length != 0) && (historico.length > 0)) ? ('mt-4 flex'):('hidden')}`}>
                     <Separator/>
                   </div>
@@ -806,6 +826,10 @@ const searchFilesByTermPrefix = async (prefix: string) => {
             </ResponsiveMasonry>
           </div>
           </Alert>
+
+          <Alert onClick={() => limparHistorico()} className="rounded-t-none flex gap-3 items-center font-medium text-xs dark:bg-neutral-800 dark:hover:bg-neutral-700  cursor-pointer border-t-0 bg-neutral-100 transition-all  hover:bg-neutral-200 p-4"><div>
+          <X size={16}/></div>Limpar histórico</Alert>
+          </div>
         )}
       </DialogContent>
     </Dialog>
