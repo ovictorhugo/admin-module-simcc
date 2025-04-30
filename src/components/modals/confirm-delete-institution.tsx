@@ -54,6 +54,9 @@ export function ConfirmDeleteInstitution() {
       };
       
       fetchData()
+      if (data?.setUpdateFetch) {
+        data.setUpdateFetch(true);
+      }
       onClose()
     
     }

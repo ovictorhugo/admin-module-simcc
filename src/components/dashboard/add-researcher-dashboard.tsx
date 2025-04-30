@@ -1,10 +1,10 @@
-import { Alert } from "../ui/alert"
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
 import bg_popup from '../../assets/bg_popup.png';
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useContext, useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { ChevronDown, ChevronLeft,  ChevronUp,  Copy,  Download,  Link,  Maximize2,  Plus, Trash, User } from "lucide-react";
+import { ChevronDown, ChevronLeft,  ChevronUp,  Copy,  Download,  Info,  Link,  Maximize2,  Plus, Trash, User } from "lucide-react";
 import { toast } from "sonner"
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { UserContext } from "../../context/context";
@@ -455,7 +455,8 @@ setcarregado(false)
 
  
     {onOpenAdd && (
-       <fieldset className="grid gap-6 rounded-lg  p-4 bg-white dark:border-neutral-800 border border-neutral-200 dark:bg-neutral-950 bg-cover  bg-center bg-no-repeat "  >
+       <div className="grid gap-8">
+        <fieldset className="grid gap-6 rounded-lg  p-4 bg-white dark:border-neutral-800 border border-neutral-200 dark:bg-neutral-950 bg-cover  bg-center bg-no-repeat "  >
        <legend className="-ml-1 px-1 text-sm font-medium">
          Adicionar pesquisador à instituição
        </legend>
@@ -495,6 +496,16 @@ setcarregado(false)
           
            </div>
        </fieldset>
+
+       <Alert className="m-0">
+  <Info className="h-4 w-4" />
+  <AlertTitle>Aviso</AlertTitle>
+  <AlertDescription>
+    O CPF é utilizado apenas para localizar o ID Lattes do pesquisador. Nenhum dado sensível é armazenado em nossos servidores.
+  </AlertDescription>
+</Alert>
+
+       </div>
     )}
 
 <div>
@@ -555,8 +566,14 @@ setcarregado(false)
  <Alert className="flex p-0 flex-col flex-1 gap-4 bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url("${urlGeral}ResearcherData/Image?name=${props.name}")`}}>
  <div className="bg-[#000000] rounded-md bg-opacity-30 hover:bg-opacity-70 transition-all absolute w-full h-full rounded-t-md ">
  <div className="flex flex-col justify-between h-full">
+<div className=" p-4 flex justify-between items-start">
+<div className="flex group-hover:hidden">
+                  <div className="flex text-white gap-2 items-center" >
+                    <div className={` rounded-md h-4 w-4 ${props.status ? ('bg-green-500') : ('bg-red-500')}`}></div>
+                    <div className="flex-1 flex">{props.status ? ('Ativo') : ('Inativo')}</div></div>
+                </div>
 
- <div className="z-[1] w-full  p-4 flex gap-3 justify-end">
+                <div className="z-[1] w-full  flex gap-3 justify-end">
   <div className="flex gap-3">
 
 
@@ -593,6 +610,8 @@ status={props.status}
 />
   </div>
  </div>
+</div>
+
 
  <div className="flex gap-2 px-6 flex-col pb-6  w-full h-full text-white justify-end  ">
  <div className="flex gap-1 flex-col">

@@ -40,7 +40,7 @@ export function Instituicoes() {
     const [nome, setNome] = useState('')
     const [sigla, setSigla] = useState('')
     const [lattesId, setLattesId] = useState('')
-
+    const [updateFetch, setUpdateFetch] = useState(false)
         const [count, setCount] = useState(24)
         
         const [typeVisu, setTypeVisu] = useState('block');
@@ -153,7 +153,7 @@ export function Instituicoes() {
       // upload
 
       const urlGetResearcher = urlGeralAdm + `InstitutionRest/Query`;
-    const {onOpen} = useModal()
+    const {onOpen, data:dataModal} = useModal()
 
       const fetchDataTable = async () => {
         setLoading(true)
@@ -183,6 +183,14 @@ export function Instituicoes() {
       useEffect(() => {
         fetchDataTable();
       }, [urlGetResearcher]);
+
+      useEffect(() => {
+        if (updateFetch) {
+          fetchDataTable();
+          setUpdateFetch(false)
+        }
+       
+      }, [dataModal.updateFetch]);
 
       console.log(researcher)
 
