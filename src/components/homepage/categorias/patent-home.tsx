@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { UserContext } from "../../../context/context";
 import { FilterYearPopUp } from "../../popup/filters-year-popup";
 import { Skeleton } from "../../ui/skeleton";
@@ -9,6 +9,7 @@ import { Button } from "../../ui/button";
 import {  ChartBar, Rows, SquaresFour } from "phosphor-react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { TableReseracherPatentesPopup } from "../../popup/columns/producoes-tecnicas/table-patentes-popup";
+import debounce from "lodash.debounce"; // Importing debounce
 
 
 import { Alert } from "../../ui/alert";
@@ -49,8 +50,9 @@ export function PatentHome() {
 
     const {urlGeral, valoresSelecionadosExport} = useContext(UserContext)
     const [distinct, setDistinct] = useState(false)
-
-    let urlTermPublicacoes = `${urlGeral}patent_production_researcher?researcher_id=&year=${yearString}&term=${valoresSelecionadosExport}&distinct=${distinct ? '1' : '0'}`;
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    let urlTermPublicacoes = `${urlGeral}patent_production_researcher?researcher_id=&year=${yearString || year-5}&term=${valoresSelecionadosExport}&distinct=${distinct ? '1' : '0'}`;
   
     console.log(urlTermPublicacoes)
     useMemo(() => {
@@ -83,7 +85,12 @@ export function PatentHome() {
             <Skeleton key={index} className="w-full rounded-md h-[170px]" />
           ));
 
-
+          const updateDistinct = useCallback(
+            debounce((value: boolean) => {
+              setDistinct(value);
+            }, 300), // 300ms de debounce
+            []
+          );
     return(
         <div className="grid grid-cols-1 gap-4 pb-16 ">
           <HeaderResult/>
@@ -104,16 +111,16 @@ export function PatentHome() {
             <div>
             <div className="text-2xl font-bold">{publicacoes.length}</div>
             <p className="text-xs text-muted-foreground flex gap-2">
-              encontrados na busca 
+              encontrados na busca desde {yearString}
             </p>
             </div>
 
             <div className="gap-2 flex items-center h-fit text-xs text-gray-500 dark:text-gray-300">
   <p>Patentes:</p>
   <Switch
-    checked={distinct}
-    onCheckedChange={(value) => setDistinct(value)}
-  />
+  checked={distinct}
+  onCheckedChange={(value) => updateDistinct(value)}
+/>
   <span>{distinct ? "Sem repetição" : "Com repetição"}</span>
 </div>
           </CardContent>

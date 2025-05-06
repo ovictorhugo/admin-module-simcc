@@ -1,6 +1,6 @@
 import { useModal } from "../hooks/use-modal-store";
 import { Sheet, SheetContent } from "../../components/ui/sheet";
-import { ClipboardIcon, Download, Eye, Trash, UserIcon, X } from "lucide-react";
+import { ClipboardIcon, Download, Eye, Info, Trash, UserIcon, X } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -9,12 +9,12 @@ import {
 } from "../ui/tooltip";
 import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "../ui/button";
-import { PencilSimple, Plus } from "phosphor-react";
+import { ArrowSquareOut, PencilSimple, Plus } from "phosphor-react";
 import { DialogHeader } from "../ui/dialog";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/context";
-import { Alert } from "../ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Research } from "./researcher-modal";
 
@@ -33,6 +33,8 @@ export function PesquisadoresSelecionadosModal() {
 
     onClose()
   }
+
+  const currentUrl = window.location.origin
 
   const handleRemove = (indexToRemove: number) => {
     setPesquisadoresSelecionados((prev) => prev.filter((_, index) => index !== indexToRemove));
@@ -146,33 +148,46 @@ export function PesquisadoresSelecionadosModal() {
             <div className="mb-8 flex justify-between items-center">
               <div >
                 <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
-                  Barema de avaliação
+                 Pesquisadores
                 </p>
 
                 <h1 className="max-w-[500px] whitespace-pre-wrap flex-wrap text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
-                  Pesquisadores selecionados
+                Lista de selecionados
                 </h1>
               </div>
             </div>
 
-            <div className="flex flex-col h-full gap-4">
+            <div className="flex flex-col  gap-4">
+
+              
+            {pesquisadoresSelecionados.length != 0 && (
+              <Alert className="mb-8">
+              <Info className="h-4 w-4" />
+              <AlertTitle>Esses são os pesquisadores que você selecionou na plataforma</AlertTitle>
+              <AlertDescription className="flex items-center gap-2">
+                Você pode adicionar novos pesquisadores clicando no botão 
+                <Button size="icon" className="h-6 w-6"><Plus size={12} /></Button>
+              </AlertDescription>
+            </Alert>
+            
+              )}
 
               {pesquisadoresSelecionados.length == 0 && (
-                <div className="flex flex-col py-24 justify-center items-center w-full h-full">
+                <div className=" h-[calc(100vh-236px)] flex flex-col  justify-center items-center w-full">
                                   <p className="text-9xl text-center text-[#719CB8] font-bold mb-16 animate-pulse">{`⚆_⚆`}</p>
                 <h1 className="text-2xl md:text-3xl text-neutral-400 text-center font-medium leading-tight tracking-tighter lg:leading-[1.1] ">Nenhum pesquisador selecionado</h1>
-                <p className="max-w-[600px] mt-4 text-sm text-gray-500 whitespace-normal text-center">Selecione os pesquisadores na plataforma para realizar o download dos dados em formato CSV. Caso você possua acesso administrativo, é possível criar um novo barema de avaliação para aplicar aos docentes selecionados.</p>
+                <p className="max-w-[600px] mt-4 text-sm text-gray-500 whitespace-normal text-justify">Selecione os pesquisadores na plataforma para realizar o download dos dados em formato CSV. Caso você possua acesso administrativo, é possível criar um novo barema de avaliação para aplicar aos docentes selecionados.</p>
                
                 </div>
               )}
               {pesquisadoresSelecionados.map((props, index) => (
-                <Alert key={index}>
+                <Alert key={index} className=" border-0 pt-0 border-b rounded-none">
                   <div className="flex justify-between items-center h-10 group">
                     <div className="h-10">
-                      <div className="flex items-center gap-2">
-                        <Avatar className="cursor-pointer rounded-md h-8 w-8">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="rounded-md h-10 w-10">
                           <AvatarImage
-                            className="rounded-md h-8 w-8"
+                            className="rounded-md h-10 w-10"
                             src={`${urlGeral}ResearcherData/Image?name=${props.name}`}
                           />
                           <AvatarFallback className="flex items-center justify-center">
@@ -188,7 +203,11 @@ export function PesquisadoresSelecionadosModal() {
                     <div className="flex items-center gap-3">
                       <div className=" items-center gap-3 hidden group-hover:flex transition-all">
 
-
+                      <Link to={`${currentUrl}/researcher?researcher_name=${props.name}&search_type=name&terms=`} target="_blank">
+                            <Button variant={'outline'} className="h-8 w-8 p-0">
+                              <span className="sr-only">Open menu</span>
+                              <ArrowSquareOut size={8} className="h-4 w-4" />
+                            </Button></Link>
                       <Button
             size="icon"
             variant="destructive"
@@ -206,24 +225,29 @@ export function PesquisadoresSelecionadosModal() {
               ))}
             </div>
 
-            {pesquisadoresSelecionados.length == 0 && (
-              <div></div>
-            )}
+           
 
             {pesquisadoresSelecionados.length > 0 && (
-              <div className="flex items-center gap-3 w-full justify-end">
-              { hasBaremaAvaliacao && (
-                  <Button onClick={() => handleDownloadJson()} variant={'ghost'} size={'sm'} className=" mt-3  flex ">
+              <div className="flex mt-8 items-center gap-3 w-full justify-end">
+             
+
+<Button onClick={() => handleDownloadJson()} variant={hasBaremaAvaliacao ? ('ghost'):'default'} size={'sm'} className=" mt-3  flex ">
                   <Download size={16} className="" />Baixar dados
                 </Button>
-              )}
 
-                <Link to={'/dashboard/baremas'}>
-                  <Button size={'sm'} className="text-white dark:text-white mt-3 flex ">
-                    <ClipboardIcon size={16} className="" />Criar barema de avaliação
-                  </Button></Link>
+
+                { hasBaremaAvaliacao && (
+                 <Link to={'/dashboard/baremas'}>
+                 <Button size={'sm'} className="text-white dark:text-white mt-3 flex ">
+                   <ClipboardIcon size={16} className="" />Criar barema de avaliação
+                 </Button></Link>
+              )}
               </div>
+
+              
             )}
+
+
           </ScrollArea>
         </div>
       </SheetContent>

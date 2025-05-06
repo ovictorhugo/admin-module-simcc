@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react"
+import { useCallback, useContext, useMemo, useState } from "react"
 import { UserContext } from "../../context/context"
 import { Skeleton } from "../ui/skeleton"
 import { HeaderResult } from "../homepage/header-results"
@@ -16,6 +16,7 @@ import { BlockItemGeral } from "../homepage/categorias/book-home/block-item-gera
 import { TableReseracherMarcasPopup } from "../popup/columns/producoes-tecnicas/table-marcas-popup"
 import { GraficoTextoRevista } from "../popup/graficos/grafico-texto-revista"
 import { TableTextoRevista } from "../popup/columns/table-texto-revista"
+import debounce from "lodash.debounce"; // Importing debounce
 
 type Patente = {
   authors: string;
@@ -51,8 +52,9 @@ export function TextoRevistaHome() {
 
     const {urlGeral, valoresSelecionadosExport} = useContext(UserContext)
     const [distinct, setDistinct] = useState(false)
-
-    let urlTermPublicacoes = `${urlGeral}researcher_production/papers_magazine?researcher_id=&year=${yearString}&distinct=${distinct ? '1' : '0'}`;
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    let urlTermPublicacoes = `${urlGeral}researcher_production/papers_magazine?researcher_id=&year=${yearString || year-5}&distinct=${distinct ? '1' : '0'}`;
   
     console.log(urlTermPublicacoes)
     useMemo(() => {
@@ -85,7 +87,12 @@ export function TextoRevistaHome() {
             <Skeleton key={index} className="w-full rounded-md h-[170px]" />
           ));
 
-
+          const updateDistinct = useCallback(
+            debounce((value: boolean) => {
+              setDistinct(value);
+            }, 300), // 300ms de debounce
+            []
+          );
     return(
         <div className="grid grid-cols-1 gap-4 pb-16 ">
           <HeaderResult/>
@@ -106,16 +113,16 @@ export function TextoRevistaHome() {
             <div>
             <div className="text-2xl font-bold">{publicacoes.length}</div>
             <p className="text-xs text-muted-foreground flex gap-2">
-              encontrados na busca 
+              encontrados na busca desde {yearString}
             </p>
             </div>
 
             <div className="gap-2 flex items-center h-fit text-xs text-gray-500 dark:text-gray-300">
   <p>Texto Revista:</p>
   <Switch
-    checked={distinct}
-    onCheckedChange={(value) => setDistinct(value)}
-  />
+  checked={distinct}
+  onCheckedChange={(value) => updateDistinct(value)}
+/>
   <span>{distinct ? "Sem repetição" : "Com repetição"}</span>
 </div>
           </CardContent>

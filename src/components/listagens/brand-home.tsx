@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react"
+import { useCallback, useContext, useMemo, useState } from "react"
 import { UserContext } from "../../context/context"
 import { Skeleton } from "../ui/skeleton"
 import { HeaderResult } from "../homepage/header-results"
@@ -15,6 +15,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { BlockItemGeral } from "../homepage/categorias/book-home/block-item-geral"
 import { TableReseracherMarcasPopup } from "../popup/columns/producoes-tecnicas/table-marcas-popup"
 import { GraficoMarca } from "./graficos/grafico-marca"
+import debounce from "lodash.debounce"; // Importing debounce
 
 type Patente = {
     id: string,
@@ -44,9 +45,10 @@ export function BrandHome() {
 
     const {urlGeral, valoresSelecionadosExport} = useContext(UserContext)
     const [distinct, setDistinct] = useState(false)
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    let urlTermPublicacoes = `${urlGeral}brand_production_researcher?researcher_id=&year=${yearString || year-5}&distinct=${distinct ? '1' : '0'}`;
 
-    let urlTermPublicacoes = `${urlGeral}brand_production_researcher?researcher_id=&year=${yearString}&distinct=${distinct ? '1' : '0'}`;
-  
     console.log(urlTermPublicacoes)
     useMemo(() => {
         const fetchData = async () => {
@@ -78,7 +80,12 @@ export function BrandHome() {
             <Skeleton key={index} className="w-full rounded-md h-[170px]" />
           ));
 
-
+          const updateDistinct = useCallback(
+            debounce((value: boolean) => {
+              setDistinct(value);
+            }, 300), // 300ms de debounce
+            []
+          );
     return(
         <div className="grid grid-cols-1 gap-4 pb-16 ">
           <HeaderResult/>
@@ -99,16 +106,16 @@ export function BrandHome() {
             <div>
             <div className="text-2xl font-bold">{publicacoes.length}</div>
             <p className="text-xs text-muted-foreground flex gap-2">
-              encontrados na busca
+              encontrados na busca desde {yearString}
             </p>
             </div>
 
             <div className="gap-2 flex items-center h-fit text-xs text-gray-500 dark:text-gray-300">
   <p>Marcas:</p>
   <Switch
-    checked={distinct}
-    onCheckedChange={(value) => setDistinct(value)}
-  />
+  checked={distinct}
+  onCheckedChange={(value) => updateDistinct(value)}
+/>
   <span>{distinct ? "Sem repetição" : "Com repetição"}</span>
 </div>
           </CardContent>

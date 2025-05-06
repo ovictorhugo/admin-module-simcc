@@ -60,10 +60,11 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
   const handleResearcherUpdate = (newResearcherData: Filter[]) => {
     setFilters(newResearcherData);
   };
-
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
   const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
-  const urlTermPublicacoes = `${urlGeral}researcher_report?researcher_id=${props.name}&year=${yearString}`;
+  const urlTermPublicacoes = `${urlGeral}researcher_report?researcher_id=${props.name}&year=${yearString || year-5}`;
 
   useMemo(() => {
     const fetchData = async () => {
@@ -173,7 +174,7 @@ export function RelatorioTecnicoResearcherPopUp(props: Props) {
                   </ResponsiveMasonry>
                 ) : (
                   publicacoes.length == 0 ? (
-                    <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
+                    <div className="items-center justify-center w-full flex text-center pt-6">Nenhum resultado encontrado a partir de {year-5}</div>
                   ) : (
                     <BookBlockPopUp
                       articles={publicacoes}

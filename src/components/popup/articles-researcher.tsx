@@ -96,8 +96,11 @@ export function ArticlesResearcherPopUp(props: Props) {
         [itemsSelecionadosPopUp]
     );
 
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+
     const urlTermPublicacoes = useMemo(() => {
-        const baseUrl = `${urlGeral}bibliographic_production_researcher?researcher_id=${props.name}&type=ARTICLE&qualis=${qualisString}&year=${yearString}`;
+        const baseUrl = `${urlGeral}bibliographic_production_researcher?researcher_id=${props.name}&type=ARTICLE&qualis=${qualisString}&year=${yearString  || year-5}`;
         return searchType === 'article'
             ? `${baseUrl}&terms=${resultadoFormatado}`
             : baseUrl;
@@ -292,9 +295,10 @@ export function ArticlesResearcherPopUp(props: Props) {
                                     <ResponsiveMasonry
                                         columnsCountBreakPoints={{
                                             350: 1,
-                                            750: 1,
-                                            900: 2,
-                                            1200: 3
+          750: 1,
+          900: 2,
+          1200: 3,
+          1700: 4
                                         }}
                                     >
                                         <Masonry gutter="16px">
@@ -304,12 +308,16 @@ export function ArticlesResearcherPopUp(props: Props) {
                                         </Masonry>
                                     </ResponsiveMasonry>
                                 ) : (
-
-                                    <ArticleBlockPopUp
+                                    publicacoes.length == 0 ? (
+                                        <div className="items-center justify-center w-full flex text-center pt-6">Nenhum resultado encontrado a partir de {year-5}</div>
+                                    ):(
+                                        <ArticleBlockPopUp
                                         articles={publicacoes}
                                         distinct={distinct}
                                         onRefresh={handleRefresh}
                                     />
+                                    )
+                                  
                                 )
                             ) : (
 

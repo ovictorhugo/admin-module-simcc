@@ -84,10 +84,11 @@ export function ResearchProject(props: Props) {
 
 
   };
-
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
   const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
-  const urlTermPublicacoes = `${urlGeral}researcher_research_project?researcher_id=${props.name}&term=&year=${yearString}`;
+  const urlTermPublicacoes = `${urlGeral}researcher_research_project?researcher_id=${props.name}&term=&year=${yearString || year-5}`;
   console.log(urlTermPublicacoes)
   useMemo(() => {
     const fetchData = async () => {
@@ -201,7 +202,7 @@ export function ResearchProject(props: Props) {
                 </ResponsiveMasonry>
               ) : (
                 publicacoes.length == 0 ? (
-                  <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
+                  <div className="items-center justify-center w-full flex text-center pt-6">Nenhum resultado encontrado a partir de {year-5}</div>
                 ) : (
                   <BookBlockPopUp
                     articles={publicacoes}

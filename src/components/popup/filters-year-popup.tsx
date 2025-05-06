@@ -17,7 +17,7 @@ export function FilterYearPopUp(props: Props) {
   const [itensSelecionados] = useState<string[]>([]);
   const currentDate = new Date();
   const year = currentDate.getFullYear();
-  const [filterYear, setFilterYear] = useState([1990]);
+  const [filterYear, setFilterYear] = useState([year-5]);
   const [isFirstRender, setIsFirstRender] = useState(true); // State to track the first render
 
   // Função para debounced update
@@ -30,17 +30,12 @@ export function FilterYearPopUp(props: Props) {
 
   // Atualizando filtros quando filterYear ou itensSelecionados mudarem
   useEffect(() => {
-    if (isFirstRender) {
-      setIsFirstRender(false); // Set first render to false after the first render
-      return;
-    }
-
     const filtros = {
       year: filterYear,
       qualis: itensSelecionados,
     };
     updateResearcher([filtros]); // Chamando a função de update
-  }, [filterYear, itensSelecionados, updateResearcher, isFirstRender]);
+  }, [filterYear, itensSelecionados, updateResearcher]);
 
   return (
     <div className=" flex gap-6">

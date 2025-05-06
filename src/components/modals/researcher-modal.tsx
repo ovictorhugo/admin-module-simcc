@@ -484,6 +484,14 @@ useEffect(() => {
                                 if (pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name)) {
                                   // Remove o pesquisador selecionado com o nome correspondente
                                   setPesquisadoresSelecionados(prev => prev.filter(pesquisador => pesquisador.name !== props.name));
+
+                                  toast("Pesquisador(a) removido dos selecionados", {
+                                    description: `${props.name}`,
+                                    action: {
+                                      label: "Fechar",
+                                      onClick: () => console.log("Fechar"),
+                                    },
+                                  });
                                 } else {
                                   // Adiciona o novo pesquisador selecionado
                                   setPesquisadoresSelecionados(prev => [
@@ -498,6 +506,14 @@ useEffect(() => {
                                       graduation: props.graduation,
                                     }
                                   ]);
+
+                                  toast("Pesquisador(a) adicionado aos selecionados", {
+                                    description: `${props.name}`,
+                                    action: {
+                                      label: "Fechar",
+                                      onClick: () => console.log("Fechar"),
+                                    },
+                                  });
                                 }
                               }}
                               className={`

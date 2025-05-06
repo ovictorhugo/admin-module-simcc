@@ -44,7 +44,7 @@ export function FilterArticle(props: Props) {
   const [itensSelecionados, setItensSelecionados] = useState<string[]>([]);
   const currentDate = new Date();
   const year = currentDate.getFullYear();
-  const [filterYear, setFilterYear] = useState([1990]);
+  const [filterYear, setFilterYear] = useState([year-5]);
 
   const [checkboxStates, setCheckboxStates] = useState<{ [index: number]: boolean }>({});
   const [isFirstRender, setIsFirstRender] = useState(true);

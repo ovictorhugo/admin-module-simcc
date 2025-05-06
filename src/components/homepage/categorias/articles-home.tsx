@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { useModalResult } from "../../hooks/use-modal-result";
 import { UserContext } from "../../../context/context";
 
@@ -31,6 +31,7 @@ export type Publicacao = {
 }
 
 import { Switch } from "../../ui/switch";
+import debounce from "lodash.debounce"; // Importing debounce
 
 import {
   Accordion,
@@ -72,7 +73,14 @@ export function ArticlesHome() {
   const [distinct, setDistinct] = useState(false)
   const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
   const [typeVisu, setTypeVisu] = useState('block')
-
+ 
+  const updateDistinct = useCallback(
+    debounce((value: boolean) => {
+      setDistinct(value);
+    }, 300), // 300ms de debounce
+    []
+  );
+  
   const total = publicacoes.length;
 const validDoiCount = publicacoes.filter(pub => pub.doi && pub.doi.trim() !== "").length;
 const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
@@ -80,7 +88,7 @@ const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
   const idGraduateProgram = ''
 
   const [filters, setFilters] = useState<Filter[]>([]);
-
+  const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
   // Função para lidar com a atualização de researcherData
   const handleResearcherUpdate = (newResearcherData: Filter[]) => {
     setFilters(newResearcherData);
@@ -89,20 +97,21 @@ const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
   };
   // Atualização de `yearString` e `qualisString` dentro do useMemo
   const urlTermPublicacoes = useMemo(() => {
-    const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
+    const currentDate = new Date();
+  const year = currentDate.getFullYear();
     const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
     console.log('yearString', yearString)
-    let url = `${urlGeral}bibliographic_production_article?terms=&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=`;
+    let url = `${urlGeral}bibliographic_production_article?terms=&year=${yearString || year-5}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=`;
 
     if (itemsSelecionados.length > 0) {
       if (searchType === 'name') {
-        url = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=&type=ARTICLE&qualis=${qualisString}&year=${yearString}`;
+        url = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=&type=ARTICLE&qualis=${qualisString}&year=${yearString || year-5}`;
       } else if (searchType === 'article') {
-        url = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=`;
+        url = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString || year-5}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=`;
       } else if (searchType === 'area') {
-        url = `${urlGeral}bibliographic_production_article_area?area_specialty=${valoresSelecionadosExport.replace(/;/g, ' ')}&great_area=&year=${yearString}&qualis=${qualisString}`;
+        url = `${urlGeral}bibliographic_production_article_area?area_specialty=${valoresSelecionadosExport.replace(/;/g, ' ')}&great_area=&year=${yearString || year-5}&qualis=${qualisString}`;
       } else if (searchType === 'abstract') {
-        url = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}`;
+        url = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString || year-5}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}`;
       }
     }
 
@@ -111,7 +120,7 @@ const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
   }, [filters, searchType, valoresSelecionadosExport, distinct, idGraduateProgram]);
 
 
-  console.log('urlTermPublicacoes', urlTermPublicacoes)
+
   useMemo(() => {
     const fetchData = async () => {
       isLoading(true)
@@ -137,6 +146,7 @@ const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
       }
     };
     fetchData();
+    console.log('urlTermPublicacoes', urlTermPublicacoes)
   }, [urlTermPublicacoes]);
 
   const items = Array.from({ length: 12 }, (_, index) => (
@@ -166,16 +176,16 @@ const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
             <div>
             <div className="text-2xl font-bold">{publicacoes.length}</div>
             <p className="text-xs text-muted-foreground flex gap-2">
-              encontrados na busca <p className="text-eng-blue">({percentage.toFixed(2)}% com DOI)</p>
+              encontrados na busca desde {yearString} <p className="text-eng-blue">({percentage.toFixed(2)}% com DOI)</p>
             </p>
             </div>
 
             <div className="gap-2 flex items-center h-fit text-xs text-gray-500 dark:text-gray-300">
   <p>Artigos:</p>
   <Switch
-    checked={distinct}
-    onCheckedChange={(value) => setDistinct(value)}
-  />
+  checked={distinct}
+  onCheckedChange={(value) => updateDistinct(value)}
+/>
   <span>{distinct ? "Sem repetição" : "Com repetição"}</span>
 </div>
           </CardContent>

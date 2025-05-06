@@ -11,6 +11,7 @@ import pq from '../../../../assets/pq.png'
 import { CardTitle } from "../../../ui/card"
 import { InfiniteMovingCards } from "../../../ui/infinite-moving-cards"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../ui/tooltip"
+import { toast } from "sonner"
 
 type Research = {
   among: number,
@@ -87,6 +88,14 @@ export function ResearchItem(props: Research) {
       setPesquisadoresSelecionados(prev =>
         prev.filter(pesquisador => pesquisador.name !== props.name)
       );
+
+       toast("Pesquisador(a) removido dos selecionados", {
+                                          description: `${props.name}`,
+                                          action: {
+                                            label: "Fechar",
+                                            onClick: () => console.log("Fechar"),
+                                          },
+                                        });
     } else {
       setPesquisadoresSelecionados(prev => [
         ...prev,
@@ -100,6 +109,14 @@ export function ResearchItem(props: Research) {
           graduation: props.graduation,
         }
       ]);
+
+        toast("Pesquisador(a) adicionado aos selecionados", {
+                                          description: `${props.name}`,
+                                          action: {
+                                            label: "Fechar",
+                                            onClick: () => console.log("Fechar"),
+                                          },
+                                        });
     }
   }}
   size={'icon'}

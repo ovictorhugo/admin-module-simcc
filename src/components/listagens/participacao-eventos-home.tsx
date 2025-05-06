@@ -47,11 +47,12 @@ export function ParticipacaoEventosHome() {
     }
 
     const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
-
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
     const {urlGeral, valoresSelecionadosExport} = useContext(UserContext)
     const [distinct, setDistinct] = useState(false)
 
-    let urlTermPublicacoes = `${urlGeral}researcher_production/events?researcher_id=&year=${yearString}&distinct=${distinct ? '1' : '0'}`;
+    let urlTermPublicacoes = `${urlGeral}researcher_production/events?researcher_id=&year=${yearString || year-5}&distinct=${distinct ? '1' : '0'}`;
   
     console.log(urlTermPublicacoes)
     useMemo(() => {
@@ -99,7 +100,7 @@ export function ParticipacaoEventosHome() {
                   <CardContent>
                     <div className="text-2xl font-bold">{publicacoes.length}</div>
                     <p className="text-xs text-muted-foreground">
-                      encontradas na busca
+                      encontradas na busca desde {yearString}
                     </p>
                   </CardContent>
                   </Alert>
@@ -139,17 +140,7 @@ export function ParticipacaoEventosHome() {
             </div>
 
             <div className="flex gap-3 mr-3  items-center h-full">
-            <div className="gap-2 flex items-center text-xs text-gray-500 dark:text-gray-300">
-                        <p>Trabalhos em eventos:</p>
-                        Iguais
-                    <Switch
-                     checked={distinct}
-                     onCheckedChange={(value) => setDistinct(value)}
-
-                />
-
-                Distintas
-                    </div>
+          
 
             <Button onClick={() => setTypeVisu('rows')}  variant={typeVisu == 'block' ? 'ghost' : 'outline' } size={'icon'}>
                             <Rows size={16} className=" whitespace-nowrap" />

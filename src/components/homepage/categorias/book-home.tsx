@@ -1,9 +1,10 @@
-import { useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../../context/context";
 import { FilterYearPopUp } from "../../popup/filters-year-popup";
 import { Skeleton } from "../../ui/skeleton";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../ui/accordion";
 import { HeaderResultTypeHome } from "./header-result-type-home";
+import debounce from "lodash.debounce"; // Importing debounce
 
 import { Button } from "../../ui/button";
 import { Book, Books, ChartBar, Rows, SquaresFour } from "phosphor-react";
@@ -41,19 +42,28 @@ export function BookHome() {
 
   const [filters, setFilters] = useState<Filter[]>([]);
 
+  let yearString = useMemo(() => {
+    return filters.length > 0 ? filters[0].year.join(';') : '';
+  }, [filters]);
+
   const handleResearcherUpdate = (newResearcherData: Filter[]) => {
     setFilters(newResearcherData);
+
+    let yearString = newResearcherData.length > 0 
+    ? newResearcherData[0].year.join(';') 
+    : '';
 
   }
   const [distinct, setDistinct] = useState(false)
   const [distinct2, setDistinct2] = useState(false)
-  const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
+  
   const { urlGeral, valoresSelecionadosExport } = useContext(UserContext)
-
-  let urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=&year=${yearString}&term=${valoresSelecionadosExport}&distinct=${distinct ? '1' : '0'}`;
-  console.log(urlTermPublicacoes)
-  useMemo(() => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  let urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=&year=${yearString || year-5}&term=${valoresSelecionadosExport}&distinct=${distinct ? '1' : '0'}`;
+  
+  useEffect(() => {
     const fetchData = async () => {
       try {
         isLoading(true)
@@ -77,7 +87,8 @@ export function BookHome() {
       }
     };
     fetchData();
-  }, [urlTermPublicacoes]);
+    console.log(urlTermPublicacoes)
+  }, [urlTermPublicacoes, yearString]);
 
   const items = Array.from({ length: 12 }, (_, index) => (
     <Skeleton key={index} className="w-full rounded-md h-[170px]" />
@@ -85,10 +96,10 @@ export function BookHome() {
 
   ///cap
 
-  let urlTermCap = `${urlGeral}book_chapter_production_researcher?researcher_id=&year=${yearString}&term=${valoresSelecionadosExport}&distinct=${distinct2 ? '1' : '0'}`
+  let urlTermCap = `${urlGeral}book_chapter_production_researcher?researcher_id=&year=${yearString || year-5}&term=${valoresSelecionadosExport}&distinct=${distinct2 ? '1' : '0'}`
 console.log(urlTermCap)
 
-  useMemo(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         isLoading2(true)
@@ -114,6 +125,20 @@ console.log(urlTermCap)
     fetchData();
   }, [urlTermCap]);
 
+  const updateDistinct = useCallback(
+      debounce((value: boolean) => {
+        setDistinct(value);
+      }, 300), // 300ms de debounce
+      []
+    );
+
+    const updateDistinct2 = useCallback(
+      debounce((value: boolean) => {
+        setDistinct2(value);
+      }, 300), // 300ms de debounce
+      []
+    );
+
   return (
     <div className="grid grid-cols-1 gap-4 pb-16">
       <HeaderResult />
@@ -135,16 +160,16 @@ console.log(urlTermCap)
             <div>
             <div className="text-2xl font-bold">{publicacoes.length}</div>
             <p className="text-xs text-muted-foreground flex gap-2">
-              encontrados na busca 
+              encontrados na busca desde {yearString}
             </p>
             </div>
 
             <div className="gap-2 flex items-center h-fit text-xs text-gray-500 dark:text-gray-300">
   <p>Livros:</p>
   <Switch
-    checked={distinct}
-    onCheckedChange={(value) => setDistinct(value)}
-  />
+  checked={distinct}
+  onCheckedChange={(value) => updateDistinct(value)}
+/>
   <span>{distinct ? "Sem repetição" : "Com repetição"}</span>
 </div>
           </CardContent>
@@ -168,9 +193,9 @@ console.log(urlTermCap)
             <div className="gap-2 flex items-center h-fit text-xs text-gray-500 dark:text-gray-300">
   <p>Capítulos:</p>
   <Switch
-    checked={distinct2}
-    onCheckedChange={(value) => setDistinct2(value)}
-  />
+  checked={distinct2}
+  onCheckedChange={(value) => updateDistinct2(value)}
+/>
   <span>{distinct ? "Sem repetição" : "Com repetição"}</span>
 </div>
           </CardContent>
@@ -188,7 +213,7 @@ console.log(urlTermCap)
             </AccordionTrigger>
           </div>
           <AccordionContent >
-            {loading ? (
+            {(loading || loading2) ? (
               <Skeleton className="w-full rounded-md h-[300px]" />
             ) : (
               <GraficoLivros capLivros={capLivros} publicacoes={publicacoes} />

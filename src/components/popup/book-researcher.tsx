@@ -112,14 +112,15 @@ export function BooksResearcherPopUp(props: Props) {
 
   const resultadoFormatado = formatTerms(itemsSelecionadosPopUp);
 
-
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
 
   const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
-  let urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=${props.name}&year=${yearString}&term=`;
+  let urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=${props.name}&year=${yearString || year-5}&term=`;
 
   if (searchType == "book") {
-    urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=${props.name}&year=${yearString}&term=${resultadoFormatado}`;
+    urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=${props.name}&year=${yearString || year-5}&term=${resultadoFormatado}`;
   }
 
   useMemo(() => {
@@ -149,10 +150,10 @@ export function BooksResearcherPopUp(props: Props) {
   }, [urlTermPublicacoes]);
 
 
-  let urlTermCap = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.name}&year=${yearString}&term=`
+  let urlTermCap = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.name}&year=${yearString || year-5}&term=`
 
   if (searchType == "book") {
-    urlTermCap = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.name}&year=${yearString}&term=${formatTerms(itemsSelecionadosCap)}`
+    urlTermCap = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.name}&year=${yearString || year-5}&term=${formatTerms(itemsSelecionadosCap)}`
   }
 
   useMemo(() => {
@@ -337,7 +338,7 @@ export function BooksResearcherPopUp(props: Props) {
                   </ResponsiveMasonry>
                 ) : (
                   publicacoes.length == 0 ? (
-                    <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
+                    <div className="items-center justify-center w-full flex text-center pt-6">Nenhum resultado encontrado a partir de {year-5}</div>
                   ) : (
                     <BookBlockPopUp
                       articles={publicacoes}
@@ -447,7 +448,7 @@ export function BooksResearcherPopUp(props: Props) {
                   </ResponsiveMasonry>
                 ) : (
                   capLivros.length == 0 ? (
-                    <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
+                    <div className="items-center justify-center w-full flex text-center pt-6">Nenhum resultado encontrado a partir de {year}</div>
                   ) : (
                     <BookBlockPopUp
                       articles={capLivros}

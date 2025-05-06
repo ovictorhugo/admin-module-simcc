@@ -549,8 +549,8 @@ export function ResearcherPage() {
       </Helmet>
 
       <main className="flex flex-1 flex-col  p-4 md:p-8 ">
-        <Tabs defaultValue={tab} value={tab} className="h-full" >
-          <div className="w-full  gap-4 m pb-0 md:pb-0">
+        <Tabs defaultValue={tab} value={tab} className="h-full grid grid-cols-1" >
+          <div className="w-full  gap-4 m pb-0 md:pb-0 grid grid-cols-1">
             <div className="flex items-center gap-4">
 
               <Button onClick={handleVoltar} variant="outline" size="icon" className="h-7 w-7">
@@ -943,73 +943,10 @@ export function ResearcherPage() {
                         </div></div>
                     )}
 
-                    {researcher.slice(0, 1).map((props) => {
-                      if (props.relevance_itens !== 0) {
-                        return (
-                          <div>
-                            <Accordion defaultValue="item-1" type="single" collapsible>
-                              <AccordionItem value="item-1">
-                                <div className="flex mb-2">
-                                  <HeaderResultTypeHome title="Produções relevantes" icon={<Star size={24} className="text-gray-400" />}>
-                                    <div className="hidden md:flex gap-3 mr-3">
-                                      <Button onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
-                                        <Rows size={16} className="whitespace-nowrap" />
-                                      </Button>
-                                      <Button onClick={() => setTypeVisu('block')} variant={typeVisu === 'block' ? 'outline' : 'ghost'} size={'icon'}>
-                                        <SquaresFour size={16} className="whitespace-nowrap" />
-                                      </Button>
-                                    </div>
-                                  </HeaderResultTypeHome>
-                                  <AccordionTrigger>
-
-                                  </AccordionTrigger>
-                                </div>
-                                <AccordionContent>
-                                  {typeVisu === 'block' ? (
-                                    loading ? (
-                                      <ResponsiveMasonry
-                                        columnsCountBreakPoints={{
-                                          350: 2,
-                                          750: 3,
-                                          900: 4,
-                                          1200: 6,
-                                          1500: 6,
-                                          1700: 7
-                                        }}
-                                      >
-                                        <Masonry gutter="16px">
-                                          {items.map((item, index) => (
-                                            <div key={index}>{item}</div>
-                                          ))}
-                                        </Masonry>
-                                      </ResponsiveMasonry>
-                                    ) : (
-                                      researcher.slice(0, 1).map((user) => (
-                                        <div className="grid grid-cols-1">
-                                          <RelevanceProduction name={user.id} />
-                                        </div>
-                                      ))
-
-                                    )
-                                  ) : (
-                                    loading ? (
-                                      <Skeleton className="w-full rounded-md h-[400px]" />
-                                    ) : (
-                                      <div></div>
-                                    )
-                                  )}
-                                </AccordionContent>
-                              </AccordionItem>
-                            </Accordion>
-                          </div>
-                        );
-                      }
-
-                      // Retorna null caso a condição não seja atendida
-                      return null;
-                    })}
-
+                    
+                        <div className="grid grid-cols-1">
                     <div className="flex gap-6 xl:flex-row flex-col-reverse">
+                      <div className="grid grid-cols-1">
                       <div className="w-full flex-1 flex">
                         <Tabs defaultValue="articles" value={value} className="flex-1 flex flex-col w-full">
                           {researcher.slice(0, 1).map(() => (
@@ -1191,6 +1128,8 @@ export function ResearcherPage() {
                         </Tabs>
                       </div>
 
+                      </div>
+
                       <div className="xl:w-[350px] min-w-[350px]  w-full grid grid-cols-1">
                         <ResponsiveMasonry
                           columnsCountBreakPoints={{
@@ -1279,6 +1218,7 @@ export function ResearcherPage() {
                           </Masonry>
                         </ResponsiveMasonry>
                       </div>
+                    </div>
                     </div>
                   </DrawerHeader>
                 </div>

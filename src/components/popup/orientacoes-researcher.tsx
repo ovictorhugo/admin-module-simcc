@@ -64,12 +64,13 @@ export function OrientacoesResearcherPopUp(props: Props) {
   const handleResearcherUpdate = (newResearcherData: Filter[]) => {
     setFilters(newResearcherData);
   };
-
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
   const [type, setType] = useState('')
 
   const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
 
-  const urlTermPublicacoes = `${urlGeral}guidance_researcher?researcher_id=${props.name}&year=${yearString}`;
+  const urlTermPublicacoes = `${urlGeral}guidance_researcher?researcher_id=${props.name}&year=${yearString || year-5}`;
 
   console.log(urlTermPublicacoes)
   useMemo(() => {
@@ -237,7 +238,7 @@ export function OrientacoesResearcherPopUp(props: Props) {
                   </ResponsiveMasonry>
                 ) : (
                   publicacoes.length == 0 ? (
-                    <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
+                    <div className="items-center justify-center w-full flex text-center pt-6">Nenhum resultado encontrado a partir de {year-5}</div>
                   ) : (
                     <BookBlockPopUp
                       articles={filteredPublicacoes}

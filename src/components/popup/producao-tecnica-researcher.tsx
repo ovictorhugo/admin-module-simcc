@@ -113,11 +113,12 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
 
   const resultadoFormatado = formatTerms(itemsSelecionadosPopUp);
   const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
-
-  let urlTermPublicacoes = `${urlGeral}patent_production_researcher?researcher_id=${props.name}&year=${yearString}&term=`;
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  let urlTermPublicacoes = `${urlGeral}patent_production_researcher?researcher_id=${props.name}&year=${yearString || year-5}&term=`;
 
   if (searchType == "patent") {
-    urlTermPublicacoes = `${urlGeral}patent_production_researcher?researcher_id=${props.name}&year=${yearString}&term=${resultadoFormatado}`;
+    urlTermPublicacoes = `${urlGeral}patent_production_researcher?researcher_id=${props.name}&year=${yearString || year-5}&term=${resultadoFormatado}`;
   }
 
   useMemo(() => {
@@ -148,7 +149,7 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
 
 
   //softaewra
-  const urlTermSoftware = `${urlGeral}software_production_researcher?researcher_id=${props.name}&year=${yearString}`;
+  const urlTermSoftware = `${urlGeral}software_production_researcher?researcher_id=${props.name}&year=${yearString || year-5}`;
 
   useMemo(() => {
     const fetchData = async () => {
@@ -177,7 +178,7 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
   }, [urlTermSoftware]);
 
   //marca
-  let urlTermMarca = `${urlGeral}brand_production_researcher?researcher_id=${props.name}&year=${yearString}`;
+  let urlTermMarca = `${urlGeral}brand_production_researcher?researcher_id=${props.name}&year=${yearString || year-5}`;
   const [marca, setMarca] = useState<Livros[]>([]);
 
   useMemo(() => {
@@ -347,7 +348,7 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
                   </ResponsiveMasonry>
                 ) : (
                   publicacoes.length == 0 ? (
-                    <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
+                    <div className="items-center justify-center w-full flex text-center pt-6">Nenhum resultado encontrado a partir de {year}</div>
                   ) : (
                     <BookBlockPopUp
                       articles={publicacoes}
@@ -416,7 +417,7 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
                   </ResponsiveMasonry>
                 ) : (
                   software.length == 0 ? (
-                    <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
+                    <div className="items-center justify-center w-full flex text-center pt-6">Nenhum resultado encontrado a partir de {year}</div>
                   ) : (
                     <BookBlockPopUp
                       articles={software}
@@ -485,7 +486,7 @@ export function ProducaoTecnicaResearcherPopUp(props: Props) {
                   </ResponsiveMasonry>
                 ) : (
                   marca.length == 0 ? (
-                    <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
+                    <div className="items-center justify-center w-full flex text-center pt-6">Nenhum resultado encontrado a partir de {year-5}</div>
                   ) : (
                     <BookBlockPopUp
                       articles={marca}

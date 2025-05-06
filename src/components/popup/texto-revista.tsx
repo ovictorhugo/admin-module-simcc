@@ -59,8 +59,9 @@ export function TextoRevista(props: Props) {
 
 
   const yearString = filters.length > 0 ? filters[0].year.join(';') : '';
-
-  const urlTermPublicacoes = `${urlGeral}researcher_production/papers_magazine?researcher_id=${props.name}&year=${yearString}`;
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const urlTermPublicacoes = `${urlGeral}researcher_production/papers_magazine?researcher_id=${props.name}&year=${yearString || year-5}`;
 
   console.log(urlTermPublicacoes)
 
@@ -172,7 +173,7 @@ export function TextoRevista(props: Props) {
                 </ResponsiveMasonry>
               ) : (
                 publicacoes.length == 0 ? (
-                  <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
+                  <div className="items-center justify-center w-full flex text-center pt-6">Nenhum resultado encontrado a partir de {year-5}</div>
                 ) : (
                   <BookBlockPopUp
                     articles={publicacoes}

@@ -125,7 +125,7 @@ const [loading, setLoading] = useState(false)
 
             const [isOn, setIsOn] = useState(true);
  
-            const [value, setValue] = useState('pesquisadores')
+            const [value, setValue] = useState('book')
 
             const randomResearchers = useMemo(() => {
               return researcher.sort(() => Math.random() - 0.5).slice(0, 40);
@@ -213,11 +213,12 @@ const [loading, setLoading] = useState(false)
             };
 
             const tabs = [
+              { id: "book", label: "Livros e capítulos", icon: BookOpen },
               { id: "pesquisadores", label: "Pesquisadores", icon: Users },
               { id: "tecnicos", label: "Técnicos", icon: UserCog, condition: version },
               { id: "bolsistas", label: "Bolsistas CNPq", icon: UserSearch },
               { id: "article", label: "Artigos", icon: File },
-              { id: "book", label: "Livros e capítulos", icon: BookOpen },
+           
               { id: "patent", label: "Patentes", icon: Copyright },
               { id: "software", label: "Softwares", icon: Code },
               { id: "brand", label: "Marcas", icon: StripeLogo },
