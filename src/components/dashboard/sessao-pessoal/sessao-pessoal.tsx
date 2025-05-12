@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Button } from "../../ui/button";
 
-import { ChevronLeft, Disc, File, Plus, Weight } from "lucide-react";
+import { ChevronLeft, Disc, File, Plus, Trash, Trash2, Upload, Weight } from "lucide-react";
 
 
 import { useContext, useState } from "react";
@@ -17,6 +17,7 @@ import { HeaderResult } from "../../homepage/header-results";
 import { HeaderResultTypeHome } from "../../homepage/categorias/header-result-type-home";
 import { FilePdf } from "phosphor-react";
 import { HeaderInstitution } from "../components/header-institutuion";
+import { toast } from "sonner";
 
 
 export function SessaoPessoal() {
@@ -26,24 +27,69 @@ export function SessaoPessoal() {
           history(-1);
         }
 
-        
+        const {urlGeral} = useContext(UserContext)
         const [tab, setTab] = useState('all')
         
         //images
         const [images, setImages] = useState<{ url: string; name: string; type: string; size: number }[]>([]);
 
+        const [files, setFiles] = useState<File[]>([]);
+
         const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
           const uploadedFiles = event.target.files;
           if (uploadedFiles) {
-            const newFiles = Array.from(uploadedFiles).map((file) => ({
+            const newFiles = Array.from(uploadedFiles);
+            setFiles((prev) => [...prev, ...newFiles]);
+        
+            // Se quiser continuar mostrando os previews:
+            const previewData = newFiles.map((file) => ({
               url: URL.createObjectURL(file),
               name: file.name,
               type: file.type,
               size: file.size,
             }));
-            setImages((prevFiles) => [...prevFiles, ...newFiles]);
+            setImages((prevFiles) => [...prevFiles, ...previewData]);
           }
         };
+        
+
+        const uploadFiles = async () => {
+          if (files.length === 0) {
+            toast("Nenhum arquivo para enviar");
+            return;
+          }
+        
+          const formData = new FormData();
+          files.forEach((file) => {
+            formData.append("files", file); // ou "file[]" se o backend espera múltiplos arquivos
+          });
+        
+          try {
+            const response = await fetch(`${urlGeral}ufmg/researcher`, {
+              method: "POST",
+              body: formData,
+            });
+        
+            if (!response.ok) throw new Error("Erro ao enviar arquivos");
+        
+            const result = await response.json();
+            toast("Upload realizado com sucesso!");
+            setFiles([])
+            setImages([])
+            console.log("Resposta do backend:", result);
+          } catch (error) {
+            console.error("Erro no upload:", error);
+            toast("Erro ao enviar arquivos", {
+              description: "Verifique sua conexão ou o formato do arquivo.",
+            });
+          }
+        };
+   
+        
+        const removeImage = (indexToRemove: number) => {
+          setImages((prevImages) => prevImages.filter((_, index) => index !== indexToRemove));
+        };
+        
 
 const {version} = useContext(UserContext)
     
@@ -122,8 +168,9 @@ const {version} = useContext(UserContext)
                    <HeaderResultTypeHome title="Arquivos selecionados" icon={<FilePdf size={24} className="text-gray-400" />} />
                    </div>
                      {images.map((file, index) => (
-        <Alert key={index} className="flex items-center gap-4">
-         <Alert className="aspect-square h-13 w-12 flex items-center justify-center">
+        <Alert key={index} className="flex items-center gap-4 group w-full justify-between">
+<div className="flex gap-3 items-center">
+<Alert className="aspect-square h-13 w-12 flex items-center justify-center">
 <File size={16}/>
          </Alert>
           <div>
@@ -133,9 +180,33 @@ const {version} = useContext(UserContext)
            <p className="text-sm text-gray-500 flex items-center gap-1"><Weight size={12}/> {(file.size / 1024).toFixed(2)} KB</p>
            </div>
           </div>
+
+        
+</div>
+
+<div>
+          <Button
+      onClick={() => removeImage(index)}
+     variant={'destructive'}
+     size={'icon'}
+     className="hidden h-8 w-8 group-hover:flex"
+    >
+      <Trash size={16} />
+    </Button>
+          </div>
         </Alert>
       ))}
                   </div>
+                )}
+
+{images.length > 0 && (
+                 <div className="flex w-full justify-end gap-3">
+                     <Button variant={'ghost'} onClick={() => {
+                      setImages([])
+                      setFiles([])
+                     }}><Trash size={16}/>Deletar arquivos</Button>
+                  <Button onClick={() => uploadFiles()}><Upload size={16}/>Upload dos arquivos</Button>
+                 </div>
                 )}
 
 
