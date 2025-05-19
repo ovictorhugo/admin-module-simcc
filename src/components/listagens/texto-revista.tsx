@@ -17,6 +17,7 @@ import { TableReseracherMarcasPopup } from "../popup/columns/producoes-tecnicas/
 import { GraficoTextoRevista } from "../popup/graficos/grafico-texto-revista"
 import { TableTextoRevista } from "../popup/columns/table-texto-revista"
 import debounce from "lodash.debounce"; // Importing debounce
+import { useQuery } from "../dashboard/builder-page/tabelas/tabela-artigos"
 
 type Patente = {
   authors: string;
@@ -54,7 +55,11 @@ export function TextoRevistaHome() {
     const [distinct, setDistinct] = useState(false)
     const currentDate = new Date();
     const year = currentDate.getFullYear();
-    let urlTermPublicacoes = `${urlGeral}researcher_production/papers_magazine?researcher_id=&year=${yearString || year-5}&distinct=${distinct ? '1' : '0'}`;
+    const queryUrl = useQuery();
+    const Page =  queryUrl.get('page') || '1';
+    const Length =  queryUrl.get('length') || '12';
+    
+    let urlTermPublicacoes = `${urlGeral}researcher_production/papers_magazine?researcher_id=&year=${yearString || year-5}&distinct=${distinct ? '1' : '0'}&lenght=${Length}&page=${Page}`;
   
     console.log(urlTermPublicacoes)
     useMemo(() => {

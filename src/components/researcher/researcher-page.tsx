@@ -1036,7 +1036,7 @@ export function ResearcherPage() {
                                   >
                                     <Waypoints size={16} className="" />
 
-                                    Cargos e funções
+                                    Atuação profissional
                                   </TabsTrigger>
 
                                 </TabsList>

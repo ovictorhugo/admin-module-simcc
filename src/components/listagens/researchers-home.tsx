@@ -721,8 +721,11 @@ export function ResearchersHomeListagens() {
   let FinalOpenAlex = openAlexState || ''
 
   const isModalOpen = isOpen && type === "researchers-home";
-
-  let urlTermPesquisadores =`${urlGeral}researcherName?name=`;
+ 
+  const Page =  queryUrl.get('page') || '1';
+  const Length =  queryUrl.get('length') || '12';
+  
+  let urlTermPesquisadores =`${urlGeral}researcherName?name=&lenght=${Length}&page=${Page}`;
 
  
   console.log(urlTermPesquisadores);

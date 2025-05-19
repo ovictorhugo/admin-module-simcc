@@ -16,6 +16,7 @@ import { BlockItemGeral } from "../homepage/categorias/book-home/block-item-gera
 import { TableReseracherMarcasPopup } from "../popup/columns/producoes-tecnicas/table-marcas-popup"
 import { GraficoTrabalhoEvento } from "../popup/graficos/grafico-trabalho-evento"
 import debounce from "lodash.debounce"; // Importing debounce
+import { useQuery } from "../dashboard/builder-page/tabelas/tabela-artigos"
 
 type Patente = {
   authors: string;
@@ -53,7 +54,11 @@ export function WorkEventHome() {
     const [distinct, setDistinct] = useState(false)
     const currentDate = new Date();
     const year = currentDate.getFullYear();
-    let urlTermPublicacoes = `${urlGeral}researcher_production/events?researcher_id=&year=${yearString || year-5}&distinct=${distinct ? '1' : '0'}`;
+    const queryUrl = useQuery();
+    const Page =  queryUrl.get('page') || '1';
+    const Length =  queryUrl.get('length') || '12';
+    
+    let urlTermPublicacoes = `${urlGeral}researcher_production/events?researcher_id=&year=${yearString || year-5}&distinct=${distinct ? '1' : '0'}&lenght=${Length}&page=${Page}`;
   
     console.log(urlTermPublicacoes)
     useMemo(() => {

@@ -776,7 +776,7 @@ useEffect(() => {
                                 className="flex gap-2 items-center"
                               >
                                 <Waypoints size={16} className="" />
-                                Cargos e funções
+                                Atuação profissional
                               </TabsTrigger>
 
                             </TabsList>

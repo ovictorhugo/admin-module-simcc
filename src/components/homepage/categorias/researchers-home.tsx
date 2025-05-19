@@ -786,21 +786,25 @@ export function ResearchersHome() {
   const isModalOpen = isOpen && type === "researchers-home";
 
   let urlTermPesquisadores = ``;
+ 
+  const Page =  queryUrl.get('page') || '1';
+  const Length =  queryUrl.get('length') || '12';
+  
 
   if (searchType === 'name') {
-    urlTermPesquisadores = `${urlGeral}researcherName?name=${terms?.replace(/[;|()]/g, '')}`;
+    urlTermPesquisadores = `${urlGeral}researcherName?name=${terms?.replace(/[;|()]/g, '')}&lenght=${Length}&page=${Page}`;
   } else if (searchType === 'article') {
-    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ARTICLE&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}`;
+    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ARTICLE&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&lenght=${Length}&page=${Page}`;
   } else if (searchType === 'book') {
-    urlTermPesquisadores = `${urlGeral}researcherBook?term=${terms}&university=&type=BOOK&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}`; //
+    urlTermPesquisadores = `${urlGeral}researcherBook?term=${terms}&university=&type=BOOK&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&lenght=${Length}&page=${Page}`; //
   } else if (searchType === 'area') {
-    urlTermPesquisadores = `${urlGeral}researcherArea_specialty?area_specialty=${terms}&university=&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}`;
+    urlTermPesquisadores = `${urlGeral}researcherArea_specialty?area_specialty=${terms}&university=&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&lenght=${Length}&page=${Page}`;
   } else if (searchType === 'speaker') {
-    urlTermPesquisadores = `${urlGeral}researcherParticipationEvent?term=${terms}&university=&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}`; //
+    urlTermPesquisadores = `${urlGeral}researcherParticipationEvent?term=${terms}&university=&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&lenght=${Length}&page=${Page}`; //
   } else if (searchType === 'patent') {
-    urlTermPesquisadores = `${urlGeral}researcherPatent?term=${terms}&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&university=`;
+    urlTermPesquisadores = `${urlGeral}researcherPatent?term=${terms}&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&university=&lenght=${Length}&page=${Page}`;
   } else if (searchType === 'abstract') {
-    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ABSTRACT&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}`;
+    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ABSTRACT&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&lenght=${Length}&page=${Page}`;
   }
 
   console.log(urlTermPesquisadores);

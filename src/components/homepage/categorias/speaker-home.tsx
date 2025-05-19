@@ -17,6 +17,7 @@ import { GraficosEventos } from "../../popup/graficos/grafico-eventos";
 import { BlockItemGeral } from "./book-home/block-item-geral";
 import { HeaderResult } from "../header-results";
 import { Switch } from "../../ui/switch";
+import { useQuery } from "../../dashboard/builder-page/tabelas/tabela-artigos";
 
 type Patente = {
   event_name: string
@@ -49,7 +50,11 @@ export function SpeakerHome() {
   const year = currentDate.getFullYear();
   const { urlGeral, valoresSelecionadosExport } = useContext(UserContext)
   const [distinct, setDistinct] = useState(false)
-  let urlTermPublicacoes = `${urlGeral}pevent_researcher?researcher_id=&year=${yearString || year-5}&term=${valoresSelecionadosExport}&nature=&distinct=${distinct ? '1' : '0'}`;
+  const queryUrl = useQuery();
+  const Page =  queryUrl.get('page') || '1';
+  const Length =  queryUrl.get('length') || '12';
+  
+  let urlTermPublicacoes = `${urlGeral}pevent_researcher?researcher_id=&year=${yearString || year-5}&term=${valoresSelecionadosExport}&nature=&distinct=${distinct ? '1' : '0'}&lenght=${Length}&page=${Page}`;
  
 console.log(urlTermPublicacoes)
   useMemo(() => {

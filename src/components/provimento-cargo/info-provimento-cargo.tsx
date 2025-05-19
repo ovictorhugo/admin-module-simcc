@@ -318,31 +318,6 @@ return(
 
         <h2 className="text-2xl font-medium ">Índices</h2>
 
-        <Alert className="">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <div>
-                    <CardTitle className="text-sm font-medium">
-                    Projeção estimada de salário
-                    </CardTitle>
-                    <CardDescription>Bolsas PQ e DT </CardDescription>
-                    </div>
-
-                    <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Fonte: Conectee</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                   
-                  </CardHeader>
-
-
-                  <CardContent className="py-0 flex-1 items-center justify-center">
-                       
-                          </CardContent>
-                    </Alert>
       
         <Accordion defaultValue="item-1" type="single" collapsible>
         <AccordionItem value="item-1">

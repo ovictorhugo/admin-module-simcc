@@ -328,7 +328,7 @@ export function Info() {
   <li><strong>Textos em Revista:</strong> Publicações em revistas com título da matéria, nome da revista e ano de publicação.</li>
   <li><strong>Trabalhos em Eventos:</strong> Registros de trabalhos completos e resumos expandidos publicados em anais de eventos acadêmicos, com título, autoria, evento, ISBN dos anais e ano.</li>
   <li><strong>Projetos de Pesquisa:</strong> Detalhamento de projetos de pesquisa coordenados ou em que há participação, com título, resumo, instituição de execução, agência financiadora, ano de ínicio, situação atual (em andamento ou concluído), produções associadas.</li>
-  <li><strong>Cargos e Funções:</strong> Registro de atividades administrativas e acadêmicas, incluindo coordenação de cursos, chefias de departamento, direção de unidade, representação em colegiados e outros; com período de atuação e descrição da função.</li>
+  <li><strong>Atuação profissional:</strong> Registro de atividades administrativas e acadêmicas, incluindo coordenação de cursos, chefias de departamento, direção de unidade, representação em colegiados e outros; com período de atuação e descrição da função.</li>
   <li><strong>Outras Informações Relevantes:</strong> Dados complementares como índice H, índice i10, total de citações, além de indicadores bibliométricos e métricas de impacto institucional.</li>
 
   <li><strong>Atuação em Grupos de Pesquisa:</strong> Vinculação a grupos de pesquisa certificados pelo CNPq, com nome do grupo, líder e vice-líder, linha de pesquisa e instituição.</li>
