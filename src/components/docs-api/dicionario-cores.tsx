@@ -12,10 +12,11 @@ import { Card, CardContent } from "../ui/card";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { toast } from "sonner";
+import { ClipboardCopy } from "lucide-react"
 
 export function DicionarioCores() {
-    const { version } = useContext(UserContext);
-    const platform = version ? "Conectee" : "Simcc";
+  const { version } = useContext(UserContext);
+  const platform = version ? "Conectee" : "Simcc";
   const version2 = getVersion();
 
   const colors = [
@@ -131,13 +132,13 @@ export function DicionarioCores() {
 
   const handleCopy = (value: string) => {
     navigator.clipboard.writeText(value);
-  
+
   };
 
   const [format, setFormat] = useState<"hex" | "rgb">("hex");
 
-    return(
-        <main className="p-4 md:p-8 bg-neutral-50 dark:bg-neutral-900 text-gray-800 dark:text-gray-100">
+  return (
+    <main className="p-4 md:p-8 bg-neutral-50 dark:bg-neutral-900 text-gray-800 dark:text-gray-100">
       <div className="max-w-[936px] mx-auto space-y-8">
 
         {/* Header */}
@@ -155,81 +156,120 @@ export function DicionarioCores() {
           </Alert>
 
           <div
-          className="p-8 rounded-t-none md:p-12 bg-cover bg-center rounded-md"
-          style={{ backgroundImage: `url(${bg_popup})` }}
-        >
-          <h1 className="text-4xl font-bold mb-2">
-            Plataforma {platform}
-          </h1>
-          <p className="text-sm font-light">
-            Versão da plataforma: {version2}
-          </p>
-        </div>
+            className="p-8 rounded-t-none md:p-12 bg-cover bg-center rounded-md"
+            style={{ backgroundImage: `url(${bg_popup})` }}
+          >
+            <h1 className="text-4xl font-bold mb-2">
+              Plataforma {platform}
+            </h1>
+            <p className="text-sm font-light">
+              Versão da plataforma: {version2}
+            </p>
+          </div>
         </Alert>
 
         <Alert className="space-y-4 p-8">
           <h2 className="text-2xl font-semibold">Sobre o dicionário</h2>
-         
-         <p>
-         O dicionário de cores do {platform} foi criado para padronizar a identificação visual de status, tipos de produção acadêmica, áreas de grupos de pesquisa, programas de pós-graduação,alertas no sistema, entre outros. Cada cor, definida em hexadecimal e aplicada via Tailwind CSS, facilita a leitura rápida e intuitiva das informações, diferenciando dados validados, pendentes ou com erro, além de destacar categorias específicas como produções técnicas e científicas.
-         </p>
-         <Alert>
+
+          <p>
+            O dicionário de cores do {platform} foi criado para padronizar a identificação visual de status, tipos de produção acadêmica, áreas de grupos de pesquisa, programas de pós-graduação,alertas no sistema, entre outros. Cada cor, definida em hexadecimal e aplicada via Tailwind CSS, facilita a leitura rápida e intuitiva das informações, diferenciando dados validados, pendentes ou com erro, além de destacar categorias específicas como produções técnicas e científicas.
+          </p>
+          <Alert>
             <p>Essa padronização garante organização, acessibilidade, coesão visual e eficiência na navegação em toda a plataforma.</p>
-         </Alert>
-         
+          </Alert>
+
         </Alert>
 
         <Alert className="space-y-6 p-8">
-      <div className="flex justify-between items-center">
-      <h2 className="text-2xl font-semibold">Cores</h2>
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-semibold">Cores</h2>
 
-        <Select onValueChange={(val) => setFormat(val as "hex" | "rgb")}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Selecionar formato" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="hex">Hex</SelectItem>
-            <SelectItem value="rgb">RGB</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-     
-    </Alert>
-
-
-    {Object.entries(grouped).map(([groupName, groupColors]) => (
-        <Alert key={groupName} className="space-y-2 p-8">
-          <h2 className="text-lg font-semibold">{groupName}</h2>
-          <ScrollArea>
-            <div className="flex gap-4">
-              {groupColors.map((color) => {
-                const valueToCopy = format === "hex" ? color.hex : color.rgb;
-
-                return (
-                  <Card
-                    key={color.name}
-                    className="w-[120px]  cursor-pointer  transition-transform"
-                    onClick={() => handleCopy(valueToCopy)}
-                  >
-                    <CardContent className="p-0 h-full flex flex-col justify-between items-center py-2">
-                      <div className={`w-[120px] h-[150px] mt-2 ${color.class} rounded-lg`} />
-                      <div className="text-sm text-center px-2">
-                        {color.name}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {valueToCopy}
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+            <Select onValueChange={(val) => setFormat(val as "hex" | "rgb")}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Selecionar formato" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="hex">Hex</SelectItem>
+                <SelectItem value="rgb">RGB</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </Alert>
-      ))}
-        </div>
-        </main>
-    )
+
+        {Object.entries(grouped).map(([groupName, groupColors]) => (
+          <Alert key={groupName} className="space-y-2 p-8">
+            <h2 className="text-lg font-semibold">{groupName}</h2>
+            <ScrollArea>
+              <div className="flex gap-4">
+                {groupColors.map((color) => {
+                  const valueToCopy = format === "hex" ? color.hex : color.rgb;
+
+                  return (
+                    <Card
+                      key={color.name}
+                      className="w-[120px] cursor-pointer transition-transform relative group"
+                      onClick={() => handleCopy(valueToCopy)}
+                    >
+                      <CardContent className="p-0 h-full flex flex-col justify-between items-center py-2">
+                        <div className={`w-[120px] h-[150px] mt-2 ${color.class} rounded-lg relative`}>
+                          {/* Ícone de copiar no hover com animação */}
+                          <span
+                            className={`
+                          absolute top-2 right-2
+                          opacity-0 group-hover:opacity-100
+                          scale-75 group-hover:scale-100
+                          transition-all duration-200 ease-out
+                          z-10
+                        `}
+                            style={{
+                              color: isColorLight(color.hex) ? "#000" : "#fff"
+                            }}
+                            onClick={e => {
+                              e.stopPropagation();
+                              handleCopy(valueToCopy);
+                              toast("Cor copiada!");
+                            }}
+                            title="Copiar cor"
+                          >
+                            <ClipboardCopy size={22} className="drop-shadow" />
+                          </span>
+                        </div>
+                        <div className="text-sm text-center px-2">
+                          {color.name}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {valueToCopy}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+          </Alert>
+        ))}
+      </div>
+    </main>
+  )
+}
+
+// Função para verificar se a cor é clara ou escura
+function isColorLight(hex: string) {
+  // Remove o # se existir
+  hex = hex.replace("#", "");
+  // Converte para RGB
+  let r = 0, g = 0, b = 0;
+  if (hex.length === 3) {
+    r = parseInt(hex[0] + hex[0], 16);
+    g = parseInt(hex[1] + hex[1], 16);
+    b = parseInt(hex[2] + hex[2], 16);
+  } else if (hex.length === 6) {
+    r = parseInt(hex.substring(0, 2), 16);
+    g = parseInt(hex.substring(2, 4), 16);
+    b = parseInt(hex.substring(4, 6), 16);
+  }
+  // Calcula o brilho (perceptivo)
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  return brightness > 160; // threshold ajustável
 }

@@ -1,6 +1,26 @@
 import { create } from "zustand";
-
-export type ModalType = 'termos-uso' | 'politica-privacidade' | 'api-docs'| 'informacoes' | 'dicionario-cores' | 'pesquisadores'
+export type ModalType =
+  | 'termos-uso'
+  | 'politica-privacidade'
+  | 'api-docs'
+  | 'informacoes'
+  | 'dicionario-cores'
+  | 'producoes'
+  | 'pesquisadores'
+  | 'bolsistas-cnpq'
+  | 'artigos-infos'
+  | 'livros'
+  | 'capitulos-livros'
+  | 'patentes'
+  | 'softwares'
+  | 'relatorio-tecnico'
+  | 'texto-revista'
+  | 'trabalho-evento'
+  | 'revistas'
+  | 'projeto-pesquisa'
+  | 'marca'
+  | 'orientacoes'
+  | 'participacoes-eventos';
 
 
 interface ModalStore {
@@ -10,10 +30,10 @@ interface ModalStore {
   onClose: () => void;
 }
 
-export const useModalDocs = create<ModalStore>((set:any) => ({
+export const useModalDocs = create<ModalStore>((set: any) => ({
   type: null,
   data: {},
   isOpen: false,
-  onOpen: (type: any) => set({ isOpen: true, type}),
+  onOpen: (type: any) => set({ isOpen: true, type }),
   onClose: () => set({ type: null, isOpen: false })
 }));

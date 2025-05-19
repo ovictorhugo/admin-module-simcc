@@ -1,40 +1,27 @@
 import * as React from "react"
 import {
   AArrowUp,
-  AudioWaveform,
-  BarChartBig,
-  Blocks,
-  BookOpen,
-  Bot,
+  Book,
+  BookOpenText,
   Braces,
-  Bug,
-  Building2,
-  CalendarSearch,
-  Command,
-  Download,
+  Briefcase,
+  Code,
+  Copyright,
   File,
-  Frame,
-  GalleryVerticalEnd,
+  Files,
+  FolderKanban,
   GraduationCap,
-  Home,
-  Info,
   InfoIcon,
-  Link2,
-  List,
+  LibraryBigIcon,
   Lock,
-  Map,
   Palette,
-  PieChart,
-  SearchCheck,
+  Receipt,
   Settings,
-  Settings2,
-  Sparkles,
-  SquareTerminal,
-  UserPlus,
+  Ticket,
+  UserRoundSearchIcon,
   Users,
-  Wrench,
 } from "lucide-react"
-
+import { Student, DotsThree, PaperPlane, PaperPlaneRight } from "phosphor-react"
 import { NavMain } from "./nav-main"
 import { NavProjects } from "./nav-projects"
 import { NavUser } from "./nav-user"
@@ -47,15 +34,13 @@ import {
   SidebarRail,
 } from "./ui/sidebar"
 import { UserContext } from "../context/context"
-import { useContext} from "react";
+import { useContext } from "react";
 import { AccountSwitcher } from "./navigation/user-list"
-import {  DotsThree } from "phosphor-react"
 import { useModal } from "./hooks/use-modal-store"
-// This is sample data.
 
 export function AppSidebarDocs({ ...props }: React.ComponentProps<typeof Sidebar>) {
- const {urlGeral, user, version, loggedIn} = useContext(UserContext)
- const { onOpen } = useModal()
+  const { urlGeral, user, version, loggedIn } = useContext(UserContext)
+  const { onOpen } = useModal()
 
   const data = {
     user: {
@@ -63,19 +48,19 @@ export function AppSidebarDocs({ ...props }: React.ComponentProps<typeof Sidebar
       email: user?.email || '',
       avatar: user?.photo_url || '',
     },
-   
+
     navMain: [
-    
+
       {
         title: "API",
         url: "/",
         icon: Settings,
         isActive: true,
         items: [
-  
+
           {
             title: "Produções",
-            url: "/api-producoes",
+            url: "/api-docs/producoes",
             icon: GraduationCap
           },
           {
@@ -83,12 +68,81 @@ export function AppSidebarDocs({ ...props }: React.ComponentProps<typeof Sidebar
             url: "/api-docs/pesquisadores",
             icon: Users
           },
+          {
+            title: "Bolsistas CNPq",
+            url: "/api-docs/bolsistas-cnpq",
+            icon: UserRoundSearchIcon
+          },
+          {
+            title: "Artigos",
+            url: "/api-docs/artigos-infos",
+            icon: File
+          },
+          {
+            title: "Livros",
+            url: "/api-docs/livros",
+            icon: Book
+          },
+          {
+            title: "Capítulos de Livros",
+            url: "/api-docs/capitulos-livros",
+            icon: LibraryBigIcon
+          },
+          {
+            title: "Patentes",
+            url: "/api-docs/patentes",
+            icon: Copyright
+          },
+          {
+            title: "Softwares",
+            url: "/api-docs/softwares",
+            icon: Code
+          },
+          {
+            title: "Relatório Técnico",
+            url: "/api-docs/relatorio-tecnico",
+            icon: Files
+          },
+          {
+            title: "Texto em Revista",
+            url: "/api-docs/texto-revista",
+            icon: BookOpenText
+          },
+          {
+            title: "Trabalho em Evento",
+            url: "/api-docs/trabalho-evento",
+            icon: Briefcase
+          },
+          {
+            title: "Revistas",
+            url: "/api-docs/revistas",
+            icon: BookOpenText
+          },
+          {
+            title: "Projeto de Pesquisa",
+            url: "/api-docs/projeto-pesquisa",
+            icon: FolderKanban
+          },
+          {
+            title: "Marca",
+            url: "/api-docs/marca",
+            icon: Receipt
+          },
+          {
+            title: "Orientações",
+            url: "/api-docs/orientacoes",
+            icon: Student
+          },
+          {
+            title: "Participações em Eventos",
+            url: "/api-docs/participacoes-eventos",
+            icon: Ticket
+          },
+
         ],
       },
 
-     
-      
-     
+
     ],
     projects: [
       {
@@ -116,20 +170,23 @@ export function AppSidebarDocs({ ...props }: React.ComponentProps<typeof Sidebar
         url: "/dicionario-cores",
         icon: Palette,
       },
-     
-      
+      {
+        name: "Índice pesquisador",
+        url: "/indice-pesquisador",
+        icon: AArrowUp
+      },
     ],
   }
-  
+
   return (
-    <Sidebar  collapsible='icon' className="border-0" {...props}>
+    <Sidebar collapsible='icon' className="border-0" {...props}>
       <SidebarHeader>
-        <AccountSwitcher/>
+        <AccountSwitcher />
       </SidebarHeader>
       <SidebarContent >
-      <NavProjects projects={data.projects} />
+        <NavProjects projects={data.projects} />
         <NavMain items={data.navMain} />
-      
+
       </SidebarContent>
       <SidebarFooter>
         {loggedIn && (
