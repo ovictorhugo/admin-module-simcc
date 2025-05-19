@@ -5,12 +5,12 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { Button } from "../ui/button";
 
-import { ChartLine, ChartLineUp, MagnifyingGlass, Quotes, Rows, SquaresFour, StripeLogo, Student, UserList } from "phosphor-react";
+import { Books, ChartLine, ChartLineUp, MagnifyingGlass, Quotes, Rows, SquaresFour, StripeLogo, Student, UserList } from "phosphor-react";
 
 import { ResearchersBloco } from "../homepage/categorias/researchers-home/researchers-bloco";
 import { TableReseracherhome } from "../homepage/categorias/researchers-home/table-reseracher-home";
 import { Link } from "react-router-dom";
-import { ArrowRight, BookOpen, BookOpenText, Briefcase, ChevronDown, ChevronUp, Code, Copyright, Download, File, Files, FolderKanban, Info, MoreHorizontal, Ticket, UserCog, Users, UserSearch } from "lucide-react";
+import { ArrowRight, Book, BookOpen, BookOpenText, Briefcase, ChevronDown, ChevronUp, Code, Copyright, Download, File, Files, FolderKanban, Info, LibraryBig, MoreHorizontal, Ticket, UserCog, Users, UserSearch } from "lucide-react";
 import { InfiniteMovingResearchers } from "../ui/infinite-moving-researcher";
 import { Tabs, TabsContent, TabsList } from "../ui/tabs";
 import { Input } from "../ui/input";
@@ -36,6 +36,7 @@ import { ProjetoPesquisaHome } from "./projeto-pesquisa-home";
 import { OrientacoesHome } from "./orientacoes-home";
 import { TechnicianHome } from "./technician-home";
 import { InfiniteMovingResearchersLoading } from "../ui/infinite-moving-researcher-loading";
+import { ChapterHome } from "../homepage/categorias/chapter-home";
 type Research = {
     among: number,
     articles: number,
@@ -122,10 +123,32 @@ const [loading, setLoading] = useState(false)
               fetchData();
             }, [urlTermPesquisadores]);
 
+            
+            const tabs = [
+             
+              { id: "pesquisadores", label: "Pesquisadores", icon: Users },
+              { id: "book", label: "Livros", icon: Book },
+              { id: "chapter", label: "Capítulo de livros", icon: LibraryBig },
+              { id: "tecnicos", label: "Técnicos", icon: UserCog, condition: version },
+              { id: "bolsistas", label: "Bolsistas CNPq", icon: UserSearch },
+              { id: "article", label: "Artigos", icon: File },
+           
+              { id: "patent", label: "Patentes", icon: Copyright },
+              { id: "software", label: "Softwares", icon: Code },
+              { id: "brand", label: "Marcas", icon: StripeLogo },
+              { id: "relatorio-tecnico", label: "Relatório técnico", icon: Files },
+              { id: "orientacoes", label: "Orientações", icon: Student },
+              { id: "speaker", label: "Participação em eventos", icon: Ticket },
+              { id: "research-project", label: "Projetos de pesquisa", icon: FolderKanban },
+              { id: "texto-revista", label: "Texto em revista", icon: BookOpenText },
+              { id: "work-event", label: "Trabalho em evento", icon: Briefcase },
+              { id: "magazine", label: "Revistas", icon: BookOpen }
+            ];
+
 
             const [isOn, setIsOn] = useState(true);
  
-            const [value, setValue] = useState('book')
+            const [value, setValue] = useState(tabs[0].id)
 
             const randomResearchers = useMemo(() => {
               return researcher.sort(() => Math.random() - 0.5).slice(0, 40);
@@ -212,24 +235,6 @@ const [loading, setLoading] = useState(false)
               }
             };
 
-            const tabs = [
-              { id: "book", label: "Livros e capítulos", icon: BookOpen },
-              { id: "pesquisadores", label: "Pesquisadores", icon: Users },
-              { id: "tecnicos", label: "Técnicos", icon: UserCog, condition: version },
-              { id: "bolsistas", label: "Bolsistas CNPq", icon: UserSearch },
-              { id: "article", label: "Artigos", icon: File },
-           
-              { id: "patent", label: "Patentes", icon: Copyright },
-              { id: "software", label: "Softwares", icon: Code },
-              { id: "brand", label: "Marcas", icon: StripeLogo },
-              { id: "relatorio-tecnico", label: "Relatório técnico", icon: Files },
-              { id: "orientacoes", label: "Orientações", icon: Student },
-              { id: "speaker", label: "Participação em eventos", icon: Ticket },
-              { id: "research-project", label: "Projetos de pesquisa", icon: FolderKanban },
-              { id: "texto-revista", label: "Texto em revista", icon: BookOpenText },
-              { id: "work-event", label: "Trabalho em evento", icon: Briefcase },
-              { id: "magazine", label: "Revistas", icon: BookOpen }
-            ];
             
             const nomesAleatorios = Array.from({ length: 20 }, (_, i) => ({
               name: `Pesquisador ${i + 1}`,
@@ -402,6 +407,10 @@ const [loading, setLoading] = useState(false)
 
   <TabsContent value="book">
             <BookHome />
+  </TabsContent>
+
+  <TabsContent value="chapter">
+            <ChapterHome />
   </TabsContent>
 
   <TabsContent value="tecnicos">

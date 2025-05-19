@@ -1,10 +1,14 @@
 FROM node:18-alpine AS builder
 
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
 WORKDIR /app
 
 COPY package*.json ./
 
 RUN npm install --legacy-peer-deps --force
+
+RUN npm i emoji-mart
 
 COPY . .
 

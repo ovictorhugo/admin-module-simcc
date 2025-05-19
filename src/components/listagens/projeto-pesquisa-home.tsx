@@ -17,6 +17,7 @@ import { TableReseracherMarcasPopup } from "../popup/columns/producoes-tecnicas/
 import { GraficoProjetoPesquisa } from "../popup/graficos/grafico-projeto-pesquisa"
 import { TableReseracherProject } from "../popup/columns/table-projetos-pesquisa"
 import debounce from "lodash.debounce"; // Importing debounce
+import { useQuery } from "../dashboard/builder-page/tabelas/tabela-artigos"
 
 type Patente = {
   agency_code: string
@@ -81,7 +82,12 @@ export function ProjetoPesquisaHome() {
     const [distinct, setDistinct] = useState(false)
     const currentDate = new Date();
     const year = currentDate.getFullYear();
-    let urlTermPublicacoes = `${urlGeral}researcher_research_project?researcher_id=&term=&year=${yearString || year-5}&distinct=${distinct ? '1' : '0'}`;
+      const queryUrl = useQuery();
+      const Page =  queryUrl.get('page') || '1';
+      const Length =  queryUrl.get('length') || '12';
+      
+
+    let urlTermPublicacoes = `${urlGeral}researcher_research_project?researcher_id=&term=&year=${yearString || year-5}&distinct=${distinct ? '1' : '0'}&lenght=${Length}&page=${Page}`;
   
     console.log(urlTermPublicacoes)
     useMemo(() => {
@@ -215,10 +221,11 @@ export function ProjetoPesquisaHome() {
                     loading ? (
                         <ResponsiveMasonry
                         columnsCountBreakPoints={{
-                            350: 1,
-                            750: 2,
-                            900: 3,
-                            1200: 4
+                          350: 1,
+                          750: 2,
+                          900: 3,
+                          1200: 4,
+                          1700: 5
                         }}
                     >
                                      <Masonry gutter="16px">
