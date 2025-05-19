@@ -145,7 +145,7 @@ export function CargosFuncoes(props: Props) {
             <div className="flex gap-4 w-full justify-between items-center ">
               <div className="flex gap-4 items-center">
                 <Waypoints size={24} className="text-gray-400" />
-                <p className="font-medium">Todos os cargos e funções</p>
+                <p className="font-medium">Todos os Atuação profissional</p>
               </div>
 
               <div className="flex gap-3 mr-3 items-center h-full">

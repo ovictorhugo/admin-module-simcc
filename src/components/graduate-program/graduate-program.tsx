@@ -699,7 +699,7 @@ const { onOpen } = useModal();
              {simcc && (
                <div className="bg-cover w-fit pl-8 bg-bottom bg-no-repeat" >
                <div className="justify-center h-[calc(100vh-124px)] z-[9] m w-full  flex max-w-[980px] flex-col items-center lg:items-start  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
-                 <Link to={'/informacoes'} className="inline-flex z-[2] lg:w-fit  w-fit items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12} /></Link>
+                 <Link to={'/informacoes'} className="inline-flex z-[2] lg:w-fit  w-fit items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2  px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba o que é e como utilizar a plataforma<ArrowRight size={12} /></Link>
 
                  <h1 className="lg:w-fit lg:text-left text-center max-w-[600px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1] md:block mb-4">
   Selecione uma cidade ou{" "}

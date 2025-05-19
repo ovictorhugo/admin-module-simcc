@@ -18,7 +18,7 @@ import {
 
 } from "phosphor-react";
 import { ArrowRight, BarChartBig, Blocks, Download, File, GraduationCap, Info, InfoIcon, Link2, List } from "lucide-react";
-import { Alert } from "../ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
 
 
@@ -650,7 +650,7 @@ const [isLoad, setLoad] = useState(false)
         </div>
 
         <div className="justify-center px-4 md:px-8 w-full mx-auto flex max-w-[1200px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
-          <Link to={'/informacoes'} className="inline-flex z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba como utilizar a plataforma<ArrowRight size={12} /></Link>
+          <Link to={'/informacoes'} className="inline-flex z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba o que é e como utilizar a plataforma<ArrowRight size={12} /></Link>
 
           <h1 className="z-[2] text-center max-w-[980px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
             Experimente{" "}
@@ -703,7 +703,16 @@ const [isLoad, setLoad] = useState(false)
 
       <div className=" w-full md:px-8 gap-8 flex flex-col px-4">
 
-        <Alert className="flex flex-col md:grid gap-3 lg:grid-cols-4 grid-cols-2">
+      <div>
+      <Alert className="rounded-b-none border-b-0 bg-neutral-100">
+  <Info className="h-4 w-4" />
+  <AlertTitle>Interpretação dos dados</AlertTitle>
+  <AlertDescription className="text-xs">
+    Os dados exibidos na plataforma <strong>Conectee</strong> consideram apenas os <strong>pesquisadores ativos</strong>. Métricas como <strong>"Total de livros"</strong> refletem a produção dos docentes atualmente cadastrados, e não o histórico completo.
+  </AlertDescription>
+</Alert>
+
+      <Alert className="flex rounded-t-none flex-col md:grid gap-3 lg:grid-cols-4 grid-cols-2">
           <Link onClick={() => onOpenResult('articles-home')} to={'/resultados?type_search=article&terms=&researcher=false'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
@@ -783,6 +792,7 @@ const [isLoad, setLoad] = useState(false)
           </Link>
 
         </Alert>
+      </div>
 
         <div
           className="
