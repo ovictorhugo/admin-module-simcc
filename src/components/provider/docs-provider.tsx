@@ -15,25 +15,69 @@ import { PoliticaPrivacidade } from "../docs-api/politica-privacidade";
 import { ApiDocs } from "../docs-api/api-docs";
 import { DicionarioCores } from "../docs-api/dicionario-cores";
 import { Info } from "../info/info";
+import { Producoes } from "../docs-api/api/producoes";
 import { Pesquisadores } from "../docs-api/api/pesquisadores";
-
+import { BolsistasCnpq } from "../docs-api/api/bolsistas-cnpq";
+import { ArtigosInfos } from "../docs-api/api/artigos-infos";
+import { Livros } from "../docs-api/api/livros";
+import { CapitulosLivros } from "../docs-api/api/capitulos-livros";
+import { PatentesInfos } from "../docs-api/api/patentes";
+import { SoftwareInfos } from "../docs-api/api/softwares";
+import { RelatorioTecnico } from "../docs-api/api/relatorio-tecnico";
+import { TextoRevista } from "../docs-api/api/texto-revista";
+import { TrabalhoEvento } from "../docs-api/api/trabalho-evento";
+import { Revistas } from "../docs-api/api/revistas";
+import { ProjetoPesquisa } from "../docs-api/api/projeto-pesquisa";
+import { Marca } from "../docs-api/api/marca";
+import { Orientacoes } from "../docs-api/api/orientacoes";
+import { ParticipacoesEventos } from "../docs-api/api/participacoes-eventos";
 
 const ModalContent = () => {
   const { type } = useModalDocs();
 
   switch (type) {
     case 'termos-uso':
-      return <TermosUso/>
-      case 'politica-privacidade':
-        return <PoliticaPrivacidade/>
-        case 'api-docs':
-            return <ApiDocs/>
-            case 'dicionario-cores':
-            return <DicionarioCores/>
-            case 'informacoes':
-              return <Info/>
-            case 'pesquisadores':
-              return <Pesquisadores/>
+      return <TermosUso />
+    case 'politica-privacidade':
+      return <PoliticaPrivacidade />
+    case 'api-docs':
+      return <ApiDocs />
+    case 'dicionario-cores':
+      return <DicionarioCores />
+    case 'informacoes':
+      return <Info />
+    case 'producoes':
+      return <Producoes />
+    case 'pesquisadores':
+      return <Pesquisadores />
+    case 'bolsistas-cnpq':
+      return <BolsistasCnpq />
+    case 'artigos-infos':
+      return <ArtigosInfos />
+    case 'livros':
+      return <Livros />
+    case 'capitulos-livros':
+      return <CapitulosLivros />
+    case 'patentes':
+      return <PatentesInfos />
+    case 'softwares':
+      return <SoftwareInfos />
+    case 'relatorio-tecnico':
+      return <RelatorioTecnico />
+    case 'texto-revista':
+      return <TextoRevista />
+    case 'revistas':
+      return <Revistas />
+    case 'trabalho-evento':
+      return <TrabalhoEvento />
+    case 'projeto-pesquisa':
+      return <ProjetoPesquisa />
+    case 'marca':
+      return <Marca />
+    case 'orientacoes':
+      return <Orientacoes />
+    case 'participacoes-eventos':
+      return <ParticipacoesEventos />
   }
 
 }

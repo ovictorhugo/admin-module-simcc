@@ -18,6 +18,7 @@ import { BlockItemGeral } from "./book-home/block-item-geral";
 import { HeaderResult } from "../header-results";
 import { GraficoPatente } from "./patent-home/grafico-patent";
 import { Switch } from "../../ui/switch";
+import { useQuery } from "../../dashboard/builder-page/tabelas/tabela-artigos";
 
 type Patente = {
     id: string,
@@ -52,7 +53,11 @@ export function PatentHome() {
     const [distinct, setDistinct] = useState(false)
     const currentDate = new Date();
     const year = currentDate.getFullYear();
-    let urlTermPublicacoes = `${urlGeral}patent_production_researcher?researcher_id=&year=${yearString || year-5}&term=${valoresSelecionadosExport}&distinct=${distinct ? '1' : '0'}`;
+    const queryUrl = useQuery();
+    const Page =  queryUrl.get('page') || '1';
+    const Length =  queryUrl.get('length') || '12';
+    
+    let urlTermPublicacoes = `${urlGeral}patent_production_researcher?researcher_id=&year=${yearString || year-5}&term=${valoresSelecionadosExport}&distinct=${distinct ? '1' : '0'}&lenght=${Length}&page=${Page}`;
   
     console.log(urlTermPublicacoes)
     useMemo(() => {

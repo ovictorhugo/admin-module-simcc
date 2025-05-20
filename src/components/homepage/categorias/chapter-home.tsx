@@ -32,7 +32,7 @@ type Filter = {
   qualis: string[]
 }
 
-export function BookHome() {
+export function ChapterHome() {
   const [publicacoes, setPublicacoes] = useState<Patente[]>([]);
   const [capLivros, setCapLivros] = useState<Patente[]>([]);
   const [typeVisu, setTypeVisu] = useState('block')
@@ -65,13 +65,22 @@ export function BookHome() {
   const { urlGeral, valoresSelecionadosExport } = useContext(UserContext)
   const currentDate = new Date();
   const year = currentDate.getFullYear();
-  let urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=&year=${yearString || year-5}&term=${valoresSelecionadosExport}&distinct=${distinct ? '1' : '0'}&lenght=${Length}&page=${Page}`;
-  
+ 
+
+  const items = Array.from({ length: 12 }, (_, index) => (
+    <Skeleton key={index} className="w-full rounded-md h-[170px]" />
+  ));
+
+  ///cap
+
+  let urlTermCap = `${urlGeral}book_chapter_production_researcher?researcher_id=&year=${yearString || year-5}&term=${valoresSelecionadosExport}&distinct=${distinct2 ? '1' : '0'}&lenght=${Length}&page=${Page}`
+console.log(urlTermCap)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        isLoading(true)
-        const response = await fetch(urlTermPublicacoes, {
+        isLoading2(true)
+        const response = await fetch(urlTermCap, {
           mode: "cors",
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -83,24 +92,15 @@ export function BookHome() {
         });
         const data = await response.json();
         if (data) {
-          setPublicacoes(data);
-          isLoading(false)
+          setCapLivros(data);
+          isLoading2(false)
         }
       } catch (err) {
         console.log(err);
       }
     };
     fetchData();
-    console.log(urlTermPublicacoes)
-  }, [urlTermPublicacoes, yearString]);
-
-  const items = Array.from({ length: 12 }, (_, index) => (
-    <Skeleton key={index} className="w-full rounded-md h-[170px]" />
-  ));
-
-  ///cap
-
-  
+  }, [urlTermCap]);
 
   const updateDistinct = useCallback(
       debounce((value: boolean) => {
@@ -125,39 +125,37 @@ export function BookHome() {
         onFilterUpdate={handleResearcherUpdate} />
      </div>
 
- 
-        <Alert className={`p-0 mt-4 bg-cover bg-no-repeat bg-center `}  >
+     <Alert className={`p-0 mt-4 bg-cover bg-no-repeat bg-center `}  >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Total de livros
+              Total de capítulos
             </CardTitle>
-            <Book className="h-4 w-4 text-muted-foreground" />
+            <Books className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="flex justify-between items-end">
             <div>
-            <div className="text-2xl font-bold">{publicacoes.length}</div>
+            <div className="text-2xl font-bold">{capLivros.length}</div>
             <p className="text-xs text-muted-foreground flex gap-2">
-              encontrados na busca desde {yearString}
+              encontrados na busca 
             </p>
             </div>
 
             <div className="gap-2 flex items-center h-fit text-xs text-gray-500 dark:text-gray-300">
-  <p>Livros:</p>
+  <p>Capítulos:</p>
   <Switch
-  checked={distinct}
-  onCheckedChange={(value) => updateDistinct(value)}
+  checked={distinct2}
+  onCheckedChange={(value) => updateDistinct2(value)}
 />
-  <span>{distinct ? "Sem repetição" : "Com repetição"}</span>
+  <span>{distinct2 ? "Sem repetição" : "Com repetição"}</span>
 </div>
           </CardContent>
         </Alert>
-
 
   
       <Accordion type="single" collapsible defaultValue="item-1">
         <AccordionItem value="item-1" >
           <div className="flex ">
-            <HeaderResultTypeHome title="Gráfico de quantidade total de livros " icon={<ChartBar size={24} className="text-gray-400" />}>
+            <HeaderResultTypeHome title="Gráfico de quantidade total de capítulos de livros" icon={<ChartBar size={24} className="text-gray-400" />}>
             </HeaderResultTypeHome>
             <AccordionTrigger>
 
@@ -173,23 +171,24 @@ export function BookHome() {
         </AccordionItem>
       </Accordion>
 
+     
+
       <Accordion defaultValue="item-1" type="single" collapsible >
         <AccordionItem value="item-1" >
           <div className="flex ">
             <div className="flex gap-4 w-full justify-between items-center ">
               <div className="flex gap-4 items-center">
-                <Book size={24} className="text-gray-400" />
-                <p className=" font-medium">Livros</p>
+                <Books size={24} className="text-gray-400" />
+                <p className=" font-medium">Capítulos de livros</p>
               </div>
 
               <div className="flex gap-3 mr-3  items-center h-full">
-            
-
-                <Button onClick={() => setTypeVisu('rows')} variant={typeVisu == 'block' ? 'ghost' : 'outline'} size={'icon'}>
+              
+                <Button onClick={() => setTypeVisu2('rows')} variant={typeVisu2 == 'block' ? 'ghost' : 'outline'} size={'icon'}>
                   <Rows size={16} className=" whitespace-nowrap" />
                 </Button>
 
-                <Button onClick={() => setTypeVisu('block')} variant={typeVisu == 'block' ? 'outline' : 'ghost'} size={'icon'}>
+                <Button onClick={() => setTypeVisu2('block')} variant={typeVisu2 == 'block' ? 'outline' : 'ghost'} size={'icon'}>
                   <SquaresFour size={16} className=" whitespace-nowrap" />
                 </Button>
               </div>
@@ -201,8 +200,8 @@ export function BookHome() {
           </div>
           <AccordionContent >
 
-            {typeVisu == 'block' ? (
-              loading ? (
+            {typeVisu2 == 'block' ? (
+              loading2 ? (
                 <ResponsiveMasonry
                   columnsCountBreakPoints={{
                     350: 1,
@@ -222,26 +221,25 @@ export function BookHome() {
                   <div className="items-center justify-center w-full flex text-center pt-6">Sem resultados para essa pesquisa</div>
                 ) : (
                   <BlockItemGeral
-                    articles={publicacoes}
-                    distinct={distinct}
-                    type={'livro'}
+                    articles={capLivros}
+                    distinct={distinct2}
+                    type={'capLivro'}
                   />
                 )
               )
             ) : (
-              loading ? (
+              loading2 ? (
 
                 <Skeleton className="w-full rounded-md h-[400px]" />
               ) : (
                 <TableReseracherBookPopup
-                  books={publicacoes}
+                  books={capLivros}
                 />
               )
             )}
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-
     </div>
   )
 }

@@ -703,7 +703,10 @@ export function BolsistasHome() {
 
   const isModalOpen = isOpen && type === "researchers-home";
 
-  let urlTermPesquisadores =`${urlGeral}/researcher/foment`;
+  const Page =  queryUrl.get('page') || '1';
+  const Length =  queryUrl.get('length') || '12';
+  
+  let urlTermPesquisadores =`${urlGeral}/researcher/foment?&lenght=${Length}&page=${Page}`;
  
   console.log(urlTermPesquisadores);
 

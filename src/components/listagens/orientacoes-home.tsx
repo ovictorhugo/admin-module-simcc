@@ -17,6 +17,7 @@ import { TableReseracherMarcasPopup } from "../popup/columns/producoes-tecnicas/
 import { GraficoTextoRevista } from "../popup/graficos/grafico-texto-revista"
 import { GraficoOrientacoes } from "../popup/graficos/grafico-orientacoes"
 import debounce from "lodash.debounce"; // Importing debounce
+import { useQuery } from "../dashboard/builder-page/tabelas/tabela-artigos"
 
 type Patente = {
 
@@ -52,7 +53,11 @@ export function OrientacoesHome() {
     const [distinct, setDistinct] = useState(false)
     const currentDate = new Date();
     const year = currentDate.getFullYear();
-    let urlTermPublicacoes = `${urlGeral}guidance_researcher?researcher_id=&year=${yearString || year-5}&distinct=${distinct ? '1' : '0'}`;
+    const queryUrl = useQuery();
+    const Page =  queryUrl.get('page') || '1';
+    const Length =  queryUrl.get('length') || '12';
+    
+    let urlTermPublicacoes = `${urlGeral}guidance_researcher?researcher_id=&year=${yearString || year-5}&distinct=${distinct ? '1' : '0'}&lenght=${Length}&page=${Page}`;
   
     console.log(urlTermPublicacoes)
     useMemo(() => {

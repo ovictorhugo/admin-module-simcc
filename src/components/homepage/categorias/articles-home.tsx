@@ -56,6 +56,7 @@ import { HeaderResult } from "../header-results";
 import { FilterArticle } from "./articles-home/filters-articles";
 import { GraficoCitationsArticleHome } from "./articles-home/grafico-citacoes";
 import { File } from "lucide-react";
+import { useQuery } from "../../dashboard/builder-page/tabelas/tabela-artigos";
 
 type Filter = {
   year: number[]
@@ -80,6 +81,9 @@ export function ArticlesHome() {
     }, 300), // 300ms de debounce
     []
   );
+    const queryUrl = useQuery();
+  const Page =  queryUrl.get('page') || '1';
+  const Length =  queryUrl.get('length') || '12';
   
   const total = publicacoes.length;
 const validDoiCount = publicacoes.filter(pub => pub.doi && pub.doi.trim() !== "").length;
@@ -101,23 +105,23 @@ const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
   const year = currentDate.getFullYear();
     const qualisString = filters.length > 0 ? filters[0].qualis.join(';') : '';
     console.log('yearString', yearString)
-    let url = `${urlGeral}bibliographic_production_article?terms=&year=${yearString || year-5}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=`;
+    let url = `${urlGeral}bibliographic_production_article?terms=&year=${yearString || year-5}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=&lenght=${Length}&page=${Page}`;
 
     if (itemsSelecionados.length > 0) {
       if (searchType === 'name') {
-        url = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=&type=ARTICLE&qualis=${qualisString}&year=${yearString || year-5}`;
+        url = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosExport}&researcher_id=&type=ARTICLE&qualis=${qualisString}&year=${yearString || year-5}&lenght=${Length}&page=${Page}`;
       } else if (searchType === 'article') {
-        url = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString || year-5}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=`;
+        url = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString || year-5}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&graduate_program_id=&lenght=${Length}&page=${Page}`;
       } else if (searchType === 'area') {
-        url = `${urlGeral}bibliographic_production_article_area?area_specialty=${valoresSelecionadosExport.replace(/;/g, ' ')}&great_area=&year=${yearString || year-5}&qualis=${qualisString}`;
+        url = `${urlGeral}bibliographic_production_article_area?area_specialty=${valoresSelecionadosExport.replace(/;/g, ' ')}&great_area=&year=${yearString || year-5}&qualis=${qualisString}&lenght=${Length}&page=${Page}`;
       } else if (searchType === 'abstract') {
-        url = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString || year-5}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}`;
+        url = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${yearString || year-5}&qualis=${qualisString}&university=&distinct=${distinct ? '1' : '0'}&lenght=${Length}&page=${Page}`;
       }
     }
 
     console.log('urlTermPublicacoes', url);
     return url;
-  }, [filters, searchType, valoresSelecionadosExport, distinct, idGraduateProgram]);
+  }, [filters, searchType, valoresSelecionadosExport, distinct, idGraduateProgram, Page, Length]);
 
 
 
@@ -150,7 +154,7 @@ const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
   }, [urlTermPublicacoes]);
 
   const items = Array.from({ length: 12 }, (_, index) => (
-    <Skeleton key={index} className="w-full rounded-md h-[170px]" />
+    <Skeleton key={index} className="w-full rounded-md h-[250px]" />
   ));
 
   return (
@@ -256,7 +260,8 @@ const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
                     350: 1,
                     750: 2,
                     900: 3,
-                    1200: 4
+                    1200: 4,
+                    1700: 5
                   }}
                 >
                   <Masonry gutter="16px">
@@ -269,6 +274,7 @@ const percentage = total > 0 ? (validDoiCount / total) * 100 : 0;
                 <ArticleBlock
                   articles={publicacoes}
                   distinct={distinct}
+                
                 />
               )
             ) : (

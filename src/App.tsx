@@ -405,10 +405,25 @@ useEffect(() => {
         <Route path='/informacoes' element={<TermosUso/>}/>
         <Route path='/dicionario-cores' element={<TermosUso/>}/>
 
-
+        <Route path='/api-docs/producoes' element={<TermosUso/>}/>
         <Route path='/api-docs/pesquisadores' element={<TermosUso/>}/>
-
-
+        <Route path='/api-docs/bolsistas-cnpq' element={<TermosUso/>}/>
+        <Route path="/api-docs/artigos-infos" element={<TermosUso />} />
+        <Route path='/api-docs/livros' element={<TermosUso/>}/>
+        <Route path='/api-docs/capitulos-livros' element={<TermosUso/>}/>
+        <Route path='/api-docs/patentes' element={<TermosUso/>}/>
+        <Route path='/api-docs/softwares' element={<TermosUso/>}/>
+        <Route path='/api-docs/relatorio-tecnico' element={<TermosUso/>}/>
+        <Route path='/api-docs/texto-revista' element={<TermosUso/>}/>
+        <Route path='/api-docs/trabalho-evento' element={<TermosUso/>}/>
+        <Route path='/api-docs/revistas' element={<TermosUso/>}/>
+        <Route path='/api-docs/projeto-pesquisa' element={<TermosUso/>}/>
+        <Route path='/api-docs/marca' element={<TermosUso/>}/>
+        <Route path='/api-docs/organizacao' element={<TermosUso/>}/>
+        <Route path='/api-docs/orientacoes' element={<TermosUso/>}/>
+        <Route path='/api-docs/participacoes-eventos' element={<TermosUso/>}/>
+    
+    
         <Route path='/sobre' element={<AboutPage/>}/>
         <Route
         path='/ufmg/'

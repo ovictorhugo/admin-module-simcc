@@ -42,15 +42,15 @@ import {
   SidebarRail,
 } from "./ui/sidebar"
 import { UserContext } from "../context/context"
-import { useContext} from "react";
+import { useContext } from "react";
 import { AccountSwitcher } from "./navigation/user-list"
-import {  DotsThree } from "phosphor-react"
+import { DotsThree } from "phosphor-react"
 import { useModal } from "./hooks/use-modal-store"
 // This is sample data.
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
- const {urlGeral, user, version, loggedIn} = useContext(UserContext)
- const { onOpen } = useModal()
+  const { urlGeral, user, version, loggedIn } = useContext(UserContext)
+  const { onOpen } = useModal()
 
   const data = {
     user: {
@@ -58,7 +58,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       email: user?.email || '',
       avatar: user?.photo_url || '',
     },
-   
+
     navMain: [
       {
         title: "Ferramentas",
@@ -71,7 +71,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: "/indicadores",
             icon: BarChartBig
           },
-       
+
           {
             title: "Mapa de palavras",
             url: "/mapa-palavras",
@@ -82,15 +82,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: "/listagens",
             icon: Download
           },
-        
+
           ...(version
             ? [
               {
                 title: "Provimento de cargo",
-            url: "/provimento-cargo",
-            icon: CalendarSearch
+                url: "/provimento-cargo",
+                icon: CalendarSearch
               },
-              ]
+            ]
             : []),
 
 
@@ -112,9 +112,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               {
                 title: "Departamentos",
                 url: "/departamentos",
-                icon:Building2
+                icon: Building2
               },
-              ]
+            ]
             : []),
           {
             title: "Pós-graduação",
@@ -126,15 +126,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: "/grupos-pesquisa",
             icon: Blocks
           },
-          
+
           ...(!version
             ? [
               {
                 title: "INCITE's",
                 url: "/incites",
-                icon:Boxes
+                icon: Boxes
               },
-              ]
+            ]
             : []),
         ],
       },
@@ -153,21 +153,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           {
             title: "Relatar problema",
             icon: Bug,
-            onClick: () => onOpen( 'relatar-problema'), // Chama a função onOpen() ao clicar
+            onClick: () => onOpen('relatar-problema'), // Chama a função onOpen() ao clicar
           },
-
-          {
-            title: "Índice pesquisador",
-            url: "/indice-pesquisador",
-            icon: AArrowUp
-          },
-        
         ],
       },
-   
-      
-     
     ],
+
     projects: [
       {
         name: "Página Inicial",
@@ -184,19 +175,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: "/resultados-ia",
         icon: Sparkles,
       },
-      
+
     ],
   }
-  
+
   return (
-    <Sidebar  collapsible='icon' className="border-0" {...props}>
+    <Sidebar collapsible='icon' className="border-0" {...props}>
       <SidebarHeader>
-        <AccountSwitcher/>
+        <AccountSwitcher />
       </SidebarHeader>
       <SidebarContent >
-      <NavProjects projects={data.projects} />
+        <NavProjects projects={data.projects} />
         <NavMain items={data.navMain} />
-      
+
       </SidebarContent>
       <SidebarFooter>
         {loggedIn && (
