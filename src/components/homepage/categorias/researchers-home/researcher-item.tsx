@@ -7,6 +7,7 @@ import { useModal } from "../../../hooks/use-modal-store"
 import { Button } from "../../../ui/button"
 
 import dt from '../../../../assets/dt.png'
+import fc from '../../../../assets/fc.png'
 import pq from '../../../../assets/pq.png'
 import { CardTitle } from "../../../ui/card"
 import { InfiniteMovingCards } from "../../../ui/infinite-moving-cards"
@@ -40,7 +41,38 @@ type Research = {
   departments: string
   subsidy: Bolsistas[]
   graduate_programs: GraduatePrograms[]
+  ufmg: Ufmg
 }
+
+interface Ufmg {
+  id: string;
+  full_name: string;
+  gender: string | null;
+  status_code: string;
+  work_regime: string;
+  job_class: string;
+  job_title: string;
+  job_rank: string;
+  job_reference_code: string;
+  academic_degree: string;
+  organization_entry_date: string; // formato ISO: "YYYY-MM-DD"
+  last_promotion_date: string;
+  employment_status_description: string;
+  department_name: string;
+  career_category: string;
+  academic_unit: string;
+  unit_code: string;
+  function_code: string 
+  position_code: string 
+  leadership_start_date: string 
+  leadership_end_date: string 
+  current_function_name: string 
+  function_location: string 
+  registration_number: string 
+  ufmg_registration_number: string 
+  semester_reference: string 
+}
+
 
 interface Bolsistas {
   aid_quantity: string
@@ -130,9 +162,9 @@ export function ResearchItem(props: Research) {
 </Button>
                             </TooltipTrigger>
                             <TooltipContent> {pesquisadoresSelecionados.some(pesquisador => pesquisador.name === props.name) ? (
-                              'Remover pesquisador(a) do barema'
+                              'Remover pesquisador(a)'
                             ) : (
-                              'Adicionar pesquisador(a) ao barema'
+                              'Adicionar pesquisador(a)'
                             )}</TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
@@ -143,14 +175,49 @@ export function ResearchItem(props: Research) {
 
                 <div className="flex group-hover:hidden">
                   <div className="flex text-white gap-2 items-center" >
-                    <div className={` rounded-md h-4 w-4 ${props.status ? ('bg-green-500') : ('bg-red-500')}`}></div>
-                    <div className="flex-1 flex">{props.status ? ('Ativo') : ('Inativo')}</div></div>
+                  {!props.status && (
+                      <div className={` rounded-md h-4 w-4 bg-red-500`}></div>
+                  )}
+                    <div className="flex-1 flex">{!props.status && ('Inativo')}</div></div>
                 </div>
               </div>
+           
+
+              {props.ufmg?.current_function_name?.trim()  &&  (
+                      <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                <img src={fc} className="w-8 relative -top-4" alt="" />
+
+                </TooltipTrigger>
+                
+
+                <TooltipContent>
+                  {props.ufmg.current_function_name}
+                </TooltipContent>
+
+                </Tooltip>
+                </TooltipProvider>
+              )}
 
               {props.subsidy && props.subsidy.length != 0 && props.subsidy.slice(0, 1).map((item) => (
+                      <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                 <img src={item.modality_code == 'DT' ? (dt) : (pq)} className="w-8 relative -top-4" alt="" />
+
+                </TooltipTrigger>
+                
+
+                <TooltipContent>
+                  {item.modality_code == 'PQ' ? ('Bolsista de Proatividade CNPq'):('Bolsista de Desenvolvimento Tecnológico CNPq')}
+                </TooltipContent>
+
+                </Tooltip>
+                </TooltipProvider>
               ))}
+
+              
             </div>
 
             <div className="flex gap-2 px-6 flex-col pb-6  w-full h-full text-white justify-end  ">

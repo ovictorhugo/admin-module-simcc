@@ -9,7 +9,7 @@ import { Books, ChartLine, ChartLineUp, MagnifyingGlass, Quotes, Rows, SquaresFo
 
 import { ResearchersBloco } from "../homepage/categorias/researchers-home/researchers-bloco";
 import { TableReseracherhome } from "../homepage/categorias/researchers-home/table-reseracher-home";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowRight, Book, BookOpen, BookOpenText, Briefcase, ChevronDown, ChevronUp, Code, Copyright, Download, File, Files, FolderKanban, Info, LibraryBig, MoreHorizontal, Ticket, UserCog, Users, UserSearch } from "lucide-react";
 import { InfiniteMovingResearchers } from "../ui/infinite-moving-researcher";
 import { Tabs, TabsContent, TabsList } from "../ui/tabs";
@@ -37,6 +37,7 @@ import { OrientacoesHome } from "./orientacoes-home";
 import { TechnicianHome } from "./technician-home";
 import { InfiniteMovingResearchersLoading } from "../ui/infinite-moving-researcher-loading";
 import { ChapterHome } from "../homepage/categorias/chapter-home";
+import { useQuery } from "../dashboard/builder-page/tabelas/tabela-artigos";
 type Research = {
     among: number,
     articles: number,
@@ -147,8 +148,10 @@ const [loading, setLoading] = useState(false)
 
 
             const [isOn, setIsOn] = useState(true);
- 
-            const [value, setValue] = useState(tabs[0].id)
+            const queryUrl = useQuery();
+
+            const tab = queryUrl.get('tab');
+            const [value, setValue] = useState(tab || tabs[0].id)
 
             const randomResearchers = useMemo(() => {
               return researcher.sort(() => Math.random() - 0.5).slice(0, 40);
@@ -179,6 +182,33 @@ const [loading, setLoading] = useState(false)
               urlPublicacoesPorPesquisador = `${urlGeral}researcher_report?researcher_id=&year=1900&distinct=0`
             }
 
+          
+
+  const navigate = useNavigate();
+
+            const updateFilters = (category: string, values: any) => {
+              if (values  ) {
+               
+                queryUrl.set(category, values);
+               
+              } else {
+               queryUrl.delete(category)
+              }
+             
+            };
+
+              const location = useLocation();
+
+            useEffect(() => {
+              console.log("typeResult mudou para:", value);
+               updateFilters("tab", value );
+          
+               navigate({
+                pathname: location.pathname,
+                search: queryUrl.toString(),
+              })
+          
+            }, [value]);
 
             useEffect(() => {
               const fetchData = async () => {

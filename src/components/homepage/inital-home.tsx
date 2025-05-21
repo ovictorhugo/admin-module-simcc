@@ -202,7 +202,7 @@ const chartConfig = {
 
 export function InitialHome() {
   const [VisaoPrograma, setVisaoPrograma] = useState<VisaoPrograma[]>([]);
-  const { setItensSelecionados, urlGeral, version } = useContext(UserContext);
+  const { setItensSelecionados, urlGeral, version, permission } = useContext(UserContext);
 
   const [year, setYear] = useState(new Date().getFullYear() - 4);
 
@@ -533,6 +533,10 @@ export function InitialHome() {
    
   ];
 
+  const has_visualizar_tecnicos = permission.some(
+    (perm) => perm.permission === 'visualizar_tecnicos'
+  );
+
 
   ///
     const [researcher, setResearcher] = useState<Research[]>([]);
@@ -708,12 +712,12 @@ const [isLoad, setLoad] = useState(false)
   <Info className="h-4 w-4" />
   <AlertTitle>Interpretação dos dados</AlertTitle>
   <AlertDescription className="text-xs">
-    Os dados exibidos na plataforma <strong>Conectee</strong> consideram apenas os <strong>pesquisadores ativos</strong>. Métricas como <strong>"Total de livros"</strong> refletem a produção dos docentes atualmente cadastrados, e não o histórico completo.
+    Os dados exibidos na plataforma <strong>{version ? ('Conectee'):('Simcc')}</strong> consideram apenas os <strong>pesquisadores ativos</strong>. Métricas como <strong>"Total de livros"</strong> refletem a produção dos docentes atualmente cadastrados, e não o histórico completo.
   </AlertDescription>
 </Alert>
 
       <Alert className="flex rounded-t-none flex-col md:grid gap-3 lg:grid-cols-4 grid-cols-2">
-          <Link onClick={() => onOpenResult('articles-home')} to={'/resultados?type_search=article&terms=&researcher=false'}>
+          <Link  to={'/listagens?tab=article'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
                 <CardTitle className="text-[0.9rem] md:text-sm font-medium">
@@ -732,7 +736,7 @@ const [isLoad, setLoad] = useState(false)
             </CardContent>
           </Link>
 
-          <Link onClick={() => onOpenResult('book-home')} to={'/resultados?type_search=book&terms=&researcher=false'}>
+          <Link  to={'/listagens?tab=book'}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
                 <CardTitle className="text-[0.9rem] md:text-sm font-medium">
@@ -751,7 +755,7 @@ const [isLoad, setLoad] = useState(false)
             </CardContent>
           </Link>
 
-          <Link onClick={() => onOpenResult('book-home')} to={'/resultados?type_search=book&terms=&researcher=false'}>
+          <Link  to={'/listagens?tab=chapter'}>
             <CardHeader className="flex flex-row pb-2 items-center justify-between space-y-0">
               <div>
                 <CardTitle className="text-[0.9rem]  md:text-sm font-medium">
@@ -770,7 +774,7 @@ const [isLoad, setLoad] = useState(false)
             </CardContent>
           </Link>
 
-          <Link onClick={() => onOpenResult('patent-home')} to={'/resultados?type_search=patent&terms=&researcher=false'}>
+          <Link  to={'/listagens?tab=patent'}>
             <CardHeader className="flex flex-row items-center pb-2 justify-between space-y-0">
               <div>
                 <CardTitle className="text-[0.9rem] md:text-sm font-medium">
@@ -821,7 +825,7 @@ const [isLoad, setLoad] = useState(false)
 
                   lg:h-1/2
                 "
-                to={'/listagens'}
+                to={'/listagens?tab=pesquisadores'}
               >
                 <Alert
                   className="
@@ -875,7 +879,7 @@ const [isLoad, setLoad] = useState(false)
 
                   lg:h-1/2
                 "
-                to={'/listagens'}
+                to={ has_visualizar_tecnicos ? ('/listagens?tab=tecnicos') :( '/')}
               >
                 <Alert
                   className="
