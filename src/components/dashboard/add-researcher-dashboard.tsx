@@ -82,7 +82,7 @@ export function AddResearcherDashboard() {
 
           const fetchData = async () => {
           
-            if(nomePesquisador.length != 0 && lattesID.length > 13) {
+            if(nomePesquisador.length != 0) {
                 try {
                     const response = await fetch(urlProgram, {
                       mode: 'cors',
