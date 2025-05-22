@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { useModalHomepage } from "../hooks/use-modal-homepage";
-import {  useNavigate } from "react-router-dom";
+import {  Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import {  ChevronLeft,  Rows } from "lucide-react";
+import {  ArrowRight, ChevronLeft,  Info,  Rows } from "lucide-react";
 import { SelectTypeSearch } from "../search/select-type-search";
 import { Input } from "../ui/input";
 import { FileCsv, MagnifyingGlass } from "phosphor-react";
@@ -169,19 +169,22 @@ export function Dicionario() {
 
             </div>
 
-                    <div>
+            <div className=" w-full  flex  flex-col  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
+          <Link to={'/informacoes'} className="inline-flex w-fit z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba o que é e como utilizar a plataforma<ArrowRight size={12} /></Link>
+
+          <h1 className="z-[2] text-left max-w-[700px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
+          Todas as{" "}
+            <strong className="bg-eng-blue  rounded-md px-3 pb-2 text-white font-medium">
+              {" "}
+              palavras
+            </strong>{" "}
+            cadastradas na plataforma
+          </h1>
+          <p className="max-w-[750px] mb-4 text-left text-lg font-light text-foreground">Pesquise termos para auxiliar o seu filtro na plataforma</p>
+
                       
 
-                        <h1 className="max-w-[550px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block mb-3">
-                            Todas as {" "}
-                            <strong className="bg-eng-blue rounded-md px-3 pb-2 text-white font-medium">
-                                palavras
-                            </strong>{" "}
-                            cadastradas na plataforma
-                        </h1>
-                        <p className="max-w-[750px] text-lg font-light text-foreground">
-                            Pesquise termos para auxiliar o seu filtro na plataforma
-                        </p>
+                     
                         <div className="flex gap-3 mt-3">
                             <div className="flex gap-3 items-center w-full max-w-[550px] rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:placeholder:text-neutral-400">
                                 <MagnifyingGlass size={16} className="whitespace-nowrap w-10" />

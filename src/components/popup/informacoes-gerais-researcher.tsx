@@ -1,66 +1,9 @@
 import { CalendarBlank, ChalkboardSimple, ChartLine, Quotes } from "phosphor-react";
 import dt from '../../assets/dt.png'
 import pq from '../../assets/pq.png'
+import fc from '../../assets/fc.png'
 
 
-type Research = {
-  data_atualizacao_lattes?: string,
-  entradanaufmg?:string
-  orcid: string
-  h_index: string,
-  relevance_score: string,
-  works_count: string,
-  cited_by_count: string,
-  i10_index: string,
-  scopus: string,
-  openalex: string,
-
-  subsidy: Bolsistas[]
-  graduate_programs: GraduatePrograms[]
-  departments: Departments[]
-  research_groups: ResearchGroups[]
-
-  cargo: string
-  clas: string
-  classe: string
-  rt: string
-  situacao: string
-
-  classification: string
-}
-
-interface Bolsistas {
-  aid_quantity: string
-  call_title: string
-  funding_program_name: string
-  modality_code: string
-  category_level_code: string
-  institute_name: string
-  modality_name: string
-  scholarship_quantity: string
-}
-
-interface GraduatePrograms {
-  graduate_program_id: string
-  name: string
-}
-
-interface Departments {
-  dep_des: string
-  dep_email: string
-  dep_nom: string
-  dep_id: string
-  dep_sigla: string
-  dep_site: string
-  dep_tel: string
-  img_data: string
-}
-
-interface ResearchGroups {
-  area: string
-  group_id: string
-  name: string
-}
 
 import {
   Tooltip,
@@ -74,6 +17,7 @@ import { Link } from "react-router-dom";
 import { useModal } from "../hooks/use-modal-store";
 import { useContext } from "react";
 import { UserContext } from "../../context/context";
+import { Research } from "../modals/researcher-modal";
 
 
 export function InformacoesGeraisResearcher(props: Research) {
@@ -189,7 +133,7 @@ export function InformacoesGeraisResearcher(props: Research) {
   const { onClose } = useModal()
 
   const currentDate = new Date();
-  const lattesUpdate = String(props.data_atualizacao_lattes).split('/');
+  const lattesUpdate = String(props.lattes_update).split('/');
   const lattesMonth = parseInt(lattesUpdate[1]);
   const lattesYear = parseInt(lattesUpdate[2]);
 
@@ -229,17 +173,22 @@ export function InformacoesGeraisResearcher(props: Research) {
 
         )}
 
-{(props.entradanaufmg?.length != 0 && version )&& (
-          <TooltipProvider>
-            <Tooltip>
-            <TooltipTrigger className="outline-none"> <div className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><CalendarBlank size={12} className="textwhite" /> Entrada na UFMG: {props.entradanaufmg}</div></TooltipTrigger>
-              <TooltipContent>
-                <p>Fonte: Escola de Engenharia UFMG</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+{(props.ufmg.organization_entry_date?.length !== 0 && version) && (
+  <TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger className="outline-none">
+        <div className="py-2 px-4 border border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs flex gap-2 items-center">
+          <CalendarBlank size={12} className="" />
+          Entrada na UFMG: {new Date(props.ufmg.organization_entry_date).toLocaleDateString('pt-BR')}
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Fonte: Escola de Engenharia UFMG</p>
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+)}
 
-        )}
 
         {props.i10_index?.length != 0 && (
           <TooltipProvider>
@@ -253,15 +202,15 @@ export function InformacoesGeraisResearcher(props: Research) {
 
         )}
 
-        {props.rt?.length != 0 && (
-          <div className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><Clock size={12} className="textwhite" />Regime de trabalho: {props.rt}</div>
+        {props.ufmg.work_regime?.length != 0 && (
+          <div className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><Clock size={12} className="textwhite" />Regime de trabalho: {props.ufmg.work_regime}</div>
 
         )}
 
 
 
-        {props.cargo?.length != 0 && (
-          <div className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><ChalkboardSimple size={12} className="textwhite" />{props.cargo}</div>
+        {props.ufmg.job_title?.length != 0 && (
+          <div className=" py-2 px-4 border  border-neutral-200 bg-white dark:bg-black dark:border-neutral-800 rounded-md text-xs  flex gap-2 items-center"><ChalkboardSimple size={12} className="textwhite" />{props.ufmg.job_title}</div>
 
         )}
 
@@ -293,7 +242,7 @@ export function InformacoesGeraisResearcher(props: Research) {
           ${isOutdated6 ? ('bg-red-500 text-white border-none') : isOutdated ? ('bg-yellow-600 text-white border-none') : ('')}
         `}
         >
-          <CalendarBlank size={12} /> Atualização do Lattes: {String(props.data_atualizacao_lattes)}
+          <CalendarBlank size={12} /> Atualização do Lattes: {String(props.lattes_update)}
         </div>
 
       </div>
@@ -331,6 +280,35 @@ export function InformacoesGeraisResearcher(props: Research) {
         ))
 
       )}
+
+{props.ufmg.current_function_name && (
+
+
+  <div>
+    <div className="font-medium text-left text-2xl mb-6 pr-12">
+      Função de Confiança
+    </div>
+    <div className="flex relative flex-1 mb-6">
+
+      <div className={`w-2 min-w-[8px]  flex flex-1 relative rounded-l-lg bg-[#D6850F] border border-r-0 border-neutral-200 dark:border-neutral-800 `}></div>
+
+      <Alert className="flex justify-center  rounded-l-none gap-8 ">
+        <div className="flex flex-col flex-1 justify-center h-full">
+          <p className="mb-2 font-medium">{props.ufmg.current_function_name}</p>
+
+          <div className="text-xs text-gray-500 flex items-center gap-2">
+            {props.ufmg.function_location}
+          </div>
+        </div>
+
+       
+          <img src={fc} className="w-8 relative -top-4 h-[52px]" alt="" />
+       
+      </Alert>
+    </div>
+  </div>
+
+)}
 
       {props.subsidy.length != 0 && (
 

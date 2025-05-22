@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Alert } from "../../../ui/alert"
 import { UserContext } from "../../../../context/context"
 import { MapPin, Plus, PuzzlePiece, X } from "phosphor-react"
@@ -13,6 +13,8 @@ import { CardTitle } from "../../../ui/card"
 import { InfiniteMovingCards } from "../../../ui/infinite-moving-cards"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../ui/tooltip"
 import { toast } from "sonner"
+import { getInstitutionImage } from "../institutions-home/institution-image"
+import { getInstitutionImageName } from "../institutions-home/institution-image-name"
 
 type Research = {
   among: number,
@@ -44,7 +46,7 @@ type Research = {
   ufmg: Ufmg
 }
 
-interface Ufmg {
+export interface Ufmg {
   id: string;
   full_name: string;
   gender: string | null;
@@ -99,6 +101,17 @@ export function ResearchItem(props: Research) {
     (perm) => perm.permission === 'criar_barema_avaliacao'
   );
 
+   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  
+    useEffect(() => {
+      const fetchImage = async () => {
+        const url = await getInstitutionImageName(props.university);
+        setImageUrl(url);
+      };
+  
+      fetchImage();
+    }, [props]);
+
   return (
     <div onClick={() => onOpen('researcher-modal', { name: props.name })} className="flex group min-h-[300px] w-full cursor-pointer">
 
@@ -107,8 +120,9 @@ export function ResearchItem(props: Research) {
           <div className="flex flex-col justify-between h-full">
             <div className="z-[1] w-full  p-4 flex gap-3 justify-end">
 
-              <div className="mr-auto">
-        
+              <div className="mr-auto flex h-fit  gap-2">
+
+
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -170,7 +184,7 @@ export function ResearchItem(props: Research) {
                         </TooltipProvider>
                  
               
-
+                     
 
 
                 <div className="flex group-hover:hidden">
@@ -182,8 +196,8 @@ export function ResearchItem(props: Research) {
                 </div>
               </div>
            
-
-              {props.ufmg?.current_function_name?.trim()  &&  (
+              <img src={imageUrl || ''} alt="" className="h-6" />
+              {props.ufmg.current_function_name   &&  (
                       <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -193,7 +207,7 @@ export function ResearchItem(props: Research) {
                 
 
                 <TooltipContent>
-                  {props.ufmg.current_function_name}
+                 Função de confiança
                 </TooltipContent>
 
                 </Tooltip>

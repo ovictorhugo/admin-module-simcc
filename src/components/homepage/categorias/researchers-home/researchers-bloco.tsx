@@ -61,6 +61,7 @@ export function ResearchersBloco(props: Research) {
 
                         return (
                             <ResearchItem
+                            ufmg={item.ufmg}
                                 among={item.among}
                                 articles={item.articles}
                                 book={item.book}

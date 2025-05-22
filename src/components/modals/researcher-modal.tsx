@@ -25,7 +25,7 @@ export type Research = {
   book: number,
   book_chapters: number,
   id: string,
-  entradanaufmg:string
+
   name: string,
   university: string,
   lattes_id: string,
@@ -54,11 +54,7 @@ export type Research = {
   departments: Departments[]
   research_groups: ResearchGroups[]
   status: boolean
-  cargo: string
-  clas: string
-  classe: string
-  rt: string
-  situacao: string
+ ufmg: Ufmg
 }
 
 interface Bolsistas {
@@ -134,6 +130,7 @@ import { TextoRevista } from "../popup/texto-revista";
 import { CargosFuncoes } from "../popup/cargos-funcoes";
 import { Coautores } from "../popup/coautores";
 import { getInstitutionImage } from "../homepage/categorias/institutions-home/institution-image";
+import { Ufmg } from "../homepage/categorias/researchers-home/researcher-item";
 
 export function ResearcherModal() {
 
@@ -453,22 +450,26 @@ useEffect(() => {
                       <CalendarBlank size={16} />  Atualização do Lattes: {String(props.lattes_update)}
                     </div>
                     {researcher.slice(0, 1).map((user) => {
-                      return (
-                        <div
-                          className={`
-                      hidden text-[0.5rem] py-2 px-4 border dark:border-neutral-800 w-fit
-                      rounded-md  font-bold gap-1 items-center
 
-                      md:text-xs md:py-2 md:px-4 
-
-                      lg:flex
-                      text-white border-none
-                      ${user.status ? ('bg-green-500 ') : ('bg-red-500')}
-                  `}
-                        >
-                          {user.status ? (<Check size={16} />) : (<Minus size={16} />)} {user.status ? ('Ativo') : ('Inativo')}
-                        </div>
-                      )
+                      if (!user.status) {
+                        return (
+                          <div
+                            className={`
+                        hidden text-[0.5rem] py-2 px-4 border dark:border-neutral-800 w-fit
+                        rounded-md  font-bold gap-1 items-center
+  
+                        md:text-xs md:py-2 md:px-4 
+  
+                        lg:flex
+                        text-white border-none
+                        ${user.status ? ('bg-green-500 ') : ('bg-red-500')}
+                    `}
+                          >
+                            {user.status ? (<Check size={16} />) : (<Minus size={16} />)} {user.status ? ('Ativo') : ('Inativo')}
+                          </div>
+                        )
+                      }
+                     
                     })}
                   </div>
 
@@ -880,28 +881,7 @@ useEffect(() => {
 
                           return (
                             <InformacoesGeraisResearcher
-                              data_atualizacao_lattes={user.lattes_update.toString()}
-                              classification={user.classification}
-                              h_index={user.h_index}
-                              relevance_score={user.relevance_score}
-                              works_count={user.works_count}
-                              cited_by_count={user.cited_by_count}
-                              i10_index={user.i10_index}
-                              scopus={user.scopus}
-                              orcid={user.orcid}
-                              openalex={user.openalex}
-
-                              subsidy={user.subsidy}
-                              graduate_programs={user.graduate_programs}
-                              departments={user.departments}
-                              entradanaufmg={user.entradanaufmg}
-                              cargo={user.cargo}
-                              clas={user.clas}
-                              classe={user.classe}
-                              rt={user.rt}
-                              situacao={user.situacao}
-
-                              research_groups={user.research_groups}
+                             {...user}
                             />
                           )
 

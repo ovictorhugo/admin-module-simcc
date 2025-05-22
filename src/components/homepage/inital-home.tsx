@@ -250,7 +250,7 @@ export function InitialHome() {
   //
 
   const urlRt = `${urlGeral}departament/rt`
-
+console.log(urlRt)
   const [rt, setRt] = useState<Rt | null>(null);
 
   useEffect(() => {
@@ -708,7 +708,7 @@ const [isLoad, setLoad] = useState(false)
       <div className=" w-full md:px-8 gap-8 flex flex-col px-4">
 
       <div>
-      <Alert className="rounded-b-none border-b-0 bg-neutral-100">
+      <Alert className="rounded-b-none border-b-0 dark:bg-neutral-700 bg-neutral-100">
   <Info className="h-4 w-4" />
   <AlertTitle>Interpretação dos dados</AlertTitle>
   <AlertDescription className="text-xs">

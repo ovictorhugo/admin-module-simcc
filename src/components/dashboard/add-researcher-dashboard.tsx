@@ -339,7 +339,7 @@ setcarregado(false)
           
          {version && (
              <Button size={'sm'}
-             onClick={() => onOpen('import-docentes')}><FileXls size={16} />Importar dados dos docentes</Button>
+             onClick={() => onOpen('import-docentes')}><FileXls size={16} />Importar .xls da UFMG</Button>
          )}
               </div>
             </div>
@@ -410,7 +410,7 @@ setcarregado(false)
        <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3"  style={{ backgroundImage: `url(${bg_popup})` }}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
-                        Total de pesquisadores
+                        Total de docentes
                       </CardTitle>
                       <User className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
@@ -431,7 +431,7 @@ setcarregado(false)
                     </CardHeader>
   
                     <CardContent>
-                      <h2 className="font-medium text-xl">Adicionar <br/> pesquisador(a)</h2>
+                      <h2 className="font-medium text-xl">Adicionar <br/> docente</h2>
                     </CardContent>
                     </Alert>
        </div>
@@ -439,7 +439,7 @@ setcarregado(false)
       <Alert className="p-0 bg-cover bg-no-repeat bg-center lg:col-span-3"  style={{ backgroundImage: `url(${bg_popup})` }}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">
-          Total de pesquisadores
+          Total de docentes
         </CardTitle>
         <User className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
@@ -458,7 +458,7 @@ setcarregado(false)
        <div className="grid gap-8">
         <fieldset className="grid gap-6 rounded-lg  p-4 bg-white dark:border-neutral-800 border border-neutral-200 dark:bg-neutral-950 bg-cover  bg-center bg-no-repeat "  >
        <legend className="-ml-1 px-1 text-sm font-medium">
-         Adicionar pesquisador à instituição
+         Adicionar docente à instituição
        </legend>
 
        <div className="flex gap-3 items-end">

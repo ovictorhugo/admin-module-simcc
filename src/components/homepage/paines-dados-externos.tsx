@@ -133,20 +133,19 @@ export function PaineisDadosExternos() {
 
            <div className="relative ">
         
-<div className="bg-neutral-100 mb-8 flex gap-3 dark:bg-neutral-800 w-full px-8 py-4 rounded-md">
-                <div>
+           <Alert className=" bg-neutral-100 dark:bg-neutral-700 mb-8">           
                 <Info className="h-4 w-4" />
-                </div>
+               
 
-                <div>
+             
                 <AlertTitle>Atenção!</AlertTitle>
   <AlertDescription>
     Estes são alguns links de fontes de dados públicos que a plataforma acessa de forma autorizada, além de links para outras plataformas com objetivos semelhantes.
   </AlertDescription>
 
-                </div>
+        
 
-              </div>
+              </Alert>
 
 
            <div className="w-full rounded-lg absolute bg-eng-blue h-[270px]"></div>
