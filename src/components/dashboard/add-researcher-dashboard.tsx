@@ -141,14 +141,6 @@ export function AddResearcherDashboard() {
                       onClick: () => console.log("Undo"),
                     },
                   })
-               } else if (lattesID.length < 13) {
-                toast("Parece que o Lattes Id está incorreto ou não preenchido", {
-                    description: "O Lattes ID teve conter 13 números",
-                    action: {
-                      label: "Fechar",
-                      onClick: () => console.log("Undo"),
-                    },
-                  })
                } else if (nomePesquisador.length == 0) {
                 toast("Preencha o nome do pesquisador", {
                     description: "Parece que o campo está vazio",
@@ -225,7 +217,7 @@ setcarregado(false)
   useEffect(() => {
     if (dataModal.updateFetch == true) {
       fetchDataTable();
-      dataModal.setUpdateFetch(false)
+     
       setUpdateFetch(false)
     }
   }, [dataModal.updateFetch]);

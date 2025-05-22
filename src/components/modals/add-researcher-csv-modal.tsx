@@ -303,7 +303,7 @@ const headerMap: { [key: string]: keyof Bolsista } = {
                         <div className="text-sm font-gray-500">
                             {uploadProgress ? ('Isso pode demorar bastante, não feche a página.') : ('')}
                         </div>
-                        <Button onClick={() => handleSubmitBolsista()} className="ml-auto flex mt-3">
+                        <Button disabled={data.length == 0} onClick={() => handleSubmitBolsista()} className="ml-auto flex mt-3">
                             {uploadProgress ? (<LoaderCircle size={16} className="an animate-spin" />) : (<Upload size={16} className="" />)}  {uploadProgress ? ('Adicionando docentes') : ('Adicionar docentes')}
                         </Button>
 
