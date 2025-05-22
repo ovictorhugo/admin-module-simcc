@@ -129,9 +129,6 @@ const onClickBuscaPatrimonio = () => {
            seu provimento de cargo
            </h1>
 
-
-
-     
           <Alert  className="h-14 mt-8 p-2 flex items-center justify-between lg:max-w-[60vw] lg:w-[60vw] w-full ">
            <div className="flex items-center gap-2 w-full flex-1">
            <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />

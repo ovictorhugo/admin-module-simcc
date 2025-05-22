@@ -95,7 +95,7 @@ interface GraduatePrograms {
 
 export function ResearchItem(props: Research) {
   const { onOpen } = useModal();
-  const { urlGeral, setPesquisadoresSelecionados, permission, pesquisadoresSelecionados } = useContext(UserContext)
+  const { urlGeral, version, setPesquisadoresSelecionados, permission, pesquisadoresSelecionados } = useContext(UserContext)
 
   const hasBaremaAvaliacao = permission.some(
     (perm) => perm.permission === 'criar_barema_avaliacao'
@@ -196,7 +196,7 @@ export function ResearchItem(props: Research) {
                 </div>
               </div>
            
-              <img src={imageUrl || ''} alt="" className="h-6" />
+            
               {props.ufmg.current_function_name   &&  (
                       <TooltipProvider>
                       <Tooltip>
@@ -237,7 +237,9 @@ export function ResearchItem(props: Research) {
             <div className="flex gap-2 px-6 flex-col pb-6  w-full h-full text-white justify-end  ">
               <div className="flex gap-1 flex-col">
 
-
+             {!version && (
+               <img src={imageUrl || ''} alt="" className="h-5 group-hover:hidden w-fit flex" />
+             )}
                 <CardTitle className="text-lg font-medium">{props.name}</CardTitle>
 
                 <div className="group-hover:flex hidden items-center flex-wrap gap-1  mb-2">
