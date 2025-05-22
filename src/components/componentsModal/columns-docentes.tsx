@@ -35,7 +35,7 @@ export const columnsDocentes: ColumnDef<Patrimonio>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Nome do docente
+          Nome 
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )

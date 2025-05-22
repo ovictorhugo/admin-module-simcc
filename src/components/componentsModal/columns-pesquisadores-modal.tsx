@@ -48,7 +48,7 @@ export const columnsPesquisadoresModal: ColumnDef<Patrimonio>[] = [
     header: () => <div className="text-right flex items-center">CPF</div>,
     cell: ({ row }) => {
     
-      return  <div className="flex w-fit gap-1 text-xs  ">{row.getValue("lattes_id")}</div>
+      return  <div className="flex w-fit gap-1 text-xs  ">{row.getValue("cpf")}</div>
       
     },
   },

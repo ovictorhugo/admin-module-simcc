@@ -98,14 +98,7 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex items-center pb-4">
-        <Input
-          placeholder="Filtrar pesquisador..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+       
 
 <div className="flex gap-3 ml-auto">
 <Button onClick={() => handleBtnCsv()} variant="outline" className="ml-auto">

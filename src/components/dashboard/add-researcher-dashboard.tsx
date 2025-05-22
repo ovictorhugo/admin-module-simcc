@@ -2,7 +2,7 @@ import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
 import bg_popup from '../../assets/bg_popup.png';
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { ChevronDown, ChevronLeft,  ChevronUp,  Copy,  Download,  Info,  Link,  Maximize2,  Plus, Trash, User } from "lucide-react";
 import { toast } from "sonner"
@@ -25,6 +25,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
 import { EditResearcherModal } from "../modals/edit-researcher-modal";
 import { HeaderInstitution } from "./components/header-institutuion";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import { Badge } from "../ui/badge";
 
 
 export function AddResearcherDashboard() {
@@ -220,11 +223,11 @@ setcarregado(false)
 
 
   useEffect(() => {
-    if (updateFetch) {
+    if (dataModal.updateFetch == true) {
       fetchDataTable();
+      dataModal.setUpdateFetch(false)
       setUpdateFetch(false)
     }
-   
   }, [dataModal.updateFetch]);
 
   const history = useNavigate();
@@ -307,6 +310,50 @@ setcarregado(false)
   /////
 
 
+  const [profile, setProfile] = useState({
+    img_perfil: '',
+    img_background: '',
+    institution_id: user?.institution_id || '',
+    color:'',
+    site:'',
+    name:''
+  });
+
+  
+    const db = getFirestore();
+    const storage = getStorage();
+    const isDataLoaded = useRef(false); // Evita loops de salvamento
+    
+    // Carregar dados ao montar a página
+    useEffect(() => {
+      if (profile.institution_id) {
+        const fetchInstitutionData = async () => {
+          const docRef = doc(db, "institutions", profile.institution_id);
+          const docSnap = await getDoc(docRef);
+    
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+    
+            setProfile({
+              institution_id:data?.institution_id || '',
+              img_background: data?.img_background || "",
+              img_perfil: data?.img_perfil || "",
+              color: data?.color || "",
+              site: data?.site || "",
+              name: data?.name || ''
+            });
+    
+            isDataLoaded.current = true; // Marca que os dados foram carregados
+          } else {
+            console.log("Instituição não encontrada. Criando novo registro...");
+         
+          }
+        };
+    
+        fetchInstitutionData();
+      }
+    }, [profile.institution_id]);
+
     return  (
 <>
 
@@ -330,7 +377,13 @@ setcarregado(false)
               <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
                 Pesquisadores
               </h1>
+
              
+        
+
+              <Badge variant="outline" className="ml-auto gap-2 sm:ml-0">
+              <img src={profile.img_perfil} className="w-8 " alt="" />   {`${profile.name}`}
+              </Badge>
 
                 
             
@@ -339,14 +392,14 @@ setcarregado(false)
           
          {version && (
              <Button size={'sm'}
-             onClick={() => onOpen('import-docentes')}><FileXls size={16} />Importar .xls da UFMG</Button>
+             onClick={() => onOpen('import-docentes')}><FileXls size={16} />Importar dados UFMG</Button>
          )}
               </div>
             </div>
 
             </div>
 
-            <HeaderInstitution/>
+ 
 </div>
             <div className="top-[68px] sticky z-[2] supports-[backdrop-filter]:dark:bg-neutral-900/60 supports-[backdrop-filter]:bg-neutral-50/60 backdrop-blur">
             <div className={`w-full px-8  border-b border-b-neutral-200 dark:border-b-neutral-800`}>
@@ -469,12 +522,12 @@ setcarregado(false)
 
            <div className="flex flex-col space-y-1.5 w-full flex-1">
            <Label htmlFor="name">Lattes Id</Label>
-           <Input value={lattesID} onChange={(e) => setLattesID(e.target.value)} type="text" />
+           <Input  disabled={cpf.length > 0} value={lattesID} onChange={(e) => setLattesID(e.target.value)} type="text" />
            </div>
 
            <div className="flex flex-col space-y-1.5 w-full flex-1">
            <Label htmlFor="name">CPF</Label>
-           <Input value={cpf} onChange={handleCpfChange} type="text" />
+           <Input disabled={lattesID.length > 0} value={cpf} onChange={handleCpfChange} type="text" />
            </div>
 
            <div className="flex flex-col max-w-[250px] space-y-1.5 w-full flex-1">
@@ -512,7 +565,7 @@ setcarregado(false)
               <Accordion defaultValue="item-1" type="single" collapsible>
                 <AccordionItem value="item-1">
                   <div className="flex mb-2">
-                    <HeaderResultTypeHome title="Todos os pesquisadores" icon={<UserList size={24} className="text-gray-400" />}>
+                    <HeaderResultTypeHome title="Todos os docentes" icon={<UserList size={24} className="text-gray-400" />}>
                       <div className="hidden md:flex gap-3 mr-3">
                         <Button onClick={() => setTypeVisu('rows')} variant={typeVisu === 'block' ? 'ghost' : 'outline'} size={'icon'}>
                           <Rows size={16} className="whitespace-nowrap" />

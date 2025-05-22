@@ -12,8 +12,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/
 import { ScrollArea } from "../ui/scroll-area";
 import { DataTableModal } from "../componentsModal/data-table";
 import { columnsPesquisadoresModal } from "../componentsModal/columns-pesquisadores-modal";
-import { LoaderCircle, X } from "lucide-react";
+import { ArrowRight, Info, LoaderCircle, X } from "lucide-react";
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
+import { Link } from "react-router-dom";
+import { Separator } from "../ui/separator";
 interface Bolsista {
     name: string
     lattes_id: string
@@ -69,10 +71,13 @@ export function AddResearcherCsvModal() {
             const rows = json.slice(1);
 
             // Map headers to your interface keys
-            const headerMap: { [key: string]: keyof Bolsista } = {
-                'name': 'name',
-                'lattes_id': 'lattes_id'
-            };
+            // Corrigir headerMap para bater com os nomes reais da planilha
+const headerMap: { [key: string]: keyof Bolsista } = {
+    'name': 'name',
+    'lattes_id': 'lattes_id',
+    'cpf': 'cpf'
+};
+
 
             // Convert rows to an array of objects
             const jsonData = rows.map((row: any) => {
@@ -80,8 +85,9 @@ export function AddResearcherCsvModal() {
                     researcher_id: uuidv4(),
                     name: '',
                     lattes_id: '',
+                     cpf: '',
                     institution_id: user?.institution_id || '',
-                    cpf: ''
+                   
                 };
                 headers.forEach((header, index) => {
                     const key = headerMap[header];
@@ -100,64 +106,109 @@ export function AddResearcherCsvModal() {
     const [uploadProgress, setUploadProgress] = useState(false);
 
     const handleSubmitBolsista = async () => {
-        try {
-            if (data.length === 0) {
-                toast("Erro: Nenhum arquivo selecionado", {
-                    description: "Por favor, selecione um arquivo csv para enviar.",
-                    action: {
-                        label: "Fechar",
-                        onClick: () => console.log("Fechar"),
-                    },
-                });
-                return;
-            }
-            setUploadProgress(true)
-            let urlBolsistaInsert = `${urlGeralAdm}ResearcherRest/Insert`;
-
-            const response = await fetch(urlBolsistaInsert, {
-                mode: 'cors',
-                method: 'POST',
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'POST',
-                    'Access-Control-Allow-Headers': 'Content-Type',
-                    'Access-Control-Max-Age': '3600',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
+        if (data.length === 0) {
+            toast("Erro: Nenhum arquivo selecionado", {
+                description: "Por favor, selecione um arquivo .xls para enviar.",
+                action: { label: "Fechar", onClick: () => {} },
             });
-
-            if (response.ok) {
-                toast("Dados enviados com sucesso", {
-                    description: "Todos os dados foram enviados.",
-                    action: {
-                        label: "Fechar",
-                        onClick: () => console.log("Fechar"),
-                    },
-                });
+            return;
+        }
+    
+        setUploadProgress(true);
+        const urlBolsistaInsert = `${urlGeralAdm}ResearcherRest/Insert`;
+    
+        const failedInserts: Bolsista[] = [];
+        const validationErrors: { item: Bolsista; motivo: string }[] = [];
+    
+        for (const item of data) {
+            const nomeValido = item.name?.trim().length > 0;
+            const lattesId = item.lattes_id?.trim() || '';
+            const lattesValido = lattesId.length >= 13;
+            const cpf = item.cpf?.trim() || '';
+            const cpfValido = cpf.length >= 11;
+    
+            // Regras de validação com prioridade para Lattes ID
+            if (!nomeValido) {
+                validationErrors.push({ item, motivo: 'Nome do pesquisador ausente.' });
+                continue;
             }
-
-            setUploadProgress(false)
-
-            setData([])
-            setFileInfo({
-                name: '',
-                size: 0,
-            });
-
-        } catch (error) {
-            console.error('Erro ao processar a requisição:', error);
-            toast("Erro ao processar a requisição", {
-                description: "Tente novamente mais tarde.",
+    
+            if (!lattesValido) {
+                if (!cpfValido) {
+                    validationErrors.push({
+                        item,
+                        motivo: lattesId.length > 0
+                            ? 'Lattes ID inválido (menos de 13 caracteres) e CPF inválido ou ausente.'
+                            : 'Lattes ID ausente e CPF inválido ou ausente.',
+                    });
+                    continue;
+                }
+            }
+    
+            // Envio ao backend
+            try {
+                const response = await fetch(urlBolsistaInsert, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'POST',
+                        'Access-Control-Allow-Headers': 'Content-Type',
+                        'Access-Control-Max-Age': '3600'
+                    },
+                    body: JSON.stringify(item),
+                });
+    
+                if (!response.ok) {
+                    if (response.status === 400) {
+                        toast(`Pesquisador já existe: ${item.name}`, {
+                            description: "Registro duplicado.",
+                            action: { label: "Fechar", onClick: () => {} },
+                        });
+                    } else {
+                        toast(`Erro ao enviar: ${item.name}`, {
+                            description: `Erro ${response.status}`,
+                            action: { label: "Fechar", onClick: () => {} },
+                        });
+                    }
+                    failedInserts.push(item);
+                }
+            } catch (error) {
+                console.error(`Erro ao enviar ${item.name}:`, error);
+                failedInserts.push(item);
+            }
+        }
+    
+        setUploadProgress(false);
+    
+        if (validationErrors.length > 0) {
+            console.warn("Erros de validação:", validationErrors);
+            toast("Erros de validação", {
+                description: `${validationErrors.length} registros ignorados.`,
                 action: {
-                    label: "Fechar",
-                    onClick: () => console.log("Fechar"),
+                    label: "Ver detalhes",
+                    onClick: () => console.table(validationErrors),
                 },
             });
-            setUploadProgress(false)
+        }
+    
+        if (failedInserts.length > 0 || validationErrors.length > 0) {
+            setData(failedInserts.concat(validationErrors.map(v => v.item)));
+            toast("Dados com erro", {
+                description: `${failedInserts.length + validationErrors.length} registros falharam.`,
+                action: { label: "Fechar", onClick: () => {} },
+            });
+        } else {
+            setData([]);
+            setFileInfo({ name: '', size: 0 });
+            toast("Sucesso!", {
+                description: "Todos os registros foram inseridos.",
+                action: { label: "Fechar", onClick: () => {} },
+            });
         }
     };
-
+    
+    
 
     console.log(data)
 
@@ -197,7 +248,16 @@ export function AddResearcherCsvModal() {
                         <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
                             Adicionar pesquisadores com .xls
                         </h1>
-
+                        <Link
+              to={"/modelos-documentos"}
+              target="_blank"
+              className="inline-flex mt-2 items-center rounded-lg bg-neutral-100 dark:bg-neutral-700 gap-2 mb-3 px-3 py-1 text-sm font-medium"
+            >
+              <Info size={12} />
+              <div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>
+              Veja o modelo do documento .xls
+              <ArrowRight size={12} />
+            </Link>
                     </div>
                     <div className="">
                         <div {...getRootProps()} className="border-dashed mb-6 flex-col border border-neutral-300 p-6 text-center rounded-md text-neutral-400 text-sm  cursor-pointer transition-all gap-3  w-full flex items-center justify-center hover:bg-neutral-100 mt-4">
@@ -214,24 +274,28 @@ export function AddResearcherCsvModal() {
 
                         <div>
                             {fileInfo.name && (
+                              <>
                                 <div className="justify-center flex items-center gap-3">
                                     <FileXls size={16} />
                                     <p className=" text-center  text-zinc-500 text-sm">
                                         Arquivo selecionado: <strong>{fileInfo.name}</strong> ({(fileInfo.size / 1024).toFixed(2)} KB)
                                     </p>
                                 </div>
+
+<Separator className="my-8"/></>
                             )}
                         </div>
                     </div>
 
                     {data.length > 0 && (
                         <div className="">
-                            <div className="my-6 border-b dark:border-b-neutral-800"></div>
+
                             <h5 className="font-medium text-xl mb-4">Tabela de dados</h5>
                             <DataTableModal columns={columnsPesquisadoresModal} data={data} />
-                            <div className="mt-2 mb-6 border-b dark:border-b-neutral-800"></div>
+                          
 
-
+                            <Separator className="my-8"/>
+                           
                         </div>
                     )}
 
@@ -240,7 +304,7 @@ export function AddResearcherCsvModal() {
                             {uploadProgress ? ('Isso pode demorar bastante, não feche a página.') : ('')}
                         </div>
                         <Button onClick={() => handleSubmitBolsista()} className="ml-auto flex mt-3">
-                            {uploadProgress ? (<LoaderCircle size={16} className="an animate-spin" />) : (<Upload size={16} className="" />)}  {uploadProgress ? ('Atualizando dados') : ('Atualizar dados')}
+                            {uploadProgress ? (<LoaderCircle size={16} className="an animate-spin" />) : (<Upload size={16} className="" />)}  {uploadProgress ? ('Adicionando docentes') : ('Adicionar docentes')}
                         </Button>
 
                     </div>

@@ -169,7 +169,7 @@ export function Dicionario() {
 
             </div>
 
-            <div className=" w-full  flex  flex-col  gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
+            <div className=" w-full  flex  flex-col  gap-2 " >
           <Link to={'/informacoes'} className="inline-flex w-fit z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12} /><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba o que é e como utilizar a plataforma<ArrowRight size={12} /></Link>
 
           <h1 className="z-[2] text-left max-w-[700px] text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]  md:block mb-4 ">
