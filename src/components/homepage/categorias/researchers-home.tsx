@@ -166,13 +166,50 @@ const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 }
 
-type FiltersModalProps = {
-  researcher: Research[];
-  setResearcher: React.Dispatch<React.SetStateAction<Research[]>>;
-};
 
-export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
+interface Filtros {
+  area:string[]
+  graduation:string[]
+  city:string[]
+  institution:string[]
+  modality:string[]
+  graduate_program:string[]
+}
+export function FiltersModal() {
   const isFirstRender = useRef(true);
+const {urlGeral} = useContext(UserContext)
+  const [filtros, setFiltros] = useState<Filtros>(Filtros[])
+
+  let urlPublicacoesPorPesquisador = `${urlGeral}/researcher_filter`;
+  
+  
+    useEffect(() => {
+      const fetchData = async () => {
+  
+        try {
+          const response = await fetch(urlPublicacoesPorPesquisador, {
+            mode: 'cors',
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET',
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Max-Age': '3600',
+              'Content-Type': 'text/plain'
+            }
+          });
+          const data = await response.json();
+          if (data) {
+            setFiltros(data)
+          }
+        } catch (err) {
+          console.log(err);
+        } finally {
+  
+        }
+      };
+      fetchData();
+    }, [urlPublicacoesPorPesquisador]);
+
   const queryUrl = useQuery();
   const getArrayFromUrl = (key: string) => queryUrl.get(key)?.split(";") || [];
 
@@ -313,7 +350,7 @@ export function FiltersModal({ researcher, setResearcher }: FiltersModalProps) {
     setSelectedSubsidies([]);
     setSelectedDepartaments([]);
     setSelectedGraduatePrograms([])
-    setResearcher(researcher);
+  
     onClose();
   };
 
@@ -953,10 +990,7 @@ export function ResearchersHome() {
     setSelectedGraduatePrograms,
     setSelectedSubsidies,
     setSelectedUniversities,
-    clearFilters, selectedAreas, selectedGraduations, component, selectedCities, selectedDepartaments, selectedGraduatePrograms, selectedSubsidies, selectedUniversities } = FiltersModal({
-    researcher: originalResearcher,
-    setResearcher,
-  });
+    clearFilters, selectedAreas, selectedGraduations, component, selectedCities, selectedDepartaments, selectedGraduatePrograms, selectedSubsidies, selectedUniversities } = FiltersModal();
 
   return (
     <div className="w-full h-full">

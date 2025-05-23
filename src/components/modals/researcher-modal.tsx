@@ -165,7 +165,7 @@ export function ResearcherModal() {
   const [open, setOpen] = useState(false);
   const variations = useMemo(() => {
     if (!name) return [];
-    return generateNameVariations(name);
+    return generateNameVariations(name || '');
   }, [name]);
 
   useEffect(() => {
@@ -343,26 +343,33 @@ useEffect(() => {
     const initials = parts.map(part => part[0]).join('. ');
     const initialsWithDots = initials.replace(/ /g, '.');
     const firstAndMiddleNames = parts.slice(0, -1).join(' ');
+    const penultimatePart = parts.length >= 2 ? parts[parts.length - 2] : '';
+  
     const variations = [
-      `${lastName.toUpperCase()}, ${initials.toUpperCase()}`,
-      `${lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()}, ${initials.toUpperCase()}`,
-      `${lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()}, ${initialsWithDots.toUpperCase()}`,
-      `${lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()}, ${firstAndMiddleNames.charAt(0).toUpperCase() + firstAndMiddleNames.slice(1).toLowerCase()} ${initials.toUpperCase()}`,
-      `${lastName.toUpperCase()}, ${firstAndMiddleNames.charAt(0).toUpperCase()}`,
-      `${lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()}, ${firstAndMiddleNames.charAt(0).toUpperCase() + firstAndMiddleNames.slice(1).toLowerCase()}`,
-      `${lastName.toUpperCase()}, ${firstAndMiddleNames.toUpperCase()}`,
-      `${lastName.toUpperCase()}, ${firstAndMiddleNames.charAt(0).toUpperCase() + firstAndMiddleNames.slice(1).toLowerCase()} ${initialsWithDots.toUpperCase()}`,
-      `${parts[parts.length - 2].toUpperCase()} ${lastName.toUpperCase()}, ${firstAndMiddleNames.toUpperCase()}`,
-      `${lastName.toUpperCase()}, ${initials.charAt(0).toUpperCase()}`,
-      `${lastName.toUpperCase()}, ${name.toUpperCase()}`,
-      `${lastName.toUpperCase()}, ${firstAndMiddleNames.charAt(0).toUpperCase() + firstAndMiddleNames.slice(1).toLowerCase()} ${initials.toUpperCase()}`,
-      `${initials.charAt(0).toUpperCase()}. ${lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()}, ${initials.toUpperCase()}`,
-      `${initialsWithDots.toUpperCase()} ${lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase()}`,
-      `${initialsWithDots.toUpperCase()} ${lastName.toUpperCase()}`
+      `${lastName}, ${initials}`,
+      `${capitalize(lastName)}, ${initials}`,
+      `${capitalize(lastName)}, ${initialsWithDots}`,
+      `${capitalize(lastName)}, ${capitalize(firstAndMiddleNames)} ${initials}`,
+      `${lastName}, ${firstAndMiddleNames.charAt(0)}`,
+      `${capitalize(lastName)}, ${capitalize(firstAndMiddleNames)}`,
+      `${lastName}, ${firstAndMiddleNames}`,
+      `${lastName}, ${capitalize(firstAndMiddleNames)} ${initialsWithDots}`,
+      `${penultimatePart} ${lastName}, ${firstAndMiddleNames}`,
+      `${lastName}, ${initials.charAt(0)}`,
+      `${lastName}, ${name.toUpperCase()}`,
+      `${lastName}, ${capitalize(firstAndMiddleNames)} ${initials}`,
+      `${initials.charAt(0)}. ${capitalize(lastName)}, ${initials}`,
+      `${initialsWithDots} ${capitalize(lastName)}`,
+      `${initialsWithDots} ${lastName}`
     ];
-
+  
     return variations;
   }
+  
+  function capitalize(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
+  
 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 

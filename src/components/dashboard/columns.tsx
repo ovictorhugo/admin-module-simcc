@@ -9,8 +9,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu"
-import { ArrowUpDown, Maximize2, MoreHorizontal, Pencil, User } from "lucide-react"
-import {Copy, Eye, Trash} from "phosphor-react"
+import { Copy , Trash ,ArrowUpDown, Maximize2, MoreHorizontal, Pencil, User } from "lucide-react"
+import { Eye} from "phosphor-react"
 import { useModal } from "../hooks/use-modal-store"
 import { useContext, useState } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
@@ -88,20 +88,7 @@ export const columns: ColumnDef<PesquisadorProps>[] = [
       return (
         <div className="flex gap-3">
 
-<Button  onClick={() => onOpen('confirm-delete-researcher', {id_delete:id_pesquisador, name:name})} variant={'destructive'} className="h-8 w-8 p-0 text-white  dark:text-white">
-             
-             <Trash size={8} className="h-4 w-4" />
-           </Button>
 
-<EditResearcherModal
-researcher_id={row.original.researcher_id}
-name={row.original.name}
-lattes_id={row.original.lattes_id}
-institution_id={row.original.institution_id}
-status={row.original.status}
-/>
-
-  
 
       
 

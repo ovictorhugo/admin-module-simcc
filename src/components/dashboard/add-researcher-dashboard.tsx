@@ -96,11 +96,13 @@ export function AddResearcherDashboard() {
                       },
                       body: JSON.stringify(data),
                     });
-      
+                  
+                    const responseBody = await response.json(); // <-- CAPTURA O JSON DE ERRO
                     if (response.ok) {
                       setLattesID('')
                      
                       setNomePesquisador('')
+                      setCpf('')
                       fetchDataTable()
                       toast("Dados enviados com sucesso", {
                           description: "Pesquisador cadastrado na instituição",
@@ -110,6 +112,7 @@ export function AddResearcherDashboard() {
                           },
                         })
                     } else {
+                      console.error("Erro do servidor:", responseBody);
                       if (response.status === 400) {
                         toast("Pesquisador já existe", {
                           description: "Tente novamente",
@@ -130,6 +133,7 @@ export function AddResearcherDashboard() {
                     }
                     
                   } catch (err) {
+                  
                     console.log(err);
                   } 
             } else {
@@ -156,6 +160,7 @@ export function AddResearcherDashboard() {
     
           
         } catch (error) {
+        
           console.error('Erro ao processar a requisição:', error);
         }
       };
@@ -215,12 +220,12 @@ setcarregado(false)
 
 
   useEffect(() => {
-    if (dataModal.updateFetch == true) {
+    if (updateFetch === true) {
       fetchDataTable();
-     
-      setUpdateFetch(false)
+      setUpdateFetch(false);
     }
-  }, [dataModal.updateFetch]);
+  }, [updateFetch]);
+  
 
   const history = useNavigate();
 

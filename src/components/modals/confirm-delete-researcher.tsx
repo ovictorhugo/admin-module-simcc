@@ -54,10 +54,11 @@ export function ConfirmDeleteResearcher() {
       };
       
       fetchData()
-      if (data?.setUpdateFetch) {
-        data.setUpdateFetch(true);
-      }
-      
+
+     if (data?.setUpdateFetch) {
+  data.setUpdateFetch(true);
+}
+
       onClose()
     
     }
