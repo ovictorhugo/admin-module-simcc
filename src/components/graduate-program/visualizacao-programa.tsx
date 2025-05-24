@@ -1,4 +1,4 @@
-import { ArrowLeftFromLine, ArrowRightFromLine, Book, BookOpen, ChevronDown, ChevronLeft, ChevronUp, Copyright, File, Globe, GraduationCap, Home, Info, LayoutDashboard, MapPinIcon, SlidersHorizontal, Star, Ticket, Users, Users2, X } from "lucide-react";
+import { ArrowLeftFromLine, ArrowRightFromLine, Book, BookOpen, ChevronDown, ChevronLeft, ChevronUp, Copyright, File, Globe, GraduationCap, Home, Info, LayoutDashboard, MapPinIcon, SlidersHorizontal, Star, TextSearch, Ticket, Users, Users2, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -39,6 +39,8 @@ import { HomepageProgram } from "./homepage-program";
 import { PainelAdminGraduate } from "./painel-admin-graduate";
 import { Helmet } from "react-helmet";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { ProducoesPrograma } from "./producoes-programa";
+import { LinhasPesquisaPrograma } from "./linhas-pesquisa-programa";
 
 interface PalavrasChaves {
   term: string;
@@ -202,13 +204,45 @@ const siteDescription = graduatePrograms?.name
     const tabs = [
       { id: "visao_geral", label: "Visão geral", icon: Home },
       { id: "producoes", label: "Produções", icon: Users2 },
-      { id: "linhas_pesquisa", label: "Linhas de pesquisa", icon: Users2 },
+      { id: "linhas_pesquisa", label: "Linhas de pesquisa", icon: TextSearch },
       { id: "docentes", label: "Docentes", icon: Users2 },
       { id: "indicadores", label: "Indicadores", icon: Users2 },
 
     ];
 
-    const [value, setValue] = useState(tabs[0].id)
+    const tab = queryUrl.get('pagina');
+
+  const navigate = useNavigate();
+    const [value, setValue] = useState(tab || tabs[0].id)
+
+
+    const updateFilters = (category: string, values: any) => {
+      if (values  ) {
+       
+        queryUrl.set(category, values);
+       
+      } else {
+       queryUrl.delete(category)
+      }
+     
+    };
+
+      const location = useLocation();
+
+    useEffect(() => {
+      console.log("typeResult mudou para:", value);
+       updateFilters("pagina", value );
+  
+       navigate({
+        pathname: location.pathname,
+        search: queryUrl.toString(),
+      })
+  
+    }, [value]);
+
+          
+
+
 
 if (loading) {
   return (
@@ -251,39 +285,9 @@ return(
 
   <main className="grid grid-cols-1 ">
   <Tabs defaultValue={tabs[0].id} value={value} className="">
-  <div className="bg-eng-blue pb-0 md:pb-0 p-4 md:p-8 flex-col flex justify-end items-end w-full absolute top-0 left-0 h-[300px]">
-  <div className="w-fit gap-8 max-w-[900px]">
-<ScrollArea className="relative overflow-x-auto">
-<TabsList className="p-0 justify-start flex gap-2 h-auto bg-transparent dark:bg-transparent">
-{tabs.map(
-({ id, label, icon: Icon }) =>
- 
-    <div
-      key={id}
-      className={`pb-2 border-b-2 text-black dark:text-white transition-all ${
-        value === id ? "border-b-white" : "border-b-transparent"
-      }`}
-      onClick={() => setValue(id)}
-    >
-      <Button variant="ghost" className={`m-0 text-white hover:text-eng-blue ${ value === id ? "bg-white text-eng-blue" : ""}`}>
-        <Icon size={16} />
-        {label}
-      </Button>
-    </div>
-  
-)}
-</TabsList>
-<ScrollBar orientation="horizontal" />
-</ScrollArea>
-
-<div>
-
-</div>
-</div>
-  </div>
- 
- <div className="grid grid-cols-1 gap-4 md:gap-8 p-4 md:p-8 z-[2]">
- <div
+<div className="p-8 pb-0">
+<div className="bg-eng-blue pb-0 md:pb-0 p-4 md:p-8 flex-col flex justify-between  w-full rounded-md h-[300px]">
+  <div
                   className="
                     flex flex-col items-center gap-4 justify-between
 
@@ -322,12 +326,56 @@ return(
     </Link>
                   </div>
                 </div>
-                <div className="flex justify-between items-center pt-12">
-        <div className="flex flex-col  gap-6 mt-8">
-          <Avatar className="cursor-pointer rounded-lg  h-24 w-24">
+  
+  <div className="flex justify-end items-end flex-1 w-full ">
+  <div className="flex justify-between w-full gap-8">
+
+  <Avatar className="cursor-pointer rounded-lg  h-24 w-24 absolute">
             <AvatarImage className={'rounded-md h-24 w-24'} src={``} />
             <AvatarFallback className="flex items-center justify-center"><GraduationCap size={24} /></AvatarFallback>
           </Avatar>
+<div className="  w-24 min-w-24">
+
+</div>
+
+  <div className="w-fit gap-8 max-w-[900px]">
+<ScrollArea className="relative overflow-x-auto">
+<TabsList className="p-0 justify-start flex gap-2 h-auto bg-transparent dark:bg-transparent">
+{tabs.map(
+({ id, label, icon: Icon }) =>
+ 
+    <div
+      key={id}
+      className={`pb-2 border-b-2 text-black dark:text-white transition-all ${
+        value === id ? "border-b-white" : "border-b-transparent"
+      }`}
+      onClick={() => setValue(id)}
+    >
+      <Button variant="ghost" className={`m-0 text-white hover:text-eng-blue ${ value === id ? "bg-white text-eng-blue" : ""}`}>
+        <Icon size={16} />
+        {label}
+      </Button>
+    </div>
+  
+)}
+</TabsList>
+<ScrollBar orientation="horizontal" />
+</ScrollArea>
+
+<div>
+
+</div>
+</div>
+  </div>
+  </div>
+  </div>
+</div>
+ 
+ <div className="grid grid-cols-1 gap-4 md:gap-8  z-[2]">
+
+                <div className="flex justify-between px-4 md:px-8 items-center pt-12">
+        <div className="flex flex-col  gap-6 mt-8 px-8">
+        
 
           <div>
           <h1 className="text-2xl mb-2 max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
@@ -354,6 +402,18 @@ return(
 
 <TabsContent value="visao_geral" className="m-0">
 <HomepageProgram program={graduatePrograms} />
+</TabsContent>
+
+<TabsContent value="producoes" className="m-0">
+<ProducoesPrograma />
+</TabsContent>
+
+<TabsContent value="linhas_pesquisa" className="m-0">
+<LinhasPesquisaPrograma />
+</TabsContent>
+
+<TabsContent value="docentes" className="m-0">
+<DocentesPrograma />
 </TabsContent>
 
                

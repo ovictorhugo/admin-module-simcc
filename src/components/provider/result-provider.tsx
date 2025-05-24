@@ -9,6 +9,7 @@ import { PatentHome } from "../homepage/categorias/patent-home";
 import { BookHome } from "../homepage/categorias/book-home";
 import { SpeakerHome } from "../homepage/categorias/speaker-home";
 import { InstitutionsHome } from "../homepage/categorias/institutions-home";
+import { ChapterHome } from "../homepage/categorias/chapter-home";
 
 
 const ModalContent = () => {
@@ -27,6 +28,8 @@ const ModalContent = () => {
       return <SpeakerHome />
     case 'institutions-home':
       return <InstitutionsHome />
+    case 'chapter-home':
+      return <ChapterHome/>
   }
 
 }

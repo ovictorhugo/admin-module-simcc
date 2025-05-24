@@ -237,13 +237,13 @@ export default function SearchLayout({
           <main className="h-full flex flex-col flex-1 ">
 
 
-            <div className={`flex p-8 pt-8 pb-2 h-[68px] items-center justify-between top-0 sticky z-[3] ${(location.pathname == '/pos-graduacao' && type_search) ? (''):('supports-[backdrop-filter]:bg-neutral-50/60 supports-[backdrop-filter]:dark:bg-neutral-900/60 backdrop-blur ')}`}>
+            <div className="flex p-8 pt-8 pb-2 h-[68px] items-center justify-between top-0 sticky z-[3] supports-[backdrop-filter]:bg-neutral-50/60 supports-[backdrop-filter]:dark:bg-neutral-900/60 backdrop-blur ">
               <div className="flex  pb-0 items-center gap-2">
                 <SidebarTrigger className="" />
                 <Separator orientation="vertical" className="mr-2 h-4" />
 
 
-                <Breadcrumb >
+                <Breadcrumb>
                   <BreadcrumbList>
                     {breadcrumbItems.map((segment, index) => {
                       const isLastItem = index === breadcrumbItems.length - 1;
@@ -255,7 +255,7 @@ export default function SearchLayout({
 
                       return (
                         <React.Fragment key={index}>
-                          <BreadcrumbItem className={`hidden md:block capitalize ${(location.pathname == '/pos-graduacao' && type_search) ? ('text-white'):('')}`}>
+                          <BreadcrumbItem className="hidden md:block capitalize">
                             {/* Se for o último item, não criamos um link, é apenas texto */}
                             {isLastItem ? (
                               <span>{segment}</span>
@@ -265,7 +265,7 @@ export default function SearchLayout({
                               </BreadcrumbLink>
                             )}
                           </BreadcrumbItem>
-                          {!isLastItem && <BreadcrumbSeparator className={`${(location.pathname == '/pos-graduacao' && type_search) ? ('text-white'):('')}`}/>}
+                          {!isLastItem && <BreadcrumbSeparator className="hidden md:block" />}
                         </React.Fragment>
                       );
                     })}

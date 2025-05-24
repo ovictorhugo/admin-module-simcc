@@ -603,7 +603,7 @@ export function HomepageProgram(props: Props) {
 
 
   return (
-    <main className="h-full w-full flex flex-col">
+    <main className="h-full w-full flex flex-col px-4 md:px-8">
       <div>
       <Alert className="rounded-b-none border-b-0 dark:bg-neutral-700 bg-neutral-100">
   <Info className="h-4 w-4" />
@@ -614,8 +614,9 @@ export function HomepageProgram(props: Props) {
 </Alert>
 
       <Alert className="flex rounded-t-none flex-col md:grid gap-3 lg:grid-cols-4 grid-cols-2">
-          <Link  to={'/listagens?tab=article'}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      
+       <div>
+       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
                 <CardTitle className="text-[0.9rem] md:text-sm font-medium">
                   Total de artigos
@@ -628,13 +629,15 @@ export function HomepageProgram(props: Props) {
 
             <CardContent>
               <span className="font-bold leading-none text-3xl">
-              {totalProducao?.article}
+              {totalProducao?.article || 0}
               </span>
             </CardContent>
-          </Link>
+         
+       </div>
 
-          <Link  to={'/listagens?tab=book'}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          
+           <div>
+           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
                 <CardTitle className="text-[0.9rem] md:text-sm font-medium">
                   Total de livros
@@ -647,13 +650,13 @@ export function HomepageProgram(props: Props) {
 
             <CardContent>
               <span className="font-bold leading-none text-3xl">
-              {totalProducao?.article}
+              {totalProducao?.book || 0}
               </span>
             </CardContent>
-          </Link>
-
-          <Link  to={'/listagens?tab=chapter'}>
-            <CardHeader className="flex flex-row pb-2 items-center justify-between space-y-0">
+           </div>
+        
+          <div>
+          <CardHeader className="flex flex-row pb-2 items-center justify-between space-y-0">
               <div>
                 <CardTitle className="text-[0.9rem]  md:text-sm font-medium">
                   Total de capítulos
@@ -666,13 +669,15 @@ export function HomepageProgram(props: Props) {
 
             <CardContent>
               <span className="font-bold leading-none text-3xl">
-                {totalProducao?.article}
+                {totalProducao?.book_chapter || 0}
               </span>
             </CardContent>
-          </Link>
+       
+          </div>
 
-          <Link  to={'/listagens?tab=patent'}>
-            <CardHeader className="flex flex-row items-center pb-2 justify-between space-y-0">
+        
+           <div>
+           <CardHeader className="flex flex-row items-center pb-2 justify-between space-y-0">
               <div>
                 <CardTitle className="text-[0.9rem] md:text-sm font-medium">
                   Total de patentes
@@ -686,11 +691,93 @@ export function HomepageProgram(props: Props) {
 
             <CardContent>
               <span className="font-bold leading-none text-3xl">
-              {totalProducao?.article}
+              {totalProducao?.patent || 0}
               </span>
             </CardContent>
+           </div>
 
-          </Link>
+           <div>
+           <CardHeader className="flex flex-row items-center pb-2 justify-between space-y-0">
+              <div>
+                <CardTitle className="text-[0.9rem] md:text-sm font-medium">
+                  Total de marcas
+                </CardTitle>
+
+              </div>
+
+              <Copyright className="h-4 w-4 text-muted-foreground" />
+
+            </CardHeader>
+
+            <CardContent>
+              <span className="font-bold leading-none text-3xl">
+              {totalProducao?.brand || 0}
+              </span>
+            </CardContent>
+           </div>
+
+           
+           <div>
+           <CardHeader className="flex flex-row items-center pb-2 justify-between space-y-0">
+              <div>
+                <CardTitle className="text-[0.9rem] md:text-sm font-medium">
+                  Total de softwares
+                </CardTitle>
+
+              </div>
+
+              <Copyright className="h-4 w-4 text-muted-foreground" />
+
+            </CardHeader>
+
+            <CardContent>
+              <span className="font-bold leading-none text-3xl">
+              {totalProducao?.software || 0}
+              </span>
+            </CardContent>
+           </div>
+
+           <div>
+           <CardHeader className="flex flex-row items-center pb-2 justify-between space-y-0">
+              <div>
+                <CardTitle className="text-[0.9rem] md:text-sm font-medium">
+                  Total de trabalhos em evento
+                </CardTitle>
+
+              </div>
+
+              <Copyright className="h-4 w-4 text-muted-foreground" />
+
+            </CardHeader>
+
+            <CardContent>
+              <span className="font-bold leading-none text-3xl">
+              {totalProducao?.work_in_event || 0}
+              </span>
+            </CardContent>
+           </div>
+
+           <div>
+           <CardHeader className="flex flex-row items-center pb-2 justify-between space-y-0">
+              <div>
+                <CardTitle className="text-[0.9rem] md:text-sm font-medium">
+                  Total de software
+                </CardTitle>
+
+              </div>
+
+              <Copyright className="h-4 w-4 text-muted-foreground" />
+
+            </CardHeader>
+
+            <CardContent>
+              <span className="font-bold leading-none text-3xl">
+              {totalProducao?.subsidy}
+              </span>
+            </CardContent>
+           </div>
+
+        
 
         </Alert>
       </div>

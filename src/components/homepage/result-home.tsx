@@ -6,7 +6,7 @@ import { ResultProvider } from "../provider/result-provider";
 import { UserContext } from "../../context/context";
 
 import { Button } from "../ui/button";
-import { BookOpen, Building, Building2, ChevronDown, ChevronUp, Copyright, Download, MoreHorizontal, SlidersHorizontal, Ticket, Users } from "lucide-react";
+import { Book, BookOpen, Building, Building2, ChevronDown, ChevronUp, Copyright, Download, LibraryBig, MoreHorizontal, SlidersHorizontal, Ticket, Users } from "lucide-react";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useModal } from "../hooks/use-modal-store";
 import { DotsThreeOutline, DotsThreeVertical, File, Plus, Quotes } from "phosphor-react";
@@ -73,12 +73,14 @@ export function ResultHome() {
    
   };
 
+const location = useLocation()
+
   useEffect(() => {
     console.log("typeResult mudou para:", typeResult);
      updateFilters("tab", typeResult );
 
      navigate({
-      pathname: '/resultados',
+      pathname: location.pathname,
       search: queryUrl.toString(),
     })
 
@@ -232,14 +234,14 @@ export function ResultHome() {
              <div className="flex flex-1 w-full">
              <ScrollArea>
                 <div className="w-full flex  items-center gap-2">
-                  {!((researcher == 'false' && itemsSelecionados.length == 0) && itemsSelecionados.length == 0) && (
+                
                     <div className={`pb-2 border-b-2 transition-all ${typeResult == 'researchers-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
                       <Button variant={typeResult == 'researchers-home' ? ('ghost') : ('ghost')} className={`${typeResult}`} onClick={() => onOpen('researchers-home')}>
                         <Users className="h-4 w-4" />
                         Pesquisadores
                       </Button>
                     </div>
-                  )}
+            
                   {searchType === 'article' && (
                     <div className={`pb-2 border-b-2  transition-all ${typeResult == 'articles-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
                       <Button variant={typeResult == 'articles-home' ? ('ghost') : ('ghost')} className="m-0" onClick={() => onOpen('articles-home')}>
@@ -251,11 +253,21 @@ export function ResultHome() {
                   {searchType === 'book' && (
                     <div className={`pb-2 border-b-2  transition-all ${typeResult == 'book-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
                       <Button variant={typeResult == 'book-home' ? ('ghost') : ('ghost')} className="m-0" onClick={() => onOpen('book-home')}>
-                        <BookOpen className="h-4 w-4" />
-                        Livros e capítulos
+                        <Book className="h-4 w-4" />
+                        Livros 
                       </Button>
                     </div>
                   )}
+
+{searchType === 'book' && (
+                    <div className={`pb-2 border-b-2  transition-all ${typeResult == 'chapter-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
+                      <Button variant={typeResult == 'chapter-home' ? ('ghost') : ('ghost')} className="m-0" onClick={() => onOpen('chapter-home')}>
+                        <LibraryBig className="h-4 w-4" />
+                        Capítulos
+                      </Button>
+                    </div>
+                  )}
+
                   {searchType === 'patent' && (
                     <div className={`pb-2 border-b-2  transition-all ${typeResult == 'patent-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
                       <Button variant={typeResult == 'patent-home' ? ('ghost') : ('ghost')} className="m-0" onClick={() => onOpen('patent-home')}>
@@ -272,7 +284,7 @@ export function ResultHome() {
                       </Button>
                     </div>
                   )}
-                  {!((simcc && researcher == 'false' && itemsSelecionados.length == 0) && itemsSelecionados.length == 0 ) && (
+                  {((!version ) && itemsSelecionados.length == 0 ) && (
                    searchType != 'name' && (
                     <div className={`pb-2 border-b-2 transition-all ${typeResult == 'institutions-home' ? ('border-b-[#719CB8]') : (' border-b-transparent ')}`}>
                     <Button variant={typeResult == 'institutions-home' ? ('ghost') : ('ghost')} className={`${typeResult}`} onClick={() => onOpen('institutions-home')}>
