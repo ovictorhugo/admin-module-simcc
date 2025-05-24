@@ -274,7 +274,7 @@ export function ResearcherIndicators(props: Research) {
 
   const urlDados = `${urlGeral}researcher/DadosGerais?researcher_id=${props.id}&year=${yearString}`
 
-  const [loading, isLoading] = useState(false)
+  const [loading, isLoading] = useState(true)
   const [dados, setDados] = useState<Dados[]>([]);
   console.log(urlDados)
   useEffect(() => {

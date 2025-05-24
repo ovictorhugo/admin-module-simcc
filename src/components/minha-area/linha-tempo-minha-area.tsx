@@ -88,7 +88,7 @@ export function LinhaTempoMinhaArea(user:Research) {
 
     const {user:userAdm} = useContext(UserContext)
     const [researcher, setResearcher] = useState<Research[]>([]); 
-    const [loading, isLoading] = useState(false)
+    const [loading, isLoading] = useState(true)
 
     type Filter = {
         year: number[]

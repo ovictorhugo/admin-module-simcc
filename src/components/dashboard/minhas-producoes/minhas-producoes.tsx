@@ -97,7 +97,7 @@ export function MinhasProducoes() {
 
     const [search, setSearch] = useState('')
 
-    const [loading, isLoading] = useState(false)
+    const [loading, isLoading] = useState(true)
 
     const [researcher, setResearcher] = useState<Research[]>([]); 
 

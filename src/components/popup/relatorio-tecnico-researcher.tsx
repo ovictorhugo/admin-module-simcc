@@ -48,7 +48,7 @@ type Props = {
 export function RelatorioTecnicoResearcherPopUp(props: Props) {
 
   const { urlGeral, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados } = useContext(UserContext)
-  const [loading, isLoading] = useState(false)
+  const [loading, isLoading] = useState(true)
 
   const [distinct] = useState(false)
   const [publicacoes, setPublicacoes] = useState<Livros[]>([]);

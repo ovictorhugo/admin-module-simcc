@@ -36,7 +36,7 @@ export function ChapterHome() {
   const [publicacoes, setPublicacoes] = useState<Patente[]>([]);
   const [capLivros, setCapLivros] = useState<Patente[]>([]);
   const [typeVisu, setTypeVisu] = useState('block')
-  const [loading, isLoading] = useState(false)
+  const [loading, isLoading] = useState(true)
 
   const [loading2, isLoading2] = useState(false)
   const [typeVisu2, setTypeVisu2] = useState('block')

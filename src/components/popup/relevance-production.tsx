@@ -73,7 +73,7 @@ export function RelevanceProduction(props:Props) {
 
     const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
 
-    const [loading, isLoading] = useState(false)
+    const [loading, isLoading] = useState(true)
     const {urlGeral, setItensSelecionadosPopUp, itemsSelecionadosPopUp, searchType, itemsSelecionados} = useContext(UserContext)
     const urlTermPublicacoes = useMemo(() => {
         const baseUrl = `${urlGeral}bibliographic_production_researcher?researcher_id=${props.name}&type=ARTICLE&qualis=&year=1900`;

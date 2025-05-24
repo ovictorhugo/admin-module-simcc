@@ -219,7 +219,7 @@ export function ResearcherPage() {
   const { onClose, isOpen } = useModal();
 
   const [researcher, setResearcher] = useState<Research[]>([]);
-  const [loading, isLoading] = useState(false)
+  const [loading, isLoading] = useState(true)
 
   type Filter = {
     year: number[]

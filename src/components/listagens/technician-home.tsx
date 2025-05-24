@@ -53,7 +53,7 @@ type Patente = {
 export function TechnicianHome() {
     const [publicacoes, setPublicacoes] = useState<Patente[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')
-    const [loading, isLoading] = useState(false)
+    const [loading, isLoading] = useState(true)
 
     const [filters, setFilters] = useState<Filter[]>([]);
 

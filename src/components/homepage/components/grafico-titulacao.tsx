@@ -19,7 +19,7 @@ type ResearchData = {
 const chartConfig = {
   graduation: {
     label: "Graduation",
-    color: "#004A75",
+    color: "#559FB8",
   },
 } satisfies ChartConfig;
 

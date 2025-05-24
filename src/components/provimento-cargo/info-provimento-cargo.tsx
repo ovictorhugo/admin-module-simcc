@@ -41,7 +41,7 @@ export function InfoPavimentoCargo(props:Props) {
 
     const [mestrado, setMestrado] = useState('')
     const [doutorado, setDoutorado] = useState('')
-    const [loading, isLoading] = useState(false)
+    const [loading, isLoading] = useState(true)
     const [researcher, setResearcher] = useState<Research[]>([]); 
    
     let urlTermPesquisadores = urlGeral + `researcherName?name=${props.name}`;

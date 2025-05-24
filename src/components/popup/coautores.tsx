@@ -27,7 +27,7 @@ export function Coautores(props:Props) {
     const {onOpen:onOpenOne, onClose} = useModal()
     const [count, setCount] = useState(5)
      const [researcher, setResearcher] = useState<Coautor[]>([]);
-     const [loading, isLoading] = useState(false)
+     const [loading, isLoading] = useState(true)
      const { urlGeral} = useContext(UserContext);
      let urlTermPesquisadores = urlGeral + `researcher/co-authorship/${props.id}`;
    console.log(urlTermPesquisadores)

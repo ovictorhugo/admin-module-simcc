@@ -30,7 +30,7 @@ type Instituicoes = {
 
 export function InstitutionsHome() {
   const { isOpen, type } = useModalResult();
-  const [loading, isLoading] = useState(false)
+  const [loading, isLoading] = useState(true)
   const { urlGeral, searchType, valoresSelecionadosExport, navbar } = useContext(UserContext)
   const [instituicoes, setInstituicoes] = useState<Instituicoes[]>([]);
   const [typeVisu, setTypeVisu] = useState('block')

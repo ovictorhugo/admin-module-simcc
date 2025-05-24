@@ -335,7 +335,7 @@ console.log(urlRt)
     fetchData();
   }, [urlVisaoPrograma]);
 
-  const [loading, isLoading] = useState(false)
+  const [loading, isLoading] = useState(true)
 
   const [dados, setDados] = useState<Count[]>([]);
 
@@ -807,122 +807,7 @@ const [isLoad, setLoad] = useState(false)
             lg:grid lg:grid-cols-3
           "
         >
-          {version ? (
-            <div
-              className="
-                h-full gap-8 flex flex-col
-
-                md:w-full md:justify-between
-
-                lg:flex-col
-              "
-            >
-              <Link
-                className="
-                  w-full
-
-                  md:flex
-
-                  lg:h-1/2
-                "
-                to={'/listagens?tab=pesquisadores'}
-              >
-                <Alert
-                  className="
-                    p-0
-
-                    md:w-full
-
-                    lg:h-full
-                  "
-                >
-                  <CardHeader
-                    className="
-                      flex p-10 flex-row items-center justify-between space-y-0
-
-                      md:h-28
-                    "
-                  >
-                    <div>
-                      <CardTitle className="text-sm font-medium">
-                        Total de  {VisaoPrograma.map((props) => (<>{props.researcher}</>))} pesquisadores ativos
-                      </CardTitle>
-                      <CardDescription>{version ? ('na Escola de Engenharia') : ('no SECTI-BA')}</CardDescription>
-
-                    </div>
-
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                        <TooltipContent>
-                          <p>Fonte: {version ? ('Escola de Engenharia') : ('SECTI-BA')}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-
-                  </CardHeader>
-
-                  <div className="flex flex-1 px-6">
-                    <GraficoRtTeachers rtData={rt} />
-                  </div>
-
-                </Alert>
-              </Link>
-
-              <Link
-                className="
-                  w-full
-
-                  sm:w-full
-
-                  md:w-full
-
-                  lg:h-1/2
-                "
-                to={ has_visualizar_tecnicos ? ('/listagens?tab=tecnicos') :( '/')}
-              >
-                <Alert
-                  className="
-                    p-0
-                    
-                    md:w-full
-
-                    lg:h-full
-                  "
-                >
-                  <CardHeader
-                    className="
-                      flex flex-row p-10 items-center justify-between space-y-0
-
-                      md:h-28
-                    "
-                  >
-                    <div>
-                      <CardTitle className="text-sm font-medium">
-                        Total de {totalTechnicianCounts} técnicos ativos
-                      </CardTitle>
-                      <CardDescription>{version ? ('na Escola de Engenharia') : ('no SECTI-BA')}</CardDescription>
-                    </div>
-
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                        <TooltipContent>
-                          <p>Fonte: {version ? ('Escola de Engenharia') : ('SECTI-BA')}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-
-                  </CardHeader>
-
-                  <div className="flex flex-1 px-6">
-                    <GraficoRtTechnician rtData={rt} />
-                  </div>
-
-                </Alert></Link>
-            </div>
-          ) : (
-            <Link
+           <Link
                 className="
                   w-full
 
@@ -960,7 +845,7 @@ const [isLoad, setLoad] = useState(false)
                       <Tooltip>
                         <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
                         <TooltipContent>
-                          <p>Fonte: {version ? ('Escola de Engenharia') : ('SECTI-BA')}</p>
+                          <p>Fonte: Plataforma Lattes</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -973,7 +858,6 @@ const [isLoad, setLoad] = useState(false)
 
                 </Alert>
               </Link>
-          )}
 
           <Alert className="lg:col-span-2 h-full p-0">
             <CardHeader className="flex p-0 flex-col md:flex-wrap lg:flex-nowrap items-stretch space-y-0 border-b dark:border-b-neutral-800 sm:flex-row">

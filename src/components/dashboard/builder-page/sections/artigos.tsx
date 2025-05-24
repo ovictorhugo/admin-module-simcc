@@ -38,7 +38,7 @@ export function ArtigosSection (props:Props) {
     const group_id = queryUrl.get('group_id');
     const dep_id = queryUrl.get('dep_id');
 
-      const [loading, isLoading] = useState(false)
+      const [loading, isLoading] = useState(true)
       const [distinct, setDistinct] = useState(false)
       const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
       const [typeVisu, setTypeVisu] = useState('block')

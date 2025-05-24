@@ -88,7 +88,7 @@ export function LinhasPesquisaPrograma() {
             <div className="flex gap-4 w-full justify-between items-center ">
               <div className="flex gap-4 items-center">
                 <TextSearch size={24} className="text-gray-400" />
-                <p className=" font-medium">Livros</p>
+                <p className=" font-medium">Linhas de pesquisa</p>
               </div>
 
               <div className="flex gap-3 mr-3  items-center h-full">

@@ -71,7 +71,7 @@ interface Forment {
 export function ResearchProject(props: Props) {
 
   const { urlGeral, searchType, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados } = useContext(UserContext)
-  const [loading, isLoading] = useState(false)
+  const [loading, isLoading] = useState(true)
   const [publicacoes, setPublicacoes] = useState<Livros[]>([]);
 
   const [typeVisu, setTypeVisu] = useState('block')

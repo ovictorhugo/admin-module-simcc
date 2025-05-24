@@ -51,7 +51,7 @@ type Patente = {
 export function MagazineHome() {
     const [publicacoes, setPublicacoes] = useState<Patente[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')
-    const [loading, isLoading] = useState(false)
+    const [loading, isLoading] = useState(true)
 
     const [filters, setFilters] = useState<Filter[]>([]);
 

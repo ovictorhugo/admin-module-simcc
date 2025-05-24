@@ -70,7 +70,7 @@ export function ArticlesHome() {
   const { urlGeral, searchType, itemsSelecionados, valoresSelecionadosExport, navbar } = useContext(UserContext)
 
   const isModalOpen = isOpen && type === "articles-home";
-  const [loading, isLoading] = useState(false)
+  const [loading, isLoading] = useState(true)
   const [distinct, setDistinct] = useState(false)
   const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
   const [typeVisu, setTypeVisu] = useState('block')

@@ -25,7 +25,7 @@ export function Feedbacks() {
  const [publicacoes, setPublicacoes] = useState<Feedback[]>([]);
     const [count, setCount] = useState(100)
 const {urlGeralAdm} = useContext(UserContext)
-const [loading, isLoading] = useState(false)
+const [loading, isLoading] = useState(true)
 
 let urlMagazine = urlGeralAdm+ 's/feedback'
     console.log(urlMagazine)

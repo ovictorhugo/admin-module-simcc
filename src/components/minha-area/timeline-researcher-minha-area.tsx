@@ -120,7 +120,7 @@ type Dados = {
 
   
 export function TimeLineResearcherMinhaArea(props:Research) {
-    const [loading, isLoading] = useState(false)
+    const [loading, isLoading] = useState(true)
     
   const [dados, setDados] = useState<Dados[]>([]);
 

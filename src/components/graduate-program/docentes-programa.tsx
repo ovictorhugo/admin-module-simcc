@@ -29,7 +29,7 @@ interface GraduateProgram {
     software: string,
     brand: string,
     lattes_update: Date,
-   
+    ufmg: Ufmg
     h_index:string,
     relevance_score:string,
     works_count:string,
@@ -59,6 +59,36 @@ interface GraduateProgram {
       name:string
     }
 
+    interface Ufmg {
+      id: string;
+      full_name: string;
+      gender: string | null;
+      status_code: string;
+      work_regime: string;
+      job_class: string;
+      job_title: string;
+      job_rank: string;
+      job_reference_code: string;
+      academic_degree: string;
+      organization_entry_date: string; // formato ISO: "YYYY-MM-DD"
+      last_promotion_date: string;
+      employment_status_description: string;
+      department_name: string;
+      career_category: string;
+      academic_unit: string;
+      unit_code: string;
+      function_code: string
+      position_code: string 
+      leadership_start_date: string 
+      leadership_end_date: string 
+      current_function_name: string 
+      function_location: string 
+      registration_number: string 
+      ufmg_registration_number: string 
+      semester_reference: string 
+    }
+
+    
     
     interface GraduateProgram {
       area: string;
@@ -258,31 +288,7 @@ export function DocentesPrograma() {
 
                 return (
                     <ResearchItem
-                    among={item.among}
-                    articles={item.articles}
-                    book={item.book}
-                    book_chapters={item.book_chapters}
-                    id={item.id}
-                    name={item.name}
-                    university={item.university}
-                    lattes_id={item.lattes_id}
-                    area={item.area}
-                    lattes_10_id={item.lattes_10_id}
-                    city={item.city}
-                    graduation={item.graduation}
-                    patent={item.patent}
-                    speaker={item.speaker}
-                    h_index={item.h_index}
-                    relevance_score={item.relevance_score}
-                    works_count={item.works_count}
-                    cited_by_count={item.cited_by_count}
-                    i10_index={item.i10_index}
-                    scopus={item.scopus}
-                    openalex={item.openalex}
-                    subsidy={item.subsidy}
-                    graduate_programs={item.graduate_programs}
-                    departments={item.departments}
-                    status={item.status}
+                 {...item}
                     />
                 );
             })}

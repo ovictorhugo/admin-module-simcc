@@ -69,7 +69,7 @@ export function ArticlesResearcherPopUp(props: Props) {
     const { urlGeral, setItensSelecionadosPopUp, itemsSelecionadosPopUp, searchType, itemsSelecionados } = useContext(UserContext)
     const { isOpen, type: typeModal, data: modalData } = useModalSecundary();
 
-    const [loading, isLoading] = useState(false)
+    const [loading, isLoading] = useState(true)
     const [distinct] = useState(false)
     const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
     const [typeVisu, setTypeVisu] = useState('block')

@@ -63,7 +63,7 @@ export function HomeDashboard() {
 
   const [value, setValue] = useState(tabs[0].id)
   let urlTermPesquisadores = urlGeral + `researcherName?name=${user?.display_name}`;
-  const [loading, isLoading] = useState(false)
+  const [loading, isLoading] = useState(true)
 
 
     useMemo(() => {

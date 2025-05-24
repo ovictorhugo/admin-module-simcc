@@ -56,7 +56,7 @@ export function BooksResearcherPopUp(props: Props) {
   const { urlGeral, searchType, itemsSelecionadosPopUp, setItensSelecionadosPopUp, itemsSelecionados } = useContext(UserContext)
 
 
-  const [loading, isLoading] = useState(false)
+  const [loading, isLoading] = useState(true)
   const [loading2, isLoading2] = useState(false)
   const [distinct] = useState(false)
   const [publicacoes, setPublicacoes] = useState<Livros[]>([]);
