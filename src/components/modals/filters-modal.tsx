@@ -202,7 +202,7 @@ const [filtros, setFiltros] = useState<Filtros>();
 const queryUrl = useQuery();
 
 const terms = queryUrl.get('terms');
-  let urlPublicacoesPorPesquisador = `${urlGeral}/researcher_filter?terms=${terms}&type=${searchType.toUpperCase()}`;
+  let urlPublicacoesPorPesquisador = `${urlGeral}researcher_filter?terms=${terms}&type=${searchType.toUpperCase()}`;
   
   console.log(urlPublicacoesPorPesquisador)
     useEffect(() => {

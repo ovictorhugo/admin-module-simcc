@@ -1,12 +1,12 @@
 import { Book, Briefcase, Copyright, File, GraduationCap, Info, MapPinIcon, SquareArrowOutUpRight, Star, Users } from "lucide-react";
-import { Alert } from "../ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { HeaderResultTypeHome } from "../homepage/categorias/header-result-type-home";
 import { InfiniteMovingResearchers } from "../ui/infinite-moving-researcher";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "../../context/context";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { InfiniteMovingArticle } from "../ui/infinite-moving-article";
 import { Books, Code, Quotes, StripeLogo } from "phosphor-react";
 import { InfiniteMovingProductions } from "../ui/infinite-moving-productions";
@@ -339,7 +339,7 @@ export function HomepageProgram(props: Props) {
 
   //
 
-  const [totalProducao, setTotalProducao] = useState<Total[]>([]);
+  const [totalProducao, setTotalProducao] = useState<Total>();
 
   const urlTotalProgram = `${urlGeral}graduate_program_production?graduate_program_id=${type_search}&year=1900`;
 
@@ -358,7 +358,7 @@ export function HomepageProgram(props: Props) {
         });
         const data = await response.json();
         if (data) {
-          setTotalProducao(data);
+          setTotalProducao(data[0]);
         }
       } catch (err) {
         console.log(err);
@@ -368,50 +368,7 @@ export function HomepageProgram(props: Props) {
   }, [urlTotalProgram]);
 
 
-  const producoes = [
-    {
-      name: "Artigos",
-      icon: File, // Certifique-se de que Quotes é um componente ou valor válido
-      number: totalProducao.slice(0, 1)[0]?.article, // Corrigido para acessar o primeiro item e a propriedade `article`
-    },
-    {
-      name: "Livros",
-      icon: Book, // Certifique-se de que Quotes é um componente ou valor válido
-      number: totalProducao.slice(0, 1)[0]?.book, // Corrigido para acessar o primeiro item e a propriedade `article`
-    },
-    {
-      name: "Capítulos de livro",
-      icon: Books, // Certifique-se de que Quotes é um componente ou valor válido
-      number: totalProducao.slice(0, 1)[0]?.book_chapter, // Corrigido para acessar o primeiro item e a propriedade `article`
-    },
-    {
-      name: "Patentes",
-      icon: Copyright, // Certifique-se de que Quotes é um componente ou valor válido
-      number: totalProducao.slice(0, 1)[0]?.patent, // Corrigido para acessar o primeiro item e a propriedade `article`
-    },
-    {
-      name: "Marcas",
-      icon: StripeLogo, // Certifique-se de que Quotes é um componente ou valor válido
-      number: totalProducao.slice(0, 1)[0]?.brand, // Corrigido para acessar o primeiro item e a propriedade `article`
-    },
-    {
-      name: "Softwares",
-      icon: Code, // Certifique-se de que Quotes é um componente ou valor válido
-      number: totalProducao.slice(0, 1)[0]?.software, // Corrigido para acessar o primeiro item e a propriedade `article`
-    },
-    {
-      name: "Trabalhos em eventos",
-      icon: Briefcase, // Certifique-se de que Quotes é um componente ou valor válido
-      number: totalProducao.slice(0, 1)[0]?.work_in_event, // Corrigido para acessar o primeiro item e a propriedade `article`
-    },
-    {
-      name: "Bolsistas CNPq",
-      icon: Copyright, // Certifique-se de que Quotes é um componente ou valor válido
-      number: totalProducao.slice(0, 1)[0]?.subsidy, // Corrigido para acessar o primeiro item e a propriedade `article`
-    }
-
-  ];
-
+ 
   //
   const [dados, setDados] = useState<Dados[]>([]);
   const [year, setYear] = useState(new Date().getFullYear() - 4);
@@ -647,321 +604,97 @@ export function HomepageProgram(props: Props) {
 
   return (
     <main className="h-full w-full flex flex-col">
-      <div className="flex justify-between items-center py-12">
-        <div className="flex flex-col items-start md:flex-row gap-6 -mt-4">
-          <Avatar className="cursor-pointer rounded-lg  h-24 w-24">
-            <AvatarImage className={'rounded-md h-24 w-24'} src={``} />
-            <AvatarFallback className="flex items-center justify-center"><GraduationCap size={24} /></AvatarFallback>
-          </Avatar>
+      <div>
+      <Alert className="rounded-b-none border-b-0 dark:bg-neutral-700 bg-neutral-100">
+  <Info className="h-4 w-4" />
+  <AlertTitle>Interpretação dos dados</AlertTitle>
+  <AlertDescription className="text-xs">
+    Os dados exibidos na plataforma <strong>{version ? ('Conectee'):('Simcc')}</strong> consideram apenas os <strong>pesquisadores ativos</strong>. Métricas como <strong>"Total de livros"</strong> refletem a produção dos docentes atualmente cadastrados, e não o histórico completo.
+  </AlertDescription>
+</Alert>
 
-          <div>
-            <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
-              <div className="flex flex-wrap gap-4 ">
-                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12} />{props.program.type}</div>
-                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><MapPinIcon size={12} />{props.program.city}</div>
-                {props.program.rating != '' && (
-                  <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12} />{props.program.rating}</div>
-                )}
+      <Alert className="flex rounded-t-none flex-col md:grid gap-3 lg:grid-cols-4 grid-cols-2">
+          <Link  to={'/listagens?tab=article'}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div>
+                <CardTitle className="text-[0.9rem] md:text-sm font-medium">
+                  Total de artigos
+                </CardTitle>
               </div>
-            </p>
 
-            <h1 className="text-2xl max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
-              {props.program.name}
-            </h1>
-          </div>
-        </div>
-      </div>
+              <File className="h-4 w-4 text-muted-foreground" />
 
-      <div className="flex flex-col md:grid md:grid-cols-1 lg:grid-cols-3 gap-8">
-        <Alert className="bg-eng-blue dark:bg-eng-blue">
-          <CardHeader>
-            <div className="flex mb-1 gap-3 justify-between">
-              <h3 className="font-semibold text-2xl text-white">Índices de produção</h3>
+            </CardHeader>
 
-              <div className="flex items-center gap-3">
+            <CardContent>
+              <span className="font-bold leading-none text-3xl">
+              {totalProducao?.article}
+              </span>
+            </CardContent>
+          </Link>
+
+          <Link  to={'/listagens?tab=book'}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div>
+                <CardTitle className="text-[0.9rem] md:text-sm font-medium">
+                  Total de livros
+                </CardTitle>
               </div>
-            </div>
-          </CardHeader>
+
+              <Book className="h-4 w-4 text-muted-foreground" />
+
+            </CardHeader>
+
+            <CardContent>
+              <span className="font-bold leading-none text-3xl">
+              {totalProducao?.article}
+              </span>
+            </CardContent>
+          </Link>
+
+          <Link  to={'/listagens?tab=chapter'}>
+            <CardHeader className="flex flex-row pb-2 items-center justify-between space-y-0">
+              <div>
+                <CardTitle className="text-[0.9rem]  md:text-sm font-medium">
+                  Total de capítulos
+                </CardTitle>
+              </div>
+
+              <Books className="h-4 w-4 text-muted-foreground" />
+
+            </CardHeader>
+
+            <CardContent>
+              <span className="font-bold leading-none text-3xl">
+                {totalProducao?.article}
+              </span>
+            </CardContent>
+          </Link>
+
+          <Link  to={'/listagens?tab=patent'}>
+            <CardHeader className="flex flex-row items-center pb-2 justify-between space-y-0">
+              <div>
+                <CardTitle className="text-[0.9rem] md:text-sm font-medium">
+                  Total de patentes
+                </CardTitle>
+
+              </div>
+
+              <Copyright className="h-4 w-4 text-muted-foreground" />
+
+            </CardHeader>
+
+            <CardContent>
+              <span className="font-bold leading-none text-3xl">
+              {totalProducao?.article}
+              </span>
+            </CardContent>
+
+          </Link>
+
         </Alert>
-
-        <div className="lg:col-span-2 mt-5 bg-red">
-          <div>
-            <div className=" pb-4">
-              <HeaderResultTypeHome title="Artigos mais recentes" icon={<Quotes size={24} className="text-gray-400" />}>
-              </HeaderResultTypeHome>
-            </div>
-            <InfiniteMovingProductions
-              items={producoes} // Formata cada item como um objeto
-              direction="left"
-              speed='normal'
-              pauseOnHover={false}
-              className="custom-class"
-            />
-
-          </div>
-
-          <div>
-            <div className=" py-4 flex justify-between items-center">
-              <HeaderResultTypeHome title="Pesquisadores" icon={<Users size={24} className="text-gray-400" />}>
-              </HeaderResultTypeHome>
-
-              <Button className="w-8 h-8" size={'icon'}><SquareArrowOutUpRight size={12} /></Button>
-            </div>
-
-            <InfiniteMovingResearchers
-              items={researcher} // Formata cada item como um objeto
-              direction="right"
-              speed='normal'
-              pauseOnHover={true}
-              className="custom-class"
-            />
-          </div>
-        </div>
       </div>
 
-      <div className="flex flex-col mt-8 md:gap-8 gap-4">
-        <div
-          className="
-            flex w-full flex-wrap gap-8
-
-            md:flex-col
-            
-            lg:grid lg:grid-cols-3
-          "
-        >
-          <Alert className="lg:col-span-2 h-full p-0 w-full">
-            <CardHeader className="flex p-0 flex-col md:flex-wrap items-stretch space-y-0 border-b dark:border-b-neutral-800 sm:flex-row">
-              <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-                <CardHeader className="flex p-0 flex-row items-center justify-between space-y-0">
-                  <div>
-                    <CardTitle className="text-sm font-medium">
-                      Produção geral
-                    </CardTitle>
-                    <CardDescription>Dados desde o ano {year}</CardDescription>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <Select defaultValue={String(year)} value={String(year)} onValueChange={(value) => setYear(Number(value))}>
-                      <SelectTrigger className="w-[100px]">
-                        <SelectValue placeholder="" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {years.map((year) => (
-                          <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                        <TooltipContent>
-                          <p>Essas informações não representam a produção total da Escola desde a sua fundação, é um recorte a partir de {year}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-
-                </CardHeader>
-              </div>
-              <div className="flex">
-                {["producao_bibliografica", "producao_tecnica"].map((key) => {
-                  const chart = key as keyof typeof chartConfig
-                  return (
-                    <button
-                      key={chart}
-                      data-active={activeChart === chart}
-                      className={`relative flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 dark:border-l-neutral-800 sm:px-8 sm:py-6 ${activeChart === chart && ('bg-neutral-100 dark:bg-neutral-800')} ${activeChart === 'producao_tecnica' && ('rounded-tr-md')}`}
-                      onClick={() => setActiveChart(chart)}
-                    >
-                      <span className="text-xs text-muted-foreground">
-                        {chartConfig[chart].label}
-                      </span>
-                      <span className="text-lg font-bold leading-none sm:text-3xl">
-                        {total[key as keyof typeof total].toLocaleString()}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            </CardHeader>
-
-            <CardContent className="px-2 sm:p-6">
-              <ChartContainer
-                config={chartConfig}
-                className="aspect-auto h-[300px] w-full"
-              >
-                <BarChart accessibilityLayer data={dados} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
-                  <CartesianGrid vertical={false} horizontal={false} />
-                  <ChartLegend content={<ChartLegendContent />} />
-
-                  <XAxis
-                    dataKey="year"
-                    tickLine={false}
-                    tickMargin={10}
-                    axisLine={false}
-
-                  />
-
-                  <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent indicator="dashed" />}
-                  />
-
-                  {activeChart == 'producao_bibliografica' && (
-                    <>
-                      <Bar dataKey="count_article" fill="#5F82ED" radius={4} >
-                        <LabelList
-                          position="top"
-                          offset={12}
-                          className="fill-foreground"
-                          fontSize={12}
-                        />
-
-
-                      </Bar>
-                      <Bar dataKey="count_book" fill="#792F4C" radius={4} >
-                        <LabelList
-                          position="top"
-                          offset={12}
-                          className="fill-foreground"
-                          fontSize={12}
-                        />
-                      </Bar>
-                      <Bar dataKey="count_book_chapter" fill="#DBAFD0" radius={4} >
-                        <LabelList
-                          position="top"
-                          offset={12}
-                          className="fill-foreground"
-                          fontSize={12}
-                        />
-                      </Bar></>
-                  )}
-
-                  {activeChart == 'producao_tecnica' && (
-                    <>
-                      <Bar dataKey="count_patent" fill="#66B4D0" radius={4} >
-                        <LabelList
-                          position="top"
-                          offset={12}
-                          className="fill-foreground"
-                          fontSize={12}
-                        />
-                      </Bar>
-                      <Bar dataKey="count_brand" fill="#1B1464" radius={4} >
-                        <LabelList
-                          position="top"
-                          offset={12}
-                          className="fill-foreground"
-                          fontSize={12}
-                        />
-                      </Bar>
-                      <Bar dataKey="count_software" fill="#096670" radius={4} >
-                        <LabelList
-                          position="top"
-                          offset={12}
-                          className="fill-foreground"
-                          fontSize={12}
-                        />
-                      </Bar></>
-                  )}
-
-                </BarChart>
-              </ChartContainer>
-            </CardContent>
-          </Alert>
-
-          <div className="flex h-full gap-8 w-full">
-            <Alert className="p-0 w-full">
-              <CardHeader className="flex p-10 flex-row items-center justify-between space-y-0 pb-2">
-                <div>
-                  <CardTitle className="text-sm font-medium">
-                    Índice de produção de artigos
-                  </CardTitle>
-                  <CardDescription>Multiplicação do peso pela quantidade</CardDescription>
-
-                </div>
-
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                    <TooltipContent>
-                      <p>Fonte: Plataforma Lattes</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-
-              </CardHeader>
-
-              <CardContent className="p-2 sm:p-6 h-full">
-                <GraficoIndiceProdBibli articles={dados} pesosProducao={pesosProducao} />
-              </CardContent>
-
-            </Alert>
-          </div>
-        </div>
-
-        <div
-          className="
-            flex flex-wrap gap-8
-
-            lg:grid lg:grid-cols-3
-          "
-        >
-
-          <Alert className="h-full min-w-[40%]">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <div>
-                <CardTitle className="text-sm font-medium">
-                  Nuvem de palavras
-                </CardTitle>
-                <CardDescription>Termos mais presentes nos artigos</CardDescription>
-              </div>
-
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                  <TooltipContent>
-                    <p>Fonte: Plataforma Lattes</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-
-            </CardHeader>
-            <div id="nuveeeem" className="flex w-full justify-center items-center">
-              <HighchartsReact highcharts={Highcharts} options={options} className={'h-full'} />
-            </div>
-          </Alert>
-
-          <Alert className="lg:col-span-2">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <div>
-                <CardTitle className="text-sm font-medium">
-                  Artigos qualificados
-                </CardTitle>
-                <CardDescription>Avaliação Qualis Sucupira </CardDescription>
-              </div>
-
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger> <Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                  <TooltipContent>
-                    <p>Fonte: Plataforma Lattes e Sucupira Qualis</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-
-            </CardHeader>
-
-            <CardContent className="flex py-0 flex-1  items-center justify-center">
-              <GraficoArtigosPorQualis dados={dados} />
-            </CardContent>
-
-          </Alert>
-        </div>
-      </div>
-
-      <AdminGraficoGraduateProgram graduate_program_id={props.program.graduate_program_id} />
     </main>
   )
 }

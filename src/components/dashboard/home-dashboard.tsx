@@ -271,35 +271,7 @@ return (
                                 >
                                   <Masonry gutter="24px">
         
-                                    {researcher.slice(0, 1).map((user) => {
-        
-                                      return (
-                                        <InformacoesGeraisResearcher
-                                          h_index={user.h_index}
-                                          entradanaufmg={String(user.entradanaufmg)}
-                                          relevance_score={user.relevance_score}
-                                          works_count={user.works_count}
-                                          cited_by_count={user.cited_by_count}
-                                          i10_index={user.i10_index}
-                                          scopus={user.scopus}
-                                          orcid={user.orcid}
-                                          openalex={user.openalex}
-                                          subsidy={user.subsidy}
-                                          graduate_programs={user.graduate_programs}
-                                          departments={user.departments}
-                                          classification={user.classification}
-                                          cargo={user.cargo}
-                                          clas={user.clas}
-                                          classe={user.classe}
-                                          rt={user.rt}
-                                          situacao={user.situacao}
-                                          data_atualizacao_lattes={String(user.lattes_update)}
-                                          research_groups={user.research_groups}
-        
-                                        />
-                                      )
-        
-                                    })}
+                                   
         
                                     {researcher.slice(0, 1).map((user) => {
                                       return (

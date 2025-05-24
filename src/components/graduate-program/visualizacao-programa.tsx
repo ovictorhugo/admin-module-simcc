@@ -1,4 +1,4 @@
-import { ArrowLeftFromLine, ArrowRightFromLine, Book, BookOpen, ChevronDown, ChevronLeft, ChevronUp, Copyright, File, Globe, Info, LayoutDashboard, MapPinIcon, SlidersHorizontal, Star, Ticket, Users, X } from "lucide-react";
+import { ArrowLeftFromLine, ArrowRightFromLine, Book, BookOpen, ChevronDown, ChevronLeft, ChevronUp, Copyright, File, Globe, GraduationCap, Home, Info, LayoutDashboard, MapPinIcon, SlidersHorizontal, Star, Ticket, Users, Users2, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -24,7 +24,7 @@ import { DocentesPrograma } from "./docentes-programa";
 import { IndicatorsGraduate } from "./indicators-graduate";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { DialogHeader } from "../ui/dialog";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 import { DocentesGraduate } from "../dashboard/components/docentes-graduate";
 import { DiscentesGraduate } from "../dashboard/components/discentes-graduate";
@@ -38,6 +38,7 @@ import { Badge } from "../ui/badge";
 import { HomepageProgram } from "./homepage-program";
 import { PainelAdminGraduate } from "./painel-admin-graduate";
 import { Helmet } from "react-helmet";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 interface PalavrasChaves {
   term: string;
@@ -197,6 +198,18 @@ const siteDescription = graduatePrograms?.name
   ? `${graduatePrograms.name} | Conectee`
   : `${version ? "Conectee" : "Simcc"} | ${version ? "Escola de Engenharia UFMG" : "SECTI-BA"}`;
 
+
+    const tabs = [
+      { id: "visao_geral", label: "Visão geral", icon: Home },
+      { id: "producoes", label: "Produções", icon: Users2 },
+      { id: "linhas_pesquisa", label: "Linhas de pesquisa", icon: Users2 },
+      { id: "docentes", label: "Docentes", icon: Users2 },
+      { id: "indicadores", label: "Indicadores", icon: Users2 },
+
+    ];
+
+    const [value, setValue] = useState(tabs[0].id)
+
 if (loading) {
   return (
     <div className="flex items-center justify-center h-screen">
@@ -237,8 +250,36 @@ return(
   </Helmet>
 
   <main className="grid grid-cols-1 ">
-  <div className="bg-eng-blue flex-col flex items-center justify-center w-full absolute top-0 left-0 h-[250px]">
+  <Tabs defaultValue={tabs[0].id} value={value} className="">
+  <div className="bg-eng-blue pb-0 md:pb-0 p-4 md:p-8 flex-col flex justify-end items-end w-full absolute top-0 left-0 h-[300px]">
+  <div className="w-fit gap-8 max-w-[900px]">
+<ScrollArea className="relative overflow-x-auto">
+<TabsList className="p-0 justify-start flex gap-2 h-auto bg-transparent dark:bg-transparent">
+{tabs.map(
+({ id, label, icon: Icon }) =>
+ 
+    <div
+      key={id}
+      className={`pb-2 border-b-2 text-black dark:text-white transition-all ${
+        value === id ? "border-b-white" : "border-b-transparent"
+      }`}
+      onClick={() => setValue(id)}
+    >
+      <Button variant="ghost" className={`m-0 text-white hover:text-eng-blue ${ value === id ? "bg-white text-eng-blue" : ""}`}>
+        <Icon size={16} />
+        {label}
+      </Button>
+    </div>
+  
+)}
+</TabsList>
+<ScrollBar orientation="horizontal" />
+</ScrollArea>
 
+<div>
+
+</div>
+</div>
   </div>
  
  <div className="grid grid-cols-1 gap-4 md:gap-8 p-4 md:p-8 z-[2]">
@@ -250,7 +291,7 @@ return(
                   "
                 >
                   <div className="flex gap-2">
-                    <Button onClick={handleVoltar} variant="outline" size="icon" className="h-7 w-7">
+                    <Button onClick={handleVoltar} variant="outline" size="icon" className="h-7 w-7 text-eng-blue hover:text-eng-blue">
                       <ChevronLeft className="h-4 w-4" />
                       <span className="sr-only">Voltar</span>
                     </Button>
@@ -276,12 +317,50 @@ return(
                     "
                   >
      
-
-
+    <Link to={''}>
+    <Button  className="h-8 text-eng-blue hover:text-eng-blue" size={'sm'} variant={'outline'}><LayoutDashboard size={16} />Painel administrativo</Button>
+    </Link>
                   </div>
                 </div>
+                <div className="flex justify-between items-center pt-12">
+        <div className="flex flex-col  gap-6 mt-8">
+          <Avatar className="cursor-pointer rounded-lg  h-24 w-24">
+            <AvatarImage className={'rounded-md h-24 w-24'} src={``} />
+            <AvatarFallback className="flex items-center justify-center"><GraduationCap size={24} /></AvatarFallback>
+          </Avatar>
+
+          <div>
+          <h1 className="text-2xl mb-2 max-w-[800px] font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] md:block">
+              {graduatePrograms.name}
+            </h1>
+
+            <p className="max-w-[750px] text-lg font-light text-foreground">
+              <div className="flex flex-wrap gap-4 ">
+                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Users size={12} />{graduatePrograms.type}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center capitalize"><MapPinIcon size={12} />{graduatePrograms.city}</div>
+                {graduatePrograms.rating != '' && (
+                  <div className="text-sm text-gray-500 dark:text-gray-300 font-normal flex gap-1 items-center"><Star size={12} />CONCEITO CAPES: {graduatePrograms.rating}</div>
+                )}
+              </div>
+            </p>
+
+           
+          </div>
+        </div>
+      </div>
+
+              
+               
+
+<TabsContent value="visao_geral" className="m-0">
+<HomepageProgram program={graduatePrograms} />
+</TabsContent>
+
+               
  </div>
+ </Tabs>
   </main>
+  
 </>
 )
 
