@@ -17,7 +17,7 @@ export function FilterYearPopUp(props: Props) {
   const [itensSelecionados] = useState<string[]>([]);
   const currentDate = new Date();
   const year = currentDate.getFullYear();
-  const [filterYear, setFilterYear] = useState([year-5]);
+  const [filterYear, setFilterYear] = useState([1990]);
   const [isFirstRender, setIsFirstRender] = useState(true); // State to track the first render
 
   // Função para debounced update

@@ -302,12 +302,12 @@ export function ResultHome() {
                 </div>
 
                 <div>
-                  {typeResult == 'researchers-home' && (
+                 
                     <Button onClick={() => onOpenModal('filters')} variant="ghost" className="">
                       <SlidersHorizontal size={16} className="" />
                       Filtros
                     </Button>
-                  )}
+            
                 </div>
                 <Button variant="ghost" size="icon" onClick={() => setIsOn(!isOn)}>
                   {isOn ? (

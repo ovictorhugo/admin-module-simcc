@@ -74,6 +74,7 @@ import { Tv } from './pages/Tv';
 import { logEvent } from '@firebase/analytics';
 import { analytics } from './lib/firebase';
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
+import { FiltersProvider } from './context/filter-context';
 
 interface HistoricoItem {
   termo: string
@@ -375,6 +376,7 @@ useEffect(() => {
       historico, setHistorico
     }}
     >
+        <FiltersProvider>
     
       <DefaultLayout>
         <LoadingWrapper>
@@ -720,7 +722,7 @@ useEffect(() => {
       </Routes>
       </LoadingWrapper>
       </DefaultLayout>
-
+      </FiltersProvider>
     </UserContext.Provider>
    
    </CookiesProvider>

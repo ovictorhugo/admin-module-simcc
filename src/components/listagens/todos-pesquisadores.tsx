@@ -10,7 +10,7 @@ import { Books, ChartLine, ChartLineUp, MagnifyingGlass, Quotes, Rows, SquaresFo
 import { ResearchersBloco } from "../homepage/categorias/researchers-home/researchers-bloco";
 import { TableReseracherhome } from "../homepage/categorias/researchers-home/table-reseracher-home";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ArrowRight, Book, BookOpen, BookOpenText, Briefcase, ChevronDown, ChevronUp, Code, Copyright, Download, File, Files, FolderKanban, Info, LibraryBig, MoreHorizontal, Ticket, UserCog, Users, UserSearch } from "lucide-react";
+import { ArrowRight, Book, BookOpen, BookOpenText, Briefcase, ChevronDown, ChevronLeft, ChevronUp, Code, Copyright, Download, File, Files, FolderKanban, Info, LibraryBig, MoreHorizontal, SlidersHorizontal, Ticket, UserCog, Users, UserSearch } from "lucide-react";
 import { InfiniteMovingResearchers } from "../ui/infinite-moving-researcher";
 import { Tabs, TabsContent, TabsList } from "../ui/tabs";
 import { Input } from "../ui/input";
@@ -38,6 +38,7 @@ import { TechnicianHome } from "./technician-home";
 import { InfiniteMovingResearchersLoading } from "../ui/infinite-moving-researcher-loading";
 import { ChapterHome } from "../homepage/categorias/chapter-home";
 import { useQuery } from "../dashboard/builder-page/tabelas/tabela-artigos";
+import { useModal } from "../hooks/use-modal-store";
 type Research = {
     among: number,
     articles: number,
@@ -270,7 +271,14 @@ const [loading, setLoading] = useState(false)
               name: `Pesquisador ${i + 1}`,
             }));
             
-            
+              const { onOpen: onOpenModal } = useModal();
+
+              const history = useNavigate();
+
+              const handleVoltar = () => {
+                history(-1);
+              }
+
     return(
         <main className=" w-full grid grid-cols-1 ">
  <Helmet>
@@ -278,7 +286,33 @@ const [loading, setLoading] = useState(false)
           <meta name="description" content={`Listagens | ${version ? ('Conectee'):('Simcc')}`} />
           <meta name="robots" content="index, follow" />
         </Helmet>
-<div className="justify-center px-4 md:px-8 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20" >
+
+          <div className="w-full  gap-4 p-4 md:p-8 ">
+                    <div className="flex items-center gap-4">
+                  
+                    <Button onClick={handleVoltar } variant="outline" size="icon" className="h-7 w-7">
+                        <ChevronLeft className="h-4 w-4" />
+                        <span className="sr-only">Voltar</span>
+                      </Button>
+                  
+                      <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+                      Listagens 
+                      </h1>
+                     
+        
+                        
+                    
+                      <div className="hidden items-center gap-2 md:ml-auto md:flex">
+                      
+                       
+                  
+
+                      </div>
+                    </div>
+        
+                    </div>
+
+<div className="justify-center px-4 md:px-8 w-full mx-auto flex max-w-[980px] flex-col items-center gap-2 pb-8  md:pb-8  lg:pb-20" >
         <Link to={'/informacoes'}  className="inline-flex z-[2] items-center rounded-lg  bg-neutral-100 dark:bg-neutral-700  gap-2 mb-3 px-3 py-1 text-sm font-medium"><Info size={12}/><div className="h-full w-[1px] bg-neutral-200 dark:bg-neutral-800"></div>Saiba o que é e como utilizar a plataforma<ArrowRight size={12}/></Link>
         
       
@@ -322,9 +356,9 @@ const [loading, setLoading] = useState(false)
            className="custom-class"
          />
 
-<main className="h-full w-full flex flex-col">
-           <Tabs defaultValue="articles" value={value} className="">
-             <div>
+<main className="h-full w-full flex flex-col relative">
+           <Tabs defaultValue="articles" value={value} className="relative ">
+             <div className="sticky top-[68px]  z-[2] supports-[backdrop-filter]:dark:bg-neutral-900/60 supports-[backdrop-filter]:bg-neutral-50/60 backdrop-blur ">
               <div className={`w-full ${isOn ? 'px-8' : 'px-4'} border-b border-b-neutral-200 dark:border-b-neutral-800`}>
                 {isOn && (
                   <div className="w-full pt-4  flex justify-between items-center">
@@ -375,6 +409,11 @@ const [loading, setLoading] = useState(false)
                     <Download size={16} className="" />
                     Baixar resultado
                   </Button>
+
+                     <Button onClick={() => onOpenModal('filters')} variant="ghost" className="">
+                                        <SlidersHorizontal size={16} className="" />
+                                        Filtros
+                                      </Button>
                 </div>
 
                

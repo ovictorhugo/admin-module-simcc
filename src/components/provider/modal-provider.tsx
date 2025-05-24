@@ -33,6 +33,7 @@ import { RelatarBug } from "../modals/relatar-bug";
 import { PesquisadoresSelecionadosModal } from "../modals/pesquisadores-selecionados-modal";
 import { ConfirmDeleteInstitution } from "../modals/confirm-delete-institution";
 import { UserProfileInitialModal } from "../modals/user-profile-initial";
+import { FiltersModal } from "../modals/filters-modal";
 
 const ModalContent = () => {
   const { type } = useModal();
@@ -86,6 +87,8 @@ const ModalContent = () => {
       return <UserProfileInitialModal/>
     case 'edit-background':
       return <AddBackground/>
+    case 'filters':
+      return <FiltersModal/>
     default:
       return null;
   }

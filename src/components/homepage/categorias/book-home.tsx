@@ -17,6 +17,7 @@ import { BlockItemGeral } from "./book-home/block-item-geral";
 import { HeaderResult } from "../header-results";
 import { Switch } from "../../ui/switch";
 import { useQuery } from "../../dashboard/builder-page/tabelas/tabela-artigos";
+import { useFiltersContext } from "../../../context/filter-context";
 
 type Patente = {
   id: string,
@@ -31,6 +32,13 @@ type Filter = {
   year: number[]
   qualis: string[]
 }
+
+interface Total {
+  year:string
+  among:number
+
+}
+
 
 export function BookHome() {
   const [publicacoes, setPublicacoes] = useState<Patente[]>([]);
@@ -65,7 +73,31 @@ export function BookHome() {
   const { urlGeral, valoresSelecionadosExport } = useContext(UserContext)
   const currentDate = new Date();
   const year = currentDate.getFullYear();
-  let urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=&year=${yearString || year-5}&term=${valoresSelecionadosExport}&distinct=${distinct ? '1' : '0'}&lenght=${Length}&page=${Page}`;
+
+  const {
+      setSelectedAreas,
+      setSelectedGraduations,
+      setSelectedCities,
+      setSelectedDepartaments,
+      setSelectedGraduatePrograms,
+      setSelectedSubsidies,
+      setSelectedUniversities,
+      clearFilters,
+      selectedAreas,
+      selectedGraduations,
+      selectedCities,
+      selectedDepartaments,
+      selectedGraduatePrograms,
+      selectedSubsidies,
+      selectedUniversities
+    } = useFiltersContext(); // ✅ correto
+
+    
+  function arrayToParam(arr?: string[]) {
+    return (arr || []).join(';');
+  }
+
+  let urlTermPublicacoes = `${urlGeral}book_production_researcher?researcher_id=&year=${yearString || year-5}&term=${valoresSelecionadosExport}&distinct=${distinct ? '1' : '0'}&lenght=${Length}&page=${Page}&area=${arrayToParam(selectedAreas)}&graduate_program=${arrayToParam(selectedGraduatePrograms)}&city=${arrayToParam(selectedCities)}&institution=${arrayToParam(selectedUniversities)}&modality=${arrayToParam(selectedSubsidies)}&graduation=${arrayToParam(selectedGraduations)}&departament=${arrayToParam(selectedDepartaments)}`;
   
   useEffect(() => {
     const fetchData = async () => {
@@ -100,6 +132,42 @@ export function BookHome() {
 
   ///cap
 
+  ////
+  const [total, setTotal] = useState<Total[]>([])
+  const totalAmong = total.reduce((acc, item) => acc + item.among, 0)
+
+      let urlTotais = `${urlGeral}researcher_metrics?type=BOOK&term=${valoresSelecionadosExport}&distinct=${distinct ? '1' : '0'}&area=${arrayToParam(selectedAreas)}&graduate_program=${arrayToParam(selectedGraduatePrograms)}&city=${arrayToParam(selectedCities)}&institution=${arrayToParam(selectedUniversities)}&modality=${arrayToParam(selectedSubsidies)}&graduation=${arrayToParam(selectedGraduations)}&departament=${arrayToParam(selectedDepartaments)}`;
+      
+      console.log(urlTotais)
+        useEffect(() => {
+          const fetchData = async () => {
+      
+            try {
+              const response = await fetch(urlTotais, {
+                mode: 'cors',
+                headers: {
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'GET',
+                  'Access-Control-Allow-Headers': 'Content-Type',
+                  'Access-Control-Max-Age': '3600',
+                  'Content-Type': 'text/plain'
+                }
+              });
+              const data = await response.json();
+              if (data) {
+                setTotal(data)
+              }
+            } catch (err) {
+              console.log(err);
+            } finally {
+      
+            }
+          };
+          fetchData();
+        }, [urlTotais]);
+  
+
+
   
 
   const updateDistinct = useCallback(
@@ -115,6 +183,9 @@ export function BookHome() {
       }, 300), // 300ms de debounce
       []
     );
+
+
+
 
   return (
     <div className="grid grid-cols-1 gap-4 pb-16">
@@ -135,7 +206,7 @@ export function BookHome() {
           </CardHeader>
           <CardContent className="flex justify-between items-end">
             <div>
-            <div className="text-2xl font-bold">{publicacoes.length}</div>
+            <div className="text-2xl font-bold">{totalAmong}</div>
             <p className="text-xs text-muted-foreground flex gap-2">
               encontrados na busca desde {yearString}
             </p>

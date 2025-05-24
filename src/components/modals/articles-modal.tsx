@@ -170,7 +170,7 @@ export function ArticlesModal() {
   };
 
   const teste = highlightText(data.title || '', itemsSelecionados)
-
+const {onClose:onCloseModal} = useModal()
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
 
@@ -484,7 +484,10 @@ export function ArticlesModal() {
                 <div className="flex flex-wrap gap-3">
                   {data.authors?.split(';').map((author, index) => (
                     <div
-                      onClick={() => onOpen('researcher-modal', { name: author.trim() })}
+                      onClick={() => {
+                        onOpen('researcher-modal', { name: author.trim() })
+                        onClose()
+                      }}
                       key={index}
                       className="border-neutral-200 border cursor-pointer dark:border-neutral-800 py-2 px-2 rounded-md text-xs flex gap-2 items-center">
                       <Avatar className="cursor-pointer rounded-md  h-6 w-6">

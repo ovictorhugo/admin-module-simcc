@@ -39,6 +39,9 @@ import { Separator } from "../../ui/separator";
 import { Badge } from "../../ui/badge";
 import { GraficoTitulacao } from "../../listagens/graficos/grafico-titulacao";
 import { GraficoAreaPesquisares } from "../../listagens/graficos/grafico-area-pesquisadores";
+import { FiltersModal } from "../../modals/filters-modal";
+import { useFiltersContext } from "../../../context/filter-context";
+import { FiltersBadge } from "./researchers-home/filters-badge";
 
 type CityData = {
   nome: string;
@@ -166,6 +169,12 @@ const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 }
 
+interface Total {
+  researcher_count:number
+  orcid_count:number
+  scopus_count:number
+}
+
 
 interface Filtros {
   area:string[]
@@ -174,654 +183,7 @@ interface Filtros {
   institution:string[]
   modality:string[]
   graduate_program:string[]
-}
-export function FiltersModal() {
-  const isFirstRender = useRef(true);
-const {urlGeral} = useContext(UserContext)
-  const [filtros, setFiltros] = useState<Filtros>(Filtros[])
-
-  let urlPublicacoesPorPesquisador = `${urlGeral}/researcher_filter`;
-  
-  
-    useEffect(() => {
-      const fetchData = async () => {
-  
-        try {
-          const response = await fetch(urlPublicacoesPorPesquisador, {
-            mode: 'cors',
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': 'GET',
-              'Access-Control-Allow-Headers': 'Content-Type',
-              'Access-Control-Max-Age': '3600',
-              'Content-Type': 'text/plain'
-            }
-          });
-          const data = await response.json();
-          if (data) {
-            setFiltros(data)
-          }
-        } catch (err) {
-          console.log(err);
-        } finally {
-  
-        }
-      };
-      fetchData();
-    }, [urlPublicacoesPorPesquisador]);
-
-  const queryUrl = useQuery();
-  const getArrayFromUrl = (key: string) => queryUrl.get(key)?.split(";") || [];
-
-  
-  const { onClose, isOpen, type: typeModal } = useModal();
-  const isModalOpen = isOpen && typeModal === "filters";
-  const [selectedAreas, setSelectedAreas] = useState<string[]>(getArrayFromUrl("areas"));
-  const [selectedGraduations, setSelectedGraduations] = useState<string[]>(getArrayFromUrl("graduations"));
-  const [selectedCities, setSelectedCities] = useState<string[]>(getArrayFromUrl("cities"));
-  const [selectedUniversities, setSelectedUniversities] = useState<string[]>(getArrayFromUrl("universities"));
-  const [selectedSubsidies, setSelectedSubsidies] = useState<string[]>(getArrayFromUrl("subsidy"));
-  const [selectedGraduatePrograms, setSelectedGraduatePrograms] = useState<string[]>(getArrayFromUrl("graduatePrograms"));
-  const [selectedDepartaments, setSelectedDepartaments] = useState<string[]>(getArrayFromUrl("departments"));
-
-  const [filteredCount, setFilteredCount] = useState<number>(0);
-  const navigate = useNavigate();
-
-  const { simcc } = useContext(UserContext)
-  useEffect(() => {
-    // Calculate filtered results count
-    let filtered = [...researcher];
-    if (selectedAreas.length > 0) {
-      filtered = filtered.filter((r) => selectedAreas.some((selectedArea) =>
-        r.area.split(';').map(area => area.trim()).some((area) => area.includes(selectedArea))
-      ));
-    }
-    if (selectedGraduations.length > 0) {
-      filtered = filtered.filter((r) => selectedGraduations.includes(r.graduation));
-    }
-    if (selectedCities.length > 0) {
-      filtered = filtered.filter((r) => selectedCities.includes(r.city));
-    }
-    if (selectedUniversities.length > 0) {
-      filtered = filtered.filter((r) => selectedUniversities.includes(r.university));
-    }
-    if (selectedSubsidies.length > 0) {
-      filtered = filtered.filter((r) => {
-        if (!r.subsidy || !Array.isArray(r.subsidy)) return false;
-        return r.subsidy.some(s => selectedSubsidies.includes(s.modality_name));
-      });
-    }
-    if (selectedGraduatePrograms.length > 0) {
-      filtered = filtered.filter((r) => {
-        if (!r.graduate_programs || !Array.isArray(r.graduate_programs)) return false;
-        return r.graduate_programs.some(gp => selectedGraduatePrograms.includes(gp.name));
-      });
-    }
-    if (selectedDepartaments.length > 0) {
-      filtered = filtered.filter((r) => {
-        if (!r.departments || !Array.isArray(r.departments)) return false;
-        return r.departments.some(gp => selectedDepartaments.includes(gp.dep_sigla));
-      });
-    }
-    setFilteredCount(filtered.length);
-
-      updateFilters("areas", selectedAreas );
-    updateFilters("graduations", selectedGraduations);
-    updateFilters("cities", selectedCities);
-    updateFilters("universities", selectedUniversities);
-    updateFilters("subsidy", selectedSubsidies);
-    updateFilters("graduatePrograms", selectedGraduatePrograms);
-    updateFilters("departments", selectedDepartaments);
-
-    navigate({
-      pathname: '/resultados',
-      search: queryUrl.toString(),
-    });
-    
-
-   
-    setResearcher(filteredResearchers);
-
-
-  }, [researcher, selectedAreas, selectedGraduations, selectedCities, selectedUniversities, selectedSubsidies, selectedGraduatePrograms, selectedDepartaments]);
-
-  const handleAreaToggle = (value: any) => {
-    setSelectedAreas(value);
-  };
-
-  const handleGraduationToggle = (value: any) => {
-    setSelectedGraduations(value);
-  };
-
-  const handleDepartamentToggle = (value: any) => {
-    setSelectedDepartaments(value);
-  };
-
-  const handleCityToggle = (value: any) => {
-    setSelectedCities(value);
-  };
-
-  const handleUniversityToggle = (value: any) => {
-    setSelectedUniversities(value);
-  };
-
-  const handleSubsidyToggle = (value: any) => {
-    setSelectedSubsidies(value);
-  };
-
-  const handleGraduateProgramToggle = (value: any) => {
-    setSelectedGraduatePrograms(value);
-  };
-
-
-  const filteredResearchers = researcher.filter((res) => {
-    const areas = res.area.split(';').map(area => area.trim());
-    const hasSelectedArea = selectedAreas.length === 0 || selectedAreas.some((selectedArea) =>
-      areas.some((area) => area.includes(selectedArea))
-    );
-    const hasSelectedGraduation = selectedGraduations.length === 0 || selectedGraduations.includes(res.graduation);
-    const hasSelectedCity = selectedCities.length === 0 || selectedCities.includes(res.city);
-    const hasSelectedUniversity = selectedUniversities.length === 0 || selectedUniversities.includes(res.university);
-    const hasSelectedSubsidy = selectedSubsidies.length === 0 || (
-      res.subsidy && res.subsidy.some(sub => selectedSubsidies.includes(sub.modality_name))
-    );
-
-    const hasSelectedGraduateProgram = selectedGraduatePrograms.length === 0 || (
-      res.graduate_programs && res.graduate_programs.some(gp => selectedGraduatePrograms.includes(gp.name))
-    );
-
-    const hasSelectedDepartament = selectedDepartaments.length === 0 || (
-      res.departments && res.departments.some(gp => selectedDepartaments.includes(gp.dep_sigla))
-    );
-
-    return hasSelectedArea && hasSelectedGraduation && hasSelectedCity && hasSelectedUniversity && hasSelectedSubsidy && hasSelectedGraduateProgram && hasSelectedDepartament;
-  });
-
-  const applyFilters = () => {
-    setResearcher(filteredResearchers);
-    onClose();
-  };
-
-  const clearFilters = () => {
-    setSelectedAreas([]);
-    setSelectedGraduations([]);
-    setSelectedCities([]);
-    setSelectedUniversities([]);
-    setSelectedSubsidies([]);
-    setSelectedDepartaments([]);
-    setSelectedGraduatePrograms([])
-  
-    onClose();
-  };
-
-  // Ensure unique values
-  const uniqueAreas = Array.from(new Set(researcher.flatMap((res) => res.area.split(';').map(area => area.trim()))));
-  const uniqueGraduations = Array.from(new Set(researcher.map((res) => res.graduation)));
-  const uniqueCities = Array.from(new Set(researcher.map((res) => res.city))).filter(Boolean);
-  const uniqueUniversities = Array.from(new Set(researcher.map((res) => res.university))).filter(Boolean);
-  const uniqueSubsidies = Array.from(
-    new Set(
-      researcher.flatMap((res) =>
-        Array.isArray(res.subsidy) ? res.subsidy.map((sub) => sub.modality_name) : []
-      )
-    )
-  ).filter(Boolean);
-
-  const uniqueGraduatePrograms = Array.from(
-    new Set(
-      researcher.flatMap((res) =>
-        Array.isArray(res.graduate_programs) ? res.graduate_programs.map((gp) => gp.name) : []
-      )
-    )
-  ).filter(Boolean);
-
-  const uniqueDepartaments = Array.from(
-    new Set(
-      researcher.flatMap((res) =>
-        Array.isArray(res.departments) ? res.departments.map((gp) => gp.dep_sigla) : []
-      )
-    )
-  ).filter(Boolean);
-
-  useEffect(() => {
-    if (researcher.length == 0) {
-      setSelectedAreas([]);
-      setSelectedGraduations([]);
-      setSelectedCities([]);
-      setSelectedUniversities([]);
-      setSelectedSubsidies([]);
-      setSelectedDepartaments([])
-      setSelectedGraduatePrograms([])
-    }
-  }, [researcher]);
-
-
-
-  const {version} = useContext(UserContext)
-
-
-  ///////////q
-
-
-   // Função para atualizar os filtros na URL
-   const updateFilters = (category: string, values: string[]) => {
-    if (values.length > 0 ) {
-     
-      queryUrl.set(category, values.join(";"));
-      setResearcher(filteredResearchers);
-    } else {
-     queryUrl.delete(category)
-    }
-   
-  };
-
- 
-  // Carrega os valores da URL ao iniciar a página
-  useEffect(() => {
-
-    setSelectedAreas(getArrayFromUrl("areas"));
-    setSelectedGraduations(getArrayFromUrl("graduations"));
-    setSelectedCities(getArrayFromUrl("cities"));
-    setSelectedUniversities(getArrayFromUrl("universities"));
-    setSelectedSubsidies(getArrayFromUrl("subsidy"));
-    setSelectedGraduatePrograms(getArrayFromUrl("graduatePrograms"));
-    setSelectedDepartaments(getArrayFromUrl("departments"));
-
-   
- 
-  }, []);
-
-  const [search, setSearch] = useState('')
-  const [search2, setSearch2] = useState('')
-
-  const filteredTotal = Array.isArray(uniqueGraduatePrograms) ? uniqueGraduatePrograms.filter(item => {
-    // Normaliza a string do item e da busca para comparação
-    const normalizeString = (str: any) => str
-      .normalize("NFD") // Decompõe os caracteres acentuados
-      .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
-      .toLowerCase(); // Converte para minúsculas
-
-    const searchString = normalizeString(item);
-    const normalizedSearch = normalizeString(search);
-
-    return searchString.includes(normalizedSearch);
-  }) : [];
-
-  const filteredTotal2 = Array.isArray(uniqueCities) ? uniqueCities.filter(item => {
-    // Normaliza a string do item e da busca para comparação
-    const normalizeString = (str: any) => str
-      .normalize("NFD") // Decompõe os caracteres acentuados
-      .replace(/[\u0300-\u036f]/g, "") // Remove os diacríticos
-      .toLowerCase(); // Converte para minúsculas
-
-    const searchString = normalizeString(item);
-    const normalizedSearch = normalizeString(search2);
-
-    return searchString.includes(normalizedSearch);
-  }) : [];
-
-  return {
-    selectedAreas,
-    selectedGraduations,
-    selectedCities,
-    selectedDepartaments,
-    selectedGraduatePrograms,
-    selectedSubsidies,
-    selectedUniversities,
-    setSelectedAreas,
-    setSelectedGraduations,
-    setSelectedCities,
-    setSelectedDepartaments,
-    setSelectedGraduatePrograms,
-    setSelectedSubsidies,
-    setSelectedUniversities,
-    clearFilters,
-    component: (
-    <Sheet open={isModalOpen} onOpenChange={onClose}>
-      <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 min-w-[60vw]`}>
-        <DialogHeader className="h-[50px] px-4 justify-center border-b dark:border-gray-600">
-
-          <div className="flex items-center gap-3">
-
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button className="h-8 w-8" variant={'outline'} onClick={() => {
-                    onClose()
-                  }} size={'icon'}><X size={16} /></Button>
-                </TooltipTrigger>
-                <TooltipContent> Fechar</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-
-        </DialogHeader>
-
-        <div className="relative flex">
-
-          <div>
-            <div className="hidden lg:block p-8 pr-0 h-full">
-              <div style={{ backgroundImage: `url(${bg_user})` }} className=" h-full w-[270px]  bg-cover bg-no-repeat bg-left rounded-md bg-eng-blue p-8"></div>
-
-            </div>
-
-          </div>
-          <ScrollArea className="relative whitespace-nowrap h-[calc(100vh-50px)] p-8 w-full ">
-            <div>
-              <p className="max-w-[750px] mb-2 text-lg font-light text-foreground">
-                Pesquisadores
-              </p>
-
-              <h1 className="max-w-[500px] text-3xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1] mb-8 md:block">
-                Filtros de pesquisa
-              </h1>
-            </div>
-
-            <div className="w-full">
-              {/* Área de especialidade */}
-             
-
-              <Accordion defaultValue="item-1" type="single" collapsible className="w-full">
-  <AccordionItem value="item-1" className="w-full">
-    <div className="flex items-center justify-between">
-    <Label>Área de especialidade</Label>
-    <div className="flex gap-2 items-center">
-    {selectedAreas.length > 0 && (
-        <Button
-        onClick={() => {
-          setSelectedAreas([]) 
-          applyFilters()}}
-         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
-      )}
-       <AccordionTrigger>
-      
-      </AccordionTrigger>
-    </div>
-    
-    </div>
-    <AccordionContent>
-    <ToggleGroup
-                  type="multiple"
-                  variant={'outline'}
-                  value={selectedAreas}
-                  onValueChange={handleAreaToggle}
-                  className="aspect-auto flex flex-wrap items-start justify-start gap-2"
-                >
-                {uniqueAreas
-  .filter((area) => area.trim() !== "")
-  .map((area) => (
-    <ToggleGroupItem key={area} value={area} className="px-3 py-2 gap-2 flex">
-     <Alert className={` w-4 rounded-md border-0 h-4 p-0 ${
-                area.includes("CIENCIAS AGRARIAS")
-                  ? "bg-red-400"
-                  : area.includes("CIENCIAS EXATAS E DA TERRA")
-                  ? "bg-green-400"
-                  : area.includes("CIENCIAS DA SAUDE")
-                  ? "bg-[#20BDBE]"
-                  : area.includes("CIENCIAS HUMANAS")
-                  ? "bg-[#F5831F]"
-                  : area.includes("CIENCIAS BIOLOGICAS")
-                  ? "bg-[#EB008B]"
-                  : area.includes("ENGENHARIAS")
-                  ? "bg-[#FCB712]"
-                  : area.includes("CIENCIAS SOCIAIS APLICADAS")
-                  ? "bg-[#009245]"
-                  : area.includes("LINGUISTICA LETRAS E ARTES")
-                  ? "bg-[#A67C52]"
-                  : area.includes("OUTROS")
-                  ? "bg-[#1B1464]"
-                  : "bg-[#000]"
-              }`} />   {area}
-    </ToggleGroupItem>
-  ))}
-                </ToggleGroup>
-    </AccordionContent>
-  </AccordionItem>
-
-  <AccordionItem value="item-2">
-    <div className="flex items-center justify-between">
-    <Label>Titulação</Label>
-   
-       <div className="flex gap-2 items-center">
-
-       {selectedGraduations.length > 0 && (
-        <Button
-        onClick={() => setSelectedGraduations([])}
-         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
-      )}
-<AccordionTrigger>
-
-</AccordionTrigger>
-</div>
-    </div>
-    <AccordionContent>
-    <ToggleGroup
-                  type="multiple"
-                  variant={'outline'}
-                  value={selectedGraduations}
-                  onValueChange={handleGraduationToggle}
-                  className="aspect-auto flex flex-wrap items-start justify-start gap-2"
-                >
-                  {uniqueGraduations.map((graduation) => (
-                    <ToggleGroupItem key={graduation} value={graduation} className="px-3 py-2">
-                      {graduation}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
-    </AccordionContent>
-  </AccordionItem>
-
-  <AccordionItem value="item-3">
-    <div className="flex items-center justify-between">
-    <Label>Cidade</Label>
-   
-      
-      <div className="flex gap-2 items-center">
-
-      {selectedCities.length > 0 && (
-        <Button
-        onClick={() => setSelectedCities([])}
-         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
-      )}
-<AccordionTrigger>
-
-</AccordionTrigger>
-</div>
-    </div>
-    <AccordionContent>
-    <Alert className="h-12 p-2 mb-4 flex items-center justify-between  w-full ">
-                <div className="flex items-center gap-2 w-full flex-1">
-                  <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
-                  <Input onChange={(e) => setSearch2(e.target.value)} value={search2} type="text" className="border-0 w-full " />
-                </div>
-
-                <div className="w-fit">
-
-
-                </div>
-              </Alert>
-
-    <ToggleGroup
-                    type="multiple"
-                    variant={'outline'}
-                    value={selectedCities}
-                    onValueChange={handleCityToggle}
-                    className="aspect-auto flex flex-wrap items-start justify-start gap-2"
-                  >
-                    {filteredTotal2.map((city) => (
-                      <ToggleGroupItem key={city} value={city} className="px-3 py-2">
-                        {city}
-                      </ToggleGroupItem>
-                    ))}
-                  </ToggleGroup>
-    </AccordionContent>
-  </AccordionItem>
-
-  <AccordionItem value="item-4">
-    <div className="flex items-center justify-between">
-    <Label>Universidade</Label>
-     <div className="flex gap-2 items-center">
-    
-          {selectedUniversities.length > 0 && (
-            <Button
-            onClick={() => setSelectedUniversities([])}
-             className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
-          )}
-        <AccordionTrigger>
-          
-          </AccordionTrigger>
-        </div>
-   
-    </div>
-    <AccordionContent>
-    <ToggleGroup
-                    type="multiple"
-                    variant={'outline'}
-                    value={selectedUniversities}
-                    onValueChange={handleUniversityToggle}
-                    className="aspect-auto flex flex-wrap items-start justify-start gap-2"
-                  >
-                    {uniqueUniversities.map((university) => (
-                      <ToggleGroupItem key={university} value={university} className="px-3 py-2">
-                        {university}
-                      </ToggleGroupItem>
-                    ))}
-                  </ToggleGroup>
-    </AccordionContent>
-  </AccordionItem>
-
-
-<AccordionItem value="item-5">
-    <div className="flex items-center justify-between">
-    <Label>Bolsa CNPq</Label>
-  
-
-<div className="flex gap-2 items-center">
-
-{selectedSubsidies.length > 0 && (
-        <Button
-        onClick={() => setSelectedSubsidies([])}
-         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
-      )}
-<AccordionTrigger>
-
-</AccordionTrigger>
-</div>
-    </div>
-    <AccordionContent>
-    <ToggleGroup
-                  type="multiple"
-                  variant={'outline'}
-                  value={selectedSubsidies}
-                  onValueChange={handleSubsidyToggle}
-                  className="aspect-auto flex flex-wrap items-start justify-start gap-2"
-                >
-                  {uniqueSubsidies.map((subsidy) => (
-                    <ToggleGroupItem key={subsidy} value={subsidy} className="px-3 py-2">
-                      {subsidy === 'pq' ? 'Produtividade em Pesquisa' : subsidy === 'dt' ? 'Desenvolvimento Tecnológico' : subsidy}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
-    </AccordionContent>
-  </AccordionItem>
-
-  {version && (
-  <AccordionItem value="item-6">
-    <div className="flex items-center justify-between">
-    <Label>Departamentos</Label>
-    <div className="flex gap-2 items-center">
-
-      {selectedDepartaments.length > 0 && (
-        <Button
-        onClick={() => setSelectedDepartaments([])}
-         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
-      )}
-    <AccordionTrigger>
-      
-      </AccordionTrigger>
-    </div>
-    </div>
-    <AccordionContent>
-    <ToggleGroup
-                type="multiple"
-                variant={'outline'}
-                value={selectedDepartaments}
-                onValueChange={handleDepartamentToggle}
-                className="aspect-auto flex flex-wrap items-start justify-start gap-2"
-              >
-                {uniqueDepartaments.map((program) => (
-                  <ToggleGroupItem key={program} value={program} className="px-3 py-2 whitespace-normal">
-                    {program}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
-    </AccordionContent>
-  </AccordionItem>
-)}
-
-<AccordionItem value="item-7">
-    <div className="flex items-center justify-between">
-    <Label>Programas de Pós-graduação</Label>
-    <div className="flex gap-2 items-center">
-
-      {selectedGraduatePrograms.length > 0 && (
-        <Button
-        onClick={() => setSelectedGraduatePrograms([])}
-         className="" variant={'destructive'} size={'icon'}><Trash size={16}/></Button>
-      )}
-    <AccordionTrigger>
-      
-      </AccordionTrigger>
-    </div>
-    </div>
-    <AccordionContent>
-    <Alert className="h-12 p-2 mb-4 flex items-center justify-between  w-full ">
-                <div className="flex items-center gap-2 w-full flex-1">
-                  <MagnifyingGlass size={16} className=" whitespace-nowrap w-10" />
-                  <Input onChange={(e) => setSearch(e.target.value)} value={search} type="text" className="border-0 w-full " />
-                </div>
-
-                <div className="w-fit">
-
-
-                </div>
-              </Alert>
-
-    <ToggleGroup
-                  type="multiple"
-                  variant={'outline'}
-                  value={selectedGraduatePrograms}
-                  onValueChange={handleGraduateProgramToggle}
-                  className="aspect-auto flex flex-wrap items-start justify-start gap-2"
-                >
-                  {filteredTotal.map((program) => (
-                    <ToggleGroupItem key={program} value={program} className="px-3 py-2 whitespace-normal">
-                      {program}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
-    </AccordionContent>
-  </AccordionItem>
-</Accordion>
-
-            </div>
-
-            <DialogFooter className="py-4">
-              <Button variant="ghost" onClick={clearFilters} className="gap-2">
-                <Trash size={16} />
-                Limpar Filtros
-              </Button>
-
-              <Button onClick={applyFilters} className="gap-2">
-                <FadersHorizontal size={16} />
-                Mostrar {filteredCount} resultados
-              </Button>
-            </DialogFooter>
-          </ScrollArea>
-        </div>
-      </SheetContent>
-    </Sheet>
-  )}
+  departament:string[]
 }
 
 export function ResearchersHome() {
@@ -839,7 +201,29 @@ export function ResearchersHome() {
     localStorage.setItem('pesquisadoresSelecionados', JSON.stringify(pesquisadoresSelecionados));
   }, [pesquisadoresSelecionados]);
 
+
+
+
+
   const queryUrl = useQuery();
+
+  const {
+    setSelectedAreas,
+    setSelectedGraduations,
+    setSelectedCities,
+    setSelectedDepartaments,
+    setSelectedGraduatePrograms,
+    setSelectedSubsidies,
+    setSelectedUniversities,
+    clearFilters,
+    selectedAreas,
+    selectedGraduations,
+    selectedCities,
+    selectedDepartaments,
+    selectedGraduatePrograms,
+    selectedSubsidies,
+    selectedUniversities
+  } = useFiltersContext(); // ✅ correto
 
   const terms = queryUrl.get('terms');
   const openAlexState = queryUrl.get('open_alex');
@@ -848,27 +232,34 @@ export function ResearchersHome() {
 
   const isModalOpen = isOpen && type === "researchers-home";
 
-  let urlTermPesquisadores = ``;
- 
+
   const Page =  queryUrl.get('page') || '1';
   const Length =  queryUrl.get('length') || '12';
-  
 
-  if (searchType === 'name') {
-    urlTermPesquisadores = `${urlGeral}researcherName?name=${terms?.replace(/[;|()]/g, '')}&lenght=${Length}&page=${Page}`;
-  } else if (searchType === 'article') {
-    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ARTICLE&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&lenght=${Length}&page=${Page}`;
-  } else if (searchType === 'book') {
-    urlTermPesquisadores = `${urlGeral}researcherBook?term=${terms}&university=&type=BOOK&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&lenght=${Length}&page=${Page}`; //
-  } else if (searchType === 'area') {
-    urlTermPesquisadores = `${urlGeral}researcherArea_specialty?area_specialty=${terms}&university=&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&lenght=${Length}&page=${Page}`;
-  } else if (searchType === 'speaker') {
-    urlTermPesquisadores = `${urlGeral}researcherParticipationEvent?term=${terms}&university=&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&lenght=${Length}&page=${Page}`; //
-  } else if (searchType === 'patent') {
-    urlTermPesquisadores = `${urlGeral}researcherPatent?term=${terms}&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&university=&lenght=${Length}&page=${Page}`;
-  } else if (searchType === 'abstract') {
-    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ABSTRACT&graduate_program_id=${idGraduateProgram == '0' ? ('') : (idGraduateProgram)}&lenght=${Length}&page=${Page}`;
+
+
+  function arrayToParam(arr?: string[]) {
+    return (arr || []).join(';');
   }
+  
+  let urlTermPesquisadores = '';
+  
+  if (searchType === 'name') {
+    urlTermPesquisadores = `${urlGeral}researcherName?name=${terms?.replace(/[;|()]/g, '')}&lenght=${Length}&page=${Page}&area=${arrayToParam(selectedAreas)}&graduate_program=${arrayToParam(selectedGraduatePrograms)}&city=${arrayToParam(selectedCities)}&institution=${arrayToParam(selectedUniversities)}&modality=${arrayToParam(selectedSubsidies)}&graduation=${arrayToParam(selectedGraduations)}&departament=${arrayToParam(selectedDepartaments)}`;
+  } else if (searchType === 'article') {
+    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ARTICLE&graduate_program_id=${idGraduateProgram === '0' ? '' : idGraduateProgram}&lenght=${Length}&page=${Page}&area=${arrayToParam(selectedAreas)}&graduate_program=${arrayToParam(selectedGraduatePrograms)}&city=${arrayToParam(selectedCities)}&institution=${arrayToParam(selectedUniversities)}&modality=${arrayToParam(selectedSubsidies)}&graduation=${arrayToParam(selectedGraduations)}&departament=${arrayToParam(selectedDepartaments)}`;
+  } else if (searchType === 'book') {
+    urlTermPesquisadores = `${urlGeral}researcherBook?term=${terms}&university=&type=BOOK&graduate_program_id=${idGraduateProgram === '0' ? '' : idGraduateProgram}&lenght=${Length}&page=${Page}&area=${arrayToParam(selectedAreas)}&graduate_program=${arrayToParam(selectedGraduatePrograms)}&city=${arrayToParam(selectedCities)}&institution=${arrayToParam(selectedUniversities)}&modality=${arrayToParam(selectedSubsidies)}&graduation=${arrayToParam(selectedGraduations)}&departament=${arrayToParam(selectedDepartaments)}`;
+  } else if (searchType === 'area') {
+    urlTermPesquisadores = `${urlGeral}researcherArea_specialty?area_specialty=${terms}&university=&graduate_program_id=${idGraduateProgram === '0' ? '' : idGraduateProgram}&lenght=${Length}&page=${Page}&area=${arrayToParam(selectedAreas)}&graduate_program=${arrayToParam(selectedGraduatePrograms)}&city=${arrayToParam(selectedCities)}&institution=${arrayToParam(selectedUniversities)}&modality=${arrayToParam(selectedSubsidies)}&graduation=${arrayToParam(selectedGraduations)}&departament=${arrayToParam(selectedDepartaments)}`;
+  } else if (searchType === 'speaker') {
+    urlTermPesquisadores = `${urlGeral}researcherParticipationEvent?term=${terms}&university=&graduate_program_id=${idGraduateProgram === '0' ? '' : idGraduateProgram}&lenght=${Length}&page=${Page}&area=${arrayToParam(selectedAreas)}&graduate_program=${arrayToParam(selectedGraduatePrograms)}&city=${arrayToParam(selectedCities)}&institution=${arrayToParam(selectedUniversities)}&modality=${arrayToParam(selectedSubsidies)}&graduation=${arrayToParam(selectedGraduations)}&departament=${arrayToParam(selectedDepartaments)}`;
+  } else if (searchType === 'patent') {
+    urlTermPesquisadores = `${urlGeral}researcherPatent?term=${terms}&graduate_program_id=${idGraduateProgram === '0' ? '' : idGraduateProgram}&university=&lenght=${Length}&page=${Page}&area=${arrayToParam(selectedAreas)}&graduate_program=${arrayToParam(selectedGraduatePrograms)}&city=${arrayToParam(selectedCities)}&institution=${arrayToParam(selectedUniversities)}&modality=${arrayToParam(selectedSubsidies)}&graduation=${arrayToParam(selectedGraduations)}&departament=${arrayToParam(selectedDepartaments)}`;
+  } else if (searchType === 'abstract') {
+    urlTermPesquisadores = `${urlGeral}researcher?terms=${terms}&university=&type=ABSTRACT&graduate_program_id=${idGraduateProgram === '0' ? '' : idGraduateProgram}&lenght=${Length}&page=${Page}&area=${arrayToParam(selectedAreas)}&graduate_program=${arrayToParam(selectedGraduatePrograms)}&city=${arrayToParam(selectedCities)}&institution=${arrayToParam(selectedUniversities)}&modality=${arrayToParam(selectedSubsidies)}&graduation=${arrayToParam(selectedGraduations)}&departament=${arrayToParam(selectedDepartaments)}`;
+  }
+  
 
   console.log(urlTermPesquisadores);
 
@@ -876,6 +267,7 @@ export function ResearchersHome() {
   const [researcherOpenAlex, setResearcherOpenAlex] = useState<ResearchOpenAlex[]>([])
   const [isOpenAlex, setIsOpenAlex] = useState(false)
 
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -922,7 +314,40 @@ export function ResearchersHome() {
     };
 
     fetchData();
-  }, [urlTermPesquisadores, FinalOpenAlex, urlOpenAlex]);
+  }, [urlTermPesquisadores]);
+
+
+    ////
+    const [total, setTotal] = useState<Total>()
+    let urlTotais = `${urlGeral}researcher_metrics?type=${searchType.toUpperCase()}&term=${terms}&area=${arrayToParam(selectedAreas)}&graduate_program=${arrayToParam(selectedGraduatePrograms)}&city=${arrayToParam(selectedCities)}&institution=${arrayToParam(selectedUniversities)}&modality=${arrayToParam(selectedSubsidies)}&graduation=${arrayToParam(selectedGraduations)}&departament=${arrayToParam(selectedDepartaments)}`;
+    
+    console.log(urlTotais)
+      useEffect(() => {
+        const fetchData = async () => {
+    
+          try {
+            const response = await fetch(urlTotais, {
+              mode: 'cors',
+              headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Max-Age': '3600',
+                'Content-Type': 'text/plain'
+              }
+            });
+            const data = await response.json();
+            if (data) {
+              setTotal(data[0])
+            }
+          } catch (err) {
+            console.log(err);
+          } finally {
+    
+          }
+        };
+        fetchData();
+      }, [urlTotais]);
 
   useEffect(() => {
     const processCityData = () => {
@@ -983,15 +408,6 @@ export function ResearchersHome() {
       .toLowerCase(); // Converte para minúsculas
   };
 
-  const { setSelectedAreas,
-    setSelectedGraduations,
-    setSelectedCities,
-    setSelectedDepartaments,
-    setSelectedGraduatePrograms,
-    setSelectedSubsidies,
-    setSelectedUniversities,
-    clearFilters, selectedAreas, selectedGraduations, component, selectedCities, selectedDepartaments, selectedGraduatePrograms, selectedSubsidies, selectedUniversities } = FiltersModal();
-
   return (
     <div className="w-full h-full">
       <div className="w-full flex gap-4 justify-center">
@@ -1000,132 +416,7 @@ export function ResearchersHome() {
           <div className="w-full">
             <HeaderResult />
           </div>
-<div className={`flex flex-col gap-4 w-full ${selectedAreas.length > 0 || selectedCities.length > 0 || selectedDepartaments.length > 0 || selectedGraduatePrograms.length > 0 || selectedGraduations.length > 0 || selectedSubsidies.length > 0 || selectedUniversities.length > 0 ? ('flex'):('hidden')}`}>
-  <Separator/>
-          <div className="flex flex-wrap gap-3 items-center">
-            <p className="text-sm font-medium">Filtros aplicados:</p>
-            {selectedAreas.map((item) => (
-               <Badge  className={` gap-2 items-center flex font-normal  rounded-md  dark:text-white py-2 px-3 ${
-                item.includes("CIENCIAS AGRARIAS")
-                  ? "bg-red-400"
-                  : item.includes("CIENCIAS EXATAS E DA TERRA")
-                  ? "bg-green-400"
-                  : item.includes("CIENCIAS DA SAUDE")
-                  ? "bg-[#20BDBE]"
-                  : item.includes("CIENCIAS HUMANAS")
-                  ? "bg-[#F5831F]"
-                  : item.includes("CIENCIAS BIOLOGICAS")
-                  ? "bg-[#EB008B]"
-                  : item.includes("ENGENHARIAS")
-                  ? "bg-[#FCB712]"
-                  : item.includes("CIENCIAS SOCIAIS APLICADAS")
-                  ? "bg-[#009245]"
-                  : item.includes("LINGUISTICA LETRAS E ARTES")
-                  ? "bg-[#A67C52]"
-                  : item.includes("OUTROS")
-                  ? "bg-[#1B1464]"
-                  : "bg-[#000]"
-              }`}>{item}
-               <div   onClick={() => setSelectedAreas(selectedAreas.filter(area => area !== item))} className="cursor-pointer"><X size={16}/></div>
-               </Badge>
-            ))}
-
-{selectedGraduations.map((item) => (
-  <Badge
-    key={item}
-   className="bg-eng-blue gap-2 items-center flex font-normal  rounded-md dark:bg-eng-blue  dark:text-white py-2 px-3 "
-  >
-    {item}
-    <div
-      className="cursor-pointer"
-      onClick={() => setSelectedGraduations(selectedGraduations.filter(i => i !== item))}
-    >
-      <X size={16} />
-    </div>
-  </Badge>
-))}
-
-{selectedCities.map((item) => (
-  <Badge
-    key={item}
-    className="bg-eng-blue gap-2 items-center flex font-normal  rounded-md dark:bg-eng-blue  dark:text-white py-2 px-3"
-  >
-    {item}
-    <div
-      className="cursor-pointer"
-      onClick={() => setSelectedCities(selectedCities.filter(i => i !== item))}
-    >
-      <X size={16} />
-    </div>
-  </Badge>
-))}
-
-{selectedDepartaments.map((item) => (
-  <Badge
-    key={item}
-    className="bg-eng-blue gap-2 items-center flex font-normal  rounded-md dark:bg-eng-blue  dark:text-white py-2 px-3"
-  >
-    {item}
-    <div
-      className="cursor-pointer"
-      onClick={() => setSelectedDepartaments(selectedDepartaments.filter(i => i !== item))}
-    >
-      <X size={16} />
-    </div>
-  </Badge>
-))}
-
-{selectedGraduatePrograms.map((item) => (
-  <Badge
-    key={item}
-    className="bg-eng-blue gap-2 items-center flex font-normal  rounded-md dark:bg-eng-blue  dark:text-white py-2 px-3"
-  >
-    {item}
-    <div
-      className="cursor-pointer"
-      onClick={() => setSelectedGraduatePrograms(selectedGraduatePrograms.filter(i => i !== item))}
-    >
-      <X size={16} />
-    </div>
-  </Badge>
-))}
-
-{selectedSubsidies.map((item) => (
-  <Badge
-    key={item}
-    className="bg-eng-blue gap-2 items-center flex font-normal  rounded-md dark:bg-eng-blue  dark:text-white py-2 px-3"
-  >
-    {item}
-    <div
-      className="cursor-pointer"
-      onClick={() => setSelectedSubsidies(selectedSubsidies.filter(i => i !== item))}
-    >
-      <X size={16} />
-    </div>
-  </Badge>
-))}
-
-{selectedUniversities.map((item) => (
-  <Badge
-    key={item}
-    className="bg-eng-blue gap-2 items-center flex font-normal  rounded-md dark:bg-eng-blue  dark:text-white py-2 px-3"
-  >
-    {item}
-    <div
-      className="cursor-pointer"
-      onClick={() => setSelectedUniversities(selectedUniversities.filter(i => i !== item))}
-    >
-      <X size={16} />
-    </div>
-  </Badge>
-))}
-
-
-
-<Badge variant={'secondary'} onClick={() => clearFilters()} className=" rounded-md cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-900 border-0  py-2 px-3 font-normal flex items-center justify-center gap-2"><Trash size={12}/>Limpar filtros</Badge>
-         
-          </div>
-</div>
+        <FiltersBadge/>
 
           {(!isOpenAlex && FinalOpenAlex != 'true') && (
             <div className="grid gap-4 mt-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
@@ -1173,7 +464,7 @@ export function ResearchersHome() {
                   <User className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{researcher.length}</div>
+                  <div className="text-2xl font-bold">{total?.researcher_count}</div>
                   <p className="text-xs text-muted-foreground">
                     encontrados na busca
                   </p>
@@ -1364,7 +655,7 @@ export function ResearchersHome() {
           )}
         </div>
 
-     {component}
+
       </div>
     </div>
   );

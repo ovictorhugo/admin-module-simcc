@@ -153,10 +153,10 @@ export function VisualizacaoPrograma() {
   const queryUrl = useQuery();
   const type_search = queryUrl.get('graduate_program_id');
 
-  const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram>();
+  const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram[]>([]);
 
   const urlGraduateProgram = `${urlGeral}graduate_program_profnit?id=${type_search}`;
-  const [loading, setLoading] = useState(true);
+
   console.log(urlGraduateProgram)
 
   useEffect(() => {
@@ -174,75 +174,106 @@ export function VisualizacaoPrograma() {
         });
         const data = await response.json();
         if (data) {
-          setGraduatePrograms(data[0]);
+          setGraduatePrograms(data);
         }
       } catch (err) {
         console.log(err);
-      } finally {
-        setLoading(false);
       }
     };
     fetchData();
   }, [urlGraduateProgram]);
 
+  const [isOn, setIsOn] = useState(true);
 
-  const { version } = useContext(UserContext)
+  const { onOpen, type: typeResult } = useModalResult();
+
+
+  const qualisColor = {
+    'MESTRADO': 'bg-blue-200',
+    'DOUTORADO': 'bg-blue-800',
+  };
+
+  const has_visualizar_indicadores_pos_graduacao = permission.some(
+    (perm) => perm.permission === 'visualizar_indicadores_pos_graduacao'
+  );
+
+  const [tab, setTab] = useState('all')
+
+  useEffect(() => {
+    if (!has_visualizar_indicadores_pos_graduacao) {
+      setTab('all')
+    }
+  }, [permission]);
+
+  const [isOpenSheet, setIsOpenSheet] = useState(false);
+  const [expand, setExpand] = useState(false)
+
+  const has_editar_informacoes_programa = permission.some(
+    (perm) => perm.permission === 'editar_informacoes_programa'
+  );
+
+  const graduate_program_id = graduatePrograms && graduatePrograms[0] ? graduatePrograms[0].graduate_program_id : null;
+
   const { theme } = useTheme()
 
-  const siteTitle = graduatePrograms?.name
-  ? `${graduatePrograms.name} | ${version ? "Conectee" : "Simcc"}`
-  : `${version ? "Conectee" : "Simcc"} | ${version ? "Escola de Engenharia UFMG" : "SECTI-BA"}`;
+  const [clientId, setClientId] = useState<string | null>(null);
+  const [provider, setProvider] = useState<string | null>(null);
 
-const siteDescription = graduatePrograms?.name
-  ? `${graduatePrograms.name} | Conectee`
-  : `${version ? "Conectee" : "Simcc"} | ${version ? "Escola de Engenharia UFMG" : "SECTI-BA"}`;
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const pathname = url.pathname.split('/');
 
-if (loading) {
+    // Supondo que o ID do cliente seja o segundo segmento do caminho da URL
+    const id = pathname[1] || null;
+    setClientId(id);
+
+    // Supondo que o provedor seja o hostname do URL
+    const providerName = url.hostname;
+    setProvider(providerName);
+  }, []);
+
+  const { version } = useContext(UserContext)
+
   return (
-    <div className="flex items-center justify-center h-screen">
-      <p className="text-muted-foreground">Carregando dados...</p>
-    </div>
-  );
-}
+    <>
+      <Helmet>
+        <title>{graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | ${version ? 'Conectee' : 'Simcc'}` : `${version ? 'Conectee' : 'Simcc'} | ${version ? 'Escola de Engenharia UFMG' : 'SECTI-BA'}`}</title>
+        <meta
+          name="description"
+          content={graduatePrograms[0]?.name ? `${graduatePrograms[0].name} | Conectee` : `${version ? 'Conectee' : 'Simcc'} | ${version ? 'Escola de Engenharia UFMG' : 'SECTI-BA'}`}
+        />
+        <meta name="robots" content="index, follow" />
+      </Helmet>
+      {graduatePrograms.slice(0, 1).map((props) => (
+        props.visible === 'false' ? (
+          <div style={{ backgroundImage: `url(${bg_popup})` }} className="h-screen bg-cover bg-no-repeat bg-center w-full flex flex-col items-center justify-center bg-neutral-50 dark:bg-neutral-900">
+            <Link to={'/'} className='h-10 mb-24 absolute top-16 '>
+              {theme == 'dark' ? (<LogoConecteeWhite />) : (<LogoConectee />)}
+            </Link>
+            <div className="w-full flex flex-col items-center justify-center">
+              <p className="text-9xl text-[#719CB8] font-bold mb-16 animate-pulse">{`(⊙﹏⊙)`}</p>
+              <h1 className=" text-4xl text-neutral-400 font-medium leading-tight tracking-tighter lg:leading-[1.1] ">Parece que não é possível acessar as informações desse programa</h1>
 
-if (!graduatePrograms || graduatePrograms.visible === "false") {
-  return (
-    <div
-      className="h-screen bg-cover bg-center flex flex-col items-center justify-center bg-neutral-50 dark:bg-neutral-900"
-      style={{ backgroundImage: `url(${bg_popup})` }}
-    >
-      <Link to="/" className="absolute top-16">
-        {theme === "dark" ? <LogoConecteeWhite /> : <LogoConectee />}
-      </Link>
+              <p className="font-medium text-sm mt-2">
+                Código do erro: 404
+              </p>
 
-      <div className="text-center px-4">
-        <p className="text-9xl text-[#719CB8] font-bold mb-6 animate-pulse">
-          (⊙﹏⊙)
-        </p>
-        <h1 className="text-3xl md:text-4xl text-neutral-400 font-medium leading-tight">
-          Não foi possível acessar as informações deste programa.
-        </h1>
-        <p className="mt-2 text-sm text-neutral-500">Erro 404</p>
-      </div>
-    </div>
-  );
-}
+              <p className="font-medium text-sm">
+                Servidor: {provider}
+              </p>
 
-return(
-  <>
-  <Helmet>
-    <title>{siteTitle}</title>
-    <meta name="description" content={siteDescription} />
-    <meta name="robots" content="index, follow" />
-  </Helmet>
+              <p className="font-medium text-sm ">
+                Caminho da URL: {clientId}
+              </p>
 
-  <main className="grid grid-cols-1 ">
-  <div className="bg-eng-blue flex-col flex items-center justify-center w-full absolute top-0 left-0 h-[250px]">
+            </div>
 
-  </div>
- 
- <div className="grid grid-cols-1 gap-4 md:gap-8 p-4 md:p-8 z-[2]">
- <div
+          </div>
+        ) : (
+          <main className="grid grid-cols-1 gap-4 md:gap-8 ">
+            <Tabs defaultValue={'all'} className="h-full" >
+              <div className="w-full gap-4 md:p-8 p-4 pb-0 md:pb-0">
+                <div
                   className="
                     flex flex-col items-center gap-4 justify-between
 
@@ -263,10 +294,9 @@ return(
                         lg:flex-row
                       "
                     >
-                      <h1 className="flex-1 shrink-0 text-white whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-        Pós-graduação
-        
-      </h1>
+                      <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+                        Pós-graduação
+                      </h1>
                     </div>
                   </div>
 
@@ -275,14 +305,63 @@ return(
                       flex items-center gap-2 flex-wrap
                     "
                   >
-     
+                    <TabsList>
+
+                      <TabsTrigger value="all" onClick={() => setTab('all')} className="text-zinc-600 dark:text-zinc-200">Visão geral</TabsTrigger>
+                      <TabsTrigger value="doc" onClick={() => setTab('doc')} className="text-zinc-600 dark:text-zinc-200">Docentes</TabsTrigger>
+                      <TabsTrigger disabled={!has_visualizar_indicadores_pos_graduacao} value="ind" onClick={() => setTab('ind')} className="text-zinc-600 dark:text-zinc-200">Indicadores</TabsTrigger>
+
+                    </TabsList>
+                    {has_editar_informacoes_programa && (
+                      <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
+                        <SheetTrigger>
+                          <Button onClick={() => setExpand(false)} className="h-8" size={'sm'}><LayoutDashboard size={16} />Painel administrativo</Button>
+                        </SheetTrigger>
+
+                        <SheetContent className={`p-0 dark:bg-neutral-900 dark:border-gray-600 ${expand ? ('min-w-[80vw]') : ('min-w-[50vw]')}`}>
+                          <PainelAdminGraduate graduate_program_id={props.graduate_program_id} />
+                        </SheetContent>
+
+                      </Sheet>
+                    )}
 
 
                   </div>
                 </div>
- </div>
-  </main>
-</>
-)
 
+              </div>
+
+              <TabsContent value="all" className="h-auto flex flex-col gap-4 md:gap-8  ">
+                <div className="md:p-8 p-4 py-0 md:py-0 mt-2">
+
+
+                  <div>
+                    {graduatePrograms.map((props) => (
+                      <HomepageProgram program={props} />
+                    ))}
+                  </div>
+
+                </div>
+
+               
+              
+
+              </TabsContent>
+              <TabsContent value="doc" className="h-auto flex flex-col gap-4 md:gap-8  ">
+                <DocentesPrograma />
+              </TabsContent>
+
+              <TabsContent value="ind" className="h-auto flex flex-col gap-4 md:gap-8  ">
+                <IndicatorsGraduate />
+              </TabsContent>
+
+              <TabsContent value="unread" className="h-auto flex flex-col gap-4 md:gap-8  ">
+
+              </TabsContent>
+            </Tabs>
+          </main>
+        )
+      ))}
+    </>
+  )
 }

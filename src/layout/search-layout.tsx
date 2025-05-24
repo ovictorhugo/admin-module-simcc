@@ -43,6 +43,7 @@ import { LogoIaposWhite } from "../components/svg/LogoIaposWhite";
 import { Badge } from "../components/ui/badge";
 import { useTheme } from "next-themes";
 import { UserProfileInitialModal } from "../components/modals/user-profile-initial";
+import { useQuery } from "../components/dashboard/builder-page/tabelas/tabela-artigos";
 
 interface MailProps {
 
@@ -204,31 +205,7 @@ export default function SearchLayout({
   );
 
 
-  const links3 = [
-    ...(hasBaremaAvaliacao
-      ? [
-        {
-          title: "Pesquisadores selecionados",
-          label: `${pesquisadoresSelecionados.length == 0 ? ('') : (pesquisadoresSelecionados.length)}`,
-          icon: UserPlus,
-          link: "/pesquisadores-selecionados",
-        },
-      ]
-      : []),
 
-    {
-      title: "Relatar problema",
-      label: "",
-      icon: Bug,
-      link: "/relatar-problema",
-    },
-    {
-      title: "Informações",
-      label: "",
-      icon: Info,
-      link: "/informacoes",
-    },
-  ]
 
   const navigate = useNavigate()
 
@@ -245,6 +222,9 @@ export default function SearchLayout({
   // Se a URL estiver vazia, mostramos "Página Inicial"
   const breadcrumbItems = pathSegments.length === 0 ? ['Página inicial'] : ['Página inicial', ...pathSegments];
 
+  const queryUrl = useQuery();
+  const type_search = queryUrl.get('graduate_program_id');
+
   return (
     <div>
 
@@ -257,13 +237,13 @@ export default function SearchLayout({
           <main className="h-full flex flex-col flex-1 ">
 
 
-            <div className="flex p-8 pt-8 pb-2 h-[68px] items-center justify-between top-0 sticky z-[3] supports-[backdrop-filter]:bg-neutral-50/60 supports-[backdrop-filter]:dark:bg-neutral-900/60 backdrop-blur ">
+            <div className={`flex p-8 pt-8 pb-2 h-[68px] items-center justify-between top-0 sticky z-[3] ${(location.pathname == '/pos-graduacao' && type_search) ? (''):('supports-[backdrop-filter]:bg-neutral-50/60 supports-[backdrop-filter]:dark:bg-neutral-900/60 backdrop-blur ')}`}>
               <div className="flex  pb-0 items-center gap-2">
                 <SidebarTrigger className="" />
                 <Separator orientation="vertical" className="mr-2 h-4" />
 
 
-                <Breadcrumb>
+                <Breadcrumb >
                   <BreadcrumbList>
                     {breadcrumbItems.map((segment, index) => {
                       const isLastItem = index === breadcrumbItems.length - 1;
@@ -275,7 +255,7 @@ export default function SearchLayout({
 
                       return (
                         <React.Fragment key={index}>
-                          <BreadcrumbItem className="hidden md:block capitalize">
+                          <BreadcrumbItem className={`hidden md:block capitalize ${(location.pathname == '/pos-graduacao' && type_search) ? ('text-white'):('')}`}>
                             {/* Se for o último item, não criamos um link, é apenas texto */}
                             {isLastItem ? (
                               <span>{segment}</span>
@@ -285,7 +265,7 @@ export default function SearchLayout({
                               </BreadcrumbLink>
                             )}
                           </BreadcrumbItem>
-                          {!isLastItem && <BreadcrumbSeparator className="hidden md:block" />}
+                          {!isLastItem && <BreadcrumbSeparator className={`${(location.pathname == '/pos-graduacao' && type_search) ? ('text-white'):('')}`}/>}
                         </React.Fragment>
                       );
                     })}
